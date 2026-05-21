@@ -1,22 +1,22 @@
 <?php
 class Utente {
     private int $iduser;
-    private string $nome;
-    private mixed $imgprofilo;
-    private string $email;
-    private string $password;
+    private string $nomeuser;
+    private mixed $imgprofilouser;
+    private string $emailuser;
+    private string $passworduser;
     private int $eta;
     private string $stato;
     private DateTime $dataFineSospensione;
     private string$PlayerLevel;
    
 
-    public function __construct(int $iduser, string $nome, mixed $imgprofilo, string $email, string $password, int $eta, string $stato='attivo', DateTime $dataFineSospensione, string $PlayerLevel) {
+    public function __construct(int $iduser, string $nomeuser, mixed $imgprofilouser, string $emailuser, string $passworduser, int $eta, string $stato='attivo', DateTime $dataFineSospensione, string $PlayerLevel) {
         $this->iduser = $iduser;
-        $this->nome = $nome;
-        $this->imgprofilo = $imgprofilo;
-        $this->email = $email;
-        $this->password = $password;
+        $this->nomeuser = $nomeuser;
+        $this->imgprofilouser = $imgprofilouser;
+        $this->emailuser = $emailuser;
+        $this->passworduser = $passworduser;
         $this->eta = $eta;
         $this->stato = $stato; //un utente appena creato è attivo di default 
         $this->dataFineSospensione = $dataFineSospensione;
@@ -26,11 +26,11 @@ class Utente {
     //inserire tutte le eccezioni per i set, ad esempio se l'email non è valida, se la password è troppo corta, se l'età è negativa, ecc.
     //SET methods
     public function setNome(string $nome) {
-        $this->nome = trim($nome);
+        $this->nomeuser = trim($nome);
     }
 
     public function setImgprofilo(mixed $imgprofilo) {
-        $this->imgprofilo = $imgprofilo;
+        $this->imgprofilouser = $imgprofilo;
     }
 
     public function setEmail(string $email) {
@@ -39,14 +39,14 @@ class Utente {
         if (!filter_var($email, FILTER_VALIDATE_EMAIL)) {
             throw new Exception("Indirizzo email non valido.");
         }
-        $this->email = trim($email);
+        $this->emailuser = trim($email);
     }
 
-    set function setPassword(string $password) {
+    public function setPassword(string $password) {
         if (strlen($password) < 8) {
             throw new Exception("La password deve essere lunga almeno 8 caratteri.");
         }
-        $this->password = trim($password);
+        $this->passworduser = trim($password);
     }
 
     public function setEta(int $eta) {
@@ -94,21 +94,21 @@ class Utente {
     }
 
     public function getNome() {
-        return $this->nome;
+        return $this->nomeuser;
     }
 
     public function getImgprofilo() {
-        return $this->imgprofilo;
+        return $this->imgprofilouser;
     }
 
     public function getEmail() {
-        return $this->email;
+        return $this->emailuser;
     }
 
     
 
     public function getEta() {
-        return $this->eta;
+        return $this->eta; 
     }
 
     public function getStato() {
