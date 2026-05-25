@@ -1,22 +1,20 @@
 <?php
-class Utente {
-    private int $iduser;
-    private string $nomeuser;
-    private mixed $imgprofilouser;
-    private string $emailuser;
-    private string $passworduser;
+namespace TableCrown\Entity;
+/*namespace è un modo per includere classi, funzioni e costanti in un contesto specifico, evitando conflitti di nomi con altre parti del codice.
+in questo caso, stiamo definendo la classe Utente all'interno del namespace TableCrown\Entity, il che significa che per accedere a questa classe 
+da un'altra parte del codice, dovremo fare riferimento a TableCrown\Entity\Utente o utilizzare una dichiarazione use per importarla (use TableCrown\Entity\Utente;).
+non è quindi necessario usare il require_once per includere la classe EPersona, poiché è già definita nello stesso namespace e può essere utilizzata direttamente.
+*/
+class Utente extends EPersona {
+    
     private int $eta;
     private string $stato;
     private DateTime $dataFineSospensione;
-    private string$PlayerLevel;
+    private string $PlayerLevel;
    
 
-    public function __construct(int $iduser, string $nomeuser, mixed $imgprofilouser, string $emailuser, string $passworduser, int $eta, string $stato='attivo', DateTime $dataFineSospensione, string $PlayerLevel) {
-        $this->iduser = $iduser;
-        $this->nomeuser = $nomeuser;
-        $this->imgprofilouser = $imgprofilouser;
-        $this->emailuser = $emailuser;
-        $this->passworduser = $passworduser;
+    public function __construct(string $nomeuser, mixed $imgprofilouser, string $emailuser, string $passworduser, int $eta, string $stato='attivo', DateTime $dataFineSospensione, string $PlayerLevel) {
+        parent::__construct($nomeuser, $imgprofilouser, $emailuser, $passworduser);
         $this->eta = $eta;
         $this->stato = $stato; //un utente appena creato è attivo di default 
         $this->dataFineSospensione = $dataFineSospensione;
@@ -61,9 +59,9 @@ class Utente {
         $statiValidi = ['attivo', 'bannato', 'sospeso'];
 
         // Convertiamo in minuscolo per evitare problemi con "Attivo" o "ATTIVO"
-        $nuovoStato = strtolower($nuovoStato);
+        $nuovoStato = strtolower($newstate);
         // Controlliamo se lo stato passato è tra quelli permessi
-        if (!in_array($nuovoStato, $statiValidi)) {
+        if (!in_array($nuovostato, $statiValidi)) {
             /*throw blocca l'esecuzioe del codice, new Exception crea un oggetto di tipo Exception con il messaggio dell'errore,
             viene poi creato quando setStato viene chiamato da un codice esterno, se lo stato passato non è valido, l'eccezione viene lanciata e 
             può essere gestita con un blocco try-catch, utile per preservarsi in caso si tentati attacchi esterni*/ 
@@ -105,7 +103,9 @@ class Utente {
         return $this->emailuser;
     }
 
-    
+    public function getPassword() {
+        return $this->passworduser;
+    }
 
     public function getEta() {
         return $this->eta; 
