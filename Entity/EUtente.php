@@ -5,15 +5,17 @@ in questo caso, stiamo definendo la classe Utente all'interno del namespace Tabl
 da un'altra parte del codice, dovremo fare riferimento a TableCrown\Entity\Utente o utilizzare una dichiarazione use per importarla (use TableCrown\Entity\Utente;).
 non è quindi necessario usare il require_once per includere la classe EPersona, poiché è già definita nello stesso namespace e può essere utilizzata direttamente.
 */
+use DateTime;
+USE TableCrown\Entity\Enumerativi\PlayerLevel; //importiamo l'enumerativo PlayerLevel che abbiamo definito in una cartella separata, altrimenti dovremmo fare riferimento a esso con il suo namespace completo ogni volta che lo utilizziamo (TableCrown\Entity\Enumerativi\PlayerLevel).
 class Utente extends EPersona {
     
     private int $eta;
     private string $stato;
     private DateTime $dataFineSospensione;
-    private string $PlayerLevel;
+    private PlayerLevel $PlayerLevel;
    
 
-    public function __construct(string $nomeuser, mixed $imgprofilouser, string $emailuser, string $passworduser, int $eta, string $stato='attivo', DateTime $dataFineSospensione, string $PlayerLevel) {
+    public function __construct(string $nomeuser, mixed $imgprofilouser, string $emailuser, string $passworduser, int $eta, string $stato='attivo', DateTime $dataFineSospensione, PlayerLevel $PlayerLevel) {
         parent::__construct($nomeuser, $imgprofilouser, $emailuser, $passworduser);
         $this->eta = $eta;
         $this->stato = $stato; //un utente appena creato è attivo di default 
@@ -78,11 +80,7 @@ class Utente extends EPersona {
         $this->dataFineSospensione = $dataFineSospensione;
     }
 
-    public function setPlayerLevel(string $PlayerLevel) {
-            $livelliValidi = ['principiante', 'intermedio', 'avanzato'];
-            if (!in_array($PlayerLevel, $livelliValidi)) {
-                throw new Exception("Livello del giocatore '$PlayerLevel' non valido. Usa solo: principiante, intermedio o avanzato.");
-            }
+    public function setPlayerLevel(PlayerLevel $PlayerLevel) {
             $this->PlayerLevel = $PlayerLevel;
     }   
 
