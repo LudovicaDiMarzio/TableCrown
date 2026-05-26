@@ -22,4 +22,42 @@ class ESegnalazione{
         $this->motivazione = $motivazione;
         $this->utente = $utente;
     }
+
+    //SET methods
+    public function setDataSegnalazione(DateTime $datasegnalazione) {
+        $this->datasegnalazione = $datasegnalazione;
+    }
+
+    public function setStatoSegnalazione(StatoSegnalazione $statosegnalazione=StatoSegnalazione::IN_ATTESA) {
+        $this->statosegnalazione = $statosegnalazione;
+    }
+
+    public function setMotivazione(MotivazioneSegnalazione $motivazione) {
+        $this->motivazione = $motivazione;
+    }
+
+    public function setUtente(Utente $utente) {
+        $this->utente = $utente;
+    }   
+
+    //GET methods
+    public function getIdSegnalazione(): ?int {
+        return $this->idsegnalazione;
+    }
+
+    public function getDataSegnalazione(): DateTime {
+        return $this->datasegnalazione;
+    }
+
+    public function getStatoSegnalazione(): StatoSegnalazione {
+        return $this->statosegnalazione;
+    }   
+
+    public function getMotivazione(): MotivazioneSegnalazione {
+        return $this->motivazione;
+    }
+
+    public function getUtente(): Utente {
+        return $this->utente;
+    }   
 }
