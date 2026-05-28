@@ -1,8 +1,8 @@
 <?php
 namespace TableCrown\Entity\Enumerativi;
 
-enum PlayerLevel {
-    case PRINCIPIANTE = 'principiante'; 
+enum PlayerLevel: string {
+    case PRINCIPIANTE = 'principiante';
     case INTERMEDIO = 'intermedio';
     case ADVANZATO = 'avanzato';
 }

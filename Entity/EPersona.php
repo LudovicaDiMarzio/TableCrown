@@ -10,15 +10,15 @@ abstract class EPersona {
     protected string $nomepersona;
     //sarà di tipo blob nel db, quindi per ora prendiamo l'immagine come se fosse una stringa, poi dovrà subire un processo di conversione 
     // in blob prima di essere salvata nel db, e una volta recuperata dal db dovrà essere convertita nuovamente in stringa per poter essere visualizzata
-    protected ?string $imgperosna=null; 
+    protected ?string $imgpersona=null; 
     protected string $emailpersona;
     protected string $passwordpersona;
     
 
-    public function __construct( string $nomepersona, string $imgperosna, string $emailpersona, string $passwordpersona) {
+    public function __construct( string $nomepersona, string $imgpersona, string $emailpersona, string $passwordpersona) {
         
         $this->nomepersona = $nomepersona;
-        $this->imgperosna = $imgperosna;
+        $this->imgpersona = $imgpersona;
         $this->emailpersona = $emailpersona;
         $this->passwordpersona = $passwordpersona;
         
@@ -29,8 +29,8 @@ abstract class EPersona {
         $this->nomepersona = $nomepersona;
     }
 
-    public function setImgPersona(?string $imgperosna): void {
-        $this->imgperosna = $imgperosna;
+    public function setImgPersona(?string $imgpersona): void {
+        $this->imgpersona = $imgpersona;
     }
     public function setEmailPersona(string $emailpersona): void {
         $this->emailpersona = $emailpersona;
@@ -50,7 +50,7 @@ abstract class EPersona {
     }
 
     public function getImgPersona(): ?string {
-        return $this->imgperosna;
+        return $this->imgpersona;
     }
 
     public function getEmailPersona(): string {
