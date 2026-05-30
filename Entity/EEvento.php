@@ -12,6 +12,8 @@ abstract class EEvento {
     private DateTime $dataInizio;
     private int $maxPartecipanti;
     private StatoEvento $statoEvento;
+    /** @var EPartecipazione[] */ //notazione per indicare che si tratta di un array di oggetti EPartecipazione, serve per la documentazione e per gli strumenti di sviluppo, non è una dichiarazione di tipo formale
+    private array $partecipazioni; //array di EPartecipazione, rappresenta le partecipazioni all'evento
 
     public function __construct(?int $idEvento, string $nomeEvento, string $imgEvento, string $descrizioneEvento, DateTime $dataInizio, int $maxPartecipanti, StatoEvento $statoEvento) {
         $this->idEvento = $idEvento;
@@ -21,6 +23,7 @@ abstract class EEvento {
         $this->dataInizio = $dataInizio;
         $this->maxPartecipanti = $maxPartecipanti;
         $this->statoEvento = $statoEvento;
+        $this->partecipazioni = [];
     }
 
     //SET methods
@@ -77,5 +80,12 @@ abstract class EEvento {
         return $this->statoEvento;
     }
 
+    public function getPartecipazioni(): array {
+        return $this->partecipazioni;
+    }
 
+    //metodo per aggiungere una partecipazione all'evento
+    public function addPartecipazione(EPartecipazione $partecipazione) {
+        $this->partecipazioni[] = $partecipazione;
+    }
 }
