@@ -7,7 +7,7 @@ non è quindi necessario usare il require_once per includere la classe EPersona,
 */
 use DateTime;
 USE TableCrown\Entity\Enumerativi\PlayerLevel; //importiamo l'enumerativo PlayerLevel che abbiamo definito in una cartella separata, altrimenti dovremmo fare riferimento a esso con il suo namespace completo ogni volta che lo utilizziamo (TableCrown\Entity\Enumerativi\PlayerLevel).
-class Utente extends EPersona {
+class EUtente extends EPersona {
     
     private int $eta;
     private string $stato;
