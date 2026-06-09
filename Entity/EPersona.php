@@ -14,14 +14,14 @@ abstract class EPersona {
     private string $emailpersona;
     private string $passwordpersona;
     
-
+    //EPersona si occupa di gestire le proprietà comuni a tutte le persone (Utente, Admin, ecc.), mentre le classi figlie (EUtente, EAdmin, ecc.) si occuperanno di gestire le proprietà specifiche di ciascun tipo di persona.
     public function __construct( string $nomepersona, string $imgpersona, string $emailpersona, string $passwordpersona) {
-        
-        $this->nomepersona = $nomepersona;
+
+        if (empty(trim($nomepersona))) { throw new \Exception("Nome vuoto"); }
+        $this->nomepersona = trim($nomepersona);
         $this->imgpersona = $imgpersona;
-        $this->emailpersona = $emailpersona;
-        $this->passwordpersona = $passwordpersona;
-        
+        $this->validaEImpostaEmail($emailpersona); // metodo privato di validazione
+        $this->validaEImpostaPassword($passwordpersona); // metodo privato di validazione
     }
 
     // setter per le proprietà comuni a tutte le persone
