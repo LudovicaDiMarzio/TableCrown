@@ -14,31 +14,27 @@ class ESegnalazione{
     private DateTime $datasegnalazione;
     private StatoSegnalazione $statosegnalazione; //può essere "in attesa" o "risolta"
     private MotivazioneSegnalazione $motivazione; 
-    private Utente $utente; //l'utente che ha fatto la segnalazione
+    private EUtente $utente; //l'utente che ha fatto la segnalazione
 
-    public function __construct(DateTime $datasegnalazione, StatoSegnalazione $statosegnalazione, MotivazioneSegnalazione $motivazione, Utente $utente) {
-        $this->datasegnalazione = $datasegnalazione;
-        $this->statosegnalazione = $statosegnalazione;
+    public function __construct(      MotivazioneSegnalazione $motivazione,
+        EUtente $utente
+    ) {
+        $this->datasegnalazione = new DateTime();  //la segnalazione avviene nel momento in cui viene creata la sua istanza
+        $this->statosegnalazione = StatoSegnalazione::IN_ATTESA; // inizialmente sempre InAttesa
         $this->motivazione = $motivazione;
         $this->utente = $utente;
     }
 
-    //SET methods
-    public function setDataSegnalazione(DateTime $datasegnalazione) {
-        $this->datasegnalazione = $datasegnalazione;
+    //metodi di dominio
+    public function risolvi(): void
+    {
+        if ($this->statosegnalazione === StatoSegnalazione::RISOLTA) {
+            throw new \DomainException("La segnalazione è già risolta.");
+        }
+        $this->statosegnalazione = StatoSegnalazione::RISOLTA;
     }
+       
 
-    public function setStatoSegnalazione(StatoSegnalazione $statosegnalazione=StatoSegnalazione::IN_ATTESA) {
-        $this->statosegnalazione = $statosegnalazione;
-    }
-
-    public function setMotivazione(MotivazioneSegnalazione $motivazione) {
-        $this->motivazione = $motivazione;
-    }
-
-    public function setUtente(Utente $utente) {
-        $this->utente = $utente;
-    }   
 
     //GET methods
     public function getIdSegnalazione(): ?int {

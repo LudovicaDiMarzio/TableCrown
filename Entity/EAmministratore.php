@@ -6,5 +6,13 @@ da un'altra parte del codice, dovremo fare riferimento a TableCrown\Entity\Utent
 non è quindi necessario usare il require_once per includere la classe EPersona, poiché è già definita nello stesso namespace e può essere utilizzata direttamente.
 */
 class EAmministratore extends EPersona {
-    // Proprietà specifiche per l'amministratore  
+    // invocazione del costruttore della classe padre (EPersona) per inizializzare le proprietà comuni a tutte le persone, come nome, email, password e immagine.
+    public function __construct(
+        string $nome,
+        string $email,
+        string $password,
+        ?string $img = null
+    ) {
+        parent::__construct($nome, $email, $password, $img);
+    }
 }
