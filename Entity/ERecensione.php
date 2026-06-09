@@ -10,7 +10,7 @@ class ERecensione {
     private string $testo;
     private DateTime $data;
     private bool $segnalazione;
-    private int $idUtente; // FK -> EUtente
+    private EUtente $utente;
  
     public function __construct(int $idRecensione, int $valutazione, string $testo, DateTime $data, bool $segnalazione, int $idUtente) {
         $this->idRecensione = $idRecensione;
