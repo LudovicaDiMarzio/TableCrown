@@ -15,30 +15,62 @@ abstract class EPersona {
     private string $passwordpersona;
     
     //EPersona si occupa di gestire le proprietà comuni a tutte le persone (Utente, Admin, ecc.), mentre le classi figlie (EUtente, EAdmin, ecc.) si occuperanno di gestire le proprietà specifiche di ciascun tipo di persona.
-    public function __construct( string $nomepersona, string $imgpersona, string $emailpersona, string $passwordpersona) {
-
-        if (empty(trim($nomepersona))) { throw new \Exception("Nome vuoto"); }
-        $this->nomepersona = trim($nomepersona);
-        $this->imgpersona = $imgpersona;
-        $this->validaEImpostaEmail($emailpersona); // metodo privato di validazione
-        $this->validaEImpostaPassword($passwordpersona); // metodo privato di validazione
-    }
-
-    // setter per le proprietà comuni a tutte le persone
-    public function setNomePersona(string $nomepersona): void {
-        $this->nomepersona = $nomepersona;
-    }
-
-    public function setImgPersona(?string $imgpersona): void {
+    public function __construct(string $nomepersona, string $emailpersona, string $passwordpersona, ?string $imgpersona = null)
+    {
+        $this->impostaNome($nomepersona);
+        $this->impostaEmail($emailpersona);
+        $this->impostaPassword($passwordpersona);
         $this->imgpersona = $imgpersona;
     }
-    public function setEmailPersona(string $emailpersona): void {
-        $this->emailpersona = $emailpersona;
+
+    public function ImpostaNome(string $nuovoNome): void
+    {
+        $this->validaNome($nuovoNome);
     }
 
-    public function setPasswordPersona(string $passwordpersona): void {
-        $this->passwordpersona = $passwordpersona;
+    public function cambiaEmail(string $nuovaEmail): void
+    {
+        $this->validaEmail($nuovaEmail);
     }
+
+    public function cambiaPassword(string $nuovaPassword): void
+    {
+        $this->validaPassword($nuovaPassword);
+    }
+
+    public function aggiornaImmagine(?string $imgBlob): void
+    {
+        $this->imgpersona = $imgBlob;
+    }
+
+
+    private function validaNome(string $nome): void
+    {   
+        $nome = trim($nome); // Rimuove spazi bianchi all'inizio e alla fine   
+        if (empty($nome)) {
+            throw new \InvalidArgumentException("Il nome non può essere vuoto."); 
+        }
+        $this->nomepersona = $nome;
+    }
+
+    private function validaEmail(string $email): void
+    {
+        $email = trim($email); // Rimuove spazi bianchi all'inizio e alla fine
+        //filter_var è una funzione di PHP che filtra una variabile con un filtro specificato, in questo caso FILTER_VALIDATE_EMAIL verifica se la stringa è un indirizzo email valido
+        if (!filter_var($email, FILTER_VALIDATE_EMAIL)) { 
+            throw new \InvalidArgumentException("Email non valida.");
+        }
+        $this->emailpersona = $email;
+    }
+
+    private function validaPassword(string $password): void
+    {
+        if (strlen($password) < 8) { // Verifica che la password abbia almeno 8 caratteri
+            throw new \InvalidArgumentException("La password deve essere lunga almeno 8 caratteri.");
+        }
+        $this->passwordpersona = password_hash($password, PASSWORD_BCRYPT); // Hash della password per una maggiore sicurezza ;
+    }
+
 
     // Getter per le proprietà comuni a tutte le persone
     public function getIdPersona(): ?int {
@@ -57,8 +89,10 @@ abstract class EPersona {
         return $this->emailpersona;
     }
 
-    public function getPasswordPersona(): string {
-        return $this->passwordpersona;
+    // La verifica della password avviene confrontando la password fornita con l'hash memorizzato utilizzando la funzione password_verify, che restituisce true se la password è corretta e false altrimenti.
+      public function verificaPassword(string $password): bool
+    {
+        return password_verify($password, $this->passwordpersona);
     }
 
 }
