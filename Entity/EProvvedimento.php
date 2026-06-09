@@ -8,37 +8,50 @@ use TableCrown\Entity\Enumerativi\TipoProvvedimento;
 class EProvvedimento {
     private ?int $idprovvedimento=null;
     private TipoProvvedimento $tipoprovvedimento; //può essere  "sospensione" o "ban"
-    private ESegnalazione $segnalazione; //la segnalazione a cui è associato il provvedimento
+    /*la segnalazione a cui è associato il provvedimento, può essere null perchè l'admin potrebbe
+    decidere di appplicare un provvedimento anche senza che gli arrivi una segnalazione, ad esempio scorrendo le recensioni
+    */
+    private ?ESegnalazione $segnalazionecollegata; 
     private DateTime $dataemissione; //la data di inizio del provvedimento
     private ?DateTime $datascadenza=null; //la data di fine del provvedimento, se è una sospensione, altrimenti null
     private StatoProvvedimento $statoprovvedimento; //può essere "attivo" o "revocato"
-    private EUtente $utente; //l'utente a cui è stato applicato il provvedimento 
+    private EUtente $utentesanzionato; //l'utente a cui è stato applicato il provvedimento 
 
-    public function __construct(TipoProvvedimento $tipoprovvedimento, ESegnalazione $segnalazione, DateTime $dataemissione, ?DateTime $datascadenza, StatoProvvedimento $statoprovvedimento) {
+    public function __construct(TipoProvvedimento $tipoprovvedimento, ESegnalazione $segnalazionecollegata,  ?DateTime $datascadenza, EUtente $utentesanzionato) {
         $this->tipoprovvedimento = $tipoprovvedimento;
-        $this->segnalazione = $segnalazione;
-        $this->dataemissione = $dataemissione;
-        $this->datascadenza = $datascadenza;
-        $this->statoprovvedimento = $statoprovvedimento;
+        $this->segnalazionecollegata = $segnalazionecollegata;
+        $this->dataemissione = new DateTime();
+        $this->datascadenza = $this->validaDataScadenza($datascadenza);
+        $this->statoprovvedimento = StatoProvvedimento::ATTIVO; // inizialmente sempre attivo
+        $this->utentesanzionato = $utentesanzionato;
     }
 
-    //SET methods
-    public function setTipoProvvedimento(TipoProvvedimento $tipoprovvedimento) {
-        $this->tipoprovvedimento = $tipoprovvedimento;
+    //metodi di dominio
+    public function revoca(): void
+    {
+        if ($this->statoprovvedimento === StatoProvvedimento::REVOCATO) {
+            throw new \DomainException("Il provvedimento è già revocato.");
+        }
+        $this->statoprovvedimento = StatoProvvedimento::REVOCATO;
+        $this->datascadenza = null;
     }
 
-   
-    public function setDataEmissione(DateTime $dataemissione) {
-        $this->dataemissione = $dataemissione;
+    //validazione data di scadenza
+    private function validaDataScadenza(?DateTime $datascadenza): void {
+        if ($this->tipoprovvedimento === TipoProvvedimento::SOSPENSIONE) {
+            if ($datascadenza === null) {
+                throw new \InvalidArgumentException("Una sospensione richiede una data di scadenza.");
+            }
+            if ($datascadenza <= new DateTime()) {
+                throw new \InvalidArgumentException("La data di scadenza deve essere nel futuro.");
+            }
+            $this->datascadenza = $datascadenza;
+        } else {
+            $this->datascadenza = null; // per i ban, la data di scadenza è sempre null
+        }
     }
+    
 
-    public function setDataScadenza(?DateTime $datascadenza) {
-        $this->datascadenza = $datascadenza;
-    }
-
-    public function setStatoProvvedimento(StatoProvvedimento $statoprovvedimento) {
-        $this->statoprovvedimento = $statoprovvedimento;
-    }
 
     //GET methods
     public function getIdProvvedimento(): ?int {
@@ -60,6 +73,10 @@ class EProvvedimento {
 
     public function getStatoProvvedimento(): StatoProvvedimento {
         return $this->statoprovvedimento;
+    }
+
+    public function getUtenteSanzionato(): EUtente {
+        return $this->utentesanzionato;
     }
 
 

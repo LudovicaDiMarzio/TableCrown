@@ -6,12 +6,13 @@ da un'altra parte del codice, dovremo fare riferimento a TableCrown\Entity\Utent
 non è quindi necessario usare il require_once per includere la classe EPersona, poiché è già definita nello stesso namespace e può essere utilizzata direttamente.
 */
 use DateTime;
-USE TableCrown\Entity\Enumerativi\PlayerLevel; //importiamo l'enumerativo PlayerLevel che abbiamo definito in una cartella separata, altrimenti dovremmo fare riferimento a esso con il suo namespace completo ogni volta che lo utilizziamo (TableCrown\Entity\Enumerativi\PlayerLevel).
+use TableCrown\Entity\Enumerativi\PlayerLevel; //importiamo l'enumerativo PlayerLevel che abbiamo definito in una cartella separata, altrimenti dovremmo fare riferimento a esso con il suo namespace completo ogni volta che lo utilizziamo (TableCrown\Entity\Enumerativi\PlayerLevel).
+use TableCrown\Entity\Enumerativi\StatoUtente; //importiamo l'enumerativo StatoUtente che abbiamo definito in una cartella separata, altrimenti dovremmo fare riferimento a esso con il suo namespace completo ogni volta che lo utilizziamo (TableCrown\Entity\Enumerativi\StatoUtente).
 class EUtente extends EPersona {
     
     private int $eta;
-    private string $stato;
-    private DateTime $dataFineSospensione;
+    private StatoUtente $stato;
+    private ?DateTime $dataFineSospensione;
     private PlayerLevel $PlayerLevel;
    
 
@@ -20,8 +21,8 @@ class EUtente extends EPersona {
         parent::__construct($nomeuser, $imgprofilouser, $emailuser, $passworduser);
        
         //Gestiamo i dati specifici dell'utente
-        $this->ImpostaEta($eta); 
-        $this->stato = 'attivo'; //un utente appena creato è attivo di default 
+        $this->impostaEta($eta); 
+        $this->stato = StatoUtente::ATTIVO; //un utente appena creato è attivo di default 
         $this->dataFineSospensione = null;
         $this->PlayerLevel = $PlayerLevel;
     }
@@ -30,37 +31,37 @@ class EUtente extends EPersona {
         // Invece di setStato() generico, metodi che esprimono un'azione precisa
     public function sospendi(DateTime $dataFine): void
     {
-        if ($this->stato === 'bannato') {
+        if ($this->stato === StatoUtente::BANNATO) {
             throw new \DomainException("Un utente bannato non può essere sospeso.");
         }
         if ($dataFine <= new DateTime()) { 
             throw new \InvalidArgumentException("La data di fine sospensione deve essere nel futuro.");
         }
-        $this->stato = 'sospeso';
+        $this->stato = StatoUtente::SOSPESO;
         $this->dataFineSospensione = $dataFine;
     }
 
     public function banna(): void
     {
-        if ($this->stato === 'bannato') {
+        if ($this->stato === StatoUtente::BANNATO) {
             throw new \DomainException("L'utente è già bannato.");
         }
-        $this->stato = 'bannato';
+        $this->stato = StatoUtente::BANNATO;
         $this->dataFineSospensione = null;  // non serve più
     }
 
     public function riattiva(): void
     {
-        if ($this->stato === 'attivo') {
+        if ($this->stato === StatoUtente::ATTIVO) {
             throw new \DomainException("L'utente è già attivo.");
         }
-        $this->stato = 'attivo';
+        $this->stato = StatoUtente::ATTIVO;
         $this->dataFineSospensione = null;
     }
 
     public function aggiornaLivello(PlayerLevel $nuovoLivello): void
     {
-        $this->playerLevel = $nuovoLivello;
+        $this->PlayerLevel = $nuovoLivello;
     }
 
     // per modificare un'età già impostata
@@ -80,25 +81,7 @@ class EUtente extends EPersona {
    
 
     //GET methods
-    public function getIduser() {
-        return $this->iduser;
-    }
-
-    public function getNome() {
-        return $this->nomeuser;
-    }
-
-    public function getImgprofilo() {
-        return $this->imgprofilouser;
-    }
-
-    public function getEmail() {
-        return $this->emailuser;
-    }
-
-    public function getPassword() {
-        return $this->passworduser;
-    }
+ 
 
     public function getEta() {
         return $this->eta; 
