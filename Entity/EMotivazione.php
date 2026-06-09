@@ -9,18 +9,13 @@ class MotivazioneSegnalazione {
     private GravitaMotivazione $gravita; //può essere "bassa", "media" o "alta"
 
     public function __construct(string $nomemotivazione, GravitaMotivazione $gravita) {
-        $this->nomemotivazione = $nomemotivazione;
+        $this-> impostaNomeMotivazione($nomemotivazione);
         $this->gravita = $gravita;
     }
 
-    //SET methods
-    public function setNomeMotivazione(string $nomemotivazione) {
-        $this->nomemotivazione = $nomemotivazione;
-    }
+    //questa entità ha solo metodi get perchè i dati vengono inseriti solo al momento della creazione e non devono essere modificati successivamente
+    
 
-    public function setGravitaMotivazione(GravitaMotivazione $gravita) {
-        $this->gravita = $gravita;
-    }
 
     //GET methods
     public function getIdMotivazione(): ?int {
