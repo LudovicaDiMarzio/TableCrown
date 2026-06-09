@@ -15,11 +15,15 @@ class EUtente extends EPersona {
     private PlayerLevel $PlayerLevel;
    
 
-    public function __construct(string $nomeuser, mixed $imgprofilouser, string $emailuser, string $passworduser, int $eta, string $stato='attivo', DateTime $dataFineSospensione, PlayerLevel $PlayerLevel) {
+    public function __construct(string $nomeuser, mixed $imgprofilouser, string $emailuser, string $passworduser, int $eta, PlayerLevel $PlayerLevel) {
+        //invoca il costruttore della classe padre (EPersona) per inizializzare le proprietà comuni a tutte le persone, e poi inizializziamo le proprietà specifiche dell'utente (EUtente).
         parent::__construct($nomeuser, $imgprofilouser, $emailuser, $passworduser);
+       
+        //Gestiamo i dati specifici dell'utente
+        if ($eta < 0) { throw new \Exception("L'età non può essere negativa."); }
         $this->eta = $eta;
-        $this->stato = $stato; //un utente appena creato è attivo di default 
-        $this->dataFineSospensione = $dataFineSospensione;
+        $this->stato = 'attivo'; //un utente appena creato è attivo di default 
+        $this->dataFineSospensione = null;
         $this->PlayerLevel = $PlayerLevel;
     }
 
