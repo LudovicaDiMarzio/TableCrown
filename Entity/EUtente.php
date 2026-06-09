@@ -20,73 +20,64 @@ class EUtente extends EPersona {
         parent::__construct($nomeuser, $imgprofilouser, $emailuser, $passworduser);
        
         //Gestiamo i dati specifici dell'utente
-        if ($eta < 0) { throw new \Exception("L'età non può essere negativa."); }
-        $this->eta = $eta;
+        $this->ImpostaEta($eta); 
         $this->stato = 'attivo'; //un utente appena creato è attivo di default 
         $this->dataFineSospensione = null;
         $this->PlayerLevel = $PlayerLevel;
     }
 
-    //inserire tutte le eccezioni per i set, ad esempio se l'email non è valida, se la password è troppo corta, se l'età è negativa, ecc.
-    //SET methods
-    public function setNome(string $nome) {
-        $this->nomeuser = trim($nome);
-    }
-
-    public function setImgprofilo(mixed $imgprofilo) {
-        $this->imgprofilouser = $imgprofilo;
-    }
-
-    public function setEmail(string $email) {
-        /*FILTER_VALIDATE_EMAIL è una costante predefinita in PHP che 
-        viene utilizzata con la funzione filter_var() per validare se una stringa è un indirizzo email valido.*/
-        if (!filter_var($email, FILTER_VALIDATE_EMAIL)) {
-            throw new Exception("Indirizzo email non valido.");
+    //Metodi di dominio
+        // Invece di setStato() generico, metodi che esprimono un'azione precisa
+    public function sospendi(DateTime $dataFine): void
+    {
+        if ($this->stato === 'bannato') {
+            throw new \DomainException("Un utente bannato non può essere sospeso.");
         }
-        $this->emailuser = trim($email);
-    }
-
-    public function setPassword(string $password) {
-        if (strlen($password) < 8) {
-            throw new Exception("La password deve essere lunga almeno 8 caratteri.");
+        if ($dataFine <= new DateTime()) { 
+            throw new \InvalidArgumentException("La data di fine sospensione deve essere nel futuro.");
         }
-        $this->passworduser = trim($password);
+        $this->stato = 'sospeso';
+        $this->dataFineSospensione = $dataFine;
     }
 
-    public function setEta(int $eta) {
+    public function banna(): void
+    {
+        if ($this->stato === 'bannato') {
+            throw new \DomainException("L'utente è già bannato.");
+        }
+        $this->stato = 'bannato';
+        $this->dataFineSospensione = null;  // non serve più
+    }
+
+    public function riattiva(): void
+    {
+        if ($this->stato === 'attivo') {
+            throw new \DomainException("L'utente è già attivo.");
+        }
+        $this->stato = 'attivo';
+        $this->dataFineSospensione = null;
+    }
+
+    public function aggiornaLivello(PlayerLevel $nuovoLivello): void
+    {
+        $this->playerLevel = $nuovoLivello;
+    }
+
+    // per modificare un'età già impostata
+    public function aggiornaEta(int $nuovaEta): void
+    {
+        $this->impostaEta($nuovaEta);
+    }
+
+    // per validare l'età quando viene impostata o aggiornata, non èuò essere negativa
+    private function impostaEta(int $eta): void
+    {
         if ($eta < 0) {
-            throw new Exception("L'età non può essere negativa.");
+            throw new \InvalidArgumentException("L'età non può essere negativa.");
         }
         $this->eta = $eta;
     }
-
-    public function setStato(string $newstate){
-        // Definiamo una lista di stati validi (Whitelist)
-        $statiValidi = ['attivo', 'bannato', 'sospeso'];
-
-        // Convertiamo in minuscolo per evitare problemi con "Attivo" o "ATTIVO"
-        $nuovoStato = strtolower($newstate);
-        // Controlliamo se lo stato passato è tra quelli permessi
-        if (!in_array($nuovostato, $statiValidi)) {
-            /*throw blocca l'esecuzioe del codice, new Exception crea un oggetto di tipo Exception con il messaggio dell'errore,
-            viene poi creato quando setStato viene chiamato da un codice esterno, se lo stato passato non è valido, l'eccezione viene lanciata e 
-            può essere gestita con un blocco try-catch, utile per preservarsi in caso si tentati attacchi esterni*/ 
-            throw new Exception("Stato '$nuovoStato' non valido. Usa solo: attivo, bannato o sospeso.");
-        }
-        $this->stato = $newstate;
-    }
-
-    public function setdataFineSospensione(DateTime $dataFineSospensione) {
-
-        if ($dataFineSospensione < new DateTime()) {
-            throw new Exception("La data di fine sospensione deve essere nel futuro.");
-        }
-        $this->dataFineSospensione = $dataFineSospensione;
-    }
-
-    public function setPlayerLevel(PlayerLevel $PlayerLevel) {
-            $this->PlayerLevel = $PlayerLevel;
-    }   
+   
 
     //GET methods
     public function getIduser() {

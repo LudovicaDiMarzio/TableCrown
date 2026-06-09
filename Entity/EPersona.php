@@ -23,17 +23,17 @@ abstract class EPersona {
         $this->imgpersona = $imgpersona;
     }
 
-    public function ImpostaNome(string $nuovoNome): void
+    public function impostaNome(string $nuovoNome): void
     {
         $this->validaNome($nuovoNome);
     }
 
-    public function cambiaEmail(string $nuovaEmail): void
+    public function impostaEmail(string $nuovaEmail): void
     {
         $this->validaEmail($nuovaEmail);
     }
 
-    public function cambiaPassword(string $nuovaPassword): void
+    public function impostaPassword(string $nuovaPassword): void
     {
         $this->validaPassword($nuovaPassword);
     }
