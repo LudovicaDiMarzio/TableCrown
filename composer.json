@@ -1,13 +1,12 @@
 {
-    "__comment__": "Questo file composer.json definisce le dipendenze e l'autoloading per un progetto universitario basato su architettura MVC e Doctrine.require specifica le dipendenze del progetto, in questo caso PHP versione 8.0 o superiore e Doctrine ORM versione 3.0 o superiore.autoload definisce le regole di autoloading per le classi del progetto, utilizzando lo standard PSR-4. Le classi nei namespace Entity, Control, View e Foundation saranno caricate dalle rispettive cartelle.",
-    
     "name": "studente/delivery-project",
     "description": "Progetto universitario basato su architettura MVC e Doctrine",
     "type": "project",
 
     "require": {
         "php": ">=8.0",
-        "doctrine/orm": "^3.0"
+        "doctrine/orm": "^3.0",
+        "smarty/smarty": "5.8"
     },
 
     "autoload": {
