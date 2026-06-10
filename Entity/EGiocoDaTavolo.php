@@ -4,10 +4,12 @@ use TableCrown\Entity\EDanno;
 use InvalidArgumentException;
 use DateTime;
 use TableCrown\Entity\Enumerativi\DisponibilitaProdotto;
+use TableCrown\Entity\Enumerativi\Categoria;
 
 class EGiocoDaTavolo extends EProdotto {
     // Proprietà specifiche per il gioco da tavolo
-    private string $categoria; //es. strategia, famiglia, party game, ecc.
+    /** @var array<Categoria> */ //notazione per indicare che si tratta di un array di oggetti Categoria, serve per la documentazione e per gli strumenti di sviluppo, non è una dichiarazione di tipo formale
+    private array $categoria; //es. strategia, famiglia, party game, ecc. (può essere un array di categorie, un gioco da tavolo può appartenere a più categorie)
     private array $componenti; //elenco dei componenti del gioco (carte, pedine, tabellone, ecc.)
     private ?EGiocoDaTavolo $giocoBase; //riferimento a un eventuale gioco da tavolo di cui è espansione
     private int $numeroGiocatoriMin;
@@ -17,116 +19,29 @@ class EGiocoDaTavolo extends EProdotto {
     private ?EDanno $danno; //danno del gioco, se presente
     private ?string $descrizioneDanno; //descrizione del danno, se presente
 
-    public function __construct(?int $idProdotto, string $nomeProdotto, string $imgProdotto, string $descrizioneProdotto, DisponibilitaProdotto $disponibilitaProdotto, int $quantita, DateTime $dataPubblicazione, string $categoria, array $componenti, ?EGiocoDaTavolo $giocoBase, int $numeroGiocatoriMin, int $numeroGiocatoriMax, int $etaMinima, int $durataMedia, ?EDanno $danno = null, ?string $descrizioneDanno = null) {
-        parent::__construct($idProdotto, $nomeProdotto, $imgProdotto, $descrizioneProdotto, $disponibilitaProdotto, $quantita, $dataPubblicazione);
-        
-        $this->categoria = trim($categoria);
-
+    //Il costruttore, per effettuare i controlli sui vincoli, chiama al suo interno i metodi di verifica dei vincoli, che lanciano un'eccezione se i vincoli non sono rispettati
+    public function __construct(?int $idProdotto, string $nomeProdotto, string $imgProdotto, string $descrizioneProdotto, DisponibilitaProdotto $disponibilitaProdotto, int $quantita, DateTime $dataPubblicazione, ?EPrezzo $prezzo = null, array $recensioni = [], array $categoria, array $componenti, ?EGiocoDaTavolo $giocoBase = null, int $numeroGiocatoriMin = 1, int $numeroGiocatoriMax = 1, int $etaMinima = 1, int $durataMedia = 1, ?EDanno $danno = null, ?string $descrizioneDanno = null) {
+        parent::__construct($idProdotto, $nomeProdotto, $imgProdotto, $descrizioneProdotto, $disponibilitaProdotto, $quantita, $dataPubblicazione, $prezzo, $recensioni);
+        $this->categoria = $categoria;
+        $this->verificaCategoria(); //se fallisce, l'eccezione viene lanciata e il gioco da tavolo non viene creato (per tutti i metodi di verifica)
         $this->componenti = $componenti;
-
-        if ($giocoBase !== null && $giocoBase->getGiocoBase() !== null) {
-            throw new InvalidArgumentException("Il gioco base non può essere a sua volta un'espansione.");
-        }
-        if ($giocoBase !== null && $giocoBase->getIdProdotto() === $this->getIdProdotto()) {
-            throw new InvalidArgumentException("Un gioco da tavolo non può essere un'espansione di se stesso.");
-        }
+        $this->verificaComponenti();
         $this->giocoBase = $giocoBase;
-
-        if ($numeroGiocatoriMin > 0 && $numeroGiocatoriMax >= $numeroGiocatoriMin) {
-            $this->numeroGiocatoriMin = $numeroGiocatoriMin;
-            $this->numeroGiocatoriMax = $numeroGiocatoriMax;
-        } else {
-            throw new InvalidArgumentException("Il numero minimo di giocatori deve essere maggiore di 0 e il numero massimo deve essere maggiore o uguale al numero minimo.");
-        }
-
-        if ($etaMinima >= 0) {
-            $this->etaMinima = $etaMinima;
-        } else {
-            throw new InvalidArgumentException("L'età minima deve essere maggiore o uguale a 0.");
-        }
-
-        if ($durataMedia > 0) {
-            $this->durataMedia = $durataMedia;
-        } else {
-            throw new InvalidArgumentException("La durata media deve essere maggiore di 0.");
-        }
-
+        $this->verificaVincoliEspansione();
+        $this->numeroGiocatoriMin = $numeroGiocatoriMin;
+        $this->numeroGiocatoriMax = $numeroGiocatoriMax;
+        $this->verificaNumGiocatori();
+        $this->etaMinima = $etaMinima;
+        $this->verificaEtaMinima();
+        $this->durataMedia = $durataMedia;
+        $this->verificaDurataMedia();
         $this->danno = $danno;
-        if ($danno !== null && trim($descrizioneDanno) === "") {
-            throw new InvalidArgumentException("Se è presente un danno, la descrizione del danno non può essere vuota.");
-        }
-        if ($danno === null && trim($descrizioneDanno) !== "") {
-            throw new InvalidArgumentException("Se non è presente un danno, la descrizione del danno deve essere vuota.");
-        }
         $this->descrizioneDanno = $descrizioneDanno;
-}
-
-    //SET methods
-    public function setCategoria(string $categoria) {
-        $this->categoria = trim($categoria);
-    }
-
-    public function setComponenti(array $componenti) {
-        $this->componenti = $componenti;
-    }
-
-    /**
-     * per non ripetere gli stessi controlli del costruttore, si potrebbe richiamare il setGiocoBase all'interno del costruttore 
-     * e lasciare i controlli solo in setGiocoBase; stessa cosa vale per setNumeroGiocatoriMin, setNumeroGiocatoriMax, setEtaMinima, setDurataMedia e setDanno/setDescrizioneDanno
-     */
-    public function setGiocoBase(?EGiocoDaTavolo $giocoBase) {
-        if ($giocoBase !== null && $giocoBase->getGiocoBase() !== null) {
-            throw new InvalidArgumentException("Il gioco base non può essere a sua volta un'espansione.");
+        $this->verificaDanno();
         }
-        if ($giocoBase !== null && $giocoBase->getIdProdotto() === $this->getIdProdotto()) {
-            throw new InvalidArgumentException("Un gioco da tavolo non può essere un'espansione di se stesso.");
-        }
-        $this->giocoBase = $giocoBase;
-    }
-
-    public function setNumeroGiocatoriMin(int $numeroGiocatoriMin) {
-        if ($numeroGiocatoriMin > 0 && $numeroGiocatoriMin <= $this->numeroGiocatoriMax) {
-            $this->numeroGiocatoriMin = $numeroGiocatoriMin;
-        } else {
-            throw new InvalidArgumentException("Il numero minimo di giocatori deve essere maggiore di 0 e minore o uguale al numero massimo.");
-        }
-    }
-
-    public function setNumeroGiocatoriMax(int $numeroGiocatoriMax) {
-        if ($numeroGiocatoriMax >= $this->numeroGiocatoriMin) {
-            $this->numeroGiocatoriMax = $numeroGiocatoriMax;
-        } else {
-            throw new InvalidArgumentException("Il numero massimo di giocatori deve essere maggiore o uguale al numero minimo.");
-        }
-    }
-
-    public function setEtaMinima(int $etaMinima) {
-        if ($etaMinima >= 0) {
-            $this->etaMinima = $etaMinima;
-        } else {
-            throw new InvalidArgumentException("L'età minima deve essere maggiore o uguale a 0.");
-        }
-    }
-
-    public function setDurataMedia(int $durataMedia) {
-        if ($durataMedia > 0) {
-            $this->durataMedia = $durataMedia;
-        } else {
-            throw new InvalidArgumentException("La durata media deve essere maggiore di 0.");
-        }
-    }
-
-    //aggiungere i controlli?
-    public function setDanno(?EDanno $danno) {
-        $this->danno = $danno;
-    }
-
-    public function setDescrizioneDanno(string $descrizioneDanno) {
-        $this->descrizioneDanno = trim($descrizioneDanno);
-    }
 
     //GET methods
-    public function getCategoria(): string {
+    public function getCategoria(): array {
         return $this->categoria;
     }
 
@@ -161,4 +76,142 @@ class EGiocoDaTavolo extends EProdotto {
     public function getDescrizioneDanno(): ?string {
         return $this->descrizioneDanno;
     }
+
+    //Metodi di dominio
+
+    /**
+     * Aggiunge una categoria al gioco da tavolo.
+     */
+    public function aggiungiCategoria(Categoria $categoria): void {
+        if (!in_array($categoria, $this->categoria)) {
+            $this->categoria[] = $categoria;
+        }
+    }
+
+    /**
+     * Rimuove una categoria dal gioco da tavolo.
+     */
+    public function rimuoviCategoria(Categoria $categoria): void {
+        $key = array_search($categoria, $this->categoria);
+        if ($key !== false) {
+            unset($this->categoria[$key]);
+        }
+    }
+
+    /**
+     * Aggiunge un componente al gioco da tavolo.
+     */
+    public function aggiungiComponente(string $componente): void {
+        $componente = trim($componente);
+        if ($componente !== "" && !in_array($componente, $this->componenti)) {
+            $this->componenti[] = $componente;
+        }
+    }
+
+    /**
+     * Rimuove un componente dal gioco da tavolo.
+     */
+    public function rimuoviComponente(string $componente): void {
+        $key = array_search($componente, $this->componenti);
+        if ($key !== false) {
+            unset($this->componenti[$key]);
+        }
+    }
+
+    /**
+     * Aggiungi un danno al gioco da tavolo.
+     * Se è già presente un danno, sovrascrive il danno esistente.
+     * Quando si aggiunge un danno, è necessario fornire anche una descrizione del danno, che non può essere vuota.
+     */
+    public function aggiungiDanno(EDanno $danno, string $descrizioneDanno): void {
+        if (trim($descrizioneDanno) === "") {
+            throw new InvalidArgumentException("La descrizione del danno non può essere vuota.");
+        }
+        $this->danno = $danno;
+        $this->descrizioneDanno = trim($descrizioneDanno);
+    }
+
+    /**
+     * Metodo di validazione del danno. (Private perché viene chiamato solo all'interno del costruttore e dei metodi che modificano il danno, per garantire che i vincoli vengano sempre rispettati; come per tutti gli altri metodi di verifica dei vincoli)
+     * Controlla che vengano rispettati i vincoli relativi al danno, ovvero che se è presente un danno, sia presente anche una descrizione del danno, e che la descrizione del danno non sia vuota.
+     */
+    private function verificaDanno(): void {
+        if ($this->danno !== null) {
+            if (trim($this->descrizioneDanno) === "") {
+                throw new InvalidArgumentException("La descrizione del danno non può essere vuota se è presente un danno.");
+            }
+        } else {
+            if ($this->descrizioneDanno !== null) {
+                throw new InvalidArgumentException("Non può essere presente una descrizione del danno se non è presente un danno.");
+            }
+        }
+    }
+
+    /**
+     * Controlla che vengano rispettati i vincoli relativi alle espansioni.
+     * Se il gioco da tavolo è un'espansione, verifica che il gioco base non sia a sua volta un'espansione e che non sia lo stesso gioco da tavolo.
+     */
+    private function verificaVincoliEspansione(): void {
+        if ($this->giocoBase !== null) {
+            if ($this->giocoBase->getGiocoBase() !== null) {
+                throw new InvalidArgumentException("Il gioco base non può essere a sua volta un'espansione.");
+            }
+            if ($this->giocoBase->getIdProdotto() === $this->getIdProdotto()) {
+                throw new InvalidArgumentException("Un gioco da tavolo non può essere un'espansione di se stesso.");
+            }
+        }
+    }
+
+    /**
+     * Controlla che vengano rispettati i vincoli relativi al numero minimo e massimo di giocatori.
+     * Il numero minimo di giocatori deve essere maggiore di 0 e minore o uguale al numero massimo di giocatori.
+     */
+    private function verificaNumGiocatori(): void {
+        if ($this->numeroGiocatoriMin <= 0) {
+            throw new InvalidArgumentException("Il numero minimo di giocatori deve essere maggiore di 0.");
+        }
+        if ($this->numeroGiocatoriMin > $this->numeroGiocatoriMax) {
+            throw new InvalidArgumentException("Il numero minimo di giocatori non può essere maggiore del numero massimo di giocatori.");
+        }
+    }
+    
+
+    /**
+     * Controlla che vengano rispettati i vincoli relativi all'età minima.
+     * L'età minima deve essere maggiore di 0.
+     */
+    private function verificaEtaMinima(): void {
+        if ($this->etaMinima <= 0) {
+            throw new InvalidArgumentException("L'età minima deve essere maggiore di 0.");
+        }
+    }
+
+    /**
+     * Controlla che vengano rispettati i vincoli relativi alla durata media.
+     * La durata media deve essere maggiore di 0.
+     */
+    private function verificaDurataMedia(): void {
+        if ($this->durataMedia <= 0) {
+            throw new InvalidArgumentException("La durata media deve essere maggiore di 0.");
+        }
+    }
+
+    /**
+     * Verifica della categoria del gioco da tavolo.
+     */
+    private function verificaCategoria(): void {
+        if (empty($this->categoria)) {
+            throw new InvalidArgumentException("Il gioco da tavolo deve appartenere ad almeno una categoria.");
+        }
+    }
+
+    /**
+     * Verifica dei componenti del gioco da tavolo.
+     */
+    private function verificaComponenti(): void {
+        if (empty($this->componenti)) {
+            throw new InvalidArgumentException("Il gioco da tavolo deve avere almeno un componente.");
+        }
+    }
+    
 }

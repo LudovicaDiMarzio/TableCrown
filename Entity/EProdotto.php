@@ -9,29 +9,29 @@ use TableCrown\Entity\ERecensione;
 abstract class EProdotto {
     private ?int $idProdotto;
     private string $nomeProdotto;
-    private ?string $imgProdotto; //da rivedere
+    private ?string $imgProdotto;
     private string $descrizioneProdotto;
-    private DisponibilitaProdotto $disponibilitaProdotto;
-    private int $quantita;
+    private DisponibilitaProdotto $disponibilitaProdotto; //(Disponibile, Non disponibile, Esaurito, In arrivo)
+    private int $quantita; //quantità disponibile in magazzino del prodotto, deve essere maggiore o uguale a 0
     private DateTime $dataPubblicazione;
     private ?EPrezzo $prezzo; //prezzo del prodotto, se presente (se il prodotto è esaurito o in arrivo, il prezzo potrebbe non essere disponibile, quindi è nullable)
     /** @var ERecensione[] */ //notazione per indicare che si tratta di un array di oggetti ERecensione, serve per la documentazione e per gli strumenti di sviluppo, non è una dichiarazione di tipo formale
     private array $recensioni; //elenco delle recensioni del prodotto
 
-    public function __construct(?int $idProdotto, string $nomeProdotto, string $imgProdotto, string $descrizioneProdotto, DisponibilitaProdotto $disponibilitaProdotto, int $quantita, DateTime $dataPubblicazione, ?EPrezzo $prezzo = null, array $recensioni = []) {
+    public function __construct(?int $idProdotto, string $nomeProdotto, ?string $imgProdotto, string $descrizioneProdotto, DisponibilitaProdotto $disponibilitaProdotto, int $quantita, DateTime $dataPubblicazione, ?EPrezzo $prezzo = null, array $recensioni = []) {
         $this->idProdotto = $idProdotto;
-        $this->nomeProdotto = $nomeProdotto;
-        $this->imgProdotto = $imgProdotto;
-        $this->descrizioneProdotto = $descrizioneProdotto;
+        $this->rinominaProdotto($nomeProdotto); //utilizza il metodo di dominio per validare il nome del prodotto
+        $this->aggiornaImg($imgProdotto); //utilizza il metodo di dominio per validare l'immagine del prodotto
+        $this->aggiornaDescrizione($descrizioneProdotto); //utilizza il metodo di dominio per validare la descrizione del prodotto
         $this->disponibilitaProdotto = $disponibilitaProdotto;
-        $this->quantita = $quantita;
+        $this->aggiornaQuantita($quantita); //utilizza il metodo di dominio per validare la quantità del prodotto
         $this->dataPubblicazione = $dataPubblicazione;
         $this->prezzo = $prezzo;
         $this->recensioni = $recensioni;
     }
 
     //GET methods
-    public function getIdProdotto(): int {
+    public function getIdProdotto(): ?int {
         return $this->idProdotto;
     }
 
@@ -39,7 +39,7 @@ abstract class EProdotto {
         return $this->nomeProdotto;
     }
 
-    public function getImgProdotto(): string {
+    public function getImgProdotto(): ?string {
         return $this->imgProdotto;
     }
 
@@ -102,7 +102,7 @@ abstract class EProdotto {
 
     /**
      * Aggiorna la quantità disponibile del prodotto.
-     * La quantità non puoò essere negativa.
+     * La quantità non può essere negativa.
      * Se la quantità scende a 0, la disponibilità del prodotto viene automaticamente aggiornata a "Esaurito".
      * Se era esaurito e la quantità torna >0, la disponibilità viene aggiornata a "Disponibile".
      */
@@ -163,6 +163,13 @@ abstract class EProdotto {
      */
     public function isAcquistabile(): bool {
         return $this->disponibilitaProdotto === DisponibilitaProdotto::Disponibile && $this->quantita > 0 && $this->prezzo !== null;
+    }
+
+    /**
+     * Verifica se il prodotto è disponibile.
+     */
+    public function isDisponibile(): bool {
+        return $this->disponibilitaProdotto === DisponibilitaProdotto::Disponibile && $this->quantita > 0;
     }
 
     /**
