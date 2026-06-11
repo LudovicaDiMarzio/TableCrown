@@ -12,10 +12,10 @@
 
     "autoload": {
         "psr-4": {
-            "Entity\\": "Entity/",
-            "Control\\": "Control/",
-            "View\\": "View/",
-            "Foundation\\": "Foundation/"
+            "TableCrown\\Entity\\": "Entity/",
+            "TableCrown\\Control\\": "Control/",
+            "TableCrown\\Presentation\\": "Presentation/",
+            "TableCrown\\Foundation\\": "Foundation/"
         }
     }
 }
