@@ -8,11 +8,23 @@ non è quindi necessario usare il require_once per includere la classe EPersona,
 use DateTime;
 use TableCrown\Entity\Enumerativi\PlayerLevel; //importiamo l'enumerativo PlayerLevel che abbiamo definito in una cartella separata, altrimenti dovremmo fare riferimento a esso con il suo namespace completo ogni volta che lo utilizziamo (TableCrown\Entity\Enumerativi\PlayerLevel).
 use TableCrown\Entity\Enumerativi\StatoUtente; //importiamo l'enumerativo StatoUtente che abbiamo definito in una cartella separata, altrimenti dovremmo fare riferimento a esso con il suo namespace completo ogni volta che lo utilizziamo (TableCrown\Entity\Enumerativi\StatoUtente).
+use Doctrine\ORM\Mapping as ORM;
+
+#[ORM\Entity]
+#[ORM\Table(name: "utente")]
+
 class EUtente extends EPersona {
-    
+
+    #[ORM\column(type: "integer")]
     private int $eta;
+
+    #[ORM\column(type: "string", enumType: StatoUtente:: class)] //enumType: StatoUtente::class restituisce "TableCrown\Entity\Enumerativi\StatoUtente" per sapere quale enum usare per la conversione automatica
     private StatoUtente $stato;
+
+    #[ORM\column(type: "datetime", nullable: true)]
     private ?DateTime $dataFineSospensione;
+
+    #[ORM\column(type: "string", enumType: PlayerLevel:: class)]
     private PlayerLevel $PlayerLevel;
    
 
