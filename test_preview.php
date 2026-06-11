@@ -1,32 +1,32 @@
 <?php
-// Includi l'autoloader di Composer o Smarty direttamente
-require_once 'C:/Users/damic/Desktop/uni/APPUNTI/anno3/secondo_semenstre/Pweb/TableCrown/vendor/autoload.php';
+require_once __DIR__ . '/vendor/autoload.php'; 
 
 use Smarty\Smarty;
-
 $smarty = new Smarty();
 
-// Configura i percorsi delle cartelle che hai creato
-$smarty->setTemplateDir(__DIR__ . 'C:/Users/damic/Desktop/uni/APPUNTI/anno3/secondo_semenstre/Pweb/TableCrown/Presentation/smarty-dir/templates/');
-$smarty->setCompileDir(__DIR__ . 'C:/Users/damic/Desktop/uni/APPUNTI/anno3/secondo_semenstre/Pweb/TableCrown/Presentation/smarty-dir/templates_c/');
-$smarty->setCacheDir(__DIR__ . 'C:/Users/damic/Desktop/uni/APPUNTI/anno3/secondo_semenstre/Pweb/TableCrown/Presentation/smarty-dir/cache/');
-$smarty->setConfigDir(__DIR__ . 'C:/Users/damic/Desktop/uni/APPUNTI/anno3/secondo_semenstre/Pweb/TableCrown/Presentation/smarty-dir/configs/');
+// Definiamo i percorsi (Ho corretto anche il nome in 'view_smarty_dir' come avevi detto all'inizio)
+$templatedir = __DIR__ . '/Presentation/view_smarty_dir/templates/';
+$compiledir  = __DIR__ . '/Presentation/view_smarty_dir/templates_c/';
+$cachedir    = __DIR__ . '/Presentation/view_smarty_dir/cache/';
+$configdir   = __DIR__ . '/Presentation/view_smarty_dir/configs/';
 
-// 2. DEBUG TEMPORANEO: Controlliamo se Windows vede davvero questa cartella
-if (!is_dir($templateDir)) {
+// DEBUG REALE: Adesso stamperà la cartella corretta senza Warning
+if (!is_dir($templatedir)) {
     echo "<strong style='color:red;'>ERRORE DI PERCORSO!</strong><br>";
-    echo "Smarty sta cercando i template qui: <br><code>" . htmlspecialchars($templateDir) . "</code><br>";
-    echo "Ma questa cartella NON esiste. Controlla se hai scritto bene le maiuscole o se si chiama 'view_smarty_dir'.";
+    echo "Smarty sta cercando la cartella qui: <br><code>" . htmlspecialchars($templatedir) . "</code><br><br>";
+    echo "<strong>Cosa controllare adesso:</strong><br>";
+    echo "1. Controlla se la cartella 'Presentation' ha la 'P' maiuscola o minuscola nel tuo computer.<br>";
+    echo "2. Controlla se la cartella si chiama esattamente 'view_smarty_dir'.<br>";
     exit;
 }
 
-// 3. Se la cartella esiste, la impostiamo in Smarty
-$smarty->setTemplateDir($templateDir);
-$smarty->setCompileDir($compileDir);
-$smarty->setCacheDir($cacheDir);
-$smarty->setConfigDir($configDir);
+// Se la cartella esiste, impostiamo i percorsi in Smarty
+$smarty->setTemplateDir($templatedir);
+$smarty->setCompileDir($compiledir);
+$smarty->setCacheDir($cachedir);
+$smarty->setConfigDir($configdir);
 
 $smarty->assign('page_title', 'Anteprima Layout');
 
-// 4. Mostra il template
+// Mostra il template
 $smarty->display('common/layout.tpl');
