@@ -186,4 +186,9 @@ abstract class EEvento {
         return $this->statoEvento === StatoEvento::Programmato && count($this->partecipazioni) < $this->maxPartecipanti;
     }
 
+    /**
+     * Metodo astratto implementato dalle classi figlie (Serata, Torneo, Challenge)
+     */
+    abstract public function richiedeQuota(): bool;
+
 }
