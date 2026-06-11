@@ -172,83 +172,51 @@
     {* ──────────────────────────────────────────── *}
     {* FOOTER                                        *}
     {* ──────────────────────────────────────────── *}
-    <footer class="site-footer">
-        <div class="container">
-
-            <div class="columns is-multiline">
-
-                {* ── Col 1: Brand + social ── *}
-                <div class="column is-4-desktop is-12-tablet">
-                    <p class="footer-heading">TableCrown</p>
-                    <p class="footer-desc">
-                        Il tuo negozio di giochi da tavolo.<br>
-                        Prodotti, eventi e community.
-                    </p>
-                    <div class="social-icons">
-                        <a href="#" aria-label="Twitch">
-                            <i class="ti ti-brand-twitch"></i>
-                        </a>
-                        <a href="#" aria-label="Instagram">
-                            <i class="ti ti-brand-instagram"></i>
-                        </a>
-                        <a href="#" aria-label="Facebook">
-                            <i class="ti ti-brand-facebook"></i>
-                        </a>
+    <footer class="footer has-background-dark has-text-white" style="padding: 3rem 1.5rem;">
+    <div class="container">
+        <div class="columns">
+            
+            <div class="column is-3">
+                <h2 class="subtitle is-5 has-text-white font-weight-bold">TABLECROWN</h2>
+                <p class="is-size-7">Il tuo negozio di giochi da tavolo.</p>
+                <p class="is-size-7">Prodotti, eventi e community.</p>
+                <div class="social-icons mt-3">
                     </div>
-                </div>
-
-                {* ── Col 2: Link utili ── *}
-                <div class="column is-2-desktop is-6-tablet">
-                    <p class="footer-heading">Info</p>
-                    <ul class="footer-list">
-                        <li><a href="{$base_url}/chi-siamo">Chi siamo</a></li>
-                        <li><a href="{$base_url}/contatti">Contattaci</a></li>
-                        <li><a href="{$base_url}/dove-siamo">Dove siamo</a></li>
-                    </ul>
-                </div>
-
-                {* ── Col 3: Account ── *}
-                <div class="column is-2-desktop is-6-tablet">
-                    <p class="footer-heading">Account</p>
-                    <ul class="footer-list">
-                        {if isset($utente)}
-                            <li><a href="{$base_url}/profilo">Il mio profilo</a></li>
-                            <li><a href="{$base_url}/profilo/ordini">I miei ordini</a></li>
-                            <li><a href="{$base_url}/logout">Logout</a></li>
-                        {else}
-                            <li><a href="{$base_url}/accedi">Accedi</a></li>
-                            <li><a href="{$base_url}/registrati">Registrati</a></li>
-                        {/if}
-                    </ul>
-                </div>
-
-                {* ── Col 4: Contatti ── *}
-                <div class="column is-4-desktop is-12-tablet">
-                    <p class="footer-heading">Contatti</p>
-                    <ul class="footer-list footer-contacts">
-                        <li>
-                            <i class="ti ti-phone footer-contact-icon"></i>
-                            +39 344 253621
-                        </li>
-                        <li>
-                            <i class="ti ti-map-pin footer-contact-icon"></i>
-                            Giulianova, Abruzzo
-                        </li>
-                    </ul>
-                    <a class="footer-review-link" href="{$base_url}/recensioni/nuova">
-                        ✍ Lasciaci una recensione
-                    </a>
-                </div>
-
             </div>
 
-            <div class="footer-divider"></div>
-            <p class="footer-bottom">
-                © {$smarty.now|date_format:"%Y"} TableCrown — Tutti i diritti riservati
-            </p>
+            <div class="column is-3">
+                <h3 class="title is-6 has-text-white mb-2">INFO</h3>
+                <ul class="is-size-7">
+                    <li><a href="#" class="has-text-grey-light">Chi siamo</a></li>
+                    <li><a href="#" class="has-text-grey-light">Contattaci</a></li>
+                    <li><a href="#" class="has-text-grey-light">Dove siamo</a></li>
+                </ul>
+            </div>
+
+            <div class="column is-3">
+                <h3 class="title is-6 has-text-white mb-2">ACCOUNT</h3>
+                <ul class="is-size-7">
+                    <li><a href="#" class="has-text-grey-light">Accedi</a></li>
+                    <li><a href="#" class="has-text-grey-light">Registrati</a></li>
+                </ul>
+            </div>
+
+            <div class="column is-3">
+                <h3 class="title is-6 has-text-white mb-2">CONTATTI</h3>
+                <p class="is-size-7 has-text-grey-light">📞 +39 344 253621</p>
+                <p class="is-size-7 has-text-grey-light">📍 Giulianova, Abruzzo</p>
+                <p class="is-size-7 mt-2"><a href="#" class="has-text-warning">✍ Lasciaci una recensione</a></p>
+            </div>
 
         </div>
-    </footer>
+
+        <hr class="has-background-grey-dark my-4">
+
+        <div class="content has-text-centered is-size-7 has-text-grey">
+            <p>© 2026 TableCrown — Tutti i diritti riservati</p>
+        </div>
+    </div>
+</footer>
 
     {* ──────────────────────────────────────────── *}
     {* JS                                            *}
