@@ -1,35 +1,17 @@
 <?php
-$basePath = __DIR__;
+require_once __DIR__ . '/vendor/autoload.php'; 
 
-echo "<h2>🕵️ Spione delle Cartelle Attivo</h2>";
-echo "La root del progetto è: <code>" . htmlspecialchars($basePath) . "</code><br><br>";
+use Smarty\Smarty;
+$smarty = new Smarty();
 
-if (is_dir($basePath)) {
-    echo "<strong>Contenuto della cartella TableCrown:</strong><br><ul>";
-    $files = scandir($basePath);
-    foreach ($files as $file) {
-        if ($file !== '.' && $file !== '..') {
-            $fullPath = $basePath . '/' . $file;
-            $type = is_dir($fullPath) ? '📁 CARTELLA' : '📄 FILE';
-            echo "<li><strong>[$type]</strong> $file";
-            
-            // Se trova qualcosa che somiglia a presentation, guarda dentro
-            if (is_dir($fullPath) && strtolower($file) === 'presentation') {
-                echo "<ul>";
-                $subFiles = scandir($fullPath);
-                foreach ($subFiles as $subFile) {
-                    if ($subFile !== '.' && $subFile !== '..') {
-                        $subType = is_dir($fullPath . '/' . $subFile) ? '📁 CARTELLA' : '📄 FILE';
-                        echo "<li><strong>[$subType]</strong> $subFile</li>";
-                    }
-                }
-                echo "</ul>";
-            }
-            
-            echo "</li>";
-        }
-    }
-    echo "</ul>";
-} else {
-    echo "La cartella principale non esiste.";
-}
+// Configurazione dei percorsi basata sulla tua vera struttura delle cartelle
+$smarty->setTemplateDir(__DIR__ . '/smarty-dir/templates/');
+$smarty->setCompileDir(__DIR__ . '/smarty-dir/templates_c/');
+$smarty->setCacheDir(__DIR__ . '/smarty-dir/cache/');
+$smarty->setConfigDir(__DIR__ . '/smarty-dir/configs/');
+
+// Assegniamo una variabile per il titolo (se usata nel layout)
+$smarty->assign('page_title', 'Anteprima Layout TableCrown');
+
+// Mostra il layout
+$smarty->display('common/layout.tpl');
