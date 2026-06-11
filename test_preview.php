@@ -3,13 +3,11 @@ require_once __DIR__ . '/vendor/autoload.php';
 
 use Smarty\Smarty;
 $smarty = new Smarty();
-
-// Definiamo i percorsi (Ho corretto anche il nome in 'view_smarty_dir' come avevi detto all'inizio)
-$templatedir = __DIR__ . '/Presentation/view_smarty_dir/templates/';
-$compiledir  = __DIR__ . '/Presentation/view_smarty_dir/templates_c/';
-$cachedir    = __DIR__ . '/Presentation/view_smarty_dir/cache/';
-$configdir   = __DIR__ . '/Presentation/view_smarty_dir/configs/';
-
+// Sostituito 'Presentation' con 'presentation'
+$templatedir = __DIR__ . '/presentation/view_smarty_dir/templates/';
+$compiledir  = __DIR__ . '/presentation/view_smarty_dir/templates_c/';
+$cachedir    = __DIR__ . '/presentation/view_smarty_dir/cache/';
+$configdir   = __DIR__ . '/presentation/view_smarty_dir/configs/';
 // DEBUG REALE: Adesso stamperà la cartella corretta senza Warning
 if (!is_dir($templatedir)) {
     echo "<strong style='color:red;'>ERRORE DI PERCORSO!</strong><br>";
