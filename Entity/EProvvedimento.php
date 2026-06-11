@@ -40,7 +40,7 @@ class EProvvedimento {
         $this->tipoprovvedimento = $tipoprovvedimento;
         $this->segnalazionecollegata = $segnalazionecollegata;
         $this->dataemissione = new DateTime();
-        $this->datascadenza = $this->validaDataScadenza($datascadenza);
+        $this->validaDataScadenza($datascadenza);
         $this->statoprovvedimento = StatoProvvedimento::ATTIVO; // inizialmente sempre attivo
         $this->utentesanzionato = $utentesanzionato;
     }
@@ -56,7 +56,7 @@ class EProvvedimento {
     }
 
     //validazione data di scadenza
-    private function validaDataScadenza(?DateTime $datascadenza): void {
+    private function validaDataScadenza(?DateTime $datascadenza): void     {
         if ($this->tipoprovvedimento === TipoProvvedimento::SOSPENSIONE) {
             if ($datascadenza === null) {
                 throw new \InvalidArgumentException("Una sospensione richiede una data di scadenza.");

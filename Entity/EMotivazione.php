@@ -2,10 +2,20 @@
 namespace TableCrown\Entity;
 
 use TableCrown\Entity\Enumerativi\GravitaMotivazione;
+use Doctrine\ORM\Mapping as ORM;
 
+#[ORM\Entity]
+#[ORM\Table(name: "motivazione_segnalazione")]
 class MotivazioneSegnalazione {
+    #[ORM\Id]
+    #[ORM\GeneratedValue]
+    #[ORM\Column(type: "integer")]
     private ?int $idmotivazione=null;
+
+    #[ORM\Column(type: "string")]
     private string $nomemotivazione; //es. "contenuto inappropriato", "spam", "altro"
+
+    #[ORM\Column(type: "string", enumType: GravitaMotivazione:: class)]
     private GravitaMotivazione $gravita; //può essere "bassa", "media" o "alta"
 
     public function __construct(string $nomemotivazione, GravitaMotivazione $gravita) {
