@@ -6,6 +6,7 @@
     "require": {
         "php": ">=8.0",
         "doctrine/orm": "^3.0",
+        "doctrine/dbal": "^3.0",
         "smarty/smarty": "5.8"
     },
 
