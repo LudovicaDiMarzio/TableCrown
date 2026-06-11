@@ -35,6 +35,7 @@ $smarty->setCacheDir($smartyDirHandler . 'cache/');
 $smarty->setConfigDir($smartyDirHandler . 'configs/');
 
 $smarty->assign('page_title', 'Anteprima Layout');
+$smarty->assign('base_url', '/public');
 
 // 3. Tentativo di rendering
 try {
