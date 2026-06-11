@@ -101,8 +101,7 @@
                        href="{$base_url}/eventi">Eventi</a>
                     <a class="navbar-item{if $current_page == 'offerte'} is-active{/if}"
                        href="{$base_url}/offerte">Offerte</a>
-                    <a class="navbar-item{if $current_page == 'dadi'} is-active{/if}"
-                       href="{$base_url}/dadi-custom">Dadi Custom</a>
+
                 </div>
 
                 {* Barra di ricerca nella navbar-end *}
