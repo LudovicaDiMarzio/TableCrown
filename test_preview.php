@@ -1,6 +1,6 @@
 <?php
 // Includi l'autoloader di Composer o Smarty direttamente
-require_once 'C:/Users/damic/Desktop/uni/APPUNTI/anno3/secondo_semenstre/Pweb/TableCrown/vendor/autoload.php';
+require_once 'C:/Users/damic/Desktop/uni/APPUNTI/anno3/secondo_semenstre/Pweb/TableCrown/autoload.php';
 
 $smarty = new Smarty();
 
