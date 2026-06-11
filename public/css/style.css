@@ -361,6 +361,28 @@ main > .section {
     width: 25% !important;
 }
  
+.site-footer {
+    background-color: var(--color-bg-dark) !important;
+    color: var(--color-text-muted) !important;
+    padding: 3rem 0 0;
+    margin-top: 4rem;
+}
+
+/* Assicuriamoci che anche i titoli prendano il colore chiaro delle tue variabili */
+.site-footer .footer-heading {
+    color: var(--color-text-light) !important;
+}
+
+/* Forza i link a non diventare blu o neri per colpa di Bulma */
+.site-footer .footer-list a {
+    color: var(--color-text-subtle) !important;
+}
+
+.site-footer .footer-list a:hover {
+    color: var(--color-primary) !important;
+}
+
+
 /* Intestazioni colonne footer */
 .footer-heading {
     font-size: var(--font-size-md);
