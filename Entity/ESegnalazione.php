@@ -7,12 +7,27 @@ non è quindi necessario usare il require_once per includere la classe EPersona,
 */
 use DateTime;
 use TableCrown\Entity\Enumerativi\StatoSegnalazione;
+use Doctrine\ORM\Mapping as ORM;
 //l'enumerativo StatoSegnalazione che utilizziamo è definito in una cartella separata, pertanto dobbiamo importarlo con la dichiarazione use,
 // altrimenti dovremmo fare riferimento a esso con il suo namespace completo ogni volta che lo utilizziamo (TableCrown\Entity\Enumerativi\StatoSegnalazione).
+
+#[ORM\Entity]
+#[ORM\Table(name: "segnalazione")]
+
 class ESegnalazione{
+
+    #[ORM\ID]
+    #[ORM\GeneratedValue]
+    #[ORM\Column(type: "integer")]
     private ?int $idsegnalazione=null;
+
+    #[ORM\Column(type: "datetime")]
     private DateTime $datasegnalazione;
+
+    #[ORM\Column(type: "string", enumType: StatoSegnalazione:: class)]
     private StatoSegnalazione $statosegnalazione; //può essere "in attesa" o "risolta"
+
+    //TODO: aggiungere annotation doctrine per le relazioni con le altre entity MotivazioneSegnalazione e EUtente
     private MotivazioneSegnalazione $motivazione; 
     private EUtente $utente; //l'utente che ha fatto la segnalazione
 
@@ -53,7 +68,7 @@ class ESegnalazione{
         return $this->motivazione;
     }
 
-    public function getUtente(): Utente {
+    public function getUtente(): EUtente {
         return $this->utente;
     }   
 }

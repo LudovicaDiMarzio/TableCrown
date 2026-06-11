@@ -4,17 +4,36 @@ namespace TableCrown\Entity;
 use DateTime;
 use TableCrown\Entity\Enumerativi\StatoProvvedimento;
 use TableCrown\Entity\Enumerativi\TipoProvvedimento;
+use Doctrine\ORM\Mapping as ORM;
+
+#[ORM\Entity]
+#[ORM\Table(name: "provvedimento" )]
 
 class EProvvedimento {
+    #[ORM\Id]
+    #[ORM\GeneratedValue]
+    #[ORM\Column(type: "integer")]
     private ?int $idprovvedimento=null;
+
+    #[ORM\Column(type: "string", enumType: TipoProvvedimento:: class)] 
     private TipoProvvedimento $tipoprovvedimento; //può essere  "sospensione" o "ban"
     /*la segnalazione a cui è associato il provvedimento, può essere null perchè l'admin potrebbe
     decidere di appplicare un provvedimento anche senza che gli arrivi una segnalazione, ad esempio scorrendo le recensioni
     */
-    private ?ESegnalazione $segnalazionecollegata; 
+
+    //TODO: aggiungere annotation doctrine per la relazione con l'entity ESegnalazione
+    private ?ESegnalazione $segnalazionecollegata;
+    
+    #[ORM\Column(type: "datetime")]
     private DateTime $dataemissione; //la data di inizio del provvedimento
+
+    #[ORM\Column(type: "datetime", nullable: true)]
     private ?DateTime $datascadenza=null; //la data di fine del provvedimento, se è una sospensione, altrimenti null
+
+    #[ORM\Column(type: "string", enumType: StatoProvvedimento:: class)]
     private StatoProvvedimento $statoprovvedimento; //può essere "attivo" o "revocato"
+  
+    //TODO: aggiungere annotation doctrine per la relazione con l'entity EUtente
     private EUtente $utentesanzionato; //l'utente a cui è stato applicato il provvedimento 
 
     public function __construct(TipoProvvedimento $tipoprovvedimento, ESegnalazione $segnalazionecollegata,  ?DateTime $datascadenza, EUtente $utentesanzionato) {
@@ -79,5 +98,8 @@ class EProvvedimento {
         return $this->utentesanzionato;
     }
 
+    public function getSegnalazioneCollegata(): ?ESegnalazione {
+        return $this->segnalazionecollegata;
+    }
 
 }
