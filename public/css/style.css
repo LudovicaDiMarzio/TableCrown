@@ -346,11 +346,19 @@ main > .section {
  
 /* ── 8. FOOTER ────────────────────────────────────────────── */
  
-.site-footer {
-    background-color: var(--color-bg-dark);
-    color: var(--color-text-muted);
-    padding: 3rem 0 0;
-    margin-top: 4rem;
+.site-footer .columns {
+    display: flex !important;
+    flex-direction: row !important;
+    flex-wrap: wrap !important; /* Permette di andare a capo solo su smartphone */
+    width: 100%;
+    margin-left: 0;
+    margin-right: 0;
+}
+
+.site-footer .column.is-3 {
+    flex-basis: 25% !important;
+    max-width: 25% !important;
+    width: 25% !important;
 }
  
 /* Intestazioni colonne footer */
