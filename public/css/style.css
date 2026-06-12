@@ -112,12 +112,12 @@ p:last-child { margin-bottom: 0; }
     align-items: center;
 }
 
-/* Voci Menu spostate ed allineate a sinistra sopra il logo */
+/* MODIFICATO: Spostato a destra per allinearsi visivamente con il brand/logo sotto */
 .navbar-center-links {
     display: flex;
     gap: 0.5rem;
-    margin-left: -1rem; /* Allinea il primo elemento perfettamente al margine del container */
-    margin-right: auto; /* Spinge il blocco azioni (navbar-end-actions) tutto a destra */
+    margin-left: 1rem;  /* Sposta il menu a destra togliendo il vecchio -1rem */
+    margin-right: auto; /* Mantiene le azioni utente bloccate a destra */
 }
 
 .navbar-center-links .navbar-item {
@@ -522,25 +522,18 @@ main > .section {
         padding-top: 10px;
     }
 
+    /* MODIFICATO: Su mobile eliminiamo il margine sinistro eccessivo per preservare lo spazio dello schermo */
     .navbar-center-links {
-    display: flex;
-    gap: 0.5rem;
-    margin-left: 0.5rem; /* Sganciato dal bordo! Alza a 1rem o 1.5rem se vuoi più spazio */
-    margin-right: auto;  /* Spinge il blocco azioni (navbar-end-actions) tutto a destra */
-    }  /* Spinge il blocco azioni tutto a destra */
-
-    .navbar-center-links .navbar-item {
-    color: rgba(255, 255, 255, 0.8) !important;
-    font-size: var(--font-size-md);
-    font-weight: 500;
-    padding: 0.5rem 1rem;
-    transition: color var(--transition);
-    background: transparent !important;
-}
+        display: flex;
+        flex-direction: column;
+        gap: 0.5rem;
+        margin-left: 0;
+        margin-right: 0;
+    }
 
     .navbar-end-actions {
         width: 100%;
-        justify-content: flex-start; /* Allinea a sinistra le icone utente su mobile */
+        justify-content: flex-start;
         gap: 15px;
     }
 
@@ -548,7 +541,7 @@ main > .section {
     .navbar-row-bottom-search {
         flex-direction: column;
         gap: 12px;
-        align-items: flex-start; /* Mantieni coerente il blocco di ricerca a sinistra */
+        align-items: flex-start;
     }
 
     .navbar-row-bottom-search .navbar-logo {
