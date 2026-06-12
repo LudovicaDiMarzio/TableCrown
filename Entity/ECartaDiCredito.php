@@ -11,10 +11,11 @@ class ECartaDiCredito {
     private DateTime $dataScadenza;
     private string $numero; // conservato come stringa per preservare eventuali zeri iniziali
     private string $ccv;
-    private int $idUtente; // FK -> EUtente
+    private Eutente $Utente; // FK -> EUtente
  
-    public function __construct(int $idCartaDiCredito, string $nomeTitolare, string $cognomeTitolare, DateTime $dataScadenza, string $numero, string $ccv, int $idUtente) {
+    public function __construct(int $idCartaDiCredito, string $nomeTitolare, string $cognomeTitolare, DateTime $dataScadenza, string $numero, string $ccv, Eutente $Utente) {
         $this->idCartaDiCredito = $idCartaDiCredito;
+        $this->Utente = $Utente;
  
         if (trim($nomeTitolare) === '') {
             throw new InvalidArgumentException("Il nome del titolare non può essere vuoto.");
