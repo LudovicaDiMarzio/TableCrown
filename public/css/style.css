@@ -320,6 +320,99 @@ main > .section {
 }
 
 
+/* ── 7.1 MAIN / CONTENUTO - SPECIFICO HOMEPAGE ────────────────── */
+
+/* Struttura Esterna Carosello */
+.hero-carousel {
+    position: relative;
+    overflow: hidden;
+    border-radius: var(--radius-md);
+    margin-bottom: 3rem;
+    height: 400px;
+    width: 100%;
+}
+
+.carousel-inner {
+    display: flex;
+    width: 300%; /* Gestisce 3 slide (100% * 3) */
+    height: 100%;
+    transition: transform 0.5s ease-in-out;
+}
+
+.carousel-item {
+    width: 100%;
+    height: 100%;
+    position: relative;
+}
+
+.carousel-item img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+}
+
+.carousel-caption {
+    position: absolute;
+    bottom: 0;
+    left: 0;
+    right: 0;
+    background: linear-gradient(transparent, rgba(0, 0, 0, 0.85));
+    color: #fff;
+    padding: 2.5rem 2rem;
+}
+
+/* Frecce di Navigazione Carosello */
+.carousel-nav {
+    position: absolute;
+    top: 50%;
+    width: 100%;
+    display: flex;
+    justify-content: space-between;
+    transform: translateY(-50%);
+    padding: 0 1rem;
+    pointer-events: none; /* Evita che il box invisibile blocchi i click sotto */
+}
+
+.carousel-nav .button {
+    pointer-events: auto; /* Riattiva il click solo sulle frecce */
+    background: rgba(0, 0, 0, 0.5);
+    color: #fff;
+    border: none;
+    transition: background var(--transition);
+}
+
+.carousel-nav .button:hover {
+    background: var(--color-primary) !important;
+}
+
+/* Spazi e Titoli delle Sezioni Vetrina */
+.home-section {
+    margin-bottom: 4.5rem;
+}
+
+.section-title {
+    border-left: 4px solid var(--color-primary);
+    padding-left: 12px;
+    margin-bottom: 1.75rem;
+    font-weight: 700;
+}
+
+/* Forza l'altezza uniforme delle Card per non disallineare la griglia orizzontale */
+.card.home-card-fixed {
+    height: 100%;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+}
+
+.card.home-card-fixed .card-content {
+    flex-grow: 1;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+}
+
+
 /* ── 8. FOOTER ────────────────────────────────────────────── */
 
 .site-footer {
