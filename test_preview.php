@@ -1,10 +1,11 @@
+PHP
 <?php
 require_once __DIR__ . '/vendor/autoload.php'; 
 
 use Smarty\Smarty;
 $smarty = new Smarty();
 
-// 1. Cerchiamo automaticamente dove si trova la cartella dei template
+// 1. Ricerca automatica della cartella dei template
 $possibiliPercorsi = [
     __DIR__ . '/smarty-dir/',
     __DIR__ . '/Presentation/smarty-dir/',
@@ -21,27 +22,36 @@ foreach ($possibiliPercorsi as $percorso) {
     }
 }
 
-// Se non lo trova neanche così, facciamo un controllo disperato ma efficacissimo
 if (!$smartyDirHandler) {
     echo "<strong style='color:red;'>Impossibile trovare la cartella dei template!</strong><br>";
-    echo "Assicurati che la cartella <code>templates</code> (con all'interno <code>common/layout.tpl</code>) sia dentro <code>smarty-dir</code>.";
+    echo "Assicurati che la cartella <code>templates</code> sia dentro <code>smarty-dir</code>.";
     exit;
 }
 
-// 2. Configurazione dinamica dei percorsi trovati
+// 2. Configurazione dei percorsi di Smarty
 $smarty->setTemplateDir($smartyDirHandler . 'templates/');
 $smarty->setCompileDir($smartyDirHandler . 'templates_c/');
 $smarty->setCacheDir($smartyDirHandler . 'cache/');
 $smarty->setConfigDir($smartyDirHandler . 'configs/');
 
-$smarty->assign('page_title', 'Anteprima Layout');
-$smarty->assign('base_url', '/public');
+// Definiamo i dati di base per l'header e i link
+$smarty->assign('page_title', 'TableCrown — Home');
+$smarty->assign('base_url', '/public'); // Modifica se la cartella public ha un percorso diverso
 
-// 3. Tentativo di rendering
+// NOTA: Se hai lasciato i vettori vuoti o non settati, home.tpl mostrerà automaticamente 
+// i 4 prodotti demo statici grazie al blocco {else} che abbiamo strutturato insieme.
+$smarty->assign('offerte', []); 
+$smarty->assign('nuovi_arrivi', []); 
+
+// 3. Tentativo di rendering della HOME
 try {
-    $smarty->display('common/layout.tpl');
+    // MODIFICATO: Puntiamo alla home.tpl. 
+    // Se hai salvato home.tpl nella radice di 'templates/', usa semplicemente 'home.tpl'.
+    // Se l'hai messa in una sottocartella (es. 'pages/home.tpl'), modifica il percorso di conseguenza.
+    $smarty->display('home.tpl'); 
+    
 } catch (Exception $e) {
-    echo "<strong style='color:orange;'>Smarty è stato configurato qui:</strong> <code>" . htmlspecialchars($smartyDirHandler) . "</code><br>";
-    echo "Ma ha riscontrato questo errore: <br><i>" . $e->getMessage() . "</i><br><br>";
-    echo "<strong>Verifica interna:</strong> Controlla che dentro <code>" . htmlspecialchars($smartyDirHandler) . "templates/</code> ci sia effettivamente una cartella chiamata <code>common</code> con dentro il file <code>layout.tpl</code> (attento ai caratteri minuscoli/maiuscoli del nome del file!).";
+    echo "<strong style='color:orange;'>Errore nel caricamento della Home:</strong><br>";
+    echo "<i>" . $e->getMessage() . "</i><br><br>";
+    echo "<strong>Verifica:</strong> Assicurati di aver salvato il file <code>home.tpl</code> dentro la cartella: <code>" . htmlspecialchars($smartyDirHandler) . "templates/</code>";
 }
