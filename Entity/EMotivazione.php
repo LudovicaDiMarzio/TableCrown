@@ -2,10 +2,20 @@
 namespace TableCrown\Entity;
 
 use TableCrown\Entity\Enumerativi\GravitaMotivazione;
+use Doctrine\ORM\Mapping as ORM;
 
-class MotivazioneSegnalazione {
+#[ORM\Entity]
+#[ORM\Table(name: "motivazione_segnalazione")]
+class EMotivazione {
+    #[ORM\Id]
+    #[ORM\GeneratedValue]
+    #[ORM\Column(type: "integer")]
     private ?int $idmotivazione=null;
+
+    #[ORM\Column(type: "string")]
     private string $nomemotivazione; //es. "contenuto inappropriato", "spam", "altro"
+
+    #[ORM\Column(type: "string", enumType: GravitaMotivazione::class)]
     private GravitaMotivazione $gravita; //può essere "bassa", "media" o "alta"
 
     public function __construct(string $nomemotivazione, GravitaMotivazione $gravita) {
@@ -20,7 +30,12 @@ class MotivazioneSegnalazione {
     */
 
     
-    //metodi di dominio
+    //metodi di dominio non so se ha senso permettere la modifica di nomi e gravità eventualmente...per l'inserimento di nuove motivazioni non è necessario inserire metodi nuovi quindi la classe potrebbe rimanere immutabile
+    public function aggiornaNome(string $nuovoNome): void
+    {
+        $this->validaNomeMotivazione($nuovoNome);
+    }
+
     private function validaNomeMotivazione(string $nome): void
     {
         $nome = trim($nome);

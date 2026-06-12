@@ -5,6 +5,12 @@ in questo caso, stiamo definendo la classe Utente all'interno del namespace Tabl
 da un'altra parte del codice, dovremo fare riferimento a TableCrown\Entity\Utente o utilizzare una dichiarazione use per importarla (use TableCrown\Entity\Utente;).
 non è quindi necessario usare il require_once per includere la classe EPersona, poiché è già definita nello stesso namespace e può essere utilizzata direttamente.
 */
+
+use Doctrine\ORM\Mapping as ORM;
+
+#[ORM\Entity]
+#[ORM\Table(name: "amministratore")]
+
 class EAmministratore extends EPersona {
     // invocazione del costruttore della classe padre (EPersona) per inizializzare le proprietà comuni a tutte le persone, come nome, email, password e immagine.
     public function __construct(

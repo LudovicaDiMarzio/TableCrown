@@ -6,15 +6,16 @@
     "require": {
         "php": ">=8.0",
         "doctrine/orm": "^3.0",
+        "doctrine/dbal": "^3.0",
         "smarty/smarty": "5.8"
     },
 
     "autoload": {
         "psr-4": {
-            "Entity\\": "Entity/",
-            "Control\\": "Control/",
-            "View\\": "View/",
-            "Foundation\\": "Foundation/"
+            "TableCrown\\Entity\\": "Entity/",
+            "TableCrown\\Control\\": "Control/",
+            "TableCrown\\Presentation\\": "Presentation/",
+            "TableCrown\\Foundation\\": "Foundation/"
         }
     }
 }
