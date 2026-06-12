@@ -1,11 +1,9 @@
-{extends file="layout.tpl"}
+{extends file="common/layout.tpl"}
 
 {block name="content"}
 <div class="container px-4">
 
-    {* ──────────────────────────────────────────── *}
-    {* 1. CAROSELLO IMMAGINI (HERO)                 *}
-    {* ──────────────────────────────────────────── *}
+    {* 1. CAROSELLO IMMAGINI *}
     <div class="hero-carousel" id="home-carousel">
         <div class="carousel-inner" id="carousel-inner">
             <div class="carousel-item">
@@ -36,10 +34,7 @@
         </div>
     </div>
 
-
-    {* ──────────────────────────────────────────── *}
-    {* 2. ZONA: OFFERTE IN SCADENZA                  *}
-    {* ──────────────────────────────────────────── *}
+    {* 2. ZONA: OFFERTE IN SCADENZA *}
     <section class="home-section">
         <h2 class="title section-title is-4 text-uppercase">🔥 Offerte in Scadenza</h2>
         
@@ -65,7 +60,6 @@
                                         <p class="subtitle is-6 has-text-muted">{$prodotto->getEditore()|escape}</p>
                                     </div>
                                 </div>
-
                                 <div class="content">
                                     {$prodotto->getDescrizioneBreve()|escape}
                                     <br />
@@ -83,8 +77,7 @@
                     </div>
                 {/foreach}
             {else}
-                {* Placeholder statici per test *}
-                {for $i=1 to 4}
+                {foreach range(1, 4) as $i}
                     <div class="column is-3-desktop is-6-tablet is-12-mobile">
                         <div class="card home-card-fixed">
                             <div class="card-image">
@@ -117,15 +110,12 @@
                             </div>
                         </div>
                     </div>
-                {/for}
+                {/foreach}
             {/if}
         </div>
     </section>
 
-
-    {* ──────────────────────────────────────────── *}
-    {* 3. ZONA: NUOVI ARRIVI                        *}
-    {* ──────────────────────────────────────────── *}
+    {* 3. ZONA: NUOVI ARRIVI *}
     <section class="home-section">
         <h2 class="title section-title is-4 text-uppercase">✨ Nuovi Arrivi</h2>
         
@@ -151,7 +141,6 @@
                                         <p class="subtitle is-6 has-text-muted">{$prodotto->getEditore()|escape}</p>
                                     </div>
                                 </div>
-
                                 <div class="content">
                                     {$prodotto->getDescrizioneBreve()|escape}
                                     <br />
@@ -168,8 +157,7 @@
                     </div>
                 {/foreach}
             {else}
-                {* Placeholder statici per test *}
-                {for $i=1 to 4}
+                {foreach range(1, 4) as $i}
                     <div class="column is-3-desktop is-6-tablet is-12-mobile">
                         <div class="card home-card-fixed">
                             <div class="card-image">
@@ -177,4 +165,56 @@
                                     <img src="https://bulma.io/assets/images/placeholders/1280x960.png" alt="Placeholder image" />
                                 </figure>
                             </div>
-                            <div class="card-content
+                            <div class="card-content">
+                                <div class="media mb-3">
+                                    <div class="media-left">
+                                        <figure class="image is-48x48">
+                                            <img src="https://bulma.io/assets/images/placeholders/96x96.png" alt="Placeholder image" />
+                                        </figure>
+                                    </div>
+                                    <div class="media-content">
+                                        <p class="title is-5 mb-1">Nuovo Arrivo {$i}</p>
+                                        <p class="subtitle is-6 has-text-muted">Editore Demo</p>
+                                    </div>
+                                </div>
+                                <div class="content">
+                                    Appena arrivato in magazzino. Scopri le meccaniche e i componenti di alta qualità.
+                                    <br />
+                                    <div class="mt-3">
+                                        <span class="has-text-dark is-size-5 font-weight-bold">€39.90</span>
+                                    </div>
+                                    <hr class="my-2">
+                                    <time class="is-size-7 has-text-muted" datetime="2026-06-12">Caricato il: 12 Giu 2026</time>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                {/foreach}
+            {/if}
+        </div>
+    </section>
+
+</div>
+{/block}
+
+{block name="extra_js"}
+<script>
+    $(document).ready(function() {
+        let currentSlide = 0;
+        const totalSlides = 3;
+        const $inner = $('#carousel-inner');
+
+        function moveSlide(index) {
+            currentSlide = (index + totalSlides) % totalSlides;
+            $inner.css('transform', 'translateX(-' + (currentSlide * 100 / totalSlides) + '%)');
+        }
+
+        $('#next-slide').click(function() { moveSlide(currentSlide + 1); });
+        $('#prev-slide').click(function() { moveSlide(currentSlide - 1); });
+
+        setInterval(function() {
+            moveSlide(currentSlide + 1);
+        }, 5000);
+    });
+</script>
+{/block}
