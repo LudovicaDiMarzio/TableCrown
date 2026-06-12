@@ -403,6 +403,10 @@ main > .section {
     display: flex;
     flex-direction: column;
     justify-content: space-between;
+    background-color: #fff;
+    border-radius: var(--radius-md);
+    overflow: hidden;
+    border: 1px solid var(--color-border-light);
 }
 
 .card.home-card-fixed .card-content {
@@ -410,6 +414,22 @@ main > .section {
     display: flex;
     flex-direction: column;
     justify-content: space-between;
+}
+
+/* NUOVO: Ridimensionamento contenitore e gestione proporzioni immagini di copertina */
+.image-container-fixed {
+    max-height: 180px; /* Altezza massima bloccata per evitare card giganti */
+    overflow: hidden;
+    background-color: #f5f5f5;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.image-container-fixed img {
+    object-fit: contain !important; /* Mantiene proporzione e interezza delle scatole dei giochi */
+    height: 100% !important;
+    width: 100% !important;
 }
 
 
@@ -583,7 +603,15 @@ main > .section {
 }
 
 
-/* ── 10. RESPONSIVE ───────────────────────────────────────── */
+/* ── 10. RESPONSIVE & LAYOUT FIXES ────────────────────────── */
+
+/* NUOVO: Forza la griglia di Bulma a dividersi esattamente in 4 colonne pulite su schermi grandi */
+@media screen and (min-width: 1024px) {
+    .columns.is-desktop .column.is-3-desktop {
+        flex: none !important;
+        width: 25% !important;
+    }
+}
 
 @media (max-width: 1023px) {
     .header-top-label {
@@ -592,6 +620,12 @@ main > .section {
 
     .site-footer {
         margin-top: 2.5rem;
+    }
+    
+    /* Gestione 2 colonne per tablet */
+    .columns.is-desktop .column.is-6-tablet {
+        flex: none !important;
+        width: 50% !important;
     }
 }
 
@@ -615,7 +649,6 @@ main > .section {
         padding-top: 10px;
     }
 
-    /* MODIFICATO: Su mobile eliminiamo il margine sinistro eccessivo per preservare lo spazio dello schermo */
     .navbar-center-links {
         display: flex;
         flex-direction: column;
@@ -643,5 +676,11 @@ main > .section {
 
     .site-footer .columns {
         gap: 1.5rem 0;
+    }
+    
+    /* Colonna singola a schermo intero su mobile */
+    .columns.is-desktop .column.is-12-mobile {
+        flex: none !important;
+        width: 100% !important;
     }
 }

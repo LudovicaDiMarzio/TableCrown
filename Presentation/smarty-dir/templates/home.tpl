@@ -42,13 +42,13 @@
     <section class="home-section">
         <h2 class="title section-title is-4 text-uppercase">🔥 Offerte in Scadenza</h2>
         
-        <div class="columns is-multiline is-desktop">
+        <div class="columns is-multiline is-mobile is-tablet is-desktop">
             {if isset($offerte) && $offerte|@count > 0}
                 {foreach $offerte as $prodotto}
                     <div class="column is-3-desktop is-6-tablet is-12-mobile">
                         <div class="card home-card-fixed">
                             <div class="card-image">
-                                <figure class="image is-4by3">
+                                <figure class="image is-4by3 image-container-fixed">
                                     <img src="{$base_url}/img/prodotti/{$prodotto->getImmagine()}" alt="{$prodotto->getNome()|escape}" />
                                 </figure>
                             </div>
@@ -81,13 +81,12 @@
                     </div>
                 {/foreach}
             {else}
-                {* Fallback Demo robusto per Smarty 5 *}
                 {assign var="demo_items" value=[1, 2, 3, 4]}
                 {foreach $demo_items as $i}
                     <div class="column is-3-desktop is-6-tablet is-12-mobile">
                         <div class="card home-card-fixed">
                             <div class="card-image">
-                                <figure class="image is-4by3">
+                                <figure class="image is-4by3 image-container-fixed">
                                     <img src="https://bulma.io/assets/images/placeholders/1280x960.png" alt="Placeholder image" />
                                 </figure>
                             </div>
@@ -127,13 +126,13 @@
     <section class="home-section">
         <h2 class="title section-title is-4 text-uppercase">✨ Nuovi Arrivi</h2>
         
-        <div class="columns is-multiline is-desktop">
+        <div class="columns is-multiline is-mobile is-tablet is-desktop">
             {if isset($nuovi_arrivi) && $nuovi_arrivi|@count > 0}
                 {foreach $nuovi_arrivi as $prodotto}
                     <div class="column is-3-desktop is-6-tablet is-12-mobile">
                         <div class="card home-card-fixed">
                             <div class="card-image">
-                                <figure class="image is-4by3">
+                                <figure class="image is-4by3 image-container-fixed">
                                     <img src="{$base_url}/img/prodotti/{$prodotto->getImmagine()}" alt="{$prodotto->getNome()|escape}" />
                                 </figure>
                             </div>
@@ -165,13 +164,12 @@
                     </div>
                 {/foreach}
             {else}
-                {* Fallback Demo robusto per Smarty 5 *}
                 {assign var="demo_arrivals" value=[1, 2, 3, 4]}
                 {foreach $demo_arrivals as $j}
                     <div class="column is-3-desktop is-6-tablet is-12-mobile">
                         <div class="card home-card-fixed">
                             <div class="card-image">
-                                <figure class="image is-4by3">
+                                <figure class="image is-4by3 image-container-fixed">
                                     <img src="https://bulma.io/assets/images/placeholders/1280x960.png" alt="Placeholder image" />
                                 </figure>
                             </div>
@@ -188,7 +186,7 @@
                                     </div>
                                 </div>
                                 <div class="content">
-                                    Appena arrivato in magazzino. Scopri le meccaniche e i componenti di alta qualità.
+                                    Appena arrivato in magazzino. Scopri le meccaniche e i components di alta qualità.
                                     <br />
                                     <div class="mt-3">
                                         <span class="has-text-dark is-size-5 font-weight-bold">€39.90</span>
