@@ -3,7 +3,7 @@
    Struttura:
    1. Variabili & reset
    2. Tipografia base
-   3. Header & Navbar (Solo Icona Logo + Ricerca affiancati)
+   3. Header & Navbar (Menu sopra allineato a sx - Logo + Ricerca sotto)
    5. Breadcrumb
    6. Flash message
    7. Main / contenuto
@@ -82,7 +82,7 @@ p  { line-height: 1.7; margin: 0 0 1rem; }
 p:last-child { margin-bottom: 0; }
 
 
-/* ── 3. HEADER & NAVBAR (MENU SOPRA - LOGO + RICERCA SOTTO) ── */
+/* ── 3. HEADER & NAVBAR (MENU SOPRA ALLINEATO A SX - LOGO + RICERCA SOTTO) ── */
 
 .navbar.navigation {
     background-color: var(--color-bg-dark);
@@ -98,7 +98,7 @@ p:last-child { margin-bottom: 0; }
     width: 100%;
 }
 
-/* RIGA 1: Spazio orizzontale pulito solo per menu e azioni utente */
+/* RIGA 1: Spazio orizzontale per menu (sinistra) e azioni utente (destra) */
 .navbar-row-top-clean {
     display: flex;
     align-items: center;
@@ -112,12 +112,12 @@ p:last-child { margin-bottom: 0; }
     align-items: center;
 }
 
-/* Voci Menu centrate orizzontalmente */
+/* Voci Menu spostate ed allineate a sinistra sopra il logo */
 .navbar-center-links {
     display: flex;
-    gap: 1rem;
-    margin-left: auto;
-    margin-right: auto;
+    gap: 0.5rem;
+    margin-left: -1rem; /* Allinea il primo elemento perfettamente al margine del container */
+    margin-right: auto; /* Spinge il blocco azioni (navbar-end-actions) tutto a destra */
 }
 
 .navbar-center-links .navbar-item {
@@ -177,16 +177,16 @@ p:last-child { margin-bottom: 0; }
     justify-content: space-between;
 }
 
-/* Link del Logo (Contiene solo l'immagine, allineato al centro con la barra) */
+/* Link del Logo senza testo */
 .navbar-row-bottom-search .navbar-logo {
     display: flex;
     align-items: center;
     flex-shrink: 0; 
-    margin-right: 1.75rem; /* Ridotto leggermente dato che l'icona è più compatta */
+    margin-right: 1.75rem; 
     text-decoration: none;
 }
 
-/* Ottimizzata l'altezza dell'immagine da sola per bilanciare i 40px della barra */
+/* Altezza ottimizzata a 40px per pareggiare la barra di ricerca di fianco */
 .navbar-logo-img {
     height: 40px; 
     width: auto;
@@ -525,13 +525,14 @@ main > .section {
     .navbar-center-links {
         flex-direction: column;
         width: 100%;
-        align-items: center;
+        align-items: flex-start; /* Allinea a sinistra anche l'elenco mobile */
         gap: 8px;
+        margin-left: 0; /* Ripristina il margine corretto nello stack mobile */
     }
 
     .navbar-end-actions {
         width: 100%;
-        justify-content: center;
+        justify-content: flex-start; /* Allinea a sinistra le icone utente su mobile */
         gap: 15px;
     }
 
@@ -539,6 +540,7 @@ main > .section {
     .navbar-row-bottom-search {
         flex-direction: column;
         gap: 12px;
+        align-items: flex-start; /* Mantieni coerente il blocco di ricerca a sinistra */
     }
 
     .navbar-row-bottom-search .navbar-logo {
