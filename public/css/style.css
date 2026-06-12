@@ -523,12 +523,11 @@ main > .section {
     }
 
     .navbar-center-links {
-        flex-direction: column;
-        width: 100%;
-        align-items: flex-start; /* Allinea a sinistra anche l'elenco mobile */
-        gap: 8px;
-        margin-left: 0; /* Ripristina il margine corretto nello stack mobile */
-    }
+    display: flex;
+    gap: 0.5rem;
+    margin-left: 0.5rem; /* Crea lo stacco dal bordo sinistro dello schermo */
+    margin-right: auto;  /* Spinge il blocco azioni tutto a destra */
+}
 
     .navbar-end-actions {
         width: 100%;
