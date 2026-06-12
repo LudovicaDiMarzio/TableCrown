@@ -16,19 +16,14 @@
 <body>
 
     {* ──────────────────────────────────────────── *}
-    {* HEADER TABLECROWN (Layout Compatto)          *}
+    {* HEADER TABLECROWN (Menu sopra - Logo + Cerca sotto) *}
     {* ──────────────────────────────────────────── *}
     <nav class="navbar navigation" role="navigation" aria-label="navigazione principale">
-        <div class="container is-fluid px-5"> {* Estende il contenitore per dare respiro ai lati *}
+        <div class="container is-fluid px-5"> 
             
-            <div class="navbar-row-top">
+            <div class="navbar-row-top-clean">
                 
-                <div class="navbar-brand">
-                    <a class="navbar-logo" href="{$base_url}">
-                        <img src="{$base_url}/img/logo.png" alt="TableCrown" class="navbar-logo-img">
-                        <span class="navbar-logo-text">Table<span class="navbar-logo-accent">Crown</span></span>
-                    </a>
-                    
+                <div class="navbar-brand-mobile-only">
                     <a role="button" class="navbar-burger" id="navbar-burger" aria-label="Apri menu" aria-expanded="false" data-target="navbar-menu-custom">
                         <span aria-hidden="true"></span>
                         <span aria-hidden="true"></span>
@@ -84,7 +79,13 @@
                 </div>
             </div>
 
-            <div class="navbar-row-bottom">
+            <div class="navbar-row-bottom-search">
+                
+                <a class="navbar-logo" href="{$base_url}">
+                    <img src="{$base_url}/img/logo.png" alt="TableCrown" class="navbar-logo-img">
+                    <span class="navbar-logo-text">Table<span class="navbar-logo-accent">Crown</span></span>
+                </a>
+
                 <div class="navbar-search-fullwidth">
                     <form class="navbar-search-form" action="{$base_url}/catalogo" method="get">
                         <input class="input navbar-search-input"

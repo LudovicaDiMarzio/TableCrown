@@ -3,7 +3,7 @@
    Struttura:
    1. Variabili & reset
    2. Tipografia base
-   3. Header & Navbar (Nuova struttura compatta a due righe)
+   3. Header & Navbar (Logo affiancato alla ricerca in Riga 2)
    5. Breadcrumb
    6. Flash message
    7. Main / contenuto
@@ -82,7 +82,7 @@ p  { line-height: 1.7; margin: 0 0 1rem; }
 p:last-child { margin-bottom: 0; }
 
 
-/* ── 3. HEADER & NAVBAR (A DUE RIGHE) ─────────────────────── */
+/* ── 3. HEADER & NAVBAR (MENU SOPRA - LOGO + RICERCA SOTTO) ── */
 
 .navbar.navigation {
     background-color: var(--color-bg-dark);
@@ -90,59 +90,34 @@ p:last-child { margin-bottom: 0; }
     padding: 0.75rem 0;
 }
 
-/* Forza il container di Bulma a impilare Riga 1 e Riga 2 */
+/* Container verticale per dividere le due macro-righe dell'header */
 .navbar.navigation .container {
     display: flex !important;
     flex-direction: column !important;
-    gap: 14px;
+    gap: 16px;
     width: 100%;
 }
 
-/* RIGA 1: Struttura Orizzontale */
-.navbar-row-top {
+/* RIGA 1: Spazio orizzontale pulito solo per menu e azioni utente */
+.navbar-row-top-clean {
     display: flex;
     align-items: center;
-    justify-content: space-between;
     width: 100%;
 }
 
-/* Logo */
-.navbar-logo {
-    display: flex;
-    align-items: center;
-    gap: 10px;
-    text-decoration: none;
-}
-
-.navbar-logo-img {
-    height: 36px;
-    width: auto;
-}
-
-.navbar-logo-text {
-    font-size: 1.35rem;
-    font-weight: 700;
-    color: var(--color-text-light);
-    letter-spacing: -0.02em;
-}
-
-.navbar-logo-accent {
-    color: var(--color-primary);
-}
-
-/* Wrapper flessibile per Voci Menu + Azioni Destra */
 .navbar-menu-custom-links {
     display: flex;
     flex-grow: 1;
     justify-content: space-between;
     align-items: center;
-    margin-left: 3rem;
 }
 
-/* Centro: Allineamento Voci Menu */
+/* Voci Menu centrate orizzontalmente */
 .navbar-center-links {
     display: flex;
     gap: 1rem;
+    margin-left: auto;
+    margin-right: auto;
 }
 
 .navbar-center-links .navbar-item {
@@ -159,7 +134,7 @@ p:last-child { margin-bottom: 0; }
     color: var(--color-primary) !important;
 }
 
-/* Destra: Links Azioni (Accedi, Wishlist, Carrello) */
+/* Link ad Estrema Destra (Accedi, Wishlist, Carrello) */
 .navbar-end-actions {
     display: flex;
     align-items: center;
@@ -194,49 +169,43 @@ p:last-child { margin-bottom: 0; }
     line-height: 1;
 }
 
-/* Hamburger menu mobile nativo di Bulma */
-.navbar-burger {
-    background: transparent !important;
-    border: none;
-    color: rgba(255, 255, 255, 0.8);
-}
-
-.navbar-burger span {
-    background-color: rgba(255, 255, 255, 0.8);
-}
-
-.navbar-burger:hover span {
-    background-color: var(--color-primary);
-}
-
-/* Badge carrello */
-.cart-badge {
-    display: inline-flex;
-    align-items: center;
-    justify-content: center;
-    min-width: 18px;
-    height: 18px;
-    padding: 0 4px;
-    background-color: var(--color-primary);
-    color: #fff;
-    font-size: 11px;
-    font-weight: 700;
-    border-radius: 9999px;
-    line-height: 1;
-    position: absolute;
-    top: -6px;
-    right: -8px;
-}
-
-/* RIGA 2: Barra di ricerca estesa */
-.navbar-row-bottom {
+/* RIGA 2: LOGO E BARRA DI RICERCA SULLA STESSA LINEA */
+.navbar-row-bottom-search {
     width: 100%;
     display: flex;
-    justify-content: center;
+    align-items: center;
+    justify-content: space-between;
 }
 
+/* Brand e Logo bloccato a sinistra */
+.navbar-row-bottom-search .navbar-logo {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    flex-shrink: 0; 
+    margin-right: 2.5rem; 
+    text-decoration: none;
+}
+
+.navbar-logo-img {
+    height: 38px;
+    width: auto;
+}
+
+.navbar-logo-text {
+    font-size: 1.4rem;
+    font-weight: 700;
+    color: var(--color-text-light);
+    letter-spacing: -0.02em;
+}
+
+.navbar-logo-accent {
+    color: var(--color-primary);
+}
+
+/* La ricerca si espande a destra del logo occupando il resto dello spazio */
 .navbar-search-fullwidth {
-    width: 100%;
+    flex-grow: 1;
 }
 
 .navbar-search-fullwidth .navbar-search-form {
@@ -247,7 +216,7 @@ p:last-child { margin-bottom: 0; }
 
 .navbar-search-fullwidth .navbar-search-input {
     width: 100%;
-    height: 38px;
+    height: 40px;
     background-color: rgba(255, 255, 255, 0.08);
     border: 1px solid rgba(255, 255, 255, 0.2);
     border-right: none;
@@ -269,8 +238,8 @@ p:last-child { margin-bottom: 0; }
 }
 
 .navbar-search-fullwidth .navbar-search-btn {
-    height: 38px;
-    width: 44px;
+    height: 40px;
+    width: 46px;
     background-color: var(--color-primary) !important;
     border: 1px solid var(--color-primary);
     border-radius: 0 var(--radius-sm) var(--radius-sm) 0 !important;
@@ -288,6 +257,34 @@ p:last-child { margin-bottom: 0; }
     background-color: var(--color-primary-dark) !important;
     border-color: var(--color-primary-dark);
 }
+
+/* Elementi d'appoggio per icone e mobile */
+.cart-badge {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    min-width: 18px;
+    height: 18px;
+    padding: 0 4px;
+    background-color: var(--color-primary);
+    color: #fff;
+    font-size: 11px;
+    font-weight: 700;
+    border-radius: 9999px;
+    position: absolute;
+    top: -6px;
+    right: -8px;
+}
+
+.navbar-burger {
+    background: transparent !important;
+    border: none;
+    color: rgba(255, 255, 255, 0.8);
+}
+
+.navbar-burger span { background-color: rgba(255, 255, 255, 0.8); }
+.navbar-burger:hover span { background-color: var(--color-primary); }
+.navbar-brand-mobile-only { display: none; }
 
 
 /* ── 5. BREADCRUMB ────────────────────────────────────────── */
@@ -511,40 +508,52 @@ main > .section {
         display: none;
     }
 
-    /* Adattamento riga alta per tablet */
-    .navbar-menu-custom-links {
-        margin-left: 1.5rem;
-    }
-
     .site-footer {
         margin-top: 2.5rem;
     }
 }
 
 @media (max-width: 768px) {
-    /* Layout Mobile: Incolonna gli elementi se lo schermo si restringe */
-    .navbar-row-top {
-        flex-wrap: wrap;
+    .navbar-brand-mobile-only {
+        display: block;
+        width: 100%;
     }
 
-    .navbar-menu-custom-links {
-        margin-left: 0;
-        margin-top: 10px;
-        width: 100%;
+    /* Incolonna le macro righe su mobile */
+    .navbar-row-top-clean {
         flex-direction: column;
-        gap: 10px;
         align-items: flex-start;
     }
 
-    .navbar-center-links {
+    .navbar-menu-custom-links {
+        display: none; /* Lascia che Bulma gestisca il toggle della navbar se configurato */
         width: 100%;
-        justify-content: space-around;
+        flex-direction: column;
+        gap: 15px;
+        padding-top: 10px;
+    }
+
+    .navbar-center-links {
+        flex-direction: column;
+        width: 100%;
+        align-items: center;
+        gap: 8px;
     }
 
     .navbar-end-actions {
         width: 100%;
         justify-content: center;
         gap: 15px;
+    }
+
+    /* Riga ricerca su mobile adatta gli spazi */
+    .navbar-row-bottom-search {
+        flex-direction: column;
+        gap: 12px;
+    }
+
+    .navbar-row-bottom-search .navbar-logo {
+        margin-right: 0;
     }
 
     .site-footer .columns {
