@@ -27,11 +27,20 @@ class ESegnalazione{
     #[ORM\Column(type: "string", enumType: StatoSegnalazione:: class)]
     private StatoSegnalazione $statosegnalazione; //può essere "in attesa" o "risolta"
 
-    //TODO: aggiungere annotation doctrine per le relazioni con le altre entity MotivazioneSegnalazione e EUtente
-    private MotivazioneSegnalazione $motivazione; 
-    private EUtente $utente; //l'utente che ha fatto la segnalazione
+    //segnalazione è l'owning side sia per motivazione che per utente, quindi contiene la fk
+    //una segnalazione può avere una sola motivazione, ma una motivazione può essere associata a più segnalazioni (relazione molti a uno)
+    //non è necessario mostrare tutte le segnalazioni legate ad una motivazione, quindi lasceremo la relazione unidirezionale
+    #[ORM\ManyToOne(targetEntity: EMotivazione::class)]
+    #[ORM\JoinColumn(name: "motivazione_id", referencedColumnName: "idmotivazione", nullable: false)]
+    private EMotivazione $motivazione; 
 
-    public function __construct(      MotivazioneSegnalazione $motivazione,
+    //una segnalazione è relativa ad un utente, ma un utente può ricevere più segnalazioni (relazione molti a uno)
+    //può essere utile vedere tutte le segnalazioni legate ad un utente, quindi rendiamo la relazione bidirezionale inserendo i riferimenti alle segnalazioni con una collection di segnalazioni in utente
+    #[ORM\ManyToOne(targetEntity: EUtente::class, inversedBy: "segnalazioni")]
+    #[ORM\JoinColumn(name: "utente_id", referencedColumnName: "idpersona", nullable: false)]
+    private EUtente $utente; //l'utente che ha subito la segnalazione
+
+    public function __construct(  EMotivazione $motivazione,
         EUtente $utente
     ) {
         $this->datasegnalazione = new DateTime();  //la segnalazione avviene nel momento in cui viene creata la sua istanza
@@ -64,7 +73,7 @@ class ESegnalazione{
         return $this->statosegnalazione;
     }   
 
-    public function getMotivazione(): MotivazioneSegnalazione {
+    public function getMotivazione(): EMotivazione {
         return $this->motivazione;
     }
 

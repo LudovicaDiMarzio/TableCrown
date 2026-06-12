@@ -10,6 +10,10 @@ use TableCrown\Entity\Enumerativi\PlayerLevel; //importiamo l'enumerativo Player
 use TableCrown\Entity\Enumerativi\StatoUtente; //importiamo l'enumerativo StatoUtente che abbiamo definito in una cartella separata, altrimenti dovremmo fare riferimento a esso con il suo namespace completo ogni volta che lo utilizziamo (TableCrown\Entity\Enumerativi\StatoUtente).
 use Doctrine\ORM\Mapping as ORM;
 
+//Per creare relazione bidirezionale
+use Doctrine\Common\Collections\ArrayCollection;
+use Doctrine\Common\Collections\Collection;
+
 #[ORM\Entity]
 #[ORM\Table(name: "utente")]
 
@@ -26,6 +30,10 @@ class EUtente extends EPersona {
 
     #[ORM\column(type: "string", enumType: PlayerLevel:: class)]
     private PlayerLevel $PlayerLevel;
+
+    //crea la relazione bidirezionale con ESegnalazione, questo è una lista di segnalazioni legate all'utente esplicitato nella classe ESegnalazione
+    #[ORM\OneToMany(targetEntity: ESegnalazione::class, mappedBy: "utente")]
+    private Collection $segnalazioni;
    
 
     public function __construct(string $nomeuser, mixed $imgprofilouser, string $emailuser, string $passworduser, int $eta, PlayerLevel $PlayerLevel) {
@@ -37,6 +45,7 @@ class EUtente extends EPersona {
         $this->stato = StatoUtente::ATTIVO; //un utente appena creato è attivo di default 
         $this->dataFineSospensione = null;
         $this->PlayerLevel = $PlayerLevel;
+        $this->segnalazioni = new ArrayCollection(); //inizializziamo la collezione di segnalazioni come un ArrayCollection vuoto
     }
 
     //Metodi di dominio
