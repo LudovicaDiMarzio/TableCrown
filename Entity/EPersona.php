@@ -36,23 +36,23 @@ abstract class EPersona {
     //EPersona si occupa di gestire le proprietà comuni a tutte le persone (Utente, Admin, ecc.), mentre le classi figlie (EUtente, EAdmin, ecc.) si occuperanno di gestire le proprietà specifiche di ciascun tipo di persona.
     public function __construct(string $nomepersona, string $emailpersona, string $passwordpersona, ?string $imgpersona = null)
     {
-        $this->impostaNome($nomepersona);
-        $this->impostaEmail($emailpersona);
-        $this->impostaPassword($passwordpersona);
+        $this->rinomina($nomepersona);
+        $this->cambiaEmail($emailpersona);
+        $this->cambiaPassword($passwordpersona);
         $this->imgpersona = $imgpersona;
     }
 
-    public function impostaNome(string $nuovoNome): void
+    public function rinomina(string $nuovoNome): void
     {
         $this->validaNome($nuovoNome);
     }
 
-    public function impostaEmail(string $nuovaEmail): void
+    public function cambiaEmail(string $nuovaEmail): void
     {
         $this->validaEmail($nuovaEmail);
     }
 
-    public function impostaPassword(string $nuovaPassword): void
+    public function cambiaPassword(string $nuovaPassword): void
     {
         $this->validaPassword($nuovaPassword);
     }

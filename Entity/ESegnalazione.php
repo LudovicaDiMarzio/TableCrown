@@ -16,7 +16,7 @@ use Doctrine\ORM\Mapping as ORM;
 
 class ESegnalazione{
 
-    #[ORM\ID]
+    #[ORM\Id]
     #[ORM\GeneratedValue]
     #[ORM\Column(type: "integer")]
     private ?int $idsegnalazione=null;
@@ -24,7 +24,7 @@ class ESegnalazione{
     #[ORM\Column(type: "datetime")]
     private DateTime $datasegnalazione;
 
-    #[ORM\Column(type: "string", enumType: StatoSegnalazione:: class)]
+    #[ORM\Column(type: "string", enumType: StatoSegnalazione::class)]
     private StatoSegnalazione $statosegnalazione; //può essere "in attesa" o "risolta"
 
     //segnalazione è l'owning side sia per motivazione che per utente, quindi contiene la fk
@@ -47,7 +47,11 @@ class ESegnalazione{
         $this->statosegnalazione = StatoSegnalazione::IN_ATTESA; // inizialmente sempre InAttesa
         $this->motivazione = $motivazione;
         $this->utente = $utente;
-    }
+        //manteniamo la coerenza nella relazione bidirezionale, aggiungendo la segnalazione alla collection segnalazione di EUtente, altrimenti la collection sarebbe aggiornata solo dopo il flush
+        //il this come parametro sta a rappresentare che stiamo passando esattamente questa istanza della segnalazione
+        $utente->riceviSegnalazione($this); 
+        
+        }
 
     //metodi di dominio
     public function risolvi(): void

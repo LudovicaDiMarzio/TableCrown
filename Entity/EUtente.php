@@ -19,16 +19,16 @@ use Doctrine\Common\Collections\Collection;
 
 class EUtente extends EPersona {
 
-    #[ORM\column(type: "integer")]
+    #[ORM\Column(type: "integer")]
     private int $eta;
 
-    #[ORM\column(type: "string", enumType: StatoUtente:: class)] //enumType: StatoUtente::class restituisce "TableCrown\Entity\Enumerativi\StatoUtente" per sapere quale enum usare per la conversione automatica
+    #[ORM\Column(type: "string", enumType: StatoUtente::class)] //enumType: StatoUtente::class restituisce "TableCrown\Entity\Enumerativi\StatoUtente" per sapere quale enum usare per la conversione automatica
     private StatoUtente $stato;
 
-    #[ORM\column(type: "datetime", nullable: true)]
+    #[ORM\Column(type: "datetime", nullable: true)]
     private ?DateTime $dataFineSospensione;
 
-    #[ORM\column(type: "string", enumType: PlayerLevel:: class)]
+    #[ORM\Column(type: "string", enumType: PlayerLevel::class)]
     private PlayerLevel $PlayerLevel;
 
     //crea la relazione bidirezionale con ESegnalazione, questo è una lista di segnalazioni legate all'utente esplicitato nella classe ESegnalazione
@@ -44,7 +44,7 @@ class EUtente extends EPersona {
 
     public function __construct(string $nomeuser, mixed $imgprofilouser, string $emailuser, string $passworduser, int $eta, PlayerLevel $PlayerLevel) {
         //invoca il costruttore della classe padre (EPersona) per inizializzare le proprietà comuni a tutte le persone, e poi inizializziamo le proprietà specifiche dell'utente (EUtente).
-        parent::__construct($nomeuser, $imgprofilouser, $emailuser, $passworduser);
+        parent::__construct($nomeuser, $emailuser, $passworduser, $imgprofilouser);
        
         //Gestiamo i dati specifici dell'utente
         $this->impostaEta($eta); 
@@ -129,19 +129,19 @@ class EUtente extends EPersona {
     //GET methods
  
 
-    public function getEta() {
+    public function getEta(): int {
         return $this->eta; 
     }
 
-    public function getStato() {
+    public function getStato(): StatoUtente {
         return $this->stato;
     }
 
-    public function getDataFineSospensione() {
+    public function getDataFineSospensione(): ?\DateTime {
         return $this->dataFineSospensione;
     }
 
-    public function getPlayerLevel() {
+    public function getPlayerLevel(): PlayerLevel {
         return $this->PlayerLevel;
     }
 

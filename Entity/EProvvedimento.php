@@ -15,7 +15,7 @@ class EProvvedimento {
     #[ORM\Column(type: "integer")]
     private ?int $idprovvedimento=null;
 
-    #[ORM\Column(type: "string", enumType: TipoProvvedimento:: class)] 
+    #[ORM\Column(type: "string", enumType: TipoProvvedimento::class)] 
     private TipoProvvedimento $tipoprovvedimento; //può essere  "sospensione" o "ban"
     /*la segnalazione a cui è associato il provvedimento, può essere null perchè l'admin potrebbe
     decidere di appplicare un provvedimento anche senza che gli arrivi una segnalazione, ad esempio scorrendo le recensioni
@@ -34,27 +34,30 @@ class EProvvedimento {
     #[ORM\Column(type: "datetime", nullable: true)]
     private ?DateTime $datascadenza=null; //la data di fine del provvedimento, se è una sospensione, altrimenti null
 
-    #[ORM\Column(type: "string", enumType: StatoProvvedimento:: class)]
+    #[ORM\Column(type: "string", enumType: StatoProvvedimento::class)]
     private StatoProvvedimento $statoprovvedimento; //può essere "attivo" o "revocato"
 
     //la relazione è unidirezionale perchè non ho bisogno di vedere tutti i provvedimenti legati ad una recensione
-    #[ORM\ManyToOne(targetEntity: ERecensione::class)]
+    #[ORM\ManyToOne(TargetEntity: ERecensione::class)]
     #[ORM\JoinColumn(name: "recensione_id", referencedColumnName: "id", nullable: true)] 
     private ?ERecensione $recensionecollegata=null; //la recensione a cui è associato il provvedimento, può essere null perchè l'admin potrebbe decidere di appplicare un provvedimento anche senza che gli arrivi una segnalazione, ad esempio scorrendo le recensioni
   
     //un utente può ricevere più provvedimenti, ma un provvedimento è associato ad un solo utente (relazione molti a uno)
-    #[ORM\ManyToOne(targetEntity: EUtente::class, inversedBy: "provvedimenti")] //la proprietà "provvedimenti" è quella che abbiamo definito nella classe EUtente per la relazione inversa
+    #[ORM\ManyToOne(TargetEntity: EUtente::class, inversedBy: "provvedimenti")] //la proprietà "provvedimenti" è quella che abbiamo definito nella classe EUtente per la relazione inversa
     #[ORM\JoinColumn(nullable: false)]
     private EUtente $utentesanzionato; //l'utente a cui è stato applicato il provvedimento 
 
-    public function __construct(TipoProvvedimento $tipoprovvedimento, ?ESegnalazione $segnalazionecollegata=null,  ?DateTime $datascadenza, EUtente $utentesanzionato, ?ERecensione $recensionecollegata=null) {
+    public function __construct(TipoProvvedimento $tipoprovvedimento, EUtente $utentesanzionato, ?DateTime $datascadenza, ?ERecensione $recensionecollegata=null, ?ESegnalazione $segnalazionecollegata=null) {
         $this->tipoprovvedimento = $tipoprovvedimento;
-        $this->segnalazionecollegata = $segnalazionecollegata;
         $this->dataemissione = new DateTime();
-        $this->validaDataScadenza($datascadenza);
         $this->statoprovvedimento = StatoProvvedimento::ATTIVO; // inizialmente sempre attivo
         $this->utentesanzionato = $utentesanzionato;
+        $this->validaDataScadenza($datascadenza);
         $this->recensionecollegata = $recensionecollegata; // inizialmente non è associato a nessuna recensione, ma potrà essere associato in un secondo momento se l'admin decide di applicare un provvedimento ad una recensione specifica
+        $this->segnalazionecollegata = $segnalazionecollegata;
+        //manteniamo la coerenza nella relazione bidirezionale, aggiungendo il provvedimento alla collection provvedimenti di EUtente, altrimenti la collection sarebbe aggiornata solo dopo il flush
+        //il this come parametro sta a rappresentare che stiamo passando esattamente questa istanza del provvedimento
+        $utentesanzionato->riceviProvvedimento($this);
     }
 
     //metodi di dominio
@@ -150,7 +153,7 @@ class EProvvedimento {
         return $this->segnalazionecollegata;
     }
 
-    public function getRecensionecollegata(): ?ERecensione {
+    public function getRecensioneCollegata(): ?ERecensione {
         return $this->recensionecollegata;
     }
 
