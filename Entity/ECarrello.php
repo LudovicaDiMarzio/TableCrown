@@ -7,14 +7,14 @@ class ECarrello {
     private int $idCarrello;
     private DateTime $dataCreazione;
     private DateTime $ultimaModifica;
-    private int $idUtente;
+    private Eutente $Utente;
     private array $carrelloItems; // lista di oggetti ECarrelloItem
  
-    public function __construct(int $idCarrello, DateTime $dataCreazione, DateTime $ultimaModifica, int $idUtente, array $carrelloItems = []) {
+    public function __construct(int $idCarrello, DateTime $dataCreazione, DateTime $ultimaModifica, Eutente $Utente, array $carrelloItems = []) {
         $this->idCarrello = $idCarrello;
         $this->dataCreazione = $dataCreazione;
         $this->ultimaModifica = $ultimaModifica;
-        $this->idUtente = $idUtente;
+        $this->Utente = $Utente;
         $this->carrelloItems = $carrelloItems;
     }
  

@@ -7,13 +7,13 @@ class EWishlist {
     private int $idWishlist;
     private DateTime $dataCreazione;
     private array $idProdotti; // array di int (FK -> EProdotto)
-    private int $EUtente; // FK -> EUtente (1 a 1)
+    private Eutente $Utente; // FK -> EUtente (1 a 1)
  
-    public function __construct(DateTime $dataCreazione, array $idProdotti, int $EUtente) {
+    public function __construct(DateTime $dataCreazione, array $idProdotti, Eutente $Utente) {
         
         $this->dataCreazione = $dataCreazione;
         $this->idProdotti = $idProdotti;
-        $this->EUtente = $EUtente;
+        $this->Utente = $Utente;
     }
  
     // SET methods
