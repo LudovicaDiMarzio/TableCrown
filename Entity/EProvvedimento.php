@@ -21,7 +21,11 @@ class EProvvedimento {
     decidere di appplicare un provvedimento anche senza che gli arrivi una segnalazione, ad esempio scorrendo le recensioni
     */
 
-    //TODO: aggiungere annotation doctrine per la relazione con l'entity ESegnalazione
+    
+    //una segnalazione può avere più provvedimenti (escalation sospensione -> ban), ma un provvedimento è associato ad una sola segnalazione (relazione molti a uno)
+    //relazione unidirezionale perchè non ho bisogno di vedere tutti i provvedimenti legati ad una segnalazione, ma solo la segnalazione collegata ad un provvedimento
+    #[ORM\ManyToOne(TargetEntity: ESegnalazione::class)]
+    #[ORM\JoinColumn(nullable: true)] //
     private ?ESegnalazione $segnalazionecollegata;
     
     #[ORM\Column(type: "datetime")]
@@ -32,17 +36,25 @@ class EProvvedimento {
 
     #[ORM\Column(type: "string", enumType: StatoProvvedimento:: class)]
     private StatoProvvedimento $statoprovvedimento; //può essere "attivo" o "revocato"
+
+    //la relazione è unidirezionale perchè non ho bisogno di vedere tutti i provvedimenti legati ad una recensione
+    #[ORM\ManyToOne(targetEntity: ERecensione::class)]
+    #[ORM\JoinColumn(name: "recensione_id", referencedColumnName: "id", nullable: true)] 
+    private ?ERecensione $recensionecollegata=null; //la recensione a cui è associato il provvedimento, può essere null perchè l'admin potrebbe decidere di appplicare un provvedimento anche senza che gli arrivi una segnalazione, ad esempio scorrendo le recensioni
   
-    //TODO: aggiungere annotation doctrine per la relazione con l'entity EUtente
+    //un utente può ricevere più provvedimenti, ma un provvedimento è associato ad un solo utente (relazione molti a uno)
+    #[ORM\ManyToOne(targetEntity: EUtente::class, inversedBy: "provvedimenti")] //la proprietà "provvedimenti" è quella che abbiamo definito nella classe EUtente per la relazione inversa
+    #[ORM\JoinColumn(nullable: false)]
     private EUtente $utentesanzionato; //l'utente a cui è stato applicato il provvedimento 
 
-    public function __construct(TipoProvvedimento $tipoprovvedimento, ESegnalazione $segnalazionecollegata,  ?DateTime $datascadenza, EUtente $utentesanzionato) {
+    public function __construct(TipoProvvedimento $tipoprovvedimento, ?ESegnalazione $segnalazionecollegata=null,  ?DateTime $datascadenza, EUtente $utentesanzionato, ?ERecensione $recensionecollegata=null) {
         $this->tipoprovvedimento = $tipoprovvedimento;
         $this->segnalazionecollegata = $segnalazionecollegata;
         $this->dataemissione = new DateTime();
         $this->validaDataScadenza($datascadenza);
         $this->statoprovvedimento = StatoProvvedimento::ATTIVO; // inizialmente sempre attivo
         $this->utentesanzionato = $utentesanzionato;
+        $this->recensionecollegata = $recensionecollegata; // inizialmente non è associato a nessuna recensione, ma potrà essere associato in un secondo momento se l'admin decide di applicare un provvedimento ad una recensione specifica
     }
 
     //metodi di dominio
@@ -70,6 +82,42 @@ class EProvvedimento {
         }
     }
     
+    
+    // Associa una recensione al provvedimento come causa scatenante.
+    public function associaRecensioneCausante(ERecensione $recensione): void {
+        
+        // Un provvedimento può essere legato a una sola recensione.
+        if ($this->recensionecollegata !== null) {
+            throw new \Exception("Errore: Questo provvedimento è già associato a una recensione. Non puoi sovrascriverla.");
+        }
+
+        // Non si può associare una recensione se il provvedimento è già scaduto o revocato
+        if ($this->statoprovvedimento === StatoProvvedimento::REVOCATO) {
+            throw new \Exception("Errore: Non puoi associare una recensione a un provvedimento già revocato.");
+        }
+
+        // Se supera i controlli, esegue l'azione
+        $this->recensionecollegata = $recensione;
+    }
+
+
+    //Associa una segnalazione al provvedimento come causa scatenante. 
+    public function associaSegnalazioneCausante(ESegnalazione $segnalazione): void {
+        
+        //Un provvedimento nasce da una singola segnalazione. 
+        // Se è già associato a una segnalazione, blocchiamo la sovrascrittura.
+        if ($this->segnalazionecollegata !== null) {
+            throw new \Exception("Errore: Questo provvedimento è già stato generato da una segnalazione.");
+        }
+
+        //Impedisce di manomettere lo storico di un ban già chiuso/revocato.
+        if ($this->statoprovvedimento === StatoProvvedimento::REVOCATO) {
+            throw new \Exception("Errore: Impossibile associare una nuova segnalazione a un provvedimento già revocato.");
+        }
+
+        // Se supera i controlli di sicurezza, esegue l'assegnazione
+        $this->segnalazionecollegata = $segnalazione;
+    }
 
 
     //GET methods
@@ -100,6 +148,10 @@ class EProvvedimento {
 
     public function getSegnalazioneCollegata(): ?ESegnalazione {
         return $this->segnalazionecollegata;
+    }
+
+    public function getRecensionecollegata(): ?ERecensione {
+        return $this->recensionecollegata;
     }
 
 }

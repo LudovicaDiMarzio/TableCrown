@@ -34,6 +34,12 @@ class EUtente extends EPersona {
     //crea la relazione bidirezionale con ESegnalazione, questo è una lista di segnalazioni legate all'utente esplicitato nella classe ESegnalazione
     #[ORM\OneToMany(targetEntity: ESegnalazione::class, mappedBy: "utente")]
     private Collection $segnalazioni;
+
+    //crea la relazione bidirezionale con EProvvedimento, questo è una lista di provvedimenti legati all'utente esplicitato nella classe EProvvedimento
+    #[ORM\OneToMany(targetEntity: EProvvedimento::class, mappedBy: "utentesanzionato")]
+    private Collection $provvedimenti;
+
+    
    
 
     public function __construct(string $nomeuser, mixed $imgprofilouser, string $emailuser, string $passworduser, int $eta, PlayerLevel $PlayerLevel) {
@@ -46,6 +52,7 @@ class EUtente extends EPersona {
         $this->dataFineSospensione = null;
         $this->PlayerLevel = $PlayerLevel;
         $this->segnalazioni = new ArrayCollection(); //inizializziamo la collezione di segnalazioni come un ArrayCollection vuoto
+        $this->provvedimenti = new ArrayCollection(); //inizializziamo la collezione di provvedimenti come un ArrayCollection vuoto
     }
 
     //Metodi di dominio
@@ -101,6 +108,24 @@ class EUtente extends EPersona {
     }
    
 
+    //Aggiunge un nuovo provvedimento allo storico dell'utente in RAM
+    public function riceviProvvedimento(EProvvedimento $nuovoProvvedimento): void {
+        
+        // Controllo di sicurezza: se il provvedimento non è già nella lista, lo aggiungiamo
+        if (!$this->provvedimenti->contains($nuovoProvvedimento)) {
+            $this->provvedimenti->add($nuovoProvvedimento);
+        }
+    }
+
+    //Aggiunge una nuova segnalazione allo storico di quelle ricevute dall'utente.
+    public function riceviSegnalazione(ESegnalazione $nuovaSegnalazione): void {
+        
+        // Verifica che questa specifica segnalazione non sia già stata inserita nella lista
+        if (!$this->segnalazioni->contains($nuovaSegnalazione)) {
+            $this->segnalazioni->add($nuovaSegnalazione);
+        }
+    }
+
     //GET methods
  
 
@@ -118,5 +143,15 @@ class EUtente extends EPersona {
 
     public function getPlayerLevel() {
         return $this->PlayerLevel;
+    }
+
+    
+    //Restituisce lo storico completo di tutti i provvedimenti subiti dall'utente.
+    public function getProvvedimenti(): Collection {
+        return $this->provvedimenti;
+    }
+
+    public function getSegnalazioni(): Collection {
+        return $this->segnalazioni;
     }
 }
