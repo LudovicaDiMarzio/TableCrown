@@ -525,7 +525,7 @@ main > .section {
     .navbar-center-links {
     display: flex;
     gap: 0.5rem;
-    margin-left: 0.5rem; /* Crea lo stacco dal bordo sinistro dello schermo */
+    margin-left: 2rem; /* Crea lo stacco dal bordo sinistro dello schermo */
     margin-right: auto;  /* Spinge il blocco azioni tutto a destra */
 }
 
