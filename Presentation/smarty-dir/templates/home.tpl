@@ -3,7 +3,9 @@
 {block name="content"}
 <div class="container px-4">
 
-    {* 1. CAROSELLO IMMAGINI *}
+    {* ──────────────────────────────────────────── *}
+    {* 1. CAROSELLO IMMAGINI (HERO)                 *}
+    {* ──────────────────────────────────────────── *}
     <div class="hero-carousel" id="home-carousel">
         <div class="carousel-inner" id="carousel-inner">
             <div class="carousel-item">
@@ -34,7 +36,9 @@
         </div>
     </div>
 
-    {* 2. ZONA: OFFERTE IN SCADENZA *}
+    {* ──────────────────────────────────────────── *}
+    {* 2. ZONA: OFFERTE IN SCADENZA                  *}
+    {* ──────────────────────────────────────────── *}
     <section class="home-section">
         <h2 class="title section-title is-4 text-uppercase">🔥 Offerte in Scadenza</h2>
         
@@ -77,7 +81,9 @@
                     </div>
                 {/foreach}
             {else}
-                {foreach range(1, 4) as $i}
+                {* Fallback Demo robusto per Smarty 5 *}
+                {assign var="demo_items" value=[1, 2, 3, 4]}
+                {foreach $demo_items as $i}
                     <div class="column is-3-desktop is-6-tablet is-12-mobile">
                         <div class="card home-card-fixed">
                             <div class="card-image">
@@ -115,7 +121,9 @@
         </div>
     </section>
 
-    {* 3. ZONA: NUOVI ARRIVI *}
+    {* ──────────────────────────────────────────── *}
+    {* 3. ZONA: NUOVI ARRIVI                        *}
+    {* ──────────────────────────────────────────── *}
     <section class="home-section">
         <h2 class="title section-title is-4 text-uppercase">✨ Nuovi Arrivi</h2>
         
@@ -157,7 +165,9 @@
                     </div>
                 {/foreach}
             {else}
-                {foreach range(1, 4) as $i}
+                {* Fallback Demo robusto per Smarty 5 *}
+                {assign var="demo_arrivals" value=[1, 2, 3, 4]}
+                {foreach $demo_arrivals as $j}
                     <div class="column is-3-desktop is-6-tablet is-12-mobile">
                         <div class="card home-card-fixed">
                             <div class="card-image">
@@ -173,7 +183,7 @@
                                         </figure>
                                     </div>
                                     <div class="media-content">
-                                        <p class="title is-5 mb-1">Nuovo Arrivo {$i}</p>
+                                        <p class="title is-5 mb-1">Nuovo Arrivo {$j}</p>
                                         <p class="subtitle is-6 has-text-muted">Editore Demo</p>
                                     </div>
                                 </div>
