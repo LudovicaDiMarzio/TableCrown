@@ -83,7 +83,6 @@
                 
                 <a class="navbar-logo" href="{$base_url}">
                     <img src="{$base_url}/img/logo.png" alt="TableCrown" class="navbar-logo-img">
-                    <span class="navbar-logo-text">Table<span class="navbar-logo-accent">Crown</span></span>
                 </a>
 
                 <div class="navbar-search-fullwidth">

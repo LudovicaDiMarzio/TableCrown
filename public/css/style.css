@@ -3,7 +3,7 @@
    Struttura:
    1. Variabili & reset
    2. Tipografia base
-   3. Header & Navbar (Logo affiancato alla ricerca in Riga 2)
+   3. Header & Navbar (Solo Icona Logo + Ricerca affiancati)
    5. Breadcrumb
    6. Flash message
    7. Main / contenuto
@@ -169,7 +169,7 @@ p:last-child { margin-bottom: 0; }
     line-height: 1;
 }
 
-/* RIGA 2: LOGO E BARRA DI RICERCA SULLA STESSA LINEA */
+/* RIGA 2: ICONA LOGO E BARRA DI RICERCA SULLA STESSA LINEA */
 .navbar-row-bottom-search {
     width: 100%;
     display: flex;
@@ -177,30 +177,19 @@ p:last-child { margin-bottom: 0; }
     justify-content: space-between;
 }
 
-/* Brand e Logo bloccato a sinistra */
+/* Link del Logo (Contiene solo l'immagine, allineato al centro con la barra) */
 .navbar-row-bottom-search .navbar-logo {
     display: flex;
     align-items: center;
-    gap: 10px;
     flex-shrink: 0; 
-    margin-right: 2.5rem; 
+    margin-right: 1.75rem; /* Ridotto leggermente dato che l'icona è più compatta */
     text-decoration: none;
 }
 
+/* Ottimizzata l'altezza dell'immagine da sola per bilanciare i 40px della barra */
 .navbar-logo-img {
-    height: 38px;
+    height: 40px; 
     width: auto;
-}
-
-.navbar-logo-text {
-    font-size: 1.4rem;
-    font-weight: 700;
-    color: var(--color-text-light);
-    letter-spacing: -0.02em;
-}
-
-.navbar-logo-accent {
-    color: var(--color-primary);
 }
 
 /* La ricerca si espande a destra del logo occupando il resto dello spazio */
@@ -526,7 +515,7 @@ main > .section {
     }
 
     .navbar-menu-custom-links {
-        display: none; /* Lascia che Bulma gestisca il toggle della navbar se configurato */
+        display: none; 
         width: 100%;
         flex-direction: column;
         gap: 15px;
