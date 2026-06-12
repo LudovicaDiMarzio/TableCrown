@@ -525,8 +525,17 @@ main > .section {
     .navbar-center-links {
     display: flex;
     gap: 0.5rem;
-    margin-left: 2rem; /* Crea lo stacco dal bordo sinistro dello schermo */
-    margin-right: auto;  /* Spinge il blocco azioni tutto a destra */
+    margin-left: 0.5rem; /* Sganciato dal bordo! Alza a 1rem o 1.5rem se vuoi più spazio */
+    margin-right: auto;  /* Spinge il blocco azioni (navbar-end-actions) tutto a destra */
+    }  /* Spinge il blocco azioni tutto a destra */
+
+    .navbar-center-links .navbar-item {
+    color: rgba(255, 255, 255, 0.8) !important;
+    font-size: var(--font-size-md);
+    font-weight: 500;
+    padding: 0.5rem 1rem;
+    transition: color var(--transition);
+    background: transparent !important;
 }
 
     .navbar-end-actions {
