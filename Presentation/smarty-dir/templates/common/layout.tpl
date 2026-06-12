@@ -16,112 +16,90 @@
 <body>
 
     {* ──────────────────────────────────────────── *}
-    {* HEADER                                        *}
+    {* HEADER TABLECROWN (Layout Compatto)          *}
     {* ──────────────────────────────────────────── *}
-
-    {* Riga 1: Logo + icone account/wishlist/carrello *}
-    <div class="header-top">
-        <div class="container">
-
-            <a class="navbar-logo" href="{$base_url}">
-                <img src="{$base_url}/img/logo.png"
-                     alt="TableCrown"
-                     class="navbar-logo-img">
-                {* Fallback testuale se l'immagine non è ancora presente *}
-                <span class="navbar-logo-text">Table<span class="navbar-logo-accent">Crown</span></span>
-            </a>
-
-            <div class="header-top-actions">
-
-                {* Accedi / Account *}
-                {if isset($utente)}
-                    <div class="navbar-item has-dropdown is-hoverable">
-                        <a class="navbar-link navbar-user-link">
-                            <i class="ti ti-user-circle navbar-icon"></i>
-                            <span class="navbar-username">{$utente->getNickname()|escape}</span>
-                        </a>
-                        <div class="navbar-dropdown is-right">
-                            <a class="navbar-item" href="{$base_url}/profilo">
-                                <i class="ti ti-user navbar-dropdown-icon"></i>Il mio account
-                            </a>
-                            <a class="navbar-item" href="{$base_url}/profilo/ordini">
-                                <i class="ti ti-package navbar-dropdown-icon"></i>I miei ordini
-                            </a>
-                            <a class="navbar-item" href="{$base_url}/profilo/eventi">
-                                <i class="ti ti-calendar navbar-dropdown-icon"></i>I miei eventi
-                            </a>
-                            <hr class="navbar-divider">
-                            <a class="navbar-item navbar-logout" href="{$base_url}/logout">
-                                <i class="ti ti-logout navbar-dropdown-icon"></i>Logout
-                            </a>
-                        </div>
-                    </div>
-                {else}
-                    <a class="header-top-link" href="{$base_url}/accedi">Accedi</a>
-                {/if}
-
-                {* Wishlist *}
-                <a class="header-top-link" href="{$base_url}/wishlist" title="La mia wishlist">
-                    <i class="ti ti-heart navbar-icon"></i>
-                    <span class="header-top-label">Wishlist</span>
-                </a>
-
-                {* Carrello *}
-                <a class="header-top-link" href="{$base_url}/carrello" title="Carrello">
-                    <i class="ti ti-shopping-cart navbar-icon"></i>
-                    <span class="header-top-label">Carrello</span>
-                    {if isset($cart_count) && $cart_count > 0}
-                        <span class="cart-badge">{$cart_count}</span>
-                    {/if}
-                </a>
-
-            </div>
-        </div>
-    </div>
-
-    {* Riga 2: Navbar con voci di menu + barra di ricerca *}
     <nav class="navbar navigation" role="navigation" aria-label="navigazione principale">
-        <div class="container">
-
-            <div class="navbar-brand">
-                <a role="button" class="navbar-burger" id="navbar-burger"
-                   aria-label="Apri menu" aria-expanded="false" data-target="navbar-menu">
-                    <span aria-hidden="true"></span>
-                    <span aria-hidden="true"></span>
-                    <span aria-hidden="true"></span>
-                </a>
-            </div>
-
-            <div id="navbar-menu" class="navbar-menu">
-
-                <div class="navbar-start">
-                    <a class="navbar-item{if $current_page == 'catalogo'} is-active{/if}"
-                       href="{$base_url}/catalogo">Catalogo</a>
-                    <a class="navbar-item{if $current_page == 'eventi'} is-active{/if}"
-                       href="{$base_url}/eventi">Eventi</a>
-                    <a class="navbar-item{if $current_page == 'offerte'} is-active{/if}"
-                       href="{$base_url}/offerte">Offerte</a>
-
+        <div class="container is-fluid px-5"> {* Estende il contenitore per dare respiro ai lati *}
+            
+            <div class="navbar-row-top">
+                
+                <div class="navbar-brand">
+                    <a class="navbar-logo" href="{$base_url}">
+                        <img src="{$base_url}/img/logo.png" alt="TableCrown" class="navbar-logo-img">
+                        <span class="navbar-logo-text">Table<span class="navbar-logo-accent">Crown</span></span>
+                    </a>
+                    
+                    <a role="button" class="navbar-burger" id="navbar-burger" aria-label="Apri menu" aria-expanded="false" data-target="navbar-menu-custom">
+                        <span aria-hidden="true"></span>
+                        <span aria-hidden="true"></span>
+                        <span aria-hidden="true"></span>
+                    </a>
                 </div>
 
-                {* Barra di ricerca nella navbar-end *}
-                <div class="navbar-end">
-                    <div class="navbar-item navbar-search-wrap">
-                        <form class="navbar-search-form" action="{$base_url}/catalogo" method="get">
-                            <input class="input navbar-search-input"
-                                   type="search"
-                                   name="q"
-                                   placeholder="Cerca nel catalogo..."
-                                   value="{$search_query|default:''|escape}"
-                                   aria-label="Cerca nel catalogo">
-                            <button class="button navbar-search-btn" type="submit" aria-label="Cerca">
-                                <i class="ti ti-search"></i>
-                            </button>
-                        </form>
+                <div id="navbar-menu-custom" class="navbar-menu-custom-links">
+                    
+                    <div class="navbar-center-links">
+                        <a class="navbar-item{if $current_page == 'catalogo'} is-active{/if}" href="{$base_url}/catalogo">Catalogo</a>
+                        <a class="navbar-item{if $current_page == 'eventi'} is-active{/if}" href="{$base_url}/eventi">Eventi</a>
+                        <a class="navbar-item{if $current_page == 'offerte'} is-active{/if}" href="{$base_url}/offerte">Offerte</a>
                     </div>
-                </div>
 
+                    <div class="navbar-end-actions">
+                        
+                        {* Accedi / Account *}
+                        {if isset($utente)}
+                            <div class="navbar-item has-dropdown is-hoverable">
+                                <a class="navbar-link navbar-user-link">
+                                    <i class="ti ti-user-circle navbar-icon"></i>
+                                    <span class="navbar-username">{$utente->getNickname()|escape}</span>
+                                </a>
+                                <div class="navbar-dropdown is-right">
+                                    <a class="navbar-item" href="{$base_url}/profilo"><i class="ti ti-user"></i> Il mio account</a>
+                                    <a class="navbar-item" href="{$base_url}/profilo/ordini"><i class="ti ti-package"></i> I miei ordini</a>
+                                    <a class="navbar-item" href="{$base_url}/profilo/eventi"><i class="ti ti-calendar"></i> I miei eventi</a>
+                                    <hr class="navbar-divider">
+                                    <a class="navbar-item navbar-logout" href="{$base_url}/logout"><i class="ti ti-logout"></i> Logout</a>
+                                </div>
+                            </div>
+                        {else}
+                            <a class="header-top-link" href="{$base_url}/accedi">Accedi</a>
+                        {/if}
+
+                        {* Wishlist *}
+                        <a class="header-top-link" href="{$base_url}/wishlist" title="La mia wishlist">
+                            <i class="ti ti-heart navbar-icon"></i>
+                            <span class="header-top-label">Wishlist</span>
+                        </a>
+
+                        {* Carrello *}
+                        <a class="header-top-link" href="{$base_url}/carrello" title="Carrello">
+                            <i class="ti ti-shopping-cart navbar-icon"></i>
+                            <span class="header-top-label">Carrello</span>
+                            {if isset($cart_count) && $cart_count > 0}
+                                <span class="cart-badge">{$cart_count}</span>
+                            {/if}
+                        </a>
+                    </div>
+                    
+                </div>
             </div>
+
+            <div class="navbar-row-bottom">
+                <div class="navbar-search-fullwidth">
+                    <form class="navbar-search-form" action="{$base_url}/catalogo" method="get">
+                        <input class="input navbar-search-input"
+                               type="search"
+                               name="q"
+                               placeholder="Cerca nel catalogo..."
+                               value="{$search_query|default:''|escape}"
+                               aria-label="Cerca nel catalogo">
+                        <button class="button navbar-search-btn" type="submit" aria-label="Cerca">
+                            <i class="ti ti-search"></i>
+                        </button>
+                    </form>
+                </div>
+            </div>
+
         </div>
     </nav>
 
