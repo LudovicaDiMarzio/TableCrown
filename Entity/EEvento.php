@@ -1,29 +1,60 @@
 <?php
 namespace TableCrown\Entity;
+
+use Doctrine\ORM\Mapping as ORM;
+use Doctrine\Common\Collections\ArrayCollection;
+use Doctrine\Common\Collections\Collection;
 use DateTime;
 use InvalidArgumentException;
 use TableCrown\Entity\Enumerativi\StatoEvento;
 
+#[ORM\Entity]
+#[ORM\Table(name: "evento")]
+#[ORM\InheritanceType("JOINED")]
+#[ORM\DiscriminatorColumn(name: "tipo", type: "string")]
+#[ORM\DiscriminatorMap([
+    "serata" => ESerata::class,
+    "torneo" => ETorneo::class,
+    "challenge" => EChallenge::class,
+])]
 abstract class EEvento {
-    private ?int $idEvento;
-    private string $nomeEvento;
-    private string $imgEvento; //da rivedere
-    private string $descrizioneEvento;
-    private DateTime $dataInizio;
-    private int $maxPartecipanti;
-    private StatoEvento $statoEvento;
-    /** @var EPartecipazione[] */ //notazione per indicare che si tratta di un array di oggetti EPartecipazione, serve per la documentazione e per gli strumenti di sviluppo, non è una dichiarazione di tipo formale
-    private array $partecipazioni; //array di EPartecipazione, rappresenta le partecipazioni all'evento
 
-    public function __construct(?int $idEvento, string $nomeEvento, string $imgEvento, string $descrizioneEvento, DateTime $dataInizio, int $maxPartecipanti) {
-        $this->idEvento = $idEvento;
-        $this->nomeEvento = $nomeEvento;
-        $this->imgEvento = $imgEvento;
-        $this->descrizioneEvento = $descrizioneEvento;
+    #[ORM\Id]
+    #[ORM\GeneratedValue]
+    #[ORM\Column(type: "integer")]
+    private ?int $idEvento;
+
+    #[ORM\Column(type: "string", length: 255)]
+    private string $nomeEvento;
+
+    #[ORM\Column(type: "blob")]
+    private string $imgEvento;
+
+    #[ORM\Column(type: "text")]
+    private string $descrizioneEvento;
+
+    #[ORM\Column(type: "datetime")]
+    private DateTime $dataInizio;
+
+    #[ORM\Column(type: "integer")]
+    private int $maxPartecipanti;
+
+    #[ORM\Column(type: "string", enumType: StatoEvento::class)]
+    private StatoEvento $statoEvento;
+
+    #[ORM\OneToMany(targetEntity: EPartecipazione::class, mappedBy: "evento", cascade: ["persist", "remove"])]
+    private Collection $partecipazioni; //array di EPartecipazione, rappresenta le partecipazioni all'evento
+
+    public function __construct(string $nomeEvento, string $imgEvento, string $descrizioneEvento, DateTime $dataInizio, int $maxPartecipanti) {
+        $this->rinominaEvento($nomeEvento); //utilizza il metodo di dominio per validare il nome dell'evento
+        $this->aggiornaImg($imgEvento); //utilizza il metodo di dominio per validare l'immagine dell'evento
+        $this->aggiornaDescrizione($descrizioneEvento); //utilizza il metodo di dominio per validare la descrizione dell'evento
         $this->dataInizio = $dataInizio;
+        $this->verificaDataInizio();
         $this->maxPartecipanti = $maxPartecipanti;
+        $this->verificaMaxPartecipanti();
         $this->statoEvento = StatoEvento::Programmato; //lo stato iniziale dell'evento è sempre "Programmato"
-        $this->partecipazioni = [];
+        $this->partecipazioni = new ArrayCollection(); //inizializzazione della collezione di partecipazioni
     }
 
     //GET methods
@@ -55,7 +86,7 @@ abstract class EEvento {
         return $this->statoEvento;
     }
 
-    public function getPartecipazioni(): array {
+    public function getPartecipazioni(): Collection {
         return $this->partecipazioni;
     }
 
@@ -68,7 +99,7 @@ abstract class EEvento {
     /**
      * Aggiorna il nome dell'evento.
      */
-    public function rinominaEvento(string $nomeEvento) {
+    public function rinominaEvento(string $nomeEvento): void {
         if (trim($nomeEvento) === "") {
             throw new InvalidArgumentException("Il nome dell'evento non può essere vuoto.");
         }
@@ -78,7 +109,7 @@ abstract class EEvento {
     /**
      * Aggiorna la descrizione dell'evento.
      */
-    public function aggiornaDescrizione(string $descrizioneEvento) {
+    public function aggiornaDescrizione(string $descrizioneEvento): void {
         if (trim($descrizioneEvento) === "") {
             throw new InvalidArgumentException("La descrizione dell'evento non può essere vuota.");
         }
@@ -88,7 +119,7 @@ abstract class EEvento {
     /**
      * Aggiorna l'immagine dell'evento.
      */
-    public function aggiornaImg(string $imgEvento) {
+    public function aggiornaImg(string $imgEvento): void {
         $this->imgEvento = trim($imgEvento);
     }
 
@@ -97,7 +128,7 @@ abstract class EEvento {
      * Aggiorna il numero massimo di partecipanti all'evento.
      * Il numero massimo di partecipanti deve essere maggiore di 0.
      */
-    public function aggiornaMaxPartecipanti(int $maxPartecipanti) {
+    public function aggiornaMaxPartecipanti(int $maxPartecipanti): void {
         if ($maxPartecipanti <= 0) {
             throw new InvalidArgumentException("Il numero massimo di partecipanti deve essere maggiore di 0.");
         }
@@ -111,7 +142,7 @@ abstract class EEvento {
      * Rendi l'evento in corso.
      * L'evento può essere avviato solo se è nello stato "Programmato" e se la data di inizio è passata rispetto alla data attuale.
      */
-    public function avviaEvento() {
+    public function avviaEvento(): void {
         if ($this->statoEvento !== StatoEvento::Programmato) {
             throw new InvalidArgumentException("L'evento può essere avviato solo se è nello stato 'Programmato'.");
         }
@@ -125,7 +156,7 @@ abstract class EEvento {
      * Rendi l'evento terminato.
      * L'evento può essere terminato solo se è nello stato "In corso".
      */
-    public function terminaEvento() {
+    public function terminaEvento(): void {
         if ($this->statoEvento !== StatoEvento::InCorso) {
             throw new InvalidArgumentException("L'evento può essere terminato solo se è nello stato 'In corso'.");
         }
@@ -136,7 +167,7 @@ abstract class EEvento {
      * Annulla l'evento.
      * L'evento può essere annullato solo se è nello stato "Programmato".
      */
-    public function annullaEvento() {
+    public function annullaEvento(): void {
         if ($this->statoEvento !== StatoEvento::Programmato) {
             throw new InvalidArgumentException("L'evento può essere annullato solo se è nello stato 'Programmato'.");
         }
@@ -147,7 +178,7 @@ abstract class EEvento {
      * Riprogramma l'evento e rendi l'evento programmato.
      * L'evento può essere riprogrammato solo se è nello stato "Annullato" e se la data di inizio è una data futura rispetto alla data attuale.
      */
-    public function riprogrammaEvento(DateTime $dataInizio) {
+    public function riprogrammaEvento(DateTime $dataInizio): void {
         if ($this->statoEvento !== StatoEvento::Annullato) {
             throw new InvalidArgumentException("L'evento può essere riprogrammato solo se è nello stato 'Annullato'.");
         }
@@ -162,21 +193,20 @@ abstract class EEvento {
      * Aggiunge una partecipazione all'evento.
      * La partecipazione viene aggiunta solo se il numero di partecipanti attuali è inferiore al numero massimo di partecipanti consentiti per l'evento.
      */
-    public function addPartecipazione(EPartecipazione $partecipazione) {
+    public function addPartecipazione(EPartecipazione $partecipazione): void {
         if (count($this->partecipazioni) >= $this->maxPartecipanti) {
-            throw new InvalidArgumentException("Non è possibile partecipare, il numero massimo di partecipanti è stato raggiunto.");
+            throw new InvalidArgumentException("Il numero massimo di partecipanti è stato raggiunto.");
         }
-        $this->partecipazioni[] = $partecipazione;
+        if (!$this->partecipazioni->contains($partecipazione)) {
+            $this->partecipazioni->add($partecipazione);
+        }
     }
 
     /**
      * Rimuove una partecipazione dall'evento.
      */
-    public function removePartecipazione(EPartecipazione $partecipazione) {
-        $key = array_search($partecipazione, $this->partecipazioni); //array_search restituisce la chiave dell'elemento trovato nell'array, o false se non trovato
-        if ($key !== false) { //se la partecipazione è stata trovata nell'array, procedo alla rimozione
-            unset($this->partecipazioni[$key]); //unset rimuove l'elemento dall'array, ma non riorganizza le chiavi, quindi è possibile che si creino "buchi" nell'array, ad esempio se si rimuove l'elemento con chiave 2 da un array con chiavi 0, 1, 2, 3, si otterrà un array con chiavi 0, 1, 3
-        }
+    public function removePartecipazione(EPartecipazione $partecipazione): void {
+        $this->partecipazioni->removeElement($partecipazione);
     }
 
     /**
@@ -184,6 +214,24 @@ abstract class EEvento {
      */
     public function hasPostiDisponibili(): bool {
         return $this->statoEvento === StatoEvento::Programmato && count($this->partecipazioni) < $this->maxPartecipanti;
+    }
+
+    /**
+     * Verfica la validità della data di inizio dell'evento.
+     */
+    public function verificaDataInizio(): void {
+        if ($this->dataInizio < new DateTime()) {
+            throw new InvalidArgumentException("La data di inizio dell'evento deve essere successiva alla data attuale.");
+        }
+    }
+
+    /**
+     * Verifica la validità del numero massimo di partecipanti.
+     */
+    public function verificaMaxPartecipanti(): void {
+        if ($this->maxPartecipanti < 1) {
+            throw new InvalidArgumentException("Il numero massimo di partecipanti deve essere un numero intero positivo.");
+        }
     }
 
     /**

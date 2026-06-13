@@ -1,5 +1,7 @@
 <?php
 namespace TableCrown\Entity;
+
+use Doctrine\ORM\Mapping as ORM;
 use DateTime;
 use TableCrown\Entity\Enumerativi\StatoEvento;
 use TableCrown\Entity\EPrezzo;
@@ -7,32 +9,27 @@ use TableCrown\Entity\EProdotto;
 use InvalidArgumentException;
 use Override;
 
+#[ORM\Entity]
+#[ORM\Table(name: "torneo")]
 class ETorneo extends EEvento {
     // Proprietà specifiche per il torneo
+    #[ORM\OneToOne(targetEntity: EPrezzo::class, cascade: ["persist", "remove"])]
     private EPrezzo $quotaIscrizione; //quota di iscrizione al torneo
+
+    #[ORM\ManyToOne(targetEntity: EProdotto::class)]
     private EProdotto $premio; //premio del torneo
+
+    #[ORM\ManyToOne(targetEntity: EProdotto::class)]
     private EProdotto $gioco; //gioco da tavolo su cui si svolge il torneo
     
 
-    public function __construct(?int $idEvento, string $nomeEvento, string $imgEvento, string $descrizioneEvento, DateTime $dataInizio, int $maxPartecipanti, StatoEvento $statoEvento, EPrezzo $quotaIscrizione, EProdotto $premio, EProdotto $gioco) {
-        parent::__construct($idEvento, $nomeEvento, $imgEvento, $descrizioneEvento, $dataInizio, $maxPartecipanti);
+    public function __construct(string $nomeEvento, string $imgEvento, string $descrizioneEvento, DateTime $dataInizio, int $maxPartecipanti, EPrezzo $quotaIscrizione, EProdotto $premio, EProdotto $gioco) {
+        parent::__construct($nomeEvento, $imgEvento, $descrizioneEvento, $dataInizio, $maxPartecipanti);
         $this->quotaIscrizione = $quotaIscrizione;
         $this->premio = $premio;
+        $this->verificaPremio(); //verifica che il premio sia valido (che abbia lo stato disponibile)
         $this->gioco = $gioco;
     }
-
-    // //SET methods
-    // public function setQuotaIscrizione(EPrezzo $quotaIscrizione) {
-    //     $this->quotaIscrizione = $quotaIscrizione;
-    // }
-
-    // public function setPremio(EProdotto $premio) {
-    //     $this->premio = $premio;
-    // }
-
-    // public function setGioco(EProdotto $gioco) {
-    //     $this->gioco = $gioco;
-    // }
 
     //GET methods
     public function getQuotaIscrizione(): EPrezzo {

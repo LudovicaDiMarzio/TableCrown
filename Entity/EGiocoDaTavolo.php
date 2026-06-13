@@ -1,27 +1,52 @@
 <?php
 namespace TableCrown\Entity;
+
+use Doctrine\ORM\Mapping as ORM;
+use Doctrine\Common\Collections\ArrayCollection;
+use Doctrine\Common\Collections\Collection;
 use TableCrown\Entity\EDanno;
+use TableCrown\Entity\EPrezzo;
 use InvalidArgumentException;
 use DateTime;
 use TableCrown\Entity\Enumerativi\DisponibilitaProdotto;
 use TableCrown\Entity\Enumerativi\Categoria;
 
+#[ORM\Entity]
+#[ORM\Table(name: "gioco_da_tavolo")]
 class EGiocoDaTavolo extends EProdotto {
     // Proprietà specifiche per il gioco da tavolo
-    /** @var array<Categoria> */ //notazione per indicare che si tratta di un array di oggetti Categoria, serve per la documentazione e per gli strumenti di sviluppo, non è una dichiarazione di tipo formale
+    #[ORM\Column(type: "json")] //json è un tipo di dato che consente di serializzare e deserializzare un array in un formato leggibile e scrivibile
     private array $categoria; //es. strategia, famiglia, party game, ecc. (può essere un array di categorie, un gioco da tavolo può appartenere a più categorie)
+
+    #[ORM\Column(type: "json")]
     private array $componenti; //elenco dei componenti del gioco (carte, pedine, tabellone, ecc.)
+
+    #[ORM\ManyToMany(targetEntity: EGiocoDaTavolo::class)]
+    #[ORM\JoinColumn(nullable: true)]
     private ?EGiocoDaTavolo $giocoBase; //riferimento a un eventuale gioco da tavolo di cui è espansione
+
+    #[ORM\Column(type: "integer")]
     private int $numeroGiocatoriMin;
+
+    #[ORM\Column(type: "integer")]
     private int $numeroGiocatoriMax;
+
+    #[ORM\Column(type: "integer")]
     private int $etaMinima;
+
+    #[ORM\Column(type: "integer")]
     private int $durataMedia; //in minuti
+
+    #[ORM\ManyToOne(targetEntity: EDanno::class)]
+    #[ORM\JoinColumn(nullable: true)]
     private ?EDanno $danno; //danno del gioco, se presente
+
+    #[ORM\Column(type: "text", nullable: true)]
     private ?string $descrizioneDanno; //descrizione del danno, se presente
 
     //Il costruttore, per effettuare i controlli sui vincoli, chiama al suo interno i metodi di verifica dei vincoli, che lanciano un'eccezione se i vincoli non sono rispettati
-    public function __construct(?int $idProdotto, string $nomeProdotto, string $imgProdotto, string $descrizioneProdotto, DisponibilitaProdotto $disponibilitaProdotto, int $quantita, DateTime $dataPubblicazione, ?EPrezzo $prezzo = null, array $recensioni = [], array $categoria, array $componenti, ?EGiocoDaTavolo $giocoBase = null, int $numeroGiocatoriMin = 1, int $numeroGiocatoriMax = 1, int $etaMinima = 1, int $durataMedia = 1, ?EDanno $danno = null, ?string $descrizioneDanno = null) {
-        parent::__construct($idProdotto, $nomeProdotto, $imgProdotto, $descrizioneProdotto, $disponibilitaProdotto, $quantita, $dataPubblicazione, $prezzo, $recensioni);
+    public function __construct(string $nomeProdotto, ?string $imgProdotto = null, string $descrizioneProdotto, DisponibilitaProdotto $disponibilitaProdotto, int $quantita, DateTime $dataPubblicazione, ?EPrezzo $prezzo = null, array $categoria, array $componenti, ?EGiocoDaTavolo $giocoBase = null, int $numeroGiocatoriMin = 1, int $numeroGiocatoriMax = 1, int $etaMinima = 1, int $durataMedia = 1, ?EDanno $danno = null, ?string $descrizioneDanno = null) {
+        parent::__construct($nomeProdotto, $imgProdotto, $descrizioneProdotto, $disponibilitaProdotto, $quantita, $dataPubblicazione, $prezzo);
         $this->categoria = $categoria;
         $this->verificaCategoria(); //se fallisce, l'eccezione viene lanciata e il gioco da tavolo non viene creato (per tutti i metodi di verifica)
         $this->componenti = $componenti;

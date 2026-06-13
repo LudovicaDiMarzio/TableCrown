@@ -1,5 +1,7 @@
 <?php
 namespace TableCrown\Entity;
+
+use Doctrine\ORM\Mapping as ORM;
 use DateTime;
 use InvalidArgumentException;
 use Override;
@@ -7,22 +9,33 @@ use TableCrown\Entity\Enumerativi\StatoEvento;
 use TableCrown\Entity\EPrezzo;
 use TableCrown\Entity\EProdotto;
 
+#[ORM\Entity]
+#[ORM\Table(name: "challenge")]
 class EChallenge extends EEvento {
     // Proprietà specifiche per la challenge
+    #[ORM\OneToOne(targetEntity: EPrezzo::class, cascade: ["persist", "remove"])]
     private EPrezzo $quotaIscrizione; //costo di ingresso alla challenge
+
+    #[ORM\ManyToOne(targetEntity: EProdotto::class)]
     private EProdotto $premio; //premio della challenge
+
+    #[ORM\Column(type: "integer")]
     private int $punteggioPrimoClassificato; //punteggio del primo classificato
+
+    #[ORM\Column(type: "integer")]
     private int $punteggioSecondoClassificato; //punteggio del secondo classificato
+
+    #[ORM\Column(type: "integer")]
     private int $punteggioTerzoClassificato; //punteggio del terzo classificato
 
-    public function __construct(?int $idEvento, string $nomeEvento, string $imgEvento, string $descrizioneEvento, DateTime $dataInizio, int $maxPartecipanti, StatoEvento $statoEvento, EPrezzo $quotaIscrizione, EProdotto $premio, int $punteggioPrimoClassificato, int $punteggioSecondoClassificato, int $punteggioTerzoClassificato) {
-        parent::__construct($idEvento, $nomeEvento, $imgEvento, $descrizioneEvento, $dataInizio, $maxPartecipanti);
+    public function __construct(string $nomeEvento, string $imgEvento, string $descrizioneEvento, DateTime $dataInizio, int $maxPartecipanti, EPrezzo $quotaIscrizione, EProdotto $premio, int $punteggioPrimoClassificato, int $punteggioSecondoClassificato, int $punteggioTerzoClassificato) {
+        parent::__construct($nomeEvento, $imgEvento, $descrizioneEvento, $dataInizio, $maxPartecipanti);
         $this->quotaIscrizione = $quotaIscrizione;
         $this->premio = $premio;
         $this->verificaPremio(); //verifica che il premio sia valido (che abbia lo stato disponibile)
-        $this->aggiornaPunteggioPrimoClassificato($punteggioPrimoClassificato); //utilizza il metodo di dominio per validare il punteggio del primo classificato
-        $this->aggiornaPunteggioSecondoClassificato($punteggioSecondoClassificato); //utilizza il metodo di dominio per validare il punteggio del secondo classificato
-        $this->aggiornaPunteggioTerzoClassificato($punteggioTerzoClassificato); //utilizza il metodo di dominio per validare il punteggio del terzo classificato
+        $this->punteggioPrimoClassificato = $punteggioPrimoClassificato;
+        $this->punteggioSecondoClassificato = $punteggioSecondoClassificato;
+        $this->punteggioTerzoClassificato = $punteggioTerzoClassificato;
         $this->verificaPunteggi(); //verifica i vincoli sui punteggi dei classificati
     }
 

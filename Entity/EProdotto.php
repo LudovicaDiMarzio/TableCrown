@@ -2,24 +2,55 @@
 namespace TableCrown\Entity;
 use DateTime;
 use InvalidArgumentException;
+use Doctrine\ORM\Mapping as ORM;
+use Doctrine\Common\Collections\ArrayCollection;
+use Doctrine\Common\Collections\Collection;
 use TableCrown\Entity\EPrezzo;
 use TableCrown\Entity\Enumerativi\DisponibilitaProdotto;
 use TableCrown\Entity\ERecensione;
 
-abstract class EProdotto {
-    private ?int $idProdotto;
-    private string $nomeProdotto;
-    private ?string $imgProdotto;
-    private string $descrizioneProdotto;
-    private DisponibilitaProdotto $disponibilitaProdotto; //(Disponibile, Non disponibile, Esaurito, In arrivo)
-    private int $quantita; //quantità disponibile in magazzino del prodotto, deve essere maggiore o uguale a 0
-    private DateTime $dataPubblicazione;
-    private ?EPrezzo $prezzo; //prezzo del prodotto, se presente (se il prodotto è esaurito o in arrivo, il prezzo potrebbe non essere disponibile, quindi è nullable)
-    /** @var ERecensione[] */ //notazione per indicare che si tratta di un array di oggetti ERecensione, serve per la documentazione e per gli strumenti di sviluppo, non è una dichiarazione di tipo formale
-    private array $recensioni; //elenco delle recensioni del prodotto
+#[ORM\Entity]
+#[ORM\Table(name: "prodotto")]
+#[ORM\InheritanceType("JOINED")]
+#[ORM\DiscriminatorColumn(name: "tipo", type: "string")]
+#[ORM\DiscriminatorMap([
+    "gioco" => EGiocoDaTavolo::class,
+    "bustine" => EBustine::class,
+    "portaDadi" => EPortaDadi::class,
+])]
 
-    public function __construct(?int $idProdotto, string $nomeProdotto, ?string $imgProdotto, string $descrizioneProdotto, DisponibilitaProdotto $disponibilitaProdotto, int $quantita, DateTime $dataPubblicazione, ?EPrezzo $prezzo = null, array $recensioni = []) {
-        $this->idProdotto = $idProdotto;
+abstract class EProdotto {
+
+    #[ORM\Id]
+    #[ORM\GeneratedValue]
+    #[ORM\Column(type: "integer")]
+    private ?int $idProdotto = null;
+
+    #[ORM\Column(type: "string", length: 255)]
+    private string $nomeProdotto;
+
+    #[ORM\Column(type: "blob", nullable: true)] 
+    private ?string $imgProdotto = null;
+
+    #[ORM\Column(type: "text")]
+    private string $descrizioneProdotto;
+
+    #[ORM\Column(type: "string", enumType: DisponibilitaProdotto::class,)]
+    private DisponibilitaProdotto $disponibilitaProdotto; //(Disponibile, Non disponibile, Esaurito, In arrivo)
+
+    #[ORM\Column(type: "integer")]
+    private int $quantita; //quantità disponibile in magazzino del prodotto, deve essere maggiore o uguale a 0
+
+    #[ORM\Column(type: "datetime")]
+    private DateTime $dataPubblicazione;
+
+    #[ORM\OneToOne(targetEntity: EPrezzo::class, cascade: ["persist", "remove"])] //cascade: persist e remove indicano che le operazioni di inserimento e cancellazione del prodotto devono essere eseguite anche sul prezzo associato, in modo da mantenere la relazione tra i due oggetti
+    private ?EPrezzo $prezzo = null; //prezzo del prodotto, se presente (se il prodotto è esaurito o in arrivo, il prezzo potrebbe non essere disponibile, quindi è nullable)
+
+    #[ORM\OneToMany(targetEntity: ERecensione::class, mappedBy: "prodotto", cascade: ["persist", "remove"])]
+    private Collection $recensioni; //elenco delle recensioni del prodotto
+
+    public function __construct(string $nomeProdotto, ?string $imgProdotto = null, string $descrizioneProdotto, DisponibilitaProdotto $disponibilitaProdotto, int $quantita, DateTime $dataPubblicazione, ?EPrezzo $prezzo = null) {
         $this->rinominaProdotto($nomeProdotto); //utilizza il metodo di dominio per validare il nome del prodotto
         $this->aggiornaImg($imgProdotto); //utilizza il metodo di dominio per validare l'immagine del prodotto
         $this->aggiornaDescrizione($descrizioneProdotto); //utilizza il metodo di dominio per validare la descrizione del prodotto
@@ -27,7 +58,7 @@ abstract class EProdotto {
         $this->aggiornaQuantita($quantita); //utilizza il metodo di dominio per validare la quantità del prodotto
         $this->dataPubblicazione = $dataPubblicazione;
         $this->prezzo = $prezzo;
-        $this->recensioni = $recensioni;
+        $this->recensioni = new ArrayCollection(); //inizializzazione della collezione di recensioni
     }
 
     //GET methods
@@ -63,7 +94,7 @@ abstract class EProdotto {
         return $this->prezzo;
     }
 
-    public function getRecensioni(): array {
+    public function getRecensioni(): Collection {
         return $this->recensioni;
     }
 
@@ -175,18 +206,17 @@ abstract class EProdotto {
     /**
      * Aggiunge una recensione al prodotto.
      */
-    public function addRecensione(ERecensione $recensione) {
-        $this->recensioni[] = $recensione;
+    public function addRecensione(ERecensione $recensione): void {
+        if (!$this->recensioni->contains($recensione)) {
+            $this->recensioni->add($recensione);
+        }
     }
 
     /**
      * Rimuove una recensione dal prodotto.
      */
-    public function removeRecensione(ERecensione $recensione) {
-        $key = array_search($recensione, $this->recensioni); //array_search restituisce la chiave dell'elemento trovato nell'array, o false se non trovato
-        if ($key !== false) { //se la recensione è stata trovata nell'array, procedo alla rimozione
-            unset($this->recensioni[$key]); //unset rimuove l'elemento dall'array, ma non riorganizza le chiavi, quindi è possibile che si creino "buchi" nell'array, ad esempio se si rimuove l'elemento con chiave 2 da un array con chiavi 0, 1, 2, 3, si otterrà un array con chiavi 0, 1, 3
-        }
+    public function removeRecensione(ERecensione $recensione): void {
+        $this->recensioni->removeElement($recensione);
     }
 
 }
