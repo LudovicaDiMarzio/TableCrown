@@ -594,81 +594,79 @@ main > .section {
     }
 }
 
-/* ── ELEMENTO "+ VEDI ALTRO" (STILE TABLECROWN) ──────────────── */
+/* ── FIX APPOSITI PER ELEMENTO "+ VEDI TUTTI" ──────────────── */
 
-.view-more-container {
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    padding: 0 1rem;
-    /* Se inserito dentro .card-row-vector, garantisce che mantenga la dimensione nello scroll */
-    flex: 0 0 180px; 
-    max-width: 180px;
+/* Contenitore accodato alle card dello scroll orizzontale */
+.card-row-vector .card-vector-item.card-vector-more {
+    flex: 0 0 140px !important;
+    max-width: 140px !important;
+    display: flex !important;
+    align-items: center !important;
+    justify-content: center !important;
+    background: transparent !important;
+    border: none !important;
+    box-shadow: none !important;
+    padding: 0 1rem !important;
 }
 
-.btn-view-more {
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    gap: 12px;
-    color: var(--color-text-subtle);
-    font-size: var(--font-size-md);
-    font-weight: 600;
-    transition: color var(--transition);
-    cursor: pointer;
+/* Link flessibile incolonnato */
+.view-more-link {
+    display: flex !important;
+    flex-direction: column !important;
+    align-items: center !important;
+    gap: 12px !important;
+    text-decoration: none !important;
+    cursor: pointer !important;
+    width: 100%;
 }
 
-/* Il cerchio con il "+" realizzato in CSS puro */
-.btn-view-more .circle-plus {
-    width: 56px;
-    height: 56px;
-    background-color: var(--color-bg-dark-2);
-    border: 2px solid var(--color-border-dark);
-    border-radius: 50%;
-    position: relative;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    transition: background-color var(--transition), border-color var(--transition), transform var(--transition);
-    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.2);
+/* Il cerchio con lo stile dark-gold di TableCrown */
+.view-more-link .circle-plus {
+    width: 56px !important;
+    height: 56px !important;
+    background-color: var(--color-bg-dark-2) !important;
+    border: 2px solid var(--color-border-dark) !important;
+    border-radius: 50% !important;
+    display: flex !important;
+    align-items: center !important;
+    justify-content: center !important;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.3) !important;
+    transition: all var(--transition) !important;
 }
 
-/* Linea orizzontale del "+" */
-.btn-view-more .circle-plus::before,
-.btn-view-more .circle-plus::after {
-    content: '';
-    position: absolute;
-    background-color: var(--color-primary); /* Colore oro TableCrown */
-    transition: background-color var(--transition);
+/* Il carattere "+" dentro al cerchio */
+.view-more-link .circle-plus span {
+    font-size: 28px !important;
+    line-height: 1 !important;
+    font-weight: 600 !important;
+    color: var(--color-primary) !important; /* Colore Oro */
+    margin-top: -2px; /* Micro-aggiustamento ottico per centrare il + */
+    transition: color var(--transition) !important;
 }
 
-/* Linea orizzontale */
-.btn-view-more .circle-plus::before {
-    width: 16px;
-    height: 2px;
+/* Testo "Vedi tutti" sotto al cerchio */
+.view-more-link .view-more-text {
+    font-size: var(--font-size-md) !important;
+    font-weight: 600 !important;
+    color: var(--color-text-subtle) !important;
+    white-space: nowrap !important;
+    transition: color var(--transition) !important;
 }
 
-/* Linea verticale */
-.btn-view-more .circle-plus::after {
-    width: 2px;
-    height: 16px;
+/* ── COMPORTAMENTO AL PASSAGGIO DEL MOUSE (HOVER) ─────────── */
+
+.view-more-link:hover .circle-plus {
+    border-color: var(--color-primary) !important; /* Il bordo si accende d'oro */
+    transform: scale(1.08) !important;            /* Leggero zoom dinamico */
+    background-color: var(--color-bg-dark) !important;
 }
 
-/* ── STATI HOVER (EFFETTI VISIVI) ──────────────────────────── */
-
-.btn-view-more:hover {
-    color: var(--color-primary); /* Il testo diventa oro */
+.view-more-link:hover .circle-plus span {
+    color: #ffffff !important; /* Il "+" dentro diventa bianco al passaggio */
 }
 
-.btn-view-more:hover .circle-plus {
-    border-color: var(--color-primary); /* Il bordo del cerchio si accende d'oro */
-    background-color: var(--color-bg-dark); /* Sfondo leggermente più scuro */
-    transform: scale(1.05); /* Micro-interazione di zoom */
-}
-
-.btn-view-more:hover .circle-plus::before,
-.btn-view-more:hover .circle-plus::after {
-    background-color: var(--color-text-light); /* Il "+" diventa bianco al passaggio del mouse */
+.view-more-link:hover .view-more-text {
+    color: var(--color-primary) !important; /* La scritta sotto diventa oro */
 }
 
 /* ── 8. FOOTER ────────────────────────────────────────────── */

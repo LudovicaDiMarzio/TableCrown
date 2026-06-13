@@ -83,10 +83,12 @@
                 {/foreach}
                 
                 {* Card Vedi Altro per dati reali *}
-                <div class="view-more-container">
-                    <a href="#" class="btn-view-more">
-                        <span class="circle-plus"></span>
-                        <span class="view-more-text">Vedi altro</span>
+                <div class="card-vector-item card-vector-more">
+                    <a href="#" class="view-more-link">
+                        <div class="circle-plus">
+                            <span>+</span>
+                        </div>
+                        <span class="view-more-text">Vedi tutti</span>
                     </a>
                 </div>
 
