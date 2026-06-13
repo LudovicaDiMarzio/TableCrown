@@ -614,18 +614,23 @@ main > .section {
     display: flex !important;
     flex-direction: column !important;
     align-items: center !important;
+    justify-content: center !important;
     gap: 12px !important;
     text-decoration: none !important;
     cursor: pointer !important;
     width: 100%;
+    height: 100% !important;
 }
 
-/* Il cerchio con lo stile dark-gold di TableCrown */
+/* Il cerchio - Blindato con min-size e flex-shrink per evitare il collasso */
 .view-more-link .circle-plus {
     width: 56px !important;
     height: 56px !important;
-    background-color: var(--color-bg-dark-2) !important;
-    border: 2px solid var(--color-border-dark) !important;
+    min-width: 56px !important;   /* Forza la larghezza minima */
+    min-height: 56px !important;  /* Forza l'altezza minima */
+    flex-shrink: 0 !important;    /* Impedisce al Flexbox di schiacciarlo a 0px */
+    background-color: var(--color-bg-dark-2) !important; /* Sfondo scuro come le card */
+    border: 2px solid var(--color-primary) !important;   /* Bordo oro subito visibile */
     border-radius: 50% !important;
     display: flex !important;
     align-items: center !important;
@@ -640,7 +645,7 @@ main > .section {
     line-height: 1 !important;
     font-weight: 600 !important;
     color: var(--color-primary) !important; /* Colore Oro */
-    margin-top: -2px; /* Micro-aggiustamento ottico per centrare il + */
+    margin-top: -4px; /* Centratura ottica del carattere + */
     transition: color var(--transition) !important;
 }
 
@@ -648,7 +653,7 @@ main > .section {
 .view-more-link .view-more-text {
     font-size: var(--font-size-md) !important;
     font-weight: 600 !important;
-    color: var(--color-text-subtle) !important;
+    color: var(--color-bg-dark) !important; /* Colore scuro per contrastare lo sfondo chiaro del sito */
     white-space: nowrap !important;
     transition: color var(--transition) !important;
 }
@@ -656,13 +661,13 @@ main > .section {
 /* ── COMPORTAMENTO AL PASSAGGIO DEL MOUSE (HOVER) ─────────── */
 
 .view-more-link:hover .circle-plus {
-    border-color: var(--color-primary) !important; /* Il bordo si accende d'oro */
-    transform: scale(1.08) !important;            /* Leggero zoom dinamico */
-    background-color: var(--color-bg-dark) !important;
+    border-color: #ffffff !important;                 /* Il bordo si accende di bianco */
+    transform: scale(1.1) !important;                 /* Leggero zoom fluido */
+    background-color: var(--color-primary) !important;     /* Il cerchio si riempie d'oro */
 }
 
 .view-more-link:hover .circle-plus span {
-    color: #260087 !important; /* Il "+" dentro diventa bianco al passaggio */
+    color: #ffffff !important; /* Il "+" diventa bianco sullo sfondo oro */
 }
 
 .view-more-link:hover .view-more-text {
