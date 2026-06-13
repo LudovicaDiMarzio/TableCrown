@@ -1,95 +1,115 @@
 <?php
 namespace TableCrown\Entity;
- 
+
 use InvalidArgumentException;
 use DateTime;
- 
+use Doctrine\ORM\Mapping as ORM;
+use Doctrine\Common\Collections\ArrayCollection;
+use Doctrine\Common\Collections\Collection;
+
+#[ORM\Entity]
+#[ORM\Table(name: "ordine")]
 class EOrdine {
-    private int $idOrdine;
-    private DateTime $data;
-    private string $stato;
-    private int $idUtente;
-    private array $carteDiCredito; // lista di oggetti ECartaDiCredito
-    private array $ordineItems;    // lista di oggetti EOrdineItem
- 
+
     private static array $statiValidi = ['in attesa', 'confermato', 'spedito', 'consegnato', 'annullato'];
- 
-    public function __construct(int $idOrdine, DateTime $data, string $stato, int $idUtente, array $carteDiCredito = [], array $ordineItems = []) {
-        $this->idOrdine = $idOrdine;
-        $this->data = $data;
- 
-        if (!in_array(trim($stato), self::$statiValidi)) {
+
+    #[ORM\Id]
+    #[ORM\GeneratedValue]
+    #[ORM\Column(type: "integer")]
+    private ?int $idOrdine = null;
+
+    #[ORM\Column(type: "datetime")]
+    private DateTime $data;
+
+    #[ORM\Column(type: "string", length: 20)]
+    private string $stato;
+
+    #[ORM\ManyToOne(targetEntity: EUtente::class)]
+    #[ORM\JoinColumn(name: "utente_id", referencedColumnName: "idpersona", nullable: false)]
+    private EUtente $utente;
+
+    #[ORM\ManyToMany(targetEntity: ECartaDiCredito::class)]
+    #[ORM\JoinTable(name: "ordine_carta_di_credito")]
+    private Collection $carteDiCredito;
+
+    #[ORM\OneToMany(targetEntity: EOrdineItem::class, mappedBy: "ordine", cascade: ["persist", "remove"])]
+    private Collection $ordineItems;
+
+    public function __construct(EUtente $utente, string $stato = 'in attesa') {
+        $this->data = new DateTime();
+        $this->impostaStato($stato);
+        $this->utente = $utente;
+        $this->carteDiCredito = new ArrayCollection();
+        $this->ordineItems = new ArrayCollection();
+    }
+
+    // Metodi di dominio
+    public function impostaStato(string $stato): void {
+        $stato = trim($stato);
+        if (!in_array($stato, self::$statiValidi)) {
             throw new InvalidArgumentException("Stato ordine non valido. Valori accettati: " . implode(", ", self::$statiValidi));
         }
-        $this->stato = trim($stato);
- 
-        $this->idUtente = $idUtente;
-        $this->carteDiCredito = $carteDiCredito;
-        $this->ordineItems = $ordineItems;
+        $this->stato = $stato;
     }
- 
-    // SET methods
-    public function setData(DateTime $data): void {
-        $this->data = $data;
+
+    public function confermato(): void {
+        $this->impostaStato('confermato');
     }
- 
-    public function setStato(string $stato): void {
-        if (!in_array(trim($stato), self::$statiValidi)) {
-            throw new InvalidArgumentException("Stato ordine non valido. Valori accettati: " . implode(", ", self::$statiValidi));
-        }
-        $this->stato = trim($stato);
+
+    public function spedito(): void {
+        $this->impostaStato('spedito');
     }
- 
-    public function setIdUtente(int $idUtente): void {
-        $this->idUtente = $idUtente;
+
+    public function consegnato(): void {
+        $this->impostaStato('consegnato');
     }
- 
-    public function setCarteDiCredito(array $carteDiCredito): void {
-        $this->carteDiCredito = $carteDiCredito;
+
+    public function annulla(): void {
+        $this->impostaStato('annullato');
     }
- 
+
     public function addCartaDiCredito(ECartaDiCredito $carta): void {
-        $this->carteDiCredito[] = $carta;
+        if (!$this->carteDiCredito->contains($carta)) {
+            $this->carteDiCredito->add($carta);
+        }
     }
- 
-    public function removeCartaDiCredito(int $idCartaDiCredito): void {
-        $this->carteDiCredito = array_values(array_filter($this->carteDiCredito, fn($c) => $c->getIdCartaDiCredito() !== $idCartaDiCredito));
+
+    public function removeCartaDiCredito(ECartaDiCredito $carta): void {
+        $this->carteDiCredito->removeElement($carta);
     }
- 
-    public function setOrdineItems(array $ordineItems): void {
-        $this->ordineItems = $ordineItems;
-    }
- 
+
     public function addOrdineItem(EOrdineItem $item): void {
-        $this->ordineItems[] = $item;
+        if (!$this->ordineItems->contains($item)) {
+            $this->ordineItems->add($item);
+        }
     }
- 
-    public function removeOrdineItem(int $idOrdineItem): void {
-        $this->ordineItems = array_values(array_filter($this->ordineItems, fn($item) => $item->getIdOrdineItem() !== $idOrdineItem));
+
+    public function removeOrdineItem(EOrdineItem $item): void {
+        $this->ordineItems->removeElement($item);
     }
- 
+
     // GET methods
-    public function getIdOrdine(): int {
+    public function getIdOrdine(): ?int {
         return $this->idOrdine;
     }
- 
+
     public function getData(): DateTime {
         return $this->data;
     }
- 
+
     public function getStato(): string {
         return $this->stato;
     }
- 
-    public function getIdUtente(): int {
-        return $this->idUtente;
+
+    public function getUtente(): EUtente {
+        return $this->utente;
     }
- 
-    public function getCarteDiCredito(): array {
+
+    public function getCarteDiCredito(): Collection {
         return $this->carteDiCredito;
     }
- 
-    public function getOrdineItems(): array {
+
+    public function getOrdineItems(): Collection {
         return $this->ordineItems;
     }
 }
