@@ -81,6 +81,17 @@
                         </div>
                     </div>
                 {/foreach}
+                
+                {* Card Vedi Altro per dati reali *}
+                <div class="card-vector-item card-vector-more">
+                    <a href="{$base_url}/catalogo?ordinamento=scadenza" class="more-link-wrapper" title="Vedi tutte le offerte">
+                        <div class="more-circle-btn">
+                            <span class="more-plus-icon">+</span>
+                        </div>
+                        <span class="more-text">Vedi tutte</span>
+                    </a>
+                </div>
+
             {else}
                 {assign var="demo_items" value=[1, 2, 3, 4, 5]}
                 {foreach $demo_items as $i}
@@ -118,6 +129,16 @@
                         </div>
                     </div>
                 {/foreach}
+
+                {* Card Vedi Altro per dati Demo *}
+                <div class="card-vector-item card-vector-more">
+                    <a href="#" class="more-link-wrapper" title="Vedi tutte le offerte">
+                        <div class="more-circle-btn">
+                            <span class="more-plus-icon">+</span>
+                        </div>
+                        <span class="more-text">Vedi tutte</span>
+                    </a>
+                </div>
             {/if}
         </div>
     </section>
@@ -166,6 +187,17 @@
                         </div>
                     </div>
                 {/foreach}
+
+                {* Card Vedi Altro per dati reali *}
+                <div class="card-vector-item card-vector-more">
+                    <a href="{$base_url}/catalogo?ordinamento=novita" class="more-link-wrapper" title="Vedi tutti i nuovi arrivi">
+                        <div class="more-circle-btn">
+                            <span class="more-plus-icon">+</span>
+                        </div>
+                        <span class="more-text">Vedi tutti</span>
+                    </a>
+                </div>
+
             {else}
                 {assign var="demo_arrivals" value=[1, 2, 3, 4, 5]}
                 {foreach $demo_arrivals as $j}
@@ -202,6 +234,16 @@
                         </div>
                     </div>
                 {/foreach}
+
+                {* Card Vedi Altro per dati Demo *}
+                <div class="card-vector-item card-vector-more">
+                    <a href="#" class="more-link-wrapper" title="Vedi tutti i nuovi arrivi">
+                        <div class="more-circle-btn">
+                            <span class="more-plus-icon">+</span>
+                        </div>
+                        <span class="more-text">Vedi tutti</span>
+                    </a>
+                </div>
             {/if}
         </div>
     </section>
