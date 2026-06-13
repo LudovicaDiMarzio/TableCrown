@@ -48,31 +48,32 @@
                     <div class="column is-3-desktop is-6-tablet is-12-mobile">
                         <div class="card home-card-fixed">
                             <div class="card-image">
-                                <figure class="image is-4by3 image-container-fixed">
+                                <figure class="image-container-fixed">
                                     <img src="{$base_url}/img/prodotti/{$prodotto->getImmagine()}" alt="{$prodotto->getNome()|escape}" />
                                 </figure>
                             </div>
                             <div class="card-content">
-                                <div class="media mb-3">
+                                <div class="media">
                                     <div class="media-left">
-                                        <figure class="image is-48x48">
-                                            <img src="{$base_url}/img/categorie/{$prodotto->getCategoriaIcona()}" alt="Categoria" />
-                                        </figure>
+                                        <img src="{$base_url}/img/categorie/{$prodotto->getCategoriaIcona()}" class="editor-avatar" alt="Categoria" />
                                     </div>
                                     <div class="media-content">
-                                        <p class="title is-5 mb-1">{$prodotto->getNome()|escape}</p>
-                                        <p class="subtitle is-6 has-text-muted">{$prodotto->getEditore()|escape}</p>
+                                        <p class="title">{$prodotto->getNome()|escape}</p>
+                                        <p class="subtitle">{$prodotto->getEditore()|escape}</p>
                                     </div>
                                 </div>
-                                <div class="content">
+                                
+                                <p class="game-description">
                                     {$prodotto->getDescrizioneBreve()|escape}
-                                    <br />
-                                    <div class="mt-3">
-                                        <span class="has-text-danger font-weight-bold title is-5">€{$prodotto->getPrezzoScontato()}</span>
-                                        <span class="has-text-muted text-decoration-line-through is-size-7 ml-2">€{$prodotto->getPrezzoListino()}</span>
-                                    </div>
-                                    <hr class="my-2">
-                                    <time class="is-size-7 has-text-danger" datetime="{$prodotto->getDataScadenza()}">
+                                </p>
+                                
+                                <div class="price-container">
+                                    <span class="price">€{$prodotto->getPrezzoScontato()}</span>
+                                    <span class="price-old">€{$prodotto->getPrezzoListino()}</span>
+                                </div>
+                                
+                                <div class="footer-card-custom">
+                                    <time datetime="{$prodotto->getDataScadenza()}">
                                         <i class="ti ti-clock"></i> Scade il: {$prodotto->getDataScadenzaFormat()|escape}
                                     </time>
                                 </div>
@@ -86,31 +87,32 @@
                     <div class="column is-3-desktop is-6-tablet is-12-mobile">
                         <div class="card home-card-fixed">
                             <div class="card-image">
-                                <figure class="image is-4by3 image-container-fixed">
+                                <figure class="image-container-fixed">
                                     <img src="https://bulma.io/assets/images/placeholders/1280x960.png" alt="Placeholder image" />
                                 </figure>
                             </div>
                             <div class="card-content">
-                                <div class="media mb-3">
+                                <div class="media">
                                     <div class="media-left">
-                                        <figure class="image is-48x48">
-                                            <img src="https://bulma.io/assets/images/placeholders/96x96.png" alt="Placeholder image" />
-                                        </figure>
+                                        <img src="https://bulma.io/assets/images/placeholders/96x96.png" class="editor-avatar" alt="Placeholder image" />
                                     </div>
                                     <div class="media-content">
-                                        <p class="title is-5 mb-1">Gioco in Offerta {$i}</p>
-                                        <p class="subtitle is-6 has-text-muted">Editore Demo</p>
+                                        <p class="title">Gioco in Offerta {$i}</p>
+                                        <p class="subtitle">Editore Demo</p>
                                     </div>
                                 </div>
-                                <div class="content">
+                                
+                                <p class="game-description">
                                     Offerta incredibile a tempo limitato. Aggiungi subito al carrello TableCrown.
-                                    <br />
-                                    <div class="mt-3">
-                                        <span class="has-text-danger is-size-5 font-weight-bold">€29.90</span>
-                                        <span class="has-text-muted is-size-7 ml-2" style="text-decoration: line-through;">€49.90</span>
-                                    </div>
-                                    <hr class="my-2">
-                                    <time class="is-size-7 has-text-danger" datetime="2026-06-15">11:59 PM - 15 Giu 2026</time>
+                                </p>
+                                
+                                <div class="price-container">
+                                    <span class="price">€29.90</span>
+                                    <span class="price-old">€49.90</span>
+                                </div>
+                                
+                                <div class="footer-card-custom">
+                                    <time datetime="2026-06-15"><i class="ti ti-clock"></i> 11:59 PM - 15 Giu 2026</time>
                                 </div>
                             </div>
                         </div>
@@ -132,30 +134,31 @@
                     <div class="column is-3-desktop is-6-tablet is-12-mobile">
                         <div class="card home-card-fixed">
                             <div class="card-image">
-                                <figure class="image is-4by3 image-container-fixed">
+                                <figure class="image-container-fixed">
                                     <img src="{$base_url}/img/prodotti/{$prodotto->getImmagine()}" alt="{$prodotto->getNome()|escape}" />
                                 </figure>
                             </div>
                             <div class="card-content">
-                                <div class="media mb-3">
+                                <div class="media">
                                     <div class="media-left">
-                                        <figure class="image is-48x48">
-                                            <img src="{$base_url}/img/categorie/{$prodotto->getCategoriaIcona()}" alt="Categoria" />
-                                        </figure>
+                                        <img src="{$base_url}/img/categorie/{$prodotto->getCategoriaIcona()}" class="editor-avatar" alt="Categoria" />
                                     </div>
                                     <div class="media-content">
-                                        <p class="title is-5 mb-1">{$prodotto->getNome()|escape}</p>
-                                        <p class="subtitle is-6 has-text-muted">{$prodotto->getEditore()|escape}</p>
+                                        <p class="title">{$prodotto->getNome()|escape}</p>
+                                        <p class="subtitle">{$prodotto->getEditore()|escape}</p>
                                     </div>
                                 </div>
-                                <div class="content">
+                                
+                                <p class="game-description">
                                     {$prodotto->getDescrizioneBreve()|escape}
-                                    <br />
-                                    <div class="mt-3">
-                                        <span class="has-text-dark font-weight-bold title is-5">€{$prodotto->getPrezzo()}</span>
-                                    </div>
-                                    <hr class="my-2">
-                                    <time class="is-size-7 has-text-muted" datetime="{$prodotto->getDataInserimento()}">
+                                </p>
+                                
+                                <div class="price-container">
+                                    <span class="price">€{$prodotto->getPrezzo()}</span>
+                                </div>
+                                
+                                <div class="footer-card-custom">
+                                    <time datetime="{$prodotto->getDataInserimento()}">
                                         <i class="ti ti-calendar"></i> Disponibile da oggi
                                     </time>
                                 </div>
@@ -169,30 +172,31 @@
                     <div class="column is-3-desktop is-6-tablet is-12-mobile">
                         <div class="card home-card-fixed">
                             <div class="card-image">
-                                <figure class="image is-4by3 image-container-fixed">
+                                <figure class="image-container-fixed">
                                     <img src="https://bulma.io/assets/images/placeholders/1280x960.png" alt="Placeholder image" />
                                 </figure>
                             </div>
                             <div class="card-content">
-                                <div class="media mb-3">
+                                <div class="media">
                                     <div class="media-left">
-                                        <figure class="image is-48x48">
-                                            <img src="https://bulma.io/assets/images/placeholders/96x96.png" alt="Placeholder image" />
-                                        </figure>
+                                        <img src="https://bulma.io/assets/images/placeholders/96x96.png" class="editor-avatar" alt="Placeholder image" />
                                     </div>
                                     <div class="media-content">
-                                        <p class="title is-5 mb-1">Nuovo Arrivo {$j}</p>
-                                        <p class="subtitle is-6 has-text-muted">Editore Demo</p>
+                                        <p class="title">Nuovo Arrivo {$j}</p>
+                                        <p class="subtitle">Editore Demo</p>
                                     </div>
                                 </div>
-                                <div class="content">
+                                
+                                <p class="game-description">
                                     Appena arrivato in magazzino. Scopri le meccaniche e i components di alta qualità.
-                                    <br />
-                                    <div class="mt-3">
-                                        <span class="has-text-dark is-size-5 font-weight-bold">€39.90</span>
-                                    </div>
-                                    <hr class="my-2">
-                                    <time class="is-size-7 has-text-muted" datetime="2026-06-12">Caricato il: 12 Giu 2026</time>
+                                </p>
+                                
+                                <div class="price-container">
+                                    <span class="price">€39.90</span>
+                                </div>
+                                
+                                <div class="footer-card-custom">
+                                    <time datetime="2026-06-12"><i class="ti ti-calendar"></i> Caricato il: 12 Giu 2026</time>
                                 </div>
                             </div>
                         </div>
