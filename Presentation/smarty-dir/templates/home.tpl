@@ -58,7 +58,7 @@
                                         <img src="{$base_url}/img/categorie/{$prodotto->getCategoriaIcona()}" class="editor-avatar" alt="Categoria" />
                                     </div>
                                     <div class="media-content">
-                                        <p class="title">{$prodotto->getNome()|escape}</p>
+                                        <p class="card-title-custom">{$prodotto->getNome()|escape}</p>
                                         <p class="subtitle">{$prodotto->getEditore()|escape}</p>
                                     </div>
                                 </div>
@@ -82,7 +82,7 @@
                     </div>
                 {/foreach}
             {else}
-                {assign var="demo_items" value=[1, 2, 3, 4]}
+                {assign var="demo_items" value=[1, 2, 3, 4, 5]}
                 {foreach $demo_items as $i}
                     <div class="card-vector-item">
                         <div class="card home-card-fixed">
@@ -97,7 +97,7 @@
                                         <img src="https://bulma.io/assets/images/placeholders/96x96.png" class="editor-avatar" alt="Placeholder image" />
                                     </div>
                                     <div class="media-content">
-                                        <p class="title">Gioco in Offerta {$i}</p>
+                                        <p class="card-title-custom">Gioco in Offerta {$i}</p>
                                         <p class="subtitle">Editore Demo</p>
                                     </div>
                                 </div>
@@ -144,7 +144,7 @@
                                         <img src="{$base_url}/img/categorie/{$prodotto->getCategoriaIcona()}" class="editor-avatar" alt="Categoria" />
                                     </div>
                                     <div class="media-content">
-                                        <p class="title">{$prodotto->getNome()|escape}</p>
+                                        <p class="card-title-custom">{$prodotto->getNome()|escape}</p>
                                         <p class="subtitle">{$prodotto->getEditore()|escape}</p>
                                     </div>
                                 </div>
@@ -167,7 +167,7 @@
                     </div>
                 {/foreach}
             {else}
-                {assign var="demo_arrivals" value=[1, 2, 3, 4]}
+                {assign var="demo_arrivals" value=[1, 2, 3, 4, 5]}
                 {foreach $demo_arrivals as $j}
                     <div class="card-vector-item">
                         <div class="card home-card-fixed">
@@ -182,7 +182,7 @@
                                         <img src="https://bulma.io/assets/images/placeholders/96x96.png" class="editor-avatar" alt="Placeholder image" />
                                     </div>
                                     <div class="media-content">
-                                        <p class="title">Nuovo Arrivo {$j}</p>
+                                        <p class="card-title-custom">Nuovo Arrivo {$j}</p>
                                         <p class="subtitle">Editore Demo</p>
                                     </div>
                                 </div>

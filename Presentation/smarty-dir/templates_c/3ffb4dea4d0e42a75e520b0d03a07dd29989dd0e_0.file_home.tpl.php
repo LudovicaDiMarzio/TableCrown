@@ -1,18 +1,18 @@
 <?php
-/* Smarty version 5.8.0, created on 2026-06-13 16:02:25
+/* Smarty version 5.8.0, created on 2026-06-13 16:14:41
   from 'file:home.tpl' */
 
 /* @var \Smarty\Template $_smarty_tpl */
 if ($_smarty_tpl->getCompiled()->isFresh($_smarty_tpl, array (
   'version' => '5.8.0',
-  'unifunc' => 'content_6a2d62f1177aa8_00540582',
+  'unifunc' => 'content_6a2d65d1ae2c20_81739278',
   'has_nocache_code' => false,
   'file_dependency' => 
   array (
     '3ffb4dea4d0e42a75e520b0d03a07dd29989dd0e' => 
     array (
       0 => 'home.tpl',
-      1 => 1781359325,
+      1 => 1781360004,
       2 => 'file',
     ),
   ),
@@ -20,23 +20,23 @@ if ($_smarty_tpl->getCompiled()->isFresh($_smarty_tpl, array (
   array (
   ),
 ))) {
-function content_6a2d62f1177aa8_00540582 (\Smarty\Template $_smarty_tpl) {
+function content_6a2d65d1ae2c20_81739278 (\Smarty\Template $_smarty_tpl) {
 $_smarty_current_dir = 'C:\\Users\\damic\\Desktop\\uni\\APPUNTI\\anno3\\secondo_semenstre\\Pweb\\TableCrown\\Presentation\\smarty-dir\\templates';
 $_smarty_tpl->getInheritance()->init($_smarty_tpl, true);
 ?>
 
 
 <?php 
-$_smarty_tpl->getInheritance()->instanceBlock($_smarty_tpl, 'Block_20013041376a2d62f0df2798_44414111', "content");
+$_smarty_tpl->getInheritance()->instanceBlock($_smarty_tpl, 'Block_7352162346a2d65d1acc8e5_67901678', "content");
 ?>
 
 
 <?php 
-$_smarty_tpl->getInheritance()->instanceBlock($_smarty_tpl, 'Block_7613451296a2d62f1177214_31969125', "extra_js");
+$_smarty_tpl->getInheritance()->instanceBlock($_smarty_tpl, 'Block_20498482036a2d65d1ae2560_12412237', "extra_js");
 $_smarty_tpl->getInheritance()->endChild($_smarty_tpl, "common/layout.tpl", $_smarty_current_dir);
 }
 /* {block "content"} */
-class Block_20013041376a2d62f0df2798_44414111 extends \Smarty\Runtime\Block
+class Block_7352162346a2d65d1acc8e5_67901678 extends \Smarty\Runtime\Block
 {
 public function callBlock(\Smarty\Template $_smarty_tpl) {
 $_smarty_current_dir = 'C:\\Users\\damic\\Desktop\\uni\\APPUNTI\\anno3\\secondo_semenstre\\Pweb\\TableCrown\\Presentation\\smarty-dir\\templates';
@@ -80,7 +80,7 @@ $_smarty_current_dir = 'C:\\Users\\damic\\Desktop\\uni\\APPUNTI\\anno3\\secondo_
                 <section class="home-section">
         <h2 class="title section-title is-4 text-uppercase">🔥 Offerte in Scadenza</h2>
         
-        <div class="columns is-multiline is-mobile is-tablet is-desktop">
+        <div class="card-row-vector">
             <?php if ((true && ($_smarty_tpl->hasVariable('offerte') && null !== ($_smarty_tpl->getValue('offerte') ?? null))) && $_smarty_tpl->getSmarty()->getModifierCallback('count')($_smarty_tpl->getValue('offerte')) > 0) {?>
                 <?php
 $_from = $_smarty_tpl->getSmarty()->getRuntime('Foreach')->init($_smarty_tpl, $_smarty_tpl->getValue('offerte'), 'prodotto');
@@ -88,7 +88,7 @@ $foreach0DoElse = true;
 foreach ($_from ?? [] as $_smarty_tpl->getVariable('prodotto')->value) {
 $foreach0DoElse = false;
 ?>
-                    <div class="column is-3-desktop is-6-tablet is-12-mobile">
+                    <div class="card-vector-item">
                         <div class="card home-card-fixed">
                             <div class="card-image">
                                 <figure class="image-container-fixed">
@@ -125,7 +125,7 @@ $foreach0DoElse = false;
 </span>
                                 </div>
                                 
-                                <div class="footer-card-custom">
+                                <div class="footer-custom">
                                     <time datetime="<?php echo $_smarty_tpl->getValue('prodotto')->getDataScadenza();?>
 ">
                                         <i class="ti ti-clock"></i> Scade il: <?php echo htmlspecialchars((string)$_smarty_tpl->getValue('prodotto')->getDataScadenzaFormat(), ENT_QUOTES, 'UTF-8', true);?>
@@ -146,7 +146,7 @@ $foreach1DoElse = true;
 foreach ($_from ?? [] as $_smarty_tpl->getVariable('i')->value) {
 $foreach1DoElse = false;
 ?>
-                    <div class="column is-3-desktop is-6-tablet is-12-mobile">
+                    <div class="card-vector-item">
                         <div class="card home-card-fixed">
                             <div class="card-image">
                                 <figure class="image-container-fixed">
@@ -190,7 +190,7 @@ $_smarty_tpl->getSmarty()->getRuntime('Foreach')->restore($_smarty_tpl, 1);?>
                 <section class="home-section">
         <h2 class="title section-title is-4 text-uppercase">✨ Nuovi Arrivi</h2>
         
-        <div class="columns is-multiline is-mobile is-tablet is-desktop">
+        <div class="card-row-vector">
             <?php if ((true && ($_smarty_tpl->hasVariable('nuovi_arrivi') && null !== ($_smarty_tpl->getValue('nuovi_arrivi') ?? null))) && $_smarty_tpl->getSmarty()->getModifierCallback('count')($_smarty_tpl->getValue('nuovi_arrivi')) > 0) {?>
                 <?php
 $_from = $_smarty_tpl->getSmarty()->getRuntime('Foreach')->init($_smarty_tpl, $_smarty_tpl->getValue('nuovi_arrivi'), 'prodotto');
@@ -198,7 +198,7 @@ $foreach2DoElse = true;
 foreach ($_from ?? [] as $_smarty_tpl->getVariable('prodotto')->value) {
 $foreach2DoElse = false;
 ?>
-                    <div class="column is-3-desktop is-6-tablet is-12-mobile">
+                    <div class="card-vector-item">
                         <div class="card home-card-fixed">
                             <div class="card-image">
                                 <figure class="image-container-fixed">
@@ -253,7 +253,7 @@ $foreach3DoElse = true;
 foreach ($_from ?? [] as $_smarty_tpl->getVariable('j')->value) {
 $foreach3DoElse = false;
 ?>
-                    <div class="column is-3-desktop is-6-tablet is-12-mobile">
+                    <div class="card-vector-item">
                         <div class="card home-card-fixed">
                             <div class="card-image">
                                 <figure class="image-container-fixed">
@@ -299,7 +299,7 @@ $_smarty_tpl->getSmarty()->getRuntime('Foreach')->restore($_smarty_tpl, 1);?>
 }
 /* {/block "content"} */
 /* {block "extra_js"} */
-class Block_7613451296a2d62f1177214_31969125 extends \Smarty\Runtime\Block
+class Block_20498482036a2d65d1ae2560_12412237 extends \Smarty\Runtime\Block
 {
 public function callBlock(\Smarty\Template $_smarty_tpl) {
 $_smarty_current_dir = 'C:\\Users\\damic\\Desktop\\uni\\APPUNTI\\anno3\\secondo_semenstre\\Pweb\\TableCrown\\Presentation\\smarty-dir\\templates';

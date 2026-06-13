@@ -498,54 +498,111 @@ main > .section {
     opacity: 0.65 !important;
 }
 
+CSS
 /* ============================================================
-   STRUTTURA VETTORE RIGA PER LE CARD (VETRINA)
+   STRUTTURA VETTORE RIGA PER LE CARD (VETRINA) — COMPATTATA
    ============================================================ */
 
 .card-row-vector {
     display: flex !important;
     flex-direction: row !important;
     flex-wrap: nowrap !important; /* Impedisce tassativamente di andare a capo */
-    gap: 1.5rem !important;        /* Spazio uniforme tra le card */
+    gap: 1rem !important;        /* Ridotto lo spazio tra le card per farle stare più comode */
     width: 100% !important;
-    overflow-x: auto !important;   /* Abilita lo scorrimento orizzontale se lo schermo è piccolo */
-    padding-bottom: 1rem !important; /* Spazio per non sovrapporsi all'eventuale scrollbar */
+    overflow-x: auto !important;   /* Abilita lo scorrimento orizzontale */
+    padding-bottom: 1rem !important; 
     scroll-behavior: smooth;
     -webkit-overflow-scrolling: touch;
 }
 
-/* Nasconde lo scrollbar brutto sui browser moderni lasciando la funzionalità intatta */
+/* Nasconde lo scrollbar brutto lasciando la funzionalità intatta */
 .card-row-vector::-webkit-scrollbar {
     height: 6px;
 }
-
 .card-row-vector::-webkit-scrollbar-track {
     background: rgba(255, 255, 255, 0.05);
     border-radius: var(--radius-sm);
 }
-
 .card-row-vector::-webkit-scrollbar-thumb {
     background: var(--color-primary);
     border-radius: var(--radius-sm);
 }
 
-/* Ogni elemento occupa esattamente il 25% della riga (4 card visibili contemporaneamente su desktop) */
+/* MODIFICATO: Ogni elemento occupa ora il 20% della riga (5 card visibili contemporaneamente su schermi grandi) */
 .card-vector-item {
-    flex: 0 0 calc(25% - 1.125rem) !important; 
-    min-width: 280px !important; /* Impedisce alle card di stringersi troppo diventando illeggibili */
+    flex: 0 0 calc(20% - 0.8rem) !important; 
+    min-width: 220px !important; /* Ridotto da 280px a 220px per rimpicciolirle */
     height: auto !important;
 }
 
-/* Responsive per schermi tablet/mobile: mostra meno elementi o li adatta fluidamente */
+/* MODIFICATO: Ridotta l'altezza dell'immagine da 220px a 160px per renderla più snella */
+.image-container-fixed {
+    width: 100% !important;
+    height: 160px !important; 
+    position: relative !important;
+    display: block !important;
+    background-color: #2a2a40;
+}
+
+.image-container-fixed img {
+    width: 100% !important;
+    height: 100% !important;
+    object-fit: cover !important;
+    object-position: center !important;
+}
+
+/* MODIFICATO: Ridotto il padding interno della card da 1.5rem a 1rem per guadagnare spazio */
+.card.home-card-fixed .card-content {
+    flex-grow: 1;
+    display: flex !important;
+    flex-direction: column !important;
+    padding: 1rem !important; 
+    background-color: transparent !important;
+}
+
+/* NUOVA CLASSE: Sostituisce il pesante .title di Bulma per stringere le distanze */
+.card.home-card-fixed .card-title-custom {
+    font-size: 1.1rem !important; /* Font leggermente più piccolo e aggraziato */
+    font-weight: 700 !important;
+    margin-bottom: 0.15rem !important;
+    line-height: 1.2 !important;
+    color: var(--color-text-light) !important;
+}
+
+/* Ridotto anche il gap del media object per l'avatar */
+.card.home-card-fixed .card-content .media {
+    display: flex !important;
+    align-items: flex-start !important;
+    gap: 10px !important; /* Ridotto da 16px a 10px */
+    margin-bottom: 0.75rem !important;
+    border: none !important;
+    padding: 0 !important;
+    background: transparent !important;
+}
+
+/* Descrizione del gioco leggermente più compatta */
+.game-description {
+    font-size: 0.85rem !important;
+    line-height: 1.4 !important;
+    margin-bottom: 0.75rem !important;
+}
+
+/* Responsive per schermi tablet/mobile */
+@media screen and (max-width: 1200px) {
+    .card-vector-item {
+        flex: 0 0 calc(33.333% - 0.66rem) !important; /* 3 card visibili su laptop medio-piccoli */
+    }
+}
+
 @media screen and (max-width: 1023px) {
     .card-vector-item {
-        flex: 0 0 calc(50% - 0.75rem) !important; /* 2 card visibili contemporaneamente su tablet */
+        flex: 0 0 calc(50% - 0.5rem) !important; /* 2 card visibili su tablet */
     }
 }
 
 @media screen and (max-width: 768px) {
     .card-vector-item {
-        flex: 0 0 85% !important; /* Su mobile mostra una card quasi intera invitando a fare swipe */
+        flex: 0 0 75% !important; /* Su mobile mostra una card e un pezzetto della successiva */
     }
 }
 
