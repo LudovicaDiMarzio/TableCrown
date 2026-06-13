@@ -46,39 +46,41 @@
             {if isset($offerte) && $offerte|@count > 0}
                 {foreach $offerte as $prodotto}
                     <div class="card-vector-item">
-                        <div class="card home-card-fixed">
-                            <div class="card-image">
-                                <figure class="image-container-fixed">
-                                    <img src="{$base_url}/img/prodotti/{$prodotto->getImmagine()}" alt="{$prodotto->getNome()|escape}" />
-                                </figure>
-                            </div>
-                            <div class="card-content">
-                                <div class="media">
-                                    <div class="media-left">
-                                        <img src="{$base_url}/img/categorie/{$prodotto->getCategoriaIcona()}" class="editor-avatar" alt="Categoria" />
+                        <a href="{$base_url}/prodotto/{$prodotto->getId()}" class="card-link-wrapper">
+                            <div class="card home-card-fixed">
+                                <div class="card-image">
+                                    <figure class="image-container-fixed">
+                                        <img src="{$base_url}/img/prodotti/{$prodotto->getImmagine()}" alt="{$prodotto->getNome()|escape}" />
+                                    </figure>
+                                </div>
+                                <div class="card-content">
+                                    <div class="media">
+                                        <div class="media-left">
+                                            <img src="{$base_url}/img/categorie/{$prodotto->getCategoriaIcona()}" class="editor-avatar" alt="Categoria" />
+                                        </div>
+                                        <div class="media-content">
+                                            <p class="card-title-custom">{$prodotto->getNome()|escape}</p>
+                                            <p class="subtitle">{$prodotto->getEditore()|escape}</p>
+                                        </div>
                                     </div>
-                                    <div class="media-content">
-                                        <p class="card-title-custom">{$prodotto->getNome()|escape}</p>
-                                        <p class="subtitle">{$prodotto->getEditore()|escape}</p>
+                                    
+                                    <p class="game-description">
+                                        {$prodotto->getDescrizioneBreve()|escape}
+                                    </p>
+                                    
+                                    <div class="price-container">
+                                        <span class="price">€{$prodotto->getPrezzoScontato()}</span>
+                                        <span class="price-old">€{$prodotto->getPrezzoListino()}</span>
+                                    </div>
+                                    
+                                    <div class="footer-custom">
+                                        <time datetime="{$prodotto->getDataScadenza()}">
+                                            <i class="ti ti-clock"></i> Scade il: {$prodotto->getDataScadenzaFormat()|escape}
+                                        </time>
                                     </div>
                                 </div>
-                                
-                                <p class="game-description">
-                                    {$prodotto->getDescrizioneBreve()|escape}
-                                </p>
-                                
-                                <div class="price-container">
-                                    <span class="price">€{$prodotto->getPrezzoScontato()}</span>
-                                    <span class="price-old">€{$prodotto->getPrezzoListino()}</span>
-                                </div>
-                                
-                                <div class="footer-custom">
-                                    <time datetime="{$prodotto->getDataScadenza()}">
-                                        <i class="ti ti-clock"></i> Scade il: {$prodotto->getDataScadenzaFormat()|escape}
-                                    </time>
-                                </div>
                             </div>
-                        </div>
+                        </a>
                     </div>
                 {/foreach}
                 
@@ -96,37 +98,39 @@
                 {assign var="demo_items" value=[1, 2, 3, 4, 5]}
                 {foreach $demo_items as $i}
                     <div class="card-vector-item">
-                        <div class="card home-card-fixed">
-                            <div class="card-image">
-                                <figure class="image-container-fixed">
-                                    <img src="https://bulma.io/assets/images/placeholders/1280x960.png" alt="Placeholder image" />
-                                </figure>
-                            </div>
-                            <div class="card-content">
-                                <div class="media">
-                                    <div class="media-left">
-                                        <img src="https://bulma.io/assets/images/placeholders/96x96.png" class="editor-avatar" alt="Placeholder image" />
+                        <a href="#" class="card-link-wrapper">
+                            <div class="card home-card-fixed">
+                                <div class="card-image">
+                                    <figure class="image-container-fixed">
+                                        <img src="https://bulma.io/assets/images/placeholders/1280x960.png" alt="Placeholder image" />
+                                    </figure>
+                                </div>
+                                <div class="card-content">
+                                    <div class="media">
+                                        <div class="media-left">
+                                            <img src="https://bulma.io/assets/images/placeholders/96x96.png" class="editor-avatar" alt="Placeholder image" />
+                                        </div>
+                                        <div class="media-content">
+                                            <p class="card-title-custom">Gioco in Offerta {$i}</p>
+                                            <p class="subtitle">Editore Demo</p>
+                                        </div>
                                     </div>
-                                    <div class="media-content">
-                                        <p class="card-title-custom">Gioco in Offerta {$i}</p>
-                                        <p class="subtitle">Editore Demo</p>
+                                    
+                                    <p class="game-description">
+                                        Offerta incredibile a tempo limitato. Aggiungi subito al carrello TableCrown.
+                                    </p>
+                                    
+                                    <div class="price-container">
+                                        <span class="price">€29.90</span>
+                                        <span class="price-old">€49.90</span>
+                                    </div>
+                                    
+                                    <div class="footer-card-custom">
+                                        <time datetime="2026-06-15"><i class="ti ti-clock"></i> 11:59 PM - 15 Giu 2026</time>
                                     </div>
                                 </div>
-                                
-                                <p class="game-description">
-                                    Offerta incredibile a tempo limitato. Aggiungi subito al carrello TableCrown.
-                                </p>
-                                
-                                <div class="price-container">
-                                    <span class="price">€29.90</span>
-                                    <span class="price-old">€49.90</span>
-                                </div>
-                                
-                                <div class="footer-card-custom">
-                                    <time datetime="2026-06-15"><i class="ti ti-clock"></i> 11:59 PM - 15 Giu 2026</time>
-                                </div>
                             </div>
-                        </div>
+                        </a>
                     </div>
                 {/foreach}
 
@@ -153,38 +157,40 @@
             {if isset($nuovi_arrivi) && $nuovi_arrivi|@count > 0}
                 {foreach $nuovi_arrivi as $prodotto}
                     <div class="card-vector-item">
-                        <div class="card home-card-fixed">
-                            <div class="card-image">
-                                <figure class="image-container-fixed">
-                                    <img src="{$base_url}/img/prodotti/{$prodotto->getImmagine()}" alt="{$prodotto->getNome()|escape}" />
-                                </figure>
-                            </div>
-                            <div class="card-content">
-                                <div class="media">
-                                    <div class="media-left">
-                                        <img src="{$base_url}/img/categorie/{$prodotto->getCategoriaIcona()}" class="editor-avatar" alt="Categoria" />
+                        <a href="{$base_url}/prodotto/{$prodotto->getId()}" class="card-link-wrapper">
+                            <div class="card home-card-fixed">
+                                <div class="card-image">
+                                    <figure class="image-container-fixed">
+                                        <img src="{$base_url}/img/prodotti/{$prodotto->getImmagine()}" alt="{$prodotto->getNome()|escape}" />
+                                    </figure>
+                                </div>
+                                <div class="card-content">
+                                    <div class="media">
+                                        <div class="media-left">
+                                            <img src="{$base_url}/img/categorie/{$prodotto->getCategoriaIcona()}" class="editor-avatar" alt="Categoria" />
+                                        </div>
+                                        <div class="media-content">
+                                            <p class="card-title-custom">{$prodotto->getNome()|escape}</p>
+                                            <p class="subtitle">{$prodotto->getEditore()|escape}</p>
+                                        </div>
                                     </div>
-                                    <div class="media-content">
-                                        <p class="card-title-custom">{$prodotto->getNome()|escape}</p>
-                                        <p class="subtitle">{$prodotto->getEditore()|escape}</p>
+                                    
+                                    <p class="game-description">
+                                        {$prodotto->getDescrizioneBreve()|escape}
+                                    </p>
+                                    
+                                    <div class="price-container">
+                                        <span class="price">€{$prodotto->getPrezzo()}</span>
+                                    </div>
+                                    
+                                    <div class="footer-card-custom">
+                                        <time datetime="{$prodotto->getDataInserimento()}">
+                                            <i class="ti ti-calendar"></i> Disponibile da oggi
+                                        </time>
                                     </div>
                                 </div>
-                                
-                                <p class="game-description">
-                                    {$prodotto->getDescrizioneBreve()|escape}
-                                </p>
-                                
-                                <div class="price-container">
-                                    <span class="price">€{$prodotto->getPrezzo()}</span>
-                                </div>
-                                
-                                <div class="footer-card-custom">
-                                    <time datetime="{$prodotto->getDataInserimento()}">
-                                        <i class="ti ti-calendar"></i> Disponibile da oggi
-                                    </time>
-                                </div>
                             </div>
-                        </div>
+                        </a>
                     </div>
                 {/foreach}
 
@@ -202,36 +208,38 @@
                 {assign var="demo_arrivals" value=[1, 2, 3, 4, 5]}
                 {foreach $demo_arrivals as $j}
                     <div class="card-vector-item">
-                        <div class="card home-card-fixed">
-                            <div class="card-image">
-                                <figure class="image-container-fixed">
-                                    <img src="https://bulma.io/assets/images/placeholders/1280x960.png" alt="Placeholder image" />
-                                </figure>
-                            </div>
-                            <div class="card-content">
-                                <div class="media">
-                                    <div class="media-left">
-                                        <img src="https://bulma.io/assets/images/placeholders/96x96.png" class="editor-avatar" alt="Placeholder image" />
+                        <a href="#" class="card-link-wrapper">
+                            <div class="card home-card-fixed">
+                                <div class="card-image">
+                                    <figure class="image-container-fixed">
+                                        <img src="https://bulma.io/assets/images/placeholders/1280x960.png" alt="Placeholder image" />
+                                    </figure>
+                                </div>
+                                <div class="card-content">
+                                    <div class="media">
+                                        <div class="media-left">
+                                            <img src="https://bulma.io/assets/images/placeholders/96x96.png" class="editor-avatar" alt="Placeholder image" />
+                                        </div>
+                                        <div class="media-content">
+                                            <p class="card-title-custom">Nuovo Arrivo {$j}</p>
+                                            <p class="subtitle">Editore Demo</p>
+                                        </div>
                                     </div>
-                                    <div class="media-content">
-                                        <p class="card-title-custom">Nuovo Arrivo {$j}</p>
-                                        <p class="subtitle">Editore Demo</p>
+                                    
+                                    <p class="game-description">
+                                        Appena arrivato in magazzino. Scopri le meccaniche e i components di alta qualità.
+                                    </p>
+                                    
+                                    <div class="price-container">
+                                        <span class="price">€39.90</span>
+                                    </div>
+                                    
+                                    <div class="footer-card-custom">
+                                        <time datetime="2026-06-12"><i class="ti ti-calendar"></i> Caricato il: 12 Giu 2026</time>
                                     </div>
                                 </div>
-                                
-                                <p class="game-description">
-                                    Appena arrivato in magazzino. Scopri le meccaniche e i components di alta qualità.
-                                </p>
-                                
-                                <div class="price-container">
-                                    <span class="price">€39.90</span>
-                                </div>
-                                
-                                <div class="footer-card-custom">
-                                    <time datetime="2026-06-12"><i class="ti ti-calendar"></i> Caricato il: 12 Giu 2026</time>
-                                </div>
                             </div>
-                        </div>
+                        </a>
                     </div>
                 {/foreach}
 
