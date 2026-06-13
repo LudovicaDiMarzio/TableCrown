@@ -398,15 +398,15 @@ main > .section {
 }
 
 /* ============================================================
-   FIX COERENZA CARD (TableCrown vs Bulma Mockup)
+   FIX COERENZA CARD (TableCrown — Layout Orizzontale)
    ============================================================ */
 
-/* CONTENITORE CARD GENERALE */
+/* CONTENITORE CARD GENERALE: Trasformato in Flex orizzontale */
 .card.home-card-fixed {
     height: 100%;
     display: flex !important;
-    flex-direction: column !important;
-    background-color: var(--color-bg-dark-2) !important; /* Forza lo sfondo scuro della dark mode */
+    flex-direction: row !important; /* Affianca immagine e contenuto */
+    background-color: var(--color-bg-dark-2) !important;
     color: var(--color-text-light) !important;
     border-radius: var(--radius-md) !important;
     overflow: hidden !important; 
@@ -415,17 +415,22 @@ main > .section {
 }
 
 /* BLOCCO IMMAGINE PRINCIPALE */
-.card.home-card-fixed .card-image,
+.card.home-card-fixed .card-image {
+    width: 40% !important; /* L'immagine occupa il 40% della larghezza della card */
+    flex-shrink: 0 !important;
+}
+
 .card.home-card-fixed .card-image figure {
     width: 100% !important;
-    display: block !important;
+    height: 100% !important;
     margin: 0 !important;
     padding: 0 !important;
 }
 
 .image-container-fixed {
     width: 100% !important;
-    height: 220px !important; /* Altezza verticale proporzionata come nel mockup di Bulma */
+    height: 100% !important; /* Prende tutta l'altezza della card */
+    min-height: 250px; /* Evita che si schiacci troppo */
     position: relative !important;
     display: block !important;
     background-color: #2a2a40;
@@ -440,19 +445,21 @@ main > .section {
 
 /* CONTENUTO TEXT / INFO CARD */
 .card.home-card-fixed .card-content {
+    width: 60% !important; /* Il testo occupa il restante 60% */
     flex-grow: 1;
     display: flex !important;
     flex-direction: column !important;
-    padding: 1.5rem !important;
-    background-color: transparent !important; /* Impedisce a Bulma di sovrascrivere con il bianco */
+    justify-content: space-between; /* Distribuisce gli elementi verticalmente */
+    padding: 1.25rem !important;
+    background-color: transparent !important;
 }
 
 /* Struttura Media (Profilo / Editore affiancato al testo) */
 .card.home-card-fixed .card-content .media {
     display: flex !important;
-    align-items: flex-start !important;
-    gap: 16px !important;
-    margin-bottom: 1rem !important;
+    align-items: center !important;
+    gap: 12px !important;
+    margin-bottom: 0.75rem !important;
     border: none !important;
     padding: 0 !important;
     background: transparent !important;
@@ -460,7 +467,7 @@ main > .section {
 
 .card.home-card-fixed .card-content .media-left {
     flex-shrink: 0 !important;
-    margin-right: 0 !important; /* Reset margin di Bulma */
+    margin-right: 0 !important;
 }
 
 .card.home-card-fixed .card-content .media-content {
@@ -468,15 +475,42 @@ main > .section {
     overflow: hidden !important;
 }
 
-/* Forza l'avatar dell'editore a essere un quadrato perfetto (96x96 o 48x48) */
+/* Avatar editore */
 .card.home-card-fixed .editor-avatar {
-    width: 48px !important;
-    height: 48px !important;
+    width: 38px !important;
+    height: 38px !important;
     object-fit: cover !important;
     border-radius: var(--radius-sm) !important;
 }
 
-/* Correzione Colore Testi Interni per Contrasto Dark Mode */
+/* Descrizione del gioco: gestisce il troncamento se il testo è lungo */
+.game-description {
+    font-size: 0.9rem;
+    opacity: 0.8;
+    margin-bottom: 1rem;
+    display: -webkit-box;
+    -webkit-line-clamp: 3; /* Mostra massimo 3 righe */
+    -webkit-box-orient: vertical;
+    overflow: hidden;
+}
+
+/* Prezzi e scadenze */
+.price-container {
+    margin-bottom: 0.5rem;
+    display: flex;
+    align-items: center;
+    gap: 10px;
+}
+
+.footer-card-custom {
+    margin-top: auto;
+    font-size: 0.85rem;
+    opacity: 0.7;
+    border-top: 1px solid var(--color-border-dark);
+    padding-top: 0.5rem;
+}
+
+/* Correzione Colore Testi Interni */
 .card.home-card-fixed .title,
 .card.home-card-fixed .subtitle,
 .card.home-card-fixed p,
@@ -487,15 +521,29 @@ main > .section {
 }
 
 .card.home-card-fixed .title {
-    font-size: 1.25rem !important;
+    font-size: 1.15rem !important;
     font-weight: 700 !important;
-    margin-bottom: 0.25rem !important;
-    line-height: 1.3 !important;
+    margin-bottom: 0.15rem !important;
+    line-height: 1.2 !important;
 }
 
 .card.home-card-fixed .subtitle {
-    font-size: 0.9rem !important;
+    font-size: 0.85rem !important;
     opacity: 0.65 !important;
+}
+
+/* RESPONSIVE PER CARD: Torna verticale su Mobile per non stringere troppo */
+@media (max-width: 768px) {
+    .card.home-card-fixed {
+        flex-direction: column !important;
+    }
+    .card.home-card-fixed .card-image,
+    .card.home-card-fixed .card-content {
+        width: 100% !important;
+    }
+    .image-container-fixed {
+        height: 180px !important;
+    }
 }
 
 /* ── 8. FOOTER ────────────────────────────────────────────── */
