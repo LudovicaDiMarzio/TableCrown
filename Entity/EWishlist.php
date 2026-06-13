@@ -1,58 +1,62 @@
 <?php
 namespace TableCrown\Entity;
- 
+
 use DateTime;
- 
+use Doctrine\ORM\Mapping as ORM;
+use Doctrine\Common\Collections\ArrayCollection;
+use Doctrine\Common\Collections\Collection;
+
+#[ORM\Entity]
+#[ORM\Table(name: "wishlist")]
 class EWishlist {
-    private int $idWishlist;
+
+    #[ORM\Id]
+    #[ORM\GeneratedValue]
+    #[ORM\Column(type: "integer")]
+    private ?int $idWishlist = null;
+
+    #[ORM\Column(type: "datetime")]
     private DateTime $dataCreazione;
-    private array $idProdotti; // array di int (FK -> EProdotto)
-    private Eutente $Utente; // FK -> EUtente (1 a 1)
- 
-    public function __construct(DateTime $dataCreazione, array $idProdotti, Eutente $Utente) {
-        
-        $this->dataCreazione = $dataCreazione;
-        $this->idProdotti = $idProdotti;
-        $this->Utente = $Utente;
+
+    #[ORM\OneToOne(targetEntity: EUtente::class)]
+    #[ORM\JoinColumn(name: "utente_id", referencedColumnName: "idpersona", nullable: false)]
+    private EUtente $utente;
+
+    #[ORM\ManyToMany(targetEntity: EProdotto::class)]
+    #[ORM\JoinTable(name: "wishlist_prodotto")]
+    private Collection $prodotti;
+
+    public function __construct(EUtente $utente) {
+        $this->dataCreazione = new DateTime();
+        $this->utente = $utente;
+        $this->prodotti = new ArrayCollection();
     }
- 
-    // SET methods
-    public function setDataCreazione(DateTime $dataCreazione): void {
-        $this->dataCreazione = $dataCreazione;
-    }
- 
-    public function setIdProdotti(array $idProdotti): void {
-        $this->idProdotti = $idProdotti;
-    }
- 
-    public function addIdProdotto(int $idProdotto): void {
-        if (!in_array($idProdotto, $this->idProdotti)) {
-            $this->idProdotti[] = $idProdotto;
+
+    // Metodi di dominio
+    public function addProdotto(EProdotto $prodotto): void {
+        if (!$this->prodotti->contains($prodotto)) {
+            $this->prodotti->add($prodotto);
         }
     }
- 
-    public function removeIdProdotto(int $idProdotto): void {
-        $this->idProdotti = array_values(array_filter($this->idProdotti, fn($id) => $id !== $idProdotto));
+
+    public function removeProdotto(EProdotto $prodotto): void {
+        $this->prodotti->removeElement($prodotto);
     }
- 
-    public function setIdUtente(int $idUtente): void {
-        $this->idUtente = $idUtente;
-    }
- 
+
     // GET methods
-    public function getIdWishlist(): int {
+    public function getIdWishlist(): ?int {
         return $this->idWishlist;
     }
- 
+
     public function getDataCreazione(): DateTime {
         return $this->dataCreazione;
     }
- 
-    public function getIdProdotti(): array {
-        return $this->idProdotti;
+
+    public function getUtente(): EUtente {
+        return $this->utente;
     }
- 
-    public function getIdUtente(): int {
-        return $this->idUtente;
+
+    public function getProdotti(): Collection {
+        return $this->prodotti;
     }
 }
