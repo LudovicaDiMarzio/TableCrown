@@ -83,12 +83,10 @@
                 {/foreach}
                 
                 {* Card Vedi Altro per dati reali *}
-                <div class="card-vector-item card-vector-more">
-                    <a href="{$base_url}/catalogo?ordinamento=scadenza" class="more-link-wrapper" title="Vedi tutte le offerte">
-                        <div class="more-circle-btn">
-                            <span class="more-plus-icon">+</span>
-                        </div>
-                        <span class="more-text">Vedi tutte</span>
+                <div class="view-more-container">
+                    <a href="#" class="btn-view-more">
+                        <span class="circle-plus"></span>
+                        <span class="view-more-text">Vedi altro</span>
                     </a>
                 </div>
 

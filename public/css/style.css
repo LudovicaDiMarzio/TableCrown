@@ -594,6 +594,83 @@ main > .section {
     }
 }
 
+/* ── ELEMENTO "+ VEDI ALTRO" (STILE TABLECROWN) ──────────────── */
+
+.view-more-container {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 0 1rem;
+    /* Se inserito dentro .card-row-vector, garantisce che mantenga la dimensione nello scroll */
+    flex: 0 0 180px; 
+    max-width: 180px;
+}
+
+.btn-view-more {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 12px;
+    color: var(--color-text-subtle);
+    font-size: var(--font-size-md);
+    font-weight: 600;
+    transition: color var(--transition);
+    cursor: pointer;
+}
+
+/* Il cerchio con il "+" realizzato in CSS puro */
+.btn-view-more .circle-plus {
+    width: 56px;
+    height: 56px;
+    background-color: var(--color-bg-dark-2);
+    border: 2px solid var(--color-border-dark);
+    border-radius: 50%;
+    position: relative;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    transition: background-color var(--transition), border-color var(--transition), transform var(--transition);
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.2);
+}
+
+/* Linea orizzontale del "+" */
+.btn-view-more .circle-plus::before,
+.btn-view-more .circle-plus::after {
+    content: '';
+    position: absolute;
+    background-color: var(--color-primary); /* Colore oro TableCrown */
+    transition: background-color var(--transition);
+}
+
+/* Linea orizzontale */
+.btn-view-more .circle-plus::before {
+    width: 16px;
+    height: 2px;
+}
+
+/* Linea verticale */
+.btn-view-more .circle-plus::after {
+    width: 2px;
+    height: 16px;
+}
+
+/* ── STATI HOVER (EFFETTI VISIVI) ──────────────────────────── */
+
+.btn-view-more:hover {
+    color: var(--color-primary); /* Il testo diventa oro */
+}
+
+.btn-view-more:hover .circle-plus {
+    border-color: var(--color-primary); /* Il bordo del cerchio si accende d'oro */
+    background-color: var(--color-bg-dark); /* Sfondo leggermente più scuro */
+    transform: scale(1.05); /* Micro-interazione di zoom */
+}
+
+.btn-view-more:hover .circle-plus::before,
+.btn-view-more:hover .circle-plus::after {
+    background-color: var(--color-text-light); /* Il "+" diventa bianco al passaggio del mouse */
+}
+
 /* ── 8. FOOTER ────────────────────────────────────────────── */
 
 .site-footer {
