@@ -425,11 +425,11 @@ main > .section {
 
 .image-container-fixed {
     width: 100% !important;
-    height: 160px !important;
+    height: 180px !important; /* Portata a 180px per mantenere le proporzioni con la nuova larghezza */
     position: relative !important;
     display: block !important;
     margin: 0 !important;
-    background-color: #111827; /* Sfondo scuro coerente per i placeholder */
+    background-color: #111827; 
     overflow: hidden;
 }
 
@@ -558,7 +558,7 @@ main > .section {
     display: flex !important;
     flex-direction: row !important;
     flex-wrap: nowrap !important; /* Impedisce categoricamente di andare a capo */
-    gap: 1.25rem !important;        
+    gap: 1.5rem !important;        /* Aumentato il gap per dare più aria alle card più grandi */
     width: 100% !important;
     overflow-x: auto !important;   /* Abilita lo scorrimento orizzontale */
     padding: 0.5rem 0.25rem 1.25rem !important; /* Padding inferiore per respirare */
@@ -579,18 +579,18 @@ main > .section {
     border-radius: var(--radius-sm);
 }
 
-/* Definizione larghezza card nelle varie risoluzioni */
+/* MODIFICATO: Allargate le card da 240px a 280px per desktop/schermi grandi */
 .card-vector-item {
-    flex: 0 0 240px !important; /* FISSO: Impedisce alle card di deformarsi e allargarsi oltre i 240px */
-    max-width: 240px !important;
+    flex: 0 0 280px !important; /* Impedisce alle card di deformarsi o stringersi */
+    max-width: 280px !important;
     height: auto !important;
 }
 
 /* Responsive per schermi tablet/mobile per favorire lo scroll continuo */
 @media screen and (max-width: 768px) {
     .card-vector-item {
-        flex: 0 0 210px !important; /* Leggermente più strette su mobile per mostrare il teaser della card successiva */
-        max-width: 210px !important;
+        flex: 0 0 240px !important; /* Allargate anche su mobile (da 210px a 240px) per mostrare meglio i testi */
+        max-width: 240px !important;
     }
 }
 
