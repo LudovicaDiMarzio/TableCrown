@@ -397,83 +397,84 @@ main > .section {
     font-weight: 700;
 }
 
-/* CORRETTO: Forza l'arrotondamento su Bulma, imposta lo sfondo scuro e cura i dettagli */
+/* CONTENITORE CARD GENERALE */
 .card.home-card-fixed {
     height: 100%;
-    display: flex;
-    flex-direction: column;
-    justify-content: space-between;
-    background-color: var(--color-bg-dark-2) !important; /* Colore scuro coerente */
+    display: flex !important;
+    flex-direction: column !important;
+    background-color: var(--color-bg-dark-2) !important;
     color: var(--color-text-light) !important;
-    border-radius: var(--radius-md) !important; /* Forza il raggio di Bulma */
-    overflow: hidden !important; /* Taglia tutto ciò che esce, comprese le immagini */
+    border-radius: var(--radius-md) !important;
+    overflow: hidden !important; 
     border: 1px solid var(--color-border-dark) !important;
-    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.2);
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.25);
+    position: relative;
 }
 
-/* Forza l'arrotondamento anche sull'eventuale wrapper dell'immagine di Bulma */
+/* BLOCCO IMMAGINE: Reset totale di Bulma per evitare sfasamenti laterali */
 .card.home-card-fixed .card-image,
 .card.home-card-fixed .card-image figure {
-    border-top-left-radius: var(--radius-md) !important;
-    border-top-right-radius: var(--radius-md) !important;
-    overflow: hidden !important;
-}
-
-/* Contenitore immagine ottimizzato - Forza il posizionamento da bordo a bordo */
-.card.home-card-fixed .card-image,
-.card.home-card-fixed .card-image figure,
-.image-container-fixed {
     width: 100% !important;
-    max-width: 100% !important;
     display: block !important;
     margin: 0 !important;
     padding: 0 !important;
+    overflow: hidden !important;
 }
 
 .image-container-fixed {
-    height: 180px; /* Rimosso max-height per garantire stabilità dimensionale */
-    overflow: hidden !important;
-    background-color: #f5f5f5; /* Sfondo chiaro interno per le scatole dei giochi */
-    display: flex !important;
-    align-items: center;
-    justify-content: center;
+    width: 100% !important;
+    height: 180px !important;
+    position: relative !important;
+    display: block !important;
+    margin: 0 !important;
+    padding: 0 !important;
+    background-color: #f5f5f5;
     border-top-left-radius: var(--radius-md) !important;
     border-top-right-radius: var(--radius-md) !important;
+    overflow: hidden !important;
 }
 
+/* Forza l'immagine a coprire l'intera larghezza da bordo a bordo senza eccezioni */
 .image-container-fixed img {
     width: 100% !important;
     height: 100% !important;
-    object-fit: cover !important; /* Riempie lo spazio da bordo a bordo tagliando gli eccessi */
+    display: block !important;
+    object-fit: cover !important;
+    object-position: center !important;
 }
 
-/* Gestione testo e padding interno */
+/* CONTENUTO TEXT / INFO CARD */
 .card.home-card-fixed .card-content {
     flex-grow: 1;
-    display: flex;
-    flex-direction: column;
-    justify-content: space-between;
-    padding: 1.25rem !important; /* Aggiunge lo spazio corretto intorno al testo */
+    display: flex !important;
+    flex-direction: column !important;
+    justify-content: space-between !important;
+    padding: 1.5rem !important; /* Allinea i testi isolandoli dai bordi esterni */
     background-color: transparent !important;
 }
 
-/* Correzione colori testi interni alla card scura */
+/* Fix tipografia interna per contrasto dark mode */
 .card.home-card-fixed .title,
 .card.home-card-fixed .subtitle,
 .card.home-card-fixed p,
+.card.home-card-fixed span,
 .card.home-card-fixed time {
     color: var(--color-text-light) !important;
 }
 
+/* Regolazione per elementi secondari */
 .card.home-card-fixed .subtitle,
-.card.home-card-fixed time {
+.card.home-card-fixed time,
+.card.home-card-fixed .editor-text {
     opacity: 0.7;
+    color: var(--color-text-light) !important;
 }
 
+/* Struttura del footer interno (Es. data di scadenza o prezzo) */
 .card.home-card-fixed .footer-card-custom {
-    border-top: 1px solid var(--color-border-dark);
-    padding-top: 0.75rem;
-    margin-top: 0.75rem;
+    border-top: 1px solid var(--color-border-dark) !important;
+    padding-top: 0.75rem !important;
+    margin-top: auto !important;
 }
 
 
