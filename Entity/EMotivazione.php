@@ -30,11 +30,7 @@ class EMotivazione {
     */
 
     
-    //metodi di dominio non so se ha senso permettere la modifica di nomi e gravità eventualmente...per l'inserimento di nuove motivazioni non è necessario inserire metodi nuovi quindi la classe potrebbe rimanere immutabile
-    public function aggiornaNome(string $nuovoNome): void
-    {
-        $this->validaNomeMotivazione($nuovoNome);
-    }
+   
 
     private function validaNomeMotivazione(string $nome): void
     {
