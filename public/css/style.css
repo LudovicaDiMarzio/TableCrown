@@ -397,42 +397,74 @@ main > .section {
     font-weight: 700;
 }
 
-/* Forza l'altezza uniforme delle Card per non disallineare la griglia orizzontale */
+/* CORRETTO: Forza l'arrotondamento su Bulma, imposta lo sfondo scuro e cura i dettagli */
 .card.home-card-fixed {
     height: 100%;
     display: flex;
     flex-direction: column;
     justify-content: space-between;
-    background-color: #fff;
-    border-radius: var(--radius-md);
-    overflow: hidden; /* Taglia i contenuti in eccesso */
-    isolation: isolate; /* MODIFICATO: Evita glitch di rendering sui bordi arrotondati nei browser moderni */
-    border: 1px solid var(--color-border-light);
+    background-color: var(--color-bg-dark-2) !important; /* Colore scuro coerente */
+    color: var(--color-text-light) !important;
+    border-radius: var(--radius-md) !important; /* Forza il raggio di Bulma */
+    overflow: hidden !important; /* Taglia tutto ciò che esce, comprese le immagini */
+    border: 1px solid var(--color-border-dark) !important;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.2);
 }
 
+/* Forza l'arrotondamento anche sull'eventuale wrapper dell'immagine di Bulma */
+.card.home-card-fixed .card-image,
+.card.home-card-fixed .card-image figure {
+    border-top-left-radius: var(--radius-md) !important;
+    border-top-right-radius: var(--radius-md) !important;
+    overflow: hidden !important;
+}
+
+/* Contenitore immagine ottimizzato */
+.image-container-fixed {
+    max-height: 180px; 
+    overflow: hidden !important;
+    background-color: #f5f5f5; /* Sfondo chiaro per far risaltare le scatole dei giochi */
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border-top-left-radius: var(--radius-md) !important;
+    border-top-right-radius: var(--radius-md) !important;
+    width: 100%;
+}
+
+.image-container-fixed img {
+    object-fit: contain !important; 
+    height: 100% !important;
+    width: 100% !important;
+}
+
+/* Gestione testo e padding interno */
 .card.home-card-fixed .card-content {
     flex-grow: 1;
     display: flex;
     flex-direction: column;
     justify-content: space-between;
+    padding: 1.25rem !important; /* Aggiunge lo spazio corretto intorno al testo */
+    background-color: transparent !important;
 }
 
-/* MODIFICATO: Gestione arrotondamento superiore per non coprire il radius della Card principale */
-.image-container-fixed {
-    max-height: 180px; /* Altezza massima bloccata per evitare card giganti */
-    overflow: hidden;
-    background-color: #f5f5f5;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    border-top-left-radius: var(--radius-md);  /* Forza l'angolo superiore sinistro */
-    border-top-right-radius: var(--radius-md); /* Forza l'angolo superiore destro */
+/* Correzione colori testi interni alla card scura */
+.card.home-card-fixed .title,
+.card.home-card-fixed .subtitle,
+.card.home-card-fixed p,
+.card.home-card-fixed time {
+    color: var(--color-text-light) !important;
 }
 
-.image-container-fixed img {
-    object-fit: contain !important; /* Mantiene proporzione e interezza delle scatole dei giochi */
-    height: 100% !important;
-    width: 100% !important;
+.card.home-card-fixed .subtitle,
+.card.home-card-fixed time {
+    opacity: 0.7;
+}
+
+.card.home-card-fixed .footer-card-custom {
+    border-top: 1px solid var(--color-border-dark);
+    padding-top: 0.75rem;
+    margin-top: 0.75rem;
 }
 
 
