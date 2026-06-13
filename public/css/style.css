@@ -620,6 +620,8 @@ main > .section {
     width: 100%;
 }
 
+
+
 /* Il cerchio con lo stile dark-gold di TableCrown */
 .view-more-link .circle-plus {
     width: 56px !important;
@@ -667,6 +669,61 @@ main > .section {
 
 .view-more-link:hover .view-more-text {
     color: var(--color-primary) !important; /* La scritta sotto diventa oro */
+}
+
+/* ── FIX: cerchio per "+ Vedi tutte/tutti" nelle card DEMO ── */
+.more-link-wrapper {
+    display: flex !important;
+    flex-direction: column !important;
+    align-items: center !important;
+    gap: 12px !important;
+    text-decoration: none !important;
+    cursor: pointer !important;
+    width: 100%;
+}
+
+.more-link-wrapper .more-circle-btn {
+    width: 56px !important;
+    height: 56px !important;
+    background-color: var(--color-bg-dark-2) !important;
+    border: 2px solid var(--color-border-dark) !important;
+    border-radius: 50% !important;
+    display: flex !important;
+    align-items: center !important;
+    justify-content: center !important;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.3) !important;
+    transition: all var(--transition) !important;
+}
+
+.more-link-wrapper .more-plus-icon {
+    font-size: 28px !important;
+    line-height: 1 !important;
+    font-weight: 600 !important;
+    color: var(--color-primary) !important;
+    margin-top: -2px;
+    transition: color var(--transition) !important;
+}
+
+.more-link-wrapper .more-text {
+    font-size: var(--font-size-md) !important;
+    font-weight: 600 !important;
+    color: var(--color-text-subtle) !important;
+    white-space: nowrap !important;
+    transition: color var(--transition) !important;
+}
+
+.more-link-wrapper:hover .more-circle-btn {
+    border-color: var(--color-primary) !important;
+    transform: scale(1.08) !important;
+    background-color: var(--color-bg-dark) !important;
+}
+
+.more-link-wrapper:hover .more-plus-icon {
+    color: #ffffff !important;
+}
+
+.more-link-wrapper:hover .more-text {
+    color: var(--color-primary) !important;
 }
 
 /* ── 8. FOOTER ────────────────────────────────────────────── */
