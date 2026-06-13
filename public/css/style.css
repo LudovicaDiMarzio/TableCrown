@@ -594,9 +594,9 @@ main > .section {
     }
 }
 
-/* ── METODO A: FIX STRUTTURATO PER ELEMENTO "+ VEDI TUTTI" ── */
+/* ── FIX APPOSITI PER ELEMENTO "+ VEDI TUTTI" ──────────────── */
 
-/* Contenitore finale dello scroll */
+/* Contenitore accodato alle card dello scroll orizzontale */
 .card-row-vector .card-vector-item.card-vector-more {
     flex: 0 0 140px !important;
     max-width: 140px !important;
@@ -606,6 +606,7 @@ main > .section {
     background: transparent !important;
     border: none !important;
     box-shadow: none !important;
+    padding: 0 1rem !important;
 }
 
 /* Link flessibile incolonnato */
@@ -613,23 +614,18 @@ main > .section {
     display: flex !important;
     flex-direction: column !important;
     align-items: center !important;
-    justify-content: center !important;
     gap: 12px !important;
     text-decoration: none !important;
     cursor: pointer !important;
-    width: 100% !important;
-    height: 100% !important;
+    width: 100%;
 }
 
-/* Il cerchio ad alto contrasto */
+/* Il cerchio con lo stile dark-gold di TableCrown */
 .view-more-link .circle-plus {
     width: 56px !important;
     height: 56px !important;
-    min-width: 56px !important;
-    min-height: 56px !important;
-    flex-shrink: 0 !important;
-    background-color: var(--color-bg-dark-2) !important; /* Sfondo scuro coerente con le card */
-    border: 2px solid var(--color-primary) !important;   /* Bordo oro */
+    background-color: var(--color-bg-dark-2) !important;
+    border: 2px solid var(--color-border-dark) !important;
     border-radius: 50% !important;
     display: flex !important;
     align-items: center !important;
@@ -643,32 +639,35 @@ main > .section {
     font-size: 28px !important;
     line-height: 1 !important;
     font-weight: 600 !important;
-    color: var(--color-primary) !important;
-    margin-top: -4px; /* Centratura ottica */
+    color: var(--color-primary) !important; /* Colore Oro */
+    margin-top: -2px; /* Micro-aggiustamento ottico per centrare il + */
+    transition: color var(--transition) !important;
 }
 
 /* Testo "Vedi tutti" sotto al cerchio */
 .view-more-link .view-more-text {
     font-size: var(--font-size-md) !important;
     font-weight: 600 !important;
-    color: #4b5563 !important; /* Grigio scuro per massima leggibilità sul fondo chiaro del sito */
+    color: var(--color-text-subtle) !important;
     white-space: nowrap !important;
     transition: color var(--transition) !important;
 }
 
-/* ── HOVER STATS ── */
+/* ── COMPORTAMENTO AL PASSAGGIO DEL MOUSE (HOVER) ─────────── */
+
 .view-more-link:hover .circle-plus {
-    border-color: #ffffff !important;
-    transform: scale(1.1) !important;
-    background-color: var(--color-primary) !important; /* Si riempie d'oro */
-}
-.view-more-link:hover .circle-plus span {
-    color: #ffffff !important; /* Il "+" diventa bianco */
-}
-.view-more-link:hover .view-more-text {
-    color: var(--color-primary) !important; /* Il testo diventa oro */
+    border-color: var(--color-primary) !important; /* Il bordo si accende d'oro */
+    transform: scale(1.08) !important;            /* Leggero zoom dinamico */
+    background-color: var(--color-bg-dark) !important;
 }
 
+.view-more-link:hover .circle-plus span {
+    color: #ffffff !important; /* Il "+" dentro diventa bianco al passaggio */
+}
+
+.view-more-link:hover .view-more-text {
+    color: var(--color-primary) !important; /* La scritta sotto diventa oro */
+}
 
 /* ── 8. FOOTER ────────────────────────────────────────────── */
 
