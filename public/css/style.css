@@ -498,6 +498,56 @@ main > .section {
     opacity: 0.65 !important;
 }
 
+/* ============================================================
+   STRUTTURA VETTORE RIGA PER LE CARD (VETRINA)
+   ============================================================ */
+
+.card-row-vector {
+    display: flex !important;
+    flex-direction: row !important;
+    flex-wrap: nowrap !important; /* Impedisce tassativamente di andare a capo */
+    gap: 1.5rem !important;        /* Spazio uniforme tra le card */
+    width: 100% !important;
+    overflow-x: auto !important;   /* Abilita lo scorrimento orizzontale se lo schermo è piccolo */
+    padding-bottom: 1rem !important; /* Spazio per non sovrapporsi all'eventuale scrollbar */
+    scroll-behavior: smooth;
+    -webkit-overflow-scrolling: touch;
+}
+
+/* Nasconde lo scrollbar brutto sui browser moderni lasciando la funzionalità intatta */
+.card-row-vector::-webkit-scrollbar {
+    height: 6px;
+}
+
+.card-row-vector::-webkit-scrollbar-track {
+    background: rgba(255, 255, 255, 0.05);
+    border-radius: var(--radius-sm);
+}
+
+.card-row-vector::-webkit-scrollbar-thumb {
+    background: var(--color-primary);
+    border-radius: var(--radius-sm);
+}
+
+/* Ogni elemento occupa esattamente il 25% della riga (4 card visibili contemporaneamente su desktop) */
+.card-vector-item {
+    flex: 0 0 calc(25% - 1.125rem) !important; 
+    min-width: 280px !important; /* Impedisce alle card di stringersi troppo diventando illeggibili */
+    height: auto !important;
+}
+
+/* Responsive per schermi tablet/mobile: mostra meno elementi o li adatta fluidamente */
+@media screen and (max-width: 1023px) {
+    .card-vector-item {
+        flex: 0 0 calc(50% - 0.75rem) !important; /* 2 card visibili contemporaneamente su tablet */
+    }
+}
+
+@media screen and (max-width: 768px) {
+    .card-vector-item {
+        flex: 0 0 85% !important; /* Su mobile mostra una card quasi intera invitando a fare swipe */
+    }
+}
 
 /* ── 8. FOOTER ────────────────────────────────────────────── */
 

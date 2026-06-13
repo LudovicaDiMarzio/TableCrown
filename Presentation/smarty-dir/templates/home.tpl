@@ -42,10 +42,10 @@
     <section class="home-section">
         <h2 class="title section-title is-4 text-uppercase">🔥 Offerte in Scadenza</h2>
         
-        <div class="columns is-multiline is-mobile is-tablet is-desktop">
+        <div class="card-row-vector">
             {if isset($offerte) && $offerte|@count > 0}
                 {foreach $offerte as $prodotto}
-                    <div class="column is-3-desktop is-6-tablet is-12-mobile">
+                    <div class="card-vector-item">
                         <div class="card home-card-fixed">
                             <div class="card-image">
                                 <figure class="image-container-fixed">
@@ -72,7 +72,7 @@
                                     <span class="price-old">€{$prodotto->getPrezzoListino()}</span>
                                 </div>
                                 
-                                <div class="footer-card-custom">
+                                <div class="footer-custom">
                                     <time datetime="{$prodotto->getDataScadenza()}">
                                         <i class="ti ti-clock"></i> Scade il: {$prodotto->getDataScadenzaFormat()|escape}
                                     </time>
@@ -84,7 +84,7 @@
             {else}
                 {assign var="demo_items" value=[1, 2, 3, 4]}
                 {foreach $demo_items as $i}
-                    <div class="column is-3-desktop is-6-tablet is-12-mobile">
+                    <div class="card-vector-item">
                         <div class="card home-card-fixed">
                             <div class="card-image">
                                 <figure class="image-container-fixed">
@@ -128,10 +128,10 @@
     <section class="home-section">
         <h2 class="title section-title is-4 text-uppercase">✨ Nuovi Arrivi</h2>
         
-        <div class="columns is-multiline is-mobile is-tablet is-desktop">
+        <div class="card-row-vector">
             {if isset($nuovi_arrivi) && $nuovi_arrivi|@count > 0}
                 {foreach $nuovi_arrivi as $prodotto}
-                    <div class="column is-3-desktop is-6-tablet is-12-mobile">
+                    <div class="card-vector-item">
                         <div class="card home-card-fixed">
                             <div class="card-image">
                                 <figure class="image-container-fixed">
@@ -169,7 +169,7 @@
             {else}
                 {assign var="demo_arrivals" value=[1, 2, 3, 4]}
                 {foreach $demo_arrivals as $j}
-                    <div class="column is-3-desktop is-6-tablet is-12-mobile">
+                    <div class="card-vector-item">
                         <div class="card home-card-fixed">
                             <div class="card-image">
                                 <figure class="image-container-fixed">
