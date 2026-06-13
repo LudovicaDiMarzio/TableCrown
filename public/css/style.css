@@ -397,16 +397,17 @@ main > .section {
     font-weight: 700;
 }
 
+CSS
 /* ============================================================
-   FIX COERENZA CARD (TableCrown vs Bulma Mockup)
+   FIX COERENZA CARD (TableCrown vs Bulma Mockup) - OTTIMIZZATO
    ============================================================ */
 
 /* CONTENITORE CARD GENERALE */
 .card.home-card-fixed {
-    height: 100%;
+    height: 100% !important;
     display: flex !important;
     flex-direction: column !important;
-    background-color: var(--color-bg-dark-2) !important; /* Forza lo sfondo scuro della dark mode */
+    background-color: var(--color-bg-dark-2) !important; 
     color: var(--color-text-light) !important;
     border-radius: var(--radius-md) !important;
     overflow: hidden !important; 
@@ -415,44 +416,46 @@ main > .section {
 }
 
 /* BLOCCO IMMAGINE PRINCIPALE */
-.card.home-card-fixed .card-image,
-.card.home-card-fixed .card-image figure {
+.card.home-card-fixed .card-image {
     width: 100% !important;
     display: block !important;
     margin: 0 !important;
     padding: 0 !important;
+    flex-shrink: 0 !important; /* Impedisce all'immagine di collassare verticalmente */
 }
 
 .image-container-fixed {
     width: 100% !important;
-    height: 220px !important; /* Altezza verticale proporzionata come nel mockup di Bulma */
+    height: 160px !important; /* Mantiene l'altezza proporzionata */
     position: relative !important;
     display: block !important;
+    margin: 0 !important;
     background-color: #2a2a40;
+    overflow: hidden;
 }
 
 .image-container-fixed img {
     width: 100% !important;
     height: 100% !important;
-    object-fit: cover !important;
+    object-fit: cover !important; /* Taglia l'immagine senza distorcerla */
     object-position: center !important;
 }
 
 /* CONTENUTO TEXT / INFO CARD */
 .card.home-card-fixed .card-content {
-    flex-grow: 1;
     display: flex !important;
     flex-direction: column !important;
-    padding: 1.5rem !important;
-    background-color: transparent !important; /* Impedisce a Bulma di sovrascrivere con il bianco */
+    flex-grow: 1 !important; /* Spinge il footer della card verso il basso */
+    padding: 1rem !important; 
+    background-color: transparent !important;
 }
 
-/* Struttura Media (Profilo / Editore affiancato al testo) */
+/* Struttura Media object di Bulma (Avatar + Titolo/Editore) */
 .card.home-card-fixed .card-content .media {
     display: flex !important;
-    align-items: flex-start !important;
-    gap: 16px !important;
-    margin-bottom: 1rem !important;
+    align-items: center !important; /* Allinea verticalmente al centro avatar e testi */
+    gap: 10px !important; 
+    margin-bottom: 0.75rem !important;
     border: none !important;
     padding: 0 !important;
     background: transparent !important;
@@ -460,62 +463,86 @@ main > .section {
 
 .card.home-card-fixed .card-content .media-left {
     flex-shrink: 0 !important;
-    margin-right: 0 !important; /* Reset margin di Bulma */
+    margin-right: 0 !important; 
 }
 
 .card.home-card-fixed .card-content .media-content {
     flex-grow: 1 !important;
     overflow: hidden !important;
+    white-space: nowrap; /* Evita strani ritorni a capo nel titolo */
 }
 
-/* Forza l'avatar dell'editore a essere un quadrato perfetto (96x96 o 48x48) */
+/* Forzatura Avatar Categoria */
 .card.home-card-fixed .editor-avatar {
-    width: 48px !important;
-    height: 48px !important;
+    width: 36px !important; /* Leggermente ridotto per essere più elegante */
+    height: 36px !important; 
     object-fit: cover !important;
     border-radius: var(--radius-sm) !important;
 }
 
-/* Correzione Colore Testi Interni per Contrasto Dark Mode */
-.card.home-card-fixed .title,
-.card.home-card-fixed .subtitle,
-.card.home-card-fixed p,
-.card.home-card-fixed span,
-.card.home-card-fixed strong,
-.card.home-card-fixed time {
-    color: var(--color-text-light) !important;
-}
-
-.card.home-card-fixed .title {
-    font-size: 1.25rem !important;
+/* Testi interni */
+.card.home-card-fixed .card-title-custom {
+    font-size: 1rem !important; 
     font-weight: 700 !important;
-    margin-bottom: 0.25rem !important;
-    line-height: 1.3 !important;
+    margin-bottom: 0.15rem !important;
+    line-height: 1.2 !important;
+    color: var(--color-text-light) !important;
+    text-overflow: ellipsis;
+    overflow: hidden;
 }
 
 .card.home-card-fixed .subtitle {
-    font-size: 0.9rem !important;
+    font-size: 0.85rem !important;
+    margin-bottom: 0 !important;
     opacity: 0.65 !important;
+    text-overflow: ellipsis;
+    overflow: hidden;
 }
 
-CSS
+/* Descrizione del gioco */
+.game-description {
+    font-size: 0.85rem !important;
+    line-height: 1.4 !important;
+    margin-bottom: 1rem !important;
+    color: var(--color-text-subtle) !important;
+    flex-grow: 1; /* Fa in modo che le descrizioni corte lascino spazio equo */
+}
+
+/* Prezzi */
+.price-container {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    margin-bottom: 0.75rem !important;
+}
+
+/* Footer personalizzato della card per la scadenza/data */
+.footer-card-custom, .footer-custom {
+    margin-top: auto !important; /* Blocca il footer sul fondo della card */
+    padding-top: 0.5rem;
+    border-top: 1px solid var(--color-border-dark);
+    font-size: 0.8rem !important;
+    color: var(--color-text-muted) !important;
+}
+
+
 /* ============================================================
-   STRUTTURA VETTORE RIGA PER LE CARD (VETRINA) — COMPATTATA
+   STRUTTURA VETTORE RIGA PER LE CARD (VETRINA) — SCROLL ORIZZONTALE
    ============================================================ */
 
 .card-row-vector {
     display: flex !important;
     flex-direction: row !important;
-    flex-wrap: nowrap !important; /* Impedisce tassativamente di andare a capo */
-    gap: 1rem !important;        /* Ridotto lo spazio tra le card per farle stare più comode */
+    flex-wrap: nowrap !important; /* Impedisce categoricamente di andare a capo */
+    gap: 1.25rem !important;        
     width: 100% !important;
     overflow-x: auto !important;   /* Abilita lo scorrimento orizzontale */
-    padding-bottom: 1rem !important; 
+    padding: 0.5rem 0.25rem 1.25rem !important; /* Padding inferiore per respirare */
     scroll-behavior: smooth;
     -webkit-overflow-scrolling: touch;
 }
 
-/* Nasconde lo scrollbar brutto lasciando la funzionalità intatta */
+/* Scrollbar minimale */
 .card-row-vector::-webkit-scrollbar {
     height: 6px;
 }
@@ -528,81 +555,18 @@ CSS
     border-radius: var(--radius-sm);
 }
 
-/* MODIFICATO: Ogni elemento occupa ora il 20% della riga (5 card visibili contemporaneamente su schermi grandi) */
+/* Definizione larghezza card nelle varie risoluzioni */
 .card-vector-item {
-    flex: 0 0 calc(20% - 0.8rem) !important; 
-    min-width: 220px !important; /* Ridotto da 280px a 220px per rimpicciolirle */
+    flex: 0 0 240px !important; /* FISSO: Impedisce alle card di deformarsi e allargarsi oltre i 240px */
+    max-width: 240px !important;
     height: auto !important;
 }
 
-/* MODIFICATO: Ridotta l'altezza dell'immagine da 220px a 160px per renderla più snella */
-.image-container-fixed {
-    width: 100% !important;
-    height: 160px !important; 
-    position: relative !important;
-    display: block !important;
-    background-color: #2a2a40;
-}
-
-.image-container-fixed img {
-    width: 100% !important;
-    height: 100% !important;
-    object-fit: cover !important;
-    object-position: center !important;
-}
-
-/* MODIFICATO: Ridotto il padding interno della card da 1.5rem a 1rem per guadagnare spazio */
-.card.home-card-fixed .card-content {
-    flex-grow: 1;
-    display: flex !important;
-    flex-direction: column !important;
-    padding: 1rem !important; 
-    background-color: transparent !important;
-}
-
-/* NUOVA CLASSE: Sostituisce il pesante .title di Bulma per stringere le distanze */
-.card.home-card-fixed .card-title-custom {
-    font-size: 1.1rem !important; /* Font leggermente più piccolo e aggraziato */
-    font-weight: 700 !important;
-    margin-bottom: 0.15rem !important;
-    line-height: 1.2 !important;
-    color: var(--color-text-light) !important;
-}
-
-/* Ridotto anche il gap del media object per l'avatar */
-.card.home-card-fixed .card-content .media {
-    display: flex !important;
-    align-items: flex-start !important;
-    gap: 10px !important; /* Ridotto da 16px a 10px */
-    margin-bottom: 0.75rem !important;
-    border: none !important;
-    padding: 0 !important;
-    background: transparent !important;
-}
-
-/* Descrizione del gioco leggermente più compatta */
-.game-description {
-    font-size: 0.85rem !important;
-    line-height: 1.4 !important;
-    margin-bottom: 0.75rem !important;
-}
-
-/* Responsive per schermi tablet/mobile */
-@media screen and (max-width: 1200px) {
-    .card-vector-item {
-        flex: 0 0 calc(33.333% - 0.66rem) !important; /* 3 card visibili su laptop medio-piccoli */
-    }
-}
-
-@media screen and (max-width: 1023px) {
-    .card-vector-item {
-        flex: 0 0 calc(50% - 0.5rem) !important; /* 2 card visibili su tablet */
-    }
-}
-
+/* Responsive per schermi tablet/mobile per favorire lo scroll continuo */
 @media screen and (max-width: 768px) {
     .card-vector-item {
-        flex: 0 0 75% !important; /* Su mobile mostra una card e un pezzetto della successiva */
+        flex: 0 0 210px !important; /* Leggermente più strette su mobile per mostrare il teaser della card successiva */
+        max-width: 210px !important;
     }
 }
 

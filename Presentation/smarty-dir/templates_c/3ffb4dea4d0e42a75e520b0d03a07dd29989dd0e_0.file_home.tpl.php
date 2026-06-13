@@ -1,18 +1,18 @@
 <?php
-/* Smarty version 5.8.0, created on 2026-06-13 16:14:41
+/* Smarty version 5.8.0, created on 2026-06-13 16:19:51
   from 'file:home.tpl' */
 
 /* @var \Smarty\Template $_smarty_tpl */
 if ($_smarty_tpl->getCompiled()->isFresh($_smarty_tpl, array (
   'version' => '5.8.0',
-  'unifunc' => 'content_6a2d65d1ae2c20_81739278',
+  'unifunc' => 'content_6a2d6707424140_02483190',
   'has_nocache_code' => false,
   'file_dependency' => 
   array (
     '3ffb4dea4d0e42a75e520b0d03a07dd29989dd0e' => 
     array (
       0 => 'home.tpl',
-      1 => 1781360004,
+      1 => 1781360365,
       2 => 'file',
     ),
   ),
@@ -20,23 +20,23 @@ if ($_smarty_tpl->getCompiled()->isFresh($_smarty_tpl, array (
   array (
   ),
 ))) {
-function content_6a2d65d1ae2c20_81739278 (\Smarty\Template $_smarty_tpl) {
+function content_6a2d6707424140_02483190 (\Smarty\Template $_smarty_tpl) {
 $_smarty_current_dir = 'C:\\Users\\damic\\Desktop\\uni\\APPUNTI\\anno3\\secondo_semenstre\\Pweb\\TableCrown\\Presentation\\smarty-dir\\templates';
 $_smarty_tpl->getInheritance()->init($_smarty_tpl, true);
 ?>
 
 
 <?php 
-$_smarty_tpl->getInheritance()->instanceBlock($_smarty_tpl, 'Block_7352162346a2d65d1acc8e5_67901678', "content");
+$_smarty_tpl->getInheritance()->instanceBlock($_smarty_tpl, 'Block_9012031446a2d67073f9379_26717724', "content");
 ?>
 
 
 <?php 
-$_smarty_tpl->getInheritance()->instanceBlock($_smarty_tpl, 'Block_20498482036a2d65d1ae2560_12412237', "extra_js");
+$_smarty_tpl->getInheritance()->instanceBlock($_smarty_tpl, 'Block_4659484566a2d67074235b6_51214003', "extra_js");
 $_smarty_tpl->getInheritance()->endChild($_smarty_tpl, "common/layout.tpl", $_smarty_current_dir);
 }
 /* {block "content"} */
-class Block_7352162346a2d65d1acc8e5_67901678 extends \Smarty\Runtime\Block
+class Block_9012031446a2d67073f9379_26717724 extends \Smarty\Runtime\Block
 {
 public function callBlock(\Smarty\Template $_smarty_tpl) {
 $_smarty_current_dir = 'C:\\Users\\damic\\Desktop\\uni\\APPUNTI\\anno3\\secondo_semenstre\\Pweb\\TableCrown\\Presentation\\smarty-dir\\templates';
@@ -106,7 +106,7 @@ $foreach0DoElse = false;
 " class="editor-avatar" alt="Categoria" />
                                     </div>
                                     <div class="media-content">
-                                        <p class="title"><?php echo htmlspecialchars((string)$_smarty_tpl->getValue('prodotto')->getNome(), ENT_QUOTES, 'UTF-8', true);?>
+                                        <p class="card-title-custom"><?php echo htmlspecialchars((string)$_smarty_tpl->getValue('prodotto')->getNome(), ENT_QUOTES, 'UTF-8', true);?>
 </p>
                                         <p class="subtitle"><?php echo htmlspecialchars((string)$_smarty_tpl->getValue('prodotto')->getEditore(), ENT_QUOTES, 'UTF-8', true);?>
 </p>
@@ -139,7 +139,7 @@ $foreach0DoElse = false;
 }
 $_smarty_tpl->getSmarty()->getRuntime('Foreach')->restore($_smarty_tpl, 1);?>
             <?php } else { ?>
-                <?php $_smarty_tpl->assign('demo_items', array(1,2,3,4), false, NULL);?>
+                <?php $_smarty_tpl->assign('demo_items', array(1,2,3,4,5), false, NULL);?>
                 <?php
 $_from = $_smarty_tpl->getSmarty()->getRuntime('Foreach')->init($_smarty_tpl, $_smarty_tpl->getValue('demo_items'), 'i');
 $foreach1DoElse = true;
@@ -159,7 +159,7 @@ $foreach1DoElse = false;
                                         <img src="https://bulma.io/assets/images/placeholders/96x96.png" class="editor-avatar" alt="Placeholder image" />
                                     </div>
                                     <div class="media-content">
-                                        <p class="title">Gioco in Offerta <?php echo $_smarty_tpl->getValue('i');?>
+                                        <p class="card-title-custom">Gioco in Offerta <?php echo $_smarty_tpl->getValue('i');?>
 </p>
                                         <p class="subtitle">Editore Demo</p>
                                     </div>
@@ -216,7 +216,7 @@ $foreach2DoElse = false;
 " class="editor-avatar" alt="Categoria" />
                                     </div>
                                     <div class="media-content">
-                                        <p class="title"><?php echo htmlspecialchars((string)$_smarty_tpl->getValue('prodotto')->getNome(), ENT_QUOTES, 'UTF-8', true);?>
+                                        <p class="card-title-custom"><?php echo htmlspecialchars((string)$_smarty_tpl->getValue('prodotto')->getNome(), ENT_QUOTES, 'UTF-8', true);?>
 </p>
                                         <p class="subtitle"><?php echo htmlspecialchars((string)$_smarty_tpl->getValue('prodotto')->getEditore(), ENT_QUOTES, 'UTF-8', true);?>
 </p>
@@ -246,7 +246,7 @@ $foreach2DoElse = false;
 }
 $_smarty_tpl->getSmarty()->getRuntime('Foreach')->restore($_smarty_tpl, 1);?>
             <?php } else { ?>
-                <?php $_smarty_tpl->assign('demo_arrivals', array(1,2,3,4), false, NULL);?>
+                <?php $_smarty_tpl->assign('demo_arrivals', array(1,2,3,4,5), false, NULL);?>
                 <?php
 $_from = $_smarty_tpl->getSmarty()->getRuntime('Foreach')->init($_smarty_tpl, $_smarty_tpl->getValue('demo_arrivals'), 'j');
 $foreach3DoElse = true;
@@ -266,7 +266,7 @@ $foreach3DoElse = false;
                                         <img src="https://bulma.io/assets/images/placeholders/96x96.png" class="editor-avatar" alt="Placeholder image" />
                                     </div>
                                     <div class="media-content">
-                                        <p class="title">Nuovo Arrivo <?php echo $_smarty_tpl->getValue('j');?>
+                                        <p class="card-title-custom">Nuovo Arrivo <?php echo $_smarty_tpl->getValue('j');?>
 </p>
                                         <p class="subtitle">Editore Demo</p>
                                     </div>
@@ -299,7 +299,7 @@ $_smarty_tpl->getSmarty()->getRuntime('Foreach')->restore($_smarty_tpl, 1);?>
 }
 /* {/block "content"} */
 /* {block "extra_js"} */
-class Block_20498482036a2d65d1ae2560_12412237 extends \Smarty\Runtime\Block
+class Block_4659484566a2d67074235b6_51214003 extends \Smarty\Runtime\Block
 {
 public function callBlock(\Smarty\Template $_smarty_tpl) {
 $_smarty_current_dir = 'C:\\Users\\damic\\Desktop\\uni\\APPUNTI\\anno3\\secondo_semenstre\\Pweb\\TableCrown\\Presentation\\smarty-dir\\templates';
