@@ -397,9 +397,8 @@ main > .section {
     font-weight: 700;
 }
 
-CSS
 /* ============================================================
-   FIX COERENZA CARD (TableCrown vs Bulma Mockup) - OTTIMIZZATO
+   FIX COERENZA CARD (TableCrown vs Bulma Mockup) - COLORE E CONTRASTO AGGIORNATI
    ============================================================ */
 
 /* CONTENITORE CARD GENERALE */
@@ -421,23 +420,23 @@ CSS
     display: block !important;
     margin: 0 !important;
     padding: 0 !important;
-    flex-shrink: 0 !important; /* Impedisce all'immagine di collassare verticalmente */
+    flex-shrink: 0 !important;
 }
 
 .image-container-fixed {
     width: 100% !important;
-    height: 160px !important; /* Mantiene l'altezza proporzionata */
+    height: 160px !important;
     position: relative !important;
     display: block !important;
     margin: 0 !important;
-    background-color: #2a2a40;
+    background-color: #111827; /* Sfondo scuro coerente per i placeholder */
     overflow: hidden;
 }
 
 .image-container-fixed img {
     width: 100% !important;
     height: 100% !important;
-    object-fit: cover !important; /* Taglia l'immagine senza distorcerla */
+    object-fit: cover !important;
     object-position: center !important;
 }
 
@@ -445,16 +444,16 @@ CSS
 .card.home-card-fixed .card-content {
     display: flex !important;
     flex-direction: column !important;
-    flex-grow: 1 !important; /* Spinge il footer della card verso il basso */
-    padding: 1rem !important; 
+    flex-grow: 1 !important;
+    padding: 1.25rem !important; /* Leggermente aumentato il padding per dare più respiro */
     background-color: transparent !important;
 }
 
 /* Struttura Media object di Bulma (Avatar + Titolo/Editore) */
 .card.home-card-fixed .card-content .media {
     display: flex !important;
-    align-items: center !important; /* Allinea verticalmente al centro avatar e testi */
-    gap: 10px !important; 
+    align-items: center !important;
+    gap: 12px !important; 
     margin-bottom: 0.75rem !important;
     border: none !important;
     padding: 0 !important;
@@ -469,60 +468,85 @@ CSS
 .card.home-card-fixed .card-content .media-content {
     flex-grow: 1 !important;
     overflow: hidden !important;
-    white-space: nowrap; /* Evita strani ritorni a capo nel titolo */
 }
 
 /* Forzatura Avatar Categoria */
 .card.home-card-fixed .editor-avatar {
-    width: 36px !important; /* Leggermente ridotto per essere più elegante */
+    width: 36px !important;
     height: 36px !important; 
     object-fit: cover !important;
     border-radius: var(--radius-sm) !important;
 }
 
-/* Testi interni */
+/* Testi interni - Forzatura colore per contrasto */
 .card.home-card-fixed .card-title-custom {
-    font-size: 1rem !important; 
+    font-size: 1.1rem !important; /* Un pizzico più grande per risaltare */
     font-weight: 700 !important;
     margin-bottom: 0.15rem !important;
     line-height: 1.2 !important;
-    color: var(--color-text-light) !important;
+    color: var(--color-text-light) !important; /* Bianco acceso */
     text-overflow: ellipsis;
     overflow: hidden;
+    white-space: nowrap;
 }
 
 .card.home-card-fixed .subtitle {
     font-size: 0.85rem !important;
     margin-bottom: 0 !important;
-    opacity: 0.65 !important;
+    color: var(--color-text-subtle) !important; /* Grigio chiaro leggibile */
+    opacity: 0.8 !important; /* Aumentata l'opacità per evitare l'effetto sbiadito */
     text-overflow: ellipsis;
     overflow: hidden;
+    white-space: nowrap;
 }
 
 /* Descrizione del gioco */
 .game-description {
     font-size: 0.85rem !important;
     line-height: 1.4 !important;
-    margin-bottom: 1rem !important;
-    color: var(--color-text-subtle) !important;
-    flex-grow: 1; /* Fa in modo che le descrizioni corte lascino spazio equo */
+    margin-bottom: 1.25rem !important;
+    color: #cbd5e1 !important; /* Colore chiaro ad alto contrasto (grigio-azzurro pulito) */
+    flex-grow: 1;
 }
 
-/* Prezzi */
+/* Prezzi e icone orizzontali */
 .price-container {
     display: flex;
     align-items: center;
-    gap: 8px;
+    gap: 10px;
     margin-bottom: 0.75rem !important;
 }
 
+/* Sovrascrittura e fix del colore dei prezzi ereditati */
+.card.home-card-fixed .price {
+    font-size: 1.15rem !important;
+    font-weight: 700 !important;
+    color: var(--color-primary) !important; /* Oro/Arancio TableCrown */
+}
+
+.card.home-card-fixed .price-old {
+    font-size: var(--font-size-sm) !important;
+    color: var(--color-text-muted) !important; /* Grigio scuro/neutro per il prezzo sbarrato */
+    text-decoration: line-through !important;
+}
+
 /* Footer personalizzato della card per la scadenza/data */
-.footer-card-custom, .footer-custom {
-    margin-top: auto !important; /* Blocca il footer sul fondo della card */
-    padding-top: 0.5rem;
+.footer-card-custom, 
+.footer-custom {
+    margin-top: auto !important;
+    padding-top: 0.75rem;
     border-top: 1px solid var(--color-border-dark);
     font-size: 0.8rem !important;
-    color: var(--color-text-muted) !important;
+    color: var(--color-text-subtle) !important; /* Cambiato da muted a subtle per migliorarne la lettura */
+    display: flex;
+    align-items: center;
+    gap: 6px;
+}
+
+/* Se usi icone dentro al footer della card (es. orologio) */
+.footer-card-custom i, 
+.footer-custom i {
+    color: var(--color-primary) !important; /* Icona orologio color oro */
 }
 
 
