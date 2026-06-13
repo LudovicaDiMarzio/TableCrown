@@ -594,9 +594,9 @@ main > .section {
     }
 }
 
-/* ── FIX APPOSITI PER ELEMENTO "+ VEDI TUTTI" ──────────────── */
+/* ── METODO A: FIX STRUTTURATO PER ELEMENTO "+ VEDI TUTTI" ── */
 
-/* Contenitore accodato alle card dello scroll orizzontale */
+/* Contenitore finale dello scroll */
 .card-row-vector .card-vector-item.card-vector-more {
     flex: 0 0 140px !important;
     max-width: 140px !important;
@@ -606,7 +606,6 @@ main > .section {
     background: transparent !important;
     border: none !important;
     box-shadow: none !important;
-    padding: 0 1rem !important;
 }
 
 /* Link flessibile incolonnato */
@@ -618,19 +617,19 @@ main > .section {
     gap: 12px !important;
     text-decoration: none !important;
     cursor: pointer !important;
-    width: 100%;
+    width: 100% !important;
     height: 100% !important;
 }
 
-/* Il cerchio - Blindato con min-size e flex-shrink per evitare il collasso */
+/* Il cerchio ad alto contrasto */
 .view-more-link .circle-plus {
     width: 56px !important;
     height: 56px !important;
-    min-width: 56px !important;   /* Forza la larghezza minima */
-    min-height: 56px !important;  /* Forza l'altezza minima */
-    flex-shrink: 0 !important;    /* Impedisce al Flexbox di schiacciarlo a 0px */
-    background-color: var(--color-bg-dark-2) !important; /* Sfondo scuro come le card */
-    border: 2px solid var(--color-primary) !important;   /* Bordo oro subito visibile */
+    min-width: 56px !important;
+    min-height: 56px !important;
+    flex-shrink: 0 !important;
+    background-color: var(--color-bg-dark-2) !important; /* Sfondo scuro coerente con le card */
+    border: 2px solid var(--color-primary) !important;   /* Bordo oro */
     border-radius: 50% !important;
     display: flex !important;
     align-items: center !important;
@@ -644,35 +643,32 @@ main > .section {
     font-size: 28px !important;
     line-height: 1 !important;
     font-weight: 600 !important;
-    color: var(--color-primary) !important; /* Colore Oro */
-    margin-top: -4px; /* Centratura ottica del carattere + */
-    transition: color var(--transition) !important;
+    color: var(--color-primary) !important;
+    margin-top: -4px; /* Centratura ottica */
 }
 
 /* Testo "Vedi tutti" sotto al cerchio */
 .view-more-link .view-more-text {
     font-size: var(--font-size-md) !important;
     font-weight: 600 !important;
-    color: var(--color-bg-dark) !important; /* Colore scuro per contrastare lo sfondo chiaro del sito */
+    color: #4b5563 !important; /* Grigio scuro per massima leggibilità sul fondo chiaro del sito */
     white-space: nowrap !important;
     transition: color var(--transition) !important;
 }
 
-/* ── COMPORTAMENTO AL PASSAGGIO DEL MOUSE (HOVER) ─────────── */
-
+/* ── HOVER STATS ── */
 .view-more-link:hover .circle-plus {
-    border-color: #ffffff !important;                 /* Il bordo si accende di bianco */
-    transform: scale(1.1) !important;                 /* Leggero zoom fluido */
-    background-color: var(--color-primary) !important;     /* Il cerchio si riempie d'oro */
+    border-color: #ffffff !important;
+    transform: scale(1.1) !important;
+    background-color: var(--color-primary) !important; /* Si riempie d'oro */
 }
-
 .view-more-link:hover .circle-plus span {
-    color: #ffffff !important; /* Il "+" diventa bianco sullo sfondo oro */
+    color: #ffffff !important; /* Il "+" diventa bianco */
+}
+.view-more-link:hover .view-more-text {
+    color: var(--color-primary) !important; /* Il testo diventa oro */
 }
 
-.view-more-link:hover .view-more-text {
-    color: var(--color-primary) !important; /* La scritta sotto diventa oro */
-}
 
 /* ── 8. FOOTER ────────────────────────────────────────────── */
 
