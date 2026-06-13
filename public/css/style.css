@@ -419,23 +419,32 @@ main > .section {
     overflow: hidden !important;
 }
 
-/* Contenitore immagine ottimizzato */
+/* Contenitore immagine ottimizzato - Forza il posizionamento da bordo a bordo */
+.card.home-card-fixed .card-image,
+.card.home-card-fixed .card-image figure,
 .image-container-fixed {
-    max-height: 180px; 
+    width: 100% !important;
+    max-width: 100% !important;
+    display: block !important;
+    margin: 0 !important;
+    padding: 0 !important;
+}
+
+.image-container-fixed {
+    height: 180px; /* Rimosso max-height per garantire stabilità dimensionale */
     overflow: hidden !important;
-    background-color: #f5f5f5; /* Sfondo chiaro per far risaltare le scatole dei giochi */
-    display: flex;
+    background-color: #f5f5f5; /* Sfondo chiaro interno per le scatole dei giochi */
+    display: flex !important;
     align-items: center;
     justify-content: center;
     border-top-left-radius: var(--radius-md) !important;
     border-top-right-radius: var(--radius-md) !important;
-    width: 100%;
 }
 
 .image-container-fixed img {
-    object-fit: contain !important; 
-    height: 100% !important;
     width: 100% !important;
+    height: 100% !important;
+    object-fit: cover !important; /* Riempie lo spazio da bordo a bordo tagliando gli eccessi */
 }
 
 /* Gestione testo e padding interno */
