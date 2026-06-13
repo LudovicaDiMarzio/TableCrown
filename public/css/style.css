@@ -662,7 +662,7 @@ main > .section {
 }
 
 .view-more-link:hover .circle-plus span {
-    color: #ffffff !important; /* Il "+" dentro diventa bianco al passaggio */
+    color: #260087 !important; /* Il "+" dentro diventa bianco al passaggio */
 }
 
 .view-more-link:hover .view-more-text {
