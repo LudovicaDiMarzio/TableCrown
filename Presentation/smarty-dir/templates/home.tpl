@@ -71,7 +71,13 @@
                                     </div>
 
                                     <div class="price-container">
-                                        <span class="price">€{$prodotto->getPrezzo()}</span>
+                                        {assign var="prezzo" value=$prodotto->getPrezzo()}
+                                        {if $prezzo->hasSconto()}
+                                            <span class="price">€{$prezzo->calcolaPrezzoScontato()|number_format:2}</span>
+                                            <span class="price-old">€{$prezzo->getValore()|number_format:2}</span>
+                                        {else}
+                                            <span class="price">€{$prezzo->getValore()|number_format:2}</span>
+                                        {/if}
                                     </div>
 
                                     <button class="btn-cart">
@@ -183,7 +189,13 @@
                                     </div>
 
                                     <div class="price-container">
-                                        <span class="price">€{$prodotto->getPrezzo()}</span>
+                                        {assign var="prezzo" value=$prodotto->getPrezzo()}
+                                        {if $prezzo->hasSconto()}
+                                            <span class="price">€{$prezzo->calcolaPrezzoScontato()|number_format:2}</span>
+                                            <span class="price-old">€{$prezzo->getValore()|number_format:2}</span>
+                                        {else}
+                                            <span class="price">€{$prezzo->getValore()|number_format:2}</span>
+                                        {/if}
                                     </div>
 
                                     <button class="btn-cart">

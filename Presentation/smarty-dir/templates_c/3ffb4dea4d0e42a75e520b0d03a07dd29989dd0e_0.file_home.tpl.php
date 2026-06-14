@@ -1,18 +1,18 @@
 <?php
-/* Smarty version 5.8.0, created on 2026-06-13 17:55:18
+/* Smarty version 5.8.0, created on 2026-06-14 15:41:23
   from 'file:home.tpl' */
 
 /* @var \Smarty\Template $_smarty_tpl */
 if ($_smarty_tpl->getCompiled()->isFresh($_smarty_tpl, array (
   'version' => '5.8.0',
-  'unifunc' => 'content_6a2d7d66eb7a46_95637226',
+  'unifunc' => 'content_6a2eaf830872c4_47058237',
   'has_nocache_code' => false,
   'file_dependency' => 
   array (
     '3ffb4dea4d0e42a75e520b0d03a07dd29989dd0e' => 
     array (
       0 => 'home.tpl',
-      1 => 1781366097,
+      1 => 1781444461,
       2 => 'file',
     ),
   ),
@@ -20,25 +20,25 @@ if ($_smarty_tpl->getCompiled()->isFresh($_smarty_tpl, array (
   array (
   ),
 ))) {
-function content_6a2d7d66eb7a46_95637226 (\Smarty\Template $_smarty_tpl) {
+function content_6a2eaf830872c4_47058237 (\Smarty\Template $_smarty_tpl) {
 $_smarty_current_dir = 'C:\\Users\\damic\\Desktop\\uni\\APPUNTI\\anno3\\secondo_semenstre\\Pweb\\TableCrown\\Presentation\\smarty-dir\\templates';
 $_smarty_tpl->getInheritance()->init($_smarty_tpl, true);
 ?>
 
 
 <?php 
-$_smarty_tpl->getInheritance()->instanceBlock($_smarty_tpl, 'Block_15510077796a2d7d66e8b502_57903780', "content");
+$_smarty_tpl->getInheritance()->instanceBlock($_smarty_tpl, 'Block_13483989276a2eaf82ef3754_45918673', "content");
 ?>
 
 
 <?php 
-$_smarty_tpl->getInheritance()->instanceBlock($_smarty_tpl, 'Block_9484292476a2d7d66eb6d22_56147944', "extra_js");
+$_smarty_tpl->getInheritance()->instanceBlock($_smarty_tpl, 'Block_21401444956a2eaf83086566_58164606', "extra_js");
 ?>
 
 <?php $_smarty_tpl->getInheritance()->endChild($_smarty_tpl, "common/layout.tpl", $_smarty_current_dir);
 }
 /* {block "content"} */
-class Block_15510077796a2d7d66e8b502_57903780 extends \Smarty\Runtime\Block
+class Block_13483989276a2eaf82ef3754_45918673 extends \Smarty\Runtime\Block
 {
 public function callBlock(\Smarty\Template $_smarty_tpl) {
 $_smarty_current_dir = 'C:\\Users\\damic\\Desktop\\uni\\APPUNTI\\anno3\\secondo_semenstre\\Pweb\\TableCrown\\Presentation\\smarty-dir\\templates';
@@ -81,7 +81,7 @@ $_smarty_current_dir = 'C:\\Users\\damic\\Desktop\\uni\\APPUNTI\\anno3\\secondo_
 
                 <section class="home-section">
         <h2 class="title section-title is-4 text-uppercase">🔥 Offerte in Scadenza</h2>
-        
+
         <div class="card-row-vector">
             <?php if ((true && ($_smarty_tpl->hasVariable('offerte') && null !== ($_smarty_tpl->getValue('offerte') ?? null))) && $_smarty_tpl->getSmarty()->getModifierCallback('count')($_smarty_tpl->getValue('offerte')) > 0) {?>
                 <?php
@@ -104,39 +104,38 @@ $foreach0DoElse = false;
                                     </figure>
                                 </div>
                                 <div class="card-content">
-                                    <div class="media">
-                                        <div class="media-left">
-                                            <img src="<?php echo $_smarty_tpl->getValue('base_url');?>
-/img/categorie/<?php echo $_smarty_tpl->getValue('prodotto')->getCategoriaIcona();?>
-" class="editor-avatar" alt="Categoria" />
-                                        </div>
-                                        <div class="media-content">
-                                            <p class="card-title-custom"><?php echo htmlspecialchars((string)$_smarty_tpl->getValue('prodotto')->getNome(), ENT_QUOTES, 'UTF-8', true);?>
+                                    <p class="card-title-custom"><?php echo htmlspecialchars((string)$_smarty_tpl->getValue('prodotto')->getNome(), ENT_QUOTES, 'UTF-8', true);?>
 </p>
-                                            <p class="subtitle"><?php echo htmlspecialchars((string)$_smarty_tpl->getValue('prodotto')->getEditore(), ENT_QUOTES, 'UTF-8', true);?>
-</p>
-                                        </div>
-                                    </div>
-                                    
-                                    <p class="game-description">
-                                        <?php echo htmlspecialchars((string)$_smarty_tpl->getValue('prodotto')->getDescrizioneBreve(), ENT_QUOTES, 'UTF-8', true);?>
 
-                                    </p>
-                                    
+                                    <div class="card-rating">
+                                        <?php $_smarty_tpl->assign('media', $_smarty_tpl->getValue('prodotto')->getValutazioneMedia(), false, NULL);?>
+                                        <?php $_smarty_tpl->assign('stelle', array(1,2,3,4,5), false, NULL);?>
+                                        <?php
+$_from = $_smarty_tpl->getSmarty()->getRuntime('Foreach')->init($_smarty_tpl, $_smarty_tpl->getValue('stelle'), 's');
+$foreach1DoElse = true;
+foreach ($_from ?? [] as $_smarty_tpl->getVariable('s')->value) {
+$foreach1DoElse = false;
+?>
+                                            <?php if ($_smarty_tpl->getValue('s') <= $_smarty_tpl->getValue('media')) {?>
+                                                <i class="ti ti-star-filled star-icon"></i>
+                                            <?php } elseif (($_smarty_tpl->getValue('s')-$_smarty_tpl->getValue('media')) < 1) {?>
+                                                <i class="ti ti-star-half-filled star-icon"></i>
+                                            <?php } else { ?>
+                                                <i class="ti ti-star star-icon"></i>
+                                            <?php }?>
+                                        <?php
+}
+$_smarty_tpl->getSmarty()->getRuntime('Foreach')->restore($_smarty_tpl, 1);?>
+                                    </div>
+
                                     <div class="price-container">
-                                        <span class="price">€<?php echo $_smarty_tpl->getValue('prodotto')->getPrezzoScontato();?>
-</span>
-                                        <span class="price-old">€<?php echo $_smarty_tpl->getValue('prodotto')->getPrezzoListino();?>
+                                        <span class="price">€<?php echo $_smarty_tpl->getValue('prodotto')->getPrezzo();?>
 </span>
                                     </div>
-                                    
-                                    <div class="footer-custom">
-                                        <time datetime="<?php echo $_smarty_tpl->getValue('prodotto')->getDataScadenza();?>
-">
-                                            <i class="ti ti-clock"></i> Scade il: <?php echo htmlspecialchars((string)$_smarty_tpl->getValue('prodotto')->getDataScadenzaFormat(), ENT_QUOTES, 'UTF-8', true);?>
 
-                                        </time>
-                                    </div>
+                                    <button class="btn-cart">
+                                        <i class="ti ti-shopping-cart"></i> Carrello
+                                    </button>
                                 </div>
                             </div>
                         </a>
@@ -144,7 +143,7 @@ $foreach0DoElse = false;
                 <?php
 }
 $_smarty_tpl->getSmarty()->getRuntime('Foreach')->restore($_smarty_tpl, 1);?>
-                
+
                                 <div class="card-vector-item card-vector-more">
                     <a href="#" class="view-more-link">
                         <div class="circle-plus">
@@ -158,9 +157,9 @@ $_smarty_tpl->getSmarty()->getRuntime('Foreach')->restore($_smarty_tpl, 1);?>
                 <?php $_smarty_tpl->assign('demo_items', array(1,2,3,4,5), false, NULL);?>
                 <?php
 $_from = $_smarty_tpl->getSmarty()->getRuntime('Foreach')->init($_smarty_tpl, $_smarty_tpl->getValue('demo_items'), 'i');
-$foreach1DoElse = true;
+$foreach2DoElse = true;
 foreach ($_from ?? [] as $_smarty_tpl->getVariable('i')->value) {
-$foreach1DoElse = false;
+$foreach2DoElse = false;
 ?>
                     <div class="card-vector-item">
                         <a href="#" class="card-link-wrapper">
@@ -171,29 +170,38 @@ $foreach1DoElse = false;
                                     </figure>
                                 </div>
                                 <div class="card-content">
-                                    <div class="media">
-                                        <div class="media-left">
-                                            <img src="https://bulma.io/assets/images/placeholders/96x96.png" class="editor-avatar" alt="Placeholder image" />
-                                        </div>
-                                        <div class="media-content">
-                                            <p class="card-title-custom">Gioco in Offerta <?php echo $_smarty_tpl->getValue('i');?>
+                                    <p class="card-title-custom">Gioco in Offerta <?php echo $_smarty_tpl->getValue('i');?>
 </p>
-                                            <p class="subtitle">Editore Demo</p>
-                                        </div>
+
+                                    <div class="card-rating">
+                                        <?php $_smarty_tpl->assign('media', 4, false, NULL);?>
+                                        <?php $_smarty_tpl->assign('stelle', array(1,2,3,4,5), false, NULL);?>
+                                        <?php
+$_from = $_smarty_tpl->getSmarty()->getRuntime('Foreach')->init($_smarty_tpl, $_smarty_tpl->getValue('stelle'), 's');
+$foreach3DoElse = true;
+foreach ($_from ?? [] as $_smarty_tpl->getVariable('s')->value) {
+$foreach3DoElse = false;
+?>
+                                            <?php if ($_smarty_tpl->getValue('s') <= $_smarty_tpl->getValue('media')) {?>
+                                                <i class="ti ti-star-filled star-icon"></i>
+                                            <?php } elseif (($_smarty_tpl->getValue('s')-$_smarty_tpl->getValue('media')) < 1) {?>
+                                                <i class="ti ti-star-half-filled star-icon"></i>
+                                            <?php } else { ?>
+                                                <i class="ti ti-star star-icon"></i>
+                                            <?php }?>
+                                        <?php
+}
+$_smarty_tpl->getSmarty()->getRuntime('Foreach')->restore($_smarty_tpl, 1);?>
                                     </div>
-                                    
-                                    <p class="game-description">
-                                        Offerta incredibile a tempo limitato. Aggiungi subito al carrello TableCrown.
-                                    </p>
-                                    
+
                                     <div class="price-container">
                                         <span class="price">€29.90</span>
                                         <span class="price-old">€49.90</span>
                                     </div>
-                                    
-                                    <div class="footer-card-custom">
-                                        <time datetime="2026-06-15"><i class="ti ti-clock"></i> 11:59 PM - 15 Giu 2026</time>
-                                    </div>
+
+                                    <button class="btn-cart">
+                                        <i class="ti ti-shopping-cart"></i> Carrello
+                                    </button>
                                 </div>
                             </div>
                         </a>
@@ -216,14 +224,14 @@ $_smarty_tpl->getSmarty()->getRuntime('Foreach')->restore($_smarty_tpl, 1);?>
 
                 <section class="home-section">
         <h2 class="title section-title is-4 text-uppercase">✨ Nuovi Arrivi</h2>
-        
+
         <div class="card-row-vector">
             <?php if ((true && ($_smarty_tpl->hasVariable('nuovi_arrivi') && null !== ($_smarty_tpl->getValue('nuovi_arrivi') ?? null))) && $_smarty_tpl->getSmarty()->getModifierCallback('count')($_smarty_tpl->getValue('nuovi_arrivi')) > 0) {?>
                 <?php
 $_from = $_smarty_tpl->getSmarty()->getRuntime('Foreach')->init($_smarty_tpl, $_smarty_tpl->getValue('nuovi_arrivi'), 'prodotto');
-$foreach2DoElse = true;
+$foreach4DoElse = true;
 foreach ($_from ?? [] as $_smarty_tpl->getVariable('prodotto')->value) {
-$foreach2DoElse = false;
+$foreach4DoElse = false;
 ?>
                     <div class="card-vector-item">
                         <a href="<?php echo $_smarty_tpl->getValue('base_url');?>
@@ -239,36 +247,38 @@ $foreach2DoElse = false;
                                     </figure>
                                 </div>
                                 <div class="card-content">
-                                    <div class="media">
-                                        <div class="media-left">
-                                            <img src="<?php echo $_smarty_tpl->getValue('base_url');?>
-/img/categorie/<?php echo $_smarty_tpl->getValue('prodotto')->getCategoriaIcona();?>
-" class="editor-avatar" alt="Categoria" />
-                                        </div>
-                                        <div class="media-content">
-                                            <p class="card-title-custom"><?php echo htmlspecialchars((string)$_smarty_tpl->getValue('prodotto')->getNome(), ENT_QUOTES, 'UTF-8', true);?>
+                                    <p class="card-title-custom"><?php echo htmlspecialchars((string)$_smarty_tpl->getValue('prodotto')->getNome(), ENT_QUOTES, 'UTF-8', true);?>
 </p>
-                                            <p class="subtitle"><?php echo htmlspecialchars((string)$_smarty_tpl->getValue('prodotto')->getEditore(), ENT_QUOTES, 'UTF-8', true);?>
-</p>
-                                        </div>
-                                    </div>
-                                    
-                                    <p class="game-description">
-                                        <?php echo htmlspecialchars((string)$_smarty_tpl->getValue('prodotto')->getDescrizioneBreve(), ENT_QUOTES, 'UTF-8', true);?>
 
-                                    </p>
-                                    
+                                    <div class="card-rating">
+                                        <?php $_smarty_tpl->assign('media', $_smarty_tpl->getValue('prodotto')->getValutazioneMedia(), false, NULL);?>
+                                        <?php $_smarty_tpl->assign('stelle', array(1,2,3,4,5), false, NULL);?>
+                                        <?php
+$_from = $_smarty_tpl->getSmarty()->getRuntime('Foreach')->init($_smarty_tpl, $_smarty_tpl->getValue('stelle'), 's');
+$foreach5DoElse = true;
+foreach ($_from ?? [] as $_smarty_tpl->getVariable('s')->value) {
+$foreach5DoElse = false;
+?>
+                                            <?php if ($_smarty_tpl->getValue('s') <= $_smarty_tpl->getValue('media')) {?>
+                                                <i class="ti ti-star-filled star-icon"></i>
+                                            <?php } elseif (($_smarty_tpl->getValue('s')-$_smarty_tpl->getValue('media')) < 1) {?>
+                                                <i class="ti ti-star-half-filled star-icon"></i>
+                                            <?php } else { ?>
+                                                <i class="ti ti-star star-icon"></i>
+                                            <?php }?>
+                                        <?php
+}
+$_smarty_tpl->getSmarty()->getRuntime('Foreach')->restore($_smarty_tpl, 1);?>
+                                    </div>
+
                                     <div class="price-container">
                                         <span class="price">€<?php echo $_smarty_tpl->getValue('prodotto')->getPrezzo();?>
 </span>
                                     </div>
-                                    
-                                    <div class="footer-card-custom">
-                                        <time datetime="<?php echo $_smarty_tpl->getValue('prodotto')->getDataInserimento();?>
-">
-                                            <i class="ti ti-calendar"></i> Disponibile da oggi
-                                        </time>
-                                    </div>
+
+                                    <button class="btn-cart">
+                                        <i class="ti ti-shopping-cart"></i> Carrello
+                                    </button>
                                 </div>
                             </div>
                         </a>
@@ -291,9 +301,9 @@ $_smarty_tpl->getSmarty()->getRuntime('Foreach')->restore($_smarty_tpl, 1);?>
                 <?php $_smarty_tpl->assign('demo_arrivals', array(1,2,3,4,5), false, NULL);?>
                 <?php
 $_from = $_smarty_tpl->getSmarty()->getRuntime('Foreach')->init($_smarty_tpl, $_smarty_tpl->getValue('demo_arrivals'), 'j');
-$foreach3DoElse = true;
+$foreach6DoElse = true;
 foreach ($_from ?? [] as $_smarty_tpl->getVariable('j')->value) {
-$foreach3DoElse = false;
+$foreach6DoElse = false;
 ?>
                     <div class="card-vector-item">
                         <a href="#" class="card-link-wrapper">
@@ -304,28 +314,37 @@ $foreach3DoElse = false;
                                     </figure>
                                 </div>
                                 <div class="card-content">
-                                    <div class="media">
-                                        <div class="media-left">
-                                            <img src="https://bulma.io/assets/images/placeholders/96x96.png" class="editor-avatar" alt="Placeholder image" />
-                                        </div>
-                                        <div class="media-content">
-                                            <p class="card-title-custom">Nuovo Arrivo <?php echo $_smarty_tpl->getValue('j');?>
+                                    <p class="card-title-custom">Nuovo Arrivo <?php echo $_smarty_tpl->getValue('j');?>
 </p>
-                                            <p class="subtitle">Editore Demo</p>
-                                        </div>
+
+                                    <div class="card-rating">
+                                        <?php $_smarty_tpl->assign('media', 4, false, NULL);?>
+                                        <?php $_smarty_tpl->assign('stelle', array(1,2,3,4,5), false, NULL);?>
+                                        <?php
+$_from = $_smarty_tpl->getSmarty()->getRuntime('Foreach')->init($_smarty_tpl, $_smarty_tpl->getValue('stelle'), 's');
+$foreach7DoElse = true;
+foreach ($_from ?? [] as $_smarty_tpl->getVariable('s')->value) {
+$foreach7DoElse = false;
+?>
+                                            <?php if ($_smarty_tpl->getValue('s') <= $_smarty_tpl->getValue('media')) {?>
+                                                <i class="ti ti-star-filled star-icon"></i>
+                                            <?php } elseif (($_smarty_tpl->getValue('s')-$_smarty_tpl->getValue('media')) < 1) {?>
+                                                <i class="ti ti-star-half-filled star-icon"></i>
+                                            <?php } else { ?>
+                                                <i class="ti ti-star star-icon"></i>
+                                            <?php }?>
+                                        <?php
+}
+$_smarty_tpl->getSmarty()->getRuntime('Foreach')->restore($_smarty_tpl, 1);?>
                                     </div>
-                                    
-                                    <p class="game-description">
-                                        Appena arrivato in magazzino. Scopri le meccaniche e i components di alta qualità.
-                                    </p>
-                                    
+
                                     <div class="price-container">
                                         <span class="price">€39.90</span>
                                     </div>
-                                    
-                                    <div class="footer-card-custom">
-                                        <time datetime="2026-06-12"><i class="ti ti-calendar"></i> Caricato il: 12 Giu 2026</time>
-                                    </div>
+
+                                    <button class="btn-cart">
+                                        <i class="ti ti-shopping-cart"></i> Carrello
+                                    </button>
                                 </div>
                             </div>
                         </a>
@@ -352,7 +371,7 @@ $_smarty_tpl->getSmarty()->getRuntime('Foreach')->restore($_smarty_tpl, 1);?>
 }
 /* {/block "content"} */
 /* {block "extra_js"} */
-class Block_9484292476a2d7d66eb6d22_56147944 extends \Smarty\Runtime\Block
+class Block_21401444956a2eaf83086566_58164606 extends \Smarty\Runtime\Block
 {
 public function callBlock(\Smarty\Template $_smarty_tpl) {
 $_smarty_current_dir = 'C:\\Users\\damic\\Desktop\\uni\\APPUNTI\\anno3\\secondo_semenstre\\Pweb\\TableCrown\\Presentation\\smarty-dir\\templates';
