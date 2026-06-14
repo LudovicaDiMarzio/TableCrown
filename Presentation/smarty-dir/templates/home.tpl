@@ -99,7 +99,7 @@
 
                 {* Card Vedi Altro per dati reali *}
                 <div class="card-vector-item card-vector-more">
-                    <a href="#" class="view-more-link">
+                    <a href="{$base_url}/offerte" class="view-more-link" title="Vedi tutte le offerte">
                         <div class="circle-plus">
                             <span>+</span>
                         </div>
@@ -151,7 +151,7 @@
 
                 {* Card Vedi Altro per dati Demo *}
                 <div class="card-vector-item card-vector-more">
-                    <a href="#" class="more-link-wrapper" title="Vedi tutte le offerte">
+                    <a href="{$base_url}/offerte" class="more-link-wrapper" title="Vedi tutte le offerte">
                         <div class="more-circle-btn">
                             <span class="more-plus-icon">+</span>
                         </div>
@@ -272,7 +272,7 @@
 
                 {* Card Vedi Altro per dati Demo *}
                 <div class="card-vector-item card-vector-more">
-                    <a href="#" class="more-link-wrapper" title="Vedi tutti i nuovi arrivi">
+                    <a href="{$base_url}/catalogo?ordinamento=novita" class="more-link-wrapper" title="Vedi tutti i nuovi arrivi">
                         <div class="more-circle-btn">
                             <span class="more-plus-icon">+</span>
                         </div>
