@@ -18,9 +18,9 @@ class EGiocoDaTavolo extends EProdotto {
     #[ORM\Column(type: "json")]
     private array $componenti; //elenco dei componenti del gioco (carte, pedine, tabellone, ecc.)
 
-    #[ORM\ManyToMany(targetEntity: EGiocoDaTavolo::class)]
+    #[ORM\ManyToOne(targetEntity: EGiocoDaTavolo::class)]
     #[ORM\JoinColumn(nullable: true)]
-    private ?EGiocoDaTavolo $giocoBase; //riferimento a un eventuale gioco da tavolo di cui è espansione
+    private ?EGiocoDaTavolo $giocoBase = null; //riferimento a un eventuale gioco da tavolo di cui è espansione
 
     #[ORM\Column(type: "integer")]
     private int $numeroGiocatoriMin;
