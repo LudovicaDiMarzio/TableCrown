@@ -1,5 +1,9 @@
 {extends file="common/layout.tpl"}
 
+{block name="extra_css"}
+    <link rel="stylesheet" href="{$base_url}/css/home.css">
+{/block}
+
 {block name="content"}
 <div class="container px-4">
 
