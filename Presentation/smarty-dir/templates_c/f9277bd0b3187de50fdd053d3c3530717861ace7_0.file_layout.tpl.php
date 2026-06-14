@@ -1,18 +1,18 @@
 <?php
-/* Smarty version 5.8.0, created on 2026-06-13 17:23:48
+/* Smarty version 5.8.0, created on 2026-06-14 16:03:08
   from 'file:common/layout.tpl' */
 
 /* @var \Smarty\Template $_smarty_tpl */
 if ($_smarty_tpl->getCompiled()->isFresh($_smarty_tpl, array (
   'version' => '5.8.0',
-  'unifunc' => 'content_6a2d760447cfc3_85671078',
+  'unifunc' => 'content_6a2eb49c593077_21261272',
   'has_nocache_code' => false,
   'file_dependency' => 
   array (
     'f9277bd0b3187de50fdd053d3c3530717861ace7' => 
     array (
       0 => 'common/layout.tpl',
-      1 => 1781253868,
+      1 => 1781445721,
       2 => 'file',
     ),
   ),
@@ -20,7 +20,7 @@ if ($_smarty_tpl->getCompiled()->isFresh($_smarty_tpl, array (
   array (
   ),
 ))) {
-function content_6a2d760447cfc3_85671078 (\Smarty\Template $_smarty_tpl) {
+function content_6a2eb49c593077_21261272 (\Smarty\Template $_smarty_tpl) {
 $_smarty_current_dir = 'C:\\Users\\damic\\Desktop\\uni\\APPUNTI\\anno3\\secondo_semenstre\\Pweb\\TableCrown\\Presentation\\smarty-dir\\templates\\common';
 $_smarty_tpl->getInheritance()->init($_smarty_tpl, false);
 ?>
@@ -31,7 +31,7 @@ $_smarty_tpl->getInheritance()->init($_smarty_tpl, false);
     <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
 
     <title><?php 
-$_smarty_tpl->getInheritance()->instanceBlock($_smarty_tpl, 'Block_9802890196a2d760444ac79_20820778', "page_title");
+$_smarty_tpl->getInheritance()->instanceBlock($_smarty_tpl, 'Block_11311180216a2eb49c557bb0_62424150', "page_title");
 ?>
 </title>
 
@@ -39,10 +39,12 @@ $_smarty_tpl->getInheritance()->instanceBlock($_smarty_tpl, 'Block_9802890196a2d
 /plugins/bulma/bulma.min.css">
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@tabler/icons-webfont@3.19.0/dist/tabler-icons.min.css">
     <link rel="stylesheet" href="<?php echo $_smarty_tpl->getValue('base_url');?>
-/css/style.css">
+/css/base.css">
+    <link rel="stylesheet" href="<?php echo $_smarty_tpl->getValue('base_url');?>
+/css/layout.css">
 
     <?php 
-$_smarty_tpl->getInheritance()->instanceBlock($_smarty_tpl, 'Block_7255537346a2d760444bc91_33925177', "extra_css");
+$_smarty_tpl->getInheritance()->instanceBlock($_smarty_tpl, 'Block_726537796a2eb49c5586c3_75104166', "extra_css");
 ?>
 
 </head>
@@ -154,12 +156,12 @@ $_smarty_tpl->getInheritance()->instanceBlock($_smarty_tpl, 'Block_7255537346a2d
                     <?php
 $_from = $_smarty_tpl->getSmarty()->getRuntime('Foreach')->init($_smarty_tpl, $_smarty_tpl->getValue('breadcrumbs'), 'crumb', true);
 $_smarty_tpl->getVariable('crumb')->iteration = 0;
-$foreach4DoElse = true;
+$foreach8DoElse = true;
 foreach ($_from ?? [] as $_smarty_tpl->getVariable('crumb')->value) {
-$foreach4DoElse = false;
+$foreach8DoElse = false;
 $_smarty_tpl->getVariable('crumb')->iteration++;
 $_smarty_tpl->getVariable('crumb')->last = $_smarty_tpl->getVariable('crumb')->iteration === $_smarty_tpl->getVariable('crumb')->total;
-$foreach4Backup = clone $_smarty_tpl->getVariable('crumb');
+$foreach8Backup = clone $_smarty_tpl->getVariable('crumb');
 ?>
                         <?php if ($_smarty_tpl->getVariable('crumb')->last) {?>
                             <li class="is-active">
@@ -172,7 +174,7 @@ $foreach4Backup = clone $_smarty_tpl->getVariable('crumb');
 </a></li>
                         <?php }?>
                     <?php
-$_smarty_tpl->setVariable('crumb', $foreach4Backup);
+$_smarty_tpl->setVariable('crumb', $foreach8Backup);
 }
 $_smarty_tpl->getSmarty()->getRuntime('Foreach')->restore($_smarty_tpl, 1);?>
                 </ul>
@@ -196,7 +198,7 @@ $_smarty_tpl->getSmarty()->getRuntime('Foreach')->restore($_smarty_tpl, 1);?>
 
         <main>
         <?php 
-$_smarty_tpl->getInheritance()->instanceBlock($_smarty_tpl, 'Block_6299445366a2d760447bdc6_82939900', "content");
+$_smarty_tpl->getInheritance()->instanceBlock($_smarty_tpl, 'Block_10797109896a2eb49c58f392_42185263', "content");
 ?>
 
     </main>
@@ -276,14 +278,15 @@ $_smarty_tpl->getInheritance()->instanceBlock($_smarty_tpl, 'Block_6299445366a2d
 >
 
     <?php 
-$_smarty_tpl->getInheritance()->instanceBlock($_smarty_tpl, 'Block_5976129426a2d760447c858_47894851', "extra_js");
+$_smarty_tpl->getInheritance()->instanceBlock($_smarty_tpl, 'Block_12281769756a2eb49c5923d9_22732884', "extra_js");
 ?>
 
 
 </body>
-</html><?php }
+</html>
+<?php }
 /* {block "page_title"} */
-class Block_9802890196a2d760444ac79_20820778 extends \Smarty\Runtime\Block
+class Block_11311180216a2eb49c557bb0_62424150 extends \Smarty\Runtime\Block
 {
 public function callBlock(\Smarty\Template $_smarty_tpl) {
 $_smarty_current_dir = 'C:\\Users\\damic\\Desktop\\uni\\APPUNTI\\anno3\\secondo_semenstre\\Pweb\\TableCrown\\Presentation\\smarty-dir\\templates\\common';
@@ -293,7 +296,7 @@ TableCrown<?php
 }
 /* {/block "page_title"} */
 /* {block "extra_css"} */
-class Block_7255537346a2d760444bc91_33925177 extends \Smarty\Runtime\Block
+class Block_726537796a2eb49c5586c3_75104166 extends \Smarty\Runtime\Block
 {
 public function callBlock(\Smarty\Template $_smarty_tpl) {
 $_smarty_current_dir = 'C:\\Users\\damic\\Desktop\\uni\\APPUNTI\\anno3\\secondo_semenstre\\Pweb\\TableCrown\\Presentation\\smarty-dir\\templates\\common';
@@ -301,7 +304,7 @@ $_smarty_current_dir = 'C:\\Users\\damic\\Desktop\\uni\\APPUNTI\\anno3\\secondo_
 }
 /* {/block "extra_css"} */
 /* {block "content"} */
-class Block_6299445366a2d760447bdc6_82939900 extends \Smarty\Runtime\Block
+class Block_10797109896a2eb49c58f392_42185263 extends \Smarty\Runtime\Block
 {
 public function callBlock(\Smarty\Template $_smarty_tpl) {
 $_smarty_current_dir = 'C:\\Users\\damic\\Desktop\\uni\\APPUNTI\\anno3\\secondo_semenstre\\Pweb\\TableCrown\\Presentation\\smarty-dir\\templates\\common';
@@ -309,7 +312,7 @@ $_smarty_current_dir = 'C:\\Users\\damic\\Desktop\\uni\\APPUNTI\\anno3\\secondo_
 }
 /* {/block "content"} */
 /* {block "extra_js"} */
-class Block_5976129426a2d760447c858_47894851 extends \Smarty\Runtime\Block
+class Block_12281769756a2eb49c5923d9_22732884 extends \Smarty\Runtime\Block
 {
 public function callBlock(\Smarty\Template $_smarty_tpl) {
 $_smarty_current_dir = 'C:\\Users\\damic\\Desktop\\uni\\APPUNTI\\anno3\\secondo_semenstre\\Pweb\\TableCrown\\Presentation\\smarty-dir\\templates\\common';

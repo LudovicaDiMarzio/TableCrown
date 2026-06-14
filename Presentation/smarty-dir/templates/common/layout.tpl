@@ -35,9 +35,9 @@
                 <div id="navbar-menu-custom" class="navbar-menu-custom-links">
                     
                     <div class="navbar-center-links">
-                        <a class="navbar-item{if $current_page == 'catalogo'} is-active{/if}" href="{$base_url}/catalogo">Catalogo</a>
-                        <a class="navbar-item{if $current_page == 'eventi'} is-active{/if}" href="{$base_url}/eventi">Eventi</a>
-                        <a class="navbar-item{if $current_page == 'offerte'} is-active{/if}" href="{$base_url}/offerte">Offerte</a>
+                        <a class="navbar-item{if isset($current_page) && $current_page == 'catalogo'} is-active{/if}" href="{$base_url}/catalogo">Catalogo</a>
+                        <a class="navbar-item{if isset($current_page) && $current_page == 'eventi'} is-active{/if}" href="{$base_url}/eventi">Eventi</a>
+                        <a class="navbar-item{if isset($current_page) && $current_page == 'offerte'} is-active{/if}" href="{$base_url}/offerte">Offerte</a>
                     </div>
 
                     <div class="navbar-end-actions">
