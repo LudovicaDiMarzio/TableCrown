@@ -3,7 +3,6 @@ namespace TableCrown\Entity;
 
 use Doctrine\ORM\Mapping as ORM;
 use TableCrown\Entity\Enumerativi\LivelloDannoGiochi;
-use TableCrown\Entity\EScontoDanno;
 use InvalidArgumentException;
 
 #[ORM\Entity]
@@ -12,36 +11,24 @@ class EDanno {
 
     #[ORM\Id]
     #[ORM\GeneratedValue]
-    #[ORM\Column(type: "integer")]
-    private ?int $idDanno = null;
-
     #[ORM\Column(type: "string", enumType: LivelloDannoGiochi::class)]
     private LivelloDannoGiochi $livelloDanno; //enum per indicare il livello di danno del gioco
     
-    #[ORM\ManyToOne(targetEntity: EScontoDanno::class)]
-    #[ORM\JoinColumn(nullable: false)]
-    private EScontoDanno $scontoDanno; //oggetto della classe EScontoDanno che contiene lo sconto per il livello di danno
+    #[ORM\Column(type: "float")]
+    private float $scontoDanno; //oggetto della classe EScontoDanno che contiene lo sconto per il livello di danno
 
-    public function __construct(LivelloDannoGiochi $livelloDanno, EScontoDanno $scontoDanno) {
+    public function __construct(LivelloDannoGiochi $livelloDanno, float $scontoDanno) {
         $this->livelloDanno = $livelloDanno;
         $this->scontoDanno = $scontoDanno;
     }
 
     //GET methods
-    public function getIdDanno(): ?int {
-        return $this->idDanno;
-    }
-
     public function getLivelloDanno(): LivelloDannoGiochi {
         return $this->livelloDanno;
     }
 
-    public function getScontoDanno(): EScontoDanno {
+    public function getScontoDanno(): float {
         return $this->scontoDanno;
-    }
-
-    public function getSconto(): float {
-        return $this->scontoDanno->getSconto();
     }
 
     //Metodi di dominio
@@ -51,6 +38,16 @@ class EDanno {
      */
     public function aggiornaLivelloDanno(LivelloDannoGiochi $livelloDanno): void {
         $this->livelloDanno = $livelloDanno;
+    }
+
+    /**
+     * Aggiorna sconto.
+     */
+    public function aggiornaScontoDanno(float $scontoDanno): void {
+        if ($scontoDanno < 0 || $scontoDanno > 100) {
+            throw new InvalidArgumentException("Lo sconto deve essere compreso tra 0 e 100.");
+        }
+        $this->scontoDanno = $scontoDanno;
     }
 
     // /**

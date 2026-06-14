@@ -2,9 +2,6 @@
 namespace TableCrown\Entity;
 
 use Doctrine\ORM\Mapping as ORM;
-use Doctrine\Common\Collections\ArrayCollection;
-use Doctrine\Common\Collections\Collection;
-use TableCrown\Entity\EScontoDanno;
 use TableCrown\Entity\EPrezzo;
 use InvalidArgumentException;
 use DateTime;
@@ -45,8 +42,8 @@ class EGiocoDaTavolo extends EProdotto {
     private ?string $descrizioneDanno; //descrizione del danno, se presente
 
     //Il costruttore, per effettuare i controlli sui vincoli, chiama al suo interno i metodi di verifica dei vincoli, che lanciano un'eccezione se i vincoli non sono rispettati
-    public function __construct(string $nomeProdotto, ?string $imgProdotto = null, string $descrizioneProdotto, DisponibilitaProdotto $disponibilitaProdotto, int $quantita, DateTime $dataPubblicazione, ?EPrezzo $prezzo = null, array $categoria, array $componenti, ?EGiocoDaTavolo $giocoBase = null, int $numeroGiocatoriMin = 1, int $numeroGiocatoriMax = 1, int $etaMinima = 1, int $durataMedia = 1, ?EDanno $danno = null, ?string $descrizioneDanno = null) {
-        parent::__construct($nomeProdotto, $imgProdotto, $descrizioneProdotto, $disponibilitaProdotto, $quantita, $dataPubblicazione, $prezzo);
+    public function __construct(string $nomeProdotto, string $descrizioneProdotto, DisponibilitaProdotto $disponibilitaProdotto, int $quantita, array $categoria, array $componenti, ?string $imgProdotto = null, ?EPrezzo $prezzo = null, ?EGiocoDaTavolo $giocoBase = null, int $numeroGiocatoriMin = 1, int $numeroGiocatoriMax = 1, int $etaMinima = 1, int $durataMedia = 1, ?EDanno $danno = null, ?string $descrizioneDanno = null) {
+        parent::__construct($nomeProdotto, $descrizioneProdotto, $disponibilitaProdotto, $quantita, $imgProdotto, $prezzo);
         $this->categoria = $categoria;
         $this->verificaCategoria(); //se fallisce, l'eccezione viene lanciata e il gioco da tavolo non viene creato (per tutti i metodi di verifica)
         $this->componenti = $componenti;

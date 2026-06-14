@@ -50,13 +50,13 @@ abstract class EProdotto {
     #[ORM\OneToMany(targetEntity: ERecensione::class, mappedBy: "prodotto", cascade: ["persist", "remove"])]
     private Collection $recensioni; //elenco delle recensioni del prodotto
 
-    public function __construct(string $nomeProdotto, ?string $imgProdotto = null, string $descrizioneProdotto, DisponibilitaProdotto $disponibilitaProdotto, int $quantita, DateTime $dataPubblicazione, ?EPrezzo $prezzo = null) {
+    public function __construct(string $nomeProdotto,  string $descrizioneProdotto, DisponibilitaProdotto $disponibilitaProdotto, int $quantita, ?string $imgProdotto = null, ?EPrezzo $prezzo = null) {
         $this->rinominaProdotto($nomeProdotto); //utilizza il metodo di dominio per validare il nome del prodotto
         $this->aggiornaImg($imgProdotto); //utilizza il metodo di dominio per validare l'immagine del prodotto
         $this->aggiornaDescrizione($descrizioneProdotto); //utilizza il metodo di dominio per validare la descrizione del prodotto
         $this->disponibilitaProdotto = $disponibilitaProdotto;
         $this->aggiornaQuantita($quantita); //utilizza il metodo di dominio per validare la quantità del prodotto
-        $this->dataPubblicazione = $dataPubblicazione;
+        $this->dataPubblicazione = new DateTime();
         $this->prezzo = $prezzo;
         $this->recensioni = new ArrayCollection(); //inizializzazione della collezione di recensioni
     }

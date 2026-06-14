@@ -36,8 +36,8 @@ class EPartecipazione {
     #[ORM\Column(type: 'boolean')]
     private bool $quotaPagata; //indica se la quota di iscrizione è stata pagata, se prevista per l'evento
 
-    public function __construct(DateTime $dataIscrizione, ?int $posizioneInClassifica = null, ?int $punteggioTotale = null, EUtente $utente, EEvento $evento, bool $quotaPagata = false) {
-        $this->dataIscrizione = $dataIscrizione;
+    public function __construct(EUtente $utente, EEvento $evento, ?int $posizioneInClassifica = null, ?int $punteggioTotale = null, bool $quotaPagata = false) {
+        $this->dataIscrizione = new DateTime();
         $this->verificaDataIscrizione();
         $this->posizioneInClassifica = $posizioneInClassifica;
         $this->punteggioTotale = $punteggioTotale;
