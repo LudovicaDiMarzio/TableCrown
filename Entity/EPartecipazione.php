@@ -1,22 +1,44 @@
 <?php
 namespace TableCrown\Entity;
+
+use Doctrine\ORM\Mapping as ORM;
 use DateTime;
 use TableCrown\Entity\EEvento;
 use TableCrown\Entity\EUtente;
 use InvalidArgumentException;
 
+#[ORM\Entity]
+#[ORM\Table(name: 'partecipazione')]
 class EPartecipazione {
-    private ?int $idPartecipazione;
+
+    #[ORM\Id]
+    #[ORM\GeneratedValue]
+    #[ORM\Column(type: 'integer')]
+    private ?int $idPartecipazione = null;
+
+    #[ORM\Column(type: 'datetime')]
     private DateTime $dataIscrizione;
+
+    #[ORM\Column(type: 'integer', nullable: true)]
     private ?int $posizioneInClassifica; //posizione in classifica, se prevista per l'evento, altrimenti null (al momento della partecipazione, la posizione in classifica è sempre null, viene aggiornata solo alla fine dell'evento)
+
+    #[ORM\Column(type: 'integer', nullable: true)]
     private ?int $punteggioTotale; //punteggio totale ottenuto dal partecipante alla fine della challenge, in caso di altri eventi può essere null (al momento della partecipazione, il punteggio totale è sempre null, viene aggiornato solo alla fine dell'evento)
+
+    #[ORM\ManyToOne(targetEntity: EUtente::class)]
+    #[ORM\JoinColumn(nullable: false)]
     private EUtente $utente; //l'utente a cui è riferita la partecipazione
+
+    #[ORM\ManyToOne(targetEntity: EEvento::class, inversedBy: 'partecipazioni')]
+    #[ORM\JoinColumn(nullable: false)]
     private EEvento $evento; //l'evento a cui l'utente partecipa
+
+    #[ORM\Column(type: 'boolean')]
     private bool $quotaPagata; //indica se la quota di iscrizione è stata pagata, se prevista per l'evento
 
-    public function __construct(?int $idPartecipazione, DateTime $dataIscrizione, ?int $posizioneInClassifica = null, ?int $punteggioTotale = null, EUtente $utente, EEvento $evento, bool $quotaPagata) {
-        $this->idPartecipazione = $idPartecipazione;
+    public function __construct(DateTime $dataIscrizione, ?int $posizioneInClassifica = null, ?int $punteggioTotale = null, EUtente $utente, EEvento $evento, bool $quotaPagata = false) {
         $this->dataIscrizione = $dataIscrizione;
+        $this->verificaDataIscrizione();
         $this->posizioneInClassifica = $posizioneInClassifica;
         $this->punteggioTotale = $punteggioTotale;
         $this->utente = $utente;

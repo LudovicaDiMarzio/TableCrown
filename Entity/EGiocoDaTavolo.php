@@ -4,7 +4,7 @@ namespace TableCrown\Entity;
 use Doctrine\ORM\Mapping as ORM;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
-use TableCrown\Entity\EDanno;
+use TableCrown\Entity\EScontoDanno;
 use TableCrown\Entity\EPrezzo;
 use InvalidArgumentException;
 use DateTime;

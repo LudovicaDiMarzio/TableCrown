@@ -1,32 +1,47 @@
 <?php
 namespace TableCrown\Entity;
+
+use Doctrine\ORM\Mapping as ORM;
 use TableCrown\Entity\Enumerativi\LivelloDannoGiochi;
+use TableCrown\Entity\EScontoDanno;
 use InvalidArgumentException;
 
+#[ORM\Entity]
+#[ORM\Table(name: "danno")]
 class EDanno {
+
+    #[ORM\Id]
+    #[ORM\GeneratedValue]
+    #[ORM\Column(type: "integer")]
+    private ?int $idDanno = null;
+
+    #[ORM\Column(type: "string", enumType: LivelloDannoGiochi::class)]
     private LivelloDannoGiochi $livelloDanno; //enum per indicare il livello di danno del gioco
     
-    private static array $scontiPerLivello = [
-        'danno leggero' => 5.0,
-        'danno moderato' => 10.0,
-        'danno grave' => 15.0,
-    ];
+    #[ORM\ManyToOne(targetEntity: EScontoDanno::class)]
+    #[ORM\JoinColumn(nullable: false)]
+    private EScontoDanno $scontoDanno; //oggetto della classe EScontoDanno che contiene lo sconto per il livello di danno
 
-    public function __construct(LivelloDannoGiochi $livelloDanno) {
+    public function __construct(LivelloDannoGiochi $livelloDanno, EScontoDanno $scontoDanno) {
         $this->livelloDanno = $livelloDanno;
+        $this->scontoDanno = $scontoDanno;
     }
 
     //GET methods
+    public function getIdDanno(): ?int {
+        return $this->idDanno;
+    }
+
     public function getLivelloDanno(): LivelloDannoGiochi {
         return $this->livelloDanno;
     }
 
-    public function getSconto(): float {
-        return self::$scontiPerLivello[$this->livelloDanno->value];
+    public function getScontoDanno(): EScontoDanno {
+        return $this->scontoDanno;
     }
 
-    public static function getScontiPerLivello(): array {
-        return self::$scontiPerLivello;
+    public function getSconto(): float {
+        return $this->scontoDanno->getSconto();
     }
 
     //Metodi di dominio
@@ -38,35 +53,35 @@ class EDanno {
         $this->livelloDanno = $livelloDanno;
     }
 
-    /**
-     * Verifica che lo sconto rispetti l'ordine danno leggero < danno moderato < danno grave.
-     */
-    private static function verificaOrdine(float $sconto, ?float $min, ?float $max): void {
-        if ($min !== null && $sconto <= $min) {
-            throw new InvalidArgumentException("Lo sconto deve essere maggiore dello sconto di livello inferiore ({$min}%).");
-        }
-        if ($max != null && $sconto >= $max) {
-            throw new InvalidArgumentException("Lo sconto deve essere minore dello sconto del livello superiore ({$max}%).");
-        }
-    }
+    // /**
+    //  * Verifica che lo sconto rispetti l'ordine danno leggero < danno moderato < danno grave.
+    //  */
+    // private static function verificaOrdine(float $sconto, ?float $min, ?float $max): void {
+    //     if ($min !== null && $sconto <= $min) {
+    //         throw new InvalidArgumentException("Lo sconto deve essere maggiore dello sconto di livello inferiore ({$min}%).");
+    //     }
+    //     if ($max != null && $sconto >= $max) {
+    //         throw new InvalidArgumentException("Lo sconto deve essere minore dello sconto del livello superiore ({$max}%).");
+    //     }
+    // }
 
-    /**
-     * Aggiorna lo sconto per un livello di danno specifico.
-     * Garantisce che danno leggero < danno moderato < danno grave.
-     */
-    public static function aggiornaSconto(LivelloDannoGiochi $livello, float $sconto): void {
-        if ($sconto < 0 || $sconto > 100) {
-            throw new InvalidArgumentException("Lo sconto deve essere compreso tra 0 e 100.");
-        }
+    // /**
+    //  * Aggiorna lo sconto per un livello di danno specifico.
+    //  * Garantisce che danno leggero < danno moderato < danno grave.
+    //  */
+    // public static function aggiornaSconto(LivelloDannoGiochi $livello, float $sconto): void {
+    //     if ($sconto < 0 || $sconto > 100) {
+    //         throw new InvalidArgumentException("Lo sconto deve essere compreso tra 0 e 100.");
+    //     }
         
-        $sconti = self::$scontiPerLivello; //copia dell'array per leggibilità e comodità
+    //     $sconti = self::$scontiPerLivello; //copia dell'array per leggibilità e comodità
 
-        match($livello) {
-            LivelloDannoGiochi::L1 => self::verificaOrdine($sconto, null, $sconti['danno moderato']),
-            LivelloDannoGiochi::L2 => self::verificaOrdine($sconto, $sconti['danno leggero'], $sconti['danno grave']),
-            LivelloDannoGiochi::L3 => self::verificaOrdine($sconto, $sconti['danno moderato'], null),
-        };
+    //     match($livello) {
+    //         LivelloDannoGiochi::L1 => self::verificaOrdine($sconto, null, $sconti['danno moderato']),
+    //         LivelloDannoGiochi::L2 => self::verificaOrdine($sconto, $sconti['danno leggero'], $sconti['danno grave']),
+    //         LivelloDannoGiochi::L3 => self::verificaOrdine($sconto, $sconti['danno moderato'], null),
+    //     };
 
-        self::$scontiPerLivello[$livello->value] = $sconto;
-    }
+    //     self::$scontiPerLivello[$livello->value] = $sconto;
+    // }
 }

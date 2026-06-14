@@ -1,16 +1,30 @@
 <?php
 namespace TableCrown\Entity;
+
+use Doctrine\ORM\Mapping as ORM;
 use InvalidArgumentException;
 use TableCrown\Entity\Enumerativi\Valuta;
 
+#[ORM\Entity]
+#[ORM\Table(name: 'prezzo')]
 class EPrezzo {
+
+    #[ORM\Id]
+    #[ORM\GeneratedValue]
+    #[ORM\Column(type: 'integer')]
     private ?int $idPrezzo;
+
+    #[ORM\Column(type: 'float')]
     private float $valore;
+
+    #[ORM\Column(type: 'string', enumType: Valuta::class)]
     private Valuta $valuta;
+
+    #[ORM\Column(type: 'float')]
     private float $sconto; //sconto in percentuale, ad esempio 20 per uno sconto del 20% (Se non viene specificato, lo sconto è 0, ovvero nessuno sconto)
 
-    public function __construct(?int $idPrezzo, float $valore, Valuta $valuta, float $sconto = 0) {
-        $this->idPrezzo = $idPrezzo;
+    public function __construct(float $valore, Valuta $valuta, float $sconto = 0) {
+        $this->sconto = 0; //inizializzazione dello sconto (necessaria per aggiornaSconto() che usa += che richiede inizializzazione)
         $this->aggiornaValore($valore); //utilizza il metodo di dominio per validare il valore del prezzo
         $this->aggiornaValuta($valuta); //utilizza il metodo di dominio per validare la valuta del prezzo
         $this->aggiornaSconto($sconto); //utilizza il metodo di dominio per validare lo sconto
