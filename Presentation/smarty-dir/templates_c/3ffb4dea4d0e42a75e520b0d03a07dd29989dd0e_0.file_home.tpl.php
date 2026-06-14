@@ -1,18 +1,18 @@
 <?php
-/* Smarty version 5.8.0, created on 2026-06-14 16:15:01
+/* Smarty version 5.8.0, created on 2026-06-14 16:47:04
   from 'file:home.tpl' */
 
 /* @var \Smarty\Template $_smarty_tpl */
 if ($_smarty_tpl->getCompiled()->isFresh($_smarty_tpl, array (
   'version' => '5.8.0',
-  'unifunc' => 'content_6a2eb765a004b6_55800431',
+  'unifunc' => 'content_6a2ebee888b574_94612415',
   'has_nocache_code' => false,
   'file_dependency' => 
   array (
     '3ffb4dea4d0e42a75e520b0d03a07dd29989dd0e' => 
     array (
       0 => 'home.tpl',
-      1 => 1781446482,
+      1 => 1781448265,
       2 => 'file',
     ),
   ),
@@ -20,30 +20,30 @@ if ($_smarty_tpl->getCompiled()->isFresh($_smarty_tpl, array (
   array (
   ),
 ))) {
-function content_6a2eb765a004b6_55800431 (\Smarty\Template $_smarty_tpl) {
+function content_6a2ebee888b574_94612415 (\Smarty\Template $_smarty_tpl) {
 $_smarty_current_dir = 'C:\\Users\\damic\\Desktop\\uni\\APPUNTI\\anno3\\secondo_semenstre\\Pweb\\TableCrown\\Presentation\\smarty-dir\\templates';
 $_smarty_tpl->getInheritance()->init($_smarty_tpl, true);
 ?>
 
 
 <?php 
-$_smarty_tpl->getInheritance()->instanceBlock($_smarty_tpl, 'Block_304271616a2eb7659d17c9_51428310', "extra_css");
+$_smarty_tpl->getInheritance()->instanceBlock($_smarty_tpl, 'Block_18613539166a2ebee884d660_00281391', "extra_css");
 ?>
 
 
 <?php 
-$_smarty_tpl->getInheritance()->instanceBlock($_smarty_tpl, 'Block_18189805756a2eb7659d4213_62190424', "content");
+$_smarty_tpl->getInheritance()->instanceBlock($_smarty_tpl, 'Block_8759456936a2ebee88501e1_29100224', "content");
 ?>
 
 
 <?php 
-$_smarty_tpl->getInheritance()->instanceBlock($_smarty_tpl, 'Block_15568649026a2eb7659ff822_52112893', "extra_js");
+$_smarty_tpl->getInheritance()->instanceBlock($_smarty_tpl, 'Block_3526681986a2ebee888a534_20673040', "extra_js");
 ?>
 
 <?php $_smarty_tpl->getInheritance()->endChild($_smarty_tpl, "common/layout.tpl", $_smarty_current_dir);
 }
 /* {block "extra_css"} */
-class Block_304271616a2eb7659d17c9_51428310 extends \Smarty\Runtime\Block
+class Block_18613539166a2ebee884d660_00281391 extends \Smarty\Runtime\Block
 {
 public function callBlock(\Smarty\Template $_smarty_tpl) {
 $_smarty_current_dir = 'C:\\Users\\damic\\Desktop\\uni\\APPUNTI\\anno3\\secondo_semenstre\\Pweb\\TableCrown\\Presentation\\smarty-dir\\templates';
@@ -56,7 +56,7 @@ $_smarty_current_dir = 'C:\\Users\\damic\\Desktop\\uni\\APPUNTI\\anno3\\secondo_
 }
 /* {/block "extra_css"} */
 /* {block "content"} */
-class Block_18189805756a2eb7659d4213_62190424 extends \Smarty\Runtime\Block
+class Block_8759456936a2ebee88501e1_29100224 extends \Smarty\Runtime\Block
 {
 public function callBlock(\Smarty\Template $_smarty_tpl) {
 $_smarty_current_dir = 'C:\\Users\\damic\\Desktop\\uni\\APPUNTI\\anno3\\secondo_semenstre\\Pweb\\TableCrown\\Presentation\\smarty-dir\\templates';
@@ -175,7 +175,8 @@ $_smarty_tpl->getSmarty()->getRuntime('Foreach')->restore($_smarty_tpl, 1);?>
 $_smarty_tpl->getSmarty()->getRuntime('Foreach')->restore($_smarty_tpl, 1);?>
 
                                 <div class="card-vector-item card-vector-more">
-                    <a href="#" class="view-more-link">
+                    <a href="<?php echo $_smarty_tpl->getValue('base_url');?>
+/offerte" class="view-more-link" title="Vedi tutte le offerte">
                         <div class="circle-plus">
                             <span>+</span>
                         </div>
@@ -241,7 +242,8 @@ $_smarty_tpl->getSmarty()->getRuntime('Foreach')->restore($_smarty_tpl, 1);?>
 $_smarty_tpl->getSmarty()->getRuntime('Foreach')->restore($_smarty_tpl, 1);?>
 
                                 <div class="card-vector-item card-vector-more">
-                    <a href="#" class="more-link-wrapper" title="Vedi tutte le offerte">
+                    <a href="<?php echo $_smarty_tpl->getValue('base_url');?>
+/offerte" class="more-link-wrapper" title="Vedi tutte le offerte">
                         <div class="more-circle-btn">
                             <span class="more-plus-icon">+</span>
                         </div>
@@ -396,7 +398,8 @@ $_smarty_tpl->getSmarty()->getRuntime('Foreach')->restore($_smarty_tpl, 1);?>
 $_smarty_tpl->getSmarty()->getRuntime('Foreach')->restore($_smarty_tpl, 1);?>
 
                                 <div class="card-vector-item card-vector-more">
-                    <a href="#" class="more-link-wrapper" title="Vedi tutti i nuovi arrivi">
+                    <a href="<?php echo $_smarty_tpl->getValue('base_url');?>
+/catalogo?ordinamento=novita" class="more-link-wrapper" title="Vedi tutti i nuovi arrivi">
                         <div class="more-circle-btn">
                             <span class="more-plus-icon">+</span>
                         </div>
@@ -413,7 +416,7 @@ $_smarty_tpl->getSmarty()->getRuntime('Foreach')->restore($_smarty_tpl, 1);?>
 }
 /* {/block "content"} */
 /* {block "extra_js"} */
-class Block_15568649026a2eb7659ff822_52112893 extends \Smarty\Runtime\Block
+class Block_3526681986a2ebee888a534_20673040 extends \Smarty\Runtime\Block
 {
 public function callBlock(\Smarty\Template $_smarty_tpl) {
 $_smarty_current_dir = 'C:\\Users\\damic\\Desktop\\uni\\APPUNTI\\anno3\\secondo_semenstre\\Pweb\\TableCrown\\Presentation\\smarty-dir\\templates';
