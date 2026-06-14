@@ -41,7 +41,7 @@
     {* ──────────────────────────────────────────── *}
     <section class="home-section">
         <h2 class="title section-title is-4 text-uppercase">🔥 Offerte in Scadenza</h2>
-        
+
         <div class="card-row-vector">
             {if isset($offerte) && $offerte|@count > 0}
                 {foreach $offerte as $prodotto}
@@ -58,41 +58,31 @@
 
                                     <div class="card-rating">
                                         {assign var="media" value=$prodotto->getValutazioneMedia()}
-                                        {for $s=1 to 5}
+                                        {assign var="stelle" value=[1,2,3,4,5]}
+                                        {foreach $stelle as $s}
                                             {if $s <= $media}
                                                 <i class="ti ti-star-filled star-icon"></i>
-                                            {elseif $s - $media < 1}
+                                            {elseif ($s - $media) < 1}
                                                 <i class="ti ti-star-half-filled star-icon"></i>
                                             {else}
                                                 <i class="ti ti-star star-icon"></i>
                                             {/if}
-                                        {/for}
+                                        {/foreach}
                                     </div>
 
                                     <div class="price-container">
                                         <span class="price">€{$prodotto->getPrezzo()}</span>
                                     </div>
+
+                                    <button class="btn-cart">
+                                        <i class="ti ti-shopping-cart"></i> Carrello
+                                    </button>
                                 </div>
                             </div>
                         </a>
                     </div>
                 {/foreach}
-                
-                {* Card Vedi Altro per dati reali *}
-                <div class="card-vector-item card-vector-more">
-                    <a href="#" class="view-more-link">
-                        <div class="circle-plus">
-                            <span>+</span>
-                        </div>
-                        <span class="view-more-text">Vedi tutti</span>
-                    </a>
-                </div>
 
-                            </div>
-                        </a>
-                    </div>
-                {/foreach}
-                
                 {* Card Vedi Altro per dati reali *}
                 <div class="card-vector-item card-vector-more">
                     <a href="#" class="view-more-link">
@@ -115,29 +105,34 @@
                                     </figure>
                                 </div>
                                 <div class="card-content">
-                                    <p class="card-title-custom">{$prodotto->getNome()|escape}</p>
+                                    <p class="card-title-custom">Gioco in Offerta {$i}</p>
 
                                     <div class="card-rating">
-                                        {assign var="media" value=$prodotto->getValutazioneMedia()}
-                                        {for $s=1 to 5}
+                                        {assign var="media" value=4}
+                                        {assign var="stelle" value=[1,2,3,4,5]}
+                                        {foreach $stelle as $s}
                                             {if $s <= $media}
                                                 <i class="ti ti-star-filled star-icon"></i>
-                                            {elseif $s - $media < 1}
+                                            {elseif ($s - $media) < 1}
                                                 <i class="ti ti-star-half-filled star-icon"></i>
                                             {else}
                                                 <i class="ti ti-star star-icon"></i>
                                             {/if}
-                                        {/for}
+                                        {/foreach}
                                     </div>
 
                                     <div class="price-container">
-                                        <span class="price">€{$prodotto->getPrezzo()}</span>
+                                        <span class="price">€29.90</span>
+                                        <span class="price-old">€49.90</span>
                                     </div>
+
+                                    <button class="btn-cart">
+                                        <i class="ti ti-shopping-cart"></i> Carrello
+                                    </button>
                                 </div>
                             </div>
                         </a>
                     </div>
-                
                 {/foreach}
 
                 {* Card Vedi Altro per dati Demo *}
@@ -158,7 +153,7 @@
     {* ──────────────────────────────────────────── *}
     <section class="home-section">
         <h2 class="title section-title is-4 text-uppercase">✨ Nuovi Arrivi</h2>
-        
+
         <div class="card-row-vector">
             {if isset($nuovi_arrivi) && $nuovi_arrivi|@count > 0}
                 {foreach $nuovi_arrivi as $prodotto}
@@ -171,29 +166,29 @@
                                     </figure>
                                 </div>
                                 <div class="card-content">
-                                    <div class="media">
-                                        <div class="media-left">
-                                            <img src="{$base_url}/img/categorie/{$prodotto->getCategoriaIcona()}" class="editor-avatar" alt="Categoria" />
-                                        </div>
-                                        <div class="media-content">
-                                            <p class="card-title-custom">{$prodotto->getNome()|escape}</p>
-                                            <p class="subtitle">{$prodotto->getEditore()|escape}</p>
-                                        </div>
+                                    <p class="card-title-custom">{$prodotto->getNome()|escape}</p>
+
+                                    <div class="card-rating">
+                                        {assign var="media" value=$prodotto->getValutazioneMedia()}
+                                        {assign var="stelle" value=[1,2,3,4,5]}
+                                        {foreach $stelle as $s}
+                                            {if $s <= $media}
+                                                <i class="ti ti-star-filled star-icon"></i>
+                                            {elseif ($s - $media) < 1}
+                                                <i class="ti ti-star-half-filled star-icon"></i>
+                                            {else}
+                                                <i class="ti ti-star star-icon"></i>
+                                            {/if}
+                                        {/foreach}
                                     </div>
-                                    
-                                    <p class="game-description">
-                                        {$prodotto->getDescrizioneBreve()|escape}
-                                    </p>
-                                    
+
                                     <div class="price-container">
                                         <span class="price">€{$prodotto->getPrezzo()}</span>
                                     </div>
-                                    
-                                    <div class="footer-card-custom">
-                                        <time datetime="{$prodotto->getDataInserimento()}">
-                                            <i class="ti ti-calendar"></i> Disponibile da oggi
-                                        </time>
-                                    </div>
+
+                                    <button class="btn-cart">
+                                        <i class="ti ti-shopping-cart"></i> Carrello
+                                    </button>
                                 </div>
                             </div>
                         </a>
@@ -222,29 +217,29 @@
                                     </figure>
                                 </div>
                                 <div class="card-content">
-                                    <div class="media">
-                                        <div class="media-left">
-                                            <img src="{$base_url}/img/categorie/{$prodotto->getCategoriaIcona()}" class="editor-avatar" alt="Categoria" />
-                                        </div>
-                                        <div class="media-content">
-                                            <p class="card-title-custom">{$prodotto->getNome()|escape}</p>
-                                            <p class="subtitle">{$prodotto->getEditore()|escape}</p>
-                                        </div>
+                                    <p class="card-title-custom">Nuovo Arrivo {$j}</p>
+
+                                    <div class="card-rating">
+                                        {assign var="media" value=4}
+                                        {assign var="stelle" value=[1,2,3,4,5]}
+                                        {foreach $stelle as $s}
+                                            {if $s <= $media}
+                                                <i class="ti ti-star-filled star-icon"></i>
+                                            {elseif ($s - $media) < 1}
+                                                <i class="ti ti-star-half-filled star-icon"></i>
+                                            {else}
+                                                <i class="ti ti-star star-icon"></i>
+                                            {/if}
+                                        {/foreach}
                                     </div>
-                                    
-                                    <p class="game-description">
-                                        {$prodotto->getDescrizioneBreve()|escape}
-                                    </p>
-                                    
+
                                     <div class="price-container">
-                                        <span class="price">€{$prodotto->getPrezzo()}</span>
+                                        <span class="price">€39.90</span>
                                     </div>
-                                    
-                                    <div class="footer-card-custom">
-                                        <time datetime="{$prodotto->getDataInserimento()}">
-                                            <i class="ti ti-calendar"></i> Disponibile da oggi
-                                        </time>
-                                    </div>
+
+                                    <button class="btn-cart">
+                                        <i class="ti ti-shopping-cart"></i> Carrello
+                                    </button>
                                 </div>
                             </div>
                         </a>
