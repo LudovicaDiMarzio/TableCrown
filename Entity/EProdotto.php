@@ -219,4 +219,19 @@ abstract class EProdotto {
         $this->recensioni->removeElement($recensione);
     }
 
+    /**
+     * Calcola la valutazione media del prodotto basata sulle recensioni.
+     */
+    public function getValutazioneMedia(): float {
+        if ($this->recensioni->isEmpty()) {
+            return 0.0;
+        }
+
+        $somma = 0;
+        foreach ($this->recensioni as $recensione) {
+            $somma += $recensione->getValutazione();
+        }
+
+        return $somma / $this->recensioni->count();
+    }
 }
