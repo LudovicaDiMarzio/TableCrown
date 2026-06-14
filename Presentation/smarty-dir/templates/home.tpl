@@ -76,11 +76,15 @@
 
                                     <div class="price-container">
                                         {assign var="prezzo" value=$prodotto->getPrezzo()}
-                                        {if $prezzo->hasSconto()}
-                                            <span class="price">€{$prezzo->calcolaPrezzoScontato()|number_format:2}</span>
-                                            <span class="price-old">€{$prezzo->getValore()|number_format:2}</span>
+                                        {if $prezzo}
+                                            {if $prezzo->hasSconto()}
+                                                <span class="price">€{$prezzo->calcolaPrezzoScontato()|number_format:2}</span>
+                                                <span class="price-old">€{$prezzo->getValore()|number_format:2}</span>
+                                            {else}
+                                                <span class="price">€{$prezzo->getValore()|number_format:2}</span>
+                                            {/if}
                                         {else}
-                                            <span class="price">€{$prezzo->getValore()|number_format:2}</span>
+                                            <span class="price-unavailable">Prezzo non disponibile</span>
                                         {/if}
                                     </div>
 
@@ -194,11 +198,15 @@
 
                                     <div class="price-container">
                                         {assign var="prezzo" value=$prodotto->getPrezzo()}
-                                        {if $prezzo->hasSconto()}
-                                            <span class="price">€{$prezzo->calcolaPrezzoScontato()|number_format:2}</span>
-                                            <span class="price-old">€{$prezzo->getValore()|number_format:2}</span>
+                                        {if $prezzo}
+                                            {if $prezzo->hasSconto()}
+                                                <span class="price">€{$prezzo->calcolaPrezzoScontato()|number_format:2}</span>
+                                                <span class="price-old">€{$prezzo->getValore()|number_format:2}</span>
+                                            {else}
+                                                <span class="price">€{$prezzo->getValore()|number_format:2}</span>
+                                            {/if}
                                         {else}
-                                            <span class="price">€{$prezzo->getValore()|number_format:2}</span>
+                                            <span class="price-unavailable">Prezzo non disponibile</span>
                                         {/if}
                                     </div>
 
