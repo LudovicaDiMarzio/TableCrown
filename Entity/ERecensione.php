@@ -26,7 +26,7 @@ class ERecensione {
     #[ORM\Column(type: "boolean")]
     private bool $segnalazione;
 
-    #[ORM\ManyToOne(targetEntity: EUtente::class)]
+    #[ORM\ManyToOne(targetEntity: EUtente::class, inversedBy: "recensioni")]
     #[ORM\JoinColumn(name: "utente_id", referencedColumnName: "idpersona", nullable: false)]
     private EUtente $utente;
 

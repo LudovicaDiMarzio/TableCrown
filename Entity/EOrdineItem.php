@@ -21,7 +21,7 @@ class EOrdineItem {
     private EOrdine $ordine;
 
     #[ORM\ManyToOne(targetEntity: EProdotto::class)]
-    #[ORM\JoinColumn(name: "prodotto_id", referencedColumnName: "idprodotto", nullable: false)]
+    #[ORM\JoinColumn(name: "prodotto_id", referencedColumnName: "idProdotto", nullable: false)]
     private EProdotto $prodotto;
 
     public function __construct(int $quantita, EOrdine $ordine, EProdotto $prodotto) {

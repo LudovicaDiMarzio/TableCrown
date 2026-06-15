@@ -39,7 +39,16 @@ class EUtente extends EPersona {
     #[ORM\OneToMany(targetEntity: EProvvedimento::class, mappedBy: "utentesanzionato")]
     private Collection $provvedimenti;
 
-    
+    #[ORM\OneToMany(targetEntity: EPartecipazione::class, mappedBy: "utente")]
+    private Collection $partecipazioni; //la lista di tutte le partecipazioni effettuate dall'utente
+
+    #[ORM\OneToMany(targetEntity: ERecensione::class, mappedBy: "utente")]
+    private Collection $recensioni;
+
+    #[ORM\OneToMany(targetEntity: EOrdine::class, mappedBy: "utente")]
+    private Collection $ordini;
+
+        
    
 
     public function __construct(string $nomeuser, mixed $imgprofilouser, string $emailuser, string $passworduser, int $eta, PlayerLevel $PlayerLevel) {
@@ -53,6 +62,9 @@ class EUtente extends EPersona {
         $this->PlayerLevel = $PlayerLevel;
         $this->segnalazioni = new ArrayCollection(); //inizializziamo la collezione di segnalazioni come un ArrayCollection vuoto
         $this->provvedimenti = new ArrayCollection(); //inizializziamo la collezione di provvedimenti come un ArrayCollection vuoto
+        $this->partecipazioni = new ArrayCollection(); //inizializziamo la collezione di partecipazioni come un ArrayCollection vuoto
+        $this->recensioni = new ArrayCollection();
+        $this->ordini = new ArrayCollection();
     }
 
     //Metodi di dominio
@@ -126,6 +138,27 @@ class EUtente extends EPersona {
         }
     }
 
+    public function riceviRecensione(ERecensione $recensione): void
+    {
+        if (!$this->recensioni->contains($recensione)) {
+            $this->recensioni->add($recensione);
+        }
+    }
+
+    public function riceviOrdine(EOrdine $ordine): void
+    {
+        if (!$this->ordini->contains($ordine)) {
+            $this->ordini->add($ordine);
+        }
+    }
+
+    public function riceviPartecipazione(EPartecipazione $partecipazione): void
+    {
+        if (!$this->partecipazioni->contains($partecipazione)) {
+            $this->partecipazioni->add($partecipazione);
+        }
+    }
+
     //GET methods
  
 
@@ -153,5 +186,17 @@ class EUtente extends EPersona {
 
     public function getSegnalazioni(): Collection {
         return $this->segnalazioni;
+    }
+
+    public function getRecensioni(): Collection {
+         return $this->recensioni; 
+    }
+
+    public function getOrdini(): Collection {
+         return $this->ordini; 
+    }
+
+    public function getPartecipazioni(): Collection { 
+        return $this->partecipazioni; 
     }
 }
