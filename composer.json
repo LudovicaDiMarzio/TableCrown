@@ -18,5 +18,9 @@
             "TableCrown\\Presentation\\": "Presentation/",
             "TableCrown\\Foundation\\": "Foundation/"
         }
+    },
+    "require-dev": {
+        "doctrine/data-fixtures": "^2.2",
+        "fakerphp/faker": "^1.24"
     }
 }
