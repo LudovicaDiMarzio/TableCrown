@@ -317,7 +317,7 @@
 .price-inputs {
     display: flex;
     align-items: center;
-    gap: 8px;
+    gap: 4px;
 }
  
 .price-input {
@@ -325,9 +325,9 @@
     background-color: #111827 !important;
     border: 1px solid var(--color-border-dark) !important;
     color: var(--color-text-light) !important;
-    padding: 0.5rem !important;
+    padding: 0.35rem 0.4rem !important;
     border-radius: var(--radius-sm) !important;
-    font-size: var(--font-size-sm) !important;
+    font-size: 12px !important;
     text-align: center;
 }
  
@@ -343,6 +343,7 @@
 .price-separator {
     color: var(--color-text-subtle);
     font-weight: 500;
+    font-size: 12px;
 }
  
 .price-slider {
@@ -396,7 +397,7 @@
 .players-inputs {
     display: flex;
     align-items: center;
-    gap: 8px;
+    gap: 4px;
 }
  
 .age-input,
@@ -405,9 +406,9 @@
     background-color: #111827 !important;
     border: 1px solid var(--color-border-dark) !important;
     color: var(--color-text-light) !important;
-    padding: 0.5rem !important;
+    padding: 0.35rem 0.4rem !important;
     border-radius: var(--radius-sm) !important;
-    font-size: var(--font-size-sm) !important;
+    font-size: 12px !important;
     text-align: center;
 }
  
@@ -421,6 +422,7 @@
 .players-separator {
     color: var(--color-text-subtle);
     font-weight: 500;
+    font-size: 12px;
 }
  
  
