@@ -45,6 +45,7 @@ abstract class EProdotto {
     private DateTime $dataPubblicazione;
 
     #[ORM\OneToOne(targetEntity: EPrezzo::class, cascade: ["persist", "remove"])] //cascade: persist e remove indicano che le operazioni di inserimento e cancellazione del prodotto devono essere eseguite anche sul prezzo associato, in modo da mantenere la relazione tra i due oggetti
+    #[ORM\JoinColumn(name: "prezzo_id", referencedColumnName: "idPrezzo", nullable: true)]
     private ?EPrezzo $prezzo = null; //prezzo del prodotto, se presente (se il prodotto è esaurito o in arrivo, il prezzo potrebbe non essere disponibile, quindi è nullable)
 
     #[ORM\OneToMany(targetEntity: ERecensione::class, mappedBy: "prodotto", cascade: ["persist", "remove"])]

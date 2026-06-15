@@ -24,6 +24,8 @@ class EWishlist {
 
     #[ORM\ManyToMany(targetEntity: EProdotto::class)]
     #[ORM\JoinTable(name: "wishlist_prodotto")]
+    #[ORM\JoinColumn(name: "wishlist_id", referencedColumnName: "idWishlist")]
+    #[ORM\InverseJoinColumn(name: "prodotto_id", referencedColumnName: "idProdotto")]
     private Collection $prodotti;
 
     public function __construct(EUtente $utente) {

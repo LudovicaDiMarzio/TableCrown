@@ -25,12 +25,12 @@ class EPartecipazione {
     #[ORM\Column(type: 'integer', nullable: true)]
     private ?int $punteggioTotale; //punteggio totale ottenuto dal partecipante alla fine della challenge, in caso di altri eventi può essere null (al momento della partecipazione, il punteggio totale è sempre null, viene aggiornato solo alla fine dell'evento)
 
-    #[ORM\ManyToOne(targetEntity: EUtente::class)]
-    #[ORM\JoinColumn(nullable: false)]
+    #[ORM\ManyToOne(targetEntity: EUtente::class, inversedBy: 'partecipazioni')]
+    #[ORM\JoinColumn(name: "id_utente", referencedColumnName: "idpersona", nullable: false)]
     private EUtente $utente; //l'utente a cui è riferita la partecipazione
 
     #[ORM\ManyToOne(targetEntity: EEvento::class, inversedBy: 'partecipazioni')]
-    #[ORM\JoinColumn(nullable: false)]
+    #[ORM\JoinColumn(name: "evento_id", referencedColumnName: "idEvento", nullable: false)]
     private EEvento $evento; //l'evento a cui l'utente partecipa
 
     #[ORM\Column(type: 'boolean')]
@@ -44,6 +44,7 @@ class EPartecipazione {
         $this->utente = $utente;
         $this->evento = $evento;
         $this->quotaPagata = $quotaPagata;
+        $utente->riceviPartecipazione($this);
     }
 
     //GET methods

@@ -25,7 +25,7 @@ class EProvvedimento {
     //una segnalazione può avere più provvedimenti (escalation sospensione -> ban), ma un provvedimento è associato ad una sola segnalazione (relazione molti a uno)
     //relazione unidirezionale perchè non ho bisogno di vedere tutti i provvedimenti legati ad una segnalazione, ma solo la segnalazione collegata ad un provvedimento
     #[ORM\ManyToOne(targetEntity: ESegnalazione::class)]
-    #[ORM\JoinColumn(nullable: true)] //
+    #[ORM\JoinColumn(name: "segnalazione_id", referencedColumnName: "idsegnalazione", nullable: true)] //
     private ?ESegnalazione $segnalazionecollegata;
     
     #[ORM\Column(type: "datetime")]
@@ -39,12 +39,12 @@ class EProvvedimento {
 
     //la relazione è unidirezionale perchè non ho bisogno di vedere tutti i provvedimenti legati ad una recensione
     #[ORM\ManyToOne(targetEntity: ERecensione::class)]
-    #[ORM\JoinColumn(name: "recensione_id", referencedColumnName: "id", nullable: true)] 
+    #[ORM\JoinColumn(name: "recensione_id", referencedColumnName: "idRecensione", nullable: true)] 
     private ?ERecensione $recensionecollegata=null; //la recensione a cui è associato il provvedimento, può essere null perchè l'admin potrebbe decidere di appplicare un provvedimento anche senza che gli arrivi una segnalazione, ad esempio scorrendo le recensioni
   
     //un utente può ricevere più provvedimenti, ma un provvedimento è associato ad un solo utente (relazione molti a uno)
     #[ORM\ManyToOne(targetEntity: EUtente::class, inversedBy: "provvedimenti")] //la proprietà "provvedimenti" è quella che abbiamo definito nella classe EUtente per la relazione inversa
-    #[ORM\JoinColumn(nullable: false)]
+    #[ORM\JoinColumn(name: "utente_id", referencedColumnName: "idpersona", nullable: false)]
     private EUtente $utentesanzionato; //l'utente a cui è stato applicato il provvedimento 
 
     public function __construct(TipoProvvedimento $tipoprovvedimento, EUtente $utentesanzionato, ?DateTime $datascadenza, ?ERecensione $recensionecollegata=null, ?ESegnalazione $segnalazionecollegata=null) {

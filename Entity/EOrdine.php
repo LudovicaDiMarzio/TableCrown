@@ -24,13 +24,13 @@ class EOrdine {
     #[ORM\Column(type: "string", length: 20)]
     private string $stato;
 
-    #[ORM\ManyToOne(targetEntity: EUtente::class)]
+    #[ORM\ManyToOne(targetEntity: EUtente::class, inversedBy: "ordini")]
     #[ORM\JoinColumn(name: "utente_id", referencedColumnName: "idpersona", nullable: false)]
     private EUtente $utente;
 
-    #[ORM\ManyToMany(targetEntity: ECartaDiCredito::class)]
-    #[ORM\JoinTable(name: "ordine_carta_di_credito")]
-    private Collection $carteDiCredito;
+    #[ORM\ManyToOne(targetEntity: ECartaDiCredito::class)]
+    #[ORM\JoinColumn(name: "carta_id", referencedColumnName: "idCartaDiCredito")]
+    private ?ECartaDiCredito $cartaDiCredito = null;
 
     #[ORM\OneToMany(targetEntity: EOrdineItem::class, mappedBy: "ordine", cascade: ["persist", "remove"])]
     private Collection $ordineItems;
@@ -39,8 +39,7 @@ class EOrdine {
         $this->data = new DateTime();
         $this->impostaStato($stato);
         $this->utente = $utente;
-        $this->carteDiCredito = new ArrayCollection();
-        $this->ordineItems = new ArrayCollection();
+        $this->ordineItems = new ArrayCollection();  
     }
 
     // Metodi di dominio
@@ -68,16 +67,17 @@ class EOrdine {
         $this->impostaStato('annullato');
     }
 
-    public function addCartaDiCredito(ECartaDiCredito $carta): void {
-        if (!$this->carteDiCredito->contains($carta)) {
-            $this->carteDiCredito->add($carta);
+    public function associaMetodoDiPagamento(ECartaDiCredito $carta): void {
+        // Invariante di dominio: non puoi cambiare o associare una carta se l'ordine non è in modifica
+        if ($this->stato !== 'in attesa') {
+            throw new \InvalidArgumentException(
+                "Impossibile associare un metodo di pagamento a un ordine in stato: " . $this->stato
+            );
         }
+        $this->cartaDiCredito = $carta;
     }
 
-    public function removeCartaDiCredito(ECartaDiCredito $carta): void {
-        $this->carteDiCredito->removeElement($carta);
-    }
-
+   
     public function addOrdineItem(EOrdineItem $item): void {
         if (!$this->ordineItems->contains($item)) {
             $this->ordineItems->add($item);
@@ -105,8 +105,9 @@ class EOrdine {
         return $this->utente;
     }
 
-    public function getCarteDiCredito(): Collection {
-        return $this->carteDiCredito;
+    // Il getter serve solo per poter leggere la carta esternamente (es. nelle View)
+    public function getCartaDiCredito(): ?ECartaDiCredito {
+        return $this->cartaDiCredito;
     }
 
     public function getOrdineItems(): Collection {
