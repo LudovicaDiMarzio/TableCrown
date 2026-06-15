@@ -1,18 +1,18 @@
 <?php
-/* Smarty version 5.8.0, created on 2026-06-15 16:31:19
+/* Smarty version 5.8.0, created on 2026-06-15 17:44:01
   from 'file:catalogo.tpl' */
 
 /* @var \Smarty\Template $_smarty_tpl */
 if ($_smarty_tpl->getCompiled()->isFresh($_smarty_tpl, array (
   'version' => '5.8.0',
-  'unifunc' => 'content_6a300cb79706e0_76893086',
+  'unifunc' => 'content_6a301dc134aff8_53843734',
   'has_nocache_code' => false,
   'file_dependency' => 
   array (
     '4d90e5f688d80db201316a7cb04f34e17d9fd4ea' => 
     array (
       0 => 'catalogo.tpl',
-      1 => 1781533543,
+      1 => 1781538199,
       2 => 'file',
     ),
   ),
@@ -20,30 +20,30 @@ if ($_smarty_tpl->getCompiled()->isFresh($_smarty_tpl, array (
   array (
   ),
 ))) {
-function content_6a300cb79706e0_76893086 (\Smarty\Template $_smarty_tpl) {
+function content_6a301dc134aff8_53843734 (\Smarty\Template $_smarty_tpl) {
 $_smarty_current_dir = 'C:\\Users\\damic\\Desktop\\uni\\APPUNTI\\anno3\\secondo_semenstre\\Pweb\\TableCrown\\Presentation\\smarty-dir\\templates';
 $_smarty_tpl->getInheritance()->init($_smarty_tpl, true);
 ?>
 
 
 <?php 
-$_smarty_tpl->getInheritance()->instanceBlock($_smarty_tpl, 'Block_13290702126a300cb780dee1_72274423', "extra_css");
+$_smarty_tpl->getInheritance()->instanceBlock($_smarty_tpl, 'Block_21368342216a301dc12eac18_07612659', "extra_css");
 ?>
 
 
 <?php 
-$_smarty_tpl->getInheritance()->instanceBlock($_smarty_tpl, 'Block_20945445346a300cb7814861_09335529', "content");
+$_smarty_tpl->getInheritance()->instanceBlock($_smarty_tpl, 'Block_10256425576a301dc12f07e3_77667144', "content");
 ?>
 
 
 <?php 
-$_smarty_tpl->getInheritance()->instanceBlock($_smarty_tpl, 'Block_17982134456a300cb796fee7_62429503', "extra_js");
+$_smarty_tpl->getInheritance()->instanceBlock($_smarty_tpl, 'Block_9120973546a301dc134a304_66734656', "extra_js");
 ?>
 
 <?php $_smarty_tpl->getInheritance()->endChild($_smarty_tpl, "common/layout.tpl", $_smarty_current_dir);
 }
 /* {block "extra_css"} */
-class Block_13290702126a300cb780dee1_72274423 extends \Smarty\Runtime\Block
+class Block_21368342216a301dc12eac18_07612659 extends \Smarty\Runtime\Block
 {
 public function callBlock(\Smarty\Template $_smarty_tpl) {
 $_smarty_current_dir = 'C:\\Users\\damic\\Desktop\\uni\\APPUNTI\\anno3\\secondo_semenstre\\Pweb\\TableCrown\\Presentation\\smarty-dir\\templates';
@@ -56,7 +56,7 @@ $_smarty_current_dir = 'C:\\Users\\damic\\Desktop\\uni\\APPUNTI\\anno3\\secondo_
 }
 /* {/block "extra_css"} */
 /* {block "content"} */
-class Block_20945445346a300cb7814861_09335529 extends \Smarty\Runtime\Block
+class Block_10256425576a301dc12f07e3_77667144 extends \Smarty\Runtime\Block
 {
 public function callBlock(\Smarty\Template $_smarty_tpl) {
 $_smarty_current_dir = 'C:\\Users\\damic\\Desktop\\uni\\APPUNTI\\anno3\\secondo_semenstre\\Pweb\\TableCrown\\Presentation\\smarty-dir\\templates';
@@ -186,21 +186,21 @@ $_smarty_current_dir = 'C:\\Users\\damic\\Desktop\\uni\\APPUNTI\\anno3\\secondo_
                         </h4>
                         <div class="checkbox-group">
                             <label class="checkbox-label">
-                                <input type="checkbox" 
+                                <input type="radio" 
                                        name="disponibilita[]" 
                                        value="annunciato"
                                        <?php if ((true && ($_smarty_tpl->hasVariable('disponibilita') && null !== ($_smarty_tpl->getValue('disponibilita') ?? null))) && $_smarty_tpl->getSmarty()->getModifierCallback('in_array')('annunciato',$_smarty_tpl->getValue('disponibilita'))) {?> checked<?php }?>>
                                 <span class="checkbox-text">Annunciato</span>
                             </label>
                             <label class="checkbox-label">
-                                <input type="checkbox" 
+                                <input type="radio" 
                                        name="disponibilita[]" 
                                        value="disponibile"
                                        <?php if ((true && ($_smarty_tpl->hasVariable('disponibilita') && null !== ($_smarty_tpl->getValue('disponibilita') ?? null))) && $_smarty_tpl->getSmarty()->getModifierCallback('in_array')('disponibile',$_smarty_tpl->getValue('disponibilita'))) {?> checked<?php }?>>
                                 <span class="checkbox-text">Disponibile Subito</span>
                             </label>
                             <label class="checkbox-label">
-                                <input type="checkbox" 
+                                <input type="radio" 
                                        name="disponibilita[]" 
                                        value="esaurito"
                                        <?php if ((true && ($_smarty_tpl->hasVariable('disponibilita') && null !== ($_smarty_tpl->getValue('disponibilita') ?? null))) && $_smarty_tpl->getSmarty()->getModifierCallback('in_array')('esaurito',$_smarty_tpl->getValue('disponibilita'))) {?> checked<?php }?>>
@@ -215,35 +215,35 @@ $_smarty_current_dir = 'C:\\Users\\damic\\Desktop\\uni\\APPUNTI\\anno3\\secondo_
                         </h4>
                         <div class="checkbox-group">
                             <label class="checkbox-label">
-                                <input type="checkbox" 
+                                <input type="radio" 
                                        name="offerte[]" 
                                        value="sconti"
                                        <?php if ((true && ($_smarty_tpl->hasVariable('offerte') && null !== ($_smarty_tpl->getValue('offerte') ?? null))) && $_smarty_tpl->getSmarty()->getModifierCallback('in_array')('sconti',$_smarty_tpl->getValue('offerte'))) {?> checked<?php }?>>
                                 <span class="checkbox-text">Sconti Attivi</span>
                             </label>
                             <label class="checkbox-label">
-                                <input type="checkbox" 
+                                <input type="radio" 
                                        name="offerte[]" 
                                        value="bundle"
                                        <?php if ((true && ($_smarty_tpl->hasVariable('offerte') && null !== ($_smarty_tpl->getValue('offerte') ?? null))) && $_smarty_tpl->getSmarty()->getModifierCallback('in_array')('bundle',$_smarty_tpl->getValue('offerte'))) {?> checked<?php }?>>
                                 <span class="checkbox-text">Bundle</span>
                             </label>
                             <label class="checkbox-label">
-                                <input type="checkbox" 
+                                <input type="radio" 
                                        name="offerte[]" 
                                        value="danneggiati"
                                        <?php if ((true && ($_smarty_tpl->hasVariable('offerte') && null !== ($_smarty_tpl->getValue('offerte') ?? null))) && $_smarty_tpl->getSmarty()->getModifierCallback('in_array')('danneggiati',$_smarty_tpl->getValue('offerte'))) {?> checked<?php }?>>
                                 <span class="checkbox-text">Danneggiati / Scatolato</span>
                             </label>
                             <label class="checkbox-label">
-                                <input type="checkbox" 
+                                <input type="radio" 
                                        name="offerte[]" 
                                        value="novita"
                                        <?php if ((true && ($_smarty_tpl->hasVariable('offerte') && null !== ($_smarty_tpl->getValue('offerte') ?? null))) && $_smarty_tpl->getSmarty()->getModifierCallback('in_array')('novita',$_smarty_tpl->getValue('offerte'))) {?> checked<?php }?>>
                                 <span class="checkbox-text">Novità</span>
                             </label>
                             <label class="checkbox-label">
-                                <input type="checkbox" 
+                                <input type="radio" 
                                        name="offerte[]" 
                                        value="venduti"
                                        <?php if ((true && ($_smarty_tpl->hasVariable('offerte') && null !== ($_smarty_tpl->getValue('offerte') ?? null))) && $_smarty_tpl->getSmarty()->getModifierCallback('in_array')('venduti',$_smarty_tpl->getValue('offerte'))) {?> checked<?php }?>>
@@ -288,14 +288,14 @@ $_smarty_tpl->getSmarty()->getRuntime('Foreach')->restore($_smarty_tpl, 1);?>
                         </h4>
                         <div class="checkbox-group">
                             <label class="checkbox-label">
-                                <input type="checkbox" 
+                                <input type="radio" 
                                        name="espansioni" 
                                        value="si"
                                        <?php if ((true && ($_smarty_tpl->hasVariable('espansioni') && null !== ($_smarty_tpl->getValue('espansioni') ?? null))) && $_smarty_tpl->getValue('espansioni') == 'si') {?> checked<?php }?>>
                                 <span class="checkbox-text">Solo base game</span>
                             </label>
                             <label class="checkbox-label">
-                                <input type="checkbox" 
+                                <input type="radio" 
                                        name="espansioni" 
                                        value="no"
                                        <?php if ((true && ($_smarty_tpl->hasVariable('espansioni') && null !== ($_smarty_tpl->getValue('espansioni') ?? null))) && $_smarty_tpl->getValue('espansioni') == 'no') {?> checked<?php }?>>
@@ -365,13 +365,13 @@ $foreach1DoElse = true;
 foreach ($_from ?? [] as $_smarty_tpl->getVariable('level')->value) {
 $foreach1DoElse = false;
 ?>
-                                <label class="checkbox-label">
-                                    <input type="checkbox" 
-                                           name="difficolta[]" 
+                                <label class="radio-label">
+                                    <input type="radio" 
+                                           name="difficolta" 
                                            value="<?php echo mb_strtolower((string) $_smarty_tpl->getValue('level'), 'UTF-8');?>
 "
-                                           <?php if ((true && ($_smarty_tpl->hasVariable('difficolta') && null !== ($_smarty_tpl->getValue('difficolta') ?? null))) && $_smarty_tpl->getSmarty()->getModifierCallback('in_array')(mb_strtolower((string) $_smarty_tpl->getValue('level'), 'UTF-8'),$_smarty_tpl->getValue('difficolta'))) {?> checked<?php }?>>
-                                    <span class="checkbox-text"><?php echo $_smarty_tpl->getValue('level');?>
+                                           <?php if ((true && ($_smarty_tpl->hasVariable('difficolta') && null !== ($_smarty_tpl->getValue('difficolta') ?? null))) && $_smarty_tpl->getValue('difficolta') == mb_strtolower((string) $_smarty_tpl->getValue('level'), 'UTF-8')) {?> checked<?php }?>>
+                                    <span class="radio-text"><?php echo $_smarty_tpl->getValue('level');?>
 </span>
                                 </label>
                             <?php
@@ -417,13 +417,13 @@ $foreach2DoElse = true;
 foreach ($_from ?? [] as $_smarty_tpl->getVariable('lang')->value) {
 $foreach2DoElse = false;
 ?>
-                                <label class="checkbox-label">
-                                    <input type="checkbox" 
-                                           name="lingua[]" 
+                                <label class="radio-label">
+                                    <input type="radio" 
+                                           name="lingua" 
                                            value="<?php echo mb_strtolower((string) $_smarty_tpl->getValue('lang'), 'UTF-8');?>
 "
-                                           <?php if ((true && ($_smarty_tpl->hasVariable('lingua') && null !== ($_smarty_tpl->getValue('lingua') ?? null))) && $_smarty_tpl->getSmarty()->getModifierCallback('in_array')(mb_strtolower((string) $_smarty_tpl->getValue('lang'), 'UTF-8'),$_smarty_tpl->getValue('lingua'))) {?> checked<?php }?>>
-                                    <span class="checkbox-text"><?php echo $_smarty_tpl->getValue('lang');?>
+                                           <?php if ((true && ($_smarty_tpl->hasVariable('lingua') && null !== ($_smarty_tpl->getValue('lingua') ?? null))) && $_smarty_tpl->getValue('lingua') == mb_strtolower((string) $_smarty_tpl->getValue('lang'), 'UTF-8')) {?> checked<?php }?>>
+                                    <span class="radio-text"><?php echo $_smarty_tpl->getValue('lang');?>
 </span>
                                 </label>
                             <?php
@@ -619,7 +619,7 @@ if ((true && ($_smarty_tpl->hasVariable('search_query') && null !== ($_smarty_tp
 }
 /* {/block "content"} */
 /* {block "extra_js"} */
-class Block_17982134456a300cb796fee7_62429503 extends \Smarty\Runtime\Block
+class Block_9120973546a301dc134a304_66734656 extends \Smarty\Runtime\Block
 {
 public function callBlock(\Smarty\Template $_smarty_tpl) {
 $_smarty_current_dir = 'C:\\Users\\damic\\Desktop\\uni\\APPUNTI\\anno3\\secondo_semenstre\\Pweb\\TableCrown\\Presentation\\smarty-dir\\templates';
