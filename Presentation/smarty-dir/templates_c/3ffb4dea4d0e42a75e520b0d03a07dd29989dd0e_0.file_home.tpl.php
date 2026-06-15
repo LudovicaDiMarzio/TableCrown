@@ -1,18 +1,18 @@
 <?php
-/* Smarty version 5.8.0, created on 2026-06-14 16:47:04
+/* Smarty version 5.8.0, created on 2026-06-15 16:00:47
   from 'file:home.tpl' */
 
 /* @var \Smarty\Template $_smarty_tpl */
 if ($_smarty_tpl->getCompiled()->isFresh($_smarty_tpl, array (
   'version' => '5.8.0',
-  'unifunc' => 'content_6a2ebee888b574_94612415',
+  'unifunc' => 'content_6a30058f2d4212_50694935',
   'has_nocache_code' => false,
   'file_dependency' => 
   array (
     '3ffb4dea4d0e42a75e520b0d03a07dd29989dd0e' => 
     array (
       0 => 'home.tpl',
-      1 => 1781448265,
+      1 => 1781531891,
       2 => 'file',
     ),
   ),
@@ -20,30 +20,30 @@ if ($_smarty_tpl->getCompiled()->isFresh($_smarty_tpl, array (
   array (
   ),
 ))) {
-function content_6a2ebee888b574_94612415 (\Smarty\Template $_smarty_tpl) {
+function content_6a30058f2d4212_50694935 (\Smarty\Template $_smarty_tpl) {
 $_smarty_current_dir = 'C:\\Users\\damic\\Desktop\\uni\\APPUNTI\\anno3\\secondo_semenstre\\Pweb\\TableCrown\\Presentation\\smarty-dir\\templates';
 $_smarty_tpl->getInheritance()->init($_smarty_tpl, true);
 ?>
 
 
 <?php 
-$_smarty_tpl->getInheritance()->instanceBlock($_smarty_tpl, 'Block_18613539166a2ebee884d660_00281391', "extra_css");
+$_smarty_tpl->getInheritance()->instanceBlock($_smarty_tpl, 'Block_13649459986a30058eded453_99781761', "extra_css");
 ?>
 
 
 <?php 
-$_smarty_tpl->getInheritance()->instanceBlock($_smarty_tpl, 'Block_8759456936a2ebee88501e1_29100224', "content");
+$_smarty_tpl->getInheritance()->instanceBlock($_smarty_tpl, 'Block_478394636a30058ee9aa98_59665845', "content");
 ?>
 
 
 <?php 
-$_smarty_tpl->getInheritance()->instanceBlock($_smarty_tpl, 'Block_3526681986a2ebee888a534_20673040', "extra_js");
+$_smarty_tpl->getInheritance()->instanceBlock($_smarty_tpl, 'Block_20900565056a30058f2d34f7_23903862', "extra_js");
 ?>
 
 <?php $_smarty_tpl->getInheritance()->endChild($_smarty_tpl, "common/layout.tpl", $_smarty_current_dir);
 }
 /* {block "extra_css"} */
-class Block_18613539166a2ebee884d660_00281391 extends \Smarty\Runtime\Block
+class Block_13649459986a30058eded453_99781761 extends \Smarty\Runtime\Block
 {
 public function callBlock(\Smarty\Template $_smarty_tpl) {
 $_smarty_current_dir = 'C:\\Users\\damic\\Desktop\\uni\\APPUNTI\\anno3\\secondo_semenstre\\Pweb\\TableCrown\\Presentation\\smarty-dir\\templates';
@@ -56,13 +56,32 @@ $_smarty_current_dir = 'C:\\Users\\damic\\Desktop\\uni\\APPUNTI\\anno3\\secondo_
 }
 /* {/block "extra_css"} */
 /* {block "content"} */
-class Block_8759456936a2ebee88501e1_29100224 extends \Smarty\Runtime\Block
+class Block_478394636a30058ee9aa98_59665845 extends \Smarty\Runtime\Block
 {
 public function callBlock(\Smarty\Template $_smarty_tpl) {
 $_smarty_current_dir = 'C:\\Users\\damic\\Desktop\\uni\\APPUNTI\\anno3\\secondo_semenstre\\Pweb\\TableCrown\\Presentation\\smarty-dir\\templates';
 ?>
 
 <div class="container px-4">
+
+
+        <div class="home-search-bar">
+        <form class="home-search-form" action="<?php echo $_smarty_tpl->getValue('base_url');?>
+/catalogo" method="get">
+            <input class="input home-search-input"
+                   type="search"
+                   name="q"
+                   placeholder="Cerca nel catalogo..."
+                   value="<?php echo htmlspecialchars((string)(($tmp = $_smarty_tpl->getValue('search_query') ?? null)===null||$tmp==='' ? '' ?? null : $tmp), ENT_QUOTES, 'UTF-8', true);?>
+"
+                   aria-label="Cerca nel catalogo">
+            <button class="button home-search-btn" type="submit" aria-label="Cerca">
+                <i class="ti ti-search"></i>
+            </button>
+        </form>
+    </div>
+
+
 
                 <div class="hero-carousel" id="home-carousel">
         <div class="carousel-inner" id="carousel-inner">
@@ -74,6 +93,9 @@ $_smarty_current_dir = 'C:\\Users\\damic\\Desktop\\uni\\APPUNTI\\anno3\\secondo_
                     <p class="subtitle is-5 has-text-warning">I migliori titoli del 2026 arrivano su TableCrown</p>
                 </div>
             </div>
+
+
+
             <div class="carousel-item">
                 <img src="<?php echo $_smarty_tpl->getValue('base_url');?>
 /img/carousel/slide2.jpg" alt="Eventi e Tornei">
@@ -416,7 +438,7 @@ $_smarty_tpl->getSmarty()->getRuntime('Foreach')->restore($_smarty_tpl, 1);?>
 }
 /* {/block "content"} */
 /* {block "extra_js"} */
-class Block_3526681986a2ebee888a534_20673040 extends \Smarty\Runtime\Block
+class Block_20900565056a30058f2d34f7_23903862 extends \Smarty\Runtime\Block
 {
 public function callBlock(\Smarty\Template $_smarty_tpl) {
 $_smarty_current_dir = 'C:\\Users\\damic\\Desktop\\uni\\APPUNTI\\anno3\\secondo_semenstre\\Pweb\\TableCrown\\Presentation\\smarty-dir\\templates';
