@@ -20,10 +20,10 @@ class EPartecipazione {
     private DateTime $dataIscrizione;
 
     #[ORM\Column(type: 'integer', nullable: true)]
-    private ?int $posizioneInClassifica; //posizione in classifica, se prevista per l'evento, altrimenti null (al momento della partecipazione, la posizione in classifica è sempre null, viene aggiornata solo alla fine dell'evento)
+    private ?int $posizioneInClassifica = null; //posizione in classifica, se prevista per l'evento, altrimenti null (al momento della partecipazione, la posizione in classifica è sempre null, viene aggiornata solo alla fine dell'evento)
 
     #[ORM\Column(type: 'integer', nullable: true)]
-    private ?int $punteggioTotale; //punteggio totale ottenuto dal partecipante alla fine della challenge, in caso di altri eventi può essere null (al momento della partecipazione, il punteggio totale è sempre null, viene aggiornato solo alla fine dell'evento)
+    private ?int $punteggioTotale = null; //punteggio totale ottenuto dal partecipante alla fine della challenge, in caso di altri eventi può essere null (al momento della partecipazione, il punteggio totale è sempre null, viene aggiornato solo alla fine dell'evento)
 
     #[ORM\ManyToOne(targetEntity: EUtente::class, inversedBy: 'partecipazioni')]
     #[ORM\JoinColumn(name: "id_utente", referencedColumnName: "idpersona", nullable: false)]
@@ -38,11 +38,11 @@ class EPartecipazione {
 
     public function __construct(EUtente $utente, EEvento $evento, ?int $posizioneInClassifica = null, ?int $punteggioTotale = null, bool $quotaPagata = false) {
         $this->dataIscrizione = new DateTime();
+        $this->utente = $utente;
+        $this->evento = $evento;
         $this->verificaDataIscrizione();
         $this->posizioneInClassifica = $posizioneInClassifica;
         $this->punteggioTotale = $punteggioTotale;
-        $this->utente = $utente;
-        $this->evento = $evento;
         $this->quotaPagata = $quotaPagata;
         $utente->riceviPartecipazione($this);
     }
@@ -113,7 +113,7 @@ class EPartecipazione {
     /**
      * Verifica la validità della data di iscrizione, che non può essere successiva alla data di inizio dell'evento.
      */
-    public function verificaDataIscrizione(): void {
+    private function verificaDataIscrizione(): void {
         if ($this->dataIscrizione > $this->evento->getDataInizio()) {
             throw new InvalidArgumentException("La data di iscrizione non può essere successiva alla data di inizio dell'evento.");
         }

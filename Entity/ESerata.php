@@ -11,16 +11,16 @@ use TableCrown\Entity\Enumerativi\StatoEvento;
 class ESerata extends EEvento {
     // Proprietà specifiche per la serata
     #[ORM\Column(type: "string", length: 255)]
-    private string $nome; //es. serata gioco libero, serata presentazione gioco, ecc.
+    private string $tipoSerata; //es. serata gioco libero, serata presentazione gioco, ecc.
 
-    public function __construct(string $nomeEvento, string $imgEvento, string $descrizioneEvento, DateTime $dataInizio, int $maxPartecipanti, string $nome) {
+    public function __construct(string $nomeEvento, string $imgEvento, string $descrizioneEvento, DateTime $dataInizio, int $maxPartecipanti, string $tipoSerata) {
         parent::__construct($nomeEvento, $imgEvento, $descrizioneEvento, $dataInizio, $maxPartecipanti);
-        $this->aggiornaNome($nome); //utilizza il metodo di dominio per validare il tipo della serata
+        $this->aggiornaTipoSerata($tipoSerata); //utilizza il metodo di dominio per validare il tipo della serata
     }
 
     //GET methods
-    public function getNome(): string {
-        return $this->nome;
+    public function getTipoSerata(): string {
+        return $this->tipoSerata;
     }
 
     //Metodi di dominio
@@ -28,8 +28,8 @@ class ESerata extends EEvento {
     /**
      * Aggiorna il tipo di serata.
      */
-    public function aggiornaNome(string $nome): void {
-        $this->nome = trim($nome);
+    public function aggiornaTipoSerata(string $tipoSerata): void {
+        $this->tipoSerata = trim($tipoSerata);
     }
 
     /**

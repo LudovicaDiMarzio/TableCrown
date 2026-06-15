@@ -22,7 +22,7 @@ abstract class EEvento {
     #[ORM\Id]
     #[ORM\GeneratedValue]
     #[ORM\Column(type: "integer")]
-    private ?int $idEvento;
+    private ?int $idEvento = null;
 
     #[ORM\Column(type: "string", length: 255)]
     private string $nomeEvento;
@@ -58,7 +58,7 @@ abstract class EEvento {
     }
 
     //GET methods
-    public function getIdEvento(): int {
+    public function getIdEvento(): ?int {
         return $this->idEvento;
     }  
 
@@ -91,7 +91,7 @@ abstract class EEvento {
     }
 
     public function getNumeroPartecipanti(): int {
-        return count($this->partecipazioni);
+        return $this->partecipazioni->count();
     }
 
     //Metodi di dominio
@@ -132,7 +132,7 @@ abstract class EEvento {
         if ($maxPartecipanti <= 0) {
             throw new InvalidArgumentException("Il numero massimo di partecipanti deve essere maggiore di 0.");
         }
-        if (count($this->partecipazioni) > $maxPartecipanti) {
+        if ($this->partecipazioni->count() > $maxPartecipanti) {
             throw new InvalidArgumentException("Il numero massimo di partecipanti non può essere inferiore al numero di partecipanti attuali.");
         }
         $this->maxPartecipanti = $maxPartecipanti;
@@ -194,7 +194,7 @@ abstract class EEvento {
      * La partecipazione viene aggiunta solo se il numero di partecipanti attuali è inferiore al numero massimo di partecipanti consentiti per l'evento.
      */
     public function addPartecipazione(EPartecipazione $partecipazione): void {
-        if (count($this->partecipazioni) >= $this->maxPartecipanti) {
+        if ($this->partecipazioni->count() >= $this->maxPartecipanti) {
             throw new InvalidArgumentException("Il numero massimo di partecipanti è stato raggiunto.");
         }
         if (!$this->partecipazioni->contains($partecipazione)) {
@@ -219,7 +219,7 @@ abstract class EEvento {
     /**
      * Verfica la validità della data di inizio dell'evento.
      */
-    public function verificaDataInizio(): void {
+    private function verificaDataInizio(): void {
         if ($this->dataInizio < new DateTime()) {
             throw new InvalidArgumentException("La data di inizio dell'evento deve essere successiva alla data attuale.");
         }
@@ -228,7 +228,7 @@ abstract class EEvento {
     /**
      * Verifica la validità del numero massimo di partecipanti.
      */
-    public function verificaMaxPartecipanti(): void {
+    private function verificaMaxPartecipanti(): void {
         if ($this->maxPartecipanti < 1) {
             throw new InvalidArgumentException("Il numero massimo di partecipanti deve essere un numero intero positivo.");
         }

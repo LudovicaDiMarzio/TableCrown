@@ -12,7 +12,7 @@ class EPrezzo {
     #[ORM\Id]
     #[ORM\GeneratedValue]
     #[ORM\Column(type: 'integer')]
-    private ?int $idPrezzo;
+    private ?int $idPrezzo = null;
 
     #[ORM\Column(type: 'float')]
     private float $valore;

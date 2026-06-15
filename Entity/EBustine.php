@@ -10,8 +10,8 @@ use TableCrown\Entity\EPrezzo;
 #[ORM\Table(name: "bustine")]
 class EBustine extends EProdotto{
     
-	public function __construct(string $nomeProdotto,  string $descrizioneProdotto, string $disponibilitaProdotto, int $quantita, DateTime $dataPubblicazione, ?string $imgProdotto = null, ?EPrezzo $prezzo = null)
+	public function __construct(string $nomeProdotto, string $descrizioneProdotto, DisponibilitaProdotto $disponibilitaProdotto, int $quantita, ?string $imgProdotto = null, ?EPrezzo $prezzo = null)
     {
-        parent::__construct($nomeProdotto, $descrizioneProdotto, DisponibilitaProdotto::from($disponibilitaProdotto), $quantita, $dataPubblicazione, $imgProdotto, $prezzo);
+        parent::__construct($nomeProdotto, $descrizioneProdotto, $disponibilitaProdotto, $quantita, $imgProdotto, $prezzo);
     }
 }
