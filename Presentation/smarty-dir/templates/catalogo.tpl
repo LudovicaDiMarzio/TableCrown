@@ -127,21 +127,21 @@
                         </h4>
                         <div class="checkbox-group">
                             <label class="checkbox-label">
-                                <input type="checkbox" 
+                                <input type="radio" 
                                        name="disponibilita[]" 
                                        value="annunciato"
                                        {if isset($disponibilita) && in_array('annunciato', $disponibilita)} checked{/if}>
                                 <span class="checkbox-text">Annunciato</span>
                             </label>
                             <label class="checkbox-label">
-                                <input type="checkbox" 
+                                <input type="radio" 
                                        name="disponibilita[]" 
                                        value="disponibile"
                                        {if isset($disponibilita) && in_array('disponibile', $disponibilita)} checked{/if}>
                                 <span class="checkbox-text">Disponibile Subito</span>
                             </label>
                             <label class="checkbox-label">
-                                <input type="checkbox" 
+                                <input type="radio" 
                                        name="disponibilita[]" 
                                        value="esaurito"
                                        {if isset($disponibilita) && in_array('esaurito', $disponibilita)} checked{/if}>
@@ -157,35 +157,35 @@
                         </h4>
                         <div class="checkbox-group">
                             <label class="checkbox-label">
-                                <input type="checkbox" 
+                                <input type="radio" 
                                        name="offerte[]" 
                                        value="sconti"
                                        {if isset($offerte) && in_array('sconti', $offerte)} checked{/if}>
                                 <span class="checkbox-text">Sconti Attivi</span>
                             </label>
                             <label class="checkbox-label">
-                                <input type="checkbox" 
+                                <input type="radio" 
                                        name="offerte[]" 
                                        value="bundle"
                                        {if isset($offerte) && in_array('bundle', $offerte)} checked{/if}>
                                 <span class="checkbox-text">Bundle</span>
                             </label>
                             <label class="checkbox-label">
-                                <input type="checkbox" 
+                                <input type="radio" 
                                        name="offerte[]" 
                                        value="danneggiati"
                                        {if isset($offerte) && in_array('danneggiati', $offerte)} checked{/if}>
                                 <span class="checkbox-text">Danneggiati / Scatolato</span>
                             </label>
                             <label class="checkbox-label">
-                                <input type="checkbox" 
+                                <input type="radio" 
                                        name="offerte[]" 
                                        value="novita"
                                        {if isset($offerte) && in_array('novita', $offerte)} checked{/if}>
                                 <span class="checkbox-text">Novità</span>
                             </label>
                             <label class="checkbox-label">
-                                <input type="checkbox" 
+                                <input type="radio" 
                                        name="offerte[]" 
                                        value="venduti"
                                        {if isset($offerte) && in_array('venduti', $offerte)} checked{/if}>
@@ -223,14 +223,14 @@
                         </h4>
                         <div class="checkbox-group">
                             <label class="checkbox-label">
-                                <input type="checkbox" 
+                                <input type="radio" 
                                        name="espansioni" 
                                        value="si"
                                        {if isset($espansioni) && $espansioni == 'si'} checked{/if}>
                                 <span class="checkbox-text">Solo base game</span>
                             </label>
                             <label class="checkbox-label">
-                                <input type="checkbox" 
+                                <input type="radio" 
                                        name="espansioni" 
                                        value="no"
                                        {if isset($espansioni) && $espansioni == 'no'} checked{/if}>
@@ -294,12 +294,12 @@
                         <div class="difficulty-options">
                             {assign var="difficolta_levels" value=['Facile', 'Media', 'Difficile', 'Molto difficile']}
                             {foreach $difficolta_levels as $level}
-                                <label class="checkbox-label">
-                                    <input type="checkbox" 
-                                           name="difficolta[]" 
+                                <label class="radio-label">
+                                    <input type="radio" 
+                                           name="difficolta" 
                                            value="{$level|lower}"
-                                           {if isset($difficolta) && in_array($level|lower, $difficolta)} checked{/if}>
-                                    <span class="checkbox-text">{$level}</span>
+                                           {if isset($difficolta) && $difficolta == $level|lower} checked{/if}>
+                                    <span class="radio-text">{$level}</span>
                                 </label>
                             {/foreach}
                         </div>
@@ -337,12 +337,12 @@
                         <div class="language-options">
                             {assign var="lingue" value=['Italiano', 'English', 'Multilingue', 'Solo Immagini']}
                             {foreach $lingue as $lang}
-                                <label class="checkbox-label">
-                                    <input type="checkbox" 
-                                           name="lingua[]" 
+                                <label class="radio-label">
+                                    <input type="radio" 
+                                           name="lingua" 
                                            value="{$lang|lower}"
-                                           {if isset($lingua) && in_array($lang|lower, $lingua)} checked{/if}>
-                                    <span class="checkbox-text">{$lang}</span>
+                                           {if isset($lingua) && $lingua == $lang|lower} checked{/if}>
+                                    <span class="radio-text">{$lang}</span>
                                 </label>
                             {/foreach}
                         </div>
