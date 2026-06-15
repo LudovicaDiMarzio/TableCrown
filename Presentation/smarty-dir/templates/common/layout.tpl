@@ -17,7 +17,7 @@
 <body>
 
     {* ──────────────────────────────────────────── *}
-    {* HEADER TABLECROWN (Menu in alto a sx - Logo + Cerca sotto) *}
+    {* HEADER TABLECROWN (Logo a sx - Menu e azioni a dx) *}
     {* ──────────────────────────────────────────── *}
     <nav class="navbar navigation" role="navigation" aria-label="navigazione principale">
         <div class="container is-fluid px-5"> 
@@ -33,6 +33,11 @@
                 </div>
 
                 <div id="navbar-menu-custom" class="navbar-menu-custom-links">
+
+                    {* LOGO *}
+                    <a class="navbar-logo" href="{$base_url}">
+                        <img src="{$base_url}/img/logo.png" alt="TableCrown" class="navbar-logo-img">
+                    </a>
                     
                     <div class="navbar-center-links">
                         <a class="navbar-item{if isset($current_page) && $current_page == 'catalogo'} is-active{/if}" href="{$base_url}/catalogo">Catalogo</a>
@@ -77,27 +82,6 @@
                         </a>
                     </div>
                     
-                </div>
-            </div>
-
-            <div class="navbar-row-bottom-search">
-                
-                <a class="navbar-logo" href="{$base_url}">
-                    <img src="{$base_url}/img/logo.png" alt="TableCrown" class="navbar-logo-img">
-                </a>
-
-                <div class="navbar-search-fullwidth">
-                    <form class="navbar-search-form" action="{$base_url}/catalogo" method="get">
-                        <input class="input navbar-search-input"
-                               type="search"
-                               name="q"
-                               placeholder="Cerca nel catalogo..."
-                               value="{$search_query|default:''|escape}"
-                               aria-label="Cerca nel catalogo">
-                        <button class="button navbar-search-btn" type="submit" aria-label="Cerca">
-                            <i class="ti ti-search"></i>
-                        </button>
-                    </form>
                 </div>
             </div>
 

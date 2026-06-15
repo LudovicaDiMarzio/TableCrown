@@ -7,6 +7,24 @@
 {block name="content"}
 <div class="container px-4">
 
+
+    {* ── SEARCH BAR ── *}
+    <div class="home-search-bar">
+        <form class="home-search-form" action="{$base_url}/catalogo" method="get">
+            <input class="input home-search-input"
+                   type="search"
+                   name="q"
+                   placeholder="Cerca nel catalogo..."
+                   value="{$search_query|default:''|escape}"
+                   aria-label="Cerca nel catalogo">
+            <button class="button home-search-btn" type="submit" aria-label="Cerca">
+                <i class="ti ti-search"></i>
+            </button>
+        </form>
+    </div>
+
+
+
     {* ──────────────────────────────────────────── *}
     {* 1. CAROSELLO IMMAGINI (HERO)                 *}
     {* ──────────────────────────────────────────── *}
@@ -19,6 +37,9 @@
                     <p class="subtitle is-5 has-text-warning">I migliori titoli del 2026 arrivano su TableCrown</p>
                 </div>
             </div>
+
+
+
             <div class="carousel-item">
                 <img src="{$base_url}/img/carousel/slide2.jpg" alt="Eventi e Tornei">
                 <div class="carousel-caption">

@@ -100,12 +100,12 @@
     justify-content: space-between;
 }
 
-/* Link del Logo senza testo */
-.navbar-row-bottom-search .navbar-logo {
+/* Link del Logo nella top row */
+.navbar-menu-custom-links .navbar-logo {
     display: flex;
     align-items: center;
-    flex-shrink: 0; 
-    margin-right: 1.75rem; 
+    flex-shrink: 0;
+    margin-right: 1.75rem;
     text-decoration: none;
 }
 
@@ -115,60 +115,7 @@
     width: auto;
 }
 
-/* La ricerca si espande a destra del logo occupando il resto dello spazio */
-.navbar-search-fullwidth {
-    flex-grow: 1;
-}
 
-.navbar-search-fullwidth .navbar-search-form {
-    display: flex;
-    width: 100%;
-    align-items: center;
-}
-
-.navbar-search-fullwidth .navbar-search-input {
-    width: 100%;
-    height: 40px;
-    background-color: rgba(255, 255, 255, 0.08);
-    border: 1px solid rgba(255, 255, 255, 0.2);
-    border-right: none;
-    border-radius: var(--radius-sm) 0 0 var(--radius-sm) !important;
-    color: var(--color-text-light);
-    font-size: var(--font-size-sm);
-    padding: 0 12px;
-    transition: background-color var(--transition), border-color var(--transition);
-}
-
-.navbar-search-fullwidth .navbar-search-input::placeholder {
-    color: rgba(255, 255, 255, 0.4);
-}
-
-.navbar-search-fullwidth .navbar-search-input:focus {
-    outline: none;
-    background-color: rgba(255, 255, 255, 0.14);
-    border-color: var(--color-primary);
-}
-
-.navbar-search-fullwidth .navbar-search-btn {
-    height: 40px;
-    width: 46px;
-    background-color: var(--color-primary) !important;
-    border: 1px solid var(--color-primary);
-    border-radius: 0 var(--radius-sm) var(--radius-sm) 0 !important;
-    color: #fff;
-    font-size: 16px;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    cursor: pointer;
-    transition: background-color var(--transition);
-    padding: 0;
-}
-
-.navbar-search-fullwidth .navbar-search-btn:hover {
-    background-color: var(--color-primary-dark) !important;
-    border-color: var(--color-primary-dark);
-}
 
 /* Elementi d'appoggio per icone e mobile */
 .cart-badge {
@@ -415,16 +362,6 @@ main > .section {
         gap: 15px;
     }
 
-    /* Riga ricerca su mobile adatta gli spazi */
-    .navbar-row-bottom-search {
-        flex-direction: column;
-        gap: 12px;
-        align-items: flex-start;
-    }
-
-    .navbar-row-bottom-search .navbar-logo {
-        margin-right: 0;
-    }
 
     .site-footer .columns {
         gap: 1.5rem 0;
