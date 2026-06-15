@@ -36,6 +36,7 @@ class ERecensione {
         $this->data = new DateTime();
         $this->segnalazione = false;
         $this->utente = $utente;
+        $utente->riceviRecensione($this);
     }
 
     // Metodi di dominio

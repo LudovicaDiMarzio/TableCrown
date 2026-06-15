@@ -39,7 +39,8 @@ class EOrdine {
         $this->data = new DateTime();
         $this->impostaStato($stato);
         $this->utente = $utente;
-        $this->ordineItems = new ArrayCollection();  
+        $this->ordineItems = new ArrayCollection(); 
+        $utente->riceviOrdine($this); 
     }
 
     // Metodi di dominio
