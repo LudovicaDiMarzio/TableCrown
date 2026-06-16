@@ -433,10 +433,10 @@
 
                                 </a>
 
-                                {* Bottone Carrello *}
-                                <button class="button btn-add-cart" aria-label="Aggiungi a carrello">
+                                 {* Link Carrello *}
+                                <a href="{$base_url}/carrello/aggiungi/{$prodotto->getId()}" class="button btn-add-cart" aria-label="Aggiungi a carrello">
                                     <i class="ti ti-shopping-cart"></i> Aggiungi
-                                </button>
+                                </a>
                             </div>
                         {/foreach}
                     </div>
