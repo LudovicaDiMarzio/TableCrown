@@ -54,3 +54,42 @@ try {
     echo "<i>" . $e->getMessage() . "</i><br><br>";
     echo "<strong>Verifica:</strong> Assicurati di aver salvato il file <code>home.tpl</code> dentro la cartella: <code>" . htmlspecialchars($smartyDirHandler) . "templates/</code>";
 }
+
+$mockPrezzo = new class {
+    public function hasSconto(): bool { return true; }
+    public function getSconto(): int { return 20; }
+    public function getValore(): float { return 49.90; }
+    public function calcolaPrezzoScontato(): float { return 39.92; }
+};
+
+$mockProdotto = new class($mockPrezzo) {
+    private $prezzo;
+    public function __construct($prezzo) { $this->prezzo = $prezzo; }
+    public function getIdProdotto(): int { return 1; }
+    public function getNomeProdotto(): string { return 'Catan'; }
+    public function getImgProdotto(): string { return 'placeholder.jpg'; }
+    public function getImmagini(): array { return ['placeholder.jpg']; }
+    public function getDisponibilitaProdotto(): string { return 'disponibile'; }
+    public function getValutazioneMedia(): float { return 4.5; }
+    public function getPrezzo() { return $this->prezzo; }
+    public function getDescrizione(): string { return 'Un classico gioco di strategia per tutta la famiglia.'; }
+    public function getComponenti(): array { return ['19 tessere territorio', '95 risorse', '60 strade', '2 dadi']; }
+    public function getGiocatoriMin(): int { return 3; }
+    public function getGiocatoriMax(): int { return 4; }
+    public function getEtaMin(): int { return 10; }
+    public function getDurata(): int { return 90; }
+    public function getDifficolta(): string { return 'Media'; }
+    public function getLingua(): string { return 'Italiano'; }
+};
+
+$mockRecensione = new class {
+    public function getNicknameUtente(): string { return 'GiocatoreTop'; }
+    public function getVoto(): int { return 5; }
+    public function getTitolo(): string { return 'Gioco fantastico!'; }
+    public function getTesto(): string { return 'Lo consiglio a tutti, ore di divertimento garantite.' ; }
+};
+
+$smarty->assign('prodotto', $mockProdotto);
+$smarty->assign('recensioni', [$mockRecensione]);
+$smarty->assign('correlati', []);
+$smarty->assign('utente_loggato', false);
