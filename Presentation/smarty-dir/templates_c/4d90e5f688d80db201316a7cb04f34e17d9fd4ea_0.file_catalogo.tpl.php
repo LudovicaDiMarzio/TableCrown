@@ -1,18 +1,18 @@
 <?php
-/* Smarty version 5.8.0, created on 2026-06-16 10:34:44
+/* Smarty version 5.8.0, created on 2026-06-16 10:54:26
   from 'file:catalogo.tpl' */
 
 /* @var \Smarty\Template $_smarty_tpl */
 if ($_smarty_tpl->getCompiled()->isFresh($_smarty_tpl, array (
   'version' => '5.8.0',
-  'unifunc' => 'content_6a310aa4911f76_75729950',
+  'unifunc' => 'content_6a310f425eae98_26819288',
   'has_nocache_code' => false,
   'file_dependency' => 
   array (
     '4d90e5f688d80db201316a7cb04f34e17d9fd4ea' => 
     array (
       0 => 'catalogo.tpl',
-      1 => 1781598830,
+      1 => 1781599972,
       2 => 'file',
     ),
   ),
@@ -20,30 +20,30 @@ if ($_smarty_tpl->getCompiled()->isFresh($_smarty_tpl, array (
   array (
   ),
 ))) {
-function content_6a310aa4911f76_75729950 (\Smarty\Template $_smarty_tpl) {
+function content_6a310f425eae98_26819288 (\Smarty\Template $_smarty_tpl) {
 $_smarty_current_dir = 'C:\\Users\\damic\\Desktop\\uni\\APPUNTI\\anno3\\secondo_semenstre\\Pweb\\TableCrown\\Presentation\\smarty-dir\\templates';
 $_smarty_tpl->getInheritance()->init($_smarty_tpl, true);
 ?>
 
 
 <?php 
-$_smarty_tpl->getInheritance()->instanceBlock($_smarty_tpl, 'Block_4570512496a310aa48b6437_66460838', "extra_css");
+$_smarty_tpl->getInheritance()->instanceBlock($_smarty_tpl, 'Block_14701382296a310f42594528_77196490', "extra_css");
 ?>
 
 
 <?php 
-$_smarty_tpl->getInheritance()->instanceBlock($_smarty_tpl, 'Block_11472319716a310aa48bab12_13316157', "content");
+$_smarty_tpl->getInheritance()->instanceBlock($_smarty_tpl, 'Block_5311071246a310f42598d87_64870364', "content");
 ?>
 
 
 <?php 
-$_smarty_tpl->getInheritance()->instanceBlock($_smarty_tpl, 'Block_4135920966a310aa4910863_52097951', "extra_js");
+$_smarty_tpl->getInheritance()->instanceBlock($_smarty_tpl, 'Block_13711138336a310f425e9f93_10508095', "extra_js");
 ?>
 
 <?php $_smarty_tpl->getInheritance()->endChild($_smarty_tpl, "common/layout.tpl", $_smarty_current_dir);
 }
 /* {block "extra_css"} */
-class Block_4570512496a310aa48b6437_66460838 extends \Smarty\Runtime\Block
+class Block_14701382296a310f42594528_77196490 extends \Smarty\Runtime\Block
 {
 public function callBlock(\Smarty\Template $_smarty_tpl) {
 $_smarty_current_dir = 'C:\\Users\\damic\\Desktop\\uni\\APPUNTI\\anno3\\secondo_semenstre\\Pweb\\TableCrown\\Presentation\\smarty-dir\\templates';
@@ -56,7 +56,7 @@ $_smarty_current_dir = 'C:\\Users\\damic\\Desktop\\uni\\APPUNTI\\anno3\\secondo_
 }
 /* {/block "extra_css"} */
 /* {block "content"} */
-class Block_11472319716a310aa48bab12_13316157 extends \Smarty\Runtime\Block
+class Block_5311071246a310f42598d87_64870364 extends \Smarty\Runtime\Block
 {
 public function callBlock(\Smarty\Template $_smarty_tpl) {
 $_smarty_current_dir = 'C:\\Users\\damic\\Desktop\\uni\\APPUNTI\\anno3\\secondo_semenstre\\Pweb\\TableCrown\\Presentation\\smarty-dir\\templates';
@@ -256,7 +256,7 @@ $_smarty_current_dir = 'C:\\Users\\damic\\Desktop\\uni\\APPUNTI\\anno3\\secondo_
                         <h4 class="filter-group-title">
                             <i class="ti ti-list"></i> Categoria
                         </h4>
-                        <div class="checkbox-group">
+                        <div class="checkbox-group" data-exclusive="categoria">
                             <?php if ((true && ($_smarty_tpl->hasVariable('categorie') && null !== ($_smarty_tpl->getValue('categorie') ?? null))) && $_smarty_tpl->getSmarty()->getModifierCallback('count')($_smarty_tpl->getValue('categorie')) > 0) {?>
                                 <?php
 $_from = $_smarty_tpl->getSmarty()->getRuntime('Foreach')->init($_smarty_tpl, $_smarty_tpl->getValue('categorie'), 'cat');
@@ -619,7 +619,7 @@ if ((true && ($_smarty_tpl->hasVariable('search_query') && null !== ($_smarty_tp
 }
 /* {/block "content"} */
 /* {block "extra_js"} */
-class Block_4135920966a310aa4910863_52097951 extends \Smarty\Runtime\Block
+class Block_13711138336a310f425e9f93_10508095 extends \Smarty\Runtime\Block
 {
 public function callBlock(\Smarty\Template $_smarty_tpl) {
 $_smarty_current_dir = 'C:\\Users\\damic\\Desktop\\uni\\APPUNTI\\anno3\\secondo_semenstre\\Pweb\\TableCrown\\Presentation\\smarty-dir\\templates';
@@ -629,9 +629,10 @@ $_smarty_current_dir = 'C:\\Users\\damic\\Desktop\\uni\\APPUNTI\\anno3\\secondo_
 >
 $(document).ready(function() {
 
-    // Checkbox esclusivi per gruppo (data-exclusive): uno solo attivo per volta
+    // ✅ Checkbox esclusivi: uno solo attivo per volta in ogni gruppo
     $('[data-exclusive] input[type="checkbox"]').on('change', function() {
         if ($(this).is(':checked')) {
+            // Se viene selezionato, deseleziona gli altri dello stesso gruppo
             var group = $(this).closest('[data-exclusive]');
             group.find('input[type="checkbox"]').not(this).prop('checked', false);
         }

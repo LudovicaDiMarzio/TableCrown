@@ -499,42 +499,63 @@
 
 {block name="extra_js"}
 <script>
-$(document).ready(function() {
+document.addEventListener('DOMContentLoaded', function() {
 
     // ✅ Checkbox esclusivi: uno solo attivo per volta in ogni gruppo
-    $('[data-exclusive] input[type="checkbox"]').on('change', function() {
-        if ($(this).is(':checked')) {
-            // Se viene selezionato, deseleziona gli altri dello stesso gruppo
-            var group = $(this).closest('[data-exclusive]');
-            group.find('input[type="checkbox"]').not(this).prop('checked', false);
-        }
+    const exclusiveGroups = document.querySelectorAll('[data-exclusive]');
+    
+    exclusiveGroups.forEach(group => {
+        const checkboxes = group.querySelectorAll('input[type="checkbox"]');
+        
+        checkboxes.forEach(checkbox => {
+            checkbox.addEventListener('change', function() {
+                if (this.checked) {
+                    // Se viene selezionato, deseleziona gli altri dello stesso gruppo
+                    checkboxes.forEach(cb => {
+                        if (cb !== this) {
+                            cb.checked = false;
+                        }
+                    });
+                }
+            });
+        });
     });
 
     // Toggle Filtri su Mobile
-    $('#btn-toggle-filters').click(function() {
-        $('#catalogo-filters').toggleClass('is-open');
-        $(this).toggleClass('is-active');
-    });
+    const toggleBtn = document.getElementById('btn-toggle-filters');
+    const sidebar = document.getElementById('catalogo-filters');
+    const closeBtn = document.getElementById('filter-close-btn');
+    
+    if (toggleBtn) {
+        toggleBtn.addEventListener('click', function() {
+            sidebar.classList.toggle('is-open');
+            this.classList.toggle('is-active');
+        });
+    }
 
     // Chiudi Filtri (mobile)
-    $('#filter-close-btn').click(function() {
-        $('#catalogo-filters').removeClass('is-open');
-        $('#btn-toggle-filters').removeClass('is-active');
-    });
+    if (closeBtn) {
+        closeBtn.addEventListener('click', function() {
+            sidebar.classList.remove('is-open');
+            toggleBtn.classList.remove('is-active');
+        });
+    }
 
     // Aggiorna valore rating in tempo reale
-    $('.rating-slider').on('input', function() {
-        $('#rating-value').text($(this).val());
-    });
+    const ratingSlider = document.querySelector('.rating-slider');
+    if (ratingSlider) {
+        ratingSlider.addEventListener('input', function() {
+            document.getElementById('rating-value').textContent = this.value;
+        });
+    }
 
     // Chiudi filtri quando clicchi fuori (mobile)
-    $(document).click(function(e) {
-        const sidebar = $('#catalogo-filters');
-        const btn = $('#btn-toggle-filters');
-        if (!sidebar.is(e.target) && sidebar.has(e.target).length === 0 && 
-            !btn.is(e.target) && btn.has(e.target).length === 0) {
-            sidebar.removeClass('is-open');
-            btn.removeClass('is-active');
+    document.addEventListener('click', function(e) {
+        if (sidebar && toggleBtn) {
+            if (!sidebar.contains(e.target) && !toggleBtn.contains(e.target)) {
+                sidebar.classList.remove('is-open');
+                toggleBtn.classList.remove('is-active');
+            }
         }
     });
 
