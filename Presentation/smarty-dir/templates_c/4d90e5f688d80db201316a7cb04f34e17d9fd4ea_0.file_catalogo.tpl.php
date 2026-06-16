@@ -1,18 +1,18 @@
 <?php
-/* Smarty version 5.8.0, created on 2026-06-16 10:57:45
+/* Smarty version 5.8.0, created on 2026-06-16 11:07:18
   from 'file:catalogo.tpl' */
 
 /* @var \Smarty\Template $_smarty_tpl */
 if ($_smarty_tpl->getCompiled()->isFresh($_smarty_tpl, array (
   'version' => '5.8.0',
-  'unifunc' => 'content_6a311009472299_40403405',
+  'unifunc' => 'content_6a3112460a11a2_83809678',
   'has_nocache_code' => false,
   'file_dependency' => 
   array (
     '4d90e5f688d80db201316a7cb04f34e17d9fd4ea' => 
     array (
       0 => 'catalogo.tpl',
-      1 => 1781600243,
+      1 => 1781600820,
       2 => 'file',
     ),
   ),
@@ -20,28 +20,28 @@ if ($_smarty_tpl->getCompiled()->isFresh($_smarty_tpl, array (
   array (
   ),
 ))) {
-function content_6a311009472299_40403405 (\Smarty\Template $_smarty_tpl) {
+function content_6a3112460a11a2_83809678 (\Smarty\Template $_smarty_tpl) {
 $_smarty_current_dir = 'C:\\Users\\damic\\Desktop\\uni\\APPUNTI\\anno3\\secondo_semenstre\\Pweb\\TableCrown\\Presentation\\smarty-dir\\templates';
 $_smarty_tpl->getInheritance()->init($_smarty_tpl, true);
 ?>
 
 
 <?php 
-$_smarty_tpl->getInheritance()->instanceBlock($_smarty_tpl, 'Block_10629373196a311009421e19_21173919', "extra_css");
+$_smarty_tpl->getInheritance()->instanceBlock($_smarty_tpl, 'Block_18426217496a31124606ef79_29617401', "extra_css");
 ?>
 
 
 <?php 
-$_smarty_tpl->getInheritance()->instanceBlock($_smarty_tpl, 'Block_3722299506a311009424355_97772890', "content");
+$_smarty_tpl->getInheritance()->instanceBlock($_smarty_tpl, 'Block_2477248116a311246071516_91264293', "content");
 ?>
 
 
 <?php 
-$_smarty_tpl->getInheritance()->instanceBlock($_smarty_tpl, 'Block_6314216456a311009470bf8_07474937', "extra_js");
+$_smarty_tpl->getInheritance()->instanceBlock($_smarty_tpl, 'Block_9592955246a3112460a0639_54198019', "extra_js");
 $_smarty_tpl->getInheritance()->endChild($_smarty_tpl, "common/layout.tpl", $_smarty_current_dir);
 }
 /* {block "extra_css"} */
-class Block_10629373196a311009421e19_21173919 extends \Smarty\Runtime\Block
+class Block_18426217496a31124606ef79_29617401 extends \Smarty\Runtime\Block
 {
 public function callBlock(\Smarty\Template $_smarty_tpl) {
 $_smarty_current_dir = 'C:\\Users\\damic\\Desktop\\uni\\APPUNTI\\anno3\\secondo_semenstre\\Pweb\\TableCrown\\Presentation\\smarty-dir\\templates';
@@ -54,7 +54,7 @@ $_smarty_current_dir = 'C:\\Users\\damic\\Desktop\\uni\\APPUNTI\\anno3\\secondo_
 }
 /* {/block "extra_css"} */
 /* {block "content"} */
-class Block_3722299506a311009424355_97772890 extends \Smarty\Runtime\Block
+class Block_2477248116a311246071516_91264293 extends \Smarty\Runtime\Block
 {
 public function callBlock(\Smarty\Template $_smarty_tpl) {
 $_smarty_current_dir = 'C:\\Users\\damic\\Desktop\\uni\\APPUNTI\\anno3\\secondo_semenstre\\Pweb\\TableCrown\\Presentation\\smarty-dir\\templates';
@@ -531,9 +531,11 @@ $_smarty_tpl->getSmarty()->getRuntime('Foreach')->restore($_smarty_tpl, 1);?>
 
                                 </a>
 
-                                                                <button class="button btn-add-cart" aria-label="Aggiungi a carrello">
+                                                                 <a href="<?php echo $_smarty_tpl->getValue('base_url');?>
+/carrello/aggiungi/<?php echo $_smarty_tpl->getValue('prodotto')->getId();?>
+" class="button btn-add-cart" aria-label="Aggiungi a carrello">
                                     <i class="ti ti-shopping-cart"></i> Aggiungi
-                                </button>
+                                </a>
                             </div>
                         <?php
 }
@@ -617,7 +619,7 @@ if ((true && ($_smarty_tpl->hasVariable('search_query') && null !== ($_smarty_tp
 }
 /* {/block "content"} */
 /* {block "extra_js"} */
-class Block_6314216456a311009470bf8_07474937 extends \Smarty\Runtime\Block
+class Block_9592955246a3112460a0639_54198019 extends \Smarty\Runtime\Block
 {
 public function callBlock(\Smarty\Template $_smarty_tpl) {
 $_smarty_current_dir = 'C:\\Users\\damic\\Desktop\\uni\\APPUNTI\\anno3\\secondo_semenstre\\Pweb\\TableCrown\\Presentation\\smarty-dir\\templates';
