@@ -18,7 +18,7 @@ class CFrontController {
 
                 case '/catalogo':
                     $controller = new CNavigazioneController();
-                    // Gestisce la rotta /catalogo?ordinamento=novita chiesta dalla home [cite: 27, 41]
+                    // Gestisce la rotta /catalogo?ordinamento=novita chiesta dalla home
                     if (isset($_GET['ordinamento']) && $_GET['ordinamento'] === 'novita') {
                         $controller->mostraNovita();
                     } else {
@@ -28,20 +28,20 @@ class CFrontController {
 
                 case '/offerte':
                     $controller = new CNavigazioneController();
-                    $controller->mostraOfferte(); [cite: 41];
+                    $controller->mostraOfferte();
                     break;
 
                 case '/carrello':
-                    // Corrisponde all'operazione SSD UC1 -> procediConOrdine() [cite: 75, 76]
+                    // Corrisponde all'operazione SSD UC1 -> procediConOrdine() 
                     $controller = new CCarrelloController();
                     $controller->mostraCarrello();
                     break;
 
-                // Gestione Rotta Dinamica: /prodotto/{id} [cite: 35, 41]
+                // Gestione Rotta Dinamica: /prodotto/{id} 
                 default:
                     if (preg_match('/^\/prodotto\/(\d+)$/', $url, $matches)) {
                         $idProdotto = (int)$matches[1];
-                        // Corrisponde all'operazione SSD UC1 -> selezionaProdotto(idProdotto) [cite: 70, 71]
+                        // Corrisponde all'operazione SSD UC1 -> selezionaProdotto(idProdotto)
                         $controller = new CNavigazioneController();
                         $controller->mostraDettaglioProdotto($idProdotto);
                     } else {
@@ -54,7 +54,7 @@ class CFrontController {
         elseif ($metodo === 'POST') {
             switch ($url) {
                 case '/carrello/aggiungi':
-                    // Corrisponde all'operazione SSD UC1 -> aggiungiAlCarrello(idProdotto, quantita) [cite: 45, 72]
+                    // Corrisponde all'operazione SSD UC1 -> aggiungiAlCarrello(idProdotto, quantita)
                     $controller = new CCarrelloController();
                     $controller->aggiungi();
                     break;
