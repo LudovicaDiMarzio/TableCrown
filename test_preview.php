@@ -47,7 +47,7 @@ try {
     // MODIFICATO: Puntiamo alla home.tpl. 
     // Se hai salvato home.tpl nella radice di 'templates/', usa semplicemente 'home.tpl'.
     // Se l'hai messa in una sottocartella (es. 'pages/home.tpl'), modifica il percorso di conseguenza.
-    $smarty->display('catalogo.tpl'); 
+    $smarty->display('prodotto.tpl'); 
     
 } catch (Exception $e) {
     echo "<strong style='color:orange;'>Errore nel caricamento della Home:</strong><br>";
