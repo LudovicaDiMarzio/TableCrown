@@ -199,7 +199,7 @@
                         <h4 class="filter-group-title">
                             <i class="ti ti-list"></i> Categoria
                         </h4>
-                        <div class="checkbox-group">
+                        <div class="checkbox-group" data-exclusive="categoria">
                             {if isset($categorie) && $categorie|@count > 0}
                                 {foreach $categorie as $cat}
                                     <label class="checkbox-label">
@@ -501,9 +501,10 @@
 <script>
 $(document).ready(function() {
 
-    // Checkbox esclusivi per gruppo (data-exclusive): uno solo attivo per volta
+    // ✅ Checkbox esclusivi: uno solo attivo per volta in ogni gruppo
     $('[data-exclusive] input[type="checkbox"]').on('change', function() {
         if ($(this).is(':checked')) {
+            // Se viene selezionato, deseleziona gli altri dello stesso gruppo
             var group = $(this).closest('[data-exclusive]');
             group.find('input[type="checkbox"]').not(this).prop('checked', false);
         }
