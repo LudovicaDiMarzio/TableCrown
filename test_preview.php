@@ -55,41 +55,34 @@ try {
     echo "<strong>Verifica:</strong> Assicurati di aver salvato il file <code>home.tpl</code> dentro la cartella: <code>" . htmlspecialchars($smartyDirHandler) . "templates/</code>";
 }
 
-$mockPrezzo = new class {
-    public function hasSconto(): bool { return true; }
-    public function getSconto(): int { return 20; }
-    public function getValore(): float { return 49.90; }
-    public function calcolaPrezzoScontato(): float { return 39.92; }
-};
+class FakePrezzo {
+    public function hasSconto() { return true; }
+    public function calcolaPrezzoScontato() { return 19.99; }
+    public function getValore() { return 24.99; }
+    public function getSconto() { return 20; }
+}
 
-$mockProdotto = new class($mockPrezzo) {
-    private $prezzo;
-    public function __construct($prezzo) { $this->prezzo = $prezzo; }
-    public function getIdProdotto(): int { return 1; }
-    public function getNomeProdotto(): string { return 'Catan'; }
-    public function getImgProdotto(): string { return 'placeholder.jpg'; }
-    public function getImmagini(): array { return ['placeholder.jpg']; }
-    public function getDisponibilitaProdotto(): string { return 'disponibile'; }
-    public function getValutazioneMedia(): float { return 4.5; }
-    public function getPrezzo() { return $this->prezzo; }
-    public function getDescrizione(): string { return 'Un classico gioco di strategia per tutta la famiglia.'; }
-    public function getComponenti(): array { return ['19 tessere territorio', '95 risorse', '60 strade', '2 dadi']; }
-    public function getGiocatoriMin(): int { return 3; }
-    public function getGiocatoriMax(): int { return 4; }
-    public function getEtaMin(): int { return 10; }
-    public function getDurata(): int { return 90; }
-    public function getDifficolta(): string { return 'Media'; }
-    public function getLingua(): string { return 'Italiano'; }
-};
+class FakeProdotto {
+    public function getNomeProdotto() { return "Gioco di Ruolo di Test"; }
+    public function getImmagini() { return ['img1.jpg', 'img2.jpg']; }
+    public function getImgProdotto() { return 'img1.jpg'; }
+    public function getDisponibilitaProdotto() { return 'disponibile'; }
+    public function getValutazioneMedia() { return 4.5; }
+    public function getGiocatoriMin() { return 2; }
+    public function getGiocatoriMax() { return 5; }
+    public function getEtaMin() { return 12; }
+    public function getDurata() { return 60; }
+    public function getDifficolta() { return "Media"; }
+    public function getLingua() { return "Italiano"; }
+    public function getPrezzo() { return new FakePrezzo(); }
+    public function getDescrizione() { return "Una descrizione di prova molto bella."; }
+    public function getComponenti() { return ["100 Carte", "1 Tabellone", "Dadi"]; }
+    public function getIdProdotto() { return 1; }
+}
 
-$mockRecensione = new class {
-    public function getNicknameUtente(): string { return 'GiocatoreTop'; }
-    public function getVoto(): int { return 5; }
-    public function getTitolo(): string { return 'Gioco fantastico!'; }
-    public function getTesto(): string { return 'Lo consiglio a tutti, ore di divertimento garantite.' ; }
-};
+// Passalo a Smarty
+$smarty->assign('prodotto', new FakeProdotto());
+$smarty->assign('correlati', []); // array vuoto per ora
+$smarty->assign('utente_loggato', true);
 
-$smarty->assign('prodotto', $mockProdotto);
-$smarty->assign('recensioni', [$mockRecensione]);
-$smarty->assign('correlati', []);
-$smarty->assign('utente_loggato', false);
+$smarty->display('prodotto.tpl');
