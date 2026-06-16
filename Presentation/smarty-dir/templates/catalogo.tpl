@@ -502,16 +502,25 @@
 $(document).ready(function() {
 
     // Radio button deselezionabili
-    $('input[type="radio"]').on('mousedown', function() {
-        if ($(this).is(':checked')) {
-            $(this).one('click', function() {
-                $(this).prop('checked', false);
-            });
+    var lastChecked = {};
+
+    $('input[type="radio"]').on('click', function() {
+        var name = $(this).attr('name');
+        var value = $(this).val();
+
+        if (lastChecked[name] === value) {
+            // Stesso radio cliccato due volte → deseleziona
+            $(this).prop('checked', false);
+            lastChecked[name] = null;
+        } else {
+            lastChecked[name] = value;
         }
     });
 
-    // Inizializza lo stato per i radio già checked al caricamento
-    $('input[type="radio"]:checked').data('was-checked', true);
+    // Inizializza con eventuali radio già selezionati al caricamento
+    $('input[type="radio"]:checked').each(function() {
+        lastChecked[$(this).attr('name')] = $(this).val();
+    });
 
     // Toggle Filtri su Mobile
     $('#btn-toggle-filters').click(function() {
@@ -544,5 +553,3 @@ $(document).ready(function() {
 });
 </script>
 {/block}
-
-

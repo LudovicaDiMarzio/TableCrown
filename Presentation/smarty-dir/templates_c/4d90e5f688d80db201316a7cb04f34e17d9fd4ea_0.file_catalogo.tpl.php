@@ -1,18 +1,18 @@
 <?php
-/* Smarty version 5.8.0, created on 2026-06-16 10:25:33
+/* Smarty version 5.8.0, created on 2026-06-16 10:28:28
   from 'file:catalogo.tpl' */
 
 /* @var \Smarty\Template $_smarty_tpl */
 if ($_smarty_tpl->getCompiled()->isFresh($_smarty_tpl, array (
   'version' => '5.8.0',
-  'unifunc' => 'content_6a31087d73ba26_53833662',
+  'unifunc' => 'content_6a31092c8fee20_74528618',
   'has_nocache_code' => false,
   'file_dependency' => 
   array (
     '4d90e5f688d80db201316a7cb04f34e17d9fd4ea' => 
     array (
       0 => 'catalogo.tpl',
-      1 => 1781598315,
+      1 => 1781598480,
       2 => 'file',
     ),
   ),
@@ -20,24 +20,24 @@ if ($_smarty_tpl->getCompiled()->isFresh($_smarty_tpl, array (
   array (
   ),
 ))) {
-function content_6a31087d73ba26_53833662 (\Smarty\Template $_smarty_tpl) {
+function content_6a31092c8fee20_74528618 (\Smarty\Template $_smarty_tpl) {
 $_smarty_current_dir = 'C:\\Users\\damic\\Desktop\\uni\\APPUNTI\\anno3\\secondo_semenstre\\Pweb\\TableCrown\\Presentation\\smarty-dir\\templates';
 $_smarty_tpl->getInheritance()->init($_smarty_tpl, true);
 ?>
 
 
 <?php 
-$_smarty_tpl->getInheritance()->instanceBlock($_smarty_tpl, 'Block_10846366036a31087d6b8f49_25638259', "extra_css");
+$_smarty_tpl->getInheritance()->instanceBlock($_smarty_tpl, 'Block_17182943496a31092c89fb42_67867589', "extra_css");
 ?>
 
 
 <?php 
-$_smarty_tpl->getInheritance()->instanceBlock($_smarty_tpl, 'Block_11168358676a31087d6be320_24410408', "content");
+$_smarty_tpl->getInheritance()->instanceBlock($_smarty_tpl, 'Block_2024429816a31092c8a3fa1_28789730', "content");
 ?>
 
 
 <?php 
-$_smarty_tpl->getInheritance()->instanceBlock($_smarty_tpl, 'Block_16315381136a31087d73a9e4_14388014', "extra_js");
+$_smarty_tpl->getInheritance()->instanceBlock($_smarty_tpl, 'Block_17582338796a31092c8fdd04_05916269', "extra_js");
 ?>
 
 
@@ -45,7 +45,7 @@ $_smarty_tpl->getInheritance()->instanceBlock($_smarty_tpl, 'Block_16315381136a3
 <?php $_smarty_tpl->getInheritance()->endChild($_smarty_tpl, "common/layout.tpl", $_smarty_current_dir);
 }
 /* {block "extra_css"} */
-class Block_10846366036a31087d6b8f49_25638259 extends \Smarty\Runtime\Block
+class Block_17182943496a31092c89fb42_67867589 extends \Smarty\Runtime\Block
 {
 public function callBlock(\Smarty\Template $_smarty_tpl) {
 $_smarty_current_dir = 'C:\\Users\\damic\\Desktop\\uni\\APPUNTI\\anno3\\secondo_semenstre\\Pweb\\TableCrown\\Presentation\\smarty-dir\\templates';
@@ -58,7 +58,7 @@ $_smarty_current_dir = 'C:\\Users\\damic\\Desktop\\uni\\APPUNTI\\anno3\\secondo_
 }
 /* {/block "extra_css"} */
 /* {block "content"} */
-class Block_11168358676a31087d6be320_24410408 extends \Smarty\Runtime\Block
+class Block_2024429816a31092c8a3fa1_28789730 extends \Smarty\Runtime\Block
 {
 public function callBlock(\Smarty\Template $_smarty_tpl) {
 $_smarty_current_dir = 'C:\\Users\\damic\\Desktop\\uni\\APPUNTI\\anno3\\secondo_semenstre\\Pweb\\TableCrown\\Presentation\\smarty-dir\\templates';
@@ -621,7 +621,7 @@ if ((true && ($_smarty_tpl->hasVariable('search_query') && null !== ($_smarty_tp
 }
 /* {/block "content"} */
 /* {block "extra_js"} */
-class Block_16315381136a31087d73a9e4_14388014 extends \Smarty\Runtime\Block
+class Block_17582338796a31092c8fdd04_05916269 extends \Smarty\Runtime\Block
 {
 public function callBlock(\Smarty\Template $_smarty_tpl) {
 $_smarty_current_dir = 'C:\\Users\\damic\\Desktop\\uni\\APPUNTI\\anno3\\secondo_semenstre\\Pweb\\TableCrown\\Presentation\\smarty-dir\\templates';
@@ -630,26 +630,18 @@ $_smarty_current_dir = 'C:\\Users\\damic\\Desktop\\uni\\APPUNTI\\anno3\\secondo_
 <?php echo '<script'; ?>
 >
 $(document).ready(function() {
-    
 
-    // Radio button deselezionabili (click su già-selezionato = deseleziona)
-    $('input[type="radio"]').on('click', function() {
-        const name = $(this).attr('name');
-    
-        if ($(this).data('was-checked')) {
-        // Era già selezionato → deseleziona
-        $(this).prop('checked', false);
-        $(this).data('was-checked', false);
-        } else {
-        // Nuovo click → segna tutti del gruppo come non-checked, questo come checked
-        $('input[type="radio"][name="' + name + '"]').data('was-checked', false);
-        $(this).data('was-checked', true);
-                }
-            }       
-        );
+    // Radio button deselezionabili
+    $('input[type="radio"]').on('mousedown', function() {
+        if ($(this).is(':checked')) {
+            $(this).one('click', function() {
+                $(this).prop('checked', false);
+            });
+        }
+    });
 
-// Inizializza lo stato per i radio già checked al caricamento (da URL params)
-$('input[type="radio"]:checked').data('was-checked', true);
+    // Inizializza lo stato per i radio già checked al caricamento
+    $('input[type="radio"]:checked').data('was-checked', true);
 
     // Toggle Filtri su Mobile
     $('#btn-toggle-filters').click(function() {
