@@ -198,9 +198,9 @@
                                     <label class="checkbox-label">
                                         <input type="checkbox" 
                                                name="categoria[]" 
-                                               value="{$cat->getId()|escape}"
-                                               {if isset($categoria_selected) && in_array($cat->getId(), $categoria_selected)} checked{/if}>
-                                        <span class="checkbox-text">{$cat->getNome()|escape}</span>
+                                               value="{$cat->getIdProdotto()|escape}"
+                                               {if isset($categoria_selected) && in_array($cat->getIdProdotto(), $categoria_selected)} checked{/if}>
+                                        <span class="checkbox-text">{$cat->getNomeProdotto()|escape}</span>
                                     </label>
                                 {/foreach}
                             {else}
@@ -369,29 +369,29 @@
                     <div class="products-grid">
                         {foreach $prodotti as $prodotto}
                             <div class="product-card">
-                                <a href="{$base_url}/prodotto/{$prodotto->getId()}" class="product-card-link">
+                                <a href="{$base_url}/prodotto/{$prodotto->getIdProdotto()}" class="product-card-link">
                                     
                                     <div class="product-image-wrapper">
-                                        <img src="{$base_url}/img/prodotti/{$prodotto->getImmagine()}" 
-                                             alt="{$prodotto->getNome()|escape}" 
+                                        <img src="{$base_url}/img/prodotti/{$prodotto->getImgProdotto()|escape}" 
+                                             alt="{$prodotto->getNomeProdotto()|escape}" 
                                              class="product-image">
                                         
                                         {* Badge Disponibilità *}
-                                        {if $prodotto->getDisponibilita() == 'esaurito'}
+                                        {if $prodotto->getDisponibilitaProdotto() == 'esaurito'}
                                             <span class="product-badge product-badge-esaurito">Esaurito</span>
-                                        {elseif $prodotto->getDisponibilita() == 'annunciato'}
+                                        {elseif $prodotto->getDisponibilitaProdotto() == 'annunciato'}
                                             <span class="product-badge product-badge-annunciato">Annunciato</span>
                                         {/if}
 
                                         {* Badge Offerta *}
                                         {assign var="prezzo" value=$prodotto->getPrezzo()}
                                         {if isset($prezzo) && $prezzo->hasSconto()}
-                                            <span class="product-badge product-badge-discount">-{$prezzo->getPercentualeSconto()}%</span>
+                                            <span class="product-badge product-badge-discount">-{$prezzo->getSconto()}%</span>
                                         {/if}
                                     </div>
 
                                     <div class="product-info">
-                                        <h3 class="product-name">{$prodotto->getNome()|escape}</h3>
+                                        <h3 class="product-name">{$prodotto->getNomeProdotto()|escape}</h3>
                                         
                                         {* Rating *}
                                         <div class="product-rating">
@@ -427,7 +427,7 @@
                                 </a>
 
                                  {* Link Carrello *}
-                                <a href="{$base_url}/carrello/aggiungi/{$prodotto->getId()}" class="button btn-add-cart" aria-label="Aggiungi a carrello">
+                                <a href="{$base_url}/carrello/aggiungi/{$prodotto->getIdProdotto()}" class="button btn-add-cart" aria-label="Aggiungi a carrello">
                                     <i class="ti ti-shopping-cart"></i> Aggiungi
                                 </a>
                             </div>
