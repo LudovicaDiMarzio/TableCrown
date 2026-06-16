@@ -532,3 +532,22 @@ $(document).ready(function() {
 });
 </script>
 {/block}
+
+
+// Radio button deselezionabili (click su già-selezionato = deseleziona)
+$('input[type="radio"]').on('click', function() {
+    const name = $(this).attr('name');
+    
+    if ($(this).data('was-checked')) {
+        // Era già selezionato → deseleziona
+        $(this).prop('checked', false);
+        $(this).data('was-checked', false);
+    } else {
+        // Nuovo click → segna tutti del gruppo come non-checked, questo come checked
+        $('input[type="radio"][name="' + name + '"]').data('was-checked', false);
+        $(this).data('was-checked', true);
+    }
+});
+
+// Inizializza lo stato per i radio già checked al caricamento (da URL params)
+$('input[type="radio"]:checked').data('was-checked', true);
