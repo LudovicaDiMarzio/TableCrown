@@ -1,18 +1,18 @@
 <?php
-/* Smarty version 5.8.0, created on 2026-06-16 11:17:15
+/* Smarty version 5.8.0, created on 2026-06-16 11:19:12
   from 'file:catalogo.tpl' */
 
 /* @var \Smarty\Template $_smarty_tpl */
 if ($_smarty_tpl->getCompiled()->isFresh($_smarty_tpl, array (
   'version' => '5.8.0',
-  'unifunc' => 'content_6a31149b259f79_77048620',
+  'unifunc' => 'content_6a3115104eb0a8_09926292',
   'has_nocache_code' => false,
   'file_dependency' => 
   array (
     '4d90e5f688d80db201316a7cb04f34e17d9fd4ea' => 
     array (
       0 => 'catalogo.tpl',
-      1 => 1781601415,
+      1 => 1781601531,
       2 => 'file',
     ),
   ),
@@ -20,28 +20,28 @@ if ($_smarty_tpl->getCompiled()->isFresh($_smarty_tpl, array (
   array (
   ),
 ))) {
-function content_6a31149b259f79_77048620 (\Smarty\Template $_smarty_tpl) {
+function content_6a3115104eb0a8_09926292 (\Smarty\Template $_smarty_tpl) {
 $_smarty_current_dir = 'C:\\Users\\damic\\Desktop\\uni\\APPUNTI\\anno3\\secondo_semenstre\\Pweb\\TableCrown\\Presentation\\smarty-dir\\templates';
 $_smarty_tpl->getInheritance()->init($_smarty_tpl, true);
 ?>
 
 
 <?php 
-$_smarty_tpl->getInheritance()->instanceBlock($_smarty_tpl, 'Block_16699259796a31149b225bc7_01782845', "extra_css");
+$_smarty_tpl->getInheritance()->instanceBlock($_smarty_tpl, 'Block_7797085236a3115104b75a9_47770914', "extra_css");
 ?>
 
 
 <?php 
-$_smarty_tpl->getInheritance()->instanceBlock($_smarty_tpl, 'Block_6175951116a31149b2281d8_61084294', "content");
+$_smarty_tpl->getInheritance()->instanceBlock($_smarty_tpl, 'Block_7420792856a3115104b9ec1_06313194', "content");
 ?>
 
 
 <?php 
-$_smarty_tpl->getInheritance()->instanceBlock($_smarty_tpl, 'Block_12163626996a31149b259312_78192449', "extra_js");
+$_smarty_tpl->getInheritance()->instanceBlock($_smarty_tpl, 'Block_6252154326a3115104ea4a5_71108535', "extra_js");
 $_smarty_tpl->getInheritance()->endChild($_smarty_tpl, "common/layout.tpl", $_smarty_current_dir);
 }
 /* {block "extra_css"} */
-class Block_16699259796a31149b225bc7_01782845 extends \Smarty\Runtime\Block
+class Block_7797085236a3115104b75a9_47770914 extends \Smarty\Runtime\Block
 {
 public function callBlock(\Smarty\Template $_smarty_tpl) {
 $_smarty_current_dir = 'C:\\Users\\damic\\Desktop\\uni\\APPUNTI\\anno3\\secondo_semenstre\\Pweb\\TableCrown\\Presentation\\smarty-dir\\templates';
@@ -54,7 +54,7 @@ $_smarty_current_dir = 'C:\\Users\\damic\\Desktop\\uni\\APPUNTI\\anno3\\secondo_
 }
 /* {/block "extra_css"} */
 /* {block "content"} */
-class Block_6175951116a31149b2281d8_61084294 extends \Smarty\Runtime\Block
+class Block_7420792856a3115104b9ec1_06313194 extends \Smarty\Runtime\Block
 {
 public function callBlock(\Smarty\Template $_smarty_tpl) {
 $_smarty_current_dir = 'C:\\Users\\damic\\Desktop\\uni\\APPUNTI\\anno3\\secondo_semenstre\\Pweb\\TableCrown\\Presentation\\smarty-dir\\templates';
@@ -159,22 +159,14 @@ $_smarty_current_dir = 'C:\\Users\\damic\\Desktop\\uni\\APPUNTI\\anno3\\secondo_
                                        aria-label="Prezzo minimo">
                                 <span class="price-separator">—</span>
                                 <input type="number" 
-                                       class="input price-input price-max" 
-                                       name="price_max" 
-                                       placeholder="Max"
-                                       value="<?php echo htmlspecialchars((string)(($tmp = $_smarty_tpl->getValue('price_max') ?? null)===null||$tmp==='' ? '' ?? null : $tmp), ENT_QUOTES, 'UTF-8', true);?>
+                   class="input price-input price-max" 
+                   name="price_max" 
+                   placeholder="Max"
+                   value="<?php echo htmlspecialchars((string)(($tmp = $_smarty_tpl->getValue('price_max') ?? null)===null||$tmp==='' ? '' ?? null : $tmp), ENT_QUOTES, 'UTF-8', true);?>
 "
-                                       min="0"
-                                       aria-label="Prezzo massimo">
+                   min="0"
+                   aria-label="Prezzo massimo">
                             </div>
-                            <input type="range" 
-                                   class="range price-slider" 
-                                   name="price_slider" 
-                                   min="0" 
-                                   max="500" 
-                                   value="<?php echo htmlspecialchars((string)(($tmp = $_smarty_tpl->getValue('price_max') ?? null)===null||$tmp==='' ? '500' ?? null : $tmp), ENT_QUOTES, 'UTF-8', true);?>
-"
-                                   aria-label="Seleziona fascia di prezzo">
                         </div>
                     </div>
 
@@ -619,7 +611,7 @@ if ((true && ($_smarty_tpl->hasVariable('search_query') && null !== ($_smarty_tp
 }
 /* {/block "content"} */
 /* {block "extra_js"} */
-class Block_12163626996a31149b259312_78192449 extends \Smarty\Runtime\Block
+class Block_6252154326a3115104ea4a5_71108535 extends \Smarty\Runtime\Block
 {
 public function callBlock(\Smarty\Template $_smarty_tpl) {
 $_smarty_current_dir = 'C:\\Users\\damic\\Desktop\\uni\\APPUNTI\\anno3\\secondo_semenstre\\Pweb\\TableCrown\\Presentation\\smarty-dir\\templates';
