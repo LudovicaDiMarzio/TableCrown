@@ -1,18 +1,18 @@
 <?php
-/* Smarty version 5.8.0, created on 2026-06-15 17:44:01
+/* Smarty version 5.8.0, created on 2026-06-16 10:23:01
   from 'file:catalogo.tpl' */
 
 /* @var \Smarty\Template $_smarty_tpl */
 if ($_smarty_tpl->getCompiled()->isFresh($_smarty_tpl, array (
   'version' => '5.8.0',
-  'unifunc' => 'content_6a301dc134aff8_53843734',
+  'unifunc' => 'content_6a3107e59e6c77_69430569',
   'has_nocache_code' => false,
   'file_dependency' => 
   array (
     '4d90e5f688d80db201316a7cb04f34e17d9fd4ea' => 
     array (
       0 => 'catalogo.tpl',
-      1 => 1781538199,
+      1 => 1781598159,
       2 => 'file',
     ),
   ),
@@ -20,30 +20,48 @@ if ($_smarty_tpl->getCompiled()->isFresh($_smarty_tpl, array (
   array (
   ),
 ))) {
-function content_6a301dc134aff8_53843734 (\Smarty\Template $_smarty_tpl) {
+function content_6a3107e59e6c77_69430569 (\Smarty\Template $_smarty_tpl) {
 $_smarty_current_dir = 'C:\\Users\\damic\\Desktop\\uni\\APPUNTI\\anno3\\secondo_semenstre\\Pweb\\TableCrown\\Presentation\\smarty-dir\\templates';
 $_smarty_tpl->getInheritance()->init($_smarty_tpl, true);
 ?>
 
 
 <?php 
-$_smarty_tpl->getInheritance()->instanceBlock($_smarty_tpl, 'Block_21368342216a301dc12eac18_07612659', "extra_css");
+$_smarty_tpl->getInheritance()->instanceBlock($_smarty_tpl, 'Block_16405858276a3107e5626839_68548175', "extra_css");
 ?>
 
 
 <?php 
-$_smarty_tpl->getInheritance()->instanceBlock($_smarty_tpl, 'Block_10256425576a301dc12f07e3_77667144', "content");
+$_smarty_tpl->getInheritance()->instanceBlock($_smarty_tpl, 'Block_16049424296a3107e56b33f6_66056944', "content");
 ?>
 
 
 <?php 
-$_smarty_tpl->getInheritance()->instanceBlock($_smarty_tpl, 'Block_9120973546a301dc134a304_66734656', "extra_js");
+$_smarty_tpl->getInheritance()->instanceBlock($_smarty_tpl, 'Block_10312019406a3107e59e62b3_73108931', "extra_js");
 ?>
 
-<?php $_smarty_tpl->getInheritance()->endChild($_smarty_tpl, "common/layout.tpl", $_smarty_current_dir);
+
+
+// Radio button deselezionabili (click su già-selezionato = deseleziona)
+$('input[type="radio"]').on('click', function() {
+    const name = $(this).attr('name');
+    
+    if ($(this).data('was-checked')) {
+        // Era già selezionato → deseleziona
+        $(this).prop('checked', false);
+        $(this).data('was-checked', false);
+    } else {
+        // Nuovo click → segna tutti del gruppo come non-checked, questo come checked
+        $('input[type="radio"][name="' + name + '"]').data('was-checked', false);
+        $(this).data('was-checked', true);
+    }
+});
+
+// Inizializza lo stato per i radio già checked al caricamento (da URL params)
+$('input[type="radio"]:checked').data('was-checked', true);<?php $_smarty_tpl->getInheritance()->endChild($_smarty_tpl, "common/layout.tpl", $_smarty_current_dir);
 }
 /* {block "extra_css"} */
-class Block_21368342216a301dc12eac18_07612659 extends \Smarty\Runtime\Block
+class Block_16405858276a3107e5626839_68548175 extends \Smarty\Runtime\Block
 {
 public function callBlock(\Smarty\Template $_smarty_tpl) {
 $_smarty_current_dir = 'C:\\Users\\damic\\Desktop\\uni\\APPUNTI\\anno3\\secondo_semenstre\\Pweb\\TableCrown\\Presentation\\smarty-dir\\templates';
@@ -56,7 +74,7 @@ $_smarty_current_dir = 'C:\\Users\\damic\\Desktop\\uni\\APPUNTI\\anno3\\secondo_
 }
 /* {/block "extra_css"} */
 /* {block "content"} */
-class Block_10256425576a301dc12f07e3_77667144 extends \Smarty\Runtime\Block
+class Block_16049424296a3107e56b33f6_66056944 extends \Smarty\Runtime\Block
 {
 public function callBlock(\Smarty\Template $_smarty_tpl) {
 $_smarty_current_dir = 'C:\\Users\\damic\\Desktop\\uni\\APPUNTI\\anno3\\secondo_semenstre\\Pweb\\TableCrown\\Presentation\\smarty-dir\\templates';
@@ -619,7 +637,7 @@ if ((true && ($_smarty_tpl->hasVariable('search_query') && null !== ($_smarty_tp
 }
 /* {/block "content"} */
 /* {block "extra_js"} */
-class Block_9120973546a301dc134a304_66734656 extends \Smarty\Runtime\Block
+class Block_10312019406a3107e59e62b3_73108931 extends \Smarty\Runtime\Block
 {
 public function callBlock(\Smarty\Template $_smarty_tpl) {
 $_smarty_current_dir = 'C:\\Users\\damic\\Desktop\\uni\\APPUNTI\\anno3\\secondo_semenstre\\Pweb\\TableCrown\\Presentation\\smarty-dir\\templates';
