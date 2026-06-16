@@ -971,6 +971,12 @@
     cursor: pointer;
     user-select: none;
     transition: opacity var(--transition);
+    color: var(--color-text-light) !important;  /* ← bianco */
+}
+
+.radio-label span,
+.radio-label {
+    color: var(--color-text-light) !important;
 }
 
 .radio-label:hover {
