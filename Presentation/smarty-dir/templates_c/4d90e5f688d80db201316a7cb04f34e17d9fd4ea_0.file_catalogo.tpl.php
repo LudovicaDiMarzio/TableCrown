@@ -1,18 +1,18 @@
 <?php
-/* Smarty version 5.8.0, created on 2026-06-16 10:54:26
+/* Smarty version 5.8.0, created on 2026-06-16 10:57:45
   from 'file:catalogo.tpl' */
 
 /* @var \Smarty\Template $_smarty_tpl */
 if ($_smarty_tpl->getCompiled()->isFresh($_smarty_tpl, array (
   'version' => '5.8.0',
-  'unifunc' => 'content_6a310f425eae98_26819288',
+  'unifunc' => 'content_6a311009472299_40403405',
   'has_nocache_code' => false,
   'file_dependency' => 
   array (
     '4d90e5f688d80db201316a7cb04f34e17d9fd4ea' => 
     array (
       0 => 'catalogo.tpl',
-      1 => 1781599972,
+      1 => 1781600243,
       2 => 'file',
     ),
   ),
@@ -20,30 +20,28 @@ if ($_smarty_tpl->getCompiled()->isFresh($_smarty_tpl, array (
   array (
   ),
 ))) {
-function content_6a310f425eae98_26819288 (\Smarty\Template $_smarty_tpl) {
+function content_6a311009472299_40403405 (\Smarty\Template $_smarty_tpl) {
 $_smarty_current_dir = 'C:\\Users\\damic\\Desktop\\uni\\APPUNTI\\anno3\\secondo_semenstre\\Pweb\\TableCrown\\Presentation\\smarty-dir\\templates';
 $_smarty_tpl->getInheritance()->init($_smarty_tpl, true);
 ?>
 
 
 <?php 
-$_smarty_tpl->getInheritance()->instanceBlock($_smarty_tpl, 'Block_14701382296a310f42594528_77196490', "extra_css");
+$_smarty_tpl->getInheritance()->instanceBlock($_smarty_tpl, 'Block_10629373196a311009421e19_21173919', "extra_css");
 ?>
 
 
 <?php 
-$_smarty_tpl->getInheritance()->instanceBlock($_smarty_tpl, 'Block_5311071246a310f42598d87_64870364', "content");
+$_smarty_tpl->getInheritance()->instanceBlock($_smarty_tpl, 'Block_3722299506a311009424355_97772890', "content");
 ?>
 
 
 <?php 
-$_smarty_tpl->getInheritance()->instanceBlock($_smarty_tpl, 'Block_13711138336a310f425e9f93_10508095', "extra_js");
-?>
-
-<?php $_smarty_tpl->getInheritance()->endChild($_smarty_tpl, "common/layout.tpl", $_smarty_current_dir);
+$_smarty_tpl->getInheritance()->instanceBlock($_smarty_tpl, 'Block_6314216456a311009470bf8_07474937', "extra_js");
+$_smarty_tpl->getInheritance()->endChild($_smarty_tpl, "common/layout.tpl", $_smarty_current_dir);
 }
 /* {block "extra_css"} */
-class Block_14701382296a310f42594528_77196490 extends \Smarty\Runtime\Block
+class Block_10629373196a311009421e19_21173919 extends \Smarty\Runtime\Block
 {
 public function callBlock(\Smarty\Template $_smarty_tpl) {
 $_smarty_current_dir = 'C:\\Users\\damic\\Desktop\\uni\\APPUNTI\\anno3\\secondo_semenstre\\Pweb\\TableCrown\\Presentation\\smarty-dir\\templates';
@@ -56,7 +54,7 @@ $_smarty_current_dir = 'C:\\Users\\damic\\Desktop\\uni\\APPUNTI\\anno3\\secondo_
 }
 /* {/block "extra_css"} */
 /* {block "content"} */
-class Block_5311071246a310f42598d87_64870364 extends \Smarty\Runtime\Block
+class Block_3722299506a311009424355_97772890 extends \Smarty\Runtime\Block
 {
 public function callBlock(\Smarty\Template $_smarty_tpl) {
 $_smarty_current_dir = 'C:\\Users\\damic\\Desktop\\uni\\APPUNTI\\anno3\\secondo_semenstre\\Pweb\\TableCrown\\Presentation\\smarty-dir\\templates';
@@ -619,7 +617,7 @@ if ((true && ($_smarty_tpl->hasVariable('search_query') && null !== ($_smarty_tp
 }
 /* {/block "content"} */
 /* {block "extra_js"} */
-class Block_13711138336a310f425e9f93_10508095 extends \Smarty\Runtime\Block
+class Block_6314216456a311009470bf8_07474937 extends \Smarty\Runtime\Block
 {
 public function callBlock(\Smarty\Template $_smarty_tpl) {
 $_smarty_current_dir = 'C:\\Users\\damic\\Desktop\\uni\\APPUNTI\\anno3\\secondo_semenstre\\Pweb\\TableCrown\\Presentation\\smarty-dir\\templates';
@@ -627,42 +625,63 @@ $_smarty_current_dir = 'C:\\Users\\damic\\Desktop\\uni\\APPUNTI\\anno3\\secondo_
 
 <?php echo '<script'; ?>
 >
-$(document).ready(function() {
+document.addEventListener('DOMContentLoaded', function() {
 
     // ✅ Checkbox esclusivi: uno solo attivo per volta in ogni gruppo
-    $('[data-exclusive] input[type="checkbox"]').on('change', function() {
-        if ($(this).is(':checked')) {
-            // Se viene selezionato, deseleziona gli altri dello stesso gruppo
-            var group = $(this).closest('[data-exclusive]');
-            group.find('input[type="checkbox"]').not(this).prop('checked', false);
-        }
+    const exclusiveGroups = document.querySelectorAll('[data-exclusive]');
+    
+    exclusiveGroups.forEach(group => {
+        const checkboxes = group.querySelectorAll('input[type="checkbox"]');
+        
+        checkboxes.forEach(checkbox => {
+            checkbox.addEventListener('change', function() {
+                if (this.checked) {
+                    // Se viene selezionato, deseleziona gli altri dello stesso gruppo
+                    checkboxes.forEach(cb => {
+                        if (cb !== this) {
+                            cb.checked = false;
+                        }
+                    });
+                }
+            });
+        });
     });
 
     // Toggle Filtri su Mobile
-    $('#btn-toggle-filters').click(function() {
-        $('#catalogo-filters').toggleClass('is-open');
-        $(this).toggleClass('is-active');
-    });
+    const toggleBtn = document.getElementById('btn-toggle-filters');
+    const sidebar = document.getElementById('catalogo-filters');
+    const closeBtn = document.getElementById('filter-close-btn');
+    
+    if (toggleBtn) {
+        toggleBtn.addEventListener('click', function() {
+            sidebar.classList.toggle('is-open');
+            this.classList.toggle('is-active');
+        });
+    }
 
     // Chiudi Filtri (mobile)
-    $('#filter-close-btn').click(function() {
-        $('#catalogo-filters').removeClass('is-open');
-        $('#btn-toggle-filters').removeClass('is-active');
-    });
+    if (closeBtn) {
+        closeBtn.addEventListener('click', function() {
+            sidebar.classList.remove('is-open');
+            toggleBtn.classList.remove('is-active');
+        });
+    }
 
     // Aggiorna valore rating in tempo reale
-    $('.rating-slider').on('input', function() {
-        $('#rating-value').text($(this).val());
-    });
+    const ratingSlider = document.querySelector('.rating-slider');
+    if (ratingSlider) {
+        ratingSlider.addEventListener('input', function() {
+            document.getElementById('rating-value').textContent = this.value;
+        });
+    }
 
     // Chiudi filtri quando clicchi fuori (mobile)
-    $(document).click(function(e) {
-        const sidebar = $('#catalogo-filters');
-        const btn = $('#btn-toggle-filters');
-        if (!sidebar.is(e.target) && sidebar.has(e.target).length === 0 && 
-            !btn.is(e.target) && btn.has(e.target).length === 0) {
-            sidebar.removeClass('is-open');
-            btn.removeClass('is-active');
+    document.addEventListener('click', function(e) {
+        if (sidebar && toggleBtn) {
+            if (!sidebar.contains(e.target) && !toggleBtn.contains(e.target)) {
+                sidebar.classList.remove('is-open');
+                toggleBtn.classList.remove('is-active');
+            }
         }
     });
 
