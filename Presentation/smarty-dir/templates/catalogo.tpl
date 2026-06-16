@@ -103,20 +103,13 @@
                                        aria-label="Prezzo minimo">
                                 <span class="price-separator">—</span>
                                 <input type="number" 
-                                       class="input price-input price-max" 
-                                       name="price_max" 
-                                       placeholder="Max"
-                                       value="{$price_max|default:''|escape}"
-                                       min="0"
-                                       aria-label="Prezzo massimo">
+                   class="input price-input price-max" 
+                   name="price_max" 
+                   placeholder="Max"
+                   value="{$price_max|default:''|escape}"
+                   min="0"
+                   aria-label="Prezzo massimo">
                             </div>
-                            <input type="range" 
-                                   class="range price-slider" 
-                                   name="price_slider" 
-                                   min="0" 
-                                   max="500" 
-                                   value="{$price_max|default:'500'|escape}"
-                                   aria-label="Seleziona fascia di prezzo">
                         </div>
                     </div>
 
