@@ -125,23 +125,23 @@
                         <h4 class="filter-group-title">
                             <i class="ti ti-package"></i> Disponibilità
                         </h4>
-                        <div class="checkbox-group">
+                        <div class="checkbox-group" data-exclusive="disponibilita">
                             <label class="checkbox-label">
-                                <input type="radio" 
+                                <input type="checkbox" 
                                        name="disponibilita[]" 
                                        value="annunciato"
                                        {if isset($disponibilita) && in_array('annunciato', $disponibilita)} checked{/if}>
                                 <span class="checkbox-text">Annunciato</span>
                             </label>
                             <label class="checkbox-label">
-                                <input type="radio" 
+                                <input type="checkbox" 
                                        name="disponibilita[]" 
                                        value="disponibile"
                                        {if isset($disponibilita) && in_array('disponibile', $disponibilita)} checked{/if}>
                                 <span class="checkbox-text">Disponibile Subito</span>
                             </label>
                             <label class="checkbox-label">
-                                <input type="radio" 
+                                <input type="checkbox" 
                                        name="disponibilita[]" 
                                        value="esaurito"
                                        {if isset($disponibilita) && in_array('esaurito', $disponibilita)} checked{/if}>
@@ -155,37 +155,37 @@
                         <h4 class="filter-group-title">
                             <i class="ti ti-tag"></i> Offerte
                         </h4>
-                        <div class="checkbox-group">
+                        <div class="checkbox-group" data-exclusive="offerte">
                             <label class="checkbox-label">
-                                <input type="radio" 
+                                <input type="checkbox" 
                                        name="offerte[]" 
                                        value="sconti"
                                        {if isset($offerte) && in_array('sconti', $offerte)} checked{/if}>
                                 <span class="checkbox-text">Sconti Attivi</span>
                             </label>
                             <label class="checkbox-label">
-                                <input type="radio" 
+                                <input type="checkbox" 
                                        name="offerte[]" 
                                        value="bundle"
                                        {if isset($offerte) && in_array('bundle', $offerte)} checked{/if}>
                                 <span class="checkbox-text">Bundle</span>
                             </label>
                             <label class="checkbox-label">
-                                <input type="radio" 
+                                <input type="checkbox" 
                                        name="offerte[]" 
                                        value="danneggiati"
                                        {if isset($offerte) && in_array('danneggiati', $offerte)} checked{/if}>
                                 <span class="checkbox-text">Danneggiati / Scatolato</span>
                             </label>
                             <label class="checkbox-label">
-                                <input type="radio" 
+                                <input type="checkbox" 
                                        name="offerte[]" 
                                        value="novita"
                                        {if isset($offerte) && in_array('novita', $offerte)} checked{/if}>
                                 <span class="checkbox-text">Novità</span>
                             </label>
                             <label class="checkbox-label">
-                                <input type="radio" 
+                                <input type="checkbox" 
                                        name="offerte[]" 
                                        value="venduti"
                                        {if isset($offerte) && in_array('venduti', $offerte)} checked{/if}>
@@ -221,16 +221,16 @@
                         <h4 class="filter-group-title">
                             <i class="ti ti-puzzle-2"></i> Espansioni
                         </h4>
-                        <div class="checkbox-group">
+                        <div class="checkbox-group" data-exclusive="espansioni">
                             <label class="checkbox-label">
-                                <input type="radio" 
+                                <input type="checkbox" 
                                        name="espansioni" 
                                        value="si"
                                        {if isset($espansioni) && $espansioni == 'si'} checked{/if}>
                                 <span class="checkbox-text">Solo base game</span>
                             </label>
                             <label class="checkbox-label">
-                                <input type="radio" 
+                                <input type="checkbox" 
                                        name="espansioni" 
                                        value="no"
                                        {if isset($espansioni) && $espansioni == 'no'} checked{/if}>
@@ -291,15 +291,15 @@
                         <h4 class="filter-group-title">
                             <i class="ti ti-flame"></i> Difficoltà
                         </h4>
-                        <div class="difficulty-options">
+                        <div class="checkbox-group" data-exclusive="difficolta">
                             {assign var="difficolta_levels" value=['Facile', 'Media', 'Difficile', 'Molto difficile']}
                             {foreach $difficolta_levels as $level}
-                                <label class="radio-label">
-                                    <input type="radio" 
-                                           name="difficolta" 
+                                <label class="checkbox-label">
+                                    <input type="checkbox"
+                                           name="difficolta"
                                            value="{$level|lower}"
                                            {if isset($difficolta) && $difficolta == $level|lower} checked{/if}>
-                                    <span class="radio-text">{$level}</span>
+                                    <span class="checkbox-text">{$level}</span>
                                 </label>
                             {/foreach}
                         </div>
@@ -334,15 +334,15 @@
                         <h4 class="filter-group-title">
                             <i class="ti ti-language"></i> Lingua
                         </h4>
-                        <div class="language-options">
+                        <div class="checkbox-group" data-exclusive="lingua">
                             {assign var="lingue" value=['Italiano', 'English', 'Multilingue', 'Solo Immagini']}
                             {foreach $lingue as $lang}
-                                <label class="radio-label">
-                                    <input type="radio" 
-                                           name="lingua" 
+                                <label class="checkbox-label">
+                                    <input type="checkbox"
+                                           name="lingua"
                                            value="{$lang|lower}"
                                            {if isset($lingua) && $lingua == $lang|lower} checked{/if}>
-                                    <span class="radio-text">{$lang}</span>
+                                    <span class="checkbox-text">{$lang}</span>
                                 </label>
                             {/foreach}
                         </div>
@@ -501,25 +501,12 @@
 <script>
 $(document).ready(function() {
 
-    // Radio button deselezionabili
-    var lastChecked = {};
-
-    $('input[type="radio"]').on('click', function() {
-        var name = $(this).attr('name');
-        var value = $(this).val();
-
-        if (lastChecked[name] === value) {
-            // Stesso radio cliccato due volte → deseleziona
-            $(this).prop('checked', false);
-            lastChecked[name] = null;
-        } else {
-            lastChecked[name] = value;
+    // Checkbox esclusivi per gruppo (data-exclusive): uno solo attivo per volta
+    $('[data-exclusive] input[type="checkbox"]').on('change', function() {
+        if ($(this).is(':checked')) {
+            var group = $(this).closest('[data-exclusive]');
+            group.find('input[type="checkbox"]').not(this).prop('checked', false);
         }
-    });
-
-    // Inizializza con eventuali radio già selezionati al caricamento
-    $('input[type="radio"]:checked').each(function() {
-        lastChecked[$(this).attr('name')] = $(this).val();
     });
 
     // Toggle Filtri su Mobile
