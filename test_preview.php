@@ -81,7 +81,7 @@ $mockRecensione = new class {
 $smarty->assign('prodotto', $mockProdotto);
 $smarty->assign('recensioni', [$mockRecensione]);
 $smarty->assign('correlati', []);
-$smarty->assign('utente_loggato', false);
+$smarty->assign('utente_loggato', true);
 // 3. Tentativo di rendering della HOME
 try {
     // MODIFICATO: Puntiamo alla home.tpl. 
