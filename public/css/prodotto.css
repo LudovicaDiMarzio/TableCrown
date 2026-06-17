@@ -1055,10 +1055,14 @@
 }
 
 /* Spostiamo la scritta sopra i pulsanti usando il sistema ad ordine flessibile di CSS */
-.minicart-title-status {
+/* Spostiamo la scritta sopra i pulsanti usando il sistema ad ordine flessibile di CSS */
+.minicart-title-status,
+.minicart-content h2,
+.minicart-content h3,
+.minicart-status {
     font-size: 1.2rem;
     font-weight: 700;
-    color: var(--color-primary) !important; /* Stesso giallo del prezzo */
+    color: var(--color-primary) !important; /* Giallo del brand */
     margin: 0;
     text-align: center;
     order: 2; /* Forza il testo a posizionarsi prima dei pulsanti */
