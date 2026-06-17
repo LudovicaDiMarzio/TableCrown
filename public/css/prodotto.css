@@ -1196,27 +1196,89 @@
     background-color: var(--color-primary-dark) !important;
 }
 
-.modal-content {
-    position: relative; /* Indispensabile per l'ancoraggio della X */
+/* ── MINICART MODAL OPTIMIZED ─────────────────────────────── */
+
+.minicart-modal {
+    position: fixed;
+    inset: 0;
+    background-color: rgba(0, 0, 0, 0.65);
+    z-index: 9000;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    opacity: 0;
+    pointer-events: none;
+    transition: opacity 0.25s ease;
 }
 
+.minicart-modal.is-active {
+    opacity: 1;
+    pointer-events: all;
+}
+
+.minicart-content {
+    background-color: var(--color-bg-dark-2);
+    border: 1px solid var(--color-border-dark);
+    border-radius: var(--radius-md);
+    padding: 2.5rem 2rem 2rem; /* Aumentato il padding superiore per non sovrapporsi alla X */
+    max-width: 440px;
+    width: 90%;
+    display: flex;
+    flex-direction: column;
+    gap: 1.5rem;
+    box-shadow: 0 16px 48px rgba(0, 0, 0, 0.5);
+    animation: minicart-in 0.25s ease;
+    position: relative; /* ◄── Richiesto per ancorare la X in alto a destra del pop-up */
+}
+
+@keyframes minicart-in {
+    from { transform: translateY(16px); opacity: 0; }
+    to   { transform: translateY(0);    opacity: 1; }
+}
+
+/* Spostiamo la scritta sopra i pulsanti usando il sistema ad ordine flessibile di CSS */
+.minicart-title-status {
+    font-size: 1.2rem;
+    font-weight: 700;
+    color: var(--color-primary) !important; /* ◄── Stesso giallo del prezzo (var-primary) */
+    margin: 0;
+    text-align: center;
+    order: 2; /* ◄── Forza il testo a posizionarsi prima dei pulsanti */
+}
+
+.minicart-product {
+    display: flex;
+    align-items: center;
+    gap: 1.25rem;
+    order: 1; /* ◄── Mantiene la info del prodotto in cima */
+}
+
+.minicart-actions {
+    display: flex;
+    gap: 0.75rem;
+    flex-wrap: wrap;
+    order: 3; /* ◄── Spinge i pulsanti in fondo */
+}
+
+/* Stile pulito per il bottone di chiusura ad ancoraggio assoluto */
 #close-minicart {
     position: absolute;
-    top: 12px;
+    top: 15px;
     right: 15px;
     background: none;
     border: none;
-    font-size: 28px; /* Dimensione della X */
+    font-size: 26px;
     font-weight: bold;
     line-height: 1;
-    color: #888;
+    color: var(--color-text-muted);
     cursor: pointer;
-    transition: color 0.2s ease;
-    padding: 0;
+    transition: color var(--transition);
+    padding: 5px;
+    z-index: 10;
 }
 
 #close-minicart:hover {
-    color: #333; /* Si scurisce quando ci passi sopra con il mouse */
+    color: var(--color-primary); /* Diventa gialla quando ci passi sopra */
 }
 
 /* ── RESPONSIVE MOBILE ────────────────────────────────────── */

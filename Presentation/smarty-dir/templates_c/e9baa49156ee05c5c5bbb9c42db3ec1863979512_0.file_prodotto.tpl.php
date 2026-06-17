@@ -1,18 +1,18 @@
 <?php
-/* Smarty version 5.8.0, created on 2026-06-17 10:37:52
+/* Smarty version 5.8.0, created on 2026-06-17 10:43:09
   from 'file:prodotto.tpl' */
 
 /* @var \Smarty\Template $_smarty_tpl */
 if ($_smarty_tpl->getCompiled()->isFresh($_smarty_tpl, array (
   'version' => '5.8.0',
-  'unifunc' => 'content_6a325ce0944d42_75108887',
+  'unifunc' => 'content_6a325e1d35d4e0_20225800',
   'has_nocache_code' => false,
   'file_dependency' => 
   array (
     'e9baa49156ee05c5c5bbb9c42db3ec1863979512' => 
     array (
       0 => 'prodotto.tpl',
-      1 => 1781685446,
+      1 => 1781685767,
       2 => 'file',
     ),
   ),
@@ -20,30 +20,30 @@ if ($_smarty_tpl->getCompiled()->isFresh($_smarty_tpl, array (
   array (
   ),
 ))) {
-function content_6a325ce0944d42_75108887 (\Smarty\Template $_smarty_tpl) {
+function content_6a325e1d35d4e0_20225800 (\Smarty\Template $_smarty_tpl) {
 $_smarty_current_dir = 'C:\\Users\\damic\\Desktop\\uni\\APPUNTI\\anno3\\secondo_semenstre\\Pweb\\TableCrown\\Presentation\\smarty-dir\\templates';
 $_smarty_tpl->getInheritance()->init($_smarty_tpl, true);
 ?>
 
 
 <?php 
-$_smarty_tpl->getInheritance()->instanceBlock($_smarty_tpl, 'Block_15316737416a325ce090d4f3_78167516', "extra_css");
+$_smarty_tpl->getInheritance()->instanceBlock($_smarty_tpl, 'Block_6174233996a325e1d327850_10895906', "extra_css");
 ?>
 
 
 <?php 
-$_smarty_tpl->getInheritance()->instanceBlock($_smarty_tpl, 'Block_5079261576a325ce090fcf8_58039940', "content");
+$_smarty_tpl->getInheritance()->instanceBlock($_smarty_tpl, 'Block_14443178666a325e1d329e76_52745224', "content");
 ?>
 
 
 <?php 
-$_smarty_tpl->getInheritance()->instanceBlock($_smarty_tpl, 'Block_10100456676a325ce0943cd7_66478709', "extra_js");
+$_smarty_tpl->getInheritance()->instanceBlock($_smarty_tpl, 'Block_21273253336a325e1d35c4c4_46426118', "extra_js");
 ?>
 
 <?php $_smarty_tpl->getInheritance()->endChild($_smarty_tpl, "common/layout.tpl", $_smarty_current_dir);
 }
 /* {block "extra_css"} */
-class Block_15316737416a325ce090d4f3_78167516 extends \Smarty\Runtime\Block
+class Block_6174233996a325e1d327850_10895906 extends \Smarty\Runtime\Block
 {
 public function callBlock(\Smarty\Template $_smarty_tpl) {
 $_smarty_current_dir = 'C:\\Users\\damic\\Desktop\\uni\\APPUNTI\\anno3\\secondo_semenstre\\Pweb\\TableCrown\\Presentation\\smarty-dir\\templates';
@@ -56,7 +56,7 @@ $_smarty_current_dir = 'C:\\Users\\damic\\Desktop\\uni\\APPUNTI\\anno3\\secondo_
 }
 /* {/block "extra_css"} */
 /* {block "content"} */
-class Block_5079261576a325ce090fcf8_58039940 extends \Smarty\Runtime\Block
+class Block_14443178666a325e1d329e76_52745224 extends \Smarty\Runtime\Block
 {
 public function callBlock(\Smarty\Template $_smarty_tpl) {
 $_smarty_current_dir = 'C:\\Users\\damic\\Desktop\\uni\\APPUNTI\\anno3\\secondo_semenstre\\Pweb\\TableCrown\\Presentation\\smarty-dir\\templates';
@@ -617,6 +617,17 @@ $_smarty_tpl->getSmarty()->getRuntime('Foreach')->restore($_smarty_tpl, 1);?>
             </a>
         </div>
 
+        <div id="minicart-modal" class="modal" aria-hidden="true">
+            <div class="modal-background"></div> 
+
+            <div class="modal-content" style="position: relative;"> 
+        
+                <button id="close-minicart" class="modal-close-btn" aria-label="Chiudi pop-up">&times;</button>
+        
+                <h3>Prodotto aggiunto al carrello!</h3>
+            </div>
+        </div>
+
     </div>
 </div>
 
@@ -625,7 +636,7 @@ $_smarty_tpl->getSmarty()->getRuntime('Foreach')->restore($_smarty_tpl, 1);?>
 }
 /* {/block "content"} */
 /* {block "extra_js"} */
-class Block_10100456676a325ce0943cd7_66478709 extends \Smarty\Runtime\Block
+class Block_21273253336a325e1d35c4c4_46426118 extends \Smarty\Runtime\Block
 {
 public function callBlock(\Smarty\Template $_smarty_tpl) {
 $_smarty_current_dir = 'C:\\Users\\damic\\Desktop\\uni\\APPUNTI\\anno3\\secondo_semenstre\\Pweb\\TableCrown\\Presentation\\smarty-dir\\templates';
@@ -768,6 +779,25 @@ document.addEventListener('DOMContentLoaded', function () {
         });
     });
 
+    // ── GESTIONE CHIUSURA POP-UP CON LA X ──
+    const btnClose = document.getElementById('close-minicart');
+    const modal = document.getElementById('minicart-modal');
+
+    if (btnClose && modal) {
+        btnClose.addEventListener('click', function() {
+            modal.classList.remove('is-active');
+            modal.setAttribute('aria-hidden', 'true');
+        });
+    }
+
+    // ── CHIUSURA POP-UP SULLO SFONDO SCURO ESTERNO ──
+    const modalBg = document.querySelector('#minicart-modal .modal-background');
+    if (modalBg && modal) {
+        modalBg.addEventListener('click', function() {
+            modal.classList.remove('is-active');
+            modal.setAttribute('aria-hidden', 'true');
+        });
+    }
 });
 <?php echo '</script'; ?>
 >
