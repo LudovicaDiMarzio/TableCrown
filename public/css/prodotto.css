@@ -1055,7 +1055,6 @@
 }
 
 /* Spostiamo la scritta sopra i pulsanti usando il sistema ad ordine flessibile di CSS */
-/* Spostiamo la scritta sopra i pulsanti usando il sistema ad ordine flessibile di CSS */
 .minicart-title-status,
 .minicart-content h2,
 .minicart-content h3,
@@ -1068,11 +1067,12 @@
     order: 2; /* Forza il testo a posizionarsi prima dei pulsanti */
 }
 
+
 .minicart-product {
     display: flex;
     align-items: center;
     gap: 1.25rem;
-    order: 1; /* Mantiene le info del prodotto in cima */
+    order: 1 !important; /* ◄── Blinda le info del prodotto tassativamente in cima */
 }
 
 .minicart-img {
@@ -1108,7 +1108,7 @@
     display: flex;
     gap: 0.75rem;
     flex-wrap: wrap;
-    order: 3; /* Spinge i pulsanti in fondo */
+    order: 3 !important; /* ◄── Spinge i pulsanti in fondo con assoluta certezza */
 }
 
 .btn-minicart-continua {
