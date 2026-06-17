@@ -1,33 +1,10 @@
 {extends file="common/layout.tpl"}
-<head>
-    <link rel="stylesheet" href="/css/base.css">
-    <link rel="stylesheet" href="/css/layout.css">
-    
-    {block name="extra_css"}{/block}
-</head>
+
 {block name="extra_css"}
     <link rel="stylesheet" href="{$base_url}/public/css/carrello.css">
 {/block}
 
 {block name="content"}
-
-{*
-    ── VARIABILI RICHIESTE DAL CONTROL LAYER ──
-    $carrello   : oggetto che esporne:
-                  - getItems()         : array|Collection di item
-                  - getTotaleArticoli(): int (somma delle quantità)
-                  - getSconto()        : float (0 se nessun sconto)
-                  - getSpedizione()    : float|null (null = da calcolare, 0 = gratuita)
-                  - getTotale()        : float
-                  Ogni item espone:
-                  - getIdItem()        : int (usato nelle route aggiorna/rimuovi)
-                  - getProdotto()      : EProdotto (stessa interfaccia di prodotto.tpl)
-                  - getQuantita()      : int
-                  - getSubtotale()     : float (quantità * prezzo unitario, già scontato)
-    $correlati  : array|Collection di EProdotto (stessa interfaccia usata in prodotto.tpl)
-    $base_url   : URL base del sito
-*}
-
 <div class="carrello-container">
     <div class="container">
 
@@ -62,7 +39,8 @@
                                  data-update-url="{$base_url}/carrello/aggiorna/{$item->getIdItem()}">
 
                                 <a href="{$base_url}/prodotto/{$p->getIdProdotto()}" class="carrello-item-img-link">
-                                    <img src="{$base_url}/img/prodotti/{$p->getImgProdotto()|escape}"
+                                    <img src="{$base_url}/public/img/prodotti/{$p->getImgProdotto()|escape}"
+                                         onerror="this.src='{$base_url}/public/img/default.png'"
                                          alt="{$p->getNomeProdotto()|escape}"
                                          class="carrello-item-img">
                                 </a>
@@ -133,7 +111,8 @@
                                         <div class="correlato-card">
                                             <a href="{$base_url}/prodotto/{$correlato->getIdProdotto()}" class="correlato-card-link">
                                                 <div class="correlato-image-wrapper">
-                                                    <img src="{$base_url}/img/prodotti/{$correlato->getImgProdotto()|escape}"
+                                                    <img src="{$base_url}/public/img/prodotti/{$correlato->getImgProdotto()|escape}"
+                                                         onerror="this.src='{$base_url}/public/img/default.png'"
                                                          alt="{$correlato->getNomeProdotto()|escape}"
                                                          class="correlato-image">
                                                 </div>
@@ -247,7 +226,6 @@
 
     </div>
 </div>
-
 {/block}
 
 {block name="extra_js"}
@@ -356,7 +334,6 @@ function initCarrelloPage() {
 
             const righeRimaste = document.querySelectorAll('.carrello-item');
             if (righeRimaste.length === 0) {
-                // Nessun articolo rimasto: ricarica per mostrare lo stato "carrello vuoto"
                 window.location.reload();
             } else {
                 ricalcolaRiepilogo();
