@@ -469,7 +469,8 @@
 
 {block name="extra_js"}
 <script>
-document.addEventListener('DOMContentLoaded', function () {
+// ► AVVIA SUBITO il codice, non aspettare DOMContentLoaded
+function initProdottoPage() {
 
     // ── GALLERIA IMMAGINI ──
     const imgs = document.querySelectorAll('.gallery-main-img');
@@ -506,37 +507,47 @@ document.addEventListener('DOMContentLoaded', function () {
         prezzoTot.textContent = '€' + (unit * qty).toFixed(2);
     }
 
-    // Aggiorna l'href del carrello con la quantità scelta
     function aggiornaUrlCarrello() {
         if (!btnCart || !baseHref || !qtyInput) return;
         const qty = parseInt(qtyInput.value) || 1;
         btnCart.setAttribute('href', baseHref + '?qty=' + qty);
     }
 
-    // Bottone MENO
-    document.getElementById('qty-minus')?.addEventListener('click', function () {
-        if (!qtyInput) return;
-        const val = parseInt(qtyInput.value) || 1;
-        if (val > 1) {
-            qtyInput.value = val - 1;
+    // ✅ FIX: Bottone MENO
+    const btnMinus = document.getElementById('qty-minus');
+    if (btnMinus) {
+        btnMinus.addEventListener('click', function (e) {
+            e.preventDefault();
+            if (!qtyInput) return;
+            const val = parseInt(qtyInput.value) || 1;
+            if (val > 1) {
+                qtyInput.value = val - 1;
+                aggiornaPrezzo();
+                aggiornaUrlCarrello();
+            }
+        });
+    }
+
+    // ✅ FIX: Bottone PIÙ
+    const btnPlus = document.getElementById('qty-plus');
+    if (btnPlus) {
+        btnPlus.addEventListener('click', function (e) {
+            e.preventDefault();
+            if (!qtyInput) return;
+            const currentVal = parseInt(qtyInput.value) || 1;
+            qtyInput.value = currentVal + 1;
             aggiornaPrezzo();
             aggiornaUrlCarrello();
-        }
-    });
-
-    // Bottone PIÙ
-    document.getElementById('qty-plus')?.addEventListener('click', function () {
-        if (!qtyInput) return;
-        qtyInput.value = (parseInt(qtyInput.value) || 1) + 1;
-        aggiornaPrezzo();
-        aggiornaUrlCarrello();
-    });
+        });
+    }
 
     // Input manuale
-    qtyInput?.addEventListener('input', function () {
-        aggiornaPrezzo();
-        aggiornaUrlCarrello();
-    });
+    if (qtyInput) {
+        qtyInput.addEventListener('input', function () {
+            aggiornaPrezzo();
+            aggiornaUrlCarrello();
+        });
+    }
 
     // ── INTERCETTAZIONE CLICK CARRELLO + MODAL ──
     if (btnCart) {
@@ -562,15 +573,21 @@ document.addEventListener('DOMContentLoaded', function () {
     const formRecensione = document.getElementById('recensione-form');
 
     if (btnRecensione && formRecensione) {
-        btnRecensione.addEventListener('click', function () {
+        btnRecensione.addEventListener('click', function (e) {
+            e.preventDefault();
             const isVisible = formRecensione.style.display === 'block';
             formRecensione.style.display = isVisible ? 'none' : 'block';
         });
     }
 
-    document.getElementById('btn-annulla-recensione')?.addEventListener('click', function () {
-        if (formRecensione) formRecensione.style.display = 'none';
-    });
+    // ✅ FIX: Bottone Annulla
+    const btnAnnulla = document.getElementById('btn-annulla-recensione');
+    if (btnAnnulla && formRecensione) {
+        btnAnnulla.addEventListener('click', function (e) {
+            e.preventDefault();
+            formRecensione.style.display = 'none';
+        });
+    }
 
     // ── STAR PICKER RECENSIONE ──
     const stars     = document.querySelectorAll('.star-pick');
@@ -585,10 +602,10 @@ document.addEventListener('DOMContentLoaded', function () {
             });
         });
 
-        star.addEventListener('click', function () {
+        star.addEventListener('click', function (e) {
+            e.preventDefault();
             const val = parseInt(this.dataset.value);
             if (votoInput) votoInput.value = val;
-            // Mantieni le stelle illuminate dopo il click
             stars.forEach((s, i) => {
                 s.classList.toggle('ti-star-filled', i < val);
                 s.classList.toggle('ti-star', i >= val);
@@ -596,29 +613,50 @@ document.addEventListener('DOMContentLoaded', function () {
         });
     });
 
-    document.getElementById('star-picker')?.addEventListener('mouseleave', function () {
-        const val = parseInt(votoInput?.value) || 0;
-        stars.forEach((s, i) => {
-            s.classList.toggle('ti-star-filled', i < val);
-            s.classList.toggle('ti-star', i >= val);
+    if (document.getElementById('star-picker')) {
+        document.getElementById('star-picker').addEventListener('mouseleave', function () {
+            const val = parseInt(votoInput?.value) || 0;
+            stars.forEach((s, i) => {
+                s.classList.toggle('ti-star-filled', i < val);
+                s.classList.toggle('ti-star', i >= val);
+            });
         });
-    });
+    }
 
     // ── CHIUSURA MODAL CON X ──
     const btnClose = document.getElementById('close-minicart');
     const modal    = document.getElementById('minicart-modal');
 
-    btnClose?.addEventListener('click', function () {
-        modal?.classList.remove('is-active');
-        modal?.setAttribute('aria-hidden', 'true');
-    });
+    if (btnClose) {
+        btnClose.addEventListener('click', function (e) {
+            e.preventDefault();
+            if (modal) {
+                modal.classList.remove('is-active');
+                modal.setAttribute('aria-hidden', 'true');
+            }
+        });
+    }
 
     // ── CHIUSURA MODAL CLICCANDO SFONDO ──
-    document.querySelector('#minicart-modal .modal-background')?.addEventListener('click', function () {
-        modal?.classList.remove('is-active');
-        modal?.setAttribute('aria-hidden', 'true');
-    });
+    const modalBg = document.querySelector('#minicart-modal .modal-background');
+    if (modalBg) {
+        modalBg.addEventListener('click', function () {
+            if (modal) {
+                modal.classList.remove('is-active');
+                modal.setAttribute('aria-hidden', 'true');
+            }
+        });
+    }
 
-});
+    console.log('✅ Prodotto page inizializzato correttamente');
+}
+
+// ► Esegui quando il DOM è pronto (supporta sia pagine caricate che DOMContentLoaded già passato)
+if (document.readyState === 'loading') {
+    document.addEventListener('DOMContentLoaded', initProdottoPage);
+} else {
+    // DOM è già caricato, esegui subito
+    initProdottoPage();
+}
 </script>
 {/block}
