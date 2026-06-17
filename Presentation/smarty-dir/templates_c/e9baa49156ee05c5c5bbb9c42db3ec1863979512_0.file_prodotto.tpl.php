@@ -1,18 +1,18 @@
 <?php
-/* Smarty version 5.8.0, created on 2026-06-17 10:21:08
+/* Smarty version 5.8.0, created on 2026-06-17 10:34:53
   from 'file:prodotto.tpl' */
 
 /* @var \Smarty\Template $_smarty_tpl */
 if ($_smarty_tpl->getCompiled()->isFresh($_smarty_tpl, array (
   'version' => '5.8.0',
-  'unifunc' => 'content_6a3258f4a432f8_16799971',
+  'unifunc' => 'content_6a325c2d7234b5_90482091',
   'has_nocache_code' => false,
   'file_dependency' => 
   array (
     'e9baa49156ee05c5c5bbb9c42db3ec1863979512' => 
     array (
       0 => 'prodotto.tpl',
-      1 => 1781684448,
+      1 => 1781685207,
       2 => 'file',
     ),
   ),
@@ -20,30 +20,30 @@ if ($_smarty_tpl->getCompiled()->isFresh($_smarty_tpl, array (
   array (
   ),
 ))) {
-function content_6a3258f4a432f8_16799971 (\Smarty\Template $_smarty_tpl) {
+function content_6a325c2d7234b5_90482091 (\Smarty\Template $_smarty_tpl) {
 $_smarty_current_dir = 'C:\\Users\\damic\\Desktop\\uni\\APPUNTI\\anno3\\secondo_semenstre\\Pweb\\TableCrown\\Presentation\\smarty-dir\\templates';
 $_smarty_tpl->getInheritance()->init($_smarty_tpl, true);
 ?>
 
 
 <?php 
-$_smarty_tpl->getInheritance()->instanceBlock($_smarty_tpl, 'Block_16479905916a3258f49e5aa0_88868741', "extra_css");
+$_smarty_tpl->getInheritance()->instanceBlock($_smarty_tpl, 'Block_8819347636a325c2d6c5e77_41637851', "extra_css");
 ?>
 
 
 <?php 
-$_smarty_tpl->getInheritance()->instanceBlock($_smarty_tpl, 'Block_19737078556a3258f49e9758_30217132', "content");
+$_smarty_tpl->getInheritance()->instanceBlock($_smarty_tpl, 'Block_5164758896a325c2d6ca468_84934432', "content");
 ?>
 
 
 <?php 
-$_smarty_tpl->getInheritance()->instanceBlock($_smarty_tpl, 'Block_2110634416a3258f4a406a2_06076630', "extra_js");
+$_smarty_tpl->getInheritance()->instanceBlock($_smarty_tpl, 'Block_19267455556a325c2d7214b4_11917752', "extra_js");
 ?>
 
 <?php $_smarty_tpl->getInheritance()->endChild($_smarty_tpl, "common/layout.tpl", $_smarty_current_dir);
 }
 /* {block "extra_css"} */
-class Block_16479905916a3258f49e5aa0_88868741 extends \Smarty\Runtime\Block
+class Block_8819347636a325c2d6c5e77_41637851 extends \Smarty\Runtime\Block
 {
 public function callBlock(\Smarty\Template $_smarty_tpl) {
 $_smarty_current_dir = 'C:\\Users\\damic\\Desktop\\uni\\APPUNTI\\anno3\\secondo_semenstre\\Pweb\\TableCrown\\Presentation\\smarty-dir\\templates';
@@ -56,7 +56,7 @@ $_smarty_current_dir = 'C:\\Users\\damic\\Desktop\\uni\\APPUNTI\\anno3\\secondo_
 }
 /* {/block "extra_css"} */
 /* {block "content"} */
-class Block_19737078556a3258f49e9758_30217132 extends \Smarty\Runtime\Block
+class Block_5164758896a325c2d6ca468_84934432 extends \Smarty\Runtime\Block
 {
 public function callBlock(\Smarty\Template $_smarty_tpl) {
 $_smarty_current_dir = 'C:\\Users\\damic\\Desktop\\uni\\APPUNTI\\anno3\\secondo_semenstre\\Pweb\\TableCrown\\Presentation\\smarty-dir\\templates';
@@ -625,7 +625,7 @@ $_smarty_tpl->getSmarty()->getRuntime('Foreach')->restore($_smarty_tpl, 1);?>
 }
 /* {/block "content"} */
 /* {block "extra_js"} */
-class Block_2110634416a3258f4a406a2_06076630 extends \Smarty\Runtime\Block
+class Block_19267455556a325c2d7214b4_11917752 extends \Smarty\Runtime\Block
 {
 public function callBlock(\Smarty\Template $_smarty_tpl) {
 $_smarty_current_dir = 'C:\\Users\\damic\\Desktop\\uni\\APPUNTI\\anno3\\secondo_semenstre\\Pweb\\TableCrown\\Presentation\\smarty-dir\\templates';
@@ -683,26 +683,57 @@ document.addEventListener('DOMContentLoaded', function () {
     qtyInput?.addEventListener('input', aggiornaPrezzo);
 
     // ── AGGIORNA HREF CARRELLO CON QUANTITÀ ──
+    // ── AGGIORNA HREF CARRELLO CON QUANTITÀ (Gestione AJAX + Modal) ──
     const btnCart = document.getElementById('btn-add-cart');
     if (btnCart && qtyInput) {
-        const baseHref = btnCart.getAttribute('href');
-        qtyInput.addEventListener('input', function () {
-            btnCart.setAttribute('href', baseHref + '?qty=' + (parseInt(this.value) || 1));
-        });
+        
+        // Funzione per aggiornare l'attributo href (utile se l'utente fa tasto destro -> apri in nuova scheda)
+        function aggiornaHref() {
+            const currentQty = parseInt(qtyInput.value) || 1;
+            // Estraiamo la base del link prima di eventuali vecchi parametri query
+            const urlSenzaQuery = btnCart.getAttribute('href').split('?')[0];
+            btnCart.setAttribute('href', urlSenzaQuery + '?qty=' + currentQty);
+        }
 
-        // ── MINI CART MODAL ──
+        // Aggiorna l'href sia quando l'utente cambia input sia quando clicca sui pulsanti + e -
+        qtyInput.addEventListener('input', aggiornaHref);
+        document.getElementById('qty-minus')?.addEventListener('click', aggiornaHref);
+        document.getElementById('qty-plus')?.addEventListener('click', aggiornaHref);
+
+        // Intercettiamo il click per fare la richiesta AJAX
         btnCart.addEventListener('click', function (e) {
-            e.preventDefault();
+            e.preventDefault(); // Impedisce il reindirizzamento automatico del browser
+
+            const targetUrl = this.getAttribute('href');
             const modal = document.getElementById('minicart-modal');
-            if (modal) {
-                modal.classList.add('is-active');
-                modal.setAttribute('aria-hidden', 'false');
-            }
-            // Redirect effettivo dopo breve delay (opzionale: puoi fare fetch AJAX)
-            setTimeout(() => { window.location.href = this.getAttribute('href'); }, 300);
+
+            // Inviamo la richiesta al server in background (AJAX)
+            fetch(targetUrl, {
+                method: 'GET',
+                headers: {
+                    'X-Requested-With': 'XMLHttpRequest' // Comunica al backend che è una richiesta AJAX
+                }
+            })
+            .then(response => {
+                if (response.ok) {
+                    // Se il server risponde correttamente, mostriamo il modal
+                    if (modal) {
+                        modal.classList.add('is-active');
+                        modal.setAttribute('aria-hidden', 'false');
+                    }
+                } else {
+                    console.error("Errore durante l'aggiunta al carrello.");
+                    // Opzionale: fallback se la fetch fallisce, reindirizziamo normalmente
+                    window.location.href = targetUrl;
+                }
+            })
+            .catch(error => {
+                console.error("Errore di rete:", error);
+                window.location.href = targetUrl;
+            });
         });
     }
-
+    
     // ── TOGGLE FORM RECENSIONE ──
     document.getElementById('btn-scrivi-recensione')?.addEventListener('click', function () {
         const form = document.getElementById('recensione-form');

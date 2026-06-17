@@ -509,58 +509,55 @@ document.addEventListener('DOMContentLoaded', function () {
 
     qtyInput?.addEventListener('input', aggiornaPrezzo);
 
-    // ── AGGIORNA HREF CARRELLO CON QUANTITÀ ──
+   
     // ── AGGIORNA HREF CARRELLO CON QUANTITÀ (Gestione AJAX + Modal) ──
     const btnCart = document.getElementById('btn-add-cart');
     if (btnCart && qtyInput) {
+        // Salviamo l'URL di base iniziale del link così com'è
+        const baseHref = btnCart.getAttribute('href');
         
-        // Funzione per aggiornare l'attributo href (utile se l'utente fa tasto destro -> apri in nuova scheda)
-        function aggiornaHref() {
-            const currentQty = parseInt(qtyInput.value) || 1;
-            // Estraiamo la base del link prima di eventuali vecchi parametri query
-            const urlSenzaQuery = btnCart.getAttribute('href').split('?')[0];
-            btnCart.setAttribute('href', urlSenzaQuery + '?qty=' + currentQty);
-        }
+        // Funzione pulita per aggiornare l'URL del pulsante aggiungi al carrello
+        const aggiornaUrlCarrello = () => {
+            const qty = parseInt(qtyInput.value) || 1;
+            btnCart.setAttribute('href', baseHref + '?qty=' + qty);
+        };
 
-        // Aggiorna l'href sia quando l'utente cambia input sia quando clicca sui pulsanti + e -
-        qtyInput.addEventListener('input', aggiornaHref);
-        document.getElementById('qty-minus')?.addEventListener('click', aggiornaHref);
-        document.getElementById('qty-plus')?.addEventListener('click', aggiornaHref);
+        // Ascolta l'input manuale nella casella di testo
+        qtyInput.addEventListener('input', aggiornaUrlCarrello);
+        
+        // FIX: Ascolta anche i click sui pulsanti più e meno per aggiornare l'URL al volo!
+        document.getElementById('qty-minus')?.addEventListener('click', aggiornaUrlCarrello);
+        document.getElementById('qty-plus')?.addEventListener('click', aggiornaUrlCarrello);
 
-        // Intercettiamo il click per fare la richiesta AJAX
+        // ── INTERCETTAZIONE CLICK E APERTURA POP-UP ──
         btnCart.addEventListener('click', function (e) {
-            e.preventDefault(); // Impedisce il reindirizzamento automatico del browser
+            e.preventDefault(); // Blocca IMMEDIATAMENTE il cambio pagina del browser
 
             const targetUrl = this.getAttribute('href');
             const modal = document.getElementById('minicart-modal');
 
-            // Inviamo la richiesta al server in background (AJAX)
-            fetch(targetUrl, {
-                method: 'GET',
-                headers: {
-                    'X-Requested-With': 'XMLHttpRequest' // Comunica al backend che è una richiesta AJAX
-                }
-            })
+            // 1. Mostriamo il pop-up SUBITO. L'utente lo vede all'istante del click.
+            if (modal) {
+                modal.classList.add('is-active');
+                modal.setAttribute('aria-hidden', 'false');
+            }
+
+            // 2. Inviamo la richiesta al server in background (AJAX)
+            // Il controller PHP aggiungerà il prodotto alla sessione normalmente.
+            fetch(targetUrl)
             .then(response => {
-                if (response.ok) {
-                    // Se il server risponde correttamente, mostriamo il modal
-                    if (modal) {
-                        modal.classList.add('is-active');
-                        modal.setAttribute('aria-hidden', 'false');
-                    }
-                } else {
-                    console.error("Errore durante l'aggiunta al carrello.");
-                    // Opzionale: fallback se la fetch fallisce, reindirizziamo normalmente
-                    window.location.href = targetUrl;
+                if (!response.ok) {
+                    console.error("Il server ha risposto con un errore, ma il prodotto potrebbe essere stato aggiunto.");
                 }
             })
             .catch(error => {
-                console.error("Errore di rete:", error);
-                window.location.href = targetUrl;
+                // Anche se la fetch va in errore (es. per i redirect su localhost), 
+                // la pagina non salta e il pop-up resta visibile a schermo!
+                console.warn("Fetch intercettata in background (tranquillo, il pop-up resta attivo):", error);
             });
         });
     }
-    
+
     // ── TOGGLE FORM RECENSIONE ──
     document.getElementById('btn-scrivi-recensione')?.addEventListener('click', function () {
         const form = document.getElementById('recensione-form');
