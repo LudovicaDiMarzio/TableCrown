@@ -374,6 +374,7 @@ main > .section {
     }
 
     /* ── DROPDOWN UTENTE ─────────────────────────────────────── */
+/* ── DROPDOWN UTENTE ─────────────────────────────────────── */
 
 #user-dropdown {
     position: relative;
@@ -381,7 +382,7 @@ main > .section {
 
 #user-dropdown .navbar-dropdown {
     display: none;
-    position: absolute !important;
+    position: absolute;
     top: 100%;
     right: 0;
     background-color: var(--color-bg-dark);
@@ -425,9 +426,5 @@ main > .section {
 .navbar-logout:hover {
     color: #dc2626 !important;
 }
-
-
-
-
 
 }
