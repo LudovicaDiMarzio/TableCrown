@@ -1,18 +1,18 @@
 <?php
-/* Smarty version 5.8.0, created on 2026-06-17 20:47:19
+/* Smarty version 5.8.0, created on 2026-06-17 20:57:25
   from 'file:carrello.tpl' */
 
 /* @var \Smarty\Template $_smarty_tpl */
 if ($_smarty_tpl->getCompiled()->isFresh($_smarty_tpl, array (
   'version' => '5.8.0',
-  'unifunc' => 'content_6a32ebb7716eb5_19278938',
+  'unifunc' => 'content_6a32ee15037cc6_97216399',
   'has_nocache_code' => false,
   'file_dependency' => 
   array (
     '14c8b1bc70e7f0f2b8d951e689de31c70067fae1' => 
     array (
       0 => 'carrello.tpl',
-      1 => 1781722023,
+      1 => 1781722610,
       2 => 'file',
     ),
   ),
@@ -20,30 +20,30 @@ if ($_smarty_tpl->getCompiled()->isFresh($_smarty_tpl, array (
   array (
   ),
 ))) {
-function content_6a32ebb7716eb5_19278938 (\Smarty\Template $_smarty_tpl) {
+function content_6a32ee15037cc6_97216399 (\Smarty\Template $_smarty_tpl) {
 $_smarty_current_dir = 'C:\\Users\\damic\\Desktop\\uni\\APPUNTI\\anno3\\secondo_semenstre\\Pweb\\TableCrown\\Presentation\\smarty-dir\\templates';
 $_smarty_tpl->getInheritance()->init($_smarty_tpl, true);
 ?>
 
 
 <?php 
-$_smarty_tpl->getInheritance()->instanceBlock($_smarty_tpl, 'Block_3036968946a32ebb76d7c72_84951846', "extra_css");
+$_smarty_tpl->getInheritance()->instanceBlock($_smarty_tpl, 'Block_20315584436a32ee1500d209_30802606', "extra_css");
 ?>
 
 
 <?php 
-$_smarty_tpl->getInheritance()->instanceBlock($_smarty_tpl, 'Block_19308557766a32ebb76dbde7_69443230', "content");
+$_smarty_tpl->getInheritance()->instanceBlock($_smarty_tpl, 'Block_20140606936a32ee15010347_59915092', "content");
 ?>
 
 
 <?php 
-$_smarty_tpl->getInheritance()->instanceBlock($_smarty_tpl, 'Block_20209958436a32ebb7714979_10226723', "extra_js");
+$_smarty_tpl->getInheritance()->instanceBlock($_smarty_tpl, 'Block_20424525596a32ee15035834_37703412', "extra_js");
 ?>
 
 <?php $_smarty_tpl->getInheritance()->endChild($_smarty_tpl, "common/layout.tpl", $_smarty_current_dir);
 }
 /* {block "extra_css"} */
-class Block_3036968946a32ebb76d7c72_84951846 extends \Smarty\Runtime\Block
+class Block_20315584436a32ee1500d209_30802606 extends \Smarty\Runtime\Block
 {
 public function callBlock(\Smarty\Template $_smarty_tpl) {
 $_smarty_current_dir = 'C:\\Users\\damic\\Desktop\\uni\\APPUNTI\\anno3\\secondo_semenstre\\Pweb\\TableCrown\\Presentation\\smarty-dir\\templates';
@@ -56,7 +56,7 @@ $_smarty_current_dir = 'C:\\Users\\damic\\Desktop\\uni\\APPUNTI\\anno3\\secondo_
 }
 /* {/block "extra_css"} */
 /* {block "content"} */
-class Block_19308557766a32ebb76dbde7_69443230 extends \Smarty\Runtime\Block
+class Block_20140606936a32ee15010347_59915092 extends \Smarty\Runtime\Block
 {
 public function callBlock(\Smarty\Template $_smarty_tpl) {
 $_smarty_current_dir = 'C:\\Users\\damic\\Desktop\\uni\\APPUNTI\\anno3\\secondo_semenstre\\Pweb\\TableCrown\\Presentation\\smarty-dir\\templates';
@@ -106,9 +106,9 @@ echo $_smarty_tpl->getValue('prezzo')->getValore();
                                     <img src="<?php echo $_smarty_tpl->getValue('base_url');?>
 /public/img/prodotti/<?php echo htmlspecialchars((string)$_smarty_tpl->getValue('p')->getImgProdotto(), ENT_QUOTES, 'UTF-8', true);?>
 "
-                                         onerror="this.src='<?php echo $_smarty_tpl->getValue('base_url');?>
+                                         onerror="this.onerror=null; this.src='<?php echo $_smarty_tpl->getValue('base_url');?>
 /public/img/default.png'"
-                                         alt="<?php echo htmlspecialchars((string)$_smarty_tpl->getValue('p')->getNomeProdotto(), ENT_QUOTES, 'UTF-8', true);?>
+                                        alt="<?php echo htmlspecialchars((string)$_smarty_tpl->getValue('p')->getNomeProdotto(), ENT_QUOTES, 'UTF-8', true);?>
 "
                                          class="carrello-item-img">
                                 </a>
@@ -200,11 +200,11 @@ $foreach1DoElse = false;
                                                     <img src="<?php echo $_smarty_tpl->getValue('base_url');?>
 /public/img/prodotti/<?php echo htmlspecialchars((string)$_smarty_tpl->getValue('correlato')->getImgProdotto(), ENT_QUOTES, 'UTF-8', true);?>
 "
-                                                         onerror="this.src='<?php echo $_smarty_tpl->getValue('base_url');?>
+                                                        onerror="this.onerror=null; this.src='<?php echo $_smarty_tpl->getValue('base_url');?>
 /public/img/default.png'"
-                                                         alt="<?php echo htmlspecialchars((string)$_smarty_tpl->getValue('correlato')->getNomeProdotto(), ENT_QUOTES, 'UTF-8', true);?>
+                                                        alt="<?php echo htmlspecialchars((string)$_smarty_tpl->getValue('correlato')->getNomeProdotto(), ENT_QUOTES, 'UTF-8', true);?>
 "
-                                                         class="correlato-image">
+                                                        class="correlato-image">
                                                 </div>
                                                 <div class="correlato-info">
                                                     <h3 class="correlato-nome"><?php echo htmlspecialchars((string)$_smarty_tpl->getValue('correlato')->getNomeProdotto(), ENT_QUOTES, 'UTF-8', true);?>
@@ -344,7 +344,7 @@ echo $_smarty_tpl->getValue('carrello')->getSpedizione();
 }
 /* {/block "content"} */
 /* {block "extra_js"} */
-class Block_20209958436a32ebb7714979_10226723 extends \Smarty\Runtime\Block
+class Block_20424525596a32ee15035834_37703412 extends \Smarty\Runtime\Block
 {
 public function callBlock(\Smarty\Template $_smarty_tpl) {
 $_smarty_current_dir = 'C:\\Users\\damic\\Desktop\\uni\\APPUNTI\\anno3\\secondo_semenstre\\Pweb\\TableCrown\\Presentation\\smarty-dir\\templates';
