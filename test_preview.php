@@ -81,11 +81,68 @@ $mockRecensione = new class {
     public function getTesto(): string { return 'Lo consiglio a tutti, ore di divertimento garantite.' ; }
 };
 
-$mockUtente = new class {
-    public function getNickname(): string { return 'GiocatoreTop'; }
+// ── MOCK ORDINE ITEM ──
+$mockOrdineItem = new class($mockProdotto) {
+    private $prodotto;
+    public function __construct($prodotto) { $this->prodotto = $prodotto; }
+    public function getProdotto() { return $this->prodotto; }
 };
 
-$smarty->assign('utente', $mockUtente);
+// ── MOCK ORDINE ──
+$mockOrdineConProdotto = new class($mockOrdineItem) {
+    private $ordineItem;
+    public function __construct($ordineItem) { $this->ordineItem = $ordineItem; }
+    public function getOrdineItems() { return [$this->ordineItem]; }
+};
+
+// ── SCENARIO 1: Utente CON ACQUISTO (mostra form) ──
+$mockUtenteConAcquisto = new class($mockOrdineConProdotto, $mockProdotto) {
+    private $ordini;
+    private $prodotto;
+    
+    public function __construct($ordine, $prodotto) {
+        $this->ordini = [$ordine];
+        $this->prodotto = $prodotto;
+    }
+    
+    public function getNickname(): string { return 'GiocatoreTop'; }
+    
+    public function hasPurchasedProduct($prodotto): bool {
+        foreach ($this->ordini as $ordine) {
+            foreach ($ordine->getOrdineItems() as $item) {
+                if ($item->getProdotto()->getIdProdotto() === $prodotto->getIdProdotto()) {
+                    return true;
+                }
+            }
+        }
+        return false;
+    }
+};
+
+// ── SCENARIO 2: Utente SENZA ACQUISTO (mostra blocco) ──
+$mockUtenteSenzaAcquisto = new class {
+    public function getNickname(): string { return 'NuovoUtente'; }
+    
+    public function hasPurchasedProduct($prodotto): bool {
+        return false; // Non ha comprato nulla
+    }
+};
+
+// ────────────────────────────────────────────────────
+// 🔧 SCEGLI QUI QUALE SCENARIO TESTARE
+// ────────────────────────────────────────────────────
+
+// ✅ Decommenta per testare UTENTE CON ACQUISTO
+$utenteDaTestare = new $mockUtenteConAcquisto($mockOrdineConProdotto, $mockProdotto);
+$userHasPurchased = $utenteDaTestare->hasPurchasedProduct($mockProdotto);
+
+// ❌ Commenta la riga sopra e decomenta questa per testare SENZA ACQUISTO
+// $utenteDaTestare = new $mockUtenteSenzaAcquisto();
+// $userHasPurchased = $utenteDaTestare->hasPurchasedProduct($mockProdotto);
+
+// ── Assegna al template ──
+$smarty->assign('utente', $utenteDaTestare);
+$smarty->assign('userHasPurchased', $userHasPurchased);  // ← NUOVA VARIABILE!
 $smarty->assign('prodotto', $mockProdotto);
 $smarty->assign('recensioni', [$mockRecensione]);
 $smarty->assign('correlati', []);
