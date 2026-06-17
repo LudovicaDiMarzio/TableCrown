@@ -1,18 +1,18 @@
 <?php
-/* Smarty version 5.8.0, created on 2026-06-17 20:42:23
+/* Smarty version 5.8.0, created on 2026-06-17 20:47:19
   from 'file:carrello.tpl' */
 
 /* @var \Smarty\Template $_smarty_tpl */
 if ($_smarty_tpl->getCompiled()->isFresh($_smarty_tpl, array (
   'version' => '5.8.0',
-  'unifunc' => 'content_6a32ea8f697392_63952665',
+  'unifunc' => 'content_6a32ebb7716eb5_19278938',
   'has_nocache_code' => false,
   'file_dependency' => 
   array (
     '14c8b1bc70e7f0f2b8d951e689de31c70067fae1' => 
     array (
       0 => 'carrello.tpl',
-      1 => 1781721631,
+      1 => 1781722023,
       2 => 'file',
     ),
   ),
@@ -20,28 +20,30 @@ if ($_smarty_tpl->getCompiled()->isFresh($_smarty_tpl, array (
   array (
   ),
 ))) {
-function content_6a32ea8f697392_63952665 (\Smarty\Template $_smarty_tpl) {
+function content_6a32ebb7716eb5_19278938 (\Smarty\Template $_smarty_tpl) {
 $_smarty_current_dir = 'C:\\Users\\damic\\Desktop\\uni\\APPUNTI\\anno3\\secondo_semenstre\\Pweb\\TableCrown\\Presentation\\smarty-dir\\templates';
 $_smarty_tpl->getInheritance()->init($_smarty_tpl, true);
 ?>
 
 
 <?php 
-$_smarty_tpl->getInheritance()->instanceBlock($_smarty_tpl, 'Block_6926795896a32ea8f4b0ea8_40449077', "extra_css");
+$_smarty_tpl->getInheritance()->instanceBlock($_smarty_tpl, 'Block_3036968946a32ebb76d7c72_84951846', "extra_css");
 ?>
 
 
 <?php 
-$_smarty_tpl->getInheritance()->instanceBlock($_smarty_tpl, 'Block_4364796136a32ea8f550843_95307481', "content");
+$_smarty_tpl->getInheritance()->instanceBlock($_smarty_tpl, 'Block_19308557766a32ebb76dbde7_69443230', "content");
 ?>
 
 
 <?php 
-$_smarty_tpl->getInheritance()->instanceBlock($_smarty_tpl, 'Block_19156668176a32ea8f695b17_14637908', "extra_js");
-$_smarty_tpl->getInheritance()->endChild($_smarty_tpl, "common/layout.tpl", $_smarty_current_dir);
+$_smarty_tpl->getInheritance()->instanceBlock($_smarty_tpl, 'Block_20209958436a32ebb7714979_10226723', "extra_js");
+?>
+
+<?php $_smarty_tpl->getInheritance()->endChild($_smarty_tpl, "common/layout.tpl", $_smarty_current_dir);
 }
 /* {block "extra_css"} */
-class Block_6926795896a32ea8f4b0ea8_40449077 extends \Smarty\Runtime\Block
+class Block_3036968946a32ebb76d7c72_84951846 extends \Smarty\Runtime\Block
 {
 public function callBlock(\Smarty\Template $_smarty_tpl) {
 $_smarty_current_dir = 'C:\\Users\\damic\\Desktop\\uni\\APPUNTI\\anno3\\secondo_semenstre\\Pweb\\TableCrown\\Presentation\\smarty-dir\\templates';
@@ -54,7 +56,7 @@ $_smarty_current_dir = 'C:\\Users\\damic\\Desktop\\uni\\APPUNTI\\anno3\\secondo_
 }
 /* {/block "extra_css"} */
 /* {block "content"} */
-class Block_4364796136a32ea8f550843_95307481 extends \Smarty\Runtime\Block
+class Block_19308557766a32ebb76dbde7_69443230 extends \Smarty\Runtime\Block
 {
 public function callBlock(\Smarty\Template $_smarty_tpl) {
 $_smarty_current_dir = 'C:\\Users\\damic\\Desktop\\uni\\APPUNTI\\anno3\\secondo_semenstre\\Pweb\\TableCrown\\Presentation\\smarty-dir\\templates';
@@ -82,15 +84,18 @@ $foreach0DoElse = false;
 ?>
                             <?php $_smarty_tpl->assign('p', $_smarty_tpl->getValue('item')->getProdotto(), false, NULL);?>
                             <?php $_smarty_tpl->assign('qty', $_smarty_tpl->getValue('item')->getQuantita(), false, NULL);?>
+                            <?php $_smarty_tpl->assign('prezzo', $_smarty_tpl->getValue('p')->getPrezzo(), false, NULL);?>
 
                             <div class="carrello-item"
                                  data-item-id="<?php echo $_smarty_tpl->getValue('item')->getIdItem();?>
 "
-                                 data-prezzo-unitario="<?php if ($_smarty_tpl->getValue('prezzo')->hasSconto()) {
+                                 data-prezzo-unitario="<?php if ((true && ($_smarty_tpl->hasVariable('prezzo') && null !== ($_smarty_tpl->getValue('prezzo') ?? null)))) {
+if ($_smarty_tpl->getValue('prezzo')->hasSconto()) {
 echo $_smarty_tpl->getValue('prezzo')->calcolaPrezzoScontato();
 } else {
 echo $_smarty_tpl->getValue('prezzo')->getValore();
-}?>"
+}
+} else { ?>0<?php }?>"
                                  data-update-url="<?php echo $_smarty_tpl->getValue('base_url');?>
 /carrello/aggiorna/<?php echo $_smarty_tpl->getValue('item')->getIdItem();?>
 ">
@@ -116,7 +121,6 @@ echo $_smarty_tpl->getValue('prezzo')->getValore();
 
                                     </a>
 
-                                    <?php $_smarty_tpl->assign('prezzo', $_smarty_tpl->getValue('p')->getPrezzo(), false, NULL);?>
                                     <div class="carrello-item-prezzo-wrapper">
                                         <?php if ((true && ($_smarty_tpl->hasVariable('prezzo') && null !== ($_smarty_tpl->getValue('prezzo') ?? null)))) {?>
                                             <?php if ($_smarty_tpl->getValue('prezzo')->hasSconto()) {?>
@@ -340,7 +344,7 @@ echo $_smarty_tpl->getValue('carrello')->getSpedizione();
 }
 /* {/block "content"} */
 /* {block "extra_js"} */
-class Block_19156668176a32ea8f695b17_14637908 extends \Smarty\Runtime\Block
+class Block_20209958436a32ebb7714979_10226723 extends \Smarty\Runtime\Block
 {
 public function callBlock(\Smarty\Template $_smarty_tpl) {
 $_smarty_current_dir = 'C:\\Users\\damic\\Desktop\\uni\\APPUNTI\\anno3\\secondo_semenstre\\Pweb\\TableCrown\\Presentation\\smarty-dir\\templates';
@@ -380,11 +384,11 @@ function initCarrelloPage() {
     // ── STEPPER QUANTITÀ PER OGNI ARTICOLO ──
     document.querySelectorAll('.carrello-item').forEach(riga => {
         const input       = riga.querySelector('.carrello-qty-input');
-        const btnMinus     = riga.querySelector('.carrello-qty-minus');
-        const btnPlus      = riga.querySelector('.carrello-qty-plus');
+        const btnMinus    = riga.querySelector('.carrello-qty-minus');
+        const btnPlus     = riga.querySelector('.carrello-qty-plus');
         const subtotaleEl = riga.querySelector('.carrello-item-subtotale-value');
-        const unit         = parseFloat(riga.dataset.prezzoUnitario) || 0;
-        const updateUrl    = riga.dataset.updateUrl;
+        const unit        = parseFloat(riga.dataset.prezzoUnitario) || 0;
+        const updateUrl   = riga.dataset.updateUrl;
 
         function aggiornaRigaUI() {
             const qty = parseInt(input.value) || 1;

@@ -44,7 +44,7 @@ class MockCarrello {
 // 3. ASSEGNAZIONE DELLE VARIABILI A SMARTY
 $smarty->assign('carrello', new MockCarrello());
 $smarty->assign('correlati', [new MockProdotto(), new MockProdotto()]); 
-$smarty->assign('base_url', '.'); 
+$smarty->assign('base_url', 'http://localhost:8000'); 
 
 // 4. RENDERING DEL TEMPLATE (cerca direttamente dentro la cartella impostata sopra)
 $smarty->display('carrello.tpl');
