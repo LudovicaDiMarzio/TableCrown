@@ -58,7 +58,7 @@ $mockProdotto = new class($mockPrezzo) {
     public function getNomeProdotto(): string { return 'Catan'; }
     public function getImgProdotto(): string { return 'placeholder.jpg'; }
     public function getImmagini(): array { return ['placeholder.jpg']; }
-    public function getDisponibilitaProdotto(): string { return 'Non disponibile'; }
+    public function getDisponibilitaProdotto(): string { return 'annunciato'; }
     public function getValutazioneMedia(): float { return 4.5; }
     public function getPrezzo() { return $this->prezzo; }
     public function getDescrizione(): string { return 'Un classico gioco di strategia per tutta la famiglia.'; }
