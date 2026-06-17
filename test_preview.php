@@ -2,11 +2,12 @@
 // 1. Includi l'autoloader di Composer
 require_once __DIR__ . '/vendor/autoload.php'; 
 
-// NOTA IL CAMBIAMENTO QUI: Usiamo il namespace corretto di Smarty 5
+// Inizializza Smarty 5 col namespace corretto
 $smarty = new \Smarty\Smarty();
 
-$smarty->setTemplateDir(__DIR__ . '/templates');
-$smarty->setCompileDir(__DIR__ . '/templates_c');
+// Imposta i percorsi corretti seguendo la struttura del tuo progetto
+$smarty->setTemplateDir(__DIR__ . '/Presentation/smarty-dir/templates');
+$smarty->setCompileDir(__DIR__ . '/Presentation/smarty-dir/templates_c');
 
 // 2. CREIAMO I DATI FINTI (MOCK) PER IL TEST
 class MockPrezzo {
@@ -45,5 +46,5 @@ $smarty->assign('carrello', new MockCarrello());
 $smarty->assign('correlati', [new MockProdotto(), new MockProdotto()]); 
 $smarty->assign('base_url', '.'); 
 
-// 4. RENDERING DEL TEMPLATE
-$smarty->display('templates/carrello.tpl');
+// 4. RENDERING DEL TEMPLATE (cerca direttamente dentro la cartella impostata sopra)
+$smarty->display('carrello.tpl');
