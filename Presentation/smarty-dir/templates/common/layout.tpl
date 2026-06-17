@@ -7,10 +7,11 @@
     <title>{block name="page_title"}TableCrown{/block}</title>
 
     {* ── CSS ── *}
-    <link rel="stylesheet" href="{$base_url}/plugins/bulma/bulma.min.css">
+    <link rel="stylesheet" href="{$base_url}/public/plugins/bulma/bulma.min.css">
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@tabler/icons-webfont@3.19.0/dist/tabler-icons.min.css">
-    <link rel="stylesheet" href="{$base_url}/css/base.css">
-    <link rel="stylesheet" href="{$base_url}/css/layout.css">
+    
+    <link rel="stylesheet" href="{$base_url}/public/css/base.css">
+    <link rel="stylesheet" href="{$base_url}/public/css/layout.css">
     
     {block name="extra_css"}{/block}
 </head>
