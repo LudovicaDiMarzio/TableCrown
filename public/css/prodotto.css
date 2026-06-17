@@ -553,10 +553,10 @@
 .prodotto-section-title {
     font-size: 1.3rem;
     font-weight: 700;
-    color: var(--color-text-light);
+    color: var(--color-blue); /* ◄── CAMBIATO: Testo del blu del sito */
     margin: 0 0 1.25rem 0;
     padding-bottom: 0.75rem;
-    border-bottom: 2px solid var(--color-primary);
+    border-bottom: 2px solid var(--color-blue); /* ◄── OPZIONALE: Cambia in blu anche la linea sotto */
     display: inline-block;
 }
 
