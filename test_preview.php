@@ -81,7 +81,11 @@ $mockRecensione = new class {
 $smarty->assign('prodotto', $mockProdotto);
 $smarty->assign('recensioni', [$mockRecensione]);
 $smarty->assign('correlati', []);
-$smarty->assign('utente_loggato', true);
+$mockUtente = new class {
+    public function getNickname(): string { return 'GiocatoreTop'; }
+};
+
+$smarty->assign('utente', $mockUtente);
 // 3. Tentativo di rendering della HOME
 try {
     // MODIFICATO: Puntiamo alla home.tpl. 

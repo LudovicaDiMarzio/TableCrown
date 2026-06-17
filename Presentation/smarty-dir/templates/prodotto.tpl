@@ -329,8 +329,8 @@
         <section class="prodotto-recensioni" id="recensioni">
             <h2 class="prodotto-section-title">Recensioni</h2>
 
-            {* Form nuova recensione (solo utenti loggati) *}
-            {if isset($utente_loggato) && $utente_loggato}
+            {* Form nuova recensione (solo utenti) *}
+            {if isset($utente) && $utente}
                 <div class="recensione-form-wrapper">
                     <button class="button btn-scrivi-recensione" id="btn-scrivi-recensione">
                         <i class="ti ti-pencil"></i> Scrivi la tua recensione
