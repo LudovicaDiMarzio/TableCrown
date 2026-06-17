@@ -1,5 +1,5 @@
 /* ============================================================
-   TableCrown — carrello.css
+   TableCrown — carrello.css (Ottimizzato e Armonizzato)
    Pagina carrello: riepilogo articoli, stepper quantità,
    carosello correlati e box riepilogo ordine fissato
    ============================================================ */
@@ -32,7 +32,7 @@
 .carrello-titolo {
     font-size: 2rem;
     font-weight: 700;
-    color: var(--color-blue); /* Blu del brand */
+    color: var(--color-bg-dark); /* Modificato: usa il colore scuro principale del brand */
     margin: 0 0 2rem 0;
     display: flex;
     align-items: center;
@@ -40,7 +40,7 @@
 }
 
 .carrello-titolo i {
-    color: var(--color-primary); /* Colore d'accento */
+    color: var(--color-primary); /* Colore d'accento (Arancione/Oro) */
 }
 
 
@@ -88,7 +88,7 @@
 .carrello-item-img-link {
     width: 90px;
     height: 90px;
-    background-color: #111827;
+    background-color: var(--color-bg-dark); /* Modificato: rimpiazzato valore fisso #111827 */
     border-radius: var(--radius-sm);
     padding: 6px;
     display: flex;
@@ -169,7 +169,7 @@
     border: 1px solid var(--color-border-dark) !important;
     border-left: none !important;
     border-right: none !important;
-    background-color: #111827 !important;
+    background-color: var(--color-bg-dark) !important; /* Modificato: rimpiazzato valore fisso #111827 */
     color: var(--color-text-light) !important;
     font-size: var(--font-size-md) !important;
     font-weight: 600;
@@ -220,7 +220,7 @@
 }
 
 .carrello-item-rimuovi:hover {
-    color: #f87171; /* Colore distruttivo soft */
+    color: #f87171; /* Colore distruttivo soft per preservare l'estetica scura */
 }
 
 .carrello-item-rimuovi i {
@@ -239,13 +239,13 @@
     flex-direction: column;
     gap: 1.25rem;
     position: sticky;
-    top: 100px; /* Rimane fisso durante lo scroll come su prodotto.css */
+    top: 100px;
 }
 
 .carrello-summary-title {
     font-size: 1.25rem;
     font-weight: 700;
-    color: var(--color-blue);
+    color: var(--color-primary); /* Modificato: da var(--color-blue) a var(--color-primary) per contrasto su sfondo scuro */
     margin: 0;
     padding-bottom: 1rem;
     border-bottom: 1px solid var(--color-border-dark);
@@ -338,10 +338,10 @@
 .carrello-section-title {
     font-size: 1.3rem;
     font-weight: 700;
-    color: var(--color-blue); 
+    color: var(--color-bg-dark); /* Modificato: allineato col colore scuro di base */
     margin: 0 0 1.5rem 0;
     padding-bottom: 0.5rem;
-    border-bottom: 2px solid var(--color-blue); 
+    border-bottom: 2px solid var(--color-primary); /* Modificato: usa la linea primaria oro/arancio */
     display: inline-block;
 }
 
@@ -356,18 +356,18 @@
     gap: 1.25rem;
     overflow-x: auto;
     scroll-behavior: smooth;
-    scrollbar-width: none; /* Nasconde scrollbar Firefox */
+    scrollbar-width: none;
     padding: 0.5rem 0.25rem;
     width: 100%;
 }
 
 .correlati-grid::-webkit-scrollbar {
-    display: none; /* Nasconde scrollbar Chrome/Safari */
+    display: none;
 }
 
 /* Card Prodotto Correlato */
 .correlato-card {
-    flex: 0 0 240px; /* Larghezza fissa delle card nel carosello */
+    flex: 0 0 240px;
     background-color: var(--color-bg-dark-2);
     border: 1px solid var(--color-border-dark);
     border-radius: var(--radius-md);
@@ -392,7 +392,7 @@
 }
 
 .correlato-image-wrapper {
-    background-color: #111827;
+    background-color: var(--color-bg-dark); /* Modificato: rimpiazzato valore fisso #111827 */
     border-radius: var(--radius-sm);
     aspect-ratio: 4 / 3;
     display: flex;
@@ -420,7 +420,6 @@
     color: var(--color-text-light);
     margin: 0;
     line-height: 1.4;
-    /* Limitazione testo a due righe */
     display: -webkit-box;
     -webkit-line-clamp: 2;
     -webkit-box-orient: vertical;  
@@ -560,11 +559,11 @@
 
 @media (max-width: 992px) {
     .carrello-layout {
-        grid-template-columns: 1fr; /* Colonna di riepilogo scende sotto */
+        grid-template-columns: 1fr;
     }
     
     .carrello-summary {
-        position: static; /* Rimuove lo sticky su schermi piccoli */
+        position: static;
     }
 }
 
@@ -588,7 +587,7 @@
     }
     
     .correlati-nav {
-        right: 5px; /* Avvicina la freccia per non uscire dal viewport mobile */
+        right: 5px;
     }
 }
 
