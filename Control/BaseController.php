@@ -4,15 +4,22 @@
  */
 namespace TableCrown\Control;
 
+use TableCrown\Utility\USession;
+use TableCrown\Utility\UHTTPMethods;
+use TableCrown\Utility\UFlashMessage;
+
 
 abstract class BaseController {
-    //riferimento al livello FOundation da inserire
+    //riferimento al livello Foundation da inserire
     //protected FPersistentManager $persistentManager;
-    protected array $validRoles;
+
+    protected array $validRoles; //Elenco di ruoli di sistema ammessi per il controllo dei permessi.
+    
 
     public function __construct() {
+        //QUANDO è PRONTO FOUNDATION
         //$this->persistentManager = FPersistentManager::getInstance();
-        
+
         //Definisco i ruoli validi del nostro sistema TableCrown
         $this->validRoles = [
             'utente',
@@ -22,70 +29,112 @@ abstract class BaseController {
     }
 
     /**
-     * Controlla se l'utente è loggato nella sessione globale.
+     * Prepara i dati globali richiesti dal layout prima di passarli alla View reale.
+     * $currentPage è il nome della pagina corrente, ad esempio "home", "catalogo", "dettaglio_prodotto", ecc.
+     * $data è un array associativo che contiene i dati specifici passati dal controller figlio.
+     * Restituisce l'array completo di tutti i dati uniti.
      */
-    public function isLoggedIn(): bool {
-        return isset($_SESSION['utente']);
+    public function preparaDatiLayout(string $currentPage, $data = []): array {
+        //Variabili globali sempre richieste dal layout
+        $globalData = [
+            'base_url' => 'https://tablecrown.it', 
+            'current_page' => $currentPage, //Indica la pagina attiva (es. 'catalogo', 'eventi', ecc.)
+            'search_query' => UHTTPMethods::get('search_query', ''), //Intercetta i parametri di ricerca nell'URL(es. ?q=nome_prodotto)
+            'breadcrumbs' => $this->getBreadcrumbs(), //Il percorso di navigazione
+        ];
+
+        //Controllo dell'utente in sessione
+        if (USession::isSetSessionElement('id_utente')) {
+            //QUANDO SARà PRONTO FOUNDATION, QUI CARICHERò L'OGGETTO EUTENTE
+            //$globalData['utente'] = FUtente::getById(USession::getSessionElement('id_utente'));
+
+            //Calcolo degli articoli nel carrello usando l'ID utente preso da sessione
+            //QUANDO FOUNDATION SARà PRONTO
+            // $cartCount = FCarrello::getCountByUtente(USession::getSessionElement('id_utente'));
+            // if ($cartCount > 0) {
+            //     $globalData['cart_count'] = $cartCount; //Il badge appare solo se gli articoli sono > 0
+            // }
+        }
+
+        //Gestione dei Flash Messages
+        if (UFlashMessage::hasMessage()) {
+            $messaggiSalvati = UFlashMessage::getMessage();
+
+            //Estraggo la stringa del messaggio e il tipo per Smarty
+            foreach ($messaggiSalvati as $type => $messaggesArray) {
+                if (!empty($messaggesArray)) {
+                    $globalData['flash_message'] = $messaggesArray[0];//Prendiamo il primo messaggio di quel tipo
+                    $globalData['flash_type'] = $type; //'success', 'danger', ecc.
+                    break; //Ci fermiamo al primo tipo trovato (per non sovrascrivere i dati) per inviarlo al layout
+                }
+            }
+        }
+
+        //Unisco i dati globali e quelli specifici della pagina
+        //array_merge() unisce i due array. Se ci sono chiavi doppie, quelle in $data sovrascrivono quelle in $globalData
+        return array_merge($globalData, $data);
     }
 
     /**
-     * Forza il login: se l'utente non è loggato, lo reindirizza alla pagina di login.
+     * Metodo di default per la gestione dei Breadcrumbs (le pagine interne faranno l'override per restituire il loro percorso specifico).
+     * Restituisce un array vuoto perchè di default la homepage non mostra i breadcrumbs.
+     */
+    protected function getBreadcrumbs(): array {
+        return [];
+    }
+
+
+    /**
+     * Controlla se l'utente è loggato nella sessione globale.
+     */
+    public function isLoggedIn(): bool {
+        return USession::isSetSessionElement('id_utente');
+    }
+
+    /**
+     * Forza il login: se l'utente non è loggato, imposta un avviso e lo reindirizza alla pagina di login.
      */
     public function requireLogin(): void {
         if (!$this->isLoggedIn()) {
             //Pattern PRG: messaggio flash di avviso
-            $_SESSION['flash_message'] = "È necessario effettuare l'accesso per visualizzare questa pagina.";
-            $_SESSION['flash_type'] = "warning";
+            UFlashMessage::addMessage('warning', "È necessario effettuare l'accesso per visualizzare questa pagina.");
 
-            header("Location: /login");
+            //Eseguiamo il redirect alla rotta più pulita gestita dal FrontController
+            header("Location: /accedi");
             exit();
         }
     }
 
     /**
-     * Protezione per il ruolo singolo (es. solo l'Amministratore)
+     * Protezione degli accessi basata sul ruolo (es. solo l'Amministratore)
+     * Controlla che l'utente sia loggato e che abbia il ruolo richiesto.
      */
     public function requireRole(string $role): void {
+        //Verfifica che il ruolo richiesto faccia parte dell'elenco di ruoli ammessi
         if (!in_array($role, $this->validRoles, true)) {
             throw new \Exception("Ruolo non valido: " . $role);
         }
 
+        //Se la pagina richiede un ruolo specifico, l'utente deve essere innanzitutto autenticato
         $this->requireLogin();
 
-        //Supponendo che $_SESSION['utente'] sia un oggetto EUtente con il metodo getRuolo()
-        $userRole = $_SESSION['utente']->getRuolo();
-
-        if ($userRole !== $role) {
-            echo "Errore 403 - Accesso Negato: Non hai i permessi necessari.";
-        }
+        /**
+         * QUANDO è PRONTO FOUNDATIOND: assumo che l'oggetto salvato o richiesto sia l'Entity EUtente.
+         * Supponendo che Foundation metta l'oggetto utente o il suo ruolo a disposizione:
+         * $utenteLoggato = FUtente::getById(USession::getSessionElement('id_utente'));
+         * $userRole = $utenteLoggato->getRuolo(); //Metodo dell'Entity EUtente
+         * 
+         * if ($userRole !== $role) {
+         *  //Se l'utente è loggato ma non ha i permessi (es. cliente prova a entrare nella dashboard del gestore)
+         *     header("HTTP/1.1 403 Forbidden");
+         *     echo "Errore 403 - Accesso Negato: Non hai i permessi necessari per accedere a questa risorsa.";
+         *     exit();
+         * }
+         * 
+         */
     }
 
-    /**
-     * Inietta le variabili fisse richieste dal layout globale nel controller specifico
-     * prima di passarle alla View di Presentation.
-     */
-    protected function preparaVariabiliGlobali($view, $currentPage) {
-        $baseUrl = "http://" . $_SERVER['HTTP_HOST'];
 
-        //Uso i metodi wrapper 'assign' definiti in VView
-        $view->assign('baseUrl', $baseUrl);
-        $view->assign('currentPage', $currentPage);
-
-        if ($this->isLoggedIn()) {
-            $view->assign('utente', $_SESSION['utente']);
-            //Conteggio carrello (finto per ora, poi leggerà la sessione o il DB)
-            $cartCount = isset($_SESSION['carrello']) ? count($_SESSION['carrello']) : 0;
-            $view->assign('cart_count', $cartCount);
-        }
-
-        //Gestione Flash Masseges
-        if (isset($_SESSION['flash_message'])) {
-            $view->assign('flash_message', $_SESSION['flash_message']);
-            $view->assign('flash_type', $_SESSION['flash_type']);
-            unset($_SESSION['flash_message']);
-            unset($_SESSION['flash_type']);
-        }
-    }
 
 
 }
