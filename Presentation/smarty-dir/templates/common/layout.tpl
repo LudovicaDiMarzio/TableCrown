@@ -49,7 +49,7 @@
                         
                         {* Accedi / Account *}
                         {if isset($utente)}
-                            <div class="navbar-item has-dropdown is-hoverable">
+                            <div class="navbar-item has-dropdown" id="user-dropdown">
                                 <a class="navbar-link navbar-user-link">
                                     <i class="ti ti-user-circle navbar-icon"></i>
                                     <span class="navbar-username">{$utente->getNickname()|escape}</span>
@@ -190,7 +190,20 @@
     <script src="{$base_url}/plugins/match-height/jquery.matchHeight-min.js"></script>
     <script src="{$base_url}/js/script.js"></script>
 
-    {block name="extra_js"}{/block}
+    <script>
+        document.addEventListener('DOMContentLoaded', function () {
+            const dropdown = document.getElementById('user-dropdown');
+            if (dropdown) {
+            dropdown.querySelector('.navbar-link').addEventListener('click', function (e) {
+                    e.stopPropagation();
+                    dropdown.classList.toggle('is-active');
+                });
+                document.addEventListener('click', function () {
+                    dropdown.classList.remove('is-active');
+                });
+            }
+        });
+</script>
 
 </body>
 </html>
