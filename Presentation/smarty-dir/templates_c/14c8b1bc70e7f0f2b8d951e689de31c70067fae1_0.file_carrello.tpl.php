@@ -1,18 +1,18 @@
 <?php
-/* Smarty version 5.8.0, created on 2026-06-17 18:17:24
+/* Smarty version 5.8.0, created on 2026-06-17 20:42:23
   from 'file:carrello.tpl' */
 
 /* @var \Smarty\Template $_smarty_tpl */
 if ($_smarty_tpl->getCompiled()->isFresh($_smarty_tpl, array (
   'version' => '5.8.0',
-  'unifunc' => 'content_6a32c8941794b1_39493722',
+  'unifunc' => 'content_6a32ea8f697392_63952665',
   'has_nocache_code' => false,
   'file_dependency' => 
   array (
     '14c8b1bc70e7f0f2b8d951e689de31c70067fae1' => 
     array (
       0 => 'carrello.tpl',
-      1 => 1781713018,
+      1 => 1781721631,
       2 => 'file',
     ),
   ),
@@ -20,28 +20,28 @@ if ($_smarty_tpl->getCompiled()->isFresh($_smarty_tpl, array (
   array (
   ),
 ))) {
-function content_6a32c8941794b1_39493722 (\Smarty\Template $_smarty_tpl) {
+function content_6a32ea8f697392_63952665 (\Smarty\Template $_smarty_tpl) {
 $_smarty_current_dir = 'C:\\Users\\damic\\Desktop\\uni\\APPUNTI\\anno3\\secondo_semenstre\\Pweb\\TableCrown\\Presentation\\smarty-dir\\templates';
 $_smarty_tpl->getInheritance()->init($_smarty_tpl, true);
 ?>
 
 
 <?php 
-$_smarty_tpl->getInheritance()->instanceBlock($_smarty_tpl, 'Block_14878613946a32c89413ab57_68837828', "extra_css");
+$_smarty_tpl->getInheritance()->instanceBlock($_smarty_tpl, 'Block_6926795896a32ea8f4b0ea8_40449077', "extra_css");
 ?>
 
 
 <?php 
-$_smarty_tpl->getInheritance()->instanceBlock($_smarty_tpl, 'Block_10219886836a32c89413f145_21890616', "content");
+$_smarty_tpl->getInheritance()->instanceBlock($_smarty_tpl, 'Block_4364796136a32ea8f550843_95307481', "content");
 ?>
 
 
 <?php 
-$_smarty_tpl->getInheritance()->instanceBlock($_smarty_tpl, 'Block_21129246166a32c894177100_06516952', "extra_js");
+$_smarty_tpl->getInheritance()->instanceBlock($_smarty_tpl, 'Block_19156668176a32ea8f695b17_14637908', "extra_js");
 $_smarty_tpl->getInheritance()->endChild($_smarty_tpl, "common/layout.tpl", $_smarty_current_dir);
 }
 /* {block "extra_css"} */
-class Block_14878613946a32c89413ab57_68837828 extends \Smarty\Runtime\Block
+class Block_6926795896a32ea8f4b0ea8_40449077 extends \Smarty\Runtime\Block
 {
 public function callBlock(\Smarty\Template $_smarty_tpl) {
 $_smarty_current_dir = 'C:\\Users\\damic\\Desktop\\uni\\APPUNTI\\anno3\\secondo_semenstre\\Pweb\\TableCrown\\Presentation\\smarty-dir\\templates';
@@ -54,7 +54,7 @@ $_smarty_current_dir = 'C:\\Users\\damic\\Desktop\\uni\\APPUNTI\\anno3\\secondo_
 }
 /* {/block "extra_css"} */
 /* {block "content"} */
-class Block_10219886836a32c89413f145_21890616 extends \Smarty\Runtime\Block
+class Block_4364796136a32ea8f550843_95307481 extends \Smarty\Runtime\Block
 {
 public function callBlock(\Smarty\Template $_smarty_tpl) {
 $_smarty_current_dir = 'C:\\Users\\damic\\Desktop\\uni\\APPUNTI\\anno3\\secondo_semenstre\\Pweb\\TableCrown\\Presentation\\smarty-dir\\templates';
@@ -86,8 +86,11 @@ $foreach0DoElse = false;
                             <div class="carrello-item"
                                  data-item-id="<?php echo $_smarty_tpl->getValue('item')->getIdItem();?>
 "
-                                 data-prezzo-unitario="<?php echo $_smarty_tpl->getValue('item')->getSubtotale()/$_smarty_tpl->getValue('qty');?>
-"
+                                 data-prezzo-unitario="<?php if ($_smarty_tpl->getValue('prezzo')->hasSconto()) {
+echo $_smarty_tpl->getValue('prezzo')->calcolaPrezzoScontato();
+} else {
+echo $_smarty_tpl->getValue('prezzo')->getValore();
+}?>"
                                  data-update-url="<?php echo $_smarty_tpl->getValue('base_url');?>
 /carrello/aggiorna/<?php echo $_smarty_tpl->getValue('item')->getIdItem();?>
 ">
@@ -337,7 +340,7 @@ echo $_smarty_tpl->getValue('carrello')->getSpedizione();
 }
 /* {/block "content"} */
 /* {block "extra_js"} */
-class Block_21129246166a32c894177100_06516952 extends \Smarty\Runtime\Block
+class Block_19156668176a32ea8f695b17_14637908 extends \Smarty\Runtime\Block
 {
 public function callBlock(\Smarty\Template $_smarty_tpl) {
 $_smarty_current_dir = 'C:\\Users\\damic\\Desktop\\uni\\APPUNTI\\anno3\\secondo_semenstre\\Pweb\\TableCrown\\Presentation\\smarty-dir\\templates';
@@ -392,9 +395,11 @@ function initCarrelloPage() {
         function inviaAggiornamento() {
             if (!updateUrl) return;
             const qty = parseInt(input.value) || 1;
-            fetch(updateUrl + '?qty=' + qty).catch(err => {
-                console.warn('Aggiornamento carrello:', err);
-            });
+            const controller = new AbortController();
+            const timeout = setTimeout(() => controller.abort(), 5000);
+            fetch(updateUrl + '?qty=' + qty, { signal: controller.signal })
+                .then(() => clearTimeout(timeout))
+                .catch(() => clearTimeout(timeout));
         }
 
         if (btnMinus) {
@@ -438,9 +443,11 @@ function initCarrelloPage() {
             const url = this.dataset.url;
 
             if (url) {
-                fetch(url).catch(err => {
-                    console.warn('Rimozione carrello:', err);
-                });
+                const controller = new AbortController();
+                const timeout = setTimeout(() => controller.abort(), 5000);
+                fetch(url, { signal: controller.signal })
+                    .then(() => clearTimeout(timeout))
+                    .catch(() => clearTimeout(timeout));
             }
 
             if (riga) {

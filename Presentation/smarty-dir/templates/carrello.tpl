@@ -23,10 +23,11 @@
                         {foreach $carrello->getItems() as $item}
                             {assign var="p" value=$item->getProdotto()}
                             {assign var="qty" value=$item->getQuantita()}
+                            {assign var="prezzo" value=$p->getPrezzo()}
 
                             <div class="carrello-item"
                                  data-item-id="{$item->getIdItem()}"
-                                 data-prezzo-unitario="{if $prezzo->hasSconto()}{$prezzo->calcolaPrezzoScontato()}{else}{$prezzo->getValore()}{/if}"
+                                 data-prezzo-unitario="{if isset($prezzo)}{if $prezzo->hasSconto()}{$prezzo->calcolaPrezzoScontato()}{else}{$prezzo->getValore()}{/if}{else}0{/if}"
                                  data-update-url="{$base_url}/carrello/aggiorna/{$item->getIdItem()}">
 
                                 <a href="{$base_url}/prodotto/{$p->getIdProdotto()}" class="carrello-item-img-link">
@@ -41,7 +42,6 @@
                                         {$p->getNomeProdotto()|escape}
                                     </a>
 
-                                    {assign var="prezzo" value=$p->getPrezzo()}
                                     <div class="carrello-item-prezzo-wrapper">
                                         {if isset($prezzo)}
                                             {if $prezzo->hasSconto()}
@@ -253,11 +253,11 @@ function initCarrelloPage() {
     // ── STEPPER QUANTITÀ PER OGNI ARTICOLO ──
     document.querySelectorAll('.carrello-item').forEach(riga => {
         const input       = riga.querySelector('.carrello-qty-input');
-        const btnMinus     = riga.querySelector('.carrello-qty-minus');
-        const btnPlus      = riga.querySelector('.carrello-qty-plus');
+        const btnMinus    = riga.querySelector('.carrello-qty-minus');
+        const btnPlus     = riga.querySelector('.carrello-qty-plus');
         const subtotaleEl = riga.querySelector('.carrello-item-subtotale-value');
-        const unit         = parseFloat(riga.dataset.prezzoUnitario) || 0;
-        const updateUrl    = riga.dataset.updateUrl;
+        const unit        = parseFloat(riga.dataset.prezzoUnitario) || 0;
+        const updateUrl   = riga.dataset.updateUrl;
 
         function aggiornaRigaUI() {
             const qty = parseInt(input.value) || 1;
