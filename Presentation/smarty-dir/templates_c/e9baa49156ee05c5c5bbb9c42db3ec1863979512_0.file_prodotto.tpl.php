@@ -1,18 +1,18 @@
 <?php
-/* Smarty version 5.8.0, created on 2026-06-17 16:26:49
+/* Smarty version 5.8.0, created on 2026-06-17 16:52:27
   from 'file:prodotto.tpl' */
 
 /* @var \Smarty\Template $_smarty_tpl */
 if ($_smarty_tpl->getCompiled()->isFresh($_smarty_tpl, array (
   'version' => '5.8.0',
-  'unifunc' => 'content_6a32aea9787757_32921306',
+  'unifunc' => 'content_6a32b4ab6a4204_25312252',
   'has_nocache_code' => false,
   'file_dependency' => 
   array (
     'e9baa49156ee05c5c5bbb9c42db3ec1863979512' => 
     array (
       0 => 'prodotto.tpl',
-      1 => 1781706122,
+      1 => 1781707801,
       2 => 'file',
     ),
   ),
@@ -20,30 +20,30 @@ if ($_smarty_tpl->getCompiled()->isFresh($_smarty_tpl, array (
   array (
   ),
 ))) {
-function content_6a32aea9787757_32921306 (\Smarty\Template $_smarty_tpl) {
+function content_6a32b4ab6a4204_25312252 (\Smarty\Template $_smarty_tpl) {
 $_smarty_current_dir = 'C:\\Users\\damic\\Desktop\\uni\\APPUNTI\\anno3\\secondo_semenstre\\Pweb\\TableCrown\\Presentation\\smarty-dir\\templates';
 $_smarty_tpl->getInheritance()->init($_smarty_tpl, true);
 ?>
 
 
 <?php 
-$_smarty_tpl->getInheritance()->instanceBlock($_smarty_tpl, 'Block_20835214106a32aea97385e9_32759857', "extra_css");
+$_smarty_tpl->getInheritance()->instanceBlock($_smarty_tpl, 'Block_7959172516a32b4ab63d5f8_33216556', "extra_css");
 ?>
 
 
 <?php 
-$_smarty_tpl->getInheritance()->instanceBlock($_smarty_tpl, 'Block_19543637946a32aea973c2e5_72848521', "content");
+$_smarty_tpl->getInheritance()->instanceBlock($_smarty_tpl, 'Block_2785118526a32b4ab641c26_91164946', "content");
 ?>
 
 
 <?php 
-$_smarty_tpl->getInheritance()->instanceBlock($_smarty_tpl, 'Block_3523177126a32aea9786098_95364888', "extra_js");
+$_smarty_tpl->getInheritance()->instanceBlock($_smarty_tpl, 'Block_11225215086a32b4ab6a13a3_66616236', "extra_js");
 ?>
 
 <?php $_smarty_tpl->getInheritance()->endChild($_smarty_tpl, "common/layout.tpl", $_smarty_current_dir);
 }
 /* {block "extra_css"} */
-class Block_20835214106a32aea97385e9_32759857 extends \Smarty\Runtime\Block
+class Block_7959172516a32b4ab63d5f8_33216556 extends \Smarty\Runtime\Block
 {
 public function callBlock(\Smarty\Template $_smarty_tpl) {
 $_smarty_current_dir = 'C:\\Users\\damic\\Desktop\\uni\\APPUNTI\\anno3\\secondo_semenstre\\Pweb\\TableCrown\\Presentation\\smarty-dir\\templates';
@@ -56,7 +56,7 @@ $_smarty_current_dir = 'C:\\Users\\damic\\Desktop\\uni\\APPUNTI\\anno3\\secondo_
 }
 /* {/block "extra_css"} */
 /* {block "content"} */
-class Block_19543637946a32aea973c2e5_72848521 extends \Smarty\Runtime\Block
+class Block_2785118526a32b4ab641c26_91164946 extends \Smarty\Runtime\Block
 {
 public function callBlock(\Smarty\Template $_smarty_tpl) {
 $_smarty_current_dir = 'C:\\Users\\damic\\Desktop\\uni\\APPUNTI\\anno3\\secondo_semenstre\\Pweb\\TableCrown\\Presentation\\smarty-dir\\templates';
@@ -323,13 +323,13 @@ $_smarty_tpl->getSmarty()->getRuntime('Foreach')->restore($_smarty_tpl, 1);?>
                     </button>
                 <?php }?>
 
-                                <a href="<?php echo $_smarty_tpl->getValue('base_url');?>
+                                <button class="btn-wishlist" id="btn-wishlist" type="button"
+                        data-url="<?php echo $_smarty_tpl->getValue('base_url');?>
 /wishlist/aggiungi/<?php echo $_smarty_tpl->getValue('prodotto')->getIdProdotto();?>
 "
-                   class="btn-wishlist"
-                   aria-label="Aggiungi alla wishlist">
-                    <i class="ti ti-heart"></i> Wishlist
-                </a>
+                        aria-label="Aggiungi alla wishlist">
+                    <i class="ti ti-heart" id="wishlist-icon"></i> Wishlist
+                </button>
 
             </div>
 
@@ -638,7 +638,7 @@ $_smarty_tpl->getSmarty()->getRuntime('Foreach')->restore($_smarty_tpl, 1);?>
 }
 /* {/block "content"} */
 /* {block "extra_js"} */
-class Block_3523177126a32aea9786098_95364888 extends \Smarty\Runtime\Block
+class Block_11225215086a32b4ab6a13a3_66616236 extends \Smarty\Runtime\Block
 {
 public function callBlock(\Smarty\Template $_smarty_tpl) {
 $_smarty_current_dir = 'C:\\Users\\damic\\Desktop\\uni\\APPUNTI\\anno3\\secondo_semenstre\\Pweb\\TableCrown\\Presentation\\smarty-dir\\templates';
@@ -835,6 +835,35 @@ if (document.readyState === 'loading') {
     // DOM è già caricato, esegui subito
     initProdottoPage();
 }
+
+const btnWishlist   = document.getElementById('btn-wishlist');
+const wishlistIcon  = document.getElementById('wishlist-icon');
+let   inWishlist    = false;
+
+if (btnWishlist) {
+    btnWishlist.addEventListener('click', function () {
+        inWishlist = !inWishlist;
+
+        // Swappa l'icona
+        if (inWishlist) {
+            wishlistIcon.classList.remove('ti-heart');
+            wishlistIcon.classList.add('ti-heart-filled');
+            btnWishlist.classList.add('is-active'); // per colorarla col CSS
+        } else {
+            wishlistIcon.classList.remove('ti-heart-filled');
+            wishlistIcon.classList.add('ti-heart');
+            btnWishlist.classList.remove('is-active');
+        }
+
+        // Chiamata al server in background
+        fetch(this.dataset.url).catch(err => {
+            console.warn('Wishlist fetch error:', err);
+        });
+    });
+}
+
+
+
 <?php echo '</script'; ?>
 >
 <?php
