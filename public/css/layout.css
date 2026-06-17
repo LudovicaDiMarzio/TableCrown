@@ -372,7 +372,7 @@ main > .section {
         flex: none !important;
         width: 100% !important;
     }
-
+}
     /* ── DROPDOWN UTENTE ─────────────────────────────────────── */
 /* ── DROPDOWN UTENTE ─────────────────────────────────────── */
 
@@ -427,4 +427,3 @@ main > .section {
     color: #dc2626 !important;
 }
 
-}
