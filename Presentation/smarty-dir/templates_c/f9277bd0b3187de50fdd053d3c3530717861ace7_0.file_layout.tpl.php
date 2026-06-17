@@ -1,18 +1,18 @@
 <?php
-/* Smarty version 5.8.0, created on 2026-06-15 16:00:47
+/* Smarty version 5.8.0, created on 2026-06-17 11:39:37
   from 'file:common/layout.tpl' */
 
 /* @var \Smarty\Template $_smarty_tpl */
 if ($_smarty_tpl->getCompiled()->isFresh($_smarty_tpl, array (
   'version' => '5.8.0',
-  'unifunc' => 'content_6a30058f80bc92_66145389',
+  'unifunc' => 'content_6a326b593e5c71_64307765',
   'has_nocache_code' => false,
   'file_dependency' => 
   array (
     'f9277bd0b3187de50fdd053d3c3530717861ace7' => 
     array (
       0 => 'common/layout.tpl',
-      1 => 1781531325,
+      1 => 1781689152,
       2 => 'file',
     ),
   ),
@@ -20,7 +20,7 @@ if ($_smarty_tpl->getCompiled()->isFresh($_smarty_tpl, array (
   array (
   ),
 ))) {
-function content_6a30058f80bc92_66145389 (\Smarty\Template $_smarty_tpl) {
+function content_6a326b593e5c71_64307765 (\Smarty\Template $_smarty_tpl) {
 $_smarty_current_dir = 'C:\\Users\\damic\\Desktop\\uni\\APPUNTI\\anno3\\secondo_semenstre\\Pweb\\TableCrown\\Presentation\\smarty-dir\\templates\\common';
 $_smarty_tpl->getInheritance()->init($_smarty_tpl, false);
 ?>
@@ -31,7 +31,7 @@ $_smarty_tpl->getInheritance()->init($_smarty_tpl, false);
     <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
 
     <title><?php 
-$_smarty_tpl->getInheritance()->instanceBlock($_smarty_tpl, 'Block_1676242006a30058f8032f0_05688204', "page_title");
+$_smarty_tpl->getInheritance()->instanceBlock($_smarty_tpl, 'Block_12109900346a326b593c1753_78575946', "page_title");
 ?>
 </title>
 
@@ -44,7 +44,7 @@ $_smarty_tpl->getInheritance()->instanceBlock($_smarty_tpl, 'Block_1676242006a30
 /css/layout.css">
 
     <?php 
-$_smarty_tpl->getInheritance()->instanceBlock($_smarty_tpl, 'Block_10834220486a30058f803e37_18025707', "extra_css");
+$_smarty_tpl->getInheritance()->instanceBlock($_smarty_tpl, 'Block_14068349596a326b593c6e83_32424207', "extra_css");
 ?>
 
 </head>
@@ -83,7 +83,7 @@ $_smarty_tpl->getInheritance()->instanceBlock($_smarty_tpl, 'Block_10834220486a3
                     <div class="navbar-end-actions">
                         
                                                 <?php if ((true && ($_smarty_tpl->hasVariable('utente') && null !== ($_smarty_tpl->getValue('utente') ?? null)))) {?>
-                            <div class="navbar-item has-dropdown is-hoverable">
+                            <div class="navbar-item has-dropdown" id="user-dropdown">
                                 <a class="navbar-link navbar-user-link">
                                     <i class="ti ti-user-circle navbar-icon"></i>
                                     <span class="navbar-username"><?php echo htmlspecialchars((string)$_smarty_tpl->getValue('utente')->getNickname(), ENT_QUOTES, 'UTF-8', true);?>
@@ -137,12 +137,12 @@ $_smarty_tpl->getInheritance()->instanceBlock($_smarty_tpl, 'Block_10834220486a3
                     <?php
 $_from = $_smarty_tpl->getSmarty()->getRuntime('Foreach')->init($_smarty_tpl, $_smarty_tpl->getValue('breadcrumbs'), 'crumb', true);
 $_smarty_tpl->getVariable('crumb')->iteration = 0;
-$foreach8DoElse = true;
+$foreach0DoElse = true;
 foreach ($_from ?? [] as $_smarty_tpl->getVariable('crumb')->value) {
-$foreach8DoElse = false;
+$foreach0DoElse = false;
 $_smarty_tpl->getVariable('crumb')->iteration++;
 $_smarty_tpl->getVariable('crumb')->last = $_smarty_tpl->getVariable('crumb')->iteration === $_smarty_tpl->getVariable('crumb')->total;
-$foreach8Backup = clone $_smarty_tpl->getVariable('crumb');
+$foreach0Backup = clone $_smarty_tpl->getVariable('crumb');
 ?>
                         <?php if ($_smarty_tpl->getVariable('crumb')->last) {?>
                             <li class="is-active">
@@ -155,7 +155,7 @@ $foreach8Backup = clone $_smarty_tpl->getVariable('crumb');
 </a></li>
                         <?php }?>
                     <?php
-$_smarty_tpl->setVariable('crumb', $foreach8Backup);
+$_smarty_tpl->setVariable('crumb', $foreach0Backup);
 }
 $_smarty_tpl->getSmarty()->getRuntime('Foreach')->restore($_smarty_tpl, 1);?>
                 </ul>
@@ -179,7 +179,7 @@ $_smarty_tpl->getSmarty()->getRuntime('Foreach')->restore($_smarty_tpl, 1);?>
 
         <main>
         <?php 
-$_smarty_tpl->getInheritance()->instanceBlock($_smarty_tpl, 'Block_7526886506a30058f80a754_43491964', "content");
+$_smarty_tpl->getInheritance()->instanceBlock($_smarty_tpl, 'Block_19797670556a326b593e3777_20844103', "content");
 ?>
 
     </main>
@@ -264,16 +264,28 @@ $_smarty_tpl->getInheritance()->instanceBlock($_smarty_tpl, 'Block_7526886506a30
 /js/script.js"><?php echo '</script'; ?>
 >
 
-    <?php 
-$_smarty_tpl->getInheritance()->instanceBlock($_smarty_tpl, 'Block_12931856906a30058f80b546_06771833', "extra_js");
-?>
-
+    <?php echo '<script'; ?>
+>
+        document.addEventListener('DOMContentLoaded', function () {
+            const dropdown = document.getElementById('user-dropdown');
+            if (dropdown) {
+            dropdown.querySelector('.navbar-link').addEventListener('click', function (e) {
+                    e.stopPropagation();
+                    dropdown.classList.toggle('is-active');
+                });
+                document.addEventListener('click', function () {
+                    dropdown.classList.remove('is-active');
+                });
+            }
+        });
+<?php echo '</script'; ?>
+>
 
 </body>
 </html>
 <?php }
 /* {block "page_title"} */
-class Block_1676242006a30058f8032f0_05688204 extends \Smarty\Runtime\Block
+class Block_12109900346a326b593c1753_78575946 extends \Smarty\Runtime\Block
 {
 public function callBlock(\Smarty\Template $_smarty_tpl) {
 $_smarty_current_dir = 'C:\\Users\\damic\\Desktop\\uni\\APPUNTI\\anno3\\secondo_semenstre\\Pweb\\TableCrown\\Presentation\\smarty-dir\\templates\\common';
@@ -283,7 +295,7 @@ TableCrown<?php
 }
 /* {/block "page_title"} */
 /* {block "extra_css"} */
-class Block_10834220486a30058f803e37_18025707 extends \Smarty\Runtime\Block
+class Block_14068349596a326b593c6e83_32424207 extends \Smarty\Runtime\Block
 {
 public function callBlock(\Smarty\Template $_smarty_tpl) {
 $_smarty_current_dir = 'C:\\Users\\damic\\Desktop\\uni\\APPUNTI\\anno3\\secondo_semenstre\\Pweb\\TableCrown\\Presentation\\smarty-dir\\templates\\common';
@@ -291,19 +303,11 @@ $_smarty_current_dir = 'C:\\Users\\damic\\Desktop\\uni\\APPUNTI\\anno3\\secondo_
 }
 /* {/block "extra_css"} */
 /* {block "content"} */
-class Block_7526886506a30058f80a754_43491964 extends \Smarty\Runtime\Block
+class Block_19797670556a326b593e3777_20844103 extends \Smarty\Runtime\Block
 {
 public function callBlock(\Smarty\Template $_smarty_tpl) {
 $_smarty_current_dir = 'C:\\Users\\damic\\Desktop\\uni\\APPUNTI\\anno3\\secondo_semenstre\\Pweb\\TableCrown\\Presentation\\smarty-dir\\templates\\common';
 }
 }
 /* {/block "content"} */
-/* {block "extra_js"} */
-class Block_12931856906a30058f80b546_06771833 extends \Smarty\Runtime\Block
-{
-public function callBlock(\Smarty\Template $_smarty_tpl) {
-$_smarty_current_dir = 'C:\\Users\\damic\\Desktop\\uni\\APPUNTI\\anno3\\secondo_semenstre\\Pweb\\TableCrown\\Presentation\\smarty-dir\\templates\\common';
-}
-}
-/* {/block "extra_js"} */
 }

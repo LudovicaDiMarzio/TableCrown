@@ -372,4 +372,57 @@ main > .section {
         flex: none !important;
         width: 100% !important;
     }
+
+    /* ── DROPDOWN UTENTE ─────────────────────────────────────── */
+
+#user-dropdown {
+    position: relative;
+}
+
+#user-dropdown .navbar-dropdown {
+    display: none;
+    position: absolute;
+    top: 100%;
+    right: 0;
+    background-color: var(--color-bg-dark);
+    border: 1px solid var(--color-border-dark);
+    border-radius: 6px;
+    min-width: 180px;
+    padding: 0.5rem 0;
+    z-index: 9999;
+}
+
+#user-dropdown.is-active .navbar-dropdown {
+    display: block;
+}
+
+#user-dropdown .navbar-dropdown .navbar-item {
+    color: rgba(255, 255, 255, 0.75) !important;
+    font-size: var(--font-size-sm);
+    padding: 0.5rem 1rem;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    transition: color var(--transition);
+    background: transparent !important;
+}
+
+#user-dropdown .navbar-dropdown .navbar-item:hover {
+    color: var(--color-primary) !important;
+}
+
+#user-dropdown .navbar-divider {
+    height: 1px;
+    background-color: var(--color-border-dark);
+    margin: 0.25rem 0;
+    border: none;
+}
+
+.navbar-logout {
+    color: #ef4444 !important;
+}
+
+.navbar-logout:hover {
+    color: #dc2626 !important;
+}
 }
