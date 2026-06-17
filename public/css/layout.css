@@ -425,4 +425,14 @@ main > .section {
 .navbar-logout:hover {
     color: #dc2626 !important;
 }
+
+
+.navbar-item.has-dropdown .navbar-dropdown {
+    display: none !important;
+}
+.navbar-item.has-dropdown.is-active .navbar-dropdown {
+    display: block !important;
+}
+
+
 }
