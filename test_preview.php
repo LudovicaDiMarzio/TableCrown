@@ -1,6 +1,10 @@
 <?php
 // 1. Includi l'autoloader o il file in cui inizializzi Smarty nel tuo progetto
 // require_once 'path/to/smarty/bootstrap.php'; 
+require_once __DIR__ . '/tua_cartella_config/bootstrap.php'; 
+
+// Se quel file crea già un'istanza di smarty (es. $smarty), usa direttamente quella!
+// Altrimenti, la classe Smarty sarà comunque disponibile per essere istanziata:
 
 // (Esempio generico di inizializzazione se non hai un file globale)
 require_once 'vendor/autoload.php';
