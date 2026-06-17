@@ -33,6 +33,9 @@ $smarty->setCompileDir($smartyDirHandler . 'templates_c/');
 $smarty->setCacheDir($smartyDirHandler . 'cache/');
 $smarty->setConfigDir($smartyDirHandler . 'configs/');
 
+$smarty->clearAllCache();
+$smarty->clearCompiledTemplate();
+
 // Definiamo i dati di base per l'header e i link
 $smarty->assign('page_title', 'TableCrown — Home');
 $smarty->assign('base_url', '/public'); // Modifica se la cartella public ha un percorso diverso
