@@ -217,22 +217,52 @@
     width: fit-content;
 }
 
+/* Badge disponibilità (nell'info) */
+.prodotto-badge {
+    display: inline-flex;
+    align-items: center;
+    padding: 0.3rem 0.8rem;
+    border-radius: 4px;
+    font-size: var(--font-size-sm);
+    font-weight: 600;
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+    width: fit-content;
+}
+
+/* VERDE: Disponibile */
 .prodotto-badge-disponibile {
     background-color: rgba(34, 197, 94, 0.15);
     color: #4ade80;
     border: 1px solid rgba(34, 197, 94, 0.3);
 }
 
+/* ROSSO: Esaurito */
 .prodotto-badge-esaurito {
     background-color: rgba(239, 68, 68, 0.15);
     color: #f87171;
     border: 1px solid rgba(239, 68, 68, 0.3);
 }
 
+/* BLU: Annunciato (Usa il blu del tuo brand anziché quello standard se preferisci) */
 .prodotto-badge-annunciato {
     background-color: rgba(59, 130, 246, 0.15);
-    color: #60a5fa;
+    color: #60a5fa; /* Puoi sostituirlo con var(--color-blue) se vuoi l'identico blu del sito */
     border: 1px solid rgba(59, 130, 246, 0.3);
+}
+
+/* ROSSO: Non disponibile (Aggiunta per mappare il .tpl) */
+.prodotto-badge-non-disponibile {
+    background-color: rgba(239, 68, 68, 0.15);
+    color: #f87171;
+    border: 1px solid rgba(239, 68, 68, 0.3);
+}
+
+/* AZZURRO/GIALLO: In arrivo (Opzionale, gestito nel .tpl) */
+.prodotto-badge-in-arrivo {
+    background-color: rgba(234, 179, 8, 0.15);
+    color: #fde047;
+    border: 1px solid rgba(234, 179, 8, 0.3);
 }
 
 .prodotto-nome {
