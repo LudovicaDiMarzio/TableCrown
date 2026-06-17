@@ -133,12 +133,12 @@ $mockUtenteSenzaAcquisto = new class {
 // ────────────────────────────────────────────────────
 
 // ✅ Decommenta per testare UTENTE CON ACQUISTO
-$utenteDaTestare = new $mockUtenteConAcquisto($mockOrdineConProdotto, $mockProdotto);
-$userHasPurchased = $utenteDaTestare->hasPurchasedProduct($mockProdotto);
+//$utenteDaTestare = new $mockUtenteConAcquisto($mockOrdineConProdotto, $mockProdotto);
+//$userHasPurchased = $utenteDaTestare->hasPurchasedProduct($mockProdotto);
 
 // ❌ Commenta la riga sopra e decomenta questa per testare SENZA ACQUISTO
-// $utenteDaTestare = new $mockUtenteSenzaAcquisto();
-// $userHasPurchased = $utenteDaTestare->hasPurchasedProduct($mockProdotto);
+ $utenteDaTestare = new $mockUtenteSenzaAcquisto();
+ $userHasPurchased = $utenteDaTestare->hasPurchasedProduct($mockProdotto);
 
 // ── Assegna al template ──
 $smarty->assign('utente', $utenteDaTestare);

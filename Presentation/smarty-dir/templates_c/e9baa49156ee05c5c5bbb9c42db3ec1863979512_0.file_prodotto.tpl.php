@@ -1,18 +1,18 @@
 <?php
-/* Smarty version 5.8.0, created on 2026-06-17 15:57:01
+/* Smarty version 5.8.0, created on 2026-06-17 16:25:44
   from 'file:prodotto.tpl' */
 
 /* @var \Smarty\Template $_smarty_tpl */
 if ($_smarty_tpl->getCompiled()->isFresh($_smarty_tpl, array (
   'version' => '5.8.0',
-  'unifunc' => 'content_6a32a7ade74276_29689038',
+  'unifunc' => 'content_6a32ae68edc6e0_25664590',
   'has_nocache_code' => false,
   'file_dependency' => 
   array (
     'e9baa49156ee05c5c5bbb9c42db3ec1863979512' => 
     array (
       0 => 'prodotto.tpl',
-      1 => 1781704352,
+      1 => 1781706122,
       2 => 'file',
     ),
   ),
@@ -20,30 +20,30 @@ if ($_smarty_tpl->getCompiled()->isFresh($_smarty_tpl, array (
   array (
   ),
 ))) {
-function content_6a32a7ade74276_29689038 (\Smarty\Template $_smarty_tpl) {
+function content_6a32ae68edc6e0_25664590 (\Smarty\Template $_smarty_tpl) {
 $_smarty_current_dir = 'C:\\Users\\damic\\Desktop\\uni\\APPUNTI\\anno3\\secondo_semenstre\\Pweb\\TableCrown\\Presentation\\smarty-dir\\templates';
 $_smarty_tpl->getInheritance()->init($_smarty_tpl, true);
 ?>
 
 
 <?php 
-$_smarty_tpl->getInheritance()->instanceBlock($_smarty_tpl, 'Block_6663780666a32a7ade13173_79476885', "extra_css");
+$_smarty_tpl->getInheritance()->instanceBlock($_smarty_tpl, 'Block_18150474086a32ae68ac1c30_33479235', "extra_css");
 ?>
 
 
 <?php 
-$_smarty_tpl->getInheritance()->instanceBlock($_smarty_tpl, 'Block_19298449116a32a7ade17df0_25154559', "content");
+$_smarty_tpl->getInheritance()->instanceBlock($_smarty_tpl, 'Block_6658855446a32ae68b4af17_06436097', "content");
 ?>
 
 
 <?php 
-$_smarty_tpl->getInheritance()->instanceBlock($_smarty_tpl, 'Block_5480870686a32a7ade717f8_18041002', "extra_js");
+$_smarty_tpl->getInheritance()->instanceBlock($_smarty_tpl, 'Block_9223380846a32ae68edaff9_00360416', "extra_js");
 ?>
 
 <?php $_smarty_tpl->getInheritance()->endChild($_smarty_tpl, "common/layout.tpl", $_smarty_current_dir);
 }
 /* {block "extra_css"} */
-class Block_6663780666a32a7ade13173_79476885 extends \Smarty\Runtime\Block
+class Block_18150474086a32ae68ac1c30_33479235 extends \Smarty\Runtime\Block
 {
 public function callBlock(\Smarty\Template $_smarty_tpl) {
 $_smarty_current_dir = 'C:\\Users\\damic\\Desktop\\uni\\APPUNTI\\anno3\\secondo_semenstre\\Pweb\\TableCrown\\Presentation\\smarty-dir\\templates';
@@ -56,7 +56,7 @@ $_smarty_current_dir = 'C:\\Users\\damic\\Desktop\\uni\\APPUNTI\\anno3\\secondo_
 }
 /* {/block "extra_css"} */
 /* {block "content"} */
-class Block_19298449116a32a7ade17df0_25154559 extends \Smarty\Runtime\Block
+class Block_6658855446a32ae68b4af17_06436097 extends \Smarty\Runtime\Block
 {
 public function callBlock(\Smarty\Template $_smarty_tpl) {
 $_smarty_current_dir = 'C:\\Users\\damic\\Desktop\\uni\\APPUNTI\\anno3\\secondo_semenstre\\Pweb\\TableCrown\\Presentation\\smarty-dir\\templates';
@@ -460,68 +460,74 @@ $_smarty_tpl->getSmarty()->getRuntime('Foreach')->restore($_smarty_tpl, 1);?>
             <h2 class="prodotto-section-title">Recensioni</h2>
 
                         
-                        <?php if ((true && ($_smarty_tpl->hasVariable('utente') && null !== ($_smarty_tpl->getValue('utente') ?? null))) && $_smarty_tpl->getValue('utente')) {?>
-                <div class="recensione-form-wrapper">
-                    <button class="button btn-scrivi-recensione" id="btn-scrivi-recensione" type="button">
-                        <i class="ti ti-pencil"></i> Scrivi la tua recensione
-                    </button>
+                                    <?php if ((true && ($_smarty_tpl->hasVariable('utente') && null !== ($_smarty_tpl->getValue('utente') ?? null))) && $_smarty_tpl->getValue('utente')) {?>
+                <?php if ((true && ($_smarty_tpl->hasVariable('userHasPurchased') && null !== ($_smarty_tpl->getValue('userHasPurchased') ?? null))) && $_smarty_tpl->getValue('userHasPurchased')) {?>
+                    <div class="recensione-form-wrapper">
+                        <button class="button btn-scrivi-recensione" id="btn-scrivi-recensione" type="button">
+                            <i class="ti ti-pencil"></i> Scrivi la tua recensione
+                        </button>
 
-                    <div class="recensione-form" id="recensione-form" style="display:none;">
-                        <form action="<?php echo $_smarty_tpl->getValue('base_url');?>
+                        <div class="recensione-form" id="recensione-form" style="display:none;">
+                            <form action="<?php echo $_smarty_tpl->getValue('base_url');?>
 /recensione/aggiungi/<?php echo $_smarty_tpl->getValue('prodotto')->getIdProdotto();?>
 " method="post">
 
-                            <div class="form-group">
-                                <label class="form-label" for="rec-titolo">Titolo</label>
-                                <input type="text"
-                                       id="rec-titolo"
-                                       name="titolo"
-                                       class="input"
-                                       placeholder="Titolo della recensione"
-                                       required>
-                            </div>
-
-                            <div class="form-group">
-                                <label class="form-label">Valutazione</label>
-                                <div class="star-picker" id="star-picker" role="group" aria-label="Scegli valutazione">
-                                    <?php
+                                <div class="form-group">
+                                    <label class="form-label" for="rec-titolo">Titolo</label>
+                                    <input type="text"
+                                           id="rec-titolo"
+                                           name="titolo"
+                                           class="input"
+                                           placeholder="Titolo della recensione"
+                                           required>
+                                </div>
+        
+                                <div class="form-group">
+                                    <label class="form-label">Valutazione</label>
+                                    <div class="star-picker" id="star-picker" role="group" aria-label="Scegli valutazione">
+                                        <?php
 $_from = $_smarty_tpl->getSmarty()->getRuntime('Foreach')->init($_smarty_tpl, array(1,2,3,4,5), 's');
 $foreach6DoElse = true;
 foreach ($_from ?? [] as $_smarty_tpl->getVariable('s')->value) {
 $foreach6DoElse = false;
 ?>
-                                        <i class="ti ti-star star-pick" data-value="<?php echo $_smarty_tpl->getValue('s');?>
+                                            <i class="ti ti-star star-pick" data-value="<?php echo $_smarty_tpl->getValue('s');?>
 " aria-label="<?php echo $_smarty_tpl->getValue('s');?>
  stelle"></i>
-                                    <?php
+                                        <?php
 }
 $_smarty_tpl->getSmarty()->getRuntime('Foreach')->restore($_smarty_tpl, 1);?>
+                                    </div>
+                                    <input type="hidden" name="voto" id="rec-voto" value="0">
                                 </div>
-                                <input type="hidden" name="voto" id="rec-voto" value="0">
-                            </div>
-
-                            <div class="form-group">
-                                <label class="form-label" for="rec-testo">Testo</label>
-                                <textarea id="rec-testo"
-                                          name="testo"
-                                          class="textarea"
-                                          placeholder="Scrivi la tua opinione..."
-                                          rows="4"
-                                          required></textarea>
-                            </div>
-
-                            <div class="form-actions">
-                                <button type="submit" class="button btn-invia-recensione">
-                                    <i class="ti ti-send"></i> Invia
-                                </button>
-                                <button type="button" class="button btn-annulla-recensione" id="btn-annulla-recensione">
-                                    Annulla
-                                </button>
-                            </div>
-
-                        </form>
+        
+                                <div class="form-group">
+                                    <label class="form-label" for="rec-testo">Testo</label>
+                                    <textarea id="rec-testo"
+                                              name="testo"
+                                              class="textarea"
+                                              placeholder="Scrivi la tua opinione..."
+                                              rows="4"
+                                              required></textarea>
+                                </div>
+        
+                                <div class="form-actions">
+                                    <button type="submit" class="button btn-invia-recensione">
+                                        <i class="ti ti-send"></i> Invia
+                                    </button>
+                                    <button type="button" class="button btn-annulla-recensione" id="btn-annulla-recensione">
+                                        Annulla
+                                    </button>
+                                </div>
+        
+                            </form>
+                        </div>
                     </div>
-                </div>
+                <?php } else { ?>
+                    <p class="recensione-login-hint">
+                        <i class="ti ti-alert-circle"></i> Puoi lasciare una recensione solo dopo aver acquistato questo prodotto.
+                    </p>
+                <?php }?>
             <?php } else { ?>
                 <p class="recensione-login-hint">
                     <a href="<?php echo $_smarty_tpl->getValue('base_url');?>
@@ -632,7 +638,7 @@ $_smarty_tpl->getSmarty()->getRuntime('Foreach')->restore($_smarty_tpl, 1);?>
 }
 /* {/block "content"} */
 /* {block "extra_js"} */
-class Block_5480870686a32a7ade717f8_18041002 extends \Smarty\Runtime\Block
+class Block_9223380846a32ae68edaff9_00360416 extends \Smarty\Runtime\Block
 {
 public function callBlock(\Smarty\Template $_smarty_tpl) {
 $_smarty_current_dir = 'C:\\Users\\damic\\Desktop\\uni\\APPUNTI\\anno3\\secondo_semenstre\\Pweb\\TableCrown\\Presentation\\smarty-dir\\templates';
