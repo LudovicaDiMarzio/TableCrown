@@ -13,6 +13,10 @@
 
 .prodotto-container .container {
     max-width: 1200px;
+    margin-left: auto;  /* Centra il blocco distribuendo lo spazio a sinistra */
+    margin-right: auto; /* Centra il blocco distribuendo lo spazio a destra */
+    padding-left: 1rem;  /* Sicurezza per evitare che su schermi intermedi il testo tocchi i bordi */
+    padding-right: 1rem; /* Sicurezza per evitare che su schermi intermedi il testo tocchi i bordi */
 }
 
 
