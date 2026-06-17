@@ -510,26 +510,57 @@ document.addEventListener('DOMContentLoaded', function () {
     qtyInput?.addEventListener('input', aggiornaPrezzo);
 
     // ── AGGIORNA HREF CARRELLO CON QUANTITÀ ──
+    // ── AGGIORNA HREF CARRELLO CON QUANTITÀ (Gestione AJAX + Modal) ──
     const btnCart = document.getElementById('btn-add-cart');
     if (btnCart && qtyInput) {
-        const baseHref = btnCart.getAttribute('href');
-        qtyInput.addEventListener('input', function () {
-            btnCart.setAttribute('href', baseHref + '?qty=' + (parseInt(this.value) || 1));
-        });
+        
+        // Funzione per aggiornare l'attributo href (utile se l'utente fa tasto destro -> apri in nuova scheda)
+        function aggiornaHref() {
+            const currentQty = parseInt(qtyInput.value) || 1;
+            // Estraiamo la base del link prima di eventuali vecchi parametri query
+            const urlSenzaQuery = btnCart.getAttribute('href').split('?')[0];
+            btnCart.setAttribute('href', urlSenzaQuery + '?qty=' + currentQty);
+        }
 
-        // ── MINI CART MODAL ──
+        // Aggiorna l'href sia quando l'utente cambia input sia quando clicca sui pulsanti + e -
+        qtyInput.addEventListener('input', aggiornaHref);
+        document.getElementById('qty-minus')?.addEventListener('click', aggiornaHref);
+        document.getElementById('qty-plus')?.addEventListener('click', aggiornaHref);
+
+        // Intercettiamo il click per fare la richiesta AJAX
         btnCart.addEventListener('click', function (e) {
-            e.preventDefault();
+            e.preventDefault(); // Impedisce il reindirizzamento automatico del browser
+
+            const targetUrl = this.getAttribute('href');
             const modal = document.getElementById('minicart-modal');
-            if (modal) {
-                modal.classList.add('is-active');
-                modal.setAttribute('aria-hidden', 'false');
-            }
-            // Redirect effettivo dopo breve delay (opzionale: puoi fare fetch AJAX)
-            setTimeout(() => { window.location.href = this.getAttribute('href'); }, 300);
+
+            // Inviamo la richiesta al server in background (AJAX)
+            fetch(targetUrl, {
+                method: 'GET',
+                headers: {
+                    'X-Requested-With': 'XMLHttpRequest' // Comunica al backend che è una richiesta AJAX
+                }
+            })
+            .then(response => {
+                if (response.ok) {
+                    // Se il server risponde correttamente, mostriamo il modal
+                    if (modal) {
+                        modal.classList.add('is-active');
+                        modal.setAttribute('aria-hidden', 'false');
+                    }
+                } else {
+                    console.error("Errore durante l'aggiunta al carrello.");
+                    // Opzionale: fallback se la fetch fallisce, reindirizziamo normalmente
+                    window.location.href = targetUrl;
+                }
+            })
+            .catch(error => {
+                console.error("Errore di rete:", error);
+                window.location.href = targetUrl;
+            });
         });
     }
-
+    
     // ── TOGGLE FORM RECENSIONE ──
     document.getElementById('btn-scrivi-recensione')?.addEventListener('click', function () {
         const form = document.getElementById('recensione-form');
