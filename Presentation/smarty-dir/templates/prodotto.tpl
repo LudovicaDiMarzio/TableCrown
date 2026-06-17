@@ -73,6 +73,8 @@
                     <span class="prodotto-badge prodotto-badge-esaurito">Esaurito</span>
                 {elseif $prodotto->getDisponibilitaProdotto() == 'annunciato'}
                     <span class="prodotto-badge prodotto-badge-annunciato">Annunciato</span>
+                {elseif $prodotto->getDisponibilitaProdotto() == 'non disponibile'}
+                    <span class="prodotto-badge prodotto-badge-non-disponibile">Non disponibile</span>
                 {else}
                     <span class="prodotto-badge prodotto-badge-disponibile">Disponibile</span>
                 {/if}
@@ -159,6 +161,9 @@
                     {elseif $prodotto->getDisponibilitaProdotto() == 'esaurito'}
                         <i class="ti ti-circle-x"></i>
                         <span>Esaurito</span>
+                    {elseif $prodotto->getDisponibilitaProdotto() == 'non disponibile'}
+                        <i class="ti ti-circle-x"></i>
+                        <span>Non disponibile</span>
                     {else}
                         <i class="ti ti-clock"></i>
                         <span>Annunciato</span>
