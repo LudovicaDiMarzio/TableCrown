@@ -1,20 +1,12 @@
 <?php
-// 1. Includi l'autoloader o il file in cui inizializzi Smarty nel tuo progetto
-// require_once 'path/to/smarty/bootstrap.php'; 
-require_once __DIR__ . '/tua_cartella_config/bootstrap.php'; 
+// 1. Includi l'autoloader di Composer usando il percorso assoluto corretto
+require_once __DIR__ . '/vendor/autoload.php'; 
 
-// Se quel file crea già un'istanza di smarty (es. $smarty), usa direttamente quella!
-// Altrimenti, la classe Smarty sarà comunque disponibile per essere istanziata:
-
-// (Esempio generico di inizializzazione se non hai un file globale)
-require_once 'vendor/autoload.php';
 $smarty = new Smarty();
 $smarty->setTemplateDir(__DIR__ . '/templates');
 $smarty->setCompileDir(__DIR__ . '/templates_c');
 
 // 2. CREIAMO I DATI FINTI (MOCK) PER IL TEST
-// Creiamo delle classi veloci che mimano il comportamento del tuo database/model
-
 class MockPrezzo {
     public function hasSconto() { return true; }
     public function calcolaPrezzoScontato() { return 19.90; }
@@ -33,23 +25,23 @@ class MockItem {
     public function getIdItem() { return 1; }
     public function getProdotto() { return new MockProdotto(); }
     public function getQuantita() { return 2; }
-    public function getSubtotale() { return 39.80; } // 19.90 * 2
+    public function getSubtotale() { return 39.80; } 
 }
 
 class MockCarrello {
     public function getItems() { 
-        return [new MockItem()]; // Un array con un articolo dentro
+        return [new MockItem()]; 
     }
     public function getTotaleArticoli() { return 2; }
     public function getSconto() { return 10.00; }
-    public function getSpedizione() { return 0.00; } // Gratuita
+    public function getSpedizione() { return 0.00; } 
     public function getTotale() { return 39.80; }
 }
 
 // 3. ASSEGNAZIONE DELLE VARIABILI A SMARTY
 $smarty->assign('carrello', new MockCarrello());
-$smarty->assign('correlati', [new MockProdotto(), new MockProdotto()]); // Ne passiamo due nei correlati
-$smarty->assign('base_url', '.'); // Punto di partenza per i percorsi relativi nel tuo ambiente locale
+$smarty->assign('correlati', [new MockProdotto(), new MockProdotto()]); 
+$smarty->assign('base_url', '.'); 
 
 // 4. RENDERING DEL TEMPLATE
 $smarty->display('carrello.tpl');
