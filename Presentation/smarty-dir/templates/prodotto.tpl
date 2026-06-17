@@ -333,57 +333,64 @@
             {* {if isset($utente)}<p style="color:lime">Utente loggato: {$utente->getNickname()|escape}</p>{else}<p style="color:red">Nessun utente loggato</p>{/if} *}
 
             {* Form nuova recensione (solo utenti loggati) *}
+            {* Form nuova recensione (solo utenti che hanno acquistato) *}
             {if isset($utente) && $utente}
-                <div class="recensione-form-wrapper">
-                    <button class="button btn-scrivi-recensione" id="btn-scrivi-recensione" type="button">
-                        <i class="ti ti-pencil"></i> Scrivi la tua recensione
-                    </button>
+                {if isset($userHasPurchased) && $userHasPurchased}
+                    <div class="recensione-form-wrapper">
+                        <button class="button btn-scrivi-recensione" id="btn-scrivi-recensione" type="button">
+                            <i class="ti ti-pencil"></i> Scrivi la tua recensione
+                        </button>
 
-                    <div class="recensione-form" id="recensione-form" style="display:none;">
-                        <form action="{$base_url}/recensione/aggiungi/{$prodotto->getIdProdotto()}" method="post">
+                        <div class="recensione-form" id="recensione-form" style="display:none;">
+                            <form action="{$base_url}/recensione/aggiungi/{$prodotto->getIdProdotto()}" method="post">
 
-                            <div class="form-group">
-                                <label class="form-label" for="rec-titolo">Titolo</label>
-                                <input type="text"
-                                       id="rec-titolo"
-                                       name="titolo"
-                                       class="input"
-                                       placeholder="Titolo della recensione"
-                                       required>
-                            </div>
-
-                            <div class="form-group">
-                                <label class="form-label">Valutazione</label>
-                                <div class="star-picker" id="star-picker" role="group" aria-label="Scegli valutazione">
-                                    {foreach [1,2,3,4,5] as $s}
-                                        <i class="ti ti-star star-pick" data-value="{$s}" aria-label="{$s} stelle"></i>
-                                    {/foreach}
+                                <div class="form-group">
+                                    <label class="form-label" for="rec-titolo">Titolo</label>
+                                    <input type="text"
+                                           id="rec-titolo"
+                                           name="titolo"
+                                           class="input"
+                                           placeholder="Titolo della recensione"
+                                           required>
                                 </div>
-                                <input type="hidden" name="voto" id="rec-voto" value="0">
-                            </div>
-
-                            <div class="form-group">
-                                <label class="form-label" for="rec-testo">Testo</label>
-                                <textarea id="rec-testo"
-                                          name="testo"
-                                          class="textarea"
-                                          placeholder="Scrivi la tua opinione..."
-                                          rows="4"
-                                          required></textarea>
-                            </div>
-
-                            <div class="form-actions">
-                                <button type="submit" class="button btn-invia-recensione">
-                                    <i class="ti ti-send"></i> Invia
-                                </button>
-                                <button type="button" class="button btn-annulla-recensione" id="btn-annulla-recensione">
-                                    Annulla
-                                </button>
-                            </div>
-
-                        </form>
+        
+                                <div class="form-group">
+                                    <label class="form-label">Valutazione</label>
+                                    <div class="star-picker" id="star-picker" role="group" aria-label="Scegli valutazione">
+                                        {foreach [1,2,3,4,5] as $s}
+                                            <i class="ti ti-star star-pick" data-value="{$s}" aria-label="{$s} stelle"></i>
+                                        {/foreach}
+                                    </div>
+                                    <input type="hidden" name="voto" id="rec-voto" value="0">
+                                </div>
+        
+                                <div class="form-group">
+                                    <label class="form-label" for="rec-testo">Testo</label>
+                                    <textarea id="rec-testo"
+                                              name="testo"
+                                              class="textarea"
+                                              placeholder="Scrivi la tua opinione..."
+                                              rows="4"
+                                              required></textarea>
+                                </div>
+        
+                                <div class="form-actions">
+                                    <button type="submit" class="button btn-invia-recensione">
+                                        <i class="ti ti-send"></i> Invia
+                                    </button>
+                                    <button type="button" class="button btn-annulla-recensione" id="btn-annulla-recensione">
+                                        Annulla
+                                    </button>
+                                </div>
+        
+                            </form>
+                        </div>
                     </div>
-                </div>
+                {else}
+                    <p class="recensione-login-hint">
+                        <i class="ti ti-alert-circle"></i> Puoi lasciare una recensione solo dopo aver acquistato questo prodotto.
+                    </p>
+                {/if}
             {else}
                 <p class="recensione-login-hint">
                     <a href="{$base_url}/accedi">Accedi</a> per lasciare una recensione.
