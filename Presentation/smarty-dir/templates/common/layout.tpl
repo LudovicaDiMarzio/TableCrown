@@ -205,5 +205,7 @@
         });
 </script>
 
+{block name="extra_js"}
+
 </body>
 </html>

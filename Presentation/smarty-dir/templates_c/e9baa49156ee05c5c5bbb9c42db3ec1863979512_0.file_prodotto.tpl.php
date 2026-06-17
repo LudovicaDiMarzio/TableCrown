@@ -1,18 +1,18 @@
 <?php
-/* Smarty version 5.8.0, created on 2026-06-17 15:48:13
+/* Smarty version 5.8.0, created on 2026-06-17 15:53:25
   from 'file:prodotto.tpl' */
 
 /* @var \Smarty\Template $_smarty_tpl */
 if ($_smarty_tpl->getCompiled()->isFresh($_smarty_tpl, array (
   'version' => '5.8.0',
-  'unifunc' => 'content_6a32a59d183e23_73393646',
+  'unifunc' => 'content_6a32a6d52a0377_80367352',
   'has_nocache_code' => false,
   'file_dependency' => 
   array (
     'e9baa49156ee05c5c5bbb9c42db3ec1863979512' => 
     array (
       0 => 'prodotto.tpl',
-      1 => 1781704073,
+      1 => 1781704352,
       2 => 'file',
     ),
   ),
@@ -20,30 +20,30 @@ if ($_smarty_tpl->getCompiled()->isFresh($_smarty_tpl, array (
   array (
   ),
 ))) {
-function content_6a32a59d183e23_73393646 (\Smarty\Template $_smarty_tpl) {
+function content_6a32a6d52a0377_80367352 (\Smarty\Template $_smarty_tpl) {
 $_smarty_current_dir = 'C:\\Users\\damic\\Desktop\\uni\\APPUNTI\\anno3\\secondo_semenstre\\Pweb\\TableCrown\\Presentation\\smarty-dir\\templates';
 $_smarty_tpl->getInheritance()->init($_smarty_tpl, true);
 ?>
 
 
 <?php 
-$_smarty_tpl->getInheritance()->instanceBlock($_smarty_tpl, 'Block_760811116a32a59d14e7f2_44947589', "extra_css");
+$_smarty_tpl->getInheritance()->instanceBlock($_smarty_tpl, 'Block_13404049846a32a6d523fe64_99085570', "extra_css");
 ?>
 
 
 <?php 
-$_smarty_tpl->getInheritance()->instanceBlock($_smarty_tpl, 'Block_11745695306a32a59d1513f9_43076450', "content");
+$_smarty_tpl->getInheritance()->instanceBlock($_smarty_tpl, 'Block_1764906526a32a6d5244337_56088732', "content");
 ?>
 
 
 <?php 
-$_smarty_tpl->getInheritance()->instanceBlock($_smarty_tpl, 'Block_15153678066a32a59d182d74_37377738', "extra_js");
+$_smarty_tpl->getInheritance()->instanceBlock($_smarty_tpl, 'Block_20041099326a32a6d529d602_26337690', "extra_js");
 ?>
 
 <?php $_smarty_tpl->getInheritance()->endChild($_smarty_tpl, "common/layout.tpl", $_smarty_current_dir);
 }
 /* {block "extra_css"} */
-class Block_760811116a32a59d14e7f2_44947589 extends \Smarty\Runtime\Block
+class Block_13404049846a32a6d523fe64_99085570 extends \Smarty\Runtime\Block
 {
 public function callBlock(\Smarty\Template $_smarty_tpl) {
 $_smarty_current_dir = 'C:\\Users\\damic\\Desktop\\uni\\APPUNTI\\anno3\\secondo_semenstre\\Pweb\\TableCrown\\Presentation\\smarty-dir\\templates';
@@ -56,7 +56,7 @@ $_smarty_current_dir = 'C:\\Users\\damic\\Desktop\\uni\\APPUNTI\\anno3\\secondo_
 }
 /* {/block "extra_css"} */
 /* {block "content"} */
-class Block_11745695306a32a59d1513f9_43076450 extends \Smarty\Runtime\Block
+class Block_1764906526a32a6d5244337_56088732 extends \Smarty\Runtime\Block
 {
 public function callBlock(\Smarty\Template $_smarty_tpl) {
 $_smarty_current_dir = 'C:\\Users\\damic\\Desktop\\uni\\APPUNTI\\anno3\\secondo_semenstre\\Pweb\\TableCrown\\Presentation\\smarty-dir\\templates';
@@ -632,7 +632,7 @@ $_smarty_tpl->getSmarty()->getRuntime('Foreach')->restore($_smarty_tpl, 1);?>
 }
 /* {/block "content"} */
 /* {block "extra_js"} */
-class Block_15153678066a32a59d182d74_37377738 extends \Smarty\Runtime\Block
+class Block_20041099326a32a6d529d602_26337690 extends \Smarty\Runtime\Block
 {
 public function callBlock(\Smarty\Template $_smarty_tpl) {
 $_smarty_current_dir = 'C:\\Users\\damic\\Desktop\\uni\\APPUNTI\\anno3\\secondo_semenstre\\Pweb\\TableCrown\\Presentation\\smarty-dir\\templates';
@@ -640,7 +640,8 @@ $_smarty_current_dir = 'C:\\Users\\damic\\Desktop\\uni\\APPUNTI\\anno3\\secondo_
 
 <?php echo '<script'; ?>
 >
-document.addEventListener('DOMContentLoaded', function () {
+// ► AVVIA SUBITO il codice, non aspettare DOMContentLoaded
+function initProdottoPage() {
 
     // ── GALLERIA IMMAGINI ──
     const imgs = document.querySelectorAll('.gallery-main-img');
@@ -677,37 +678,47 @@ document.addEventListener('DOMContentLoaded', function () {
         prezzoTot.textContent = '€' + (unit * qty).toFixed(2);
     }
 
-    // Aggiorna l'href del carrello con la quantità scelta
     function aggiornaUrlCarrello() {
         if (!btnCart || !baseHref || !qtyInput) return;
         const qty = parseInt(qtyInput.value) || 1;
         btnCart.setAttribute('href', baseHref + '?qty=' + qty);
     }
 
-    // Bottone MENO
-    document.getElementById('qty-minus')?.addEventListener('click', function () {
-        if (!qtyInput) return;
-        const val = parseInt(qtyInput.value) || 1;
-        if (val > 1) {
-            qtyInput.value = val - 1;
+    // ✅ FIX: Bottone MENO
+    const btnMinus = document.getElementById('qty-minus');
+    if (btnMinus) {
+        btnMinus.addEventListener('click', function (e) {
+            e.preventDefault();
+            if (!qtyInput) return;
+            const val = parseInt(qtyInput.value) || 1;
+            if (val > 1) {
+                qtyInput.value = val - 1;
+                aggiornaPrezzo();
+                aggiornaUrlCarrello();
+            }
+        });
+    }
+
+    // ✅ FIX: Bottone PIÙ
+    const btnPlus = document.getElementById('qty-plus');
+    if (btnPlus) {
+        btnPlus.addEventListener('click', function (e) {
+            e.preventDefault();
+            if (!qtyInput) return;
+            const currentVal = parseInt(qtyInput.value) || 1;
+            qtyInput.value = currentVal + 1;
             aggiornaPrezzo();
             aggiornaUrlCarrello();
-        }
-    });
-
-    // Bottone PIÙ
-    document.getElementById('qty-plus')?.addEventListener('click', function () {
-        if (!qtyInput) return;
-        qtyInput.value = (parseInt(qtyInput.value) || 1) + 1;
-        aggiornaPrezzo();
-        aggiornaUrlCarrello();
-    });
+        });
+    }
 
     // Input manuale
-    qtyInput?.addEventListener('input', function () {
-        aggiornaPrezzo();
-        aggiornaUrlCarrello();
-    });
+    if (qtyInput) {
+        qtyInput.addEventListener('input', function () {
+            aggiornaPrezzo();
+            aggiornaUrlCarrello();
+        });
+    }
 
     // ── INTERCETTAZIONE CLICK CARRELLO + MODAL ──
     if (btnCart) {
@@ -733,15 +744,21 @@ document.addEventListener('DOMContentLoaded', function () {
     const formRecensione = document.getElementById('recensione-form');
 
     if (btnRecensione && formRecensione) {
-        btnRecensione.addEventListener('click', function () {
+        btnRecensione.addEventListener('click', function (e) {
+            e.preventDefault();
             const isVisible = formRecensione.style.display === 'block';
             formRecensione.style.display = isVisible ? 'none' : 'block';
         });
     }
 
-    document.getElementById('btn-annulla-recensione')?.addEventListener('click', function () {
-        if (formRecensione) formRecensione.style.display = 'none';
-    });
+    // ✅ FIX: Bottone Annulla
+    const btnAnnulla = document.getElementById('btn-annulla-recensione');
+    if (btnAnnulla && formRecensione) {
+        btnAnnulla.addEventListener('click', function (e) {
+            e.preventDefault();
+            formRecensione.style.display = 'none';
+        });
+    }
 
     // ── STAR PICKER RECENSIONE ──
     const stars     = document.querySelectorAll('.star-pick');
@@ -756,10 +773,10 @@ document.addEventListener('DOMContentLoaded', function () {
             });
         });
 
-        star.addEventListener('click', function () {
+        star.addEventListener('click', function (e) {
+            e.preventDefault();
             const val = parseInt(this.dataset.value);
             if (votoInput) votoInput.value = val;
-            // Mantieni le stelle illuminate dopo il click
             stars.forEach((s, i) => {
                 s.classList.toggle('ti-star-filled', i < val);
                 s.classList.toggle('ti-star', i >= val);
@@ -767,30 +784,51 @@ document.addEventListener('DOMContentLoaded', function () {
         });
     });
 
-    document.getElementById('star-picker')?.addEventListener('mouseleave', function () {
-        const val = parseInt(votoInput?.value) || 0;
-        stars.forEach((s, i) => {
-            s.classList.toggle('ti-star-filled', i < val);
-            s.classList.toggle('ti-star', i >= val);
+    if (document.getElementById('star-picker')) {
+        document.getElementById('star-picker').addEventListener('mouseleave', function () {
+            const val = parseInt(votoInput?.value) || 0;
+            stars.forEach((s, i) => {
+                s.classList.toggle('ti-star-filled', i < val);
+                s.classList.toggle('ti-star', i >= val);
+            });
         });
-    });
+    }
 
     // ── CHIUSURA MODAL CON X ──
     const btnClose = document.getElementById('close-minicart');
     const modal    = document.getElementById('minicart-modal');
 
-    btnClose?.addEventListener('click', function () {
-        modal?.classList.remove('is-active');
-        modal?.setAttribute('aria-hidden', 'true');
-    });
+    if (btnClose) {
+        btnClose.addEventListener('click', function (e) {
+            e.preventDefault();
+            if (modal) {
+                modal.classList.remove('is-active');
+                modal.setAttribute('aria-hidden', 'true');
+            }
+        });
+    }
 
     // ── CHIUSURA MODAL CLICCANDO SFONDO ──
-    document.querySelector('#minicart-modal .modal-background')?.addEventListener('click', function () {
-        modal?.classList.remove('is-active');
-        modal?.setAttribute('aria-hidden', 'true');
-    });
+    const modalBg = document.querySelector('#minicart-modal .modal-background');
+    if (modalBg) {
+        modalBg.addEventListener('click', function () {
+            if (modal) {
+                modal.classList.remove('is-active');
+                modal.setAttribute('aria-hidden', 'true');
+            }
+        });
+    }
 
-});
+    console.log('✅ Prodotto page inizializzato correttamente');
+}
+
+// ► Esegui quando il DOM è pronto (supporta sia pagine caricate che DOMContentLoaded già passato)
+if (document.readyState === 'loading') {
+    document.addEventListener('DOMContentLoaded', initProdottoPage);
+} else {
+    // DOM è già caricato, esegui subito
+    initProdottoPage();
+}
 <?php echo '</script'; ?>
 >
 <?php
