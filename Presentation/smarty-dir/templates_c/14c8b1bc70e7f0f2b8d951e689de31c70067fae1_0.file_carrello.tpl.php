@@ -1,18 +1,18 @@
 <?php
-/* Smarty version 5.8.0, created on 2026-06-17 18:11:42
+/* Smarty version 5.8.0, created on 2026-06-17 18:17:24
   from 'file:carrello.tpl' */
 
 /* @var \Smarty\Template $_smarty_tpl */
 if ($_smarty_tpl->getCompiled()->isFresh($_smarty_tpl, array (
   'version' => '5.8.0',
-  'unifunc' => 'content_6a32c73e9ba112_35360973',
+  'unifunc' => 'content_6a32c8941794b1_39493722',
   'has_nocache_code' => false,
   'file_dependency' => 
   array (
     '14c8b1bc70e7f0f2b8d951e689de31c70067fae1' => 
     array (
       0 => 'carrello.tpl',
-      1 => 1781712680,
+      1 => 1781713018,
       2 => 'file',
     ),
   ),
@@ -20,28 +20,28 @@ if ($_smarty_tpl->getCompiled()->isFresh($_smarty_tpl, array (
   array (
   ),
 ))) {
-function content_6a32c73e9ba112_35360973 (\Smarty\Template $_smarty_tpl) {
+function content_6a32c8941794b1_39493722 (\Smarty\Template $_smarty_tpl) {
 $_smarty_current_dir = 'C:\\Users\\damic\\Desktop\\uni\\APPUNTI\\anno3\\secondo_semenstre\\Pweb\\TableCrown\\Presentation\\smarty-dir\\templates';
 $_smarty_tpl->getInheritance()->init($_smarty_tpl, true);
 ?>
 
 
 <?php 
-$_smarty_tpl->getInheritance()->instanceBlock($_smarty_tpl, 'Block_14612974596a32c73e9985a0_25629630', "extra_css");
+$_smarty_tpl->getInheritance()->instanceBlock($_smarty_tpl, 'Block_14878613946a32c89413ab57_68837828', "extra_css");
 ?>
 
 
 <?php 
-$_smarty_tpl->getInheritance()->instanceBlock($_smarty_tpl, 'Block_17000046616a32c73e99acc0_12949732', "content");
+$_smarty_tpl->getInheritance()->instanceBlock($_smarty_tpl, 'Block_10219886836a32c89413f145_21890616', "content");
 ?>
 
 
 <?php 
-$_smarty_tpl->getInheritance()->instanceBlock($_smarty_tpl, 'Block_13668425326a32c73e9b9002_42129764', "extra_js");
+$_smarty_tpl->getInheritance()->instanceBlock($_smarty_tpl, 'Block_21129246166a32c894177100_06516952', "extra_js");
 $_smarty_tpl->getInheritance()->endChild($_smarty_tpl, "common/layout.tpl", $_smarty_current_dir);
 }
 /* {block "extra_css"} */
-class Block_14612974596a32c73e9985a0_25629630 extends \Smarty\Runtime\Block
+class Block_14878613946a32c89413ab57_68837828 extends \Smarty\Runtime\Block
 {
 public function callBlock(\Smarty\Template $_smarty_tpl) {
 $_smarty_current_dir = 'C:\\Users\\damic\\Desktop\\uni\\APPUNTI\\anno3\\secondo_semenstre\\Pweb\\TableCrown\\Presentation\\smarty-dir\\templates';
@@ -54,7 +54,7 @@ $_smarty_current_dir = 'C:\\Users\\damic\\Desktop\\uni\\APPUNTI\\anno3\\secondo_
 }
 /* {/block "extra_css"} */
 /* {block "content"} */
-class Block_17000046616a32c73e99acc0_12949732 extends \Smarty\Runtime\Block
+class Block_10219886836a32c89413f145_21890616 extends \Smarty\Runtime\Block
 {
 public function callBlock(\Smarty\Template $_smarty_tpl) {
 $_smarty_current_dir = 'C:\\Users\\damic\\Desktop\\uni\\APPUNTI\\anno3\\secondo_semenstre\\Pweb\\TableCrown\\Presentation\\smarty-dir\\templates';
@@ -62,16 +62,6 @@ $_smarty_current_dir = 'C:\\Users\\damic\\Desktop\\uni\\APPUNTI\\anno3\\secondo_
 
 <div class="carrello-container">
     <div class="container">
-
-                <nav class="carrello-breadcrumb" aria-label="Breadcrumb">
-            <ul class="breadcrumb-list">
-                <li><a href="<?php echo $_smarty_tpl->getValue('base_url');?>
-/">Home</a></li>
-                <li><a href="<?php echo $_smarty_tpl->getValue('base_url');?>
-/catalogo">Catalogo</a></li>
-                <li class="is-active"><span>Carrello</span></li>
-            </ul>
-        </nav>
 
         <h1 class="carrello-titolo">
             <i class="ti ti-shopping-cart"></i> Carrello
@@ -347,7 +337,7 @@ echo $_smarty_tpl->getValue('carrello')->getSpedizione();
 }
 /* {/block "content"} */
 /* {block "extra_js"} */
-class Block_13668425326a32c73e9b9002_42129764 extends \Smarty\Runtime\Block
+class Block_21129246166a32c894177100_06516952 extends \Smarty\Runtime\Block
 {
 public function callBlock(\Smarty\Template $_smarty_tpl) {
 $_smarty_current_dir = 'C:\\Users\\damic\\Desktop\\uni\\APPUNTI\\anno3\\secondo_semenstre\\Pweb\\TableCrown\\Presentation\\smarty-dir\\templates';

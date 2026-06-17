@@ -26,7 +26,7 @@
 
                             <div class="carrello-item"
                                  data-item-id="{$item->getIdItem()}"
-                                 data-prezzo-unitario="{$item->getSubtotale()/$qty}"
+                                 data-prezzo-unitario="{if $prezzo->hasSconto()}{$prezzo->calcolaPrezzoScontato()}{else}{$prezzo->getValore()}{/if}"
                                  data-update-url="{$base_url}/carrello/aggiorna/{$item->getIdItem()}">
 
                                 <a href="{$base_url}/prodotto/{$p->getIdProdotto()}" class="carrello-item-img-link">
@@ -268,9 +268,11 @@ function initCarrelloPage() {
         function inviaAggiornamento() {
             if (!updateUrl) return;
             const qty = parseInt(input.value) || 1;
-            fetch(updateUrl + '?qty=' + qty).catch(err => {
-                console.warn('Aggiornamento carrello:', err);
-            });
+            const controller = new AbortController();
+            const timeout = setTimeout(() => controller.abort(), 5000);
+            fetch(updateUrl + '?qty=' + qty, { signal: controller.signal })
+                .then(() => clearTimeout(timeout))
+                .catch(() => clearTimeout(timeout));
         }
 
         if (btnMinus) {
@@ -314,9 +316,11 @@ function initCarrelloPage() {
             const url = this.dataset.url;
 
             if (url) {
-                fetch(url).catch(err => {
-                    console.warn('Rimozione carrello:', err);
-                });
+                const controller = new AbortController();
+                const timeout = setTimeout(() => controller.abort(), 5000);
+                fetch(url, { signal: controller.signal })
+                    .then(() => clearTimeout(timeout))
+                    .catch(() => clearTimeout(timeout));
             }
 
             if (riga) {
