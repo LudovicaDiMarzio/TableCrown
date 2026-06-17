@@ -1,8 +1,10 @@
 <?php
-// 1. Includi l'autoloader di Composer usando il percorso assoluto corretto
+// 1. Includi l'autoloader di Composer
 require_once __DIR__ . '/vendor/autoload.php'; 
 
-$smarty = new Smarty();
+// NOTA IL CAMBIAMENTO QUI: Usiamo il namespace corretto di Smarty 5
+$smarty = new \Smarty\Smarty();
+
 $smarty->setTemplateDir(__DIR__ . '/templates');
 $smarty->setCompileDir(__DIR__ . '/templates_c');
 
@@ -15,7 +17,7 @@ class MockPrezzo {
 
 class MockProdotto {
     public function getIdProdotto() { return 42; }
-    public function getImgProdotto() { return 'esempio-tavolo.jpg'; } // Metti un'immagine reale se l'hai nella cartella
+    public function getImgProdotto() { return 'esempio-tavolo.jpg'; } 
     public function getNomeProdotto() { return 'Tavolo Impero in Noce'; }
     public function getPrezzo() { return new MockPrezzo(); }
     public function getValutazioneMedia() { return 4.5; }
