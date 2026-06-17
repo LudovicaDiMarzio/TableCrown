@@ -73,8 +73,10 @@
                     <span class="prodotto-badge prodotto-badge-esaurito">Esaurito</span>
                 {elseif $prodotto->getDisponibilitaProdotto() == 'annunciato'}
                     <span class="prodotto-badge prodotto-badge-annunciato">Annunciato</span>
-                {elseif $prodotto->getDisponibilitaProdotto() == 'non disponibile'}
+                {elseif $prodotto->getDisponibilitaProdotto() == 'Non disponibile'}
                     <span class="prodotto-badge prodotto-badge-non-disponibile">Non disponibile</span>
+                {elseif $prodotto->getDisponibilitaProdotto() == 'In arrivo'}
+                    <span class="prodotto-badge prodotto-badge-in-arrivo">In arrivo</span>
                 {else}
                     <span class="prodotto-badge prodotto-badge-disponibile">Disponibile</span>
                 {/if}
