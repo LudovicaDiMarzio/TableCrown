@@ -161,9 +161,12 @@
                     {elseif $prodotto->getDisponibilitaProdotto() == 'esaurito'}
                         <i class="ti ti-circle-x"></i>
                         <span>Esaurito</span>
-                    {elseif $prodotto->getDisponibilitaProdotto() == 'non disponibile'}
+                    {elseif $prodotto->getDisponibilitaProdotto() == 'Non disponibile'}
                         <i class="ti ti-circle-x"></i>
                         <span>Non disponibile</span>
+                    {elseif $prodotto->getDisponibilitaProdotto() == 'In arrivo'}
+                        <i class="ti ti-clock"></i>
+                        <span>In arrivo</span>
                     {else}
                         <i class="ti ti-clock"></i>
                         <span>Annunciato</span>

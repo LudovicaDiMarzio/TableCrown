@@ -1,18 +1,18 @@
 <?php
-/* Smarty version 5.8.0, created on 2026-06-16 17:26:26
+/* Smarty version 5.8.0, created on 2026-06-17 10:17:48
   from 'file:prodotto.tpl' */
 
 /* @var \Smarty\Template $_smarty_tpl */
 if ($_smarty_tpl->getCompiled()->isFresh($_smarty_tpl, array (
   'version' => '5.8.0',
-  'unifunc' => 'content_6a316b22835cc2_34838450',
+  'unifunc' => 'content_6a32582c073fa4_15572791',
   'has_nocache_code' => false,
   'file_dependency' => 
   array (
     'e9baa49156ee05c5c5bbb9c42db3ec1863979512' => 
     array (
       0 => 'prodotto.tpl',
-      1 => 1781623444,
+      1 => 1781684246,
       2 => 'file',
     ),
   ),
@@ -20,30 +20,30 @@ if ($_smarty_tpl->getCompiled()->isFresh($_smarty_tpl, array (
   array (
   ),
 ))) {
-function content_6a316b22835cc2_34838450 (\Smarty\Template $_smarty_tpl) {
+function content_6a32582c073fa4_15572791 (\Smarty\Template $_smarty_tpl) {
 $_smarty_current_dir = 'C:\\Users\\damic\\Desktop\\uni\\APPUNTI\\anno3\\secondo_semenstre\\Pweb\\TableCrown\\Presentation\\smarty-dir\\templates';
 $_smarty_tpl->getInheritance()->init($_smarty_tpl, true);
 ?>
 
 
 <?php 
-$_smarty_tpl->getInheritance()->instanceBlock($_smarty_tpl, 'Block_17159281416a316b22443280_01244301', "extra_css");
+$_smarty_tpl->getInheritance()->instanceBlock($_smarty_tpl, 'Block_18452368696a32582bbf56b5_00898845', "extra_css");
 ?>
 
 
 <?php 
-$_smarty_tpl->getInheritance()->instanceBlock($_smarty_tpl, 'Block_8764891526a316b224d85e9_59451629', "content");
+$_smarty_tpl->getInheritance()->instanceBlock($_smarty_tpl, 'Block_10803090896a32582bc9aef5_85753081', "content");
 ?>
 
 
 <?php 
-$_smarty_tpl->getInheritance()->instanceBlock($_smarty_tpl, 'Block_15630044466a316b228340d1_27707872', "extra_js");
+$_smarty_tpl->getInheritance()->instanceBlock($_smarty_tpl, 'Block_3363237146a32582c0722b3_42999696', "extra_js");
 ?>
 
 <?php $_smarty_tpl->getInheritance()->endChild($_smarty_tpl, "common/layout.tpl", $_smarty_current_dir);
 }
 /* {block "extra_css"} */
-class Block_17159281416a316b22443280_01244301 extends \Smarty\Runtime\Block
+class Block_18452368696a32582bbf56b5_00898845 extends \Smarty\Runtime\Block
 {
 public function callBlock(\Smarty\Template $_smarty_tpl) {
 $_smarty_current_dir = 'C:\\Users\\damic\\Desktop\\uni\\APPUNTI\\anno3\\secondo_semenstre\\Pweb\\TableCrown\\Presentation\\smarty-dir\\templates';
@@ -56,7 +56,7 @@ $_smarty_current_dir = 'C:\\Users\\damic\\Desktop\\uni\\APPUNTI\\anno3\\secondo_
 }
 /* {/block "extra_css"} */
 /* {block "content"} */
-class Block_8764891526a316b224d85e9_59451629 extends \Smarty\Runtime\Block
+class Block_10803090896a32582bc9aef5_85753081 extends \Smarty\Runtime\Block
 {
 public function callBlock(\Smarty\Template $_smarty_tpl) {
 $_smarty_current_dir = 'C:\\Users\\damic\\Desktop\\uni\\APPUNTI\\anno3\\secondo_semenstre\\Pweb\\TableCrown\\Presentation\\smarty-dir\\templates';
@@ -153,6 +153,8 @@ $_smarty_tpl->getSmarty()->getRuntime('Foreach')->restore($_smarty_tpl, 1);?>
                     <span class="prodotto-badge prodotto-badge-esaurito">Esaurito</span>
                 <?php } elseif ($_smarty_tpl->getValue('prodotto')->getDisponibilitaProdotto() == 'annunciato') {?>
                     <span class="prodotto-badge prodotto-badge-annunciato">Annunciato</span>
+                <?php } elseif ($_smarty_tpl->getValue('prodotto')->getDisponibilitaProdotto() == 'non disponibile') {?>
+                    <span class="prodotto-badge prodotto-badge-non-disponibile">Non disponibile</span>
                 <?php } else { ?>
                     <span class="prodotto-badge prodotto-badge-disponibile">Disponibile</span>
                 <?php }?>
@@ -253,6 +255,9 @@ $_smarty_tpl->getSmarty()->getRuntime('Foreach')->restore($_smarty_tpl, 1);?>
                     <?php } elseif ($_smarty_tpl->getValue('prodotto')->getDisponibilitaProdotto() == 'esaurito') {?>
                         <i class="ti ti-circle-x"></i>
                         <span>Esaurito</span>
+                    <?php } elseif ($_smarty_tpl->getValue('prodotto')->getDisponibilitaProdotto() == 'non disponibile') {?>
+                        <i class="ti ti-circle-x"></i>
+                        <span>Non disponibile</span>
                     <?php } else { ?>
                         <i class="ti ti-clock"></i>
                         <span>Annunciato</span>
@@ -615,7 +620,7 @@ $_smarty_tpl->getSmarty()->getRuntime('Foreach')->restore($_smarty_tpl, 1);?>
 }
 /* {/block "content"} */
 /* {block "extra_js"} */
-class Block_15630044466a316b228340d1_27707872 extends \Smarty\Runtime\Block
+class Block_3363237146a32582c0722b3_42999696 extends \Smarty\Runtime\Block
 {
 public function callBlock(\Smarty\Template $_smarty_tpl) {
 $_smarty_current_dir = 'C:\\Users\\damic\\Desktop\\uni\\APPUNTI\\anno3\\secondo_semenstre\\Pweb\\TableCrown\\Presentation\\smarty-dir\\templates';
