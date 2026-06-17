@@ -205,7 +205,7 @@
         });
 </script>
 
-{block name="extra_js"}
+{block name="extra_js"}{/block}
 
 </body>
 </html>
