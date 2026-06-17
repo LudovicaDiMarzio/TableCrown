@@ -16,7 +16,8 @@
             "TableCrown\\Entity\\": "Entity/",
             "TableCrown\\Control\\": "Control/",
             "TableCrown\\Presentation\\": "Presentation/",
-            "TableCrown\\Foundation\\": "Foundation/"
+            "TableCrown\\Foundation\\": "Foundation/",
+            "TableCrown\\Testing\\Fixtures\\": "Testing/Fixtures/"
         }
     },
     "require-dev": {

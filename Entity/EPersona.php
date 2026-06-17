@@ -25,7 +25,7 @@ abstract class EPersona {
     //sarà di tipo blob nel db, quindi per ora prendiamo l'immagine come se fosse una stringa, poi dovrà subire un processo di conversione 
     // in blob prima di essere salvata nel db, e una volta recuperata dal db dovrà essere convertita nuovamente in stringa per poter essere visualizzata
     #[ORM\Column(type: "blob", nullable:true)]
-    private ?string $imgpersona=null; 
+    private $imgpersona=null; 
     
     #[ORM\Column(type: "string", length: 180, unique:true)]
     private string $emailpersona;
@@ -101,7 +101,18 @@ abstract class EPersona {
     }
 
     public function getImgPersona(): ?string {
-        return $this->imgpersona;
+            // Se non c'è nessuna immagine, restituiamo subito null
+        if ($this->imgpersona === null) {
+            return null;
+        }
+        
+        // Se Doctrine ci ha restituito una risorsa dal DB, la leggiamo e la trasformiamo in stringa
+        if (is_resource($this->imgpersona)) {
+            return stream_get_contents($this->imgpersona);
+        }
+        
+        // Altrimenti (se è già una stringa, es. durante le fixture) la restituiamo direttamente
+        return (string) $this->imgpersona;
     }
 
     public function getEmailPersona(): string {

@@ -30,13 +30,19 @@ class ERecensione {
     #[ORM\JoinColumn(name: "utente_id", referencedColumnName: "idpersona", nullable: false)]
     private EUtente $utente;
 
-    public function __construct(int $valutazione, string $testo, EUtente $utente) {
+    #[ORM\ManyToOne(targetEntity: EProdotto::class, inversedBy: "recensioni")]
+    #[ORM\JoinColumn(name: "prodotto_id", referencedColumnName: "idProdotto", nullable: false)]
+    private EProdotto $prodotto;
+
+    public function __construct(int $valutazione, string $testo, EUtente $utente, EProdotto $prodotto) {
         $this->impostaValutazione($valutazione);
         $this->impostaTesto($testo);
         $this->data = new DateTime();
         $this->segnalazione = false;
         $this->utente = $utente;
         $utente->riceviRecensione($this);
+        $this->prodotto = $prodotto;
+        $prodotto->addRecensione($this);
     }
 
     // Metodi di dominio
@@ -85,5 +91,9 @@ class ERecensione {
 
     public function getUtente(): EUtente {
         return $this->utente;
+    }
+
+    public function getProdotto(): EProdotto {
+        return $this->prodotto;
     }
 }

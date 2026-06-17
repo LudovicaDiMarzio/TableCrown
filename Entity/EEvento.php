@@ -28,7 +28,7 @@ abstract class EEvento {
     private string $nomeEvento;
 
     #[ORM\Column(type: "blob")]
-    private string $imgEvento;
+    private $imgEvento;
 
     #[ORM\Column(type: "text")]
     private string $descrizioneEvento;
@@ -67,7 +67,10 @@ abstract class EEvento {
     }       
 
     public function getImgEvento(): string {
-        return $this->imgEvento;
+        if (is_resource($this->imgEvento)) {
+            return stream_get_contents($this->imgEvento);
+        }
+        return (string) $this->imgEvento;
     }
 
     public function getDescrizioneEvento(): string {
