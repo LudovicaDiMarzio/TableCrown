@@ -1,7 +1,7 @@
 {extends file="common/layout.tpl"}
 
 {block name="extra_css"}
-    <link rel="stylesheet" href="{$base_url}/css/carrello.css">
+    <link rel="stylesheet" href="{$base_url}/public/css/carrello.css">
 {/block}
 
 {block name="content"}
