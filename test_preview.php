@@ -78,13 +78,15 @@ $mockRecensione = new class {
     public function getTesto(): string { return 'Lo consiglio a tutti, ore di divertimento garantite.' ; }
 };
 
+$mockUtente = new class {
+    public function getNickname(): string { return 'GiocatoreTop'; }
+};
+
 $smarty->assign('utente', $mockUtente);
 $smarty->assign('prodotto', $mockProdotto);
 $smarty->assign('recensioni', [$mockRecensione]);
 $smarty->assign('correlati', []);
-$mockUtente = new class {
-    public function getNickname(): string { return 'GiocatoreTop'; }
-};
+
 
 
 // 3. Tentativo di rendering della HOME
