@@ -423,8 +423,15 @@
 </div>
 
 {* ── MODAL MINI-CART (appare dopo "Aggiungi al carrello") ── *}
+{* ── MODAL MINI-CART (appare dopo "Aggiungi al carrello") ── *}
 <div class="minicart-modal" id="minicart-modal" aria-hidden="true">
-    <div class="minicart-content">
+    <div class="modal-background"></div> 
+    
+    <div class="minicart-content" style="position: relative;">
+        
+        <button id="close-minicart" class="modal-close-btn" aria-label="Chiudi pop-up">&times;</button>
+        
+        <h3 class="minicart-success-title">Prodotto aggiunto al carrello!</h3>
 
         <div class="minicart-product">
             <img src="{$base_url}/img/prodotti/{$prodotto->getImgProdotto()|escape}"
@@ -451,17 +458,6 @@
             <a href="{$base_url}/carrello" class="button btn-minicart-ordine">
                 <i class="ti ti-shopping-cart"></i> Completa Ordine
             </a>
-        </div>
-
-        <div id="minicart-modal" class="modal" aria-hidden="true">
-            <div class="modal-background"></div> 
-
-            <div class="modal-content" style="position: relative;"> 
-        
-                <button id="close-minicart" class="modal-close-btn" aria-label="Chiudi pop-up">&times;</button>
-        
-                <h3>Prodotto aggiunto al carrello!</h3>
-            </div>
         </div>
 
     </div>

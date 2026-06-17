@@ -77,26 +77,6 @@
     align-items: start;
 }
 
-@media screen and (max-width: 1100px) {
-    .prodotto-top {
-        grid-template-columns: 1fr 1fr;
-    }
-
-    .prodotto-acquisto-box {
-        grid-column: 1 / -1;
-    }
-}
-
-@media screen and (max-width: 768px) {
-    .prodotto-top {
-        grid-template-columns: 1fr;
-    }
-
-    .prodotto-acquisto-box {
-        grid-column: auto;
-    }
-}
-
 
 /* ── GALLERIA IMMAGINI ────────────────────────────────────── */
 
@@ -217,19 +197,6 @@
     width: fit-content;
 }
 
-/* Badge disponibilità (nell'info) */
-.prodotto-badge {
-    display: inline-flex;
-    align-items: center;
-    padding: 0.3rem 0.8rem;
-    border-radius: 4px;
-    font-size: var(--font-size-sm);
-    font-weight: 600;
-    text-transform: uppercase;
-    letter-spacing: 0.05em;
-    width: fit-content;
-}
-
 /* VERDE: Disponibile */
 .prodotto-badge-disponibile {
     background-color: rgba(34, 197, 94, 0.15);
@@ -244,21 +211,21 @@
     border: 1px solid rgba(239, 68, 68, 0.3);
 }
 
-/* BLU: Annunciato (Usa il blu del tuo brand anziché quello standard se preferisci) */
+/* BLU: Annunciato */
 .prodotto-badge-annunciato {
     background-color: rgba(59, 130, 246, 0.15);
-    color: #60a5fa; /* Puoi sostituirlo con var(--color-blue) se vuoi l'identico blu del sito */
+    color: #60a5fa; 
     border: 1px solid rgba(59, 130, 246, 0.3);
 }
 
-/* ROSSO: Non disponibile (Aggiunta per mappare il .tpl) */
+/* ROSSO: Non disponibile (mappatura .tpl) */
 .prodotto-badge-non-disponibile {
     background-color: rgba(239, 68, 68, 0.15);
     color: #f87171;
     border: 1px solid rgba(239, 68, 68, 0.3);
 }
 
-/* AZZURRO/GIALLO: In arrivo (Opzionale, gestito nel .tpl) */
+/* GIALLO: In arrivo */
 .prodotto-badge-in-arrivo {
     background-color: rgba(234, 179, 8, 0.15);
     color: #c3ab36;
@@ -268,7 +235,7 @@
 .prodotto-nome {
     font-size: 1.75rem;
     font-weight: 700;
-    color: var(--color-blue); /* ◄── Cambiato da var(--color-text-light) al tuo blu */
+    color: var(--color-blue); /* Blu del brand */
     line-height: 1.25;
     margin: 0;
 }
@@ -444,7 +411,7 @@
     align-items: center;
     justify-content: center;
     cursor: pointer;
-    transition: all var(--transition);
+    transition: background-color var(--transition), border-color var(--transition), color var(--transition);
     padding: 0 !important;
     flex-shrink: 0;
 }
@@ -574,19 +541,13 @@
     border-top: 1px solid var(--color-border-dark);
 }
 
-@media screen and (max-width: 900px) {
-    .prodotto-details {
-        grid-template-columns: 1fr;
-    }
-}
-
 .prodotto-section-title {
     font-size: 1.3rem;
     font-weight: 700;
-    color: var(--color-blue); /* ◄── CAMBIATO: Testo del blu del sito */
+    color: var(--color-blue); 
     margin: 0 0 1.25rem 0;
     padding-bottom: 0.75rem;
-    border-bottom: 2px solid var(--color-blue); /* ◄── OPZIONALE: Cambia in blu anche la linea sotto */
+    border-bottom: 2px solid var(--color-blue); 
     display: inline-block;
 }
 
@@ -650,24 +611,6 @@
     gap: 1.25rem;
 }
 
-@media screen and (max-width: 1100px) {
-    .correlati-grid {
-        grid-template-columns: repeat(3, 1fr);
-    }
-}
-
-@media screen and (max-width: 768px) {
-    .correlati-grid {
-        grid-template-columns: repeat(2, 1fr);
-    }
-}
-
-@media screen and (max-width: 480px) {
-    .correlati-grid {
-        grid-template-columns: 1fr;
-    }
-}
-
 /* Card correlato */
 .correlato-card {
     display: flex;
@@ -676,7 +619,7 @@
     border: 1px solid var(--color-border-dark);
     border-radius: var(--radius-md);
     overflow: hidden;
-    transition: all var(--transition);
+    transition: border-color var(--transition), box-shadow var(--transition), transform var(--transition);
 }
 
 .correlato-card:hover {
@@ -818,7 +761,7 @@
     align-items: center;
     justify-content: center;
     cursor: pointer;
-    transition: all var(--transition);
+    transition: background-color var(--transition), border-color var(--transition), color var(--transition);
     z-index: 5;
     font-size: 18px;
 }
@@ -871,7 +814,7 @@
     align-items: center;
     gap: 8px;
     cursor: pointer;
-    transition: all var(--transition);
+    transition: background-color var(--transition), color var(--transition), border-color var(--transition);
     margin-bottom: 1rem;
 }
 
@@ -982,7 +925,7 @@
     padding: 0.6rem 1.25rem !important;
     border-radius: var(--radius-sm) !important;
     cursor: pointer;
-    transition: all var(--transition);
+    transition: color var(--transition), border-color var(--transition);
 }
 
 .btn-annulla-recensione:hover {
@@ -1071,7 +1014,7 @@
 }
 
 
-/* ── MINICART MODAL ───────────────────────────────────────── */
+/* ── MINICART MODAL OPTIMIZED ─────────────────────────────── */
 
 .minicart-modal {
     position: fixed;
@@ -1095,7 +1038,7 @@
     background-color: var(--color-bg-dark-2);
     border: 1px solid var(--color-border-dark);
     border-radius: var(--radius-md);
-    padding: 2rem;
+    padding: 2.5rem 2rem 2rem; /* Aumentato il padding superiore per non sovrapporsi alla X */
     max-width: 440px;
     width: 90%;
     display: flex;
@@ -1103,8 +1046,7 @@
     gap: 1.5rem;
     box-shadow: 0 16px 48px rgba(0, 0, 0, 0.5);
     animation: minicart-in 0.25s ease;
-    padding: 2rem; /* ◄── Ripristinato padding simmetrico (era 2.5rem sopra) */
-    position: relative;
+    position: relative; /* Richiesto per ancorare la X in alto a destra del pop-up */
 }
 
 @keyframes minicart-in {
@@ -1112,10 +1054,21 @@
     to   { transform: translateY(0);    opacity: 1; }
 }
 
+/* Spostiamo la scritta sopra i pulsanti usando il sistema ad ordine flessibile di CSS */
+.minicart-title-status {
+    font-size: 1.2rem;
+    font-weight: 700;
+    color: var(--color-primary) !important; /* Stesso giallo del prezzo */
+    margin: 0;
+    text-align: center;
+    order: 2; /* Forza il testo a posizionarsi prima dei pulsanti */
+}
+
 .minicart-product {
     display: flex;
     align-items: center;
     gap: 1.25rem;
+    order: 1; /* Mantiene le info del prodotto in cima */
 }
 
 .minicart-img {
@@ -1151,6 +1104,7 @@
     display: flex;
     gap: 0.75rem;
     flex-wrap: wrap;
+    order: 3; /* Spinge i pulsanti in fondo */
 }
 
 .btn-minicart-continua {
@@ -1167,7 +1121,7 @@
     justify-content: center;
     gap: 6px;
     cursor: pointer;
-    transition: all var(--transition);
+    transition: border-color var(--transition), color var(--transition);
     text-decoration: none;
 }
 
@@ -1198,95 +1152,62 @@
     background-color: var(--color-primary-dark) !important;
 }
 
-/* ── MINICART MODAL OPTIMIZED ─────────────────────────────── */
-
-.minicart-modal {
-    position: fixed;
-    inset: 0;
-    background-color: rgba(0, 0, 0, 0.65);
-    z-index: 9000;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    opacity: 0;
-    pointer-events: none;
-    transition: opacity 0.25s ease;
-}
-
-.minicart-modal.is-active {
-    opacity: 1;
-    pointer-events: all;
-}
-
-.minicart-content {
-    background-color: var(--color-bg-dark-2);
-    border: 1px solid var(--color-border-dark);
-    border-radius: var(--radius-md);
-    padding: 2.5rem 2rem 2rem; /* Aumentato il padding superiore per non sovrapporsi alla X */
-    max-width: 440px;
-    width: 90%;
-    display: flex;
-    flex-direction: column;
-    gap: 1.5rem;
-    box-shadow: 0 16px 48px rgba(0, 0, 0, 0.5);
-    animation: minicart-in 0.25s ease;
-    position: relative; /* ◄── Richiesto per ancorare la X in alto a destra del pop-up */
-}
-
-@keyframes minicart-in {
-    from { transform: translateY(16px); opacity: 0; }
-    to   { transform: translateY(0);    opacity: 1; }
-}
-
-/* Spostiamo la scritta sopra i pulsanti usando il sistema ad ordine flessibile di CSS */
-.minicart-title-status {
-    font-size: 1.2rem;
-    font-weight: 700;
-    color: var(--color-primary) !important; /* ◄── Stesso giallo del prezzo (var-primary) */
-    margin: 0;
-    text-align: center;
-    order: 2; /* ◄── Forza il testo a posizionarsi prima dei pulsanti */
-}
-
-.minicart-product {
-    display: flex;
-    align-items: center;
-    gap: 1.25rem;
-    order: 1; /* ◄── Mantiene la info del prodotto in cima */
-}
-
-.minicart-actions {
-    display: flex;
-    gap: 0.75rem;
-    flex-wrap: wrap;
-    order: 3; /* ◄── Spinge i pulsanti in fondo */
-}
-
 /* Stile pulito per il bottone di chiusura ad ancoraggio assoluto */
 #close-minicart {
     position: absolute;
-    top: 1.85rem; /* ◄── Regola questo valore finché non lo vedi perfettamente in asse col testo desiderato */
-    right: 2rem;
+    top: 2rem;       /* Identico al padding-top del contenitore */
+    right: 2rem;     /* Identico al padding-right del contenitore */
     background: none;
     border: none;
-    font-size: 24px;
-    line-height: 1;
+    font-size: 24px; /* Centrato meglio sulla linea del testo */
+    font-weight: bold;
+    line-height: 1;  /* Forza l'altezza del posizionamento al millimetro */
     color: var(--color-text-muted);
     cursor: pointer;
     transition: color var(--transition);
-    padding: 0;
+    padding: 0;      /* Resettato per evitare offset strani */
     z-index: 10;
 }
 
 #close-minicart:hover {
-    color: var(--color-primary); /* Diventa gialla quando ci passi sopra */
+    color: var(--color-primary); /* Diventa gialla in hover */
 }
 
-/* ── RESPONSIVE MOBILE ────────────────────────────────────── */
+
+/* ── MEDIA QUERIES (RESPONSIVE) ───────────────────────────── */
+
+@media screen and (max-width: 1100px) {
+    .prodotto-top {
+        grid-template-columns: 1fr 1fr;
+    }
+
+    .prodotto-acquisto-box {
+        grid-column: 1 / -1;
+    }
+
+    .correlati-grid {
+        grid-template-columns: repeat(3, 1fr);
+    }
+}
+
+@media screen and (max-width: 900px) {
+    .prodotto-details {
+        grid-template-columns: 1fr;
+    }
+}
 
 @media screen and (max-width: 768px) {
     .prodotto-container {
         padding: 1.5rem 0 3rem;
+    }
+
+    .prodotto-top {
+        grid-template-columns: 1fr;
+    }
+
+    .prodotto-acquisto-box {
+        grid-column: auto;
+        position: static;
     }
 
     .prodotto-nome {
@@ -1297,8 +1218,9 @@
         font-size: 1.6rem;
     }
 
-    .prodotto-acquisto-box {
-        position: static;
+    .gallery-thumb {
+        width: 56px;
+        height: 56px;
     }
 
     .prodotto-details {
@@ -1306,13 +1228,8 @@
         margin-bottom: 2rem;
     }
 
-    .minicart-content {
-        padding: 1.5rem;
-    }
-
-    .gallery-thumb {
-        width: 56px;
-        height: 56px;
+    .correlati-grid {
+        grid-template-columns: repeat(2, 1fr);
     }
 
     .recensione-form {
@@ -1327,5 +1244,15 @@
     .btn-annulla-recensione {
         width: 100%;
         justify-content: center;
+    }
+
+    .minicart-content {
+        padding: 1.5rem;
+    }
+}
+
+@media screen and (max-width: 480px) {
+    .correlati-grid {
+        grid-template-columns: 1fr;
     }
 }
