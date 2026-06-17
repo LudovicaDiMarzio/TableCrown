@@ -179,7 +179,7 @@
                 <div class="acquisto-quantita">
                     <label class="acquisto-quantita-label" for="qty-input">Quantità:</label>
                     <div class="quantita-stepper">
-                        <button class="button quantita-btn" id="qty-minus" aria-label="Diminuisci quantità">
+                        <button class="button quantita-btn" id="qty-minus" type="button" aria-label="Diminuisci quantità">
                             <i class="ti ti-minus"></i>
                         </button>
                         <input type="number"
@@ -189,7 +189,7 @@
                                min="1"
                                max="99"
                                aria-label="Quantità">
-                        <button class="button quantita-btn" id="qty-plus" aria-label="Aumenta quantità">
+                        <button class="button quantita-btn" id="qty-plus" type="button" aria-label="Aumenta quantità">
                             <i class="ti ti-plus"></i>
                         </button>
                     </div>
@@ -221,7 +221,7 @@
                         <i class="ti ti-shopping-cart"></i> Aggiungi al Carrello
                     </a>
                 {else}
-                    <button class="button btn-add-cart-prodotto is-disabled" disabled>
+                    <button class="button btn-add-cart-prodotto is-disabled" disabled type="button">
                         <i class="ti ti-shopping-cart-off"></i> Non disponibile
                     </button>
                 {/if}
@@ -317,7 +317,7 @@
                         {/foreach}
                     </div>
 
-                    <button class="correlati-nav correlati-next" id="correlati-next" aria-label="Vedi altri prodotti correlati">
+                    <button class="correlati-nav correlati-next" id="correlati-next" type="button" aria-label="Vedi altri prodotti correlati">
                         <i class="ti ti-chevron-right"></i>
                     </button>
                 </div>
@@ -329,10 +329,13 @@
         <section class="prodotto-recensioni" id="recensioni">
             <h2 class="prodotto-section-title">Recensioni</h2>
 
-            {* Form nuova recensione (solo utenti) *}
+            {* DEBUG TEMPORANEO - rimuovi dopo aver verificato *}
+            {* {if isset($utente)}<p style="color:lime">Utente loggato: {$utente->getNickname()|escape}</p>{else}<p style="color:red">Nessun utente loggato</p>{/if} *}
+
+            {* Form nuova recensione (solo utenti loggati) *}
             {if isset($utente) && $utente}
                 <div class="recensione-form-wrapper">
-                    <button class="button btn-scrivi-recensione" id="btn-scrivi-recensione">
+                    <button class="button btn-scrivi-recensione" id="btn-scrivi-recensione" type="button">
                         <i class="ti ti-pencil"></i> Scrivi la tua recensione
                     </button>
 
@@ -383,7 +386,7 @@
                 </div>
             {else}
                 <p class="recensione-login-hint">
-                    <a href="{$base_url}/login">Accedi</a> per lasciare una recensione.
+                    <a href="{$base_url}/accedi">Accedi</a> per lasciare una recensione.
                 </p>
             {/if}
 
@@ -422,15 +425,14 @@
     </div>
 </div>
 
-{* ── MODAL MINI-CART (appare dopo "Aggiungi al carrello") ── *}
-{* ── MODAL MINI-CART (appare dopo "Aggiungi al carrello") ── *}
+{* ── MODAL MINI-CART ── *}
 <div class="minicart-modal" id="minicart-modal" aria-hidden="true">
-    <div class="modal-background"></div> 
-    
+    <div class="modal-background"></div>
+
     <div class="minicart-content" style="position: relative;">
-        
-        <button id="close-minicart" class="modal-close-btn" aria-label="Chiudi pop-up">&times;</button>
-        
+
+        <button id="close-minicart" class="modal-close-btn" type="button" aria-label="Chiudi pop-up">&times;</button>
+
         <h3 class="minicart-success-title">Prodotto aggiunto al carrello!</h3>
 
         <div class="minicart-product">
@@ -492,91 +494,86 @@ document.addEventListener('DOMContentLoaded', function () {
     });
 
     // ── STEPPER QUANTITÀ + PREZZO TOTALE ──
-    const qtyInput = document.getElementById('qty-input');
+    const qtyInput  = document.getElementById('qty-input');
     const prezzoTot = document.getElementById('prezzo-tot');
+    const btnCart   = document.getElementById('btn-add-cart');
+    const baseHref  = btnCart ? btnCart.getAttribute('href') : null;
 
     function aggiornaPrezzo() {
-        if (!prezzoTot) return;
+        if (!prezzoTot || !qtyInput) return;
         const unit = parseFloat(prezzoTot.dataset.unit) || 0;
-        const qty = parseInt(qtyInput.value) || 1;
+        const qty  = parseInt(qtyInput.value) || 1;
         prezzoTot.textContent = '€' + (unit * qty).toFixed(2);
     }
 
+    // Aggiorna l'href del carrello con la quantità scelta
+    function aggiornaUrlCarrello() {
+        if (!btnCart || !baseHref || !qtyInput) return;
+        const qty = parseInt(qtyInput.value) || 1;
+        btnCart.setAttribute('href', baseHref + '?qty=' + qty);
+    }
+
+    // Bottone MENO
     document.getElementById('qty-minus')?.addEventListener('click', function () {
-        if (parseInt(qtyInput.value) > 1) {
-            qtyInput.value = parseInt(qtyInput.value) - 1;
+        if (!qtyInput) return;
+        const val = parseInt(qtyInput.value) || 1;
+        if (val > 1) {
+            qtyInput.value = val - 1;
             aggiornaPrezzo();
+            aggiornaUrlCarrello();
         }
     });
 
+    // Bottone PIÙ
     document.getElementById('qty-plus')?.addEventListener('click', function () {
-        qtyInput.value = parseInt(qtyInput.value) + 1;
+        if (!qtyInput) return;
+        qtyInput.value = (parseInt(qtyInput.value) || 1) + 1;
         aggiornaPrezzo();
+        aggiornaUrlCarrello();
     });
 
-    qtyInput?.addEventListener('input', aggiornaPrezzo);
+    // Input manuale
+    qtyInput?.addEventListener('input', function () {
+        aggiornaPrezzo();
+        aggiornaUrlCarrello();
+    });
 
-   
-    // ── AGGIORNA HREF CARRELLO CON QUANTITÀ (Gestione AJAX + Modal) ──
-    const btnCart = document.getElementById('btn-add-cart');
-    if (btnCart && qtyInput) {
-        // Salviamo l'URL di base iniziale del link così com'è
-        const baseHref = btnCart.getAttribute('href');
-        
-        // Funzione pulita per aggiornare l'URL del pulsante aggiungi al carrello
-        const aggiornaUrlCarrello = () => {
-            const qty = parseInt(qtyInput.value) || 1;
-            btnCart.setAttribute('href', baseHref + '?qty=' + qty);
-        };
-
-        // Ascolta l'input manuale nella casella di testo
-        qtyInput.addEventListener('input', aggiornaUrlCarrello);
-        
-        // FIX: Ascolta anche i click sui pulsanti più e meno per aggiornare l'URL al volo!
-        document.getElementById('qty-minus')?.addEventListener('click', aggiornaUrlCarrello);
-        document.getElementById('qty-plus')?.addEventListener('click', aggiornaUrlCarrello);
-
-        // ── INTERCETTAZIONE CLICK E APERTURA POP-UP ──
+    // ── INTERCETTAZIONE CLICK CARRELLO + MODAL ──
+    if (btnCart) {
         btnCart.addEventListener('click', function (e) {
-            e.preventDefault(); // Blocca IMMEDIATAMENTE il cambio pagina del browser
+            e.preventDefault();
 
             const targetUrl = this.getAttribute('href');
             const modal = document.getElementById('minicart-modal');
 
-            // 1. Mostriamo il pop-up SUBITO. L'utente lo vede all'istante del click.
             if (modal) {
                 modal.classList.add('is-active');
                 modal.setAttribute('aria-hidden', 'false');
             }
 
-            // 2. Inviamo la richiesta al server in background (AJAX)
-            // Il controller PHP aggiungerà il prodotto alla sessione normalmente.
-            fetch(targetUrl)
-            .then(response => {
-                if (!response.ok) {
-                    console.error("Il server ha risposto con un errore, ma il prodotto potrebbe essere stato aggiunto.");
-                }
-            })
-            .catch(error => {
-                // Anche se la fetch va in errore (es. per i redirect su localhost), 
-                // la pagina non salta e il pop-up resta visibile a schermo!
-                console.warn("Fetch intercettata in background (tranquillo, il pop-up resta attivo):", error);
+            fetch(targetUrl).catch(err => {
+                console.warn('Fetch background:', err);
             });
         });
     }
 
     // ── TOGGLE FORM RECENSIONE ──
-    document.getElementById('btn-scrivi-recensione')?.addEventListener('click', function () {
-        const form = document.getElementById('recensione-form');
-        if (form) form.style.display = form.style.display === 'none' ? 'block' : 'none';
-    });
+    const btnRecensione = document.getElementById('btn-scrivi-recensione');
+    const formRecensione = document.getElementById('recensione-form');
+
+    if (btnRecensione && formRecensione) {
+        btnRecensione.addEventListener('click', function () {
+            const isVisible = formRecensione.style.display === 'block';
+            formRecensione.style.display = isVisible ? 'none' : 'block';
+        });
+    }
 
     document.getElementById('btn-annulla-recensione')?.addEventListener('click', function () {
-        document.getElementById('recensione-form').style.display = 'none';
+        if (formRecensione) formRecensione.style.display = 'none';
     });
 
     // ── STAR PICKER RECENSIONE ──
-    const stars = document.querySelectorAll('.star-pick');
+    const stars     = document.querySelectorAll('.star-pick');
     const votoInput = document.getElementById('rec-voto');
 
     stars.forEach(star => {
@@ -591,6 +588,11 @@ document.addEventListener('DOMContentLoaded', function () {
         star.addEventListener('click', function () {
             const val = parseInt(this.dataset.value);
             if (votoInput) votoInput.value = val;
+            // Mantieni le stelle illuminate dopo il click
+            stars.forEach((s, i) => {
+                s.classList.toggle('ti-star-filled', i < val);
+                s.classList.toggle('ti-star', i >= val);
+            });
         });
     });
 
@@ -602,25 +604,21 @@ document.addEventListener('DOMContentLoaded', function () {
         });
     });
 
-    // ── GESTIONE CHIUSURA POP-UP CON LA X ──
+    // ── CHIUSURA MODAL CON X ──
     const btnClose = document.getElementById('close-minicart');
-    const modal = document.getElementById('minicart-modal');
+    const modal    = document.getElementById('minicart-modal');
 
-    if (btnClose && modal) {
-        btnClose.addEventListener('click', function() {
-            modal.classList.remove('is-active');
-            modal.setAttribute('aria-hidden', 'true');
-        });
-    }
+    btnClose?.addEventListener('click', function () {
+        modal?.classList.remove('is-active');
+        modal?.setAttribute('aria-hidden', 'true');
+    });
 
-    // ── CHIUSURA POP-UP SULLO SFONDO SCURO ESTERNO ──
-    const modalBg = document.querySelector('#minicart-modal .modal-background');
-    if (modalBg && modal) {
-        modalBg.addEventListener('click', function() {
-            modal.classList.remove('is-active');
-            modal.setAttribute('aria-hidden', 'true');
-        });
-    }
+    // ── CHIUSURA MODAL CLICCANDO SFONDO ──
+    document.querySelector('#minicart-modal .modal-background')?.addEventListener('click', function () {
+        modal?.classList.remove('is-active');
+        modal?.setAttribute('aria-hidden', 'true');
+    });
+
 });
 </script>
 {/block}
