@@ -32,8 +32,8 @@
 
                                 <a href="{$base_url}/prodotto/{$p->getIdProdotto()}" class="carrello-item-img-link">
                                     <img src="{$base_url}/public/img/prodotti/{$p->getImgProdotto()|escape}"
-                                         onerror="this.src='{$base_url}/public/img/default.png'"
-                                         alt="{$p->getNomeProdotto()|escape}"
+                                         onerror="this.onerror=null; this.src='{$base_url}/public/img/default.png'"
+                                        alt="{$p->getNomeProdotto()|escape}"
                                          class="carrello-item-img">
                                 </a>
 
@@ -103,9 +103,9 @@
                                             <a href="{$base_url}/prodotto/{$correlato->getIdProdotto()}" class="correlato-card-link">
                                                 <div class="correlato-image-wrapper">
                                                     <img src="{$base_url}/public/img/prodotti/{$correlato->getImgProdotto()|escape}"
-                                                         onerror="this.src='{$base_url}/public/img/default.png'"
-                                                         alt="{$correlato->getNomeProdotto()|escape}"
-                                                         class="correlato-image">
+                                                        onerror="this.onerror=null; this.src='{$base_url}/public/img/default.png'"
+                                                        alt="{$correlato->getNomeProdotto()|escape}"
+                                                        class="correlato-image">
                                                 </div>
                                                 <div class="correlato-info">
                                                     <h3 class="correlato-nome">{$correlato->getNomeProdotto()|escape}</h3>
