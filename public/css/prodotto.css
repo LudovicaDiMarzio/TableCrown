@@ -1265,17 +1265,16 @@
 /* Stile pulito per il bottone di chiusura ad ancoraggio assoluto */
 #close-minicart {
     position: absolute;
-    top: 2rem;       /* ◄── Identico al padding-top del contenitore */
-    right: 2rem;     /* ◄── Identico al padding-right del contenitore */
+    top: 1.85rem; /* ◄── Regola questo valore finché non lo vedi perfettamente in asse col testo desiderato */
+    right: 2rem;
     background: none;
     border: none;
-    font-size: 24px; /* ◄── Leggermente ridotto per centrarlo meglio sulla linea del testo */
-    font-weight: bold;
-    line-height: 1;  /* ◄── Forza l'altezza del posizionamento al millimetro */
+    font-size: 24px;
+    line-height: 1;
     color: var(--color-text-muted);
     cursor: pointer;
     transition: color var(--transition);
-    padding: 0;      /* ◄── Resettato per evitare offset strani */
+    padding: 0;
     z-index: 10;
 }
 
