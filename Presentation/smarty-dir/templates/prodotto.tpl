@@ -227,11 +227,11 @@
                 {/if}
 
                 {* Wishlist *}
-                <a href="{$base_url}/wishlist/aggiungi/{$prodotto->getIdProdotto()}"
-                   class="btn-wishlist"
-                   aria-label="Aggiungi alla wishlist">
-                    <i class="ti ti-heart"></i> Wishlist
-                </a>
+                <button class="btn-wishlist" id="btn-wishlist" type="button"
+                        data-url="{$base_url}/wishlist/aggiungi/{$prodotto->getIdProdotto()}"
+                        aria-label="Aggiungi alla wishlist">
+                    <i class="ti ti-heart" id="wishlist-icon"></i> Wishlist
+                </button>
 
             </div>
 
@@ -665,5 +665,34 @@ if (document.readyState === 'loading') {
     // DOM è già caricato, esegui subito
     initProdottoPage();
 }
+
+const btnWishlist   = document.getElementById('btn-wishlist');
+const wishlistIcon  = document.getElementById('wishlist-icon');
+let   inWishlist    = false;
+
+if (btnWishlist) {
+    btnWishlist.addEventListener('click', function () {
+        inWishlist = !inWishlist;
+
+        // Swappa l'icona
+        if (inWishlist) {
+            wishlistIcon.classList.remove('ti-heart');
+            wishlistIcon.classList.add('ti-heart-filled');
+            btnWishlist.classList.add('is-active'); // per colorarla col CSS
+        } else {
+            wishlistIcon.classList.remove('ti-heart-filled');
+            wishlistIcon.classList.add('ti-heart');
+            btnWishlist.classList.remove('is-active');
+        }
+
+        // Chiamata al server in background
+        fetch(this.dataset.url).catch(err => {
+            console.warn('Wishlist fetch error:', err);
+        });
+    });
+}
+
+
+
 </script>
 {/block}
