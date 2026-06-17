@@ -422,14 +422,9 @@
     </div>
 </div>
 
-{* ── MODAL MINI-CART (Unificato e Corretto) ── *}
+{* ── MODAL MINI-CART (appare dopo "Aggiungi al carrello") ── *}
 <div class="minicart-modal" id="minicart-modal" aria-hidden="true">
-    <div class="modal-background"></div> 
-    
-    <div class="minicart-content modal-content" style="position: relative;"> 
-        <button id="close-minicart" class="modal-close-btn" aria-label="Chiudi pop-up">&times;</button>
-        
-        <h3>Prodotto aggiunto al carrello!</h3>
+    <div class="minicart-content">
 
         <div class="minicart-product">
             <img src="{$base_url}/img/prodotti/{$prodotto->getImgProdotto()|escape}"
@@ -457,11 +452,24 @@
                 <i class="ti ti-shopping-cart"></i> Completa Ordine
             </a>
         </div>
+
+        <div id="minicart-modal" class="modal" aria-hidden="true">
+            <div class="modal-background"></div> 
+
+            <div class="modal-content" style="position: relative;"> 
+        
+                <button id="close-minicart" class="modal-close-btn" aria-label="Chiudi pop-up">&times;</button>
+        
+                <h3>Prodotto aggiunto al carrello!</h3>
+            </div>
+        </div>
+
     </div>
 </div>
 
 {/block}
 
+{block name="extra_js"}
 <script>
 document.addEventListener('DOMContentLoaded', function () {
 
@@ -487,86 +495,79 @@ document.addEventListener('DOMContentLoaded', function () {
         });
     });
 
-    // ── STEPPER QUANTITÀ, PREZZO E AGGIORNAMENTO URL (Centralizzato) ──
+    // ── STEPPER QUANTITÀ + PREZZO TOTALE ──
     const qtyInput = document.getElementById('qty-input');
     const prezzoTot = document.getElementById('prezzo-tot');
-    const btnCart = document.getElementById('btn-add-cart');
-    
-    // Salviamo l'URL di base iniziale del carrello
-    const baseHref = btnCart ? btnCart.getAttribute('href') : '';
 
-    function aggiornaStatoInterfaccia() {
+    function aggiornaPrezzo() {
+        if (!prezzoTot) return;
+        const unit = parseFloat(prezzoTot.dataset.unit) || 0;
         const qty = parseInt(qtyInput.value) || 1;
-
-        // 1. Aggiorna Prezzo Totale
-        if (prezzoTot) {
-            const unit = parseFloat(prezzoTot.dataset.unit) || 0;
-            prezzoTot.textContent = '€' + (unit * qty).toFixed(2);
-        }
-
-        // 2. Aggiorna URL del pulsante Carrello
-        if (btnCart && baseHref) {
-            btnCart.setAttribute('href', baseHref + '?qty=' + qty);
-        }
+        prezzoTot.textContent = '€' + (unit * qty).toFixed(2);
     }
 
     document.getElementById('qty-minus')?.addEventListener('click', function () {
         if (parseInt(qtyInput.value) > 1) {
             qtyInput.value = parseInt(qtyInput.value) - 1;
-            aggiornaStatoInterfaccia();
+            aggiornaPrezzo();
         }
     });
 
     document.getElementById('qty-plus')?.addEventListener('click', function () {
         qtyInput.value = parseInt(qtyInput.value) + 1;
-        aggiornaStatoInterfaccia();
+        aggiornaPrezzo();
     });
 
-    qtyInput?.addEventListener('input', aggiornaStatoInterfaccia);
+    qtyInput?.addEventListener('input', aggiornaPrezzo);
 
+   
+    // ── AGGIORNA HREF CARRELLO CON QUANTITÀ (Gestione AJAX + Modal) ──
+    const btnCart = document.getElementById('btn-add-cart');
+    if (btnCart && qtyInput) {
+        // Salviamo l'URL di base iniziale del link così com'è
+        const baseHref = btnCart.getAttribute('href');
+        
+        // Funzione pulita per aggiornare l'URL del pulsante aggiungi al carrello
+        const aggiornaUrlCarrello = () => {
+            const qty = parseInt(qtyInput.value) || 1;
+            btnCart.setAttribute('href', baseHref + '?qty=' + qty);
+        };
 
-    // ── GESTIONE AJAX E APERTURA MODAL CARRELLO ──
-    if (btnCart) {
+        // Ascolta l'input manuale nella casella di testo
+        qtyInput.addEventListener('input', aggiornaUrlCarrello);
+        
+        // FIX: Ascolta anche i click sui pulsanti più e meno per aggiornare l'URL al volo!
+        document.getElementById('qty-minus')?.addEventListener('click', aggiornaUrlCarrello);
+        document.getElementById('qty-plus')?.addEventListener('click', aggiornaUrlCarrello);
+
+        // ── INTERCETTAZIONE CLICK E APERTURA POP-UP ──
         btnCart.addEventListener('click', function (e) {
-            e.preventDefault(); // Blocca il caricamento della pagina
+            e.preventDefault(); // Blocca IMMEDIATAMENTE il cambio pagina del browser
 
             const targetUrl = this.getAttribute('href');
             const modal = document.getElementById('minicart-modal');
 
-            // Mostra subito il pop-up all'utente
+            // 1. Mostriamo il pop-up SUBITO. L'utente lo vede all'istante del click.
             if (modal) {
                 modal.classList.add('is-active');
                 modal.setAttribute('aria-hidden', 'false');
             }
 
-            // Richiesta asincrona al server
+            // 2. Inviamo la richiesta al server in background (AJAX)
+            // Il controller PHP aggiungerà il prodotto alla sessione normalmente.
             fetch(targetUrl)
             .then(response => {
                 if (!response.ok) {
-                    console.error("Errore di risposta dal server durante l'aggiunta al carrello.");
+                    console.error("Il server ha risposto con un errore, ma il prodotto potrebbe essere stato aggiunto.");
                 }
             })
             .catch(error => {
-                console.warn("Errore di rete/fetch interceptato:", error);
+                // Anche se la fetch va in errore (es. per i redirect su localhost), 
+                // la pagina non salta e il pop-up resta visibile a schermo!
+                console.warn("Fetch intercettata in background (tranquillo, il pop-up resta attivo):", error);
             });
         });
     }
-
-    // ── GESTIONE CHIUSURA POP-UP (X e Sfondo Scuro) ──
-    const modal = document.getElementById('minicart-modal');
-    const btnClose = document.getElementById('close-minicart');
-    const modalBg = document.querySelector('#minicart-modal .modal-background');
-
-    function chiudiModal() {
-        if (modal) {
-            modal.classList.remove('is-active');
-            modal.setAttribute('aria-hidden', 'true');
-        }
-    }
-
-    btnClose?.addEventListener('click', chiudiModal);
-    modalBg?.addEventListener('click', chiudiModal);
-
 
     // ── TOGGLE FORM RECENSIONE ──
     document.getElementById('btn-scrivi-recensione')?.addEventListener('click', function () {
@@ -575,8 +576,7 @@ document.addEventListener('DOMContentLoaded', function () {
     });
 
     document.getElementById('btn-annulla-recensione')?.addEventListener('click', function () {
-        const form = document.getElementById('recensione-form');
-        if (form) form.style.display = 'none';
+        document.getElementById('recensione-form').style.display = 'none';
     });
 
     // ── STAR PICKER RECENSIONE ──
@@ -605,5 +605,26 @@ document.addEventListener('DOMContentLoaded', function () {
             s.classList.toggle('ti-star', i >= val);
         });
     });
+
+    // ── GESTIONE CHIUSURA POP-UP CON LA X ──
+    const btnClose = document.getElementById('close-minicart');
+    const modal = document.getElementById('minicart-modal');
+
+    if (btnClose && modal) {
+        btnClose.addEventListener('click', function() {
+            modal.classList.remove('is-active');
+            modal.setAttribute('aria-hidden', 'true');
+        });
+    }
+
+    // ── CHIUSURA POP-UP SULLO SFONDO SCURO ESTERNO ──
+    const modalBg = document.querySelector('#minicart-modal .modal-background');
+    if (modalBg && modal) {
+        modalBg.addEventListener('click', function() {
+            modal.classList.remove('is-active');
+            modal.setAttribute('aria-hidden', 'true');
+        });
+    }
 });
 </script>
+{/block}

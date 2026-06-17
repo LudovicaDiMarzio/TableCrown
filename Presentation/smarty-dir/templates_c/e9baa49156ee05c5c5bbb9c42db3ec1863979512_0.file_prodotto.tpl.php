@@ -1,18 +1,18 @@
 <?php
-/* Smarty version 5.8.0, created on 2026-06-17 10:43:09
+/* Smarty version 5.8.0, created on 2026-06-17 10:53:11
   from 'file:prodotto.tpl' */
 
 /* @var \Smarty\Template $_smarty_tpl */
 if ($_smarty_tpl->getCompiled()->isFresh($_smarty_tpl, array (
   'version' => '5.8.0',
-  'unifunc' => 'content_6a325e1d35d4e0_20225800',
+  'unifunc' => 'content_6a3260775d4d46_86755901',
   'has_nocache_code' => false,
   'file_dependency' => 
   array (
     'e9baa49156ee05c5c5bbb9c42db3ec1863979512' => 
     array (
       0 => 'prodotto.tpl',
-      1 => 1781685767,
+      1 => 1781686374,
       2 => 'file',
     ),
   ),
@@ -20,30 +20,172 @@ if ($_smarty_tpl->getCompiled()->isFresh($_smarty_tpl, array (
   array (
   ),
 ))) {
-function content_6a325e1d35d4e0_20225800 (\Smarty\Template $_smarty_tpl) {
+function content_6a3260775d4d46_86755901 (\Smarty\Template $_smarty_tpl) {
 $_smarty_current_dir = 'C:\\Users\\damic\\Desktop\\uni\\APPUNTI\\anno3\\secondo_semenstre\\Pweb\\TableCrown\\Presentation\\smarty-dir\\templates';
 $_smarty_tpl->getInheritance()->init($_smarty_tpl, true);
 ?>
 
 
 <?php 
-$_smarty_tpl->getInheritance()->instanceBlock($_smarty_tpl, 'Block_6174233996a325e1d327850_10895906', "extra_css");
+$_smarty_tpl->getInheritance()->instanceBlock($_smarty_tpl, 'Block_4201410496a326077577776_05292706', "extra_css");
 ?>
 
 
 <?php 
-$_smarty_tpl->getInheritance()->instanceBlock($_smarty_tpl, 'Block_14443178666a325e1d329e76_52745224', "content");
+$_smarty_tpl->getInheritance()->instanceBlock($_smarty_tpl, 'Block_13947048326a32607757b437_95367602', "content");
 ?>
 
 
-<?php 
-$_smarty_tpl->getInheritance()->instanceBlock($_smarty_tpl, 'Block_21273253336a325e1d35c4c4_46426118', "extra_js");
-?>
+<?php echo '<script'; ?>
+>
+document.addEventListener('DOMContentLoaded', function () {
 
-<?php $_smarty_tpl->getInheritance()->endChild($_smarty_tpl, "common/layout.tpl", $_smarty_current_dir);
+    // ── GALLERIA IMMAGINI ──
+    const imgs = document.querySelectorAll('.gallery-main-img');
+    const thumbs = document.querySelectorAll('.gallery-thumb');
+    let currentImg = 0;
+
+    function showImg(index) {
+        imgs.forEach(i => i.classList.remove('is-active'));
+        thumbs.forEach(t => t.classList.remove('is-active'));
+        currentImg = (index + imgs.length) % imgs.length;
+        if (imgs[currentImg]) imgs[currentImg].classList.add('is-active');
+        if (thumbs[currentImg]) thumbs[currentImg].classList.add('is-active');
+    }
+
+    document.getElementById('gallery-prev')?.addEventListener('click', () => showImg(currentImg - 1));
+    document.getElementById('gallery-next')?.addEventListener('click', () => showImg(currentImg + 1));
+
+    thumbs.forEach(thumb => {
+        thumb.addEventListener('click', function () {
+            showImg(parseInt(this.dataset.index));
+        });
+    });
+
+    // ── STEPPER QUANTITÀ, PREZZO E AGGIORNAMENTO URL (Centralizzato) ──
+    const qtyInput = document.getElementById('qty-input');
+    const prezzoTot = document.getElementById('prezzo-tot');
+    const btnCart = document.getElementById('btn-add-cart');
+    
+    // Salviamo l'URL di base iniziale del carrello
+    const baseHref = btnCart ? btnCart.getAttribute('href') : '';
+
+    function aggiornaStatoInterfaccia() {
+        const qty = parseInt(qtyInput.value) || 1;
+
+        // 1. Aggiorna Prezzo Totale
+        if (prezzoTot) {
+            const unit = parseFloat(prezzoTot.dataset.unit) || 0;
+            prezzoTot.textContent = '€' + (unit * qty).toFixed(2);
+        }
+
+        // 2. Aggiorna URL del pulsante Carrello
+        if (btnCart && baseHref) {
+            btnCart.setAttribute('href', baseHref + '?qty=' + qty);
+        }
+    }
+
+    document.getElementById('qty-minus')?.addEventListener('click', function () {
+        if (parseInt(qtyInput.value) > 1) {
+            qtyInput.value = parseInt(qtyInput.value) - 1;
+            aggiornaStatoInterfaccia();
+        }
+    });
+
+    document.getElementById('qty-plus')?.addEventListener('click', function () {
+        qtyInput.value = parseInt(qtyInput.value) + 1;
+        aggiornaStatoInterfaccia();
+    });
+
+    qtyInput?.addEventListener('input', aggiornaStatoInterfaccia);
+
+
+    // ── GESTIONE AJAX E APERTURA MODAL CARRELLO ──
+    if (btnCart) {
+        btnCart.addEventListener('click', function (e) {
+            e.preventDefault(); // Blocca il caricamento della pagina
+
+            const targetUrl = this.getAttribute('href');
+            const modal = document.getElementById('minicart-modal');
+
+            // Mostra subito il pop-up all'utente
+            if (modal) {
+                modal.classList.add('is-active');
+                modal.setAttribute('aria-hidden', 'false');
+            }
+
+            // Richiesta asincrona al server
+            fetch(targetUrl)
+            .then(response => {
+                if (!response.ok) {
+                    console.error("Errore di risposta dal server durante l'aggiunta al carrello.");
+                }
+            })
+            .catch(error => {
+                console.warn("Errore di rete/fetch interceptato:", error);
+            });
+        });
+    }
+
+    // ── GESTIONE CHIUSURA POP-UP (X e Sfondo Scuro) ──
+    const modal = document.getElementById('minicart-modal');
+    const btnClose = document.getElementById('close-minicart');
+    const modalBg = document.querySelector('#minicart-modal .modal-background');
+
+    function chiudiModal() {
+        if (modal) {
+            modal.classList.remove('is-active');
+            modal.setAttribute('aria-hidden', 'true');
+        }
+    }
+
+    btnClose?.addEventListener('click', chiudiModal);
+    modalBg?.addEventListener('click', chiudiModal);
+
+
+    // ── TOGGLE FORM RECENSIONE ──
+    document.getElementById('btn-scrivi-recensione')?.addEventListener('click', function () {
+        const form = document.getElementById('recensione-form');
+        if (form) form.style.display = form.style.display === 'none' ? 'block' : 'none';
+    });
+
+    document.getElementById('btn-annulla-recensione')?.addEventListener('click', function () {
+        const form = document.getElementById('recensione-form');
+        if (form) form.style.display = 'none';
+    });
+
+    // ── STAR PICKER RECENSIONE ──
+    const stars = document.querySelectorAll('.star-pick');
+    const votoInput = document.getElementById('rec-voto');
+
+    stars.forEach(star => {
+        star.addEventListener('mouseover', function () {
+            const val = parseInt(this.dataset.value);
+            stars.forEach((s, i) => {
+                s.classList.toggle('ti-star-filled', i < val);
+                s.classList.toggle('ti-star', i >= val);
+            });
+        });
+
+        star.addEventListener('click', function () {
+            const val = parseInt(this.dataset.value);
+            if (votoInput) votoInput.value = val;
+        });
+    });
+
+    document.getElementById('star-picker')?.addEventListener('mouseleave', function () {
+        const val = parseInt(votoInput?.value) || 0;
+        stars.forEach((s, i) => {
+            s.classList.toggle('ti-star-filled', i < val);
+            s.classList.toggle('ti-star', i >= val);
+        });
+    });
+});
+<?php echo '</script'; ?>
+><?php $_smarty_tpl->getInheritance()->endChild($_smarty_tpl, "common/layout.tpl", $_smarty_current_dir);
 }
 /* {block "extra_css"} */
-class Block_6174233996a325e1d327850_10895906 extends \Smarty\Runtime\Block
+class Block_4201410496a326077577776_05292706 extends \Smarty\Runtime\Block
 {
 public function callBlock(\Smarty\Template $_smarty_tpl) {
 $_smarty_current_dir = 'C:\\Users\\damic\\Desktop\\uni\\APPUNTI\\anno3\\secondo_semenstre\\Pweb\\TableCrown\\Presentation\\smarty-dir\\templates';
@@ -56,7 +198,7 @@ $_smarty_current_dir = 'C:\\Users\\damic\\Desktop\\uni\\APPUNTI\\anno3\\secondo_
 }
 /* {/block "extra_css"} */
 /* {block "content"} */
-class Block_14443178666a325e1d329e76_52745224 extends \Smarty\Runtime\Block
+class Block_13947048326a32607757b437_95367602 extends \Smarty\Runtime\Block
 {
 public function callBlock(\Smarty\Template $_smarty_tpl) {
 $_smarty_current_dir = 'C:\\Users\\damic\\Desktop\\uni\\APPUNTI\\anno3\\secondo_semenstre\\Pweb\\TableCrown\\Presentation\\smarty-dir\\templates';
@@ -580,7 +722,12 @@ $_smarty_tpl->getSmarty()->getRuntime('Foreach')->restore($_smarty_tpl, 1);?>
 </div>
 
 <div class="minicart-modal" id="minicart-modal" aria-hidden="true">
-    <div class="minicart-content">
+    <div class="modal-background"></div> 
+    
+    <div class="minicart-content modal-content" style="position: relative;"> 
+        <button id="close-minicart" class="modal-close-btn" aria-label="Chiudi pop-up">&times;</button>
+        
+        <h3>Prodotto aggiunto al carrello!</h3>
 
         <div class="minicart-product">
             <img src="<?php echo $_smarty_tpl->getValue('base_url');?>
@@ -616,18 +763,6 @@ $_smarty_tpl->getSmarty()->getRuntime('Foreach')->restore($_smarty_tpl, 1);?>
                 <i class="ti ti-shopping-cart"></i> Completa Ordine
             </a>
         </div>
-
-        <div id="minicart-modal" class="modal" aria-hidden="true">
-            <div class="modal-background"></div> 
-
-            <div class="modal-content" style="position: relative;"> 
-        
-                <button id="close-minicart" class="modal-close-btn" aria-label="Chiudi pop-up">&times;</button>
-        
-                <h3>Prodotto aggiunto al carrello!</h3>
-            </div>
-        </div>
-
     </div>
 </div>
 
@@ -635,174 +770,4 @@ $_smarty_tpl->getSmarty()->getRuntime('Foreach')->restore($_smarty_tpl, 1);?>
 }
 }
 /* {/block "content"} */
-/* {block "extra_js"} */
-class Block_21273253336a325e1d35c4c4_46426118 extends \Smarty\Runtime\Block
-{
-public function callBlock(\Smarty\Template $_smarty_tpl) {
-$_smarty_current_dir = 'C:\\Users\\damic\\Desktop\\uni\\APPUNTI\\anno3\\secondo_semenstre\\Pweb\\TableCrown\\Presentation\\smarty-dir\\templates';
-?>
-
-<?php echo '<script'; ?>
->
-document.addEventListener('DOMContentLoaded', function () {
-
-    // ── GALLERIA IMMAGINI ──
-    const imgs = document.querySelectorAll('.gallery-main-img');
-    const thumbs = document.querySelectorAll('.gallery-thumb');
-    let currentImg = 0;
-
-    function showImg(index) {
-        imgs.forEach(i => i.classList.remove('is-active'));
-        thumbs.forEach(t => t.classList.remove('is-active'));
-        currentImg = (index + imgs.length) % imgs.length;
-        if (imgs[currentImg]) imgs[currentImg].classList.add('is-active');
-        if (thumbs[currentImg]) thumbs[currentImg].classList.add('is-active');
-    }
-
-    document.getElementById('gallery-prev')?.addEventListener('click', () => showImg(currentImg - 1));
-    document.getElementById('gallery-next')?.addEventListener('click', () => showImg(currentImg + 1));
-
-    thumbs.forEach(thumb => {
-        thumb.addEventListener('click', function () {
-            showImg(parseInt(this.dataset.index));
-        });
-    });
-
-    // ── STEPPER QUANTITÀ + PREZZO TOTALE ──
-    const qtyInput = document.getElementById('qty-input');
-    const prezzoTot = document.getElementById('prezzo-tot');
-
-    function aggiornaPrezzo() {
-        if (!prezzoTot) return;
-        const unit = parseFloat(prezzoTot.dataset.unit) || 0;
-        const qty = parseInt(qtyInput.value) || 1;
-        prezzoTot.textContent = '€' + (unit * qty).toFixed(2);
-    }
-
-    document.getElementById('qty-minus')?.addEventListener('click', function () {
-        if (parseInt(qtyInput.value) > 1) {
-            qtyInput.value = parseInt(qtyInput.value) - 1;
-            aggiornaPrezzo();
-        }
-    });
-
-    document.getElementById('qty-plus')?.addEventListener('click', function () {
-        qtyInput.value = parseInt(qtyInput.value) + 1;
-        aggiornaPrezzo();
-    });
-
-    qtyInput?.addEventListener('input', aggiornaPrezzo);
-
-   
-    // ── AGGIORNA HREF CARRELLO CON QUANTITÀ (Gestione AJAX + Modal) ──
-    const btnCart = document.getElementById('btn-add-cart');
-    if (btnCart && qtyInput) {
-        // Salviamo l'URL di base iniziale del link così com'è
-        const baseHref = btnCart.getAttribute('href');
-        
-        // Funzione pulita per aggiornare l'URL del pulsante aggiungi al carrello
-        const aggiornaUrlCarrello = () => {
-            const qty = parseInt(qtyInput.value) || 1;
-            btnCart.setAttribute('href', baseHref + '?qty=' + qty);
-        };
-
-        // Ascolta l'input manuale nella casella di testo
-        qtyInput.addEventListener('input', aggiornaUrlCarrello);
-        
-        // FIX: Ascolta anche i click sui pulsanti più e meno per aggiornare l'URL al volo!
-        document.getElementById('qty-minus')?.addEventListener('click', aggiornaUrlCarrello);
-        document.getElementById('qty-plus')?.addEventListener('click', aggiornaUrlCarrello);
-
-        // ── INTERCETTAZIONE CLICK E APERTURA POP-UP ──
-        btnCart.addEventListener('click', function (e) {
-            e.preventDefault(); // Blocca IMMEDIATAMENTE il cambio pagina del browser
-
-            const targetUrl = this.getAttribute('href');
-            const modal = document.getElementById('minicart-modal');
-
-            // 1. Mostriamo il pop-up SUBITO. L'utente lo vede all'istante del click.
-            if (modal) {
-                modal.classList.add('is-active');
-                modal.setAttribute('aria-hidden', 'false');
-            }
-
-            // 2. Inviamo la richiesta al server in background (AJAX)
-            // Il controller PHP aggiungerà il prodotto alla sessione normalmente.
-            fetch(targetUrl)
-            .then(response => {
-                if (!response.ok) {
-                    console.error("Il server ha risposto con un errore, ma il prodotto potrebbe essere stato aggiunto.");
-                }
-            })
-            .catch(error => {
-                // Anche se la fetch va in errore (es. per i redirect su localhost), 
-                // la pagina non salta e il pop-up resta visibile a schermo!
-                console.warn("Fetch intercettata in background (tranquillo, il pop-up resta attivo):", error);
-            });
-        });
-    }
-
-    // ── TOGGLE FORM RECENSIONE ──
-    document.getElementById('btn-scrivi-recensione')?.addEventListener('click', function () {
-        const form = document.getElementById('recensione-form');
-        if (form) form.style.display = form.style.display === 'none' ? 'block' : 'none';
-    });
-
-    document.getElementById('btn-annulla-recensione')?.addEventListener('click', function () {
-        document.getElementById('recensione-form').style.display = 'none';
-    });
-
-    // ── STAR PICKER RECENSIONE ──
-    const stars = document.querySelectorAll('.star-pick');
-    const votoInput = document.getElementById('rec-voto');
-
-    stars.forEach(star => {
-        star.addEventListener('mouseover', function () {
-            const val = parseInt(this.dataset.value);
-            stars.forEach((s, i) => {
-                s.classList.toggle('ti-star-filled', i < val);
-                s.classList.toggle('ti-star', i >= val);
-            });
-        });
-
-        star.addEventListener('click', function () {
-            const val = parseInt(this.dataset.value);
-            if (votoInput) votoInput.value = val;
-        });
-    });
-
-    document.getElementById('star-picker')?.addEventListener('mouseleave', function () {
-        const val = parseInt(votoInput?.value) || 0;
-        stars.forEach((s, i) => {
-            s.classList.toggle('ti-star-filled', i < val);
-            s.classList.toggle('ti-star', i >= val);
-        });
-    });
-
-    // ── GESTIONE CHIUSURA POP-UP CON LA X ──
-    const btnClose = document.getElementById('close-minicart');
-    const modal = document.getElementById('minicart-modal');
-
-    if (btnClose && modal) {
-        btnClose.addEventListener('click', function() {
-            modal.classList.remove('is-active');
-            modal.setAttribute('aria-hidden', 'true');
-        });
-    }
-
-    // ── CHIUSURA POP-UP SULLO SFONDO SCURO ESTERNO ──
-    const modalBg = document.querySelector('#minicart-modal .modal-background');
-    if (modalBg && modal) {
-        modalBg.addEventListener('click', function() {
-            modal.classList.remove('is-active');
-            modal.setAttribute('aria-hidden', 'true');
-        });
-    }
-});
-<?php echo '</script'; ?>
->
-<?php
-}
-}
-/* {/block "extra_js"} */
 }
