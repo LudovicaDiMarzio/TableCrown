@@ -1,18 +1,18 @@
 <?php
-/* Smarty version 5.8.0, created on 2026-06-17 18:01:33
+/* Smarty version 5.8.0, created on 2026-06-17 18:11:42
   from 'file:carrello.tpl' */
 
 /* @var \Smarty\Template $_smarty_tpl */
 if ($_smarty_tpl->getCompiled()->isFresh($_smarty_tpl, array (
   'version' => '5.8.0',
-  'unifunc' => 'content_6a32c4dd7fb612_09609198',
+  'unifunc' => 'content_6a32c73e9ba112_35360973',
   'has_nocache_code' => false,
   'file_dependency' => 
   array (
     '14c8b1bc70e7f0f2b8d951e689de31c70067fae1' => 
     array (
       0 => 'carrello.tpl',
-      1 => 1781712068,
+      1 => 1781712680,
       2 => 'file',
     ),
   ),
@@ -20,46 +20,28 @@ if ($_smarty_tpl->getCompiled()->isFresh($_smarty_tpl, array (
   array (
   ),
 ))) {
-function content_6a32c4dd7fb612_09609198 (\Smarty\Template $_smarty_tpl) {
+function content_6a32c73e9ba112_35360973 (\Smarty\Template $_smarty_tpl) {
 $_smarty_current_dir = 'C:\\Users\\damic\\Desktop\\uni\\APPUNTI\\anno3\\secondo_semenstre\\Pweb\\TableCrown\\Presentation\\smarty-dir\\templates';
 $_smarty_tpl->getInheritance()->init($_smarty_tpl, true);
 ?>
 
-<head>
-    <link rel="stylesheet" href="/css/base.css">
-    <link rel="stylesheet" href="/css/layout.css">
-    
-    <?php 
-$_smarty_tpl->getInheritance()->instanceBlock($_smarty_tpl, 'Block_5348773646a32c4dd7b8099_31818563', "extra_css");
-?>
 
-</head>
 <?php 
-$_smarty_tpl->getInheritance()->instanceBlock($_smarty_tpl, 'Block_328832776a32c4dd7bee71_46495563', "extra_css");
+$_smarty_tpl->getInheritance()->instanceBlock($_smarty_tpl, 'Block_14612974596a32c73e9985a0_25629630', "extra_css");
 ?>
 
 
 <?php 
-$_smarty_tpl->getInheritance()->instanceBlock($_smarty_tpl, 'Block_3045397216a32c4dd7bfb78_45692667', "content");
+$_smarty_tpl->getInheritance()->instanceBlock($_smarty_tpl, 'Block_17000046616a32c73e99acc0_12949732', "content");
 ?>
 
 
 <?php 
-$_smarty_tpl->getInheritance()->instanceBlock($_smarty_tpl, 'Block_18036945366a32c4dd7f9284_53459319', "extra_js");
-?>
-
-<?php $_smarty_tpl->getInheritance()->endChild($_smarty_tpl, "common/layout.tpl", $_smarty_current_dir);
+$_smarty_tpl->getInheritance()->instanceBlock($_smarty_tpl, 'Block_13668425326a32c73e9b9002_42129764', "extra_js");
+$_smarty_tpl->getInheritance()->endChild($_smarty_tpl, "common/layout.tpl", $_smarty_current_dir);
 }
 /* {block "extra_css"} */
-class Block_5348773646a32c4dd7b8099_31818563 extends \Smarty\Runtime\Block
-{
-public function callBlock(\Smarty\Template $_smarty_tpl) {
-$_smarty_current_dir = 'C:\\Users\\damic\\Desktop\\uni\\APPUNTI\\anno3\\secondo_semenstre\\Pweb\\TableCrown\\Presentation\\smarty-dir\\templates';
-}
-}
-/* {/block "extra_css"} */
-/* {block "extra_css"} */
-class Block_328832776a32c4dd7bee71_46495563 extends \Smarty\Runtime\Block
+class Block_14612974596a32c73e9985a0_25629630 extends \Smarty\Runtime\Block
 {
 public function callBlock(\Smarty\Template $_smarty_tpl) {
 $_smarty_current_dir = 'C:\\Users\\damic\\Desktop\\uni\\APPUNTI\\anno3\\secondo_semenstre\\Pweb\\TableCrown\\Presentation\\smarty-dir\\templates';
@@ -72,13 +54,11 @@ $_smarty_current_dir = 'C:\\Users\\damic\\Desktop\\uni\\APPUNTI\\anno3\\secondo_
 }
 /* {/block "extra_css"} */
 /* {block "content"} */
-class Block_3045397216a32c4dd7bfb78_45692667 extends \Smarty\Runtime\Block
+class Block_17000046616a32c73e99acc0_12949732 extends \Smarty\Runtime\Block
 {
 public function callBlock(\Smarty\Template $_smarty_tpl) {
 $_smarty_current_dir = 'C:\\Users\\damic\\Desktop\\uni\\APPUNTI\\anno3\\secondo_semenstre\\Pweb\\TableCrown\\Presentation\\smarty-dir\\templates';
 ?>
-
-
 
 <div class="carrello-container">
     <div class="container">
@@ -126,8 +106,10 @@ $foreach0DoElse = false;
 /prodotto/<?php echo $_smarty_tpl->getValue('p')->getIdProdotto();?>
 " class="carrello-item-img-link">
                                     <img src="<?php echo $_smarty_tpl->getValue('base_url');?>
-/img/prodotti/<?php echo htmlspecialchars((string)$_smarty_tpl->getValue('p')->getImgProdotto(), ENT_QUOTES, 'UTF-8', true);?>
+/public/img/prodotti/<?php echo htmlspecialchars((string)$_smarty_tpl->getValue('p')->getImgProdotto(), ENT_QUOTES, 'UTF-8', true);?>
 "
+                                         onerror="this.src='<?php echo $_smarty_tpl->getValue('base_url');?>
+/public/img/default.png'"
                                          alt="<?php echo htmlspecialchars((string)$_smarty_tpl->getValue('p')->getNomeProdotto(), ENT_QUOTES, 'UTF-8', true);?>
 "
                                          class="carrello-item-img">
@@ -219,8 +201,10 @@ $foreach1DoElse = false;
 " class="correlato-card-link">
                                                 <div class="correlato-image-wrapper">
                                                     <img src="<?php echo $_smarty_tpl->getValue('base_url');?>
-/img/prodotti/<?php echo htmlspecialchars((string)$_smarty_tpl->getValue('correlato')->getImgProdotto(), ENT_QUOTES, 'UTF-8', true);?>
+/public/img/prodotti/<?php echo htmlspecialchars((string)$_smarty_tpl->getValue('correlato')->getImgProdotto(), ENT_QUOTES, 'UTF-8', true);?>
 "
+                                                         onerror="this.src='<?php echo $_smarty_tpl->getValue('base_url');?>
+/public/img/default.png'"
                                                          alt="<?php echo htmlspecialchars((string)$_smarty_tpl->getValue('correlato')->getNomeProdotto(), ENT_QUOTES, 'UTF-8', true);?>
 "
                                                          class="correlato-image">
@@ -358,13 +342,12 @@ echo $_smarty_tpl->getValue('carrello')->getSpedizione();
 
     </div>
 </div>
-
 <?php
 }
 }
 /* {/block "content"} */
 /* {block "extra_js"} */
-class Block_18036945366a32c4dd7f9284_53459319 extends \Smarty\Runtime\Block
+class Block_13668425326a32c73e9b9002_42129764 extends \Smarty\Runtime\Block
 {
 public function callBlock(\Smarty\Template $_smarty_tpl) {
 $_smarty_current_dir = 'C:\\Users\\damic\\Desktop\\uni\\APPUNTI\\anno3\\secondo_semenstre\\Pweb\\TableCrown\\Presentation\\smarty-dir\\templates';
@@ -476,7 +459,6 @@ function initCarrelloPage() {
 
             const righeRimaste = document.querySelectorAll('.carrello-item');
             if (righeRimaste.length === 0) {
-                // Nessun articolo rimasto: ricarica per mostrare lo stato "carrello vuoto"
                 window.location.reload();
             } else {
                 ricalcolaRiepilogo();

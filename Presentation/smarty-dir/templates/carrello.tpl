@@ -8,15 +8,6 @@
 <div class="carrello-container">
     <div class="container">
 
-        {* ── BREADCRUMB ── *}
-        <nav class="carrello-breadcrumb" aria-label="Breadcrumb">
-            <ul class="breadcrumb-list">
-                <li><a href="{$base_url}/">Home</a></li>
-                <li><a href="{$base_url}/catalogo">Catalogo</a></li>
-                <li class="is-active"><span>Carrello</span></li>
-            </ul>
-        </nav>
-
         <h1 class="carrello-titolo">
             <i class="ti ti-shopping-cart"></i> Carrello
         </h1>
