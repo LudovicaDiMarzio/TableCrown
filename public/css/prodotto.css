@@ -1196,6 +1196,28 @@
     background-color: var(--color-primary-dark) !important;
 }
 
+.modal-content {
+    position: relative; /* Indispensabile per l'ancoraggio della X */
+}
+
+#close-minicart {
+    position: absolute;
+    top: 12px;
+    right: 15px;
+    background: none;
+    border: none;
+    font-size: 28px; /* Dimensione della X */
+    font-weight: bold;
+    line-height: 1;
+    color: #888;
+    cursor: pointer;
+    transition: color 0.2s ease;
+    padding: 0;
+}
+
+#close-minicart:hover {
+    color: #333; /* Si scurisce quando ci passi sopra con il mouse */
+}
 
 /* ── RESPONSIVE MOBILE ────────────────────────────────────── */
 

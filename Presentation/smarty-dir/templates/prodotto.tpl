@@ -453,6 +453,17 @@
             </a>
         </div>
 
+        <div id="minicart-modal" class="modal" aria-hidden="true">
+            <div class="modal-background"></div> 
+
+            <div class="modal-content" style="position: relative;"> 
+        
+                <button id="close-minicart" class="modal-close-btn" aria-label="Chiudi pop-up">&times;</button>
+        
+                <h3>Prodotto aggiunto al carrello!</h3>
+            </div>
+        </div>
+
     </div>
 </div>
 
@@ -595,6 +606,25 @@ document.addEventListener('DOMContentLoaded', function () {
         });
     });
 
+    // ── GESTIONE CHIUSURA POP-UP CON LA X ──
+    const btnClose = document.getElementById('close-minicart');
+    const modal = document.getElementById('minicart-modal');
+
+    if (btnClose && modal) {
+        btnClose.addEventListener('click', function() {
+            modal.classList.remove('is-active');
+            modal.setAttribute('aria-hidden', 'true');
+        });
+    }
+
+    // ── CHIUSURA POP-UP SULLO SFONDO SCURO ESTERNO ──
+    const modalBg = document.querySelector('#minicart-modal .modal-background');
+    if (modalBg && modal) {
+        modalBg.addEventListener('click', function() {
+            modal.classList.remove('is-active');
+            modal.setAttribute('aria-hidden', 'true');
+        });
+    }
 });
 </script>
 {/block}
