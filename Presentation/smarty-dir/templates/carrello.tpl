@@ -1,5 +1,10 @@
 {extends file="common/layout.tpl"}
-
+<head>
+    <link rel="stylesheet" href="/css/base.css">
+    <link rel="stylesheet" href="/css/layout.css">
+    
+    {block name="extra_css"}{/block}
+</head>
 {block name="extra_css"}
     <link rel="stylesheet" href="{$base_url}/public/css/carrello.css">
 {/block}
