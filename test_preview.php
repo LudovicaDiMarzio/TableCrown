@@ -46,4 +46,4 @@ $smarty->assign('correlati', [new MockProdotto(), new MockProdotto()]);
 $smarty->assign('base_url', '.'); 
 
 // 4. RENDERING DEL TEMPLATE
-$smarty->display('carrello.tpl');
+$smarty->display('templates/carrello.tpl');
