@@ -261,7 +261,7 @@
 /* AZZURRO/GIALLO: In arrivo (Opzionale, gestito nel .tpl) */
 .prodotto-badge-in-arrivo {
     background-color: rgba(234, 179, 8, 0.15);
-    color: #fde047;
+    color: #c3ab36;
     border: 1px solid rgba(234, 179, 8, 0.3);
 }
 
