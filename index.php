@@ -14,9 +14,9 @@ if (session_status() === PHP_SESSION_NONE) {
 //Caricamento delle dipendenze
 require_once __DIR__ . '/vendor/autoload.php';
 
-require_once __DIR__ . '/Control/CFrontController.php';
-require_once __DIR__ . '/Control/BaseController.php';
-require_once __DIR__ . '/Utility/UHTTPMethods.php';
+use TableCrown\Control\CFrontController;
+use TableCrown\Control\BaseController;
+use TableCrown\Utility\UHTTPMethods;
 
 //Cattura e pulizia della rotta virtuale passata dall'.htaccess
 //Se l'utente richiede 'localhost/catalogo', $_GET['url'] sarà 'catalogo' -> viene trasformato in '/catalogo'
