@@ -1,50 +1,56 @@
 <?php
-// 1. Includi l'autoloader di Composer
 require_once __DIR__ . '/vendor/autoload.php'; 
 
-// Inizializza Smarty 5 col namespace corretto
-$smarty = new \Smarty\Smarty();
+use Smarty\Smarty;
+$smarty = new Smarty();
 
-// Imposta i percorsi corretti seguendo la struttura del tuo progetto
-$smarty->setTemplateDir(__DIR__ . '/Presentation/smarty-dir/templates');
-$smarty->setCompileDir(__DIR__ . '/Presentation/smarty-dir/templates_c');
+// 1. Ricerca automatica della cartella dei template
+$possibiliPercorsi = [
+    __DIR__ . '/smarty-dir/',
+    __DIR__ . '/Presentation/smarty-dir/',
+    __DIR__ . '/Presentation/Views/smarty-dir/',
+    __DIR__ . '/presentation/smarty-dir/'
+];
 
-// 2. CREIAMO I DATI FINTI (MOCK) PER IL TEST
-class MockPrezzo {
-    public function hasSconto() { return true; }
-    public function calcolaPrezzoScontato() { return 19.90; }
-    public function getValore() { return 29.90; }
-}
+$smartyDirHandler = null;
 
-class MockProdotto {
-    public function getIdProdotto() { return 42; }
-    public function getImgProdotto() { return 'esempio-tavolo.jpg'; } 
-    public function getNomeProdotto() { return 'Tavolo Impero in Noce'; }
-    public function getPrezzo() { return new MockPrezzo(); }
-    public function getValutazioneMedia() { return 4.5; }
-}
-
-class MockItem {
-    public function getIdItem() { return 1; }
-    public function getProdotto() { return new MockProdotto(); }
-    public function getQuantita() { return 2; }
-    public function getSubtotale() { return 39.80; } 
-}
-
-class MockCarrello {
-    public function getItems() { 
-        return [new MockItem()]; 
+foreach ($possibiliPercorsi as $percorso) {
+    if (is_dir($percorso . 'templates/')) {
+        $smartyDirHandler = $percorso;
+        break;
     }
-    public function getTotaleArticoli() { return 2; }
-    public function getSconto() { return 10.00; }
-    public function getSpedizione() { return 0.00; } 
-    public function getTotale() { return 39.80; }
 }
 
-// 3. ASSEGNAZIONE DELLE VARIABILI A SMARTY
-$smarty->assign('carrello', new MockCarrello());
-$smarty->assign('correlati', [new MockProdotto(), new MockProdotto()]); 
-$smarty->assign('base_url', 'http://localhost:8000'); 
+if (!$smartyDirHandler) {
+    echo "<strong style='color:red;'>Impossibile trovare la cartella dei template!</strong><br>";
+    echo "Assicurati che la cartella <code>templates</code> sia dentro <code>smarty-dir</code>.";
+    exit;
+}
 
-// 4. RENDERING DEL TEMPLATE (cerca direttamente dentro la cartella impostata sopra)
-$smarty->display('carrello.tpl');
+// 2. Configurazione dei percorsi di Smarty
+$smarty->setTemplateDir($smartyDirHandler . 'templates/');
+$smarty->setCompileDir($smartyDirHandler . 'templates_c/');
+$smarty->setCacheDir($smartyDirHandler . 'cache/');
+$smarty->setConfigDir($smartyDirHandler . 'configs/');
+
+// Definiamo i dati di base per l'header e i link
+$smarty->assign('page_title', 'TableCrown — Home');
+$smarty->assign('base_url', '/public'); // Modifica se la cartella public ha un percorso diverso
+
+// NOTA: Se hai lasciato i vettori vuoti o non settati, home.tpl mostrerà automaticamente 
+// i 4 prodotti demo statici grazie al blocco {else} che abbiamo strutturato insieme.
+$smarty->assign('offerte', []); 
+$smarty->assign('nuovi_arrivi', []); 
+
+// 3. Tentativo di rendering della HOME
+try {
+    // MODIFICATO: Puntiamo alla home.tpl. 
+    // Se hai salvato home.tpl nella radice di 'templates/', usa semplicemente 'home.tpl'.
+    // Se l'hai messa in una sottocartella (es. 'pages/home.tpl'), modifica il percorso di conseguenza.
+    $smarty->display('catalogo.tpl'); 
+    
+} catch (Exception $e) {
+    echo "<strong style='color:orange;'>Errore nel caricamento della Home:</strong><br>";
+    echo "<i>" . $e->getMessage() . "</i><br><br>";
+    echo "<strong>Verifica:</strong> Assicurati di aver salvato il file <code>home.tpl</code> dentro la cartella: <code>" . htmlspecialchars($smartyDirHandler) . "templates/</code>";
+}
