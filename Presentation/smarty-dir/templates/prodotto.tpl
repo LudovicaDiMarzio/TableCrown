@@ -1,7 +1,7 @@
 {extends file="common/layout.tpl"}
 
 {block name="extra_css"}
-    <link rel="stylesheet" href="{$base_url}/public/css/prodotto.css">
+    <link rel="stylesheet" href="{$base_url}/css/prodotto.css">
 {/block}
 
 {block name="content"}
@@ -215,9 +215,10 @@
                 {* Bottone Aggiungi al Carrello *}
                 {if $prodotto->getDisponibilitaProdotto() != 'esaurito'}
                     <a href="{$base_url}/carrello/aggiungi/{$prodotto->getIdProdotto()}"
-                       class="button btn-add-cart-prodotto"
-                       id="btn-add-cart"
-                       aria-label="Aggiungi al carrello">
+                        class="button btn-add-cart-prodotto"
+                        id="btn-add-cart"
+                        data-id="{$prodotto->getIdProdotto()}"
+                        aria-label="Aggiungi al carrello">
                         <i class="ti ti-shopping-cart"></i> Aggiungi al Carrello
                     </a>
                 {else}
@@ -476,7 +477,9 @@
 
 {block name="extra_js"}
 <script>
-// ► AVVIA SUBITO il codice, non aspettare DOMContentLoaded
+
+{literal}
+
 function initProdottoPage() {
 
     // ── GALLERIA IMMAGINI ──
@@ -504,8 +507,6 @@ function initProdottoPage() {
     // ── STEPPER QUANTITÀ + PREZZO TOTALE ──
     const qtyInput  = document.getElementById('qty-input');
     const prezzoTot = document.getElementById('prezzo-tot');
-    const btnCart   = document.getElementById('btn-add-cart');
-    const baseHref  = btnCart ? btnCart.getAttribute('href') : null;
 
     function aggiornaPrezzo() {
         if (!prezzoTot || !qtyInput) return;
@@ -514,13 +515,6 @@ function initProdottoPage() {
         prezzoTot.textContent = '€' + (unit * qty).toFixed(2);
     }
 
-    function aggiornaUrlCarrello() {
-        if (!btnCart || !baseHref || !qtyInput) return;
-        const qty = parseInt(qtyInput.value) || 1;
-        btnCart.setAttribute('href', baseHref + '?qty=' + qty);
-    }
-
-    // ✅ FIX: Bottone MENO
     const btnMinus = document.getElementById('qty-minus');
     if (btnMinus) {
         btnMinus.addEventListener('click', function (e) {
@@ -530,53 +524,128 @@ function initProdottoPage() {
             if (val > 1) {
                 qtyInput.value = val - 1;
                 aggiornaPrezzo();
-                aggiornaUrlCarrello();
             }
         });
     }
 
-    // ✅ FIX: Bottone PIÙ
     const btnPlus = document.getElementById('qty-plus');
     if (btnPlus) {
         btnPlus.addEventListener('click', function (e) {
             e.preventDefault();
             if (!qtyInput) return;
-            const currentVal = parseInt(qtyInput.value) || 1;
-            qtyInput.value = currentVal + 1;
+            qtyInput.value = (parseInt(qtyInput.value) || 1) + 1;
             aggiornaPrezzo();
-            aggiornaUrlCarrello();
         });
     }
 
-    // Input manuale
     if (qtyInput) {
-        qtyInput.addEventListener('input', function () {
-            aggiornaPrezzo();
-            aggiornaUrlCarrello();
+        qtyInput.addEventListener('input', aggiornaPrezzo);
+    }
+
+    // ── FUNZIONE APERTURA MODAL MINICART ──
+    const modal = document.getElementById('minicart-modal');
+
+    function apriMinicart() {
+        if (modal) {
+            modal.classList.add('is-active');
+            modal.setAttribute('aria-hidden', 'false');
+            // sposta il focus sul modal per evitare conflitti aria
+            const closeBtn = document.getElementById('close-minicart');
+            if (closeBtn) closeBtn.focus();
+        }
+    }
+
+
+    function chiudiMinicart() {
+        if (modal) {
+            modal.classList.remove('is-active');
+            modal.setAttribute('aria-hidden', 'true');
+            // riporta focus al bottone carrello
+            document.getElementById('btn-add-cart')?.focus();
+        }
+    }
+
+
+
+    // ── FUNZIONE AJAX AGGIUNGI AL CARRELLO ──
+    function aggiungiAlCarrello(idProdotto, quantita, callback) {
+        fetch('/carrello/aggiungi', {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/x-www-form-urlencoded',
+                'X-Requested-With': 'XMLHttpRequest'
+            },
+            body: `id_prodotto=${idProdotto}&quantita=${quantita}`
+        })
+        .then(res => {
+            if (!res.ok) throw new Error('Errore HTTP: ' + res.status);
+            return res.json();
+        })
+        .then(data => {
+            if (data.success) {
+                apriMinicart();
+
+                // Aggiorna badge carrello nel layout se presente
+                const cartBadge = document.getElementById('cart-count');
+                if (cartBadge && data.cart_count !== undefined) {
+                    cartBadge.textContent = data.cart_count;
+                    cartBadge.style.display = data.cart_count > 0 ? 'inline' : 'none';
+                }
+
+                if (callback) callback(data);
+            } else {
+                console.error('Errore carrello:', data.messaggio);
+                // Qui puoi mostrare un flash message di errore se vuoi
+            }
+        })
+        .catch(err => {
+            console.error('Fetch carrello fallita:', err);
         });
     }
 
-    // ── INTERCETTAZIONE CLICK CARRELLO + MODAL ──
+    // ── BOTTONE CARRELLO PRODOTTO PRINCIPALE ──
+    const btnCart    = document.getElementById('btn-add-cart');
+    const idProdotto = btnCart ? btnCart.dataset.id : null;
+
     if (btnCart) {
         btnCart.addEventListener('click', function (e) {
             e.preventDefault();
-
-            const targetUrl = this.getAttribute('href');
-            const modal = document.getElementById('minicart-modal');
-
-            if (modal) {
-                modal.classList.add('is-active');
-                modal.setAttribute('aria-hidden', 'false');
-            }
-
-            fetch(targetUrl).catch(err => {
-                console.warn('Fetch background:', err);
-            });
+            apriMinicart(); // test diretto, senza fetch
         });
     }
 
+    // ── BOTTONI CARRELLO PRODOTTI CORRELATI ──
+    document.querySelectorAll('.btn-correlato-cart').forEach(function (btn) {
+        btn.addEventListener('click', function (e) {
+            e.preventDefault();
+            // Prende l'id dal href: /carrello/aggiungi/42
+            const hrefParts = this.getAttribute('href').split('/');
+            const idCorrelato = hrefParts[hrefParts.length - 1];
+            aggiungiAlCarrello(idCorrelato, 1);
+        });
+    });
+
+    // ── CHIUSURA MODAL CON X ──
+    document.getElementById('close-minicart')?.addEventListener('click', function (e) {
+        e.preventDefault();
+        chiudiMinicart();
+    });
+
+    // ── CHIUSURA MODAL CLICCANDO SFONDO ──
+    document.querySelector('#minicart-modal .modal-background')?.addEventListener('click', chiudiMinicart);
+
+
+    // ── STOP PROPAGATION SUI BOTTONI MODAL ──
+    document.querySelectorAll('.minicart-actions a').forEach(function(btn) {
+        btn.addEventListener('click', function(e) {
+            e.stopPropagation();
+        });
+    });
+
+
+
     // ── TOGGLE FORM RECENSIONE ──
-    const btnRecensione = document.getElementById('btn-scrivi-recensione');
+    const btnRecensione  = document.getElementById('btn-scrivi-recensione');
     const formRecensione = document.getElementById('recensione-form');
 
     if (btnRecensione && formRecensione) {
@@ -587,112 +656,92 @@ function initProdottoPage() {
         });
     }
 
-    // ✅ FIX: Bottone Annulla
-    const btnAnnulla = document.getElementById('btn-annulla-recensione');
-    if (btnAnnulla && formRecensione) {
-        btnAnnulla.addEventListener('click', function (e) {
-            e.preventDefault();
-            formRecensione.style.display = 'none';
-        });
-    }
+    document.getElementById('btn-annulla-recensione')?.addEventListener('click', function (e) {
+        e.preventDefault();
+        if (formRecensione) formRecensione.style.display = 'none';
+    });
 
     // ── STAR PICKER RECENSIONE ──
     const stars     = document.querySelectorAll('.star-pick');
     const votoInput = document.getElementById('rec-voto');
 
+    function aggiornaStelle(valore) {
+        stars.forEach((s, i) => {
+            s.classList.toggle('ti-star-filled', i < valore);
+            s.classList.toggle('ti-star', i >= valore);
+        });
+    }
+
     stars.forEach(star => {
         star.addEventListener('mouseover', function () {
-            const val = parseInt(this.dataset.value);
-            stars.forEach((s, i) => {
-                s.classList.toggle('ti-star-filled', i < val);
-                s.classList.toggle('ti-star', i >= val);
-            });
+            aggiornaStelle(parseInt(this.dataset.value));
         });
 
         star.addEventListener('click', function (e) {
             e.preventDefault();
             const val = parseInt(this.dataset.value);
             if (votoInput) votoInput.value = val;
-            stars.forEach((s, i) => {
-                s.classList.toggle('ti-star-filled', i < val);
-                s.classList.toggle('ti-star', i >= val);
-            });
+            aggiornaStelle(val);
         });
     });
 
-    if (document.getElementById('star-picker')) {
-        document.getElementById('star-picker').addEventListener('mouseleave', function () {
-            const val = parseInt(votoInput?.value) || 0;
-            stars.forEach((s, i) => {
-                s.classList.toggle('ti-star-filled', i < val);
-                s.classList.toggle('ti-star', i >= val);
+    document.getElementById('star-picker')?.addEventListener('mouseleave', function () {
+        aggiornaStelle(parseInt(votoInput?.value) || 0);
+    });
+
+    // ── WISHLIST ──
+    const btnWishlist  = document.getElementById('btn-wishlist');
+    const wishlistIcon = document.getElementById('wishlist-icon');
+    let   inWishlist   = false;
+
+    if (btnWishlist) {
+        btnWishlist.addEventListener('click', function () {
+            inWishlist = !inWishlist;
+
+            wishlistIcon.classList.toggle('ti-heart',        !inWishlist);
+            wishlistIcon.classList.toggle('ti-heart-filled',  inWishlist);
+            btnWishlist.classList.toggle('is-active',          inWishlist);
+
+            fetch('/wishlist/aggiungi', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/x-www-form-urlencoded',
+                    'X-Requested-With': 'XMLHttpRequest'
+                },
+                body: `id_prodotto=${idProdotto}`
+            })
+            .then(res => {
+                if (!res.ok) throw new Error('Errore HTTP: ' + res.status);
+                return res.json();
+            })
+            .then(data => {
+                if (!data.success) {
+                    // Rollback icona se il server ha risposto con errore
+                    inWishlist = !inWishlist;
+                    wishlistIcon.classList.toggle('ti-heart',        !inWishlist);
+                    wishlistIcon.classList.toggle('ti-heart-filled',  inWishlist);
+                    btnWishlist.classList.toggle('is-active',          inWishlist);
+                    console.error('Errore wishlist:', data.messaggio);
+                }
+            })
+            .catch(err => {
+                console.error('Fetch wishlist fallita:', err);
             });
-        });
-    }
-
-    // ── CHIUSURA MODAL CON X ──
-    const btnClose = document.getElementById('close-minicart');
-    const modal    = document.getElementById('minicart-modal');
-
-    if (btnClose) {
-        btnClose.addEventListener('click', function (e) {
-            e.preventDefault();
-            if (modal) {
-                modal.classList.remove('is-active');
-                modal.setAttribute('aria-hidden', 'true');
-            }
-        });
-    }
-
-    // ── CHIUSURA MODAL CLICCANDO SFONDO ──
-    const modalBg = document.querySelector('#minicart-modal .modal-background');
-    if (modalBg) {
-        modalBg.addEventListener('click', function () {
-            if (modal) {
-                modal.classList.remove('is-active');
-                modal.setAttribute('aria-hidden', 'true');
-            }
         });
     }
 
     console.log('✅ Prodotto page inizializzato correttamente');
 }
 
-// ► Esegui quando il DOM è pronto (supporta sia pagine caricate che DOMContentLoaded già passato)
 if (document.readyState === 'loading') {
     document.addEventListener('DOMContentLoaded', initProdottoPage);
 } else {
-    // DOM è già caricato, esegui subito
     initProdottoPage();
 }
 
-const btnWishlist   = document.getElementById('btn-wishlist');
-const wishlistIcon  = document.getElementById('wishlist-icon');
-let   inWishlist    = false;
-
-if (btnWishlist) {
-    btnWishlist.addEventListener('click', function () {
-        inWishlist = !inWishlist;
-
-        // Swappa l'icona
-        if (inWishlist) {
-            wishlistIcon.classList.remove('ti-heart');
-            wishlistIcon.classList.add('ti-heart-filled');
-            btnWishlist.classList.add('is-active'); // per colorarla col CSS
-        } else {
-            wishlistIcon.classList.remove('ti-heart-filled');
-            wishlistIcon.classList.add('ti-heart');
-            btnWishlist.classList.remove('is-active');
-        }
-
-        // Chiamata al server in background
-        fetch(this.dataset.url).catch(err => {
-            console.warn('Wishlist fetch error:', err);
-        });
-    });
-}
-
-
+{/literal}
 
 </script>
+
+
 {/block}

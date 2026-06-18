@@ -7,11 +7,11 @@
     <title>{block name="page_title"}TableCrown{/block}</title>
 
     {* ── CSS ── *}
-    <link rel="stylesheet" href="{$base_url}/public/plugins/bulma/bulma.min.css">
+    <link rel="stylesheet" href="{$base_url}/plugins/bulma/bulma.min.css">
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@tabler/icons-webfont@3.19.0/dist/tabler-icons.min.css">
     
-    <link rel="stylesheet" href="{$base_url}/public/css/base.css">
-    <link rel="stylesheet" href="{$base_url}/public/css/layout.css">
+    <link rel="stylesheet" href="{$base_url}/css/base.css">
+    <link rel="stylesheet" href="{$base_url}/css/layout.css">
     
     {block name="extra_css"}{/block}
 </head>
@@ -187,9 +187,9 @@
 
     {* ── JS ── *}
     <script src="{$base_url}/plugins/jQuery/jquery.min.js"></script>
-    <script src="{$base_url}/public/plugins/jQuery/jquery.min.js"></script>
-    <script src="{$base_url}/public/plugins/match-height/jquery.matchHeight-min.js"></script>
-    <script src="{$base_url}/public/js/script.js"></script>
+    <script src="{$base_url}/plugins/jQuery/jquery.min.js"></script>
+    <script src="{$base_url}/plugins/match-height/jquery.matchHeight-min.js"></script>
+    <script src="{$base_url}/js/script.js"></script>
 
     <script>
         document.addEventListener('DOMContentLoaded', function () {
