@@ -187,9 +187,9 @@
 
     {* ── JS ── *}
     <script src="{$base_url}/plugins/jQuery/jquery.min.js"></script>
-    <script src="{$base_url}/plugins/masonry/masonry.min.js"></script>
-    <script src="{$base_url}/plugins/match-height/jquery.matchHeight-min.js"></script>
-    <script src="{$base_url}/js/script.js"></script>
+    <script src="{$base_url}/public/plugins/jQuery/jquery.min.js"></script>
+    <script src="{$base_url}/public/plugins/match-height/jquery.matchHeight-min.js"></script>
+    <script src="{$base_url}/public/js/script.js"></script>
 
     <script>
         document.addEventListener('DOMContentLoaded', function () {

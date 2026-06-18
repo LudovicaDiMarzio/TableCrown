@@ -14,4 +14,4 @@ $smarty->assign('base_url', BASE_URL);
 $smarty->assign('offerte', []);
 $smarty->assign('nuovi_arrivi', []);
 
-$smarty->display('catalogo.tpl');
+$smarty->display('home.tpl');
