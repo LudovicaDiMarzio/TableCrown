@@ -2,12 +2,12 @@
 namespace Testing\Fixtures;
 
 use Doctrine\Common\DataFixtures\AbstractFixture;
-use Doctrine\Common\DataFixtures\DependentFixtureInterface; // <-- LA NOVITÀ!
+use Doctrine\Common\DataFixtures\DependentFixtureInterface; 
 use Doctrine\Persistence\ObjectManager;
 use Faker\Factory;
 
 use TableCrown\Entity\ESegnalazione;
-use TableCrown\Entity\EUtente;        // <-- Aggiungi questa
+use TableCrown\Entity\EUtente;       
 use TableCrown\Entity\EMotivazione;
 
 // Aggiungiamo 'implements DependentFixtureInterface' per gestire l'ordine di esecuzione
@@ -19,11 +19,8 @@ class SegnalazioneFixture extends AbstractFixture implements DependentFixtureInt
     {
         $faker = Factory::create('it_IT');
 
-        echo "Generazione di " . self::NUM_SEGNALAZIONI . " segnalazioni in corso...\n";
-
         for ($i = 0; $i < self::NUM_SEGNALAZIONI; $i++) {
             
-            // 1. LA MAGIA DEI SEGNALIBRI: Peschiamo un utente e una motivazione a caso
             // Sappiamo che abbiamo creato 20 utenti (da 0 a 19) e 5 motivazioni (da 0 a 4)
             $utenteCasuale = $this->getReference(
                 'utente_' . $faker->numberBetween(0, 19), 
@@ -35,7 +32,7 @@ class SegnalazioneFixture extends AbstractFixture implements DependentFixtureInt
                 EMotivazione::class
             );
 
-            // 2. Creiamo la segnalazione passandogli gli oggetti VERIC che abbiamo appena ripescato
+            //  Creiamo la segnalazione passandogli gli oggetti appena recuperati motivazione e utente
             $segnalazione = new ESegnalazione(
                 $motivazioneCasuale, 
                 $utenteCasuale

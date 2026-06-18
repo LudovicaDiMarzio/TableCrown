@@ -1,5 +1,5 @@
 <?php
-namespace Testing\Fixtures;
+namespace TableCrown\Testing\Fixtures;
 
 use Doctrine\Common\DataFixtures\AbstractFixture;
 use Doctrine\Persistence\ObjectManager;
@@ -12,30 +12,18 @@ class DannoFixture extends AbstractFixture
 {
     public function load(ObjectManager $manager): void
     {
-        echo "Generazione delle regole di sconto per i danni in corso...\n";
+        $dannolieve = new EDanno(LivelloDannoGiochi::L1, 10);
+        $dannomedio = new EDanno(LivelloDannoGiochi::L2, 20);
+        $dannoalto = new EDanno(LivelloDannoGiochi::L3, 30);
 
-        // Estraiamo in automatico tutti i casi del tuo Enum (es. L1, L2, L3)
-        $livelliDisponibili = LivelloDannoGiochi::cases();
+        $this->addReference('danno_1', $dannolieve);
+        $this->addReference('danno_2', $dannomedio);
+        $this->addReference('danno_3', $dannoalto);
 
-        // Prepariamo degli sconti realistici in ordine crescente
-        $scontiProgressione = [10.0, 25.0, 45.0];
-
-        foreach ($livelliDisponibili as $indice => $livello) {
-            
-            // Se hai più di 3 livelli nell'Enum, calcola uno sconto di default
-            $sconto = isset($scontiProgressione[$indice]) ? $scontiProgressione[$indice] : 15.0 * ($indice + 1);
-
-            // Creiamo il record Danno
-            $danno = new EDanno($livello, $sconto);
-
-            // Salviamo il segnalibro usando direttamente il nome dell'Enum! (es. "danno_L1")
-            // Ti sarà utilissimo se in futuro vorrai associare un Danno a un EProdotto usato
-            $this->addReference('danno_' . $livello->name, $danno);
-
-            $manager->persist($danno);
-        }
+        $manager->persist($dannolieve);
+        $manager->persist($dannomedio);
+        $manager->persist($dannoalto);
 
         $manager->flush();
-        echo "Livelli di danno e relativi sconti creati e salvati con successo!\n";
     }
 }

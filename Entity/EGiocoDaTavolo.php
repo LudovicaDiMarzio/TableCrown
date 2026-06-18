@@ -37,7 +37,7 @@ class EGiocoDaTavolo extends EProdotto {
     private int $durataMedia; //in minuti
 
     #[ORM\ManyToOne(targetEntity: EDanno::class)]
-    #[ORM\JoinColumn(name: "danno_id", referencedColumnName: "livelloDanno", nullable: true)]
+    #[ORM\JoinColumn(name: "danno_id", referencedColumnName: "iddanno", nullable: true)]
     private ?EDanno $danno; //danno del gioco, se presente
 
     #[ORM\Column(type: "text", nullable: true)]
