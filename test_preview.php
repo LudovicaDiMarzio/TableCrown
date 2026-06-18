@@ -35,7 +35,7 @@ $smarty->setConfigDir($smartyDirHandler . 'configs/');
 
 // Definiamo i dati di base per l'header e i link
 $smarty->assign('page_title', 'TableCrown — Home');
-$smarty->assign('base_url', '/public'); // Modifica se la cartella public ha un percorso diverso
+$smarty->assign('base_url', 'http://localhost:8000/Presentation/public'); // Modifica se la cartella public ha un percorso diverso
 
 // NOTA: Se hai lasciato i vettori vuoti o non settati, home.tpl mostrerà automaticamente 
 // i 4 prodotti demo statici grazie al blocco {else} che abbiamo strutturato insieme.
