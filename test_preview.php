@@ -6,46 +6,75 @@ use Smarty\Smarty;
 $smarty = new Smarty();
 
 ////////////////////////////////////////////////////////////////
+// DATI FAKE PER catalogo_challenge.tpl
+////////////////////////////////////////////////////////////////
 
-$prezzoFake = new class {
-    public function hasSconto() { return true; }
-    public function getSconto() { return 20; }
-    public function getValore() { return 49.90; }
-    public function calcolaPrezzoScontato() { return 39.92; }
+$smarty->assign('filtri', [
+    'data'  => '',
+    'stato' => 'programma'
+]);
+
+$statoProgrammato = new class {
+    public string $name = 'Programmato';
 };
 
-$prodottoFake = new class($prezzoFake) {
-    private $prezzo;
-    public function __construct($prezzo) { $this->prezzo = $prezzo; }
-    public function getIdProdotto() { return 1; }
-    public function getNomeProdotto() { return 'Catan'; }
-    public function getImgProdotto() { return 'placeholder.jpg'; }
-    public function getImmagini() { return []; }
-    public function getDisponibilitaProdotto() { return 'disponibile'; }
-    public function getValutazioneMedia() { return 4; }
-    public function getPrezzo() { return $this->prezzo; }
-    public function getGiocatoriMin() { return 2; }
-    public function getGiocatoriMax() { return 6; }
-    public function getEtaMin() { return 10; }
-    public function getDurata() { return 90; }
-    public function getDifficolta() { return 'Media'; }
-    public function getLingua() { return 'Italiano'; }
-    public function getDescrizione() { return 'Un gioco di strategia ambientato sull\'isola di Catan.'; }
-    public function getComponenti() { return ['19 tessere territorio', '6 tessere mare', '9 tessere porto']; }
+$statoTerminato = new class {
+    public string $name = 'Terminato';
 };
 
-$utenteFake = new class {
-    public function getNickname() { return 'cazzegio'; }
-    public function getEmail() { return 'cazzegio@tablecrown.it'; }
-    public function getId() { return 1; }
+// Fake EPrezzo — senza sconto
+$prezzo1 = new class {
+    public function getValore(): float { return 8.00; }
+    public function getValuta() { return new class { public string $name = 'EUR'; }; }
+    public function getSconto(): float { return 0; }
+    public function hasSconto(): bool { return false; }
+    public function calcolaPrezzoScontato(): float { return 8.00; }
 };
 
-$smarty->assign('utente', $utenteFake);
-$smarty->assign('userHasPurchased', true); // true = mostra form recensione
+// Fake EPrezzo — con sconto 25%
+$prezzo2 = new class {
+    public function getValore(): float { return 12.00; }
+    public function getValuta() { return new class { public string $name = 'EUR'; }; }
+    public function getSconto(): float { return 25; }
+    public function hasSconto(): bool { return true; }
+    public function calcolaPrezzoScontato(): float { return 9.00; }
+};
 
-$smarty->assign('prodotto', $prodottoFake);
-$smarty->assign('correlati', []);
-$smarty->assign('recensioni', []);
+// Fake EChallenge #1 — in programma
+$challenge1 = new class($statoProgrammato, $prezzo1) {
+    private $stato, $quota;
+    public function __construct($stato, $quota) {
+        $this->stato = $stato;
+        $this->quota = $quota;
+    }
+    public function getIdEvento() { return 1; }
+    public function getNomeEvento() { return 'Crown Challenge Estate 2026'; }
+    public function getImgEvento() { return 'placeholder.jpg'; }
+    public function getDataInizio() { return new DateTime('2026-08-15 17:00:00'); }
+    public function getMaxPartecipanti() { return 24; }
+    public function getNumeroPartecipanti() { return 9; }
+    public function getStatoEvento() { return $this->stato; }
+    public function getQuotaIscrizione() { return $this->quota; }
+};
+
+// Fake EChallenge #2 — passata, con sconto
+$challenge2 = new class($statoTerminato, $prezzo2) {
+    private $stato, $quota;
+    public function __construct($stato, $quota) {
+        $this->stato = $stato;
+        $this->quota = $quota;
+    }
+    public function getIdEvento() { return 2; }
+    public function getNomeEvento() { return 'Crown Challenge Primavera 2026'; }
+    public function getImgEvento() { return 'placeholder.jpg'; }
+    public function getDataInizio() { return new DateTime('2026-04-05 16:00:00'); }
+    public function getMaxPartecipanti() { return 20; }
+    public function getNumeroPartecipanti() { return 20; }
+    public function getStatoEvento() { return $this->stato; }
+    public function getQuotaIscrizione() { return $this->quota; }
+};
+
+$smarty->assign('eventi', [$challenge1, $challenge2]);
 
 ////////////////////////////////////////////////////////////////
 
@@ -55,7 +84,5 @@ $smarty->setCacheDir(SMARTY_DIR    . 'cache/');
 $smarty->setConfigDir(SMARTY_DIR   . 'configs/');
 
 $smarty->assign('base_url', BASE_URL);
-$smarty->assign('offerte', []);
-$smarty->assign('nuovi_arrivi', []);
 
 $smarty->display('eventi.tpl');
