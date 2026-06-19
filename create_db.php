@@ -10,8 +10,9 @@ use TableCrown\Entity\ESegnalazione;
 use TableCrown\Entity\EMotivazione;
 use TableCrown\Entity\EProvvedimento;
 use TableCrown\Entity\EBustine;
-use TableCrown\Entity\ECarrello;
-use TableCrown\Entity\ECarrelloItem;
+//il carrello sarà gestito in sessione
+//use TableCrown\Entity\ECarrello;
+//use TableCrown\Entity\ECarrelloItem;
 use TableCrown\Entity\ECartaDiCredito;
 use TableCrown\Entity\EChallenge;
 use TableCrown\Entity\EDanno;
@@ -52,8 +53,8 @@ $classes = [
     $entityManager->getClassMetadata(EMotivazione::class),
     $entityManager->getClassMetadata(EProvvedimento::class),
     $entityManager->getClassMetadata(EBustine::class),
-    $entityManager->getClassMetadata(ECarrello::class),
-    $entityManager->getClassMetadata(ECarrelloItem::class),
+    //$entityManager->getClassMetadata(ECarrello::class),
+    //$entityManager->getClassMetadata(ECarrelloItem::class),
     $entityManager->getClassMetadata(ECartaDiCredito::class),
     $entityManager->getClassMetadata(EChallenge::class),
     $entityManager->getClassMetadata(EDanno::class),

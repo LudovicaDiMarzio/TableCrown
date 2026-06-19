@@ -120,6 +120,7 @@ class ProvvedimentoFixture extends AbstractFixture implements DependentFixtureIn
                 $utente->riattiva();
             }
 
+            //in teoria addReference non è necessario poichè nessun'altra classe dovrebbe aver bisogno di questo riferimento
             $this->addReference('provvedimento_' . $contatore, $provvedimento);
             $manager->persist($provvedimento);
             $contatore++;
