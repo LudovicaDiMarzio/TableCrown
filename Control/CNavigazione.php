@@ -33,7 +33,7 @@ class CNavigazione extends BaseController {
 
         /* //Interfaccia con il livello Foundation
          try {
-            //Richiediamo un massimo di 5 prodotti per sezione
+            //Richiediamo un massimo di 5 prodotti per sezione (dovremmo prendere quelli con la scadenza più vicina, perchè la home dovrebbe mostrare le OFFERTE IN SCADENZA)
             $offerte = FProdotto::getProdottiInOfferta(5);
             $nuoviArrivi = FProdotto::getNuoviArrivo(5);
         } catch (\Exception $e) {

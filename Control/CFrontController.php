@@ -99,8 +99,12 @@ class CFrontController {
             case 'carrello':
                 $controller = new CCarrello();
                 //Verifico il metodo HTTP: se l'utente ha cliccato su "Aggiungi" nella Home, invierà una richiesta POST a /carrello/aggiungi
-                if ($metodoHTTP === 'POST' && $sottoRoute === 'aggiungi') {
-                    $controller->aggiungiAlCarrello();
+                if ($metodoHTTP === 'POST') {
+                    if ($sottoRoute === 'aggiungi') {
+                        $controller->aggiungiAlCarrello();
+                    } elseif ($sottoRoute === 'rimuovi') {
+                        $controller->rimuoviDalCarrello();
+                    }
                 } else {
                     //Altrimenti, di default con una normale GET, mostra la pagina del carrello
                     $controller->mostraCarrello();
