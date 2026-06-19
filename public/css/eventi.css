@@ -1,0 +1,165 @@
+/* ============================================================
+   TableCrown — eventi.css
+   Pagina Eventi: breadcrumb + grid di 3 card categoria
+   (Serate, Tornei, Challenge)
+   ============================================================ */
+
+
+/* ── CONTENITORE PRINCIPALE ───────────────────────────────── */
+
+.eventi-breadcrumb {
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    font-size: var(--font-size-sm);
+    color: var(--color-text-muted);
+    margin-bottom: 2rem;
+}
+
+.eventi-container .eventi-breadcrumb a {
+    color: var(--color-text-muted) !important;
+    transition: color var(--transition);
+}
+
+.eventi-container .eventi-breadcrumb a:hover {
+    color: var(--color-primary) !important;
+}
+
+.eventi-breadcrumb i {
+    font-size: 14px;
+}
+
+.eventi-container .eventi-breadcrumb span {
+    color: var(--color-text-muted) !important;
+    font-weight: 600;
+}
+
+
+/* ── BREADCRUMB ───────────────────────────────────────────── */
+
+.eventi-breadcrumb {
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    font-size: var(--font-size-sm);
+    color: var(--color-text-muted);
+    margin-bottom: 2rem;
+}
+
+.eventi-breadcrumb span {
+    color: var(--color-text-light);
+    font-weight: 600;
+}
+
+.eventi-breadcrumb a:hover {
+    color: var(--color-primary);
+}
+
+.eventi-breadcrumb i {
+    font-size: 14px;
+}
+
+.eventi-breadcrumb span {
+    color: var(--color-text-light);
+    font-weight: 600;
+}
+
+
+/* ── GRID CARD EVENTI ─────────────────────────────────────── */
+
+.eventi-grid {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 1.5rem;
+}
+
+@media screen and (max-width: 1023px) {
+    .eventi-grid {
+        grid-template-columns: repeat(2, 1fr);
+    }
+}
+
+@media screen and (max-width: 640px) {
+    .eventi-grid {
+        grid-template-columns: 1fr;
+    }
+}
+
+
+/* ── CARD EVENTO ──────────────────────────────────────────── */
+
+.evento-card-link {
+    text-decoration: none;
+    display: block;
+}
+
+.evento-card {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 1rem;
+    background-color: var(--color-bg-dark-2);
+    border: 1px solid var(--color-border-dark);
+    border-radius: var(--radius-md);
+    padding: 1.5rem;
+    height: 100%;
+    text-align: center;
+    transition: all var(--transition);
+}
+
+.evento-card:hover {
+    border-color: var(--color-primary);
+    box-shadow: 0 8px 24px rgba(232, 160, 32, 0.15);
+    transform: translateY(-4px);
+}
+
+.evento-title {
+    font-size: 1.3rem;
+    font-weight: 700;
+    color: var(--color-text-light);
+    margin: 0;
+}
+
+.evento-image-wrapper {
+    width: 100%;
+    aspect-ratio: 4 / 3;
+    background-color: var(--color-bg-dark);
+    border: 1px solid var(--color-border-dark);
+    border-radius: var(--radius-sm);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    overflow: hidden;
+    padding: 0.75rem;
+}
+
+.evento-image {
+    max-width: 100%;
+    max-height: 100%;
+    object-fit: contain;
+}
+
+.evento-description {
+    font-size: var(--font-size-md);
+    color: var(--color-text-subtle);
+    margin: 0;
+}
+
+.evento-tagline {
+    font-size: var(--font-size-md);
+    font-weight: 600;
+    font-style: italic;
+    color: var(--color-primary);
+    margin: 0;
+}
+
+
+/* ── STATO VUOTO ──────────────────────────────────────────── */
+
+.eventi-empty {
+    grid-column: 1 / -1;
+    text-align: center;
+    color: var(--color-text-muted);
+    font-style: italic;
+    padding: 3rem 0;
+}
