@@ -43,16 +43,22 @@ abstract class BaseController {
             'breadcrumbs' => $this->getBreadcrumbs(), //Il percorso di navigazione
         ];
 
-        //Controllo dell'utente in sessione
-        if (USession::isSetSessionElement('id_utente')) {
-            //QUANDO SARà PRONTO FOUNDATION, QUI CARICHERò L'OGGETTO EUTENTE
-            //$globalData['utente'] = FUtente::getById(USession::getSessionElement('id_utente'));
+        //Controllo dell'utente (/persona) in sessione
+        if (USession::isSetSessionElement('id_persona')) {
+            //QUANDO SARà PRONTO FOUNDATION:
+            //Doctrine capirà se restituire un oggetto EUtente, EGestore o EAmministratore.
+            //
+            //$personaLoggata = FUtente::getById(USession::getSessionElement('id_persona'));
+            //$globalData['utente_loggato'] = $personaLoggata;
+            //$globalData['ruolo_loggato'] = USession::getSessionElement('ruolo');
 
-            //Calcolo degli articoli nel carrello usando l'ID utente preso da sessione
+            //Calcolo degli articoli nel carrello (solo se chi è loggato è un semplice utente)
             //QUANDO FOUNDATION SARà PRONTO
-            // $cartCount = FCarrello::getCountByUtente(USession::getSessionElement('id_utente'));
-            // if ($cartCount > 0) {
-            //     $globalData['cart_count'] = $cartCount; //Il badge appare solo se gli articoli sono > 0
+            //if (USession::getSessionElement('ruolo') === 'utente') {
+                // $cartCount = FCarrello::getCountByUtente(USession::getSessionElement('id_persona'));
+                // if ($cartCount > 0) {
+                //     $globalData['cart_count'] = $cartCount; //Il badge appare solo se gli articoli sono > 0
+                // }
             // }
         }
 
@@ -88,7 +94,7 @@ abstract class BaseController {
      * Controlla se l'utente è loggato nella sessione globale.
      */
     public function isLoggedIn(): bool {
-        return USession::isSetSessionElement('id_utente');
+        return USession::isSetSessionElement('id_persona');
     }
 
     /**
@@ -110,31 +116,22 @@ abstract class BaseController {
      * Controlla che l'utente sia loggato e che abbia il ruolo richiesto.
      */
     public function requireRole(string $role): void {
-        //Verfifica che il ruolo richiesto faccia parte dell'elenco di ruoli ammessi
+        //Verifica che il ruolo richiesto faccia parte dell'elenco di ruoli ammessi
         if (!in_array($role, $this->validRoles, true)) {
             throw new \Exception("Ruolo non valido: " . $role);
         }
 
-        //Se la pagina richiede un ruolo specifico, l'utente deve essere innanzitutto autenticato
+        //Se la pagina richiede un ruolo specifico, l'utente deve essere innanzitutto loggato
         $this->requireLogin();
 
-        /**
-         * QUANDO è PRONTO FOUNDATIOND: assumo che l'oggetto salvato o richiesto sia l'Entity EUtente.
-         * Supponendo che Foundation metta l'oggetto utente o il suo ruolo a disposizione:
-         * $utenteLoggato = FUtente::getById(USession::getSessionElement('id_utente'));
-         * $userRole = $utenteLoggato->getRuolo(); //Metodo dell'Entity EUtente
-         * 
-         * if ($userRole !== $role) {
-         *  //Se l'utente è loggato ma non ha i permessi (es. cliente prova a entrare nella dashboard del gestore)
-         *     header("HTTP/1.1 403 Forbidden");
-         *     echo "Errore 403 - Accesso Negato: Non hai i permessi necessari per accedere a questa risorsa.";
-         *     exit();
-         * }
-         * 
-         */
+        //Recupera il ruolo (stringa) salvato in sessione al momento del login
+        $userRole = USession::getSessionElement('ruolo');
+
+        if ($userRole !== $role) {
+            //Se l'utente è loggato ma non ha i permessi (es. cliente prova a entrare nella dashboard del gestore)
+            header("HTTP/1.1 403 Forbidden");
+            echo "Errore 403 - Accesso Negato: Non hai i permessi necessari per accedere a questa risorsa.";
+            exit();
+        }
     }
-
-
-
-
 }
