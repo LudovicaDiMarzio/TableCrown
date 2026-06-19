@@ -6,12 +6,11 @@ use DateTime;
 use Doctrine\ORM\Mapping as ORM;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
+use TableCrown\Entity\Enumerativi\StatoOrdine;
 
 #[ORM\Entity]
 #[ORM\Table(name: "ordine")]
 class EOrdine {
-
-    private static array $statiValidi = ['in attesa', 'confermato', 'spedito', 'consegnato', 'annullato'];
 
     #[ORM\Id]
     #[ORM\GeneratedValue]
@@ -21,8 +20,8 @@ class EOrdine {
     #[ORM\Column(type: "datetime")]
     private DateTime $data;
 
-    #[ORM\Column(type: "string", length: 20)]
-    private string $stato;
+    #[ORM\Column(type: "string", enumType: StatoOrdine::class)]
+    private StatoOrdine $stato;
 
     #[ORM\ManyToOne(targetEntity: EUtente::class, inversedBy: "ordini")]
     #[ORM\JoinColumn(name: "utente_id", referencedColumnName: "idpersona", nullable: false)]
@@ -35,44 +34,44 @@ class EOrdine {
     #[ORM\OneToMany(targetEntity: EOrdineItem::class, mappedBy: "ordine", cascade: ["persist", "remove"])]
     private Collection $ordineItems;
 
-    public function __construct(EUtente $utente, string $stato = 'in attesa') {
+    public function __construct(EUtente $utente, StatoOrdine $stato = StatoOrdine::IN_LAVORAZIONE) {
         $this->data = new DateTime();
-        $this->impostaStato($stato);
+        $this->stato=$stato;
         $this->utente = $utente;
         $this->ordineItems = new ArrayCollection(); 
         $utente->riceviOrdine($this); 
     }
 
-    // Metodi di dominio
-    public function impostaStato(string $stato): void {
-        $stato = trim($stato);
-        if (!in_array($stato, self::$statiValidi)) {
-            throw new InvalidArgumentException("Stato ordine non valido. Valori accettati: " . implode(", ", self::$statiValidi));
+    // Metodi di dominio    
+    public function spedisciOrdine(): void {
+        if ($this->stato !== StatoOrdine::IN_LAVORAZIONE) {
+            throw new \Exception("Solo un ordine in elaborazione può essere spedito.");
         }
-        $this->stato = $stato;
+        $this->stato = StatoOrdine::SPEDITO;
     }
 
-    public function confermato(): void {
-        $this->impostaStato('confermato');
-    }
+    
 
-    public function spedito(): void {
-        $this->impostaStato('spedito');
+    public function consegnaOrdine(): void {
+        if ($this->stato !== StatoOrdine::SPEDITO) {
+            throw new \Exception("Solo un ordine già spedito può essere consegnato.");
+        }
+        $this->stato = StatoOrdine::CONSEGNATO;
     }
-
-    public function consegnato(): void {
-        $this->impostaStato('consegnato');
-    }
+    
 
     public function annulla(): void {
-        $this->impostaStato('annullato');
+        if ($this->stato !== StatoOrdine::IN_LAVORAZIONE) {
+            throw new \Exception("Solo un ordine in elaborazione può essere annullato.");
+        }
+        $this->stato = StatoOrdine::ANNULLATO;
     }
-
+    
     public function associaMetodoDiPagamento(ECartaDiCredito $carta): void {
         // Invariante di dominio: non puoi cambiare o associare una carta se l'ordine non è in modifica
-        if ($this->stato !== 'in attesa') {
-            throw new \InvalidArgumentException(
-                "Impossibile associare un metodo di pagamento a un ordine in stato: " . $this->stato
+        if ($this->stato !== StatoOrdine::IN_LAVORAZIONE) {
+            throw new \DomainException(
+                "Impossibile associare un metodo di pagamento a un ordine in stato: " . $this->stato->value
             );
         }
         $this->cartaDiCredito = $carta;
@@ -98,7 +97,7 @@ class EOrdine {
         return $this->data;
     }
 
-    public function getStato(): string {
+    public function getStato(): StatoOrdine {
         return $this->stato;
     }
 
