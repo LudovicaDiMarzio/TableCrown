@@ -12,6 +12,9 @@ use TableCrown\Testing\Fixtures\BustineFixture;
 use TableCrown\Testing\Fixtures\PortaDadiFixture;
 use TableCrown\Testing\Fixtures\GiocoDaTavoloFixture;
 use TableCrown\Testing\Fixtures\DannoFixture;
+use TableCrown\Testing\Fixtures\RecensioneFixture;
+use TableCrown\Testing\Fixtures\SegnalazioneFixture;
+use TableCrown\Testing\Fixtures\ProvvedimentoFixture;
 
 //creo l'entity manager
 $em = getEntityManager();
@@ -28,7 +31,10 @@ $loader->addFixture(new BustineFixture());
 $loader->addFixture(new PortaDadiFixture());
 $loader->addFixture(new GiocoDaTavoloFixture());
 $loader->addFixture(new DannoFixture()); 
-// $loader->addFixture(new SegnalazioneFixtures()); ← aggiungerai dopo
+$loader->addFixture(new RecensioneFixture());
+$loader->addFixture(new SegnalazioneFixture());
+$loader->addFixture(new ProvvedimentoFixture());
+
 
 $purger = new ORMPurger($em);  // svuota il db prima di inserire
 //crea l'istanza di doctrine ormexecutor che svuota le tabelle (con il purger) e inserisce i dati di test con l'entity manager
