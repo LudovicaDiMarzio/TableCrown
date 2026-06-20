@@ -1,18 +1,18 @@
 <?php
-/* Smarty version 5.8.0, created on 2026-06-20 16:55:23
+/* Smarty version 5.8.0, created on 2026-06-20 18:07:15
   from 'file:common/layout.tpl' */
 
 /* @var \Smarty\Template $_smarty_tpl */
 if ($_smarty_tpl->getCompiled()->isFresh($_smarty_tpl, array (
   'version' => '5.8.0',
-  'unifunc' => 'content_6a36a9dbecbdb1_95319810',
+  'unifunc' => 'content_6a36bab3067e63_28681407',
   'has_nocache_code' => false,
   'file_dependency' => 
   array (
     'f9277bd0b3187de50fdd053d3c3530717861ace7' => 
     array (
       0 => 'common/layout.tpl',
-      1 => 1781967256,
+      1 => 1781971631,
       2 => 'file',
     ),
   ),
@@ -20,7 +20,7 @@ if ($_smarty_tpl->getCompiled()->isFresh($_smarty_tpl, array (
   array (
   ),
 ))) {
-function content_6a36a9dbecbdb1_95319810 (\Smarty\Template $_smarty_tpl) {
+function content_6a36bab3067e63_28681407 (\Smarty\Template $_smarty_tpl) {
 $_smarty_current_dir = 'C:\\Users\\damic\\Desktop\\uni\\APPUNTI\\anno3\\secondo_semenstre\\Pweb\\TableCrown\\Presentation\\smarty-dir\\templates\\common';
 $_smarty_tpl->getInheritance()->init($_smarty_tpl, false);
 ?>
@@ -31,7 +31,7 @@ $_smarty_tpl->getInheritance()->init($_smarty_tpl, false);
     <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
 
     <title><?php 
-$_smarty_tpl->getInheritance()->instanceBlock($_smarty_tpl, 'Block_14260251206a36a9dbea5421_81871263', "page_title");
+$_smarty_tpl->getInheritance()->instanceBlock($_smarty_tpl, 'Block_19650063916a36bab3044f70_11163815', "page_title");
 ?>
 </title>
 
@@ -45,7 +45,7 @@ $_smarty_tpl->getInheritance()->instanceBlock($_smarty_tpl, 'Block_14260251206a3
 /css/layout.css">
     
     <?php 
-$_smarty_tpl->getInheritance()->instanceBlock($_smarty_tpl, 'Block_16568687596a36a9dbeaaf23_09818372', "extra_css");
+$_smarty_tpl->getInheritance()->instanceBlock($_smarty_tpl, 'Block_6334504916a36bab30481b6_04602604', "extra_css");
 ?>
 
 </head>
@@ -107,21 +107,36 @@ $_smarty_tpl->getInheritance()->instanceBlock($_smarty_tpl, 'Block_16568687596a3
 /accedi">Accedi</a>
                         <?php }?>
 
-                                                <a class="header-top-link" href="<?php echo $_smarty_tpl->getValue('base_url');?>
+                                                <?php if ((true && ($_smarty_tpl->hasVariable('utente') && null !== ($_smarty_tpl->getValue('utente') ?? null)))) {?>
+                            <a class="header-top-link" href="<?php echo $_smarty_tpl->getValue('base_url');?>
 /wishlist" title="La mia wishlist">
-                            <i class="ti ti-heart navbar-icon"></i>
-                            <span class="header-top-label">Wishlist</span>
-                        </a>
+                                <i class="ti ti-heart navbar-icon"></i>
+                                <span class="header-top-label">Wishlist</span>
+                            </a>
+                        <?php } else { ?>
+                            <a class="header-top-link nav-protected" href="#" title="La mia wishlist">
+                                <i class="ti ti-heart navbar-icon"></i>
+                                <span class="header-top-label">Wishlist</span>
+                            </a>
+                        <?php }?>
 
-                                                <a class="header-top-link" href="<?php echo $_smarty_tpl->getValue('base_url');?>
+                                                <?php if ((true && ($_smarty_tpl->hasVariable('utente') && null !== ($_smarty_tpl->getValue('utente') ?? null)))) {?>
+                            <a class="header-top-link" href="<?php echo $_smarty_tpl->getValue('base_url');?>
 /carrello" title="Carrello">
-                            <i class="ti ti-shopping-cart navbar-icon"></i>
-                            <span class="header-top-label">Carrello</span>
-                            <?php if ((true && ($_smarty_tpl->hasVariable('cart_count') && null !== ($_smarty_tpl->getValue('cart_count') ?? null))) && $_smarty_tpl->getValue('cart_count') > 0) {?>
-                                <span class="cart-badge"><?php echo $_smarty_tpl->getValue('cart_count');?>
+                                <i class="ti ti-shopping-cart navbar-icon"></i>
+                                <span class="header-top-label">Carrello</span>
+                                <?php if ((true && ($_smarty_tpl->hasVariable('cart_count') && null !== ($_smarty_tpl->getValue('cart_count') ?? null))) && $_smarty_tpl->getValue('cart_count') > 0) {?>
+                                    <span class="cart-badge" id="cart-count"><?php echo $_smarty_tpl->getValue('cart_count');?>
 </span>
-                            <?php }?>
-                        </a>
+                                <?php }?>
+                            </a>
+                        <?php } else { ?>
+                            <a class="header-top-link nav-protected" href="#" title="Carrello">
+                                <i class="ti ti-shopping-cart navbar-icon"></i>
+                                <span class="header-top-label">Carrello</span>
+                            </a>
+                        <?php }?>
+
                     </div>
                     
                 </div>
@@ -180,10 +195,36 @@ $_smarty_tpl->getSmarty()->getRuntime('Foreach')->restore($_smarty_tpl, 1);?>
 
         <main>
         <?php 
-$_smarty_tpl->getInheritance()->instanceBlock($_smarty_tpl, 'Block_2277007206a36a9dbec8ec4_43008459', "content");
+$_smarty_tpl->getInheritance()->instanceBlock($_smarty_tpl, 'Block_13073576426a36bab3063d32_71468157', "content");
 ?>
 
     </main>
+
+        <?php if (!(true && ($_smarty_tpl->hasVariable('utente') && null !== ($_smarty_tpl->getValue('utente') ?? null)))) {?>
+    <div class="login-modal" id="login-modal-nav" aria-hidden="true">
+        <div class="modal-background"></div>
+        <div class="login-modal-content">
+            <button id="close-login-modal-nav" class="modal-close-btn" type="button" aria-label="Chiudi pop-up">&times;</button>
+            <div class="login-modal-icon">
+                <i class="ti ti-lock"></i>
+            </div>
+            <h3 class="login-modal-title">Accedi per continuare</h3>
+            <p class="login-modal-text">
+                Devi avere un account per accedere a questa sezione.
+            </p>
+            <div class="login-modal-actions">
+                <a href="<?php echo $_smarty_tpl->getValue('base_url');?>
+/accedi" class="button btn-login-modal-accedi">
+                    <i class="ti ti-login"></i> Accedi
+                </a>
+                <a href="<?php echo $_smarty_tpl->getValue('base_url');?>
+/registrati" class="button btn-login-modal-registrati">
+                    Crea un account
+                </a>
+            </div>
+        </div>
+    </div>
+    <?php }?>
 
         <footer class="site-footer">
         <div class="container">
@@ -254,10 +295,6 @@ $_smarty_tpl->getInheritance()->instanceBlock($_smarty_tpl, 'Block_2277007206a36
 >
     <?php echo '<script'; ?>
  src="<?php echo $_smarty_tpl->getValue('base_url');?>
-/plugins/jQuery/jquery.min.js"><?php echo '</script'; ?>
->
-    <?php echo '<script'; ?>
- src="<?php echo $_smarty_tpl->getValue('base_url');?>
 /plugins/match-height/jquery.matchHeight-min.js"><?php echo '</script'; ?>
 >
     <?php echo '<script'; ?>
@@ -267,23 +304,62 @@ $_smarty_tpl->getInheritance()->instanceBlock($_smarty_tpl, 'Block_2277007206a36
 
     <?php echo '<script'; ?>
 >
-        document.addEventListener('DOMContentLoaded', function () {
-            const dropdown = document.getElementById('user-dropdown');
-            if (dropdown) {
-            dropdown.querySelector('.navbar-link').addEventListener('click', function (e) {
-                    e.stopPropagation();
-                    dropdown.classList.toggle('is-active');
-                });
-                document.addEventListener('click', function () {
-                    dropdown.classList.remove('is-active');
-                });
+    document.addEventListener('DOMContentLoaded', function() {
+
+        // ── DROPDOWN UTENTE ──
+        var dropdown = document.getElementById('user-dropdown');
+        if (dropdown) {
+            dropdown.querySelector('.navbar-link').addEventListener('click', function(e) {
+                e.stopPropagation();
+                dropdown.classList.toggle('is-active');
+            });
+            document.addEventListener('click', function() {
+                dropdown.classList.remove('is-active');
+            });
+        }
+
+        // ── MODAL LOGIN NAVBAR (carrello e wishlist per ospiti) ──
+        var loginModalNav = document.getElementById('login-modal-nav');
+        if (loginModalNav) {
+
+            function apriLoginModalNav() {
+                loginModalNav.classList.add('is-active');
+                loginModalNav.setAttribute('aria-hidden', 'false');
+                var btn = document.getElementById('close-login-modal-nav');
+                if (btn) btn.focus();
             }
-        });
-<?php echo '</script'; ?>
+
+            function chiudiLoginModalNav() {
+                loginModalNav.classList.remove('is-active');
+                loginModalNav.setAttribute('aria-hidden', 'true');
+            }
+
+            document.getElementById('close-login-modal-nav').addEventListener('click', function(e) {
+                e.preventDefault();
+                chiudiLoginModalNav();
+            });
+
+            loginModalNav.querySelector('.modal-background').addEventListener('click', chiudiLoginModalNav);
+
+            loginModalNav.querySelectorAll('.login-modal-actions a').forEach(function(btn) {
+                btn.addEventListener('click', function(e) { e.stopPropagation(); });
+            });
+
+            // intercetta tutti i link .nav-protected (carrello e wishlist per ospiti)
+            document.querySelectorAll('.nav-protected').forEach(function(link) {
+                link.addEventListener('click', function(e) {
+                    e.preventDefault();
+                    apriLoginModalNav();
+                });
+            });
+        }
+
+    });
+    <?php echo '</script'; ?>
 >
 
-<?php 
-$_smarty_tpl->getInheritance()->instanceBlock($_smarty_tpl, 'Block_9871784686a36a9dbecb0a4_98314863', "extra_js");
+    <?php 
+$_smarty_tpl->getInheritance()->instanceBlock($_smarty_tpl, 'Block_11304509416a36bab3066fc8_65217439', "extra_js");
 ?>
 
 
@@ -291,7 +367,7 @@ $_smarty_tpl->getInheritance()->instanceBlock($_smarty_tpl, 'Block_9871784686a36
 </html>
 <?php }
 /* {block "page_title"} */
-class Block_14260251206a36a9dbea5421_81871263 extends \Smarty\Runtime\Block
+class Block_19650063916a36bab3044f70_11163815 extends \Smarty\Runtime\Block
 {
 public function callBlock(\Smarty\Template $_smarty_tpl) {
 $_smarty_current_dir = 'C:\\Users\\damic\\Desktop\\uni\\APPUNTI\\anno3\\secondo_semenstre\\Pweb\\TableCrown\\Presentation\\smarty-dir\\templates\\common';
@@ -301,7 +377,7 @@ TableCrown<?php
 }
 /* {/block "page_title"} */
 /* {block "extra_css"} */
-class Block_16568687596a36a9dbeaaf23_09818372 extends \Smarty\Runtime\Block
+class Block_6334504916a36bab30481b6_04602604 extends \Smarty\Runtime\Block
 {
 public function callBlock(\Smarty\Template $_smarty_tpl) {
 $_smarty_current_dir = 'C:\\Users\\damic\\Desktop\\uni\\APPUNTI\\anno3\\secondo_semenstre\\Pweb\\TableCrown\\Presentation\\smarty-dir\\templates\\common';
@@ -309,7 +385,7 @@ $_smarty_current_dir = 'C:\\Users\\damic\\Desktop\\uni\\APPUNTI\\anno3\\secondo_
 }
 /* {/block "extra_css"} */
 /* {block "content"} */
-class Block_2277007206a36a9dbec8ec4_43008459 extends \Smarty\Runtime\Block
+class Block_13073576426a36bab3063d32_71468157 extends \Smarty\Runtime\Block
 {
 public function callBlock(\Smarty\Template $_smarty_tpl) {
 $_smarty_current_dir = 'C:\\Users\\damic\\Desktop\\uni\\APPUNTI\\anno3\\secondo_semenstre\\Pweb\\TableCrown\\Presentation\\smarty-dir\\templates\\common';
@@ -317,7 +393,7 @@ $_smarty_current_dir = 'C:\\Users\\damic\\Desktop\\uni\\APPUNTI\\anno3\\secondo_
 }
 /* {/block "content"} */
 /* {block "extra_js"} */
-class Block_9871784686a36a9dbecb0a4_98314863 extends \Smarty\Runtime\Block
+class Block_11304509416a36bab3066fc8_65217439 extends \Smarty\Runtime\Block
 {
 public function callBlock(\Smarty\Template $_smarty_tpl) {
 $_smarty_current_dir = 'C:\\Users\\damic\\Desktop\\uni\\APPUNTI\\anno3\\secondo_semenstre\\Pweb\\TableCrown\\Presentation\\smarty-dir\\templates\\common';

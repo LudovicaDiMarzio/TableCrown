@@ -465,37 +465,45 @@
     // ── FUNZIONE AJAX: PROVA SEMPRE AD AGGIUNGERE AL CARRELLO ──
     // Non decide nulla in anticipo: si fida solo della risposta di Control.
     function aggiungiAlCarrello(idProdotto, quantita, dati) {
-        fetch('/carrello/aggiungi', {
-            method: 'POST',
-            headers: {
-                'Content-Type': 'application/x-www-form-urlencoded',
-                'X-Requested-With': 'XMLHttpRequest'
-            },
-            body: `id_prodotto=${idProdotto}&quantita=${quantita}`
-        })
-        .then(res => res.json().then(data => ({ status: res.status, body: data })))
-        .then(({ status, body }) => {
-            if (status === 401 || body.error === 'auth_required') {
-                apriLoginModal();
-                return;
+    fetch('/carrello/aggiungi', {
+        method: 'POST',
+        headers: {
+            'Content-Type': 'application/x-www-form-urlencoded',
+            'X-Requested-With': 'XMLHttpRequest'
+        },
+        body: 'id_prodotto=' + idProdotto + '&quantita=' + quantita
+    })
+    .then(function(res) {
+        var status = res.status;
+        return res.text().then(function(text) {
+            try {
+                var data = JSON.parse(text);
+                return { status: status, body: data };
+            } catch(e) {
+                return { status: 401, body: { error: 'auth_required' } };
             }
-
-            if (body.success) {
-                apriMinicart(dati);
-
-                const cartBadge = document.getElementById('cart-count');
-                if (cartBadge && body.cart_count !== undefined) {
-                    cartBadge.textContent = body.cart_count;
-                    cartBadge.style.display = body.cart_count > 0 ? 'inline' : 'none';
-                }
-            } else {
-                console.error('Errore carrello:', body.messaggio || 'errore generico');
-            }
-        })
-        .catch(err => {
-            console.error('Fetch carrello fallita:', err);
         });
-    }
+    })
+    .then(function(result) {
+        if (result.status === 401 || result.body.error === 'auth_required') {
+            apriLoginModal();
+            return;
+        }
+        if (result.body.success) {
+            apriMinicart(dati);
+            var cartBadge = document.getElementById('cart-count');
+            if (cartBadge && result.body.cart_count !== undefined) {
+                cartBadge.textContent = result.body.cart_count;
+                cartBadge.style.display = result.body.cart_count > 0 ? 'inline' : 'none';
+            }
+        } else {
+            console.error('Errore carrello:', result.body.messaggio || 'errore generico');
+        }
+    })
+    .catch(function(err) {
+        console.error('Fetch carrello fallita:', err);
+    });
+}
 
     // ── CLICK SU TUTTI I BOTTONI "ACQUISTA" ──
     document.querySelectorAll('.btn-cart').forEach(function (btn) {

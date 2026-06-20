@@ -1,18 +1,18 @@
 <?php
-/* Smarty version 5.8.0, created on 2026-06-20 17:16:09
+/* Smarty version 5.8.0, created on 2026-06-20 17:46:03
   from 'file:catalogo.tpl' */
 
 /* @var \Smarty\Template $_smarty_tpl */
 if ($_smarty_tpl->getCompiled()->isFresh($_smarty_tpl, array (
   'version' => '5.8.0',
-  'unifunc' => 'content_6a36aeb9b6bec7_14725988',
+  'unifunc' => 'content_6a36b5bbc74d82_63237438',
   'has_nocache_code' => false,
   'file_dependency' => 
   array (
     '4d90e5f688d80db201316a7cb04f34e17d9fd4ea' => 
     array (
       0 => 'catalogo.tpl',
-      1 => 1781968517,
+      1 => 1781970357,
       2 => 'file',
     ),
   ),
@@ -20,28 +20,28 @@ if ($_smarty_tpl->getCompiled()->isFresh($_smarty_tpl, array (
   array (
   ),
 ))) {
-function content_6a36aeb9b6bec7_14725988 (\Smarty\Template $_smarty_tpl) {
+function content_6a36b5bbc74d82_63237438 (\Smarty\Template $_smarty_tpl) {
 $_smarty_current_dir = 'C:\\Users\\damic\\Desktop\\uni\\APPUNTI\\anno3\\secondo_semenstre\\Pweb\\TableCrown\\Presentation\\smarty-dir\\templates';
 $_smarty_tpl->getInheritance()->init($_smarty_tpl, true);
 ?>
 
 
 <?php 
-$_smarty_tpl->getInheritance()->instanceBlock($_smarty_tpl, 'Block_17480192956a36aeb9a578d5_13806886', "extra_css");
+$_smarty_tpl->getInheritance()->instanceBlock($_smarty_tpl, 'Block_8189559596a36b5bbc451d1_78452174', "extra_css");
 ?>
 
 
 <?php 
-$_smarty_tpl->getInheritance()->instanceBlock($_smarty_tpl, 'Block_18204460246a36aeb9a5a294_38905081', "content");
+$_smarty_tpl->getInheritance()->instanceBlock($_smarty_tpl, 'Block_19266207526a36b5bbc476e5_80288791', "content");
 ?>
 
 
 <?php 
-$_smarty_tpl->getInheritance()->instanceBlock($_smarty_tpl, 'Block_6444113846a36aeb9b6b415_81971634', "extra_js");
+$_smarty_tpl->getInheritance()->instanceBlock($_smarty_tpl, 'Block_6393098926a36b5bbc74666_17555652', "extra_js");
 $_smarty_tpl->getInheritance()->endChild($_smarty_tpl, "common/layout.tpl", $_smarty_current_dir);
 }
 /* {block "extra_css"} */
-class Block_17480192956a36aeb9a578d5_13806886 extends \Smarty\Runtime\Block
+class Block_8189559596a36b5bbc451d1_78452174 extends \Smarty\Runtime\Block
 {
 public function callBlock(\Smarty\Template $_smarty_tpl) {
 $_smarty_current_dir = 'C:\\Users\\damic\\Desktop\\uni\\APPUNTI\\anno3\\secondo_semenstre\\Pweb\\TableCrown\\Presentation\\smarty-dir\\templates';
@@ -54,7 +54,7 @@ $_smarty_current_dir = 'C:\\Users\\damic\\Desktop\\uni\\APPUNTI\\anno3\\secondo_
 }
 /* {/block "extra_css"} */
 /* {block "content"} */
-class Block_18204460246a36aeb9a5a294_38905081 extends \Smarty\Runtime\Block
+class Block_19266207526a36b5bbc476e5_80288791 extends \Smarty\Runtime\Block
 {
 public function callBlock(\Smarty\Template $_smarty_tpl) {
 $_smarty_current_dir = 'C:\\Users\\damic\\Desktop\\uni\\APPUNTI\\anno3\\secondo_semenstre\\Pweb\\TableCrown\\Presentation\\smarty-dir\\templates';
@@ -66,7 +66,7 @@ $_smarty_current_dir = 'C:\\Users\\damic\\Desktop\\uni\\APPUNTI\\anno3\\secondo_
         <section class="catalogo-header">
         <div class="container">
             
-                        <div class="catalogo-search-wrapper">
+            <div class="catalogo-search-wrapper">
                 <form class="catalogo-search-form" action="<?php echo $_smarty_tpl->getValue('base_url');?>
 /catalogo" method="get" id="search-form">
                     <input class="input catalogo-search-input"
@@ -82,7 +82,7 @@ $_smarty_current_dir = 'C:\\Users\\damic\\Desktop\\uni\\APPUNTI\\anno3\\secondo_
                 </form>
             </div>
 
-                        <div class="catalogo-results-header">
+            <div class="catalogo-results-header">
                 <div class="results-info">
                     <h2 class="results-title">
                         <?php if ((true && ($_smarty_tpl->hasVariable('search_query') && null !== ($_smarty_tpl->getValue('search_query') ?? null))) && $_smarty_tpl->getValue('search_query')) {?>
@@ -134,7 +134,7 @@ $_smarty_current_dir = 'C:\\Users\\damic\\Desktop\\uni\\APPUNTI\\anno3\\secondo_
                 <form class="filters-form" id="filters-form" method="get" action="<?php echo $_smarty_tpl->getValue('base_url');?>
 /catalogo">
                     
-                                        <?php if ((true && ($_smarty_tpl->hasVariable('search_query') && null !== ($_smarty_tpl->getValue('search_query') ?? null))) && $_smarty_tpl->getValue('search_query')) {?>
+                    <?php if ((true && ($_smarty_tpl->hasVariable('search_query') && null !== ($_smarty_tpl->getValue('search_query') ?? null))) && $_smarty_tpl->getValue('search_query')) {?>
                         <input type="hidden" name="q" value="<?php echo htmlspecialchars((string)$_smarty_tpl->getValue('search_query'), ENT_QUOTES, 'UTF-8', true);?>
 ">
                     <?php }?>
@@ -443,7 +443,7 @@ $_smarty_tpl->getSmarty()->getRuntime('Foreach')->restore($_smarty_tpl, 1);?>
                     </button>
                 </div>
 
-                                <?php if ((true && ($_smarty_tpl->hasVariable('prodotti') && null !== ($_smarty_tpl->getValue('prodotti') ?? null))) && $_smarty_tpl->getSmarty()->getModifierCallback('count')($_smarty_tpl->getValue('prodotti')) > 0) {?>
+                <?php if ((true && ($_smarty_tpl->hasVariable('prodotti') && null !== ($_smarty_tpl->getValue('prodotti') ?? null))) && $_smarty_tpl->getSmarty()->getModifierCallback('count')($_smarty_tpl->getValue('prodotti')) > 0) {?>
                     <div class="products-grid">
                         <?php
 $_from = $_smarty_tpl->getSmarty()->getRuntime('Foreach')->init($_smarty_tpl, $_smarty_tpl->getValue('prodotti'), 'prodotto');
@@ -464,13 +464,13 @@ $foreach3DoElse = false;
 " 
                                              class="product-image">
                                         
-                                                                                <?php if ($_smarty_tpl->getValue('prodotto')['disponibilita'] == 'esaurito') {?>
+                                        <?php if ($_smarty_tpl->getValue('prodotto')['disponibilita'] == 'esaurito') {?>
                                             <span class="product-badge product-badge-esaurito">Esaurito</span>
                                         <?php } elseif ($_smarty_tpl->getValue('prodotto')['disponibilita'] == 'annunciato') {?>
                                             <span class="product-badge product-badge-annunciato">Annunciato</span>
                                         <?php }?>
 
-                                                                                <?php if ($_smarty_tpl->getValue('prodotto')['sconto']) {?>
+                                        <?php if ($_smarty_tpl->getValue('prodotto')['sconto']) {?>
                                             <span class="product-badge product-badge-discount">-<?php echo $_smarty_tpl->getValue('prodotto')['percentuale_sconto'];?>
 %</span>
                                         <?php }?>
@@ -480,7 +480,7 @@ $foreach3DoElse = false;
                                         <h3 class="product-name"><?php echo htmlspecialchars((string)$_smarty_tpl->getValue('prodotto')['nome'], ENT_QUOTES, 'UTF-8', true);?>
 </h3>
                                         
-                                                                                <div class="product-rating">
+                                        <div class="product-rating">
                                             <?php $_smarty_tpl->assign('media', $_smarty_tpl->getValue('prodotto')['valutazione_media'], false, NULL);?>
                                             <?php $_smarty_tpl->assign('stelle', array(1,2,3,4,5), false, NULL);?>
                                             <?php
@@ -503,7 +503,7 @@ $_smarty_tpl->getSmarty()->getRuntime('Foreach')->restore($_smarty_tpl, 1);?>
 )</span>
                                         </div>
 
-                                                                                <div class="product-price-wrapper">
+                                        <div class="product-price-wrapper">
                                             <?php if ((true && (true && null !== ($_smarty_tpl->getValue('prodotto')['prezzo'] ?? null)))) {?>
                                                 <?php if ($_smarty_tpl->getValue('prodotto')['sconto']) {?>
                                                     <span class="product-price">€<?php echo $_smarty_tpl->getSmarty()->getModifierCallback('number_format')($_smarty_tpl->getValue('prodotto')['prezzo_scontato'],2);?>
@@ -522,7 +522,7 @@ $_smarty_tpl->getSmarty()->getRuntime('Foreach')->restore($_smarty_tpl, 1);?>
 
                                 </a>
 
-                                                                <button class="button btn-add-cart"
+                                <button class="button btn-add-cart"
                                         data-id="<?php echo $_smarty_tpl->getValue('prodotto')['id'];?>
 "
                                         data-nome="<?php echo htmlspecialchars((string)$_smarty_tpl->getValue('prodotto')['nome'], ENT_QUOTES, 'UTF-8', true);?>
@@ -541,7 +541,7 @@ $_smarty_tpl->getSmarty()->getRuntime('Foreach')->restore($_smarty_tpl, 1);?>
 $_smarty_tpl->getSmarty()->getRuntime('Foreach')->restore($_smarty_tpl, 1);?>
                     </div>
 
-                                        <?php if ((true && ($_smarty_tpl->hasVariable('pagination') && null !== ($_smarty_tpl->getValue('pagination') ?? null))) && $_smarty_tpl->getValue('pagination')['total_pages'] > 1) {?>
+                    <?php if ((true && ($_smarty_tpl->hasVariable('pagination') && null !== ($_smarty_tpl->getValue('pagination') ?? null))) && $_smarty_tpl->getValue('pagination')['total_pages'] > 1) {?>
                     <div class="pagination-wrapper">
                         <nav class="pagination" aria-label="Paginazione">
                             <?php if ($_smarty_tpl->getValue('pagination')['current_page'] > 1) {?>
@@ -591,7 +591,7 @@ if ((true && ($_smarty_tpl->hasVariable('search_query') && null !== ($_smarty_tp
                     <?php }?>
 
                 <?php } else { ?>
-                                        <div class="empty-state">
+                    <div class="empty-state">
                         <div class="empty-state-icon">
                             <i class="ti ti-box-off"></i>
                         </div>
@@ -611,14 +611,62 @@ if ((true && ($_smarty_tpl->hasVariable('search_query') && null !== ($_smarty_tp
         </div>
     </div>
 
-</div>
+        <div class="minicart-modal" id="minicart-modal" aria-hidden="true">
+        <div class="modal-background"></div>
+        <div class="minicart-content">
+            <button id="close-minicart" class="modal-close-btn" type="button" aria-label="Chiudi pop-up">&times;</button>
+            <h3 class="minicart-success-title">Prodotto aggiunto al carrello!</h3>
+            <div class="minicart-product">
+                <img src="" alt="" class="minicart-img" id="minicart-img">
+                <div class="minicart-info">
+                    <p class="minicart-nome" id="minicart-nome"></p>
+                    <p class="minicart-prezzo" id="minicart-prezzo"></p>
+                </div>
+            </div>
+            <div class="minicart-actions">
+                <a href="<?php echo $_smarty_tpl->getValue('base_url');?>
+/catalogo" class="button btn-minicart-continua">
+                    <i class="ti ti-arrow-left"></i> Continua Shopping
+                </a>
+                <a href="<?php echo $_smarty_tpl->getValue('base_url');?>
+/carrello" class="button btn-minicart-ordine">
+                    <i class="ti ti-shopping-cart"></i> Completa Ordine
+                </a>
+            </div>
+        </div>
+    </div>
 
+        <div class="login-modal" id="login-modal" aria-hidden="true">
+        <div class="modal-background"></div>
+        <div class="login-modal-content">
+            <button id="close-login-modal" class="modal-close-btn" type="button" aria-label="Chiudi pop-up">&times;</button>
+            <div class="login-modal-icon">
+                <i class="ti ti-lock"></i>
+            </div>
+            <h3 class="login-modal-title">Accedi per continuare</h3>
+            <p class="login-modal-text">
+                Devi avere un account per aggiungere prodotti al carrello e procedere all'acquisto.
+            </p>
+            <div class="login-modal-actions">
+                <a href="<?php echo $_smarty_tpl->getValue('base_url');?>
+/accedi" class="button btn-login-modal-accedi">
+                    <i class="ti ti-login"></i> Accedi
+                </a>
+                <a href="<?php echo $_smarty_tpl->getValue('base_url');?>
+/registrati" class="button btn-login-modal-registrati">
+                    Crea un account
+                </a>
+            </div>
+        </div>
+    </div>
+
+</div>
 <?php
 }
 }
 /* {/block "content"} */
 /* {block "extra_js"} */
-class Block_6444113846a36aeb9b6b415_81971634 extends \Smarty\Runtime\Block
+class Block_6393098926a36b5bbc74666_17555652 extends \Smarty\Runtime\Block
 {
 public function callBlock(\Smarty\Template $_smarty_tpl) {
 $_smarty_current_dir = 'C:\\Users\\damic\\Desktop\\uni\\APPUNTI\\anno3\\secondo_semenstre\\Pweb\\TableCrown\\Presentation\\smarty-dir\\templates';
@@ -626,51 +674,51 @@ $_smarty_current_dir = 'C:\\Users\\damic\\Desktop\\uni\\APPUNTI\\anno3\\secondo_
 
 <?php echo '<script'; ?>
 >
+
 document.addEventListener('DOMContentLoaded', function() {
 
-    // Checkbox esclusivi: uno solo attivo per volta in ogni gruppo
-    const exclusiveGroups = document.querySelectorAll('[data-exclusive]');
-    exclusiveGroups.forEach(group => {
-        const checkboxes = group.querySelectorAll('input[type="checkbox"]');
-        checkboxes.forEach(checkbox => {
+    // ── CHECKBOX ESCLUSIVI ──
+    var exclusiveGroups = document.querySelectorAll('[data-exclusive]');
+    exclusiveGroups.forEach(function(group) {
+        var checkboxes = group.querySelectorAll('input[type="checkbox"]');
+        checkboxes.forEach(function(checkbox) {
             checkbox.addEventListener('change', function() {
                 if (this.checked) {
-                    checkboxes.forEach(cb => {
-                        if (cb !== this) cb.checked = false;
+                    checkboxes.forEach(function(cb) {
+                        if (cb !== checkbox) cb.checked = false;
                     });
                 }
             });
         });
     });
 
-    // Toggle Filtri su Mobile
-    const toggleBtn = document.getElementById('btn-toggle-filters');
-    const sidebar   = document.getElementById('catalogo-filters');
-    const closeBtn  = document.getElementById('filter-close-btn');
+    // ── TOGGLE FILTRI MOBILE ──
+    var toggleBtn = document.getElementById('btn-toggle-filters');
+    var sidebar   = document.getElementById('catalogo-filters');
+    var closeBtn  = document.getElementById('filter-close-btn');
 
     if (toggleBtn) {
         toggleBtn.addEventListener('click', function() {
             sidebar.classList.toggle('is-open');
-            this.classList.toggle('is-active');
+            toggleBtn.classList.toggle('is-active');
         });
     }
-
     if (closeBtn) {
         closeBtn.addEventListener('click', function() {
             sidebar.classList.remove('is-open');
-            toggleBtn.classList.remove('is-active');
+            if (toggleBtn) toggleBtn.classList.remove('is-active');
         });
     }
 
-    // Aggiorna valore rating in tempo reale
-    const ratingSlider = document.querySelector('.rating-slider');
+    // ── RATING SLIDER ──
+    var ratingSlider = document.querySelector('.rating-slider');
     if (ratingSlider) {
         ratingSlider.addEventListener('input', function() {
             document.getElementById('rating-value').textContent = this.value;
         });
     }
 
-    // Chiudi filtri quando clicchi fuori (mobile)
+    // ── CHIUDI FILTRI FUORI CLICK (mobile) ──
     document.addEventListener('click', function(e) {
         if (sidebar && toggleBtn) {
             if (!sidebar.contains(e.target) && !toggleBtn.contains(e.target)) {
@@ -680,7 +728,137 @@ document.addEventListener('DOMContentLoaded', function() {
         }
     });
 
+    // ── MODAL: MINICART ──
+    var minicartModal  = document.getElementById('minicart-modal');
+    var minicartImg    = document.getElementById('minicart-img');
+    var minicartNome   = document.getElementById('minicart-nome');
+    var minicartPrezzo = document.getElementById('minicart-prezzo');
+
+    function apriMinicart(dati) {
+        if (!minicartModal) return;
+        minicartImg.src            = dati.img;
+        minicartImg.alt            = dati.nome;
+        minicartNome.textContent   = dati.nome;
+        minicartPrezzo.textContent = '€' + parseFloat(dati.prezzo || 0).toFixed(2);
+        minicartModal.classList.add('is-active');
+        minicartModal.setAttribute('aria-hidden', 'false');
+        var cm = document.getElementById('close-minicart');
+        if (cm) cm.focus();
+    }
+
+    function chiudiMinicart() {
+        if (!minicartModal) return;
+        minicartModal.classList.remove('is-active');
+        minicartModal.setAttribute('aria-hidden', 'true');
+    }
+
+    var closeMinicart = document.getElementById('close-minicart');
+    if (closeMinicart) {
+        closeMinicart.addEventListener('click', function(e) {
+            e.preventDefault();
+            chiudiMinicart();
+        });
+    }
+    var minicartBg = minicartModal ? minicartModal.querySelector('.modal-background') : null;
+    if (minicartBg) minicartBg.addEventListener('click', chiudiMinicart);
+    if (minicartModal) {
+        minicartModal.querySelectorAll('.minicart-actions a').forEach(function(btn) {
+            btn.addEventListener('click', function(e) { e.stopPropagation(); });
+        });
+    }
+
+    // ── MODAL: LOGIN ──
+    var loginModal = document.getElementById('login-modal');
+
+    function apriLoginModal() {
+        if (!loginModal) return;
+        loginModal.classList.add('is-active');
+        loginModal.setAttribute('aria-hidden', 'false');
+        var cl = document.getElementById('close-login-modal');
+        if (cl) cl.focus();
+    }
+
+    function chiudiLoginModal() {
+        if (!loginModal) return;
+        loginModal.classList.remove('is-active');
+        loginModal.setAttribute('aria-hidden', 'true');
+    }
+
+    var closeLogin = document.getElementById('close-login-modal');
+    if (closeLogin) {
+        closeLogin.addEventListener('click', function(e) {
+            e.preventDefault();
+            chiudiLoginModal();
+        });
+    }
+    var loginBg = loginModal ? loginModal.querySelector('.modal-background') : null;
+    if (loginBg) loginBg.addEventListener('click', chiudiLoginModal);
+    if (loginModal) {
+        loginModal.querySelectorAll('.login-modal-actions a').forEach(function(btn) {
+            btn.addEventListener('click', function(e) { e.stopPropagation(); });
+        });
+    }
+
+    // ── AJAX CARRELLO ──
+    function aggiungiAlCarrello(idProdotto, quantita, dati) {
+        fetch('/carrello/aggiungi', {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/x-www-form-urlencoded',
+                'X-Requested-With': 'XMLHttpRequest'
+            },
+            body: 'id_prodotto=' + idProdotto + '&quantita=' + quantita
+        })
+        .then(function(res) {
+            var status = res.status;
+            return res.text().then(function(text) {
+                try {
+                    var data = JSON.parse(text);
+                    return { status: status, body: data };
+                } catch(e) {
+                    // risposta HTML (es. redirect al login) = non autenticato
+                    return { status: 401, body: { error: 'auth_required' } };
+                }
+            });
+        })
+        .then(function(result) {
+            if (result.status === 401 || result.body.error === 'auth_required') {
+                apriLoginModal();
+                return;
+            }
+            if (result.body.success) {
+                apriMinicart(dati);
+                var cartBadge = document.getElementById('cart-count');
+                if (cartBadge && result.body.cart_count !== undefined) {
+                    cartBadge.textContent = result.body.cart_count;
+                    cartBadge.style.display = result.body.cart_count > 0 ? 'inline' : 'none';
+                }
+            } else {
+                console.error('Errore carrello:', result.body.messaggio || 'errore generico');
+            }
+        })
+        .catch(function(err) {
+            console.error('Fetch carrello fallita:', err);
+        });
+    }
+
+    // ── CLICK BOTTONI AGGIUNGI ──
+    document.querySelectorAll('.btn-add-cart').forEach(function(btn) {
+        btn.addEventListener('click', function(e) {
+            e.preventDefault();
+            e.stopPropagation();
+            var dati = {
+                id:     this.dataset.id,
+                nome:   this.dataset.nome,
+                img:    this.dataset.img,
+                prezzo: this.dataset.prezzo
+            };
+            aggiungiAlCarrello(dati.id, 1, dati);
+        });
+    });
+
 });
+
 <?php echo '</script'; ?>
 >
 <?php

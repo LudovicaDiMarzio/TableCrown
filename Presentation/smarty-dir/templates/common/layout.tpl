@@ -18,7 +18,7 @@
 <body>
 
     {* ──────────────────────────────────────────── *}
-    {* HEADER TABLECROWN (Logo a sx - Menu e azioni a dx) *}
+    {* HEADER TABLECROWN                            *}
     {* ──────────────────────────────────────────── *}
     <nav class="navbar navigation" role="navigation" aria-label="navigazione principale">
         <div class="container is-fluid px-5"> 
@@ -68,19 +68,34 @@
                         {/if}
 
                         {* Wishlist *}
-                        <a class="header-top-link" href="{$base_url}/wishlist" title="La mia wishlist">
-                            <i class="ti ti-heart navbar-icon"></i>
-                            <span class="header-top-label">Wishlist</span>
-                        </a>
+                        {if isset($utente)}
+                            <a class="header-top-link" href="{$base_url}/wishlist" title="La mia wishlist">
+                                <i class="ti ti-heart navbar-icon"></i>
+                                <span class="header-top-label">Wishlist</span>
+                            </a>
+                        {else}
+                            <a class="header-top-link nav-protected" href="#" title="La mia wishlist">
+                                <i class="ti ti-heart navbar-icon"></i>
+                                <span class="header-top-label">Wishlist</span>
+                            </a>
+                        {/if}
 
                         {* Carrello *}
-                        <a class="header-top-link" href="{$base_url}/carrello" title="Carrello">
-                            <i class="ti ti-shopping-cart navbar-icon"></i>
-                            <span class="header-top-label">Carrello</span>
-                            {if isset($cart_count) && $cart_count > 0}
-                                <span class="cart-badge">{$cart_count}</span>
-                            {/if}
-                        </a>
+                        {if isset($utente)}
+                            <a class="header-top-link" href="{$base_url}/carrello" title="Carrello">
+                                <i class="ti ti-shopping-cart navbar-icon"></i>
+                                <span class="header-top-label">Carrello</span>
+                                {if isset($cart_count) && $cart_count > 0}
+                                    <span class="cart-badge" id="cart-count">{$cart_count}</span>
+                                {/if}
+                            </a>
+                        {else}
+                            <a class="header-top-link nav-protected" href="#" title="Carrello">
+                                <i class="ti ti-shopping-cart navbar-icon"></i>
+                                <span class="header-top-label">Carrello</span>
+                            </a>
+                        {/if}
+
                     </div>
                     
                 </div>
@@ -126,6 +141,33 @@
     <main>
         {block name="content"}{/block}
     </main>
+
+    {* ════════════════════════════════════════════════════════════
+       MODAL LOGIN GLOBALE (navbar: carrello e wishlist per ospiti)
+       ════════════════════════════════════════════════════════════ *}
+    {if !isset($utente)}
+    <div class="login-modal" id="login-modal-nav" aria-hidden="true">
+        <div class="modal-background"></div>
+        <div class="login-modal-content">
+            <button id="close-login-modal-nav" class="modal-close-btn" type="button" aria-label="Chiudi pop-up">&times;</button>
+            <div class="login-modal-icon">
+                <i class="ti ti-lock"></i>
+            </div>
+            <h3 class="login-modal-title">Accedi per continuare</h3>
+            <p class="login-modal-text">
+                Devi avere un account per accedere a questa sezione.
+            </p>
+            <div class="login-modal-actions">
+                <a href="{$base_url}/accedi" class="button btn-login-modal-accedi">
+                    <i class="ti ti-login"></i> Accedi
+                </a>
+                <a href="{$base_url}/registrati" class="button btn-login-modal-registrati">
+                    Crea un account
+                </a>
+            </div>
+        </div>
+    </div>
+    {/if}
 
     {* ── FOOTER ── *}
     <footer class="site-footer">
@@ -187,26 +229,64 @@
 
     {* ── JS ── *}
     <script src="{$base_url}/plugins/jQuery/jquery.min.js"></script>
-    <script src="{$base_url}/plugins/jQuery/jquery.min.js"></script>
     <script src="{$base_url}/plugins/match-height/jquery.matchHeight-min.js"></script>
     <script src="{$base_url}/js/script.js"></script>
 
     <script>
-        document.addEventListener('DOMContentLoaded', function () {
-            const dropdown = document.getElementById('user-dropdown');
-            if (dropdown) {
-            dropdown.querySelector('.navbar-link').addEventListener('click', function (e) {
-                    e.stopPropagation();
-                    dropdown.classList.toggle('is-active');
-                });
-                document.addEventListener('click', function () {
-                    dropdown.classList.remove('is-active');
-                });
-            }
-        });
-</script>
+    document.addEventListener('DOMContentLoaded', function() {
 
-{block name="extra_js"}{/block}
+        // ── DROPDOWN UTENTE ──
+        var dropdown = document.getElementById('user-dropdown');
+        if (dropdown) {
+            dropdown.querySelector('.navbar-link').addEventListener('click', function(e) {
+                e.stopPropagation();
+                dropdown.classList.toggle('is-active');
+            });
+            document.addEventListener('click', function() {
+                dropdown.classList.remove('is-active');
+            });
+        }
+
+        // ── MODAL LOGIN NAVBAR (carrello e wishlist per ospiti) ──
+        var loginModalNav = document.getElementById('login-modal-nav');
+        if (loginModalNav) {
+
+            function apriLoginModalNav() {
+                loginModalNav.classList.add('is-active');
+                loginModalNav.setAttribute('aria-hidden', 'false');
+                var btn = document.getElementById('close-login-modal-nav');
+                if (btn) btn.focus();
+            }
+
+            function chiudiLoginModalNav() {
+                loginModalNav.classList.remove('is-active');
+                loginModalNav.setAttribute('aria-hidden', 'true');
+            }
+
+            document.getElementById('close-login-modal-nav').addEventListener('click', function(e) {
+                e.preventDefault();
+                chiudiLoginModalNav();
+            });
+
+            loginModalNav.querySelector('.modal-background').addEventListener('click', chiudiLoginModalNav);
+
+            loginModalNav.querySelectorAll('.login-modal-actions a').forEach(function(btn) {
+                btn.addEventListener('click', function(e) { e.stopPropagation(); });
+            });
+
+            // intercetta tutti i link .nav-protected (carrello e wishlist per ospiti)
+            document.querySelectorAll('.nav-protected').forEach(function(link) {
+                link.addEventListener('click', function(e) {
+                    e.preventDefault();
+                    apriLoginModalNav();
+                });
+            });
+        }
+
+    });
+    </script>
+
+    {block name="extra_js"}{/block}
 
 </body>
 </html>

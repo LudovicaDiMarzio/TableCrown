@@ -1,18 +1,18 @@
 <?php
-/* Smarty version 5.8.0, created on 2026-06-20 16:09:08
+/* Smarty version 5.8.0, created on 2026-06-20 18:01:39
   from 'file:home.tpl' */
 
 /* @var \Smarty\Template $_smarty_tpl */
 if ($_smarty_tpl->getCompiled()->isFresh($_smarty_tpl, array (
   'version' => '5.8.0',
-  'unifunc' => 'content_6a369f04825bc8_22873033',
+  'unifunc' => 'content_6a36b963d39d71_53091414',
   'has_nocache_code' => false,
   'file_dependency' => 
   array (
     '3ffb4dea4d0e42a75e520b0d03a07dd29989dd0e' => 
     array (
       0 => 'home.tpl',
-      1 => 1781964503,
+      1 => 1781971290,
       2 => 'file',
     ),
   ),
@@ -20,30 +20,30 @@ if ($_smarty_tpl->getCompiled()->isFresh($_smarty_tpl, array (
   array (
   ),
 ))) {
-function content_6a369f04825bc8_22873033 (\Smarty\Template $_smarty_tpl) {
+function content_6a36b963d39d71_53091414 (\Smarty\Template $_smarty_tpl) {
 $_smarty_current_dir = 'C:\\Users\\damic\\Desktop\\uni\\APPUNTI\\anno3\\secondo_semenstre\\Pweb\\TableCrown\\Presentation\\smarty-dir\\templates';
 $_smarty_tpl->getInheritance()->init($_smarty_tpl, true);
 ?>
 
 
 <?php 
-$_smarty_tpl->getInheritance()->instanceBlock($_smarty_tpl, 'Block_21300243786a369f047e61d2_11785905', "extra_css");
+$_smarty_tpl->getInheritance()->instanceBlock($_smarty_tpl, 'Block_4381019496a36b963d0aea2_72550599', "extra_css");
 ?>
 
 
 <?php 
-$_smarty_tpl->getInheritance()->instanceBlock($_smarty_tpl, 'Block_7442374456a369f047eb522_66158059', "content");
+$_smarty_tpl->getInheritance()->instanceBlock($_smarty_tpl, 'Block_12091802206a36b963d0d955_23819987', "content");
 ?>
 
 
 <?php 
-$_smarty_tpl->getInheritance()->instanceBlock($_smarty_tpl, 'Block_11162376416a369f04824981_55351729', "extra_js");
+$_smarty_tpl->getInheritance()->instanceBlock($_smarty_tpl, 'Block_8594205016a36b963d37760_28072672', "extra_js");
 ?>
 
 <?php $_smarty_tpl->getInheritance()->endChild($_smarty_tpl, "common/layout.tpl", $_smarty_current_dir);
 }
 /* {block "extra_css"} */
-class Block_21300243786a369f047e61d2_11785905 extends \Smarty\Runtime\Block
+class Block_4381019496a36b963d0aea2_72550599 extends \Smarty\Runtime\Block
 {
 public function callBlock(\Smarty\Template $_smarty_tpl) {
 $_smarty_current_dir = 'C:\\Users\\damic\\Desktop\\uni\\APPUNTI\\anno3\\secondo_semenstre\\Pweb\\TableCrown\\Presentation\\smarty-dir\\templates';
@@ -56,7 +56,7 @@ $_smarty_current_dir = 'C:\\Users\\damic\\Desktop\\uni\\APPUNTI\\anno3\\secondo_
 }
 /* {/block "extra_css"} */
 /* {block "content"} */
-class Block_7442374456a369f047eb522_66158059 extends \Smarty\Runtime\Block
+class Block_12091802206a36b963d0d955_23819987 extends \Smarty\Runtime\Block
 {
 public function callBlock(\Smarty\Template $_smarty_tpl) {
 $_smarty_current_dir = 'C:\\Users\\damic\\Desktop\\uni\\APPUNTI\\anno3\\secondo_semenstre\\Pweb\\TableCrown\\Presentation\\smarty-dir\\templates';
@@ -512,7 +512,7 @@ $_smarty_tpl->getSmarty()->getRuntime('Foreach')->restore($_smarty_tpl, 1);?>
 }
 /* {/block "content"} */
 /* {block "extra_js"} */
-class Block_11162376416a369f04824981_55351729 extends \Smarty\Runtime\Block
+class Block_8594205016a36b963d37760_28072672 extends \Smarty\Runtime\Block
 {
 public function callBlock(\Smarty\Template $_smarty_tpl) {
 $_smarty_current_dir = 'C:\\Users\\damic\\Desktop\\uni\\APPUNTI\\anno3\\secondo_semenstre\\Pweb\\TableCrown\\Presentation\\smarty-dir\\templates';
@@ -612,37 +612,45 @@ $_smarty_current_dir = 'C:\\Users\\damic\\Desktop\\uni\\APPUNTI\\anno3\\secondo_
     // ── FUNZIONE AJAX: PROVA SEMPRE AD AGGIUNGERE AL CARRELLO ──
     // Non decide nulla in anticipo: si fida solo della risposta di Control.
     function aggiungiAlCarrello(idProdotto, quantita, dati) {
-        fetch('/carrello/aggiungi', {
-            method: 'POST',
-            headers: {
-                'Content-Type': 'application/x-www-form-urlencoded',
-                'X-Requested-With': 'XMLHttpRequest'
-            },
-            body: `id_prodotto=${idProdotto}&quantita=${quantita}`
-        })
-        .then(res => res.json().then(data => ({ status: res.status, body: data })))
-        .then(({ status, body }) => {
-            if (status === 401 || body.error === 'auth_required') {
-                apriLoginModal();
-                return;
+    fetch('/carrello/aggiungi', {
+        method: 'POST',
+        headers: {
+            'Content-Type': 'application/x-www-form-urlencoded',
+            'X-Requested-With': 'XMLHttpRequest'
+        },
+        body: 'id_prodotto=' + idProdotto + '&quantita=' + quantita
+    })
+    .then(function(res) {
+        var status = res.status;
+        return res.text().then(function(text) {
+            try {
+                var data = JSON.parse(text);
+                return { status: status, body: data };
+            } catch(e) {
+                return { status: 401, body: { error: 'auth_required' } };
             }
-
-            if (body.success) {
-                apriMinicart(dati);
-
-                const cartBadge = document.getElementById('cart-count');
-                if (cartBadge && body.cart_count !== undefined) {
-                    cartBadge.textContent = body.cart_count;
-                    cartBadge.style.display = body.cart_count > 0 ? 'inline' : 'none';
-                }
-            } else {
-                console.error('Errore carrello:', body.messaggio || 'errore generico');
-            }
-        })
-        .catch(err => {
-            console.error('Fetch carrello fallita:', err);
         });
-    }
+    })
+    .then(function(result) {
+        if (result.status === 401 || result.body.error === 'auth_required') {
+            apriLoginModal();
+            return;
+        }
+        if (result.body.success) {
+            apriMinicart(dati);
+            var cartBadge = document.getElementById('cart-count');
+            if (cartBadge && result.body.cart_count !== undefined) {
+                cartBadge.textContent = result.body.cart_count;
+                cartBadge.style.display = result.body.cart_count > 0 ? 'inline' : 'none';
+            }
+        } else {
+            console.error('Errore carrello:', result.body.messaggio || 'errore generico');
+        }
+    })
+    .catch(function(err) {
+        console.error('Fetch carrello fallita:', err);
+    });
+}
 
     // ── CLICK SU TUTTI I BOTTONI "ACQUISTA" ──
     document.querySelectorAll('.btn-cart').forEach(function (btn) {

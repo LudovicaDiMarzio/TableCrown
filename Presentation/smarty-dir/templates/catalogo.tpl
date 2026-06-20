@@ -12,7 +12,6 @@
     <section class="catalogo-header">
         <div class="container">
             
-            {* Search Form *}
             <div class="catalogo-search-wrapper">
                 <form class="catalogo-search-form" action="{$base_url}/catalogo" method="get" id="search-form">
                     <input class="input catalogo-search-input"
@@ -27,7 +26,6 @@
                 </form>
             </div>
 
-            {* Risultati + Ordinamento *}
             <div class="catalogo-results-header">
                 <div class="results-info">
                     <h2 class="results-title">
@@ -79,7 +77,6 @@
 
                 <form class="filters-form" id="filters-form" method="get" action="{$base_url}/catalogo">
                     
-                    {* Mantieni la ricerca durante i filtri *}
                     {if isset($search_query) && $search_query}
                         <input type="hidden" name="q" value="{$search_query|escape}">
                     {/if}
@@ -364,7 +361,6 @@
                     </button>
                 </div>
 
-                {* Grid Prodotti *}
                 {if isset($prodotti) && $prodotti|@count > 0}
                     <div class="products-grid">
                         {foreach $prodotti as $prodotto}
@@ -376,14 +372,12 @@
                                              alt="{$prodotto.nome|escape}" 
                                              class="product-image">
                                         
-                                        {* Badge Disponibilità *}
                                         {if $prodotto.disponibilita == 'esaurito'}
                                             <span class="product-badge product-badge-esaurito">Esaurito</span>
                                         {elseif $prodotto.disponibilita == 'annunciato'}
                                             <span class="product-badge product-badge-annunciato">Annunciato</span>
                                         {/if}
 
-                                        {* Badge Offerta *}
                                         {if $prodotto.sconto}
                                             <span class="product-badge product-badge-discount">-{$prodotto.percentuale_sconto}%</span>
                                         {/if}
@@ -392,7 +386,6 @@
                                     <div class="product-info">
                                         <h3 class="product-name">{$prodotto.nome|escape}</h3>
                                         
-                                        {* Rating *}
                                         <div class="product-rating">
                                             {assign var="media" value=$prodotto.valutazione_media}
                                             {assign var="stelle" value=[1,2,3,4,5]}
@@ -408,7 +401,6 @@
                                             <span class="rating-value">({$media|number_format:1})</span>
                                         </div>
 
-                                        {* Prezzo *}
                                         <div class="product-price-wrapper">
                                             {if isset($prodotto.prezzo)}
                                                 {if $prodotto.sconto}
@@ -425,7 +417,6 @@
 
                                 </a>
 
-                                {* Bottone Carrello *}
                                 <button class="button btn-add-cart"
                                         data-id="{$prodotto.id}"
                                         data-nome="{$prodotto.nome|escape}"
@@ -438,7 +429,6 @@
                         {/foreach}
                     </div>
 
-                    {* Paginazione *}
                     {if isset($pagination) && $pagination.total_pages > 1}
                     <div class="pagination-wrapper">
                         <nav class="pagination" aria-label="Paginazione">
@@ -470,7 +460,6 @@
                     {/if}
 
                 {else}
-                    {* Stato vuoto *}
                     <div class="empty-state">
                         <div class="empty-state-icon">
                             <i class="ti ti-box-off"></i>
@@ -490,57 +479,108 @@
         </div>
     </div>
 
-</div>
+    {* ════════════════════════════════════════════════════════════
+       MODAL 1: PRODOTTO AGGIUNTO AL CARRELLO (utente loggato)
+       ════════════════════════════════════════════════════════════ *}
+    <div class="minicart-modal" id="minicart-modal" aria-hidden="true">
+        <div class="modal-background"></div>
+        <div class="minicart-content">
+            <button id="close-minicart" class="modal-close-btn" type="button" aria-label="Chiudi pop-up">&times;</button>
+            <h3 class="minicart-success-title">Prodotto aggiunto al carrello!</h3>
+            <div class="minicart-product">
+                <img src="" alt="" class="minicart-img" id="minicart-img">
+                <div class="minicart-info">
+                    <p class="minicart-nome" id="minicart-nome"></p>
+                    <p class="minicart-prezzo" id="minicart-prezzo"></p>
+                </div>
+            </div>
+            <div class="minicart-actions">
+                <a href="{$base_url}/catalogo" class="button btn-minicart-continua">
+                    <i class="ti ti-arrow-left"></i> Continua Shopping
+                </a>
+                <a href="{$base_url}/carrello" class="button btn-minicart-ordine">
+                    <i class="ti ti-shopping-cart"></i> Completa Ordine
+                </a>
+            </div>
+        </div>
+    </div>
+
+    {* ════════════════════════════════════════════════════════════
+       MODAL 2: ACCESSO RICHIESTO (utente NON loggato)
+       ════════════════════════════════════════════════════════════ *}
+    <div class="login-modal" id="login-modal" aria-hidden="true">
+        <div class="modal-background"></div>
+        <div class="login-modal-content">
+            <button id="close-login-modal" class="modal-close-btn" type="button" aria-label="Chiudi pop-up">&times;</button>
+            <div class="login-modal-icon">
+                <i class="ti ti-lock"></i>
+            </div>
+            <h3 class="login-modal-title">Accedi per continuare</h3>
+            <p class="login-modal-text">
+                Devi avere un account per aggiungere prodotti al carrello e procedere all'acquisto.
+            </p>
+            <div class="login-modal-actions">
+                <a href="{$base_url}/accedi" class="button btn-login-modal-accedi">
+                    <i class="ti ti-login"></i> Accedi
+                </a>
+                <a href="{$base_url}/registrati" class="button btn-login-modal-registrati">
+                    Crea un account
+                </a>
+            </div>
+        </div>
+    </div>
+
+</div>{* fine catalogo-container *}
 
 {/block}
 
 {block name="extra_js"}
 <script>
+{literal}
 document.addEventListener('DOMContentLoaded', function() {
 
-    // Checkbox esclusivi: uno solo attivo per volta in ogni gruppo
-    const exclusiveGroups = document.querySelectorAll('[data-exclusive]');
-    exclusiveGroups.forEach(group => {
-        const checkboxes = group.querySelectorAll('input[type="checkbox"]');
-        checkboxes.forEach(checkbox => {
+    // ── CHECKBOX ESCLUSIVI ──
+    var exclusiveGroups = document.querySelectorAll('[data-exclusive]');
+    exclusiveGroups.forEach(function(group) {
+        var checkboxes = group.querySelectorAll('input[type="checkbox"]');
+        checkboxes.forEach(function(checkbox) {
             checkbox.addEventListener('change', function() {
                 if (this.checked) {
-                    checkboxes.forEach(cb => {
-                        if (cb !== this) cb.checked = false;
+                    checkboxes.forEach(function(cb) {
+                        if (cb !== checkbox) cb.checked = false;
                     });
                 }
             });
         });
     });
 
-    // Toggle Filtri su Mobile
-    const toggleBtn = document.getElementById('btn-toggle-filters');
-    const sidebar   = document.getElementById('catalogo-filters');
-    const closeBtn  = document.getElementById('filter-close-btn');
+    // ── TOGGLE FILTRI MOBILE ──
+    var toggleBtn = document.getElementById('btn-toggle-filters');
+    var sidebar   = document.getElementById('catalogo-filters');
+    var closeBtn  = document.getElementById('filter-close-btn');
 
     if (toggleBtn) {
         toggleBtn.addEventListener('click', function() {
             sidebar.classList.toggle('is-open');
-            this.classList.toggle('is-active');
+            toggleBtn.classList.toggle('is-active');
         });
     }
-
     if (closeBtn) {
         closeBtn.addEventListener('click', function() {
             sidebar.classList.remove('is-open');
-            toggleBtn.classList.remove('is-active');
+            if (toggleBtn) toggleBtn.classList.remove('is-active');
         });
     }
 
-    // Aggiorna valore rating in tempo reale
-    const ratingSlider = document.querySelector('.rating-slider');
+    // ── RATING SLIDER ──
+    var ratingSlider = document.querySelector('.rating-slider');
     if (ratingSlider) {
         ratingSlider.addEventListener('input', function() {
             document.getElementById('rating-value').textContent = this.value;
         });
     }
 
-    // Chiudi filtri quando clicchi fuori (mobile)
+    // ── CHIUDI FILTRI FUORI CLICK (mobile) ──
     document.addEventListener('click', function(e) {
         if (sidebar && toggleBtn) {
             if (!sidebar.contains(e.target) && !toggleBtn.contains(e.target)) {
@@ -550,6 +590,136 @@ document.addEventListener('DOMContentLoaded', function() {
         }
     });
 
+    // ── MODAL: MINICART ──
+    var minicartModal  = document.getElementById('minicart-modal');
+    var minicartImg    = document.getElementById('minicart-img');
+    var minicartNome   = document.getElementById('minicart-nome');
+    var minicartPrezzo = document.getElementById('minicart-prezzo');
+
+    function apriMinicart(dati) {
+        if (!minicartModal) return;
+        minicartImg.src            = dati.img;
+        minicartImg.alt            = dati.nome;
+        minicartNome.textContent   = dati.nome;
+        minicartPrezzo.textContent = '€' + parseFloat(dati.prezzo || 0).toFixed(2);
+        minicartModal.classList.add('is-active');
+        minicartModal.setAttribute('aria-hidden', 'false');
+        var cm = document.getElementById('close-minicart');
+        if (cm) cm.focus();
+    }
+
+    function chiudiMinicart() {
+        if (!minicartModal) return;
+        minicartModal.classList.remove('is-active');
+        minicartModal.setAttribute('aria-hidden', 'true');
+    }
+
+    var closeMinicart = document.getElementById('close-minicart');
+    if (closeMinicart) {
+        closeMinicart.addEventListener('click', function(e) {
+            e.preventDefault();
+            chiudiMinicart();
+        });
+    }
+    var minicartBg = minicartModal ? minicartModal.querySelector('.modal-background') : null;
+    if (minicartBg) minicartBg.addEventListener('click', chiudiMinicart);
+    if (minicartModal) {
+        minicartModal.querySelectorAll('.minicart-actions a').forEach(function(btn) {
+            btn.addEventListener('click', function(e) { e.stopPropagation(); });
+        });
+    }
+
+    // ── MODAL: LOGIN ──
+    var loginModal = document.getElementById('login-modal');
+
+    function apriLoginModal() {
+        if (!loginModal) return;
+        loginModal.classList.add('is-active');
+        loginModal.setAttribute('aria-hidden', 'false');
+        var cl = document.getElementById('close-login-modal');
+        if (cl) cl.focus();
+    }
+
+    function chiudiLoginModal() {
+        if (!loginModal) return;
+        loginModal.classList.remove('is-active');
+        loginModal.setAttribute('aria-hidden', 'true');
+    }
+
+    var closeLogin = document.getElementById('close-login-modal');
+    if (closeLogin) {
+        closeLogin.addEventListener('click', function(e) {
+            e.preventDefault();
+            chiudiLoginModal();
+        });
+    }
+    var loginBg = loginModal ? loginModal.querySelector('.modal-background') : null;
+    if (loginBg) loginBg.addEventListener('click', chiudiLoginModal);
+    if (loginModal) {
+        loginModal.querySelectorAll('.login-modal-actions a').forEach(function(btn) {
+            btn.addEventListener('click', function(e) { e.stopPropagation(); });
+        });
+    }
+
+    // ── AJAX CARRELLO ──
+    function aggiungiAlCarrello(idProdotto, quantita, dati) {
+        fetch('/carrello/aggiungi', {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/x-www-form-urlencoded',
+                'X-Requested-With': 'XMLHttpRequest'
+            },
+            body: 'id_prodotto=' + idProdotto + '&quantita=' + quantita
+        })
+        .then(function(res) {
+            var status = res.status;
+            return res.text().then(function(text) {
+                try {
+                    var data = JSON.parse(text);
+                    return { status: status, body: data };
+                } catch(e) {
+                    // risposta HTML (es. redirect al login) = non autenticato
+                    return { status: 401, body: { error: 'auth_required' } };
+                }
+            });
+        })
+        .then(function(result) {
+            if (result.status === 401 || result.body.error === 'auth_required') {
+                apriLoginModal();
+                return;
+            }
+            if (result.body.success) {
+                apriMinicart(dati);
+                var cartBadge = document.getElementById('cart-count');
+                if (cartBadge && result.body.cart_count !== undefined) {
+                    cartBadge.textContent = result.body.cart_count;
+                    cartBadge.style.display = result.body.cart_count > 0 ? 'inline' : 'none';
+                }
+            } else {
+                console.error('Errore carrello:', result.body.messaggio || 'errore generico');
+            }
+        })
+        .catch(function(err) {
+            console.error('Fetch carrello fallita:', err);
+        });
+    }
+
+    // ── CLICK BOTTONI AGGIUNGI ──
+    document.querySelectorAll('.btn-add-cart').forEach(function(btn) {
+        btn.addEventListener('click', function(e) {
+            e.preventDefault();
+            e.stopPropagation();
+            var dati = {
+                id:     this.dataset.id,
+                nome:   this.dataset.nome,
+                img:    this.dataset.img,
+                prezzo: this.dataset.prezzo
+            };
+            aggiungiAlCarrello(dati.id, 1, dati);
+        });
+    });
+
 });
+{/literal}
 </script>
 {/block}
