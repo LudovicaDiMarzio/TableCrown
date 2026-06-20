@@ -5,84 +5,62 @@ require_once __DIR__ . '/vendor/autoload.php';
 use Smarty\Smarty;
 $smarty = new Smarty();
 
-////////////////////////////////////////////////////////////////
-// DATI FAKE PER catalogo_challenge.tpl
-////////////////////////////////////////////////////////////////
+$offerte = [
+    ['id' => 101, 'nome' => 'Catan',       'immagine' => 'placeholder.jpg', 'valutazione_media' => 4.5, 'prezzo' => 34.90, 'sconto' => true,  'prezzo_scontato' => 27.92],
+    ['id' => 102, 'nome' => 'Carcassonne', 'immagine' => 'placeholder.jpg', 'valutazione_media' => 4.0, 'prezzo' => 29.90, 'sconto' => true,  'prezzo_scontato' => 25.42],
+    ['id' => 103, 'nome' => '7 Wonders',   'immagine' => 'placeholder.jpg', 'valutazione_media' => 4.7, 'prezzo' => 39.90, 'sconto' => false, 'prezzo_scontato' => null],
+];
 
-$smarty->assign('filtri', [
-    'data'  => '',
-    'stato' => 'programma'
-]);
+$nuovi_arrivi = [
+    ['id' => 201, 'nome' => 'Wingspan',         'immagine' => 'placeholder.jpg', 'valutazione_media' => 4.8, 'prezzo' => 49.90, 'sconto' => false, 'prezzo_scontato' => null],
+    ['id' => 202, 'nome' => 'Azul',             'immagine' => 'placeholder.jpg', 'valutazione_media' => 4.6, 'prezzo' => 32.90, 'sconto' => true,  'prezzo_scontato' => 29.61],
+    ['id' => 203, 'nome' => 'Brass Birmingham', 'immagine' => 'placeholder.jpg', 'valutazione_media' => 4.9, 'prezzo' => 59.90, 'sconto' => false, 'prezzo_scontato' => null],
+];
 
-$statoProgrammato = new class {
-    public string $name = 'Programmato';
-};
 
-$statoTerminato = new class {
-    public string $name = 'Terminato';
-};
+// ── PRODOTTI CATALOGO ──
+$prodotti = [
+    ['id' => 101, 'nome' => 'Catan',            'immagine' => 'placeholder.jpg', 'valutazione_media' => 4.5, 'disponibilita' => 'disponibile', 'prezzo' => 34.90, 'sconto' => true,  'percentuale_sconto' => 20, 'prezzo_scontato' => 27.92],
+    ['id' => 102, 'nome' => 'Carcassonne',       'immagine' => 'placeholder.jpg', 'valutazione_media' => 4.0, 'disponibilita' => 'disponibile', 'prezzo' => 29.90, 'sconto' => true,  'percentuale_sconto' => 15, 'prezzo_scontato' => 25.42],
+    ['id' => 103, 'nome' => '7 Wonders',         'immagine' => 'placeholder.jpg', 'valutazione_media' => 4.7, 'disponibilita' => 'esaurito',    'prezzo' => 39.90, 'sconto' => false, 'percentuale_sconto' => null, 'prezzo_scontato' => null],
+    ['id' => 201, 'nome' => 'Wingspan',          'immagine' => 'placeholder.jpg', 'valutazione_media' => 4.8, 'disponibilita' => 'disponibile', 'prezzo' => 49.90, 'sconto' => false, 'percentuale_sconto' => null, 'prezzo_scontato' => null],
+    ['id' => 202, 'nome' => 'Azul',              'immagine' => 'placeholder.jpg', 'valutazione_media' => 4.6, 'disponibilita' => 'disponibile', 'prezzo' => 32.90, 'sconto' => true,  'percentuale_sconto' => 10, 'prezzo_scontato' => 29.61],
+    ['id' => 203, 'nome' => 'Brass Birmingham',  'immagine' => 'placeholder.jpg', 'valutazione_media' => 4.9, 'disponibilita' => 'annunciato',  'prezzo' => 59.90, 'sconto' => false, 'percentuale_sconto' => null, 'prezzo_scontato' => null],
+];
 
-// Fake EPrezzo — senza sconto
-$prezzo1 = new class {
-    public function getValore(): float { return 8.00; }
-    public function getValuta() { return new class { public string $name = 'EUR'; }; }
-    public function getSconto(): float { return 0; }
-    public function hasSconto(): bool { return false; }
-    public function calcolaPrezzoScontato(): float { return 8.00; }
-};
+// ── CATEGORIE ──
+$categorie = [
+    ['id' => 1, 'nome' => 'Strategia'],
+    ['id' => 2, 'nome' => 'Famiglia'],
+    ['id' => 3, 'nome' => 'Cooperativo'],
+    ['id' => 4, 'nome' => 'Carte'],
+];
 
-// Fake EPrezzo — con sconto 25%
-$prezzo2 = new class {
-    public function getValore(): float { return 12.00; }
-    public function getValuta() { return new class { public string $name = 'EUR'; }; }
-    public function getSconto(): float { return 25; }
-    public function hasSconto(): bool { return true; }
-    public function calcolaPrezzoScontato(): float { return 9.00; }
-};
-
-// Fake EChallenge #1 — in programma
-$challenge1 = new class($statoProgrammato, $prezzo1) {
-    private $stato, $quota;
-    public function __construct($stato, $quota) {
-        $this->stato = $stato;
-        $this->quota = $quota;
-    }
-    public function getIdEvento() { return 1; }
-    public function getNomeEvento() { return 'Crown Challenge Estate 2026'; }
-    public function getImgEvento() { return 'placeholder.jpg'; }
-    public function getDataInizio() { return new DateTime('2026-08-15 17:00:00'); }
-    public function getMaxPartecipanti() { return 24; }
-    public function getNumeroPartecipanti() { return 9; }
-    public function getStatoEvento() { return $this->stato; }
-    public function getQuotaIscrizione() { return $this->quota; }
-};
-
-// Fake EChallenge #2 — passata, con sconto
-$challenge2 = new class($statoTerminato, $prezzo2) {
-    private $stato, $quota;
-    public function __construct($stato, $quota) {
-        $this->stato = $stato;
-        $this->quota = $quota;
-    }
-    public function getIdEvento() { return 2; }
-    public function getNomeEvento() { return 'Crown Challenge Primavera 2026'; }
-    public function getImgEvento() { return 'placeholder.jpg'; }
-    public function getDataInizio() { return new DateTime('2026-04-05 16:00:00'); }
-    public function getMaxPartecipanti() { return 20; }
-    public function getNumeroPartecipanti() { return 20; }
-    public function getStatoEvento() { return $this->stato; }
-    public function getQuotaIscrizione() { return $this->quota; }
-};
-
-$smarty->assign('eventi', [$challenge1, $challenge2]);
-
-////////////////////////////////////////////////////////////////
+// ── PAGINAZIONE ──
+$pagination = [
+    'current_page' => 1,
+    'total_pages'  => 3,
+];
 
 $smarty->setTemplateDir(SMARTY_DIR . 'templates/');
 $smarty->setCompileDir(SMARTY_DIR  . 'templates_c/');
 $smarty->setCacheDir(SMARTY_DIR    . 'cache/');
 $smarty->setConfigDir(SMARTY_DIR   . 'configs/');
 
-$smarty->assign('base_url', BASE_URL);
+$smarty->assign('base_url',       BASE_URL);
+$smarty->assign('utente',         isset($_SESSION['utente_id']) ? ['nickname' => $_SESSION['utente_nickname']] : null);
+$smarty->assign('current_page',   'catalogo');
+$smarty->assign('prodotti',       $prodotti);
+$smarty->assign('categorie',      $categorie);
+$smarty->assign('pagination',     $pagination);
+$smarty->assign('total_results',  count($prodotti));
+$smarty->assign('search_query',   '');
+$smarty->assign('ordinamento',    'rilevanza');
 
-$smarty->display('eventi.tpl');
+
+$smarty->assign('base_url',     BASE_URL);
+$smarty->assign('offerte',      $offerte);
+$smarty->assign('nuovi_arrivi', $nuovi_arrivi);
+$smarty->assign('utente', isset($_SESSION['utente_id']) ? ['nickname' => $_SESSION['utente_nickname']] : null);
+
+$smarty->display('catalogo.tpl');

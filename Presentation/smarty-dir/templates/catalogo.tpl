@@ -50,12 +50,12 @@
                 <div class="sort-wrapper">
                     <label for="sort-select" class="sort-label">Ordina per:</label>
                     <select id="sort-select" class="select catalogo-sort-select" name="ordinamento" onchange="document.getElementById('search-form').submit();">
-                        <option value="rilevanza" {if isset($ordinamento) && $ordinamento == 'rilevanza'} selected{/if}>Rilevanza</option>
-                        <option value="prezzo-asc" {if isset($ordinamento) && $ordinamento == 'prezzo-asc'} selected{/if}>Prezzo: crescente</option>
+                        <option value="rilevanza"   {if isset($ordinamento) && $ordinamento == 'rilevanza'}   selected{/if}>Rilevanza</option>
+                        <option value="prezzo-asc"  {if isset($ordinamento) && $ordinamento == 'prezzo-asc'}  selected{/if}>Prezzo: crescente</option>
                         <option value="prezzo-desc" {if isset($ordinamento) && $ordinamento == 'prezzo-desc'} selected{/if}>Prezzo: decrescente</option>
-                        <option value="novita" {if isset($ordinamento) && $ordinamento == 'novita'} selected{/if}>Novità</option>
-                        <option value="popolarita" {if isset($ordinamento) && $ordinamento == 'popolarita'} selected{/if}>Più venduti</option>
-                        <option value="rating" {if isset($ordinamento) && $ordinamento == 'rating'} selected{/if}>Valutazione</option>
+                        <option value="novita"      {if isset($ordinamento) && $ordinamento == 'novita'}      selected{/if}>Novità</option>
+                        <option value="popolarita"  {if isset($ordinamento) && $ordinamento == 'popolarita'}  selected{/if}>Più venduti</option>
+                        <option value="rating"      {if isset($ordinamento) && $ordinamento == 'rating'}      selected{/if}>Valutazione</option>
                     </select>
                 </div>
             </div>
@@ -103,12 +103,12 @@
                                        aria-label="Prezzo minimo">
                                 <span class="price-separator">—</span>
                                 <input type="number" 
-                   class="input price-input price-max" 
-                   name="price_max" 
-                   placeholder="Max"
-                   value="{$price_max|default:''|escape}"
-                   min="0"
-                   aria-label="Prezzo massimo">
+                                       class="input price-input price-max" 
+                                       name="price_max" 
+                                       placeholder="Max"
+                                       value="{$price_max|default:''|escape}"
+                                       min="0"
+                                       aria-label="Prezzo massimo">
                             </div>
                         </div>
                     </div>
@@ -153,35 +153,35 @@
                                 <input type="checkbox" 
                                        name="offerte[]" 
                                        value="sconti"
-                                       {if isset($offerte) && in_array('sconti', $offerte)} checked{/if}>
+                                       {if isset($offerte_filtro) && in_array('sconti', $offerte_filtro)} checked{/if}>
                                 <span class="checkbox-text">Sconti Attivi</span>
                             </label>
                             <label class="checkbox-label">
                                 <input type="checkbox" 
                                        name="offerte[]" 
                                        value="bundle"
-                                       {if isset($offerte) && in_array('bundle', $offerte)} checked{/if}>
+                                       {if isset($offerte_filtro) && in_array('bundle', $offerte_filtro)} checked{/if}>
                                 <span class="checkbox-text">Bundle</span>
                             </label>
                             <label class="checkbox-label">
                                 <input type="checkbox" 
                                        name="offerte[]" 
                                        value="danneggiati"
-                                       {if isset($offerte) && in_array('danneggiati', $offerte)} checked{/if}>
+                                       {if isset($offerte_filtro) && in_array('danneggiati', $offerte_filtro)} checked{/if}>
                                 <span class="checkbox-text">Danneggiati / Scatolato</span>
                             </label>
                             <label class="checkbox-label">
                                 <input type="checkbox" 
                                        name="offerte[]" 
                                        value="novita"
-                                       {if isset($offerte) && in_array('novita', $offerte)} checked{/if}>
+                                       {if isset($offerte_filtro) && in_array('novita', $offerte_filtro)} checked{/if}>
                                 <span class="checkbox-text">Novità</span>
                             </label>
                             <label class="checkbox-label">
                                 <input type="checkbox" 
                                        name="offerte[]" 
                                        value="venduti"
-                                       {if isset($offerte) && in_array('venduti', $offerte)} checked{/if}>
+                                       {if isset($offerte_filtro) && in_array('venduti', $offerte_filtro)} checked{/if}>
                                 <span class="checkbox-text">I più venduti</span>
                             </label>
                         </div>
@@ -198,9 +198,9 @@
                                     <label class="checkbox-label">
                                         <input type="checkbox" 
                                                name="categoria[]" 
-                                               value="{$cat->getIdProdotto()|escape}"
-                                               {if isset($categoria_selected) && in_array($cat->getIdProdotto(), $categoria_selected)} checked{/if}>
-                                        <span class="checkbox-text">{$cat->getNomeProdotto()|escape}</span>
+                                               value="{$cat.id|escape}"
+                                               {if isset($categoria_selected) && in_array($cat.id, $categoria_selected)} checked{/if}>
+                                        <span class="checkbox-text">{$cat.nome|escape}</span>
                                     </label>
                                 {/foreach}
                             {else}
@@ -369,33 +369,32 @@
                     <div class="products-grid">
                         {foreach $prodotti as $prodotto}
                             <div class="product-card">
-                                <a href="{$base_url}/prodotto/{$prodotto->getIdProdotto()}" class="product-card-link">
+                                <a href="{$base_url}/prodotto/{$prodotto.id}" class="product-card-link">
                                     
                                     <div class="product-image-wrapper">
-                                        <img src="{$base_url}/img/prodotti/{$prodotto->getImgProdotto()|escape}" 
-                                             alt="{$prodotto->getNomeProdotto()|escape}" 
+                                        <img src="{$base_url}/img/prodotti/{$prodotto.immagine|escape}" 
+                                             alt="{$prodotto.nome|escape}" 
                                              class="product-image">
                                         
                                         {* Badge Disponibilità *}
-                                        {if $prodotto->getDisponibilitaProdotto() == 'esaurito'}
+                                        {if $prodotto.disponibilita == 'esaurito'}
                                             <span class="product-badge product-badge-esaurito">Esaurito</span>
-                                        {elseif $prodotto->getDisponibilitaProdotto() == 'annunciato'}
+                                        {elseif $prodotto.disponibilita == 'annunciato'}
                                             <span class="product-badge product-badge-annunciato">Annunciato</span>
                                         {/if}
 
                                         {* Badge Offerta *}
-                                        {assign var="prezzo" value=$prodotto->getPrezzo()}
-                                        {if isset($prezzo) && $prezzo->hasSconto()}
-                                            <span class="product-badge product-badge-discount">-{$prezzo->getSconto()}%</span>
+                                        {if $prodotto.sconto}
+                                            <span class="product-badge product-badge-discount">-{$prodotto.percentuale_sconto}%</span>
                                         {/if}
                                     </div>
 
                                     <div class="product-info">
-                                        <h3 class="product-name">{$prodotto->getNomeProdotto()|escape}</h3>
+                                        <h3 class="product-name">{$prodotto.nome|escape}</h3>
                                         
                                         {* Rating *}
                                         <div class="product-rating">
-                                            {assign var="media" value=$prodotto->getValutazioneMedia()}
+                                            {assign var="media" value=$prodotto.valutazione_media}
                                             {assign var="stelle" value=[1,2,3,4,5]}
                                             {foreach $stelle as $s}
                                                 {if $s <= $media}
@@ -411,12 +410,12 @@
 
                                         {* Prezzo *}
                                         <div class="product-price-wrapper">
-                                            {if isset($prezzo)}
-                                                {if $prezzo->hasSconto()}
-                                                    <span class="product-price">€{$prezzo->calcolaPrezzoScontato()|number_format:2}</span>
-                                                    <span class="product-price-old">€{$prezzo->getValore()|number_format:2}</span>
+                                            {if isset($prodotto.prezzo)}
+                                                {if $prodotto.sconto}
+                                                    <span class="product-price">€{$prodotto.prezzo_scontato|number_format:2}</span>
+                                                    <span class="product-price-old">€{$prodotto.prezzo|number_format:2}</span>
                                                 {else}
-                                                    <span class="product-price">€{$prezzo->getValore()|number_format:2}</span>
+                                                    <span class="product-price">€{$prodotto.prezzo|number_format:2}</span>
                                                 {/if}
                                             {else}
                                                 <span class="product-price-unavailable">Prezzo N/D</span>
@@ -426,15 +425,20 @@
 
                                 </a>
 
-                                 {* Link Carrello *}
-                                <a href="{$base_url}/carrello/aggiungi/{$prodotto->getIdProdotto()}" class="button btn-add-cart" aria-label="Aggiungi a carrello">
+                                {* Bottone Carrello *}
+                                <button class="button btn-add-cart"
+                                        data-id="{$prodotto.id}"
+                                        data-nome="{$prodotto.nome|escape}"
+                                        data-img="{$base_url}/img/prodotti/{$prodotto.immagine}"
+                                        data-prezzo="{$prodotto.prezzo}"
+                                        aria-label="Aggiungi a carrello">
                                     <i class="ti ti-shopping-cart"></i> Aggiungi
-                                </a>
+                                </button>
                             </div>
                         {/foreach}
                     </div>
 
-                    {* Paginazione (se necessaria) *}
+                    {* Paginazione *}
                     {if isset($pagination) && $pagination.total_pages > 1}
                     <div class="pagination-wrapper">
                         <nav class="pagination" aria-label="Paginazione">
@@ -494,20 +498,15 @@
 <script>
 document.addEventListener('DOMContentLoaded', function() {
 
-    // ✅ Checkbox esclusivi: uno solo attivo per volta in ogni gruppo
+    // Checkbox esclusivi: uno solo attivo per volta in ogni gruppo
     const exclusiveGroups = document.querySelectorAll('[data-exclusive]');
-    
     exclusiveGroups.forEach(group => {
         const checkboxes = group.querySelectorAll('input[type="checkbox"]');
-        
         checkboxes.forEach(checkbox => {
             checkbox.addEventListener('change', function() {
                 if (this.checked) {
-                    // Se viene selezionato, deseleziona gli altri dello stesso gruppo
                     checkboxes.forEach(cb => {
-                        if (cb !== this) {
-                            cb.checked = false;
-                        }
+                        if (cb !== this) cb.checked = false;
                     });
                 }
             });
@@ -516,9 +515,9 @@ document.addEventListener('DOMContentLoaded', function() {
 
     // Toggle Filtri su Mobile
     const toggleBtn = document.getElementById('btn-toggle-filters');
-    const sidebar = document.getElementById('catalogo-filters');
-    const closeBtn = document.getElementById('filter-close-btn');
-    
+    const sidebar   = document.getElementById('catalogo-filters');
+    const closeBtn  = document.getElementById('filter-close-btn');
+
     if (toggleBtn) {
         toggleBtn.addEventListener('click', function() {
             sidebar.classList.toggle('is-open');
@@ -526,7 +525,6 @@ document.addEventListener('DOMContentLoaded', function() {
         });
     }
 
-    // Chiudi Filtri (mobile)
     if (closeBtn) {
         closeBtn.addEventListener('click', function() {
             sidebar.classList.remove('is-open');

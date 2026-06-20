@@ -6,12 +6,9 @@
 // ============================================================
 
 // ── AMBIENTE ────────────────────────────────────────────────
-// Cambia in 'production' quando vai live
 define('ENVIRONMENT', 'development');
 
 // ── BASE URL ─────────────────────────────────────────────────
-// development: punta al server locale
-// production:  punta al dominio reale
 if (ENVIRONMENT === 'development') {
     define('BASE_URL', 'http://localhost:8000');
 } else {
@@ -45,3 +42,10 @@ if (ENVIRONMENT === 'development') {
 // ── SESSIONE ─────────────────────────────────────────────────
 define('SESSION_NAME',    'tablecrown_session');
 define('SESSION_LIFETIME', 3600); // 1 ora in secondi
+
+// Avvia la sessione PHP — serve a simulare login/logout
+// in locale e servirà davvero quando Control gestirà l'auth.
+if (session_status() === PHP_SESSION_NONE) {
+    session_name(SESSION_NAME);
+    session_start();
+}

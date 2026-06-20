@@ -53,7 +53,7 @@
                             <div class="navbar-item has-dropdown" id="user-dropdown">
                                 <a class="navbar-link navbar-user-link">
                                     <i class="ti ti-user-circle navbar-icon"></i>
-                                    <span class="navbar-username">{$utente->getNickname()|escape}</span>
+                                    <span class="navbar-username">{$utente.nickname|escape}</span>
                                 </a>
                                 <div class="navbar-dropdown is-right">
                                     <a class="navbar-item" href="{$base_url}/profilo"><i class="ti ti-user"></i> Il mio account</a>

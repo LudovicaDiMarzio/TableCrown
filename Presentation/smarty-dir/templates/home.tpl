@@ -71,52 +71,55 @@
             {if isset($offerte) && $offerte|@count > 0}
                 {foreach $offerte as $prodotto}
                     <div class="card-vector-item">
-                        <a href="{$base_url}/prodotto/{$prodotto->getId()}" class="card-link-wrapper">
-                            <div class="card home-card-fixed">
-                                <div class="card-image">
-                                    <figure class="image-container-fixed">
-                                        <img src="{$base_url}/img/prodotti/{$prodotto->getImmagine()}" alt="{$prodotto->getNome()|escape}" />
-                                    </figure>
-                                </div>
-                                <div class="card-content">
-                                    <p class="card-title-custom">{$prodotto->getNome()|escape}</p>
-
-                                    <div class="card-rating">
-                                        {assign var="media" value=$prodotto->getValutazioneMedia()}
-                                        {assign var="stelle" value=[1,2,3,4,5]}
-                                        {foreach $stelle as $s}
-                                            {if $s <= $media}
-                                                <i class="ti ti-star-filled star-icon"></i>
-                                            {elseif ($s - $media) < 1}
-                                                <i class="ti ti-star-half-filled star-icon"></i>
-                                            {else}
-                                                <i class="ti ti-star star-icon"></i>
-                                            {/if}
-                                        {/foreach}
+                            <a href="{$base_url}/prodotto/{$prodotto.id}" class="card-link-wrapper">
+                                <div class="card home-card-fixed">
+                                    <div class="card-image">
+                                        <figure class="image-container-fixed">
+                                            <img src="{$base_url}/img/prodotti/{$prodotto.immagine}" alt="{$prodotto.nome|escape}" />
+                                        </figure>
                                     </div>
-
-                                    <div class="price-container">
-                                        {assign var="prezzo" value=$prodotto->getPrezzo()}
-                                        {if $prezzo}
-                                            {if $prezzo->hasSconto()}
-                                                <span class="price">€{$prezzo->calcolaPrezzoScontato()|number_format:2}</span>
-                                                <span class="price-old">€{$prezzo->getValore()|number_format:2}</span>
+                                    <div class="card-content">
+                                        <p class="card-title-custom">{$prodotto.nome|escape}</p>
+                    
+                                        <div class="card-rating">
+                                            {assign var="media" value=$prodotto.valutazione_media}
+                                            {assign var="stelle" value=[1,2,3,4,5]}
+                                            {foreach $stelle as $s}
+                                                {if $s <= $media}
+                                                    <i class="ti ti-star-filled star-icon"></i>
+                                                {elseif ($s - $media) < 1}
+                                                    <i class="ti ti-star-half-filled star-icon"></i>
+                                                {else}
+                                                    <i class="ti ti-star star-icon"></i>
+                                                {/if}
+                                            {/foreach}
+                                        </div>
+                    
+                                        <div class="price-container">
+                                            {if isset($prodotto.prezzo)}
+                                                {if $prodotto.sconto}
+                                                    <span class="price">€{$prodotto.prezzo_scontato|number_format:2}</span>
+                                                    <span class="price-old">€{$prodotto.prezzo|number_format:2}</span>
+                                                {else}
+                                                    <span class="price">€{$prodotto.prezzo|number_format:2}</span>
+                                                {/if}
                                             {else}
-                                                <span class="price">€{$prezzo->getValore()|number_format:2}</span>
+                                                <span class="price-unavailable">Prezzo non disponibile</span>
                                             {/if}
-                                        {else}
-                                            <span class="price-unavailable">Prezzo non disponibile</span>
-                                        {/if}
+                                        </div>
+                    
+                                        <button class="btn-cart"
+                                                data-id="{$prodotto.id}"
+                                                data-nome="{$prodotto.nome|escape}"
+                                                data-img="{$base_url}/img/prodotti/{$prodotto.immagine}"
+                                                data-prezzo="{$prodotto.prezzo}">
+                                            <i class="ti ti-shopping-cart"></i> Acquista
+                                        </button>
                                     </div>
-
-                                    <button class="btn-cart">
-                                        <i class="ti ti-shopping-cart"></i> Carrello
-                                    </button>
                                 </div>
-                            </div>
-                        </a>
-                    </div>
-                {/foreach}
+                            </a>
+                        </div>
+                    {/foreach}
 
                 {* Card Vedi Altro per dati reali *}
                 <div class="card-vector-item card-vector-more">
@@ -162,7 +165,7 @@
                                     </div>
 
                                     <button class="btn-cart">
-                                        <i class="ti ti-shopping-cart"></i> Carrello
+                                        <i class="ti ti-shopping-cart"></i> Acquista
                                     </button>
                                 </div>
                             </div>
@@ -193,52 +196,55 @@
             {if isset($nuovi_arrivi) && $nuovi_arrivi|@count > 0}
                 {foreach $nuovi_arrivi as $prodotto}
                     <div class="card-vector-item">
-                        <a href="{$base_url}/prodotto/{$prodotto->getId()}" class="card-link-wrapper">
-                            <div class="card home-card-fixed">
-                                <div class="card-image">
-                                    <figure class="image-container-fixed">
-                                        <img src="{$base_url}/img/prodotti/{$prodotto->getImmagine()}" alt="{$prodotto->getNome()|escape}" />
-                                    </figure>
-                                </div>
-                                <div class="card-content">
-                                    <p class="card-title-custom">{$prodotto->getNome()|escape}</p>
-
-                                    <div class="card-rating">
-                                        {assign var="media" value=$prodotto->getValutazioneMedia()}
-                                        {assign var="stelle" value=[1,2,3,4,5]}
-                                        {foreach $stelle as $s}
-                                            {if $s <= $media}
-                                                <i class="ti ti-star-filled star-icon"></i>
-                                            {elseif ($s - $media) < 1}
-                                                <i class="ti ti-star-half-filled star-icon"></i>
-                                            {else}
-                                                <i class="ti ti-star star-icon"></i>
-                                            {/if}
-                                        {/foreach}
+                            <a href="{$base_url}/prodotto/{$prodotto.id}" class="card-link-wrapper">
+                                <div class="card home-card-fixed">
+                                    <div class="card-image">
+                                        <figure class="image-container-fixed">
+                                            <img src="{$base_url}/img/prodotti/{$prodotto.immagine}" alt="{$prodotto.nome|escape}" />
+                                        </figure>
                                     </div>
-
-                                    <div class="price-container">
-                                        {assign var="prezzo" value=$prodotto->getPrezzo()}
-                                        {if $prezzo}
-                                            {if $prezzo->hasSconto()}
-                                                <span class="price">€{$prezzo->calcolaPrezzoScontato()|number_format:2}</span>
-                                                <span class="price-old">€{$prezzo->getValore()|number_format:2}</span>
+                                    <div class="card-content">
+                                        <p class="card-title-custom">{$prodotto.nome|escape}</p>
+                    
+                                        <div class="card-rating">
+                                            {assign var="media" value=$prodotto.valutazione_media}
+                                            {assign var="stelle" value=[1,2,3,4,5]}
+                                            {foreach $stelle as $s}
+                                                {if $s <= $media}
+                                                    <i class="ti ti-star-filled star-icon"></i>
+                                                {elseif ($s - $media) < 1}
+                                                    <i class="ti ti-star-half-filled star-icon"></i>
+                                                {else}
+                                                    <i class="ti ti-star star-icon"></i>
+                                                {/if}
+                                            {/foreach}
+                                        </div>
+                    
+                                        <div class="price-container">
+                                            {if isset($prodotto.prezzo)}
+                                                {if $prodotto.sconto}
+                                                    <span class="price">€{$prodotto.prezzo_scontato|number_format:2}</span>
+                                                    <span class="price-old">€{$prodotto.prezzo|number_format:2}</span>
+                                                {else}
+                                                    <span class="price">€{$prodotto.prezzo|number_format:2}</span>
+                                                {/if}
                                             {else}
-                                                <span class="price">€{$prezzo->getValore()|number_format:2}</span>
+                                                <span class="price-unavailable">Prezzo non disponibile</span>
                                             {/if}
-                                        {else}
-                                            <span class="price-unavailable">Prezzo non disponibile</span>
-                                        {/if}
+                                        </div>
+                    
+                                        <button class="btn-cart"
+                                                data-id="{$prodotto.id}"
+                                                data-nome="{$prodotto.nome|escape}"
+                                                data-img="{$base_url}/img/prodotti/{$prodotto.immagine}"
+                                                data-prezzo="{$prodotto.prezzo}">
+                                            <i class="ti ti-shopping-cart"></i> Acquista
+                                        </button>
                                     </div>
-
-                                    <button class="btn-cart">
-                                        <i class="ti ti-shopping-cart"></i> Carrello
-                                    </button>
                                 </div>
-                            </div>
-                        </a>
-                    </div>
-                {/foreach}
+                            </a>
+                        </div>
+                    {/foreach}
 
                 {* Card Vedi Altro per dati reali *}
                 <div class="card-vector-item card-vector-more">
@@ -283,7 +289,7 @@
                                     </div>
 
                                     <button class="btn-cart">
-                                        <i class="ti ti-shopping-cart"></i> Carrello
+                                        <i class="ti ti-shopping-cart"></i> Acquista
                                     </button>
                                 </div>
                             </div>
@@ -305,6 +311,66 @@
     </section>
 
 </div>
+
+{* ════════════════════════════════════════════════════════════
+   MODAL 1: PRODOTTO AGGIUNTO AL CARRELLO (utente loggato)
+   ════════════════════════════════════════════════════════════ *}
+<div class="minicart-modal" id="minicart-modal" aria-hidden="true">
+    <div class="modal-background"></div>
+
+    <div class="minicart-content">
+        <button id="close-minicart" class="modal-close-btn" type="button" aria-label="Chiudi pop-up">&times;</button>
+
+        <h3 class="minicart-success-title">Prodotto aggiunto al carrello!</h3>
+
+        <div class="minicart-product">
+            <img src="" alt="" class="minicart-img" id="minicart-img">
+            <div class="minicart-info">
+                <p class="minicart-nome" id="minicart-nome"></p>
+                <p class="minicart-prezzo" id="minicart-prezzo"></p>
+            </div>
+        </div>
+
+        <div class="minicart-actions">
+            <a href="{$base_url}/catalogo" class="button btn-minicart-continua">
+                <i class="ti ti-arrow-left"></i> Continua Shopping
+            </a>
+            <a href="{$base_url}/carrello" class="button btn-minicart-ordine">
+                <i class="ti ti-shopping-cart"></i> Completa Ordine
+            </a>
+        </div>
+    </div>
+</div>
+
+{* ════════════════════════════════════════════════════════════
+   MODAL 2: ACCESSO RICHIESTO (utente NON loggato)
+   ════════════════════════════════════════════════════════════ *}
+<div class="login-modal" id="login-modal" aria-hidden="true">
+    <div class="modal-background"></div>
+
+    <div class="login-modal-content">
+        <button id="close-login-modal" class="modal-close-btn" type="button" aria-label="Chiudi pop-up">&times;</button>
+
+        <div class="login-modal-icon">
+            <i class="ti ti-lock"></i>
+        </div>
+
+        <h3 class="login-modal-title">Accedi per continuare</h3>
+        <p class="login-modal-text">
+            Devi avere un account per aggiungere prodotti al carrello e procedere all'acquisto.
+        </p>
+
+        <div class="login-modal-actions">
+            <a href="{$base_url}/accedi" class="button btn-login-modal-accedi">
+                <i class="ti ti-login"></i> Accedi
+            </a>
+            <a href="{$base_url}/registrati" class="button btn-login-modal-registrati">
+                Crea un account
+            </a>
+        </div>
+    </div>
+</div>
+
 {/block}
 
 {block name="extra_js"}
@@ -327,4 +393,136 @@
         }, 5000);
     });
 </script>
+
+<script>
+
+    {literal}
+
+    function initHomeCartLogic() {
+
+    // ── ELEMENTI MODAL: AGGIUNTO AL CARRELLO ──
+    const minicartModal  = document.getElementById('minicart-modal');
+    const minicartImg     = document.getElementById('minicart-img');
+    const minicartNome    = document.getElementById('minicart-nome');
+    const minicartPrezzo  = document.getElementById('minicart-prezzo');
+
+    function apriMinicart(dati) {
+        if (!minicartModal) return;
+        minicartImg.src = dati.img;
+        minicartImg.alt = dati.nome;
+        minicartNome.textContent = dati.nome;
+        minicartPrezzo.textContent = '€' + parseFloat(dati.prezzo || 0).toFixed(2);
+
+        minicartModal.classList.add('is-active');
+        minicartModal.setAttribute('aria-hidden', 'false');
+        document.getElementById('close-minicart')?.focus();
+    }
+
+    function chiudiMinicart() {
+        if (!minicartModal) return;
+        minicartModal.classList.remove('is-active');
+        minicartModal.setAttribute('aria-hidden', 'true');
+    }
+
+    document.getElementById('close-minicart')?.addEventListener('click', function (e) {
+        e.preventDefault();
+        chiudiMinicart();
+    });
+
+    minicartModal?.querySelector('.modal-background')?.addEventListener('click', chiudiMinicart);
+
+    minicartModal?.querySelectorAll('.minicart-actions a').forEach(function (btn) {
+        btn.addEventListener('click', function (e) { e.stopPropagation(); });
+    });
+
+    // ── ELEMENTI MODAL: ACCESSO RICHIESTO ──
+    const loginModal = document.getElementById('login-modal');
+
+    function apriLoginModal() {
+        if (!loginModal) return;
+        loginModal.classList.add('is-active');
+        loginModal.setAttribute('aria-hidden', 'false');
+        document.getElementById('close-login-modal')?.focus();
+    }
+
+    function chiudiLoginModal() {
+        if (!loginModal) return;
+        loginModal.classList.remove('is-active');
+        loginModal.setAttribute('aria-hidden', 'true');
+    }
+
+    document.getElementById('close-login-modal')?.addEventListener('click', function (e) {
+        e.preventDefault();
+        chiudiLoginModal();
+    });
+
+    loginModal?.querySelector('.modal-background')?.addEventListener('click', chiudiLoginModal);
+
+    loginModal?.querySelectorAll('.login-modal-actions a').forEach(function (btn) {
+        btn.addEventListener('click', function (e) { e.stopPropagation(); });
+    });
+
+    // ── FUNZIONE AJAX: PROVA SEMPRE AD AGGIUNGERE AL CARRELLO ──
+    // Non decide nulla in anticipo: si fida solo della risposta di Control.
+    function aggiungiAlCarrello(idProdotto, quantita, dati) {
+        fetch('/carrello/aggiungi', {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/x-www-form-urlencoded',
+                'X-Requested-With': 'XMLHttpRequest'
+            },
+            body: `id_prodotto=${idProdotto}&quantita=${quantita}`
+        })
+        .then(res => res.json().then(data => ({ status: res.status, body: data })))
+        .then(({ status, body }) => {
+            if (status === 401 || body.error === 'auth_required') {
+                apriLoginModal();
+                return;
+            }
+
+            if (body.success) {
+                apriMinicart(dati);
+
+                const cartBadge = document.getElementById('cart-count');
+                if (cartBadge && body.cart_count !== undefined) {
+                    cartBadge.textContent = body.cart_count;
+                    cartBadge.style.display = body.cart_count > 0 ? 'inline' : 'none';
+                }
+            } else {
+                console.error('Errore carrello:', body.messaggio || 'errore generico');
+            }
+        })
+        .catch(err => {
+            console.error('Fetch carrello fallita:', err);
+        });
+    }
+
+    // ── CLICK SU TUTTI I BOTTONI "ACQUISTA" ──
+    document.querySelectorAll('.btn-cart').forEach(function (btn) {
+        btn.addEventListener('click', function (e) {
+            e.preventDefault();
+            e.stopPropagation(); // blocca la navigazione della card sottostante
+
+            const dati = {
+                id: this.dataset.id,
+                nome: this.dataset.nome,
+                img: this.dataset.img,
+                prezzo: this.dataset.prezzo
+            };
+
+            aggiungiAlCarrello(dati.id, 1, dati);
+        });
+    });
+}
+
+if (document.readyState === 'loading') {
+    document.addEventListener('DOMContentLoaded', initHomeCartLogic);
+} else {
+    initHomeCartLogic();
+}
+
+{/literal}
+
+</script>
+
 {/block}
