@@ -4,8 +4,8 @@ namespace TableCrown\Entity;
 use InvalidArgumentException;
 use Doctrine\ORM\Mapping as ORM;
 
-#[ORM\Entity]
-#[ORM\Table(name: "carrello_item")]
+//#[ORM\Entity]
+//#[ORM\Table(name: "carrello_item")]
 class ECarrelloItem {
 
     #[ORM\Id]

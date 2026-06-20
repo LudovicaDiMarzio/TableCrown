@@ -15,7 +15,7 @@ use TableCrown\Testing\Fixtures\DannoFixture;
 use TableCrown\Testing\Fixtures\RecensioneFixture;
 use TableCrown\Testing\Fixtures\SegnalazioneFixture;
 use TableCrown\Testing\Fixtures\ProvvedimentoFixture;
-use TableCrown\Testing\Fixtures\CarrelloFixture;
+use TableCrown\Testing\Fixtures\OrdineFixture;
 
 //creo l'entity manager
 $em = getEntityManager();
@@ -35,7 +35,8 @@ $loader->addFixture(new DannoFixture());
 $loader->addFixture(new RecensioneFixture());
 $loader->addFixture(new SegnalazioneFixture());
 $loader->addFixture(new ProvvedimentoFixture());
-$loader->addFixture(new CarrelloFixture());
+$loader->addFixture(new OrdineFixture());
+
 
 
 $purger = new ORMPurger($em);  // svuota il db prima di inserire

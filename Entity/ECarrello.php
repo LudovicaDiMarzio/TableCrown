@@ -6,8 +6,8 @@ use Doctrine\ORM\Mapping as ORM;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
 
-#[ORM\Entity]
-#[ORM\Table(name: "carrello")]
+//#[ORM\Entity]
+//#[ORM\Table(name: "carrello")]
 class ECarrello {
 
     #[ORM\Id]
