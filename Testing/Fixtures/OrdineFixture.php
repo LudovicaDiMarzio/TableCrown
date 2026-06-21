@@ -5,79 +5,107 @@ use Doctrine\Common\DataFixtures\AbstractFixture;
 use Doctrine\Common\DataFixtures\DependentFixtureInterface;
 use Doctrine\Persistence\ObjectManager;
 use Faker\Factory;
+use DateTime;
 
 use TableCrown\Entity\EOrdine;
+use TableCrown\Entity\EOrdineItem;
 use TableCrown\Entity\EUtente;
 use TableCrown\Entity\EProdotto;
-use TableCrown\Entity\EOrdineItem;
+use TableCrown\Entity\ECartaDiCredito;
+use TableCrown\Entity\EIndirizzo;
 
-//creiamo le fixtures per l'ordine che saranno collegate direttamente con il rispettivo item grazie al cascade presente nell'entity
 class OrdineFixture extends AbstractFixture implements DependentFixtureInterface
 {
-   
+    private const NUM_ORDINI = 10;
 
     public function getDependencies(): array
     {
-        // Ci servono gli utenti per comprare e i prodotti da mettere nell'ordine!
         return [
             UtenteFixture::class,
-            GiocoDaTavoloFixture::class, // (O la fixture generica dei prodotti se ne hai una)
+            GiocoDaTavoloFixture::class,
+            CartaDiCreditoFixture::class,  // ← serve per avere carte disponibili
+            IndirizzoFixture::class,        // ← serve per avere indirizzi disponibili
         ];
     }
-    private const NUM_ORDINI = 10;
 
     public function load(ObjectManager $manager): void
     {
         $faker = Factory::create('it_IT');
 
-        // Peschiamo tutti gli utenti e tutti i prodotti 
         $utenti = $manager->getRepository(EUtente::class)->findAll();
         $tuttiIProdotti = $manager->getRepository(EProdotto::class)->findAll();
 
-        // Facciamo fare un acquisto a NUM_ORDINI utenti casuali 
         for ($i = 0; $i < self::NUM_ORDINI; $i++) {
-            
-            $utenteAcquirente = $faker->randomElement($utenti);
-            
-            // creazione ordine base
-            $ordine = new EOrdine($utenteAcquirente);
 
-            // scegliamo un numero casuale di articoli da acquistare
+            $utenteAcquirente = $faker->randomElement($utenti);
+
+            // recuperiamo una carta che appartiene all'utente
+            $carteUtente = $manager->getRepository(ECartaDiCredito::class)->findBy([
+                'utente' => $utenteAcquirente
+            ]);
+
+            // se l'utente non ha carte, saltiamo
+            if (empty($carteUtente)) {
+                continue;
+            }
+
+            // recuperiamo un indirizzo che appartiene all'utente
+            $indirizziUtente = $manager->getRepository(EIndirizzo::class)->findBy([
+                'utente' => $utenteAcquirente
+            ]);
+
+            // se l'utente non ha indirizzi, saltiamo
+            if (empty($indirizziUtente)) {
+                continue;
+            }
+
+            $carta = $faker->randomElement($carteUtente);
+            $indirizzo = $faker->randomElement($indirizziUtente);
+
+            // creiamo l'ordine con utente, indirizzo e carta
+            $ordine = new EOrdine($utenteAcquirente, $indirizzo, $carta);
+
+            // aggiungiamo un numero casuale di prodotti all'ordine
             $numeroArticoli = $faker->numberBetween(1, 4);
+            $prodottiUsati = []; // teniamo traccia dei prodotti già aggiunti
 
             for ($j = 0; $j < $numeroArticoli; $j++) {
-                
+
                 $prodotto = $faker->randomElement($tuttiIProdotti);
+
+                // evitiamo di aggiungere lo stesso prodotto due volte
+                if (in_array($prodotto->getIdProdotto(), $prodottiUsati)) {
+                    continue;
+                }
+
+                $prodottiUsati[] = $prodotto->getIdProdotto();
                 $quantita = $faker->numberBetween(1, 3);
 
-                // creazione item ordine
-                $item = new EOrdineItem($quantita, $ordine, $prodotto);
-                
-                //aggiunta dell'item all'ordine
-                $ordine->addOrdineItem($item); 
+                // EOrdineItem chiama $ordine->addOrdineItem($this) nel costruttore
+                new EOrdineItem($quantita, $ordine, $prodotto);
             }
 
-            //creo stati diversi per alcuni ordini (L'ordine è nato IN_LAVORAZIONE.)
-            
-            //  Tiriamo un dado per cambiare lo stato ad alcuni di loro.
+            // cambiamo lo stato ad alcuni ordini
             $dadoStato = $faker->numberBetween(1, 100);
-            //non usiamo la funzione boolean di faker perchè andrebbe a rimpicciolire la percentuale di volta in volta
+
             if ($dadoStato <= 30) {
-                // 30% dei casi: L'ordine è stato spedito
+                // 30% — spedito
                 $ordine->spedisciOrdine();
-                
-            } elseif ($dadoStato > 30 && $dadoStato <= 60) {
-                // 30% dei casi: L'ordine è stato spedito E poi consegnato!
+
+            } elseif ($dadoStato <= 60) {
+                // 30% — spedito e consegnato
                 $ordine->spedisciOrdine();
                 $ordine->consegnaOrdine();
-                
+
             } elseif ($dadoStato > 90) {
-                // 10% dei casi: L'ordine è stato annullato subito
+                // 10% — annullato
                 $ordine->annulla();
             }
-            // Il restante 30% rimarrà IN_LAVORAZIONE (come appena nato)
+            // 30% rimane IN_LAVORAZIONE
 
-            // 5. Salviamo l'Ordine (gli item si salveranno a cascata!)
+            $this->addReference('ordine_' . $i, $ordine);
+
+            // gli item si salvano a cascata grazie al cascade: ["persist"] in EOrdine
             $manager->persist($ordine);
         }
 

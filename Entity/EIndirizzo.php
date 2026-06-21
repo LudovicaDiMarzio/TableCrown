@@ -38,18 +38,51 @@ class EIndirizzo {
     #[ORM\JoinColumn(name: "utente_id", referencedColumnName: "idpersona", nullable: false)]
     private EUtente $utente;
 
-    public function __construct(string $nome, string $via, string $citta, string $cap, string $provincia, string $nazione, string $nomeCitofono, EUtente $utente) {
-        $this->nome = trim($nome);
-        $this->via = trim($via);
-        $this->citta = trim($citta);
+    public function __construct(
+        string $nome,
+        string $via,
+        string $citta,
+        string $cap,
+        string $provincia,
+        string $nazione,
+        string $nomeCitofono,
+        EUtente $utente
+    ) {
+        $this->impostaNome($nome);
+        $this->impostaVia($via);
+        $this->impostaCitta($citta);
         $this->impostaCap($cap);
-        $this->provincia = trim($provincia);
-        $this->nazione = trim($nazione);
-        $this->nomeCitofono = trim($nomeCitofono);
+        $this->impostaProvincia($provincia);
+        $this->impostaNazione($nazione);
+        $this->impostaNomeCitofono($nomeCitofono);
         $this->utente = $utente;
     }
 
-    // Metodi di dominio
+    // ─── Metodi di dominio ───────────────────────────────────────────────
+    public function impostaNome(string $nome): void {
+        $nome = trim($nome);
+        if (empty($nome)) {
+            throw new InvalidArgumentException("Il nome dell'indirizzo non può essere vuoto.");
+        }
+        $this->nome = $nome;
+    }
+
+    public function impostaVia(string $via): void {
+        $via = trim($via);
+        if (empty($via)) {
+            throw new InvalidArgumentException("La via non può essere vuota.");
+        }
+        $this->via = $via;
+    }
+
+    public function impostaCitta(string $citta): void {
+        $citta = trim($citta);
+        if (empty($citta)) {
+            throw new InvalidArgumentException("La città non può essere vuota.");
+        }
+        $this->citta = $citta;
+    }
+
     public function impostaCap(string $cap): void {
         if (!preg_match('/^\d{5}$/', trim($cap))) {
             throw new InvalidArgumentException("CAP non valido. Deve essere composto da 5 cifre.");
@@ -57,65 +90,38 @@ class EIndirizzo {
         $this->cap = trim($cap);
     }
 
-    // SET methods
-    public function setNome(string $nome): void {
-        $this->nome = trim($nome);
+    public function impostaProvincia(string $provincia): void {
+        $provincia = trim($provincia);
+        if (empty($provincia)) {
+            throw new InvalidArgumentException("La provincia non può essere vuota.");
+        }
+        $this->provincia = $provincia;
     }
 
-    public function setVia(string $via): void {
-        $this->via = trim($via);
+    public function impostaNazione(string $nazione): void {
+        $nazione = trim($nazione);
+        if (empty($nazione)) {
+            throw new InvalidArgumentException("La nazione non può essere vuota.");
+        }
+        $this->nazione = $nazione;
     }
 
-    public function setCitta(string $citta): void {
-        $this->citta = trim($citta);
+    public function impostaNomeCitofono(string $nomeCitofono): void {
+        $nomeCitofono = trim($nomeCitofono);
+        if (empty($nomeCitofono)) {
+            throw new InvalidArgumentException("Il nome del citofono non può essere vuoto.");
+        }
+        $this->nomeCitofono = $nomeCitofono;
     }
 
-    public function setProvincia(string $provincia): void {
-        $this->provincia = trim($provincia);
-    }
-
-    public function setNazione(string $nazione): void {
-        $this->nazione = trim($nazione);
-    }
-
-    public function setNomeCitofono(string $nomeCitofono): void {
-        $this->nomeCitofono = trim($nomeCitofono);
-    }
-
-    // GET methods
-    public function getIdIndirizzo(): ?int {
-        return $this->idIndirizzo;
-    }
-
-    public function getNome(): string {
-        return $this->nome;
-    }
-
-    public function getVia(): string {
-        return $this->via;
-    }
-
-    public function getCitta(): string {
-        return $this->citta;
-    }
-
-    public function getCap(): string {
-        return $this->cap;
-    }
-
-    public function getProvincia(): string {
-        return $this->provincia;
-    }
-
-    public function getNazione(): string {
-        return $this->nazione;
-    }
-
-    public function getNomeCitofono(): string {
-        return $this->nomeCitofono;
-    }
-
-    public function getUtente(): EUtente {
-        return $this->utente;
-    }
+    // ─── Getter ─────────────────────────────────────────────────────────
+    public function getIdIndirizzo(): ?int    { return $this->idIndirizzo; }
+    public function getNome(): string         { return $this->nome; }
+    public function getVia(): string          { return $this->via; }
+    public function getCitta(): string        { return $this->citta; }
+    public function getCap(): string          { return $this->cap; }
+    public function getProvincia(): string    { return $this->provincia; }
+    public function getNazione(): string      { return $this->nazione; }
+    public function getNomeCitofono(): string { return $this->nomeCitofono; }
+    public function getUtente(): EUtente      { return $this->utente; }
 }
