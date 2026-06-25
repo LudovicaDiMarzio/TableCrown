@@ -2,17 +2,23 @@
 namespace TableCrown\Entity;
 
 use Doctrine\ORM\Mapping as ORM;
+use Doctrine\Common\Collections\ArrayCollection;
+use Doctrine\Common\Collections\Collection;
 use DateTime;
 use InvalidArgumentException;
 use Override;
 use TableCrown\Entity\Enumerativi\StatoEvento;
 use TableCrown\Entity\EPrezzo;
 use TableCrown\Entity\EProdotto;
+use TableCrown\Entity\ETorneo;
 
 #[ORM\Entity]
 #[ORM\Table(name: "challenge")]
 class EChallenge extends EEvento {
     // Proprietà specifiche per la challenge
+    #[ORM\OneToMany(targetEntity: ETorneo::class, mappedBy: "challenge", cascade: ["persist"])] //Non mettiamo remove, perché altrimenti in caso di cancellazione di una challenge verrebero eliminati anche tutti i relativi tornei.
+    private Collection $tornei; //tornei della challenge
+
     #[ORM\OneToOne(targetEntity: EPrezzo::class, cascade: ["persist", "remove"])]
     #[ORM\JoinColumn(name: "quota_iscrizione_id", referencedColumnName: "idPrezzo")]
     private EPrezzo $quotaIscrizione; //costo di ingresso alla challenge
@@ -30,8 +36,17 @@ class EChallenge extends EEvento {
     #[ORM\Column(type: "integer")]
     private int $punteggioTerzoClassificato; //punteggio del terzo classificato
 
-    public function __construct(string $nomeEvento, string $imgEvento, string $descrizioneEvento, DateTime $dataInizio, int $maxPartecipanti, EPrezzo $quotaIscrizione, EProdotto $premio, int $punteggioPrimoClassificato, int $punteggioSecondoClassificato, int $punteggioTerzoClassificato) {
+    public function __construct(string $nomeEvento, string $imgEvento, string $descrizioneEvento, DateTime $dataInizio, int $maxPartecipanti, EPrezzo $quotaIscrizione, EProdotto $premio, int $punteggioPrimoClassificato, int $punteggioSecondoClassificato, int $punteggioTerzoClassificato, array $tornei) {
         parent::__construct($nomeEvento, $imgEvento, $descrizioneEvento, $dataInizio, $maxPartecipanti);
+        $this->tornei = new ArrayCollection(); //inizializzo la collection vuota
+        $this->verificaTornei($tornei); //verifica che il numero di tornei sia valido
+        //Se la verifica non lancia eccezioni, popoliamo la collection in sicurezza
+        foreach ($tornei as $torneo) {
+            if ($torneo instanceof ETorneo) {
+                $this->tornei->add($torneo);
+                $torneo->impostaChallenge($this);
+            }
+        }
         $this->quotaIscrizione = $quotaIscrizione;
         $this->premio = $premio;
         $this->verificaPremio(); //verifica che il premio sia valido (che abbia lo stato disponibile)
@@ -61,8 +76,42 @@ class EChallenge extends EEvento {
     public function getPunteggioTerzoClassificato(): int {
         return $this->punteggioTerzoClassificato;
     }
+    
+    public function getTornei(): Collection {
+        return $this->tornei;
+    }
 
     //Metodi di dominio
+
+    /**
+     * Aggiunge un singolo torneo alla challenge 
+     */
+    public function aggiungiTorneo(ETorneo $torneo): void {
+        if ($this-tornei->count() >=7) {
+            throw new InvalidArgumentException("Impossibile aggiungere il torneo. Una challenge non può avere più di 7 tornei.");
+        }
+
+        if (!$this->tornei->contains($torneo)) {
+            $this->tornei->add($torneo);
+            $torneo->impostaChallenge($this);
+        }
+    }
+
+    /**
+     * Rimuove un singolo torneo dalla challenge
+     */
+    public function rimuoviTorneo(ETorneo $torneo): void {
+        if ($this->tornei->count() <= 3) {
+            throw new InvalidArgumentException("Impossibile rimuovere il torneo. Una challenge deve avere almeno 3 tornei.");
+        }
+
+        if ($this->tornei->contains($torneo)) {
+            $this->tornei->removeElement($torneo);
+            if ($torneo->getChallenge() === $this) {
+                $torneo->impostaChallenge(null);
+            }
+        }
+    }
 
     /**
      * Aggiorna il punteggio del primo classificato.
@@ -112,7 +161,7 @@ class EChallenge extends EEvento {
     /**
      * Verifica i vincoli sui punteggi dei classificati.
      */
-    public function verificaPunteggi(): void {
+    protected function verificaPunteggi(): void {
         if ($this->punteggioPrimoClassificato <= 0 || $this->punteggioSecondoClassificato < 0 || $this->punteggioTerzoClassificato < 0) {
             throw new InvalidArgumentException("I punteggi del primo, del secondo e del terzo classificato devono essere numeri interi positivi.");
         }
@@ -124,9 +173,19 @@ class EChallenge extends EEvento {
     /**
      * Verifica che il premio sia valido (che abbia lo stato disponibile).
      */
-    public function verificaPremio(): void {
+    protected function verificaPremio(): void {
         if (!$this->premio->isDisponibile()) {
             throw new InvalidArgumentException("Il premio non è disponibile.");
+        }
+    }
+
+    /**
+     * Verifica che il numero di tornei sia valido (minimo 3 e massimo 7).
+     */
+    protected function verificaTornei(array $tornei): void {
+        $conteggio = count($tornei);
+        if ($conteggio <= 2 || $conteggio >= 8) {
+            throw new InvalidArgumentException("Il numero di tornei deve essere compreso tra 3 e 7.");
         }
     }
 
