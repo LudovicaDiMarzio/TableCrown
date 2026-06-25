@@ -40,18 +40,23 @@ class ESegnalazione{
     #[ORM\JoinColumn(name: "utente_id", referencedColumnName: "idpersona", nullable: false)]
     private EUtente $utente; //l'utente che ha subito la segnalazione
 
-    public function __construct(  EMotivazione $motivazione,
-        EUtente $utente
-    ) {
+    //una segnalazione è relativa ad una recensione, ma una recensione può ricevere più segnalazioni (relazione molti a uno)
+    //può essere utile vedere tutte le segnalazioni legate ad una recensione, quindi rendiamo la relazione bidirezionale inserendo i riferimenti alle segnalazioni con una collection di segnalazioni in recensione
+    #[ORM\ManyToOne(targetEntity: ERecensione::class, inversedBy: "segnalazioni")]
+    #[ORM\JoinColumn(name: "recensione_id", referencedColumnName: "idRecensione", nullable: false)]
+    private ERecensione $recensione; //la recensione che ha subito la segnalazione
+
+    public function __construct(  EMotivazione $motivazione,ERecensione $recensione) 
+    {
         $this->datasegnalazione = new DateTime();  //la segnalazione avviene nel momento in cui viene creata la sua istanza
         $this->statosegnalazione = StatoSegnalazione::IN_ATTESA; // inizialmente sempre InAttesa
         $this->motivazione = $motivazione;
-        $this->utente = $utente;
+        $this->recensione = $recensione;
+        $this->utente = $recensione->getUtente();
         //manteniamo la coerenza nella relazione bidirezionale, aggiungendo la segnalazione alla collection segnalazione di EUtente, altrimenti la collection sarebbe aggiornata solo dopo il flush
         //il this come parametro sta a rappresentare che stiamo passando esattamente questa istanza della segnalazione
-        $utente->riceviSegnalazione($this); 
-        
-        }
+        $recensione->riceviSegnalazione($this);
+    }
 
     //metodi di dominio
     public function risolvi(): void
@@ -81,7 +86,11 @@ class ESegnalazione{
         return $this->motivazione;
     }
 
+    public function getRecensione(): ERecensione {
+        return $this->recensione;
+    }   
+
     public function getUtente(): EUtente {
         return $this->utente;
-    }   
+    }
 }

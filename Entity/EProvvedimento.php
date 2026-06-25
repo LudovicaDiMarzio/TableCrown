@@ -47,7 +47,7 @@ class EProvvedimento {
     #[ORM\JoinColumn(name: "utente_id", referencedColumnName: "idpersona", nullable: false)]
     private EUtente $utentesanzionato; //l'utente a cui è stato applicato il provvedimento 
 
-    public function __construct(TipoProvvedimento $tipoprovvedimento, EUtente $utentesanzionato, ?DateTime $datascadenza, ?ERecensione $recensionecollegata=null, ?ESegnalazione $segnalazionecollegata=null) {
+    public function __construct(TipoProvvedimento $tipoprovvedimento, EUtente $utentesanzionato, ?DateTime $datascadenza=null, ?ERecensione $recensionecollegata=null, ?ESegnalazione $segnalazionecollegata=null) {
         $this->tipoprovvedimento = $tipoprovvedimento;
         $this->dataemissione = new DateTime();
         $this->statoprovvedimento = StatoProvvedimento::ATTIVO; // inizialmente sempre attivo
