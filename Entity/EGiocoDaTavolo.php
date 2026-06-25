@@ -19,8 +19,10 @@ class EGiocoDaTavolo extends EProdotto {
     private array $componenti; //elenco dei componenti del gioco (carte, pedine, tabellone, ecc.)
 
     #[ORM\ManyToOne(targetEntity: EGiocoDaTavolo::class)]
-    #[ORM\JoinColumn(nullable: true)]
-    private ?EGiocoDaTavolo $giocoBase = null; //riferimento a un eventuale gioco da tavolo di cui è espansione
+
+    #[ORM\JoinColumn(name : "gioco_base_id", referencedColumnName: "idProdotto", nullable: true)]
+    private ?EGiocoDaTavolo $giocoBase=null; //riferimento a un eventuale gioco da tavolo di cui è espansione
+
 
     #[ORM\Column(type: "integer")]
     private int $numeroGiocatoriMin;
@@ -35,7 +37,7 @@ class EGiocoDaTavolo extends EProdotto {
     private int $durataMedia; //in minuti
 
     #[ORM\ManyToOne(targetEntity: EDanno::class)]
-    #[ORM\JoinColumn(nullable: true)]
+    #[ORM\JoinColumn(name: "danno_id", referencedColumnName: "iddanno", nullable: true)]
     private ?EDanno $danno; //danno del gioco, se presente
 
     #[ORM\Column(type: "text", nullable: true)]

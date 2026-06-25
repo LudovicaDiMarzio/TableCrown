@@ -14,9 +14,11 @@ use TableCrown\Entity\EProdotto;
 class EChallenge extends EEvento {
     // Proprietà specifiche per la challenge
     #[ORM\OneToOne(targetEntity: EPrezzo::class, cascade: ["persist", "remove"])]
+    #[ORM\JoinColumn(name: "quota_iscrizione_id", referencedColumnName: "idPrezzo")]
     private EPrezzo $quotaIscrizione; //costo di ingresso alla challenge
 
     #[ORM\ManyToOne(targetEntity: EProdotto::class)]
+    #[ORM\JoinColumn(name: "premio_id", referencedColumnName: "idProdotto", nullable: true)]
     private EProdotto $premio; //premio della challenge
 
     #[ORM\Column(type: "integer")]

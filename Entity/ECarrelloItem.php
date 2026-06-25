@@ -4,8 +4,8 @@ namespace TableCrown\Entity;
 use InvalidArgumentException;
 use Doctrine\ORM\Mapping as ORM;
 
-#[ORM\Entity]
-#[ORM\Table(name: "carrello_item")]
+//#[ORM\Entity]
+//#[ORM\Table(name: "carrello_item")]
 class ECarrelloItem {
 
     #[ORM\Id]
@@ -21,7 +21,7 @@ class ECarrelloItem {
     private ECarrello $carrello;
 
     #[ORM\ManyToOne(targetEntity: EProdotto::class)]
-    #[ORM\JoinColumn(name: "prodotto_id", referencedColumnName: "idprodotto", nullable: false)]
+    #[ORM\JoinColumn(name: "prodotto_id", referencedColumnName: "idProdotto", nullable: false)]
     private EProdotto $prodotto;
 
     public function __construct(int $quantita, ECarrello $carrello, EProdotto $prodotto) {

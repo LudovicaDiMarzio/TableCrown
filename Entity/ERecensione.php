@@ -5,6 +5,10 @@ use InvalidArgumentException;
 use DateTime;
 use Doctrine\ORM\Mapping as ORM;
 
+//Per creare relazione bidirezionale
+use Doctrine\Common\Collections\ArrayCollection;
+use Doctrine\Common\Collections\Collection;
+
 #[ORM\Entity]
 #[ORM\Table(name: "recensione")]
 class ERecensione {
@@ -23,19 +27,28 @@ class ERecensione {
     #[ORM\Column(type: "datetime")]
     private DateTime $data;
 
-    #[ORM\Column(type: "boolean")]
-    private bool $segnalazione;
-
-    #[ORM\ManyToOne(targetEntity: EUtente::class)]
+    #[ORM\ManyToOne(targetEntity: EUtente::class, inversedBy: "recensioni")]
     #[ORM\JoinColumn(name: "utente_id", referencedColumnName: "idpersona", nullable: false)]
     private EUtente $utente;
 
-    public function __construct(int $valutazione, string $testo, EUtente $utente) {
+    #[ORM\ManyToOne(targetEntity: EProdotto::class, inversedBy: "recensioni")]
+    #[ORM\JoinColumn(name: "prodotto_id", referencedColumnName: "idProdotto", nullable: false)]
+    private EProdotto $prodotto;
+
+    //crea la relazione bidirezionale con ESegnalazione, questo è una lista di segnalazioni legate all'utente esplicitato nella classe ESegnalazione
+    #[ORM\OneToMany(targetEntity: ESegnalazione::class, mappedBy: "recensione", cascade: ["persist"])]
+    private Collection $segnalazioni;
+
+
+    public function __construct(int $valutazione, string $testo, EUtente $utente, EProdotto $prodotto) {
         $this->impostaValutazione($valutazione);
         $this->impostaTesto($testo);
         $this->data = new DateTime();
-        $this->segnalazione = false;
         $this->utente = $utente;
+        $utente->riceviRecensione($this);
+        $this->prodotto = $prodotto;
+        $prodotto->addRecensione($this);
+        $this->segnalazioni = new ArrayCollection();
     }
 
     // Metodi di dominio
@@ -53,12 +66,18 @@ class ERecensione {
         $this->testo = trim($testo);
     }
 
-    public function segnala(): void {
-        $this->segnalazione = true;
+    //Aggiunge una nuova segnalazione allo storico di quelle ricevute da questa recensione.
+    public function riceviSegnalazione(ESegnalazione $nuovaSegnalazione): void {
+        
+        // Verifica che questa specifica segnalazione non sia già stata inserita nella lista
+        if (!$this->segnalazioni->contains($nuovaSegnalazione)) {
+            $this->segnalazioni->add($nuovaSegnalazione);
+        }
     }
 
-    public function rimuoviSegnalazione(): void {
-        $this->segnalazione = false;
+    public function isSegnalata(): bool {
+        // Restituisce TRUE se la lista delle vere segnalazioni NON è vuota
+        return !$this->segnalazioni->isEmpty();
     }
 
     // GET methods
@@ -78,11 +97,17 @@ class ERecensione {
         return $this->data;
     }
 
-    public function getSegnalazione(): bool {
-        return $this->segnalazione;
-    }
-
     public function getUtente(): EUtente {
         return $this->utente;
+    }
+
+    public function getProdotto(): EProdotto {
+        return $this->prodotto;
+    }
+
+    // Restituisce l'elenco (collection) di tutte le segnalazioni ricevute.
+    public function getSegnalazioni(): Collection 
+    {
+        return $this->segnalazioni;
     }
 }

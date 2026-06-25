@@ -14,12 +14,15 @@ use Override;
 class ETorneo extends EEvento {
     // Proprietà specifiche per il torneo
     #[ORM\OneToOne(targetEntity: EPrezzo::class, cascade: ["persist", "remove"])]
+    #[ORM\JoinColumn(name: "prezzo_id", referencedColumnName: "idPrezzo", nullable: true)]
     private EPrezzo $quotaIscrizione; //quota di iscrizione al torneo
 
     #[ORM\ManyToOne(targetEntity: EProdotto::class)]
+    #[ORM\JoinColumn(name: "premio_id", referencedColumnName: "idProdotto", nullable: true)]
     private EProdotto $premio; //premio del torneo
 
     #[ORM\ManyToOne(targetEntity: EProdotto::class)]
+    #[ORM\JoinColumn(name: "giocoTorneoid", referencedColumnName: "idProdotto", nullable: false)]
     private EProdotto $gioco; //gioco da tavolo su cui si svolge il torneo
     
 
