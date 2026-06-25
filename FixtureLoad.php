@@ -21,7 +21,7 @@ use TableCrown\Testing\Fixtures\OrdineFixture;
 
 
 //creo l'entity manager
-$em = getEntityManager();
+$em = getEntityManagerBoot();
 
 //cerca i file che estendono AbstractFixture li organizza nell'ordine corretto 
 $loader = new Loader();

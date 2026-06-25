@@ -32,7 +32,7 @@ use TableCrown\Entity\ESerata;
 use TableCrown\Entity\EWishlist;
 
 //creo l'entity manager sfruttando il codice di bootstrap.php
-$entityManager = getEntityManager();
+$entityManager = getEntityManagerBoot();
 
 // Gestisce gli enum come stringhe
 $platform = $entityManager->getConnection()->getDatabasePlatform();
