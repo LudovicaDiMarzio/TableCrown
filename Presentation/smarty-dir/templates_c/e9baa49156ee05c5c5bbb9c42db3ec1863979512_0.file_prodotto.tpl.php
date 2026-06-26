@@ -1,18 +1,18 @@
 <?php
-/* Smarty version 5.8.0, created on 2026-06-20 11:44:19
+/* Smarty version 5.8.0, created on 2026-06-26 16:08:54
   from 'file:prodotto.tpl' */
 
 /* @var \Smarty\Template $_smarty_tpl */
 if ($_smarty_tpl->getCompiled()->isFresh($_smarty_tpl, array (
   'version' => '5.8.0',
-  'unifunc' => 'content_6a3660f3e34c45_35643035',
+  'unifunc' => 'content_6a3e87f6447061_15732929',
   'has_nocache_code' => false,
   'file_dependency' => 
   array (
     'e9baa49156ee05c5c5bbb9c42db3ec1863979512' => 
     array (
       0 => 'prodotto.tpl',
-      1 => 1781796348,
+      1 => 1782482930,
       2 => 'file',
     ),
   ),
@@ -20,28 +20,30 @@ if ($_smarty_tpl->getCompiled()->isFresh($_smarty_tpl, array (
   array (
   ),
 ))) {
-function content_6a3660f3e34c45_35643035 (\Smarty\Template $_smarty_tpl) {
+function content_6a3e87f6447061_15732929 (\Smarty\Template $_smarty_tpl) {
 $_smarty_current_dir = 'C:\\Users\\damic\\Desktop\\uni\\APPUNTI\\anno3\\secondo_semenstre\\Pweb\\TableCrown\\Presentation\\smarty-dir\\templates';
 $_smarty_tpl->getInheritance()->init($_smarty_tpl, true);
 ?>
 
 
 <?php 
-$_smarty_tpl->getInheritance()->instanceBlock($_smarty_tpl, 'Block_9971719196a3660f3d8bfc0_54500357', "extra_css");
+$_smarty_tpl->getInheritance()->instanceBlock($_smarty_tpl, 'Block_18079011496a3e87f63d2127_39663965', "extra_css");
 ?>
 
 
 <?php 
-$_smarty_tpl->getInheritance()->instanceBlock($_smarty_tpl, 'Block_21413690896a3660f3d92259_97574223', "content");
+$_smarty_tpl->getInheritance()->instanceBlock($_smarty_tpl, 'Block_18930523776a3e87f63d67a5_50760365', "content");
 ?>
 
 
 <?php 
-$_smarty_tpl->getInheritance()->instanceBlock($_smarty_tpl, 'Block_5485913946a3660f3e33e28_25298756', "extra_js");
-$_smarty_tpl->getInheritance()->endChild($_smarty_tpl, "common/layout.tpl", $_smarty_current_dir);
+$_smarty_tpl->getInheritance()->instanceBlock($_smarty_tpl, 'Block_15722969096a3e87f6446326_60794966', "extra_js");
+?>
+
+<?php $_smarty_tpl->getInheritance()->endChild($_smarty_tpl, "common/layout.tpl", $_smarty_current_dir);
 }
 /* {block "extra_css"} */
-class Block_9971719196a3660f3d8bfc0_54500357 extends \Smarty\Runtime\Block
+class Block_18079011496a3e87f63d2127_39663965 extends \Smarty\Runtime\Block
 {
 public function callBlock(\Smarty\Template $_smarty_tpl) {
 $_smarty_current_dir = 'C:\\Users\\damic\\Desktop\\uni\\APPUNTI\\anno3\\secondo_semenstre\\Pweb\\TableCrown\\Presentation\\smarty-dir\\templates';
@@ -54,7 +56,7 @@ $_smarty_current_dir = 'C:\\Users\\damic\\Desktop\\uni\\APPUNTI\\anno3\\secondo_
 }
 /* {/block "extra_css"} */
 /* {block "content"} */
-class Block_21413690896a3660f3d92259_97574223 extends \Smarty\Runtime\Block
+class Block_18930523776a3e87f63d67a5_50760365 extends \Smarty\Runtime\Block
 {
 public function callBlock(\Smarty\Template $_smarty_tpl) {
 $_smarty_current_dir = 'C:\\Users\\damic\\Desktop\\uni\\APPUNTI\\anno3\\secondo_semenstre\\Pweb\\TableCrown\\Presentation\\smarty-dir\\templates';
@@ -70,7 +72,7 @@ $_smarty_current_dir = 'C:\\Users\\damic\\Desktop\\uni\\APPUNTI\\anno3\\secondo_
 /">Home</a></li>
                 <li><a href="<?php echo $_smarty_tpl->getValue('base_url');?>
 /catalogo">Catalogo</a></li>
-                <li class="is-active"><span><?php echo htmlspecialchars((string)$_smarty_tpl->getValue('prodotto')->getNomeProdotto(), ENT_QUOTES, 'UTF-8', true);?>
+                <li class="is-active"><span><?php echo htmlspecialchars((string)$_smarty_tpl->getValue('prodotto')['nome'], ENT_QUOTES, 'UTF-8', true);?>
 </span></li>
             </ul>
         </nav>
@@ -85,10 +87,9 @@ $_smarty_current_dir = 'C:\\Users\\damic\\Desktop\\uni\\APPUNTI\\anno3\\secondo_
                     </button>
 
                     <div class="gallery-main" id="gallery-main">
-                        <?php $_smarty_tpl->assign('immagini', $_smarty_tpl->getValue('prodotto')->getImmagini(), false, NULL);?>
-                        <?php if ((true && ($_smarty_tpl->hasVariable('immagini') && null !== ($_smarty_tpl->getValue('immagini') ?? null))) && $_smarty_tpl->getSmarty()->getModifierCallback('count')($_smarty_tpl->getValue('immagini')) > 0) {?>
+                        <?php if ((true && (true && null !== ($_smarty_tpl->getValue('prodotto')['immagini'] ?? null))) && $_smarty_tpl->getSmarty()->getModifierCallback('count')($_smarty_tpl->getValue('prodotto')['immagini']) > 0) {?>
                             <?php
-$_from = $_smarty_tpl->getSmarty()->getRuntime('Foreach')->init($_smarty_tpl, $_smarty_tpl->getValue('immagini'), 'img', false, 'key');
+$_from = $_smarty_tpl->getSmarty()->getRuntime('Foreach')->init($_smarty_tpl, $_smarty_tpl->getValue('prodotto')['immagini'], 'img', false, 'key');
 $foreach0DoElse = true;
 foreach ($_from ?? [] as $_smarty_tpl->getVariable('key')->value => $_smarty_tpl->getVariable('img')->value) {
 $foreach0DoElse = false;
@@ -96,7 +97,7 @@ $foreach0DoElse = false;
                                 <img src="<?php echo $_smarty_tpl->getValue('base_url');?>
 /img/prodotti/<?php echo htmlspecialchars((string)$_smarty_tpl->getValue('img'), ENT_QUOTES, 'UTF-8', true);?>
 "
-                                     alt="<?php echo htmlspecialchars((string)$_smarty_tpl->getValue('prodotto')->getNomeProdotto(), ENT_QUOTES, 'UTF-8', true);?>
+                                     alt="<?php echo htmlspecialchars((string)$_smarty_tpl->getValue('prodotto')['nome'], ENT_QUOTES, 'UTF-8', true);?>
  - immagine <?php echo $_smarty_tpl->getValue('key')+1;?>
 "
                                      class="gallery-main-img<?php if ($_smarty_tpl->getValue('key') == 0) {?> is-active<?php }?>"
@@ -107,9 +108,9 @@ $foreach0DoElse = false;
 $_smarty_tpl->getSmarty()->getRuntime('Foreach')->restore($_smarty_tpl, 1);?>
                         <?php } else { ?>
                             <img src="<?php echo $_smarty_tpl->getValue('base_url');?>
-/img/prodotti/<?php echo htmlspecialchars((string)$_smarty_tpl->getValue('prodotto')->getImgProdotto(), ENT_QUOTES, 'UTF-8', true);?>
+/img/prodotti/<?php echo htmlspecialchars((string)$_smarty_tpl->getValue('prodotto')['immagine'], ENT_QUOTES, 'UTF-8', true);?>
 "
-                                 alt="<?php echo htmlspecialchars((string)$_smarty_tpl->getValue('prodotto')->getNomeProdotto(), ENT_QUOTES, 'UTF-8', true);?>
+                                 alt="<?php echo htmlspecialchars((string)$_smarty_tpl->getValue('prodotto')['nome'], ENT_QUOTES, 'UTF-8', true);?>
 "
                                  class="gallery-main-img is-active"
                                  data-index="0">
@@ -121,10 +122,10 @@ $_smarty_tpl->getSmarty()->getRuntime('Foreach')->restore($_smarty_tpl, 1);?>
                     </button>
                 </div>
 
-                                <?php if ((true && ($_smarty_tpl->hasVariable('immagini') && null !== ($_smarty_tpl->getValue('immagini') ?? null))) && $_smarty_tpl->getSmarty()->getModifierCallback('count')($_smarty_tpl->getValue('immagini')) > 1) {?>
+                                <?php if ((true && (true && null !== ($_smarty_tpl->getValue('prodotto')['immagini'] ?? null))) && $_smarty_tpl->getSmarty()->getModifierCallback('count')($_smarty_tpl->getValue('prodotto')['immagini']) > 1) {?>
                     <div class="gallery-thumbs" id="gallery-thumbs">
                         <?php
-$_from = $_smarty_tpl->getSmarty()->getRuntime('Foreach')->init($_smarty_tpl, $_smarty_tpl->getValue('immagini'), 'img', false, 'key');
+$_from = $_smarty_tpl->getSmarty()->getRuntime('Foreach')->init($_smarty_tpl, $_smarty_tpl->getValue('prodotto')['immagini'], 'img', false, 'key');
 $foreach1DoElse = true;
 foreach ($_from ?? [] as $_smarty_tpl->getVariable('key')->value => $_smarty_tpl->getVariable('img')->value) {
 $foreach1DoElse = false;
@@ -147,26 +148,25 @@ $_smarty_tpl->getSmarty()->getRuntime('Foreach')->restore($_smarty_tpl, 1);?>
 
                         <div class="prodotto-info">
 
-                                <?php if ($_smarty_tpl->getValue('prodotto')->getDisponibilitaProdotto() == 'esaurito') {?>
+                                <?php if ($_smarty_tpl->getValue('prodotto')['disponibilita'] == 'esaurito') {?>
                     <span class="prodotto-badge prodotto-badge-esaurito">Esaurito</span>
-                <?php } elseif ($_smarty_tpl->getValue('prodotto')->getDisponibilitaProdotto() == 'annunciato') {?>
+                <?php } elseif ($_smarty_tpl->getValue('prodotto')['disponibilita'] == 'annunciato') {?>
                     <span class="prodotto-badge prodotto-badge-annunciato">Annunciato</span>
-                <?php } elseif ($_smarty_tpl->getValue('prodotto')->getDisponibilitaProdotto() == 'Non disponibile') {?>
+                <?php } elseif ($_smarty_tpl->getValue('prodotto')['disponibilita'] == 'non disponibile') {?>
                     <span class="prodotto-badge prodotto-badge-non-disponibile">Non disponibile</span>
-                <?php } elseif ($_smarty_tpl->getValue('prodotto')->getDisponibilitaProdotto() == 'In arrivo') {?>
+                <?php } elseif ($_smarty_tpl->getValue('prodotto')['disponibilita'] == 'in arrivo') {?>
                     <span class="prodotto-badge prodotto-badge-in-arrivo">In arrivo</span>
                 <?php } else { ?>
                     <span class="prodotto-badge prodotto-badge-disponibile">Disponibile</span>
                 <?php }?>
 
-                <h1 class="prodotto-nome"><?php echo htmlspecialchars((string)$_smarty_tpl->getValue('prodotto')->getNomeProdotto(), ENT_QUOTES, 'UTF-8', true);?>
+                <h1 class="prodotto-nome"><?php echo htmlspecialchars((string)$_smarty_tpl->getValue('prodotto')['nome'], ENT_QUOTES, 'UTF-8', true);?>
 </h1>
 
                                 <div class="prodotto-rating">
-                    <?php $_smarty_tpl->assign('media', $_smarty_tpl->getValue('prodotto')->getValutazioneMedia(), false, NULL);?>
-                    <?php $_smarty_tpl->assign('stelle', array(1,2,3,4,5), false, NULL);?>
+                    <?php $_smarty_tpl->assign('media', $_smarty_tpl->getValue('prodotto')['valutazione_media'], false, NULL);?>
                     <?php
-$_from = $_smarty_tpl->getSmarty()->getRuntime('Foreach')->init($_smarty_tpl, $_smarty_tpl->getValue('stelle'), 's');
+$_from = $_smarty_tpl->getSmarty()->getRuntime('Foreach')->init($_smarty_tpl, array(1,2,3,4,5), 's');
 $foreach2DoElse = true;
 foreach ($_from ?? [] as $_smarty_tpl->getVariable('s')->value) {
 $foreach2DoElse = false;
@@ -187,58 +187,55 @@ $_smarty_tpl->getSmarty()->getRuntime('Foreach')->restore($_smarty_tpl, 1);?>
                 </div>
 
                                 <div class="prodotto-meta">
-                    <?php if ($_smarty_tpl->getValue('prodotto')->getGiocatoriMin() && $_smarty_tpl->getValue('prodotto')->getGiocatoriMax()) {?>
+                    <?php if ((true && (true && null !== ($_smarty_tpl->getValue('prodotto')['giocatori_min'] ?? null))) && (true && (true && null !== ($_smarty_tpl->getValue('prodotto')['giocatori_max'] ?? null)))) {?>
                         <span class="prodotto-meta-item">
                             <i class="ti ti-users"></i>
-                            <?php echo $_smarty_tpl->getValue('prodotto')->getGiocatoriMin();?>
-–<?php echo $_smarty_tpl->getValue('prodotto')->getGiocatoriMax();?>
+                            <?php echo $_smarty_tpl->getValue('prodotto')['giocatori_min'];?>
+–<?php echo $_smarty_tpl->getValue('prodotto')['giocatori_max'];?>
  giocatori
                         </span>
                     <?php }?>
-                    <?php if ($_smarty_tpl->getValue('prodotto')->getEtaMin()) {?>
+                    <?php if ((true && (true && null !== ($_smarty_tpl->getValue('prodotto')['eta_min'] ?? null)))) {?>
                         <span class="prodotto-meta-item">
                             <i class="ti ti-baby-carriage"></i>
-                            <?php echo $_smarty_tpl->getValue('prodotto')->getEtaMin();?>
+                            <?php echo $_smarty_tpl->getValue('prodotto')['eta_min'];?>
 + anni
                         </span>
                     <?php }?>
-                    <?php if ($_smarty_tpl->getValue('prodotto')->getDurata()) {?>
+                    <?php if ((true && (true && null !== ($_smarty_tpl->getValue('prodotto')['durata'] ?? null)))) {?>
                         <span class="prodotto-meta-item">
                             <i class="ti ti-clock"></i>
-                            <?php echo $_smarty_tpl->getValue('prodotto')->getDurata();?>
+                            <?php echo $_smarty_tpl->getValue('prodotto')['durata'];?>
  min
                         </span>
                     <?php }?>
-                    <?php if ($_smarty_tpl->getValue('prodotto')->getDifficolta()) {?>
+                    <?php if ((true && (true && null !== ($_smarty_tpl->getValue('prodotto')['difficolta'] ?? null)))) {?>
                         <span class="prodotto-meta-item">
                             <i class="ti ti-flame"></i>
-                            <?php echo htmlspecialchars((string)$_smarty_tpl->getValue('prodotto')->getDifficolta(), ENT_QUOTES, 'UTF-8', true);?>
+                            <?php echo htmlspecialchars((string)$_smarty_tpl->getValue('prodotto')['difficolta'], ENT_QUOTES, 'UTF-8', true);?>
 
                         </span>
                     <?php }?>
-                    <?php if ($_smarty_tpl->getValue('prodotto')->getLingua()) {?>
+                    <?php if ((true && (true && null !== ($_smarty_tpl->getValue('prodotto')['lingua'] ?? null)))) {?>
                         <span class="prodotto-meta-item">
                             <i class="ti ti-language"></i>
-                            <?php echo htmlspecialchars((string)$_smarty_tpl->getValue('prodotto')->getLingua(), ENT_QUOTES, 'UTF-8', true);?>
+                            <?php echo htmlspecialchars((string)$_smarty_tpl->getValue('prodotto')['lingua'], ENT_QUOTES, 'UTF-8', true);?>
 
                         </span>
                     <?php }?>
                 </div>
 
                                 <div class="prodotto-prezzo-wrapper">
-                    <?php $_smarty_tpl->assign('prezzo', $_smarty_tpl->getValue('prodotto')->getPrezzo(), false, NULL);?>
-                    <?php if ((true && ($_smarty_tpl->hasVariable('prezzo') && null !== ($_smarty_tpl->getValue('prezzo') ?? null)))) {?>
-                        <?php if ($_smarty_tpl->getValue('prezzo')->hasSconto()) {?>
-                            <span class="prodotto-prezzo">€<?php echo $_smarty_tpl->getSmarty()->getModifierCallback('number_format')($_smarty_tpl->getValue('prezzo')->calcolaPrezzoScontato(),2);?>
+                    <?php if ($_smarty_tpl->getValue('prodotto')['sconto']) {?>
+                        <span class="prodotto-prezzo">€<?php echo $_smarty_tpl->getSmarty()->getModifierCallback('number_format')($_smarty_tpl->getValue('prodotto')['prezzo_scontato'],2);?>
 </span>
-                            <span class="prodotto-prezzo-old">€<?php echo $_smarty_tpl->getSmarty()->getModifierCallback('number_format')($_smarty_tpl->getValue('prezzo')->getValore(),2);?>
+                        <span class="prodotto-prezzo-old">€<?php echo $_smarty_tpl->getSmarty()->getModifierCallback('number_format')($_smarty_tpl->getValue('prodotto')['prezzo'],2);?>
 </span>
-                            <span class="prodotto-badge-sconto">-<?php echo $_smarty_tpl->getValue('prezzo')->getSconto();?>
+                        <span class="prodotto-badge-sconto">-<?php echo $_smarty_tpl->getValue('prodotto')['percentuale_sconto'];?>
 %</span>
-                        <?php } else { ?>
-                            <span class="prodotto-prezzo">€<?php echo $_smarty_tpl->getSmarty()->getModifierCallback('number_format')($_smarty_tpl->getValue('prezzo')->getValore(),2);?>
+                    <?php } elseif ((true && (true && null !== ($_smarty_tpl->getValue('prodotto')['prezzo'] ?? null)))) {?>
+                        <span class="prodotto-prezzo">€<?php echo $_smarty_tpl->getSmarty()->getModifierCallback('number_format')($_smarty_tpl->getValue('prodotto')['prezzo'],2);?>
 </span>
-                        <?php }?>
                     <?php } else { ?>
                         <span class="prodotto-prezzo-nd">Prezzo N/D</span>
                     <?php }?>
@@ -249,16 +246,16 @@ $_smarty_tpl->getSmarty()->getRuntime('Foreach')->restore($_smarty_tpl, 1);?>
                         <div class="prodotto-acquisto-box">
 
                                 <div class="acquisto-disponibilita">
-                    <?php if ($_smarty_tpl->getValue('prodotto')->getDisponibilitaProdotto() == 'disponibile') {?>
+                    <?php if ($_smarty_tpl->getValue('prodotto')['disponibilita'] == 'disponibile') {?>
                         <i class="ti ti-circle-check"></i>
                         <span>Disponibile</span>
-                    <?php } elseif ($_smarty_tpl->getValue('prodotto')->getDisponibilitaProdotto() == 'esaurito') {?>
+                    <?php } elseif ($_smarty_tpl->getValue('prodotto')['disponibilita'] == 'esaurito') {?>
                         <i class="ti ti-circle-x"></i>
                         <span>Esaurito</span>
-                    <?php } elseif ($_smarty_tpl->getValue('prodotto')->getDisponibilitaProdotto() == 'Non disponibile') {?>
+                    <?php } elseif ($_smarty_tpl->getValue('prodotto')['disponibilita'] == 'non disponibile') {?>
                         <i class="ti ti-circle-x"></i>
                         <span>Non disponibile</span>
-                    <?php } elseif ($_smarty_tpl->getValue('prodotto')->getDisponibilitaProdotto() == 'In arrivo') {?>
+                    <?php } elseif ($_smarty_tpl->getValue('prodotto')['disponibilita'] == 'in arrivo') {?>
                         <i class="ti ti-clock"></i>
                         <span>In arrivo</span>
                     <?php } else { ?>
@@ -287,34 +284,32 @@ $_smarty_tpl->getSmarty()->getRuntime('Foreach')->restore($_smarty_tpl, 1);?>
                 </div>
 
                                 <div class="acquisto-prezzo-tot">
-                    <?php if ((true && ($_smarty_tpl->hasVariable('prezzo') && null !== ($_smarty_tpl->getValue('prezzo') ?? null)))) {?>
-                        <?php if ($_smarty_tpl->getValue('prezzo')->hasSconto()) {?>
-                            <span class="prezzo-tot-label">Totale:</span>
-                            <span class="prezzo-tot-value" id="prezzo-tot" data-unit="<?php echo $_smarty_tpl->getValue('prezzo')->calcolaPrezzoScontato();?>
+                    <?php if ($_smarty_tpl->getValue('prodotto')['sconto']) {?>
+                        <span class="prezzo-tot-label">Totale:</span>
+                        <span class="prezzo-tot-value" id="prezzo-tot" data-unit="<?php echo $_smarty_tpl->getValue('prodotto')['prezzo_scontato'];?>
 ">
-                                €<?php echo $_smarty_tpl->getSmarty()->getModifierCallback('number_format')($_smarty_tpl->getValue('prezzo')->calcolaPrezzoScontato(),2);?>
+                            €<?php echo $_smarty_tpl->getSmarty()->getModifierCallback('number_format')($_smarty_tpl->getValue('prodotto')['prezzo_scontato'],2);?>
 
-                            </span>
-                        <?php } else { ?>
-                            <span class="prezzo-tot-label">Totale:</span>
-                            <span class="prezzo-tot-value" id="prezzo-tot" data-unit="<?php echo $_smarty_tpl->getValue('prezzo')->getValore();?>
+                        </span>
+                    <?php } elseif ((true && (true && null !== ($_smarty_tpl->getValue('prodotto')['prezzo'] ?? null)))) {?>
+                        <span class="prezzo-tot-label">Totale:</span>
+                        <span class="prezzo-tot-value" id="prezzo-tot" data-unit="<?php echo $_smarty_tpl->getValue('prodotto')['prezzo'];?>
 ">
-                                €<?php echo $_smarty_tpl->getSmarty()->getModifierCallback('number_format')($_smarty_tpl->getValue('prezzo')->getValore(),2);?>
+                            €<?php echo $_smarty_tpl->getSmarty()->getModifierCallback('number_format')($_smarty_tpl->getValue('prodotto')['prezzo'],2);?>
 
-                            </span>
-                        <?php }?>
+                        </span>
                     <?php }?>
                 </div>
 
-                                <?php if ($_smarty_tpl->getValue('prodotto')->getDisponibilitaProdotto() != 'esaurito') {?>
+                                <?php if ($_smarty_tpl->getValue('prodotto')['disponibilita'] != 'esaurito') {?>
                     <a href="<?php echo $_smarty_tpl->getValue('base_url');?>
-/carrello/aggiungi/<?php echo $_smarty_tpl->getValue('prodotto')->getIdProdotto();?>
+/carrello/aggiungi/<?php echo $_smarty_tpl->getValue('prodotto')['id'];?>
 "
-                        class="button btn-add-cart-prodotto"
-                        id="btn-add-cart"
-                        data-id="<?php echo $_smarty_tpl->getValue('prodotto')->getIdProdotto();?>
+                       class="button btn-add-cart-prodotto"
+                       id="btn-add-cart"
+                       data-id="<?php echo $_smarty_tpl->getValue('prodotto')['id'];?>
 "
-                        aria-label="Aggiungi al carrello">
+                       aria-label="Aggiungi al carrello">
                         <i class="ti ti-shopping-cart"></i> Aggiungi al Carrello
                     </a>
                 <?php } else { ?>
@@ -325,7 +320,7 @@ $_smarty_tpl->getSmarty()->getRuntime('Foreach')->restore($_smarty_tpl, 1);?>
 
                                 <button class="btn-wishlist" id="btn-wishlist" type="button"
                         data-url="<?php echo $_smarty_tpl->getValue('base_url');?>
-/wishlist/aggiungi/<?php echo $_smarty_tpl->getValue('prodotto')->getIdProdotto();?>
+/wishlist/aggiungi/<?php echo $_smarty_tpl->getValue('prodotto')['id'];?>
 "
                         aria-label="Aggiungi alla wishlist">
                     <i class="ti ti-heart" id="wishlist-icon"></i> Wishlist
@@ -340,17 +335,17 @@ $_smarty_tpl->getSmarty()->getRuntime('Foreach')->restore($_smarty_tpl, 1);?>
             <div class="prodotto-descrizione">
                 <h2 class="prodotto-section-title">Descrizione</h2>
                 <div class="prodotto-descrizione-testo">
-                    <?php echo nl2br((string) (($tmp = $_smarty_tpl->getValue('prodotto')->getDescrizione() ?? null)===null||$tmp==='' ? 'Descrizione non disponibile.' ?? null : $tmp), (bool) 1);?>
+                    <?php echo nl2br((string) (($tmp = $_smarty_tpl->getValue('prodotto')['descrizione'] ?? null)===null||$tmp==='' ? 'Descrizione non disponibile.' ?? null : $tmp), (bool) 1);?>
 
                 </div>
             </div>
 
-            <?php if ($_smarty_tpl->getValue('prodotto')->getComponenti()) {?>
+            <?php if ((true && (true && null !== ($_smarty_tpl->getValue('prodotto')['componenti'] ?? null))) && $_smarty_tpl->getSmarty()->getModifierCallback('count')($_smarty_tpl->getValue('prodotto')['componenti']) > 0) {?>
                 <div class="prodotto-componenti">
                     <h2 class="prodotto-section-title">Componenti</h2>
                     <ul class="componenti-list">
                         <?php
-$_from = $_smarty_tpl->getSmarty()->getRuntime('Foreach')->init($_smarty_tpl, $_smarty_tpl->getValue('prodotto')->getComponenti(), 'comp');
+$_from = $_smarty_tpl->getSmarty()->getRuntime('Foreach')->init($_smarty_tpl, $_smarty_tpl->getValue('prodotto')['componenti'], 'comp');
 $foreach3DoElse = true;
 foreach ($_from ?? [] as $_smarty_tpl->getVariable('comp')->value) {
 $foreach3DoElse = false;
@@ -383,24 +378,23 @@ $foreach4DoElse = false;
 ?>
                             <div class="correlato-card">
                                 <a href="<?php echo $_smarty_tpl->getValue('base_url');?>
-/prodotto/<?php echo $_smarty_tpl->getValue('correlato')->getIdProdotto();?>
+/prodotto/<?php echo $_smarty_tpl->getValue('correlato')['id'];?>
 " class="correlato-card-link">
                                     <div class="correlato-image-wrapper">
                                         <img src="<?php echo $_smarty_tpl->getValue('base_url');?>
-/img/prodotti/<?php echo htmlspecialchars((string)$_smarty_tpl->getValue('correlato')->getImgProdotto(), ENT_QUOTES, 'UTF-8', true);?>
+/img/prodotti/<?php echo htmlspecialchars((string)$_smarty_tpl->getValue('correlato')['immagine'], ENT_QUOTES, 'UTF-8', true);?>
 "
-                                             alt="<?php echo htmlspecialchars((string)$_smarty_tpl->getValue('correlato')->getNomeProdotto(), ENT_QUOTES, 'UTF-8', true);?>
+                                             alt="<?php echo htmlspecialchars((string)$_smarty_tpl->getValue('correlato')['nome'], ENT_QUOTES, 'UTF-8', true);?>
 "
                                              class="correlato-image">
                                     </div>
                                     <div class="correlato-info">
-                                        <h3 class="correlato-nome"><?php echo htmlspecialchars((string)$_smarty_tpl->getValue('correlato')->getNomeProdotto(), ENT_QUOTES, 'UTF-8', true);?>
+                                        <h3 class="correlato-nome"><?php echo htmlspecialchars((string)$_smarty_tpl->getValue('correlato')['nome'], ENT_QUOTES, 'UTF-8', true);?>
 </h3>
                                         <div class="correlato-rating">
-                                            <?php $_smarty_tpl->assign('cMedia', $_smarty_tpl->getValue('correlato')->getValutazioneMedia(), false, NULL);?>
-                                            <?php $_smarty_tpl->assign('stelle', array(1,2,3,4,5), false, NULL);?>
+                                            <?php $_smarty_tpl->assign('cMedia', $_smarty_tpl->getValue('correlato')['valutazione_media'], false, NULL);?>
                                             <?php
-$_from = $_smarty_tpl->getSmarty()->getRuntime('Foreach')->init($_smarty_tpl, $_smarty_tpl->getValue('stelle'), 's');
+$_from = $_smarty_tpl->getSmarty()->getRuntime('Foreach')->init($_smarty_tpl, array(1,2,3,4,5), 's');
 $foreach5DoElse = true;
 foreach ($_from ?? [] as $_smarty_tpl->getVariable('s')->value) {
 $foreach5DoElse = false;
@@ -417,17 +411,14 @@ $foreach5DoElse = false;
 $_smarty_tpl->getSmarty()->getRuntime('Foreach')->restore($_smarty_tpl, 1);?>
                                         </div>
                                         <div class="correlato-prezzo">
-                                            <?php $_smarty_tpl->assign('cPrezzo', $_smarty_tpl->getValue('correlato')->getPrezzo(), false, NULL);?>
-                                            <?php if ((true && ($_smarty_tpl->hasVariable('cPrezzo') && null !== ($_smarty_tpl->getValue('cPrezzo') ?? null)))) {?>
-                                                <?php if ($_smarty_tpl->getValue('cPrezzo')->hasSconto()) {?>
-                                                    <span class="correlato-prezzo-scontato">€<?php echo $_smarty_tpl->getSmarty()->getModifierCallback('number_format')($_smarty_tpl->getValue('cPrezzo')->calcolaPrezzoScontato(),2);?>
+                                            <?php if ($_smarty_tpl->getValue('correlato')['sconto']) {?>
+                                                <span class="correlato-prezzo-scontato">€<?php echo $_smarty_tpl->getSmarty()->getModifierCallback('number_format')($_smarty_tpl->getValue('correlato')['prezzo_scontato'],2);?>
 </span>
-                                                    <span class="correlato-prezzo-old">€<?php echo $_smarty_tpl->getSmarty()->getModifierCallback('number_format')($_smarty_tpl->getValue('cPrezzo')->getValore(),2);?>
+                                                <span class="correlato-prezzo-old">€<?php echo $_smarty_tpl->getSmarty()->getModifierCallback('number_format')($_smarty_tpl->getValue('correlato')['prezzo'],2);?>
 </span>
-                                                <?php } else { ?>
-                                                    <span>€<?php echo $_smarty_tpl->getSmarty()->getModifierCallback('number_format')($_smarty_tpl->getValue('cPrezzo')->getValore(),2);?>
+                                            <?php } elseif ((true && (true && null !== ($_smarty_tpl->getValue('correlato')['prezzo'] ?? null)))) {?>
+                                                <span>€<?php echo $_smarty_tpl->getSmarty()->getModifierCallback('number_format')($_smarty_tpl->getValue('correlato')['prezzo'],2);?>
 </span>
-                                                <?php }?>
                                             <?php } else { ?>
                                                 <span class="prezzo-nd">N/D</span>
                                             <?php }?>
@@ -435,10 +426,10 @@ $_smarty_tpl->getSmarty()->getRuntime('Foreach')->restore($_smarty_tpl, 1);?>
                                     </div>
                                 </a>
                                 <a href="<?php echo $_smarty_tpl->getValue('base_url');?>
-/carrello/aggiungi/<?php echo $_smarty_tpl->getValue('correlato')->getIdProdotto();?>
+/carrello/aggiungi/<?php echo $_smarty_tpl->getValue('correlato')['id'];?>
 "
                                    class="button btn-correlato-cart"
-                                   aria-label="Aggiungi <?php echo htmlspecialchars((string)$_smarty_tpl->getValue('correlato')->getNomeProdotto(), ENT_QUOTES, 'UTF-8', true);?>
+                                   aria-label="Aggiungi <?php echo htmlspecialchars((string)$_smarty_tpl->getValue('correlato')['nome'], ENT_QUOTES, 'UTF-8', true);?>
  al carrello">
                                     <i class="ti ti-shopping-cart"></i> Carrello
                                 </a>
@@ -459,8 +450,7 @@ $_smarty_tpl->getSmarty()->getRuntime('Foreach')->restore($_smarty_tpl, 1);?>
                 <section class="prodotto-recensioni" id="recensioni">
             <h2 class="prodotto-section-title">Recensioni</h2>
 
-                        
-                                    <?php if ((true && ($_smarty_tpl->hasVariable('utente') && null !== ($_smarty_tpl->getValue('utente') ?? null))) && $_smarty_tpl->getValue('utente')) {?>
+            <?php if ((true && ($_smarty_tpl->hasVariable('utente') && null !== ($_smarty_tpl->getValue('utente') ?? null))) && $_smarty_tpl->getValue('utente')) {?>
                 <?php if ((true && ($_smarty_tpl->hasVariable('userHasPurchased') && null !== ($_smarty_tpl->getValue('userHasPurchased') ?? null))) && $_smarty_tpl->getValue('userHasPurchased')) {?>
                     <div class="recensione-form-wrapper">
                         <button class="button btn-scrivi-recensione" id="btn-scrivi-recensione" type="button">
@@ -469,7 +459,7 @@ $_smarty_tpl->getSmarty()->getRuntime('Foreach')->restore($_smarty_tpl, 1);?>
 
                         <div class="recensione-form" id="recensione-form" style="display:none;">
                             <form action="<?php echo $_smarty_tpl->getValue('base_url');?>
-/recensione/aggiungi/<?php echo $_smarty_tpl->getValue('prodotto')->getIdProdotto();?>
+/recensione/aggiungi/<?php echo $_smarty_tpl->getValue('prodotto')['id'];?>
 " method="post">
 
                                 <div class="form-group">
@@ -481,7 +471,7 @@ $_smarty_tpl->getSmarty()->getRuntime('Foreach')->restore($_smarty_tpl, 1);?>
                                            placeholder="Titolo della recensione"
                                            required>
                                 </div>
-        
+
                                 <div class="form-group">
                                     <label class="form-label">Valutazione</label>
                                     <div class="star-picker" id="star-picker" role="group" aria-label="Scegli valutazione">
@@ -500,7 +490,7 @@ $_smarty_tpl->getSmarty()->getRuntime('Foreach')->restore($_smarty_tpl, 1);?>
                                     </div>
                                     <input type="hidden" name="voto" id="rec-voto" value="0">
                                 </div>
-        
+
                                 <div class="form-group">
                                     <label class="form-label" for="rec-testo">Testo</label>
                                     <textarea id="rec-testo"
@@ -510,7 +500,7 @@ $_smarty_tpl->getSmarty()->getRuntime('Foreach')->restore($_smarty_tpl, 1);?>
                                               rows="4"
                                               required></textarea>
                                 </div>
-        
+
                                 <div class="form-actions">
                                     <button type="submit" class="button btn-invia-recensione">
                                         <i class="ti ti-send"></i> Invia
@@ -519,7 +509,7 @@ $_smarty_tpl->getSmarty()->getRuntime('Foreach')->restore($_smarty_tpl, 1);?>
                                         Annulla
                                     </button>
                                 </div>
-        
+
                             </form>
                         </div>
                     </div>
@@ -547,11 +537,11 @@ $foreach7DoElse = false;
                             <div class="recensione-header">
                                 <span class="recensione-nickname">
                                     <i class="ti ti-user"></i>
-                                    <?php echo htmlspecialchars((string)$_smarty_tpl->getValue('rec')->getNicknameUtente(), ENT_QUOTES, 'UTF-8', true);?>
+                                    <?php echo htmlspecialchars((string)$_smarty_tpl->getValue('rec')['nickname'], ENT_QUOTES, 'UTF-8', true);?>
 
                                 </span>
                                 <div class="recensione-stars">
-                                    <?php $_smarty_tpl->assign('voto', $_smarty_tpl->getValue('rec')->getVoto(), false, NULL);?>
+                                    <?php $_smarty_tpl->assign('voto', $_smarty_tpl->getValue('rec')['voto'], false, NULL);?>
                                     <?php
 $_from = $_smarty_tpl->getSmarty()->getRuntime('Foreach')->init($_smarty_tpl, array(1,2,3,4,5), 's');
 $foreach8DoElse = true;
@@ -568,9 +558,9 @@ $foreach8DoElse = false;
 $_smarty_tpl->getSmarty()->getRuntime('Foreach')->restore($_smarty_tpl, 1);?>
                                 </div>
                             </div>
-                            <p class="recensione-titolo"><?php echo htmlspecialchars((string)$_smarty_tpl->getValue('rec')->getTitolo(), ENT_QUOTES, 'UTF-8', true);?>
+                            <p class="recensione-titolo"><?php echo htmlspecialchars((string)$_smarty_tpl->getValue('rec')['titolo'], ENT_QUOTES, 'UTF-8', true);?>
 </p>
-                            <p class="recensione-testo"><?php echo nl2br((string) htmlspecialchars((string)$_smarty_tpl->getValue('rec')->getTesto(), ENT_QUOTES, 'UTF-8', true), (bool) 1);?>
+                            <p class="recensione-testo"><?php echo nl2br((string) htmlspecialchars((string)$_smarty_tpl->getValue('rec')['testo'], ENT_QUOTES, 'UTF-8', true), (bool) 1);?>
 </p>
                         </div>
                     <?php
@@ -589,31 +579,28 @@ $_smarty_tpl->getSmarty()->getRuntime('Foreach')->restore($_smarty_tpl, 1);?>
 <div class="minicart-modal" id="minicart-modal" aria-hidden="true">
     <div class="modal-background"></div>
 
-    <div class="minicart-content" style="position: relative;">
-
+    <div class="minicart-content">
         <button id="close-minicart" class="modal-close-btn" type="button" aria-label="Chiudi pop-up">&times;</button>
 
         <h3 class="minicart-success-title">Prodotto aggiunto al carrello!</h3>
 
         <div class="minicart-product">
             <img src="<?php echo $_smarty_tpl->getValue('base_url');?>
-/img/prodotti/<?php echo htmlspecialchars((string)$_smarty_tpl->getValue('prodotto')->getImgProdotto(), ENT_QUOTES, 'UTF-8', true);?>
+/img/prodotti/<?php echo htmlspecialchars((string)$_smarty_tpl->getValue('prodotto')['immagine'], ENT_QUOTES, 'UTF-8', true);?>
 "
-                 alt="<?php echo htmlspecialchars((string)$_smarty_tpl->getValue('prodotto')->getNomeProdotto(), ENT_QUOTES, 'UTF-8', true);?>
+                 alt="<?php echo htmlspecialchars((string)$_smarty_tpl->getValue('prodotto')['nome'], ENT_QUOTES, 'UTF-8', true);?>
 "
                  class="minicart-img">
             <div class="minicart-info">
-                <p class="minicart-nome"><?php echo htmlspecialchars((string)$_smarty_tpl->getValue('prodotto')->getNomeProdotto(), ENT_QUOTES, 'UTF-8', true);?>
+                <p class="minicart-nome"><?php echo htmlspecialchars((string)$_smarty_tpl->getValue('prodotto')['nome'], ENT_QUOTES, 'UTF-8', true);?>
 </p>
                 <p class="minicart-prezzo">
-                    <?php if ((true && ($_smarty_tpl->hasVariable('prezzo') && null !== ($_smarty_tpl->getValue('prezzo') ?? null)))) {?>
-                        <?php if ($_smarty_tpl->getValue('prezzo')->hasSconto()) {?>
-                            €<?php echo $_smarty_tpl->getSmarty()->getModifierCallback('number_format')($_smarty_tpl->getValue('prezzo')->calcolaPrezzoScontato(),2);?>
+                    <?php if ($_smarty_tpl->getValue('prodotto')['sconto']) {?>
+                        €<?php echo $_smarty_tpl->getSmarty()->getModifierCallback('number_format')($_smarty_tpl->getValue('prodotto')['prezzo_scontato'],2);?>
 
-                        <?php } else { ?>
-                            €<?php echo $_smarty_tpl->getSmarty()->getModifierCallback('number_format')($_smarty_tpl->getValue('prezzo')->getValore(),2);?>
+                    <?php } elseif ((true && (true && null !== ($_smarty_tpl->getValue('prodotto')['prezzo'] ?? null)))) {?>
+                        €<?php echo $_smarty_tpl->getSmarty()->getModifierCallback('number_format')($_smarty_tpl->getValue('prodotto')['prezzo'],2);?>
 
-                        <?php }?>
                     <?php }?>
                 </p>
             </div>
@@ -629,7 +616,6 @@ $_smarty_tpl->getSmarty()->getRuntime('Foreach')->restore($_smarty_tpl, 1);?>
                 <i class="ti ti-shopping-cart"></i> Completa Ordine
             </a>
         </div>
-
     </div>
 </div>
 
@@ -638,7 +624,7 @@ $_smarty_tpl->getSmarty()->getRuntime('Foreach')->restore($_smarty_tpl, 1);?>
 }
 /* {/block "content"} */
 /* {block "extra_js"} */
-class Block_5485913946a3660f3e33e28_25298756 extends \Smarty\Runtime\Block
+class Block_15722969096a3e87f6446326_60794966 extends \Smarty\Runtime\Block
 {
 public function callBlock(\Smarty\Template $_smarty_tpl) {
 $_smarty_current_dir = 'C:\\Users\\damic\\Desktop\\uni\\APPUNTI\\anno3\\secondo_semenstre\\Pweb\\TableCrown\\Presentation\\smarty-dir\\templates';
@@ -647,59 +633,56 @@ $_smarty_current_dir = 'C:\\Users\\damic\\Desktop\\uni\\APPUNTI\\anno3\\secondo_
 <?php echo '<script'; ?>
 >
 
-
-
-function initProdottoPage() {
+(function() {
 
     // ── GALLERIA IMMAGINI ──
-    const imgs = document.querySelectorAll('.gallery-main-img');
-    const thumbs = document.querySelectorAll('.gallery-thumb');
-    let currentImg = 0;
+    var imgs   = document.querySelectorAll('.gallery-main-img');
+    var thumbs = document.querySelectorAll('.gallery-thumb');
+    var currentImg = 0;
 
     function showImg(index) {
-        imgs.forEach(i => i.classList.remove('is-active'));
-        thumbs.forEach(t => t.classList.remove('is-active'));
+        imgs.forEach(function(i) { i.classList.remove('is-active'); });
+        thumbs.forEach(function(t) { t.classList.remove('is-active'); });
         currentImg = (index + imgs.length) % imgs.length;
-        if (imgs[currentImg]) imgs[currentImg].classList.add('is-active');
+        if (imgs[currentImg])   imgs[currentImg].classList.add('is-active');
         if (thumbs[currentImg]) thumbs[currentImg].classList.add('is-active');
     }
 
-    document.getElementById('gallery-prev')?.addEventListener('click', () => showImg(currentImg - 1));
-    document.getElementById('gallery-next')?.addEventListener('click', () => showImg(currentImg + 1));
+    var galleryPrev = document.getElementById('gallery-prev');
+    var galleryNext = document.getElementById('gallery-next');
+    if (galleryPrev) galleryPrev.addEventListener('click', function() { showImg(currentImg - 1); });
+    if (galleryNext) galleryNext.addEventListener('click', function() { showImg(currentImg + 1); });
 
-    thumbs.forEach(thumb => {
-        thumb.addEventListener('click', function () {
+    thumbs.forEach(function(thumb) {
+        thumb.addEventListener('click', function() {
             showImg(parseInt(this.dataset.index));
         });
     });
 
     // ── STEPPER QUANTITÀ + PREZZO TOTALE ──
-    const qtyInput  = document.getElementById('qty-input');
-    const prezzoTot = document.getElementById('prezzo-tot');
+    var qtyInput  = document.getElementById('qty-input');
+    var prezzoTot = document.getElementById('prezzo-tot');
 
     function aggiornaPrezzo() {
         if (!prezzoTot || !qtyInput) return;
-        const unit = parseFloat(prezzoTot.dataset.unit) || 0;
-        const qty  = parseInt(qtyInput.value) || 1;
+        var unit = parseFloat(prezzoTot.dataset.unit) || 0;
+        var qty  = parseInt(qtyInput.value) || 1;
         prezzoTot.textContent = '€' + (unit * qty).toFixed(2);
     }
 
-    const btnMinus = document.getElementById('qty-minus');
+    var btnMinus = document.getElementById('qty-minus');
     if (btnMinus) {
-        btnMinus.addEventListener('click', function (e) {
+        btnMinus.addEventListener('click', function(e) {
             e.preventDefault();
             if (!qtyInput) return;
-            const val = parseInt(qtyInput.value) || 1;
-            if (val > 1) {
-                qtyInput.value = val - 1;
-                aggiornaPrezzo();
-            }
+            var val = parseInt(qtyInput.value) || 1;
+            if (val > 1) { qtyInput.value = val - 1; aggiornaPrezzo(); }
         });
     }
 
-    const btnPlus = document.getElementById('qty-plus');
+    var btnPlus = document.getElementById('qty-plus');
     if (btnPlus) {
-        btnPlus.addEventListener('click', function (e) {
+        btnPlus.addEventListener('click', function(e) {
             e.preventDefault();
             if (!qtyInput) return;
             qtyInput.value = (parseInt(qtyInput.value) || 1) + 1;
@@ -707,36 +690,29 @@ function initProdottoPage() {
         });
     }
 
-    if (qtyInput) {
-        qtyInput.addEventListener('input', aggiornaPrezzo);
-    }
+    if (qtyInput) qtyInput.addEventListener('input', aggiornaPrezzo);
 
-    // ── FUNZIONE APERTURA MODAL MINICART ──
-    const modal = document.getElementById('minicart-modal');
+    // ── MODAL MINICART ──
+    var modal   = document.getElementById('minicart-modal');
+    var btnCart = document.getElementById('btn-add-cart');
+    var idProdotto = btnCart ? btnCart.dataset.id : null;
 
     function apriMinicart() {
-        if (modal) {
-            modal.classList.add('is-active');
-            modal.setAttribute('aria-hidden', 'false');
-            // sposta il focus sul modal per evitare conflitti aria
-            const closeBtn = document.getElementById('close-minicart');
-            if (closeBtn) closeBtn.focus();
-        }
+        if (!modal) return;
+        modal.classList.add('is-active');
+        modal.setAttribute('aria-hidden', 'false');
+        var closeBtn = document.getElementById('close-minicart');
+        if (closeBtn) closeBtn.focus();
     }
-
 
     function chiudiMinicart() {
-        if (modal) {
-            modal.classList.remove('is-active');
-            modal.setAttribute('aria-hidden', 'true');
-            // riporta focus al bottone carrello
-            document.getElementById('btn-add-cart')?.focus();
-        }
+        if (!modal) return;
+        modal.classList.remove('is-active');
+        modal.setAttribute('aria-hidden', 'true');
+        if (btnCart) btnCart.focus();
     }
 
-
-
-    // ── FUNZIONE AJAX AGGIUNGI AL CARRELLO ──
+    // ── AJAX AGGIUNGI AL CARRELLO ──
     function aggiungiAlCarrello(idProdotto, quantita, callback) {
         fetch('/carrello/aggiungi', {
             method: 'POST',
@@ -744,129 +720,129 @@ function initProdottoPage() {
                 'Content-Type': 'application/x-www-form-urlencoded',
                 'X-Requested-With': 'XMLHttpRequest'
             },
-            body: `id_prodotto=${idProdotto}&quantita=${quantita}`
+            body: 'id_prodotto=' + idProdotto + '&quantita=' + quantita
         })
-        .then(res => {
+        .then(function(res) {
             if (!res.ok) throw new Error('Errore HTTP: ' + res.status);
             return res.json();
         })
-        .then(data => {
+        .then(function(data) {
             if (data.success) {
                 apriMinicart();
-
-                // Aggiorna badge carrello nel layout se presente
-                const cartBadge = document.getElementById('cart-count');
+                var cartBadge = document.getElementById('cart-count');
                 if (cartBadge && data.cart_count !== undefined) {
                     cartBadge.textContent = data.cart_count;
                     cartBadge.style.display = data.cart_count > 0 ? 'inline' : 'none';
                 }
-
                 if (callback) callback(data);
             } else {
                 console.error('Errore carrello:', data.messaggio);
-                // Qui puoi mostrare un flash message di errore se vuoi
             }
         })
-        .catch(err => {
+        .catch(function(err) {
             console.error('Fetch carrello fallita:', err);
         });
     }
 
-    // ── BOTTONE CARRELLO PRODOTTO PRINCIPALE ──
-    const btnCart    = document.getElementById('btn-add-cart');
-    const idProdotto = btnCart ? btnCart.dataset.id : null;
-
     if (btnCart) {
-        btnCart.addEventListener('click', function (e) {
+        btnCart.addEventListener('click', function(e) {
             e.preventDefault();
-            apriMinicart(); // test diretto, senza fetch
+            var qty = parseInt(qtyInput ? qtyInput.value : 1) || 1;
+            aggiungiAlCarrello(idProdotto, qty);
         });
     }
 
-    // ── BOTTONI CARRELLO PRODOTTI CORRELATI ──
-    document.querySelectorAll('.btn-correlato-cart').forEach(function (btn) {
-        btn.addEventListener('click', function (e) {
+    document.querySelectorAll('.btn-correlato-cart').forEach(function(btn) {
+        btn.addEventListener('click', function(e) {
             e.preventDefault();
-            // Prende l'id dal href: /carrello/aggiungi/42
-            const hrefParts = this.getAttribute('href').split('/');
-            const idCorrelato = hrefParts[hrefParts.length - 1];
+            var hrefParts = this.getAttribute('href').split('/');
+            var idCorrelato = hrefParts[hrefParts.length - 1];
             aggiungiAlCarrello(idCorrelato, 1);
         });
     });
 
-    // ── CHIUSURA MODAL CON X ──
-    document.getElementById('close-minicart')?.addEventListener('click', function (e) {
-        e.preventDefault();
-        chiudiMinicart();
-    });
+    var closeMinicart = document.getElementById('close-minicart');
+    if (closeMinicart) closeMinicart.addEventListener('click', function(e) { e.preventDefault(); chiudiMinicart(); });
 
-    // ── CHIUSURA MODAL CLICCANDO SFONDO ──
-    document.querySelector('#minicart-modal .modal-background')?.addEventListener('click', chiudiMinicart);
+    var modalBg = modal ? modal.querySelector('.modal-background') : null;
+    if (modalBg) modalBg.addEventListener('click', chiudiMinicart);
 
-
-    // ── STOP PROPAGATION SUI BOTTONI MODAL ──
     document.querySelectorAll('.minicart-actions a').forEach(function(btn) {
-        btn.addEventListener('click', function(e) {
-            e.stopPropagation();
-        });
+        btn.addEventListener('click', function(e) { e.stopPropagation(); });
     });
 
+    // ── CAROSELLO CORRELATI ──
+    var correlatiNext = document.getElementById('correlati-next');
+    var correlatiGrid = document.getElementById('correlati-grid');
 
+    if (correlatiNext && correlatiGrid) {
+        correlatiNext.addEventListener('click', function() {
+            var card = correlatiGrid.querySelector('.correlato-card');
+            var scrollAmount = card ? card.offsetWidth + 20 : 280;
+            var fineRaggiunta = correlatiGrid.scrollLeft + correlatiGrid.clientWidth >= correlatiGrid.scrollWidth - 5;
+            if (fineRaggiunta) {
+                correlatiGrid.scrollTo({ left: 0, behavior: 'smooth' });
+            } else {
+                correlatiGrid.scrollBy({ left: scrollAmount, behavior: 'smooth' });
+            }
+        });
+    }
 
     // ── TOGGLE FORM RECENSIONE ──
-    const btnRecensione  = document.getElementById('btn-scrivi-recensione');
-    const formRecensione = document.getElementById('recensione-form');
+    var btnRecensione  = document.getElementById('btn-scrivi-recensione');
+    var formRecensione = document.getElementById('recensione-form');
 
     if (btnRecensione && formRecensione) {
-        btnRecensione.addEventListener('click', function (e) {
+        btnRecensione.addEventListener('click', function(e) {
             e.preventDefault();
-            const isVisible = formRecensione.style.display === 'block';
-            formRecensione.style.display = isVisible ? 'none' : 'block';
+            formRecensione.style.display = formRecensione.style.display === 'block' ? 'none' : 'block';
         });
     }
 
-    document.getElementById('btn-annulla-recensione')?.addEventListener('click', function (e) {
-        e.preventDefault();
-        if (formRecensione) formRecensione.style.display = 'none';
-    });
+    var btnAnnulla = document.getElementById('btn-annulla-recensione');
+    if (btnAnnulla) {
+        btnAnnulla.addEventListener('click', function(e) {
+            e.preventDefault();
+            if (formRecensione) formRecensione.style.display = 'none';
+        });
+    }
 
     // ── STAR PICKER RECENSIONE ──
-    const stars     = document.querySelectorAll('.star-pick');
-    const votoInput = document.getElementById('rec-voto');
+    var stars     = document.querySelectorAll('.star-pick');
+    var votoInput = document.getElementById('rec-voto');
 
     function aggiornaStelle(valore) {
-        stars.forEach((s, i) => {
+        stars.forEach(function(s, i) {
             s.classList.toggle('ti-star-filled', i < valore);
-            s.classList.toggle('ti-star', i >= valore);
+            s.classList.toggle('ti-star',        i >= valore);
         });
     }
 
-    stars.forEach(star => {
-        star.addEventListener('mouseover', function () {
-            aggiornaStelle(parseInt(this.dataset.value));
-        });
-
-        star.addEventListener('click', function (e) {
+    stars.forEach(function(star) {
+        star.addEventListener('mouseover', function() { aggiornaStelle(parseInt(this.dataset.value)); });
+        star.addEventListener('click', function(e) {
             e.preventDefault();
-            const val = parseInt(this.dataset.value);
+            var val = parseInt(this.dataset.value);
             if (votoInput) votoInput.value = val;
             aggiornaStelle(val);
         });
     });
 
-    document.getElementById('star-picker')?.addEventListener('mouseleave', function () {
-        aggiornaStelle(parseInt(votoInput?.value) || 0);
-    });
+    var starPicker = document.getElementById('star-picker');
+    if (starPicker) {
+        starPicker.addEventListener('mouseleave', function() {
+            aggiornaStelle(parseInt(votoInput ? votoInput.value : 0) || 0);
+        });
+    }
 
     // ── WISHLIST ──
-    const btnWishlist  = document.getElementById('btn-wishlist');
-    const wishlistIcon = document.getElementById('wishlist-icon');
-    let   inWishlist   = false;
+    var btnWishlist  = document.getElementById('btn-wishlist');
+    var wishlistIcon = document.getElementById('wishlist-icon');
+    var inWishlist   = false;
 
     if (btnWishlist) {
-        btnWishlist.addEventListener('click', function () {
+        btnWishlist.addEventListener('click', function() {
             inWishlist = !inWishlist;
-
             wishlistIcon.classList.toggle('ti-heart',        !inWishlist);
             wishlistIcon.classList.toggle('ti-heart-filled',  inWishlist);
             btnWishlist.classList.toggle('is-active',          inWishlist);
@@ -877,15 +853,14 @@ function initProdottoPage() {
                     'Content-Type': 'application/x-www-form-urlencoded',
                     'X-Requested-With': 'XMLHttpRequest'
                 },
-                body: `id_prodotto=${idProdotto}`
+                body: 'id_prodotto=' + idProdotto
             })
-            .then(res => {
+            .then(function(res) {
                 if (!res.ok) throw new Error('Errore HTTP: ' + res.status);
                 return res.json();
             })
-            .then(data => {
+            .then(function(data) {
                 if (!data.success) {
-                    // Rollback icona se il server ha risposto con errore
                     inWishlist = !inWishlist;
                     wishlistIcon.classList.toggle('ti-heart',        !inWishlist);
                     wishlistIcon.classList.toggle('ti-heart-filled',  inWishlist);
@@ -893,26 +868,15 @@ function initProdottoPage() {
                     console.error('Errore wishlist:', data.messaggio);
                 }
             })
-            .catch(err => {
-                console.error('Fetch wishlist fallita:', err);
-            });
+            .catch(function(err) { console.error('Fetch wishlist fallita:', err); });
         });
     }
 
-    console.log('✅ Prodotto page inizializzato correttamente');
-}
-
-if (document.readyState === 'loading') {
-    document.addEventListener('DOMContentLoaded', initProdottoPage);
-} else {
-    initProdottoPage();
-}
-
+})();
 
 
 <?php echo '</script'; ?>
 >
-
 
 <?php
 }

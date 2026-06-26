@@ -12,7 +12,7 @@
             <i class="ti ti-shopping-cart"></i> Carrello
         </h1>
 
-        {if isset($carrello) && $carrello->getItems()|@count > 0}
+        {if isset($carrello_items) && $carrello_items|@count > 0}
 
             <div class="carrello-layout">
 
@@ -20,36 +20,32 @@
                 <div class="carrello-main">
 
                     <div class="carrello-items" id="carrello-items">
-                        {foreach $carrello->getItems() as $item}
-                            {assign var="p" value=$item->getProdotto()}
-                            {assign var="qty" value=$item->getQuantita()}
-                            {assign var="prezzo" value=$p->getPrezzo()}
+                        {foreach $carrello_items as $item}
+                            {assign var="p" value=$item.prodotto}
 
                             <div class="carrello-item"
-                                 data-item-id="{$item->getIdItem()}"
-                                 data-prezzo-unitario="{if isset($prezzo)}{if $prezzo->hasSconto()}{$prezzo->calcolaPrezzoScontato()}{else}{$prezzo->getValore()}{/if}{else}0{/if}"
-                                 data-update-url="{$base_url}/carrello/aggiorna/{$item->getIdItem()}">
+                                 data-item-id="{$item.id_item}"
+                                 data-prezzo-unitario="{$item.prezzo_unitario}"
+                                 data-update-url="{$item.update_url|escape}">
 
-                                <a href="{$base_url}/prodotto/{$p->getIdProdotto()}" class="carrello-item-img-link">
-                                    <img src="{$base_url}/public/img/prodotti/{$p->getImgProdotto()|escape}"
-                                         onerror="this.onerror=null; this.src='{$base_url}/public/img/default.png'"
-                                        alt="{$p->getNomeProdotto()|escape}"
+                                <a href="{$base_url}/prodotto/{$p.id}" class="carrello-item-img-link">
+                                    <img src="{$base_url}/img/prodotti/{$p.immagine|escape}"
+                                         onerror="this.onerror=null; this.src='{$base_url}/img/default.png'"
+                                         alt="{$p.nome|escape}"
                                          class="carrello-item-img">
                                 </a>
 
                                 <div class="carrello-item-info">
-                                    <a href="{$base_url}/prodotto/{$p->getIdProdotto()}" class="carrello-item-nome">
-                                        {$p->getNomeProdotto()|escape}
+                                    <a href="{$base_url}/prodotto/{$p.id}" class="carrello-item-nome">
+                                        {$p.nome|escape}
                                     </a>
 
                                     <div class="carrello-item-prezzo-wrapper">
-                                        {if isset($prezzo)}
-                                            {if $prezzo->hasSconto()}
-                                                <span class="carrello-item-prezzo">€{$prezzo->calcolaPrezzoScontato()|number_format:2}</span>
-                                                <span class="carrello-item-prezzo-old">€{$prezzo->getValore()|number_format:2}</span>
-                                            {else}
-                                                <span class="carrello-item-prezzo">€{$prezzo->getValore()|number_format:2}</span>
-                                            {/if}
+                                        {if $item.sconto}
+                                            <span class="carrello-item-prezzo">€{$item.prezzo_unitario|number_format:2}</span>
+                                            <span class="carrello-item-prezzo-old">€{$item.prezzo_originale|number_format:2}</span>
+                                        {elseif isset($item.prezzo_unitario)}
+                                            <span class="carrello-item-prezzo">€{$item.prezzo_unitario|number_format:2}</span>
                                         {else}
                                             <span class="carrello-item-prezzo-nd">Prezzo N/D</span>
                                         {/if}
@@ -64,7 +60,7 @@
                                         </button>
                                         <input type="number"
                                                class="input quantita-input carrello-qty-input"
-                                               value="{$qty}"
+                                               value="{$item.quantita}"
                                                min="1"
                                                max="99"
                                                aria-label="Quantità">
@@ -75,13 +71,13 @@
 
                                     <div class="carrello-item-subtotale">
                                         <span class="carrello-item-subtotale-label">Subtotale</span>
-                                        <span class="carrello-item-subtotale-value">€{$item->getSubtotale()|number_format:2}</span>
+                                        <span class="carrello-item-subtotale-value">€{$item.subtotale|number_format:2}</span>
                                     </div>
 
                                     <button class="carrello-item-rimuovi"
                                             type="button"
-                                            data-url="{$base_url}/carrello/rimuovi/{$item->getIdItem()}"
-                                            aria-label="Rimuovi {$p->getNomeProdotto()|escape} dal carrello">
+                                            data-url="{$base_url}/carrello/rimuovi/{$item.id_item}"
+                                            aria-label="Rimuovi {$p.nome|escape} dal carrello">
                                         <i class="ti ti-trash"></i> Rimuovi
                                     </button>
 
@@ -100,17 +96,17 @@
                                 <div class="correlati-grid" id="correlati-grid">
                                     {foreach $correlati as $correlato}
                                         <div class="correlato-card">
-                                            <a href="{$base_url}/prodotto/{$correlato->getIdProdotto()}" class="correlato-card-link">
+                                            <a href="{$base_url}/prodotto/{$correlato.id}" class="correlato-card-link">
                                                 <div class="correlato-image-wrapper">
-                                                    <img src="{$base_url}/public/img/prodotti/{$correlato->getImgProdotto()|escape}"
-                                                        onerror="this.onerror=null; this.src='{$base_url}/public/img/default.png'"
-                                                        alt="{$correlato->getNomeProdotto()|escape}"
-                                                        class="correlato-image">
+                                                    <img src="{$base_url}/img/prodotti/{$correlato.immagine|escape}"
+                                                         onerror="this.onerror=null; this.src='{$base_url}/img/default.png'"
+                                                         alt="{$correlato.nome|escape}"
+                                                         class="correlato-image">
                                                 </div>
                                                 <div class="correlato-info">
-                                                    <h3 class="correlato-nome">{$correlato->getNomeProdotto()|escape}</h3>
+                                                    <h3 class="correlato-nome">{$correlato.nome|escape}</h3>
                                                     <div class="correlato-rating">
-                                                        {assign var="cMedia" value=$correlato->getValutazioneMedia()}
+                                                        {assign var="cMedia" value=$correlato.valutazione_media}
                                                         {foreach [1,2,3,4,5] as $s}
                                                             {if $s <= $cMedia}
                                                                 <i class="ti ti-star-filled"></i>
@@ -122,23 +118,20 @@
                                                         {/foreach}
                                                     </div>
                                                     <div class="correlato-prezzo">
-                                                        {assign var="cPrezzo" value=$correlato->getPrezzo()}
-                                                        {if isset($cPrezzo)}
-                                                            {if $cPrezzo->hasSconto()}
-                                                                <span class="correlato-prezzo-scontato">€{$cPrezzo->calcolaPrezzoScontato()|number_format:2}</span>
-                                                                <span class="correlato-prezzo-old">€{$cPrezzo->getValore()|number_format:2}</span>
-                                                            {else}
-                                                                <span>€{$cPrezzo->getValore()|number_format:2}</span>
-                                                            {/if}
+                                                        {if $correlato.sconto}
+                                                            <span class="correlato-prezzo-scontato">€{$correlato.prezzo_scontato|number_format:2}</span>
+                                                            <span class="correlato-prezzo-old">€{$correlato.prezzo|number_format:2}</span>
+                                                        {elseif isset($correlato.prezzo)}
+                                                            <span>€{$correlato.prezzo|number_format:2}</span>
                                                         {else}
                                                             <span class="prezzo-nd">N/D</span>
                                                         {/if}
                                                     </div>
                                                 </div>
                                             </a>
-                                            <a href="{$base_url}/carrello/aggiungi/{$correlato->getIdProdotto()}"
+                                            <a href="{$base_url}/carrello/aggiungi/{$correlato.id}"
                                                class="button btn-correlato-cart"
-                                               aria-label="Aggiungi {$correlato->getNomeProdotto()|escape} al carrello">
+                                               aria-label="Aggiungi {$correlato.nome|escape} al carrello">
                                                 <i class="ti ti-shopping-cart"></i> Carrello
                                             </a>
                                         </div>
@@ -157,33 +150,33 @@
                 {* ── COLONNA DESTRA: RIEPILOGO ORDINE ── *}
                 <aside class="carrello-summary"
                        id="carrello-summary"
-                       data-sconto="{$carrello->getSconto()}"
-                       data-spedizione="{if $carrello->getSpedizione() !== null}{$carrello->getSpedizione()}{/if}">
+                       data-sconto="{$carrello_summary.sconto}"
+                       data-spedizione="{$carrello_summary.spedizione|default:''}">
 
                     <h2 class="carrello-summary-title">Totale Carrello</h2>
 
                     <dl class="carrello-summary-list">
                         <div class="carrello-summary-row">
                             <dt>N° articoli</dt>
-                            <dd id="summary-n-articoli" aria-live="polite">{$carrello->getTotaleArticoli()}</dd>
+                            <dd id="summary-n-articoli" aria-live="polite">{$carrello_summary.n_articoli}</dd>
                         </div>
 
-                        {if $carrello->getSconto() > 0}
+                        {if $carrello_summary.sconto > 0}
                             <div class="carrello-summary-row carrello-summary-sconto">
                                 <dt>Sconto</dt>
-                                <dd>-€{$carrello->getSconto()|number_format:2}</dd>
+                                <dd>-€{$carrello_summary.sconto|number_format:2}</dd>
                             </div>
                         {/if}
 
                         <div class="carrello-summary-row">
                             <dt>Spedizione</dt>
                             <dd>
-                                {if $carrello->getSpedizione() === null}
+                                {if $carrello_summary.spedizione === null}
                                     Da calcolare
-                                {elseif $carrello->getSpedizione() == 0}
+                                {elseif $carrello_summary.spedizione == 0}
                                     Gratuita
                                 {else}
-                                    €{$carrello->getSpedizione()|number_format:2}
+                                    €{$carrello_summary.spedizione|number_format:2}
                                 {/if}
                             </dd>
                         </div>
@@ -192,7 +185,7 @@
                     <div class="carrello-summary-totale">
                         <span class="carrello-summary-totale-label">Totale</span>
                         <span class="carrello-summary-totale-value" id="summary-totale" aria-live="polite">
-                            €{$carrello->getTotale()|number_format:2}
+                            €{$carrello_summary.totale|number_format:2}
                         </span>
                     </div>
 
@@ -221,64 +214,65 @@
 
 {block name="extra_js"}
 <script>
-function initCarrelloPage() {
+{literal}
+(function() {
 
     const summary = document.getElementById('carrello-summary');
     const sconto = summary ? (parseFloat(summary.dataset.sconto) || 0) : 0;
     const spedizioneRaw = summary ? summary.dataset.spedizione : '';
-    const spedizione = spedizioneRaw ? (parseFloat(spedizioneRaw) || 0) : 0;
+    const spedizione = spedizioneRaw !== '' ? (parseFloat(spedizioneRaw) || 0) : 0;
 
     // ── RICALCOLO RIEPILOGO (lato client, per feedback immediato) ──
     function ricalcolaRiepilogo() {
-        const righe = document.querySelectorAll('.carrello-item');
-        let nArticoli = 0;
-        let subtotale = 0;
+        var righe = document.querySelectorAll('.carrello-item');
+        var nArticoli = 0;
+        var subtotale = 0;
 
-        righe.forEach(riga => {
-            const input = riga.querySelector('.carrello-qty-input');
-            const qty = parseInt(input?.value) || 1;
-            const unit = parseFloat(riga.dataset.prezzoUnitario) || 0;
+        righe.forEach(function(riga) {
+            var input = riga.querySelector('.carrello-qty-input');
+            var qty = parseInt(input ? input.value : 1) || 1;
+            var unit = parseFloat(riga.dataset.prezzoUnitario) || 0;
             nArticoli += qty;
             subtotale += qty * unit;
         });
 
-        const totale = Math.max(subtotale - sconto + spedizione, 0);
+        var totale = Math.max(subtotale - sconto + spedizione, 0);
 
-        const nArticoliEl = document.getElementById('summary-n-articoli');
-        const totaleEl = document.getElementById('summary-totale');
+        var nArticoliEl = document.getElementById('summary-n-articoli');
+        var totaleEl    = document.getElementById('summary-totale');
         if (nArticoliEl) nArticoliEl.textContent = nArticoli;
-        if (totaleEl) totaleEl.textContent = '€' + totale.toFixed(2);
+        if (totaleEl)    totaleEl.textContent = '€' + totale.toFixed(2);
     }
 
     // ── STEPPER QUANTITÀ PER OGNI ARTICOLO ──
-    document.querySelectorAll('.carrello-item').forEach(riga => {
-        const input       = riga.querySelector('.carrello-qty-input');
-        const btnMinus    = riga.querySelector('.carrello-qty-minus');
-        const btnPlus     = riga.querySelector('.carrello-qty-plus');
-        const subtotaleEl = riga.querySelector('.carrello-item-subtotale-value');
-        const unit        = parseFloat(riga.dataset.prezzoUnitario) || 0;
-        const updateUrl   = riga.dataset.updateUrl;
+    document.querySelectorAll('.carrello-item').forEach(function(riga) {
+        var input       = riga.querySelector('.carrello-qty-input');
+        var btnMinus    = riga.querySelector('.carrello-qty-minus');
+        var btnPlus     = riga.querySelector('.carrello-qty-plus');
+        var subtotaleEl = riga.querySelector('.carrello-item-subtotale-value');
+        var unit        = parseFloat(riga.dataset.prezzoUnitario) || 0;
+        var updateUrl   = riga.dataset.updateUrl;
 
         function aggiornaRigaUI() {
-            const qty = parseInt(input.value) || 1;
+            var qty = parseInt(input.value) || 1;
             if (subtotaleEl) subtotaleEl.textContent = '€' + (unit * qty).toFixed(2);
             ricalcolaRiepilogo();
         }
 
         function inviaAggiornamento() {
             if (!updateUrl) return;
-            const qty = parseInt(input.value) || 1;
-            const controller = new AbortController();
-            const timeout = setTimeout(() => controller.abort(), 5000);
+            var qty = parseInt(input.value) || 1;
+            var controller = new AbortController();
+            var timeout = setTimeout(function() { controller.abort(); }, 5000);
             fetch(updateUrl + '?qty=' + qty, { signal: controller.signal })
-                .then(() => clearTimeout(timeout))
-                .catch(() => clearTimeout(timeout));
+                .then(function() { clearTimeout(timeout); })
+                .catch(function() { clearTimeout(timeout); });
         }
 
         if (btnMinus) {
-            btnMinus.addEventListener('click', function (e) {
+            btnMinus.addEventListener('click', function(e) {
                 e.preventDefault();
-                const val = parseInt(input.value) || 1;
+                var val = parseInt(input.value) || 1;
                 if (val > 1) {
                     input.value = val - 1;
                     aggiornaRigaUI();
@@ -288,21 +282,18 @@ function initCarrelloPage() {
         }
 
         if (btnPlus) {
-            btnPlus.addEventListener('click', function (e) {
+            btnPlus.addEventListener('click', function(e) {
                 e.preventDefault();
-                const val = parseInt(input.value) || 1;
-                input.value = val + 1;
+                input.value = (parseInt(input.value) || 1) + 1;
                 aggiornaRigaUI();
                 inviaAggiornamento();
             });
         }
 
         if (input) {
-            input.addEventListener('input', function () {
-                const val = parseInt(input.value);
-                if (isNaN(val) || val < 1) {
-                    input.value = 1;
-                }
+            input.addEventListener('input', function() {
+                var val = parseInt(input.value);
+                if (isNaN(val) || val < 1) input.value = 1;
                 aggiornaRigaUI();
                 inviaAggiornamento();
             });
@@ -310,24 +301,22 @@ function initCarrelloPage() {
     });
 
     // ── RIMOZIONE ARTICOLO ──
-    document.querySelectorAll('.carrello-item-rimuovi').forEach(btn => {
-        btn.addEventListener('click', function () {
-            const riga = this.closest('.carrello-item');
-            const url = this.dataset.url;
+    document.querySelectorAll('.carrello-item-rimuovi').forEach(function(btn) {
+        btn.addEventListener('click', function() {
+            var riga = this.closest('.carrello-item');
+            var url  = this.dataset.url;
 
             if (url) {
-                const controller = new AbortController();
-                const timeout = setTimeout(() => controller.abort(), 5000);
+                var controller = new AbortController();
+                var timeout = setTimeout(function() { controller.abort(); }, 5000);
                 fetch(url, { signal: controller.signal })
-                    .then(() => clearTimeout(timeout))
-                    .catch(() => clearTimeout(timeout));
+                    .then(function() { clearTimeout(timeout); })
+                    .catch(function() { clearTimeout(timeout); });
             }
 
-            if (riga) {
-                riga.remove();
-            }
+            if (riga) riga.remove();
 
-            const righeRimaste = document.querySelectorAll('.carrello-item');
+            var righeRimaste = document.querySelectorAll('.carrello-item');
             if (righeRimaste.length === 0) {
                 window.location.reload();
             } else {
@@ -337,15 +326,14 @@ function initCarrelloPage() {
     });
 
     // ── CAROSELLO "POTREBBE INTERESSARTI" ──
-    const correlatiNext = document.getElementById('correlati-next');
-    const correlatiGrid = document.getElementById('correlati-grid');
+    var correlatiNext = document.getElementById('correlati-next');
+    var correlatiGrid = document.getElementById('correlati-grid');
 
     if (correlatiNext && correlatiGrid) {
-        correlatiNext.addEventListener('click', function () {
-            const card = correlatiGrid.querySelector('.correlato-card');
-            const scrollAmount = card ? card.offsetWidth + 20 : 280;
-
-            const fineRaggiunta = correlatiGrid.scrollLeft + correlatiGrid.clientWidth >= correlatiGrid.scrollWidth - 5;
+        correlatiNext.addEventListener('click', function() {
+            var card = correlatiGrid.querySelector('.correlato-card');
+            var scrollAmount = card ? card.offsetWidth + 20 : 280;
+            var fineRaggiunta = correlatiGrid.scrollLeft + correlatiGrid.clientWidth >= correlatiGrid.scrollWidth - 5;
 
             if (fineRaggiunta) {
                 correlatiGrid.scrollTo({ left: 0, behavior: 'smooth' });
@@ -354,12 +342,8 @@ function initCarrelloPage() {
             }
         });
     }
-}
 
-if (document.readyState === 'loading') {
-    document.addEventListener('DOMContentLoaded', initCarrelloPage);
-} else {
-    initCarrelloPage();
-}
+})();
+{/literal}
 </script>
 {/block}
