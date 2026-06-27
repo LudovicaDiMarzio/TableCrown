@@ -44,7 +44,7 @@ class EChallenge extends EEvento {
         foreach ($tornei as $torneo) {
             if ($torneo instanceof ETorneo) {
                 $this->tornei->add($torneo);
-                $torneo->impostaChallenge($this);
+                $torneo->assegnaChallenge($this);
             }
         }
         $this->quotaIscrizione = $quotaIscrizione;
@@ -87,13 +87,13 @@ class EChallenge extends EEvento {
      * Aggiunge un singolo torneo alla challenge 
      */
     public function aggiungiTorneo(ETorneo $torneo): void {
-        if ($this-tornei->count() >=7) {
+        if ($this->tornei->count() >=7) {
             throw new InvalidArgumentException("Impossibile aggiungere il torneo. Una challenge non può avere più di 7 tornei.");
         }
 
         if (!$this->tornei->contains($torneo)) {
             $this->tornei->add($torneo);
-            $torneo->impostaChallenge($this);
+            $torneo->assegnaChallenge($this);
         }
     }
 
@@ -108,7 +108,7 @@ class EChallenge extends EEvento {
         if ($this->tornei->contains($torneo)) {
             $this->tornei->removeElement($torneo);
             if ($torneo->getChallenge() === $this) {
-                $torneo->impostaChallenge(null);
+                $torneo->assegnaChallenge(null);
             }
         }
     }
