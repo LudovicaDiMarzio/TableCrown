@@ -1,5 +1,5 @@
 <?php
-namespace Foundation;
+namespace TableCrown\Foundation;
 
 //per la gestione delle eccezioni in try catch
 use Exception;
@@ -36,7 +36,7 @@ class FEntityManager {
     *@return bool True se salvato con successo, false altrimenti.
     *@throws Exception Se il salvataggio fallisce.
     */
-    public function saveObj(Object $obj): bool{
+    public static function saveObj(Object $obj): bool{
         try{
             /**
              * potevano essere usati anche i metodi doctrine specifici pe rla gestione delle transaction  self::$entityManager->getConnection()->beginTransaction(); 
@@ -136,7 +136,7 @@ class FEntityManager {
     * @return bool true se esiste, false altrimenti
     * @throws Exception
     */
-    public function verificaEsistenza( $table, $field, $value,): bool 
+    public static function verificaEsistenza( $table, $field, $value,): bool 
     {
        try {
         $qb = self::$entityManager->createQueryBuilder();
@@ -194,7 +194,7 @@ class FEntityManager {
      * @return array di oggetti
      * @throws Exception
      */
-    public function getRicerca($entityClass, $str, $field): array{
+    public static function getRicerca($entityClass, $str, $field): array{
         try{
             $qb=self:: $entityManager->createQueryBuilder();
 
