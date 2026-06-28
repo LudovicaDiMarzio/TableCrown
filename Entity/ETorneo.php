@@ -24,6 +24,10 @@ class ETorneo extends EEvento {
     #[ORM\ManyToOne(targetEntity: EProdotto::class)]
     #[ORM\JoinColumn(name: "giocoTorneoid", referencedColumnName: "idProdotto", nullable: false)]
     private EProdotto $gioco; //gioco da tavolo su cui si svolge il torneo
+
+    #[ORM\ManyToOne(targetEntity: EChallenge::class, inversedBy: "tornei")]
+    #[ORM\JoinColumn(name: "challenge_id", referencedColumnName: "idEvento", nullable: true)]
+    private ?EChallenge $challenge = null; //challenge associata al torneo
     
 
     public function __construct(string $nomeEvento, string $imgEvento, string $descrizioneEvento, DateTime $dataInizio, int $maxPartecipanti, EPrezzo $quotaIscrizione, EProdotto $premio, EProdotto $gioco) {
@@ -47,7 +51,19 @@ class ETorneo extends EEvento {
         return $this->gioco;
     }
 
+    public function getChallenge(): ?EChallenge {
+        return $this->challenge;
+    }
+
     //Metodi di dominio
+
+    /**
+     * Imposta la challenge associata al torneo.
+     * Accetta anche null per poter eventualmente "slegare" il torneo dalla challenge.
+     */
+    public function assegnaChallenge(?EChallenge $challenge): void {
+        $this->challenge = $challenge;
+    }
 
     /**
      * Verifica che il premio sia valido (che abbia lo stato disponibile).

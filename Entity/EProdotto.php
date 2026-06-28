@@ -30,7 +30,7 @@ abstract class EProdotto {
     private string $nomeProdotto;
 
     #[ORM\Column(type: "blob", nullable: true)] 
-    private ?string $imgProdotto = null;
+    private $imgProdotto = null;
 
     #[ORM\Column(type: "text")]
     private string $descrizioneProdotto;
@@ -72,7 +72,10 @@ abstract class EProdotto {
     }
 
     public function getImgProdotto(): ?string {
-        return $this->imgProdotto;
+        if (is_resource($this->imgProdotto)) {
+            return stream_get_contents($this->imgProdotto);
+        }
+        return (string) $this->imgProdotto;
     }
 
     public function getDescrizioneProdotto(): string {

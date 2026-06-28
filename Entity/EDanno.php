@@ -10,6 +10,10 @@ use InvalidArgumentException;
 class EDanno {
 
     #[ORM\Id]
+    #[ORM\GeneratedValue]
+    #[ORM\Column(type: "integer")]
+    private ?int $iddanno=null;
+
     #[ORM\Column(type: "string", enumType: LivelloDannoGiochi::class)]
     private LivelloDannoGiochi $livelloDanno; //enum per indicare il livello di danno del gioco
     
