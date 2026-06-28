@@ -24,7 +24,7 @@ class EChallenge extends EEvento {
     private EPrezzo $quotaIscrizione; //costo di ingresso alla challenge
 
     #[ORM\ManyToOne(targetEntity: EProdotto::class)]
-    #[ORM\JoinColumn(name: "premio_id", referencedColumnName: "idProdotto", nullable: true)]
+    #[ORM\JoinColumn(name: "premio_id", referencedColumnName: "idProdotto")]
     private EProdotto $premio; //premio della challenge
 
     #[ORM\Column(type: "integer")]
