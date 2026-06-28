@@ -1,18 +1,18 @@
 <?php
-/* Smarty version 5.8.0, created on 2026-06-26 16:08:54
+/* Smarty version 5.8.0, created on 2026-06-28 16:34:32
   from 'file:prodotto.tpl' */
 
 /* @var \Smarty\Template $_smarty_tpl */
 if ($_smarty_tpl->getCompiled()->isFresh($_smarty_tpl, array (
   'version' => '5.8.0',
-  'unifunc' => 'content_6a3e87f6447061_15732929',
+  'unifunc' => 'content_6a4130f86bf6b3_93217838',
   'has_nocache_code' => false,
   'file_dependency' => 
   array (
     'e9baa49156ee05c5c5bbb9c42db3ec1863979512' => 
     array (
       0 => 'prodotto.tpl',
-      1 => 1782482930,
+      1 => 1782657267,
       2 => 'file',
     ),
   ),
@@ -20,30 +20,30 @@ if ($_smarty_tpl->getCompiled()->isFresh($_smarty_tpl, array (
   array (
   ),
 ))) {
-function content_6a3e87f6447061_15732929 (\Smarty\Template $_smarty_tpl) {
+function content_6a4130f86bf6b3_93217838 (\Smarty\Template $_smarty_tpl) {
 $_smarty_current_dir = 'C:\\Users\\damic\\Desktop\\uni\\APPUNTI\\anno3\\secondo_semenstre\\Pweb\\TableCrown\\Presentation\\smarty-dir\\templates';
 $_smarty_tpl->getInheritance()->init($_smarty_tpl, true);
 ?>
 
 
 <?php 
-$_smarty_tpl->getInheritance()->instanceBlock($_smarty_tpl, 'Block_18079011496a3e87f63d2127_39663965', "extra_css");
+$_smarty_tpl->getInheritance()->instanceBlock($_smarty_tpl, 'Block_15525048486a4130f8278dc0_42543969', "extra_css");
 ?>
 
 
 <?php 
-$_smarty_tpl->getInheritance()->instanceBlock($_smarty_tpl, 'Block_18930523776a3e87f63d67a5_50760365', "content");
+$_smarty_tpl->getInheritance()->instanceBlock($_smarty_tpl, 'Block_2000824316a4130f82fe754_75558534', "content");
 ?>
 
 
 <?php 
-$_smarty_tpl->getInheritance()->instanceBlock($_smarty_tpl, 'Block_15722969096a3e87f6446326_60794966', "extra_js");
+$_smarty_tpl->getInheritance()->instanceBlock($_smarty_tpl, 'Block_11952616246a4130f86bd946_23466534', "extra_js");
 ?>
 
 <?php $_smarty_tpl->getInheritance()->endChild($_smarty_tpl, "common/layout.tpl", $_smarty_current_dir);
 }
 /* {block "extra_css"} */
-class Block_18079011496a3e87f63d2127_39663965 extends \Smarty\Runtime\Block
+class Block_15525048486a4130f8278dc0_42543969 extends \Smarty\Runtime\Block
 {
 public function callBlock(\Smarty\Template $_smarty_tpl) {
 $_smarty_current_dir = 'C:\\Users\\damic\\Desktop\\uni\\APPUNTI\\anno3\\secondo_semenstre\\Pweb\\TableCrown\\Presentation\\smarty-dir\\templates';
@@ -56,7 +56,7 @@ $_smarty_current_dir = 'C:\\Users\\damic\\Desktop\\uni\\APPUNTI\\anno3\\secondo_
 }
 /* {/block "extra_css"} */
 /* {block "content"} */
-class Block_18930523776a3e87f63d67a5_50760365 extends \Smarty\Runtime\Block
+class Block_2000824316a4130f82fe754_75558534 extends \Smarty\Runtime\Block
 {
 public function callBlock(\Smarty\Template $_smarty_tpl) {
 $_smarty_current_dir = 'C:\\Users\\damic\\Desktop\\uni\\APPUNTI\\anno3\\secondo_semenstre\\Pweb\\TableCrown\\Presentation\\smarty-dir\\templates';
@@ -624,7 +624,7 @@ $_smarty_tpl->getSmarty()->getRuntime('Foreach')->restore($_smarty_tpl, 1);?>
 }
 /* {/block "content"} */
 /* {block "extra_js"} */
-class Block_15722969096a3e87f6446326_60794966 extends \Smarty\Runtime\Block
+class Block_11952616246a4130f86bd946_23466534 extends \Smarty\Runtime\Block
 {
 public function callBlock(\Smarty\Template $_smarty_tpl) {
 $_smarty_current_dir = 'C:\\Users\\damic\\Desktop\\uni\\APPUNTI\\anno3\\secondo_semenstre\\Pweb\\TableCrown\\Presentation\\smarty-dir\\templates';
@@ -632,8 +632,24 @@ $_smarty_current_dir = 'C:\\Users\\damic\\Desktop\\uni\\APPUNTI\\anno3\\secondo_
 
 <?php echo '<script'; ?>
 >
+var utenteLoggato = <?php if ((true && ($_smarty_tpl->hasVariable('utente') && null !== ($_smarty_tpl->getValue('utente') ?? null)))) {?>true<?php } else { ?>false<?php }?>;
+<?php echo '</script'; ?>
+>
+<?php echo '<script'; ?>
+>
 
 (function() {
+
+    // ── HELPER: APRI MODAL LOGIN (riusa quello globale del layout) ──
+    function richiedeLogin() {
+        var modal = document.getElementById('login-modal-nav');
+        if (modal) {
+            modal.classList.add('is-active');
+            modal.setAttribute('aria-hidden', 'false');
+            var btn = document.getElementById('close-login-modal-nav');
+            if (btn) btn.focus();
+        }
+    }
 
     // ── GALLERIA IMMAGINI ──
     var imgs   = document.querySelectorAll('.gallery-main-img');
@@ -747,6 +763,10 @@ $_smarty_current_dir = 'C:\\Users\\damic\\Desktop\\uni\\APPUNTI\\anno3\\secondo_
     if (btnCart) {
         btnCart.addEventListener('click', function(e) {
             e.preventDefault();
+            if (!utenteLoggato) {
+                richiedeLogin();
+                return;
+            }
             var qty = parseInt(qtyInput ? qtyInput.value : 1) || 1;
             aggiungiAlCarrello(idProdotto, qty);
         });
@@ -755,6 +775,10 @@ $_smarty_current_dir = 'C:\\Users\\damic\\Desktop\\uni\\APPUNTI\\anno3\\secondo_
     document.querySelectorAll('.btn-correlato-cart').forEach(function(btn) {
         btn.addEventListener('click', function(e) {
             e.preventDefault();
+            if (!utenteLoggato) {
+                richiedeLogin();
+                return;
+            }
             var hrefParts = this.getAttribute('href').split('/');
             var idCorrelato = hrefParts[hrefParts.length - 1];
             aggiungiAlCarrello(idCorrelato, 1);
@@ -842,6 +866,11 @@ $_smarty_current_dir = 'C:\\Users\\damic\\Desktop\\uni\\APPUNTI\\anno3\\secondo_
 
     if (btnWishlist) {
         btnWishlist.addEventListener('click', function() {
+            if (!utenteLoggato) {
+                richiedeLogin();
+                return;
+            }
+
             inWishlist = !inWishlist;
             wishlistIcon.classList.toggle('ti-heart',        !inWishlist);
             wishlistIcon.classList.toggle('ti-heart-filled',  inWishlist);

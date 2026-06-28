@@ -457,8 +457,22 @@
 
 {block name="extra_js"}
 <script>
+var utenteLoggato = {if isset($utente)}true{else}false{/if};
+</script>
+<script>
 {literal}
 (function() {
+
+    // ── HELPER: APRI MODAL LOGIN (riusa quello globale del layout) ──
+    function richiedeLogin() {
+        var modal = document.getElementById('login-modal-nav');
+        if (modal) {
+            modal.classList.add('is-active');
+            modal.setAttribute('aria-hidden', 'false');
+            var btn = document.getElementById('close-login-modal-nav');
+            if (btn) btn.focus();
+        }
+    }
 
     // ── GALLERIA IMMAGINI ──
     var imgs   = document.querySelectorAll('.gallery-main-img');
@@ -572,6 +586,10 @@
     if (btnCart) {
         btnCart.addEventListener('click', function(e) {
             e.preventDefault();
+            if (!utenteLoggato) {
+                richiedeLogin();
+                return;
+            }
             var qty = parseInt(qtyInput ? qtyInput.value : 1) || 1;
             aggiungiAlCarrello(idProdotto, qty);
         });
@@ -580,6 +598,10 @@
     document.querySelectorAll('.btn-correlato-cart').forEach(function(btn) {
         btn.addEventListener('click', function(e) {
             e.preventDefault();
+            if (!utenteLoggato) {
+                richiedeLogin();
+                return;
+            }
             var hrefParts = this.getAttribute('href').split('/');
             var idCorrelato = hrefParts[hrefParts.length - 1];
             aggiungiAlCarrello(idCorrelato, 1);
@@ -667,6 +689,11 @@
 
     if (btnWishlist) {
         btnWishlist.addEventListener('click', function() {
+            if (!utenteLoggato) {
+                richiedeLogin();
+                return;
+            }
+
             inWishlist = !inWishlist;
             wishlistIcon.classList.toggle('ti-heart',        !inWishlist);
             wishlistIcon.classList.toggle('ti-heart-filled',  inWishlist);
