@@ -51,11 +51,35 @@ class CFrontController {
                 break;
 
             case 'eventi':
-                //Corrisponde a: GET /eventi
+                /* //Corrisponde a: GET /eventi
                 $controller = new CEventi();
-                $controller->mostraEventi();
-                break;
+                if ($sottoRoute === null) { //Corrisponde a: GET /eventi (Lista completa degli eventi)
+                    $controller->mostraEventi();
+                }
+                
+                elseif (is_numeric($sottoRoute)) { //Corrisponde a: GET /eventi/{id} (es. /eventi/45)
+                    $controller->mostraDettaglioEvento();
+                }
 
+                //ROTTE DEDICATE AL GESTORE:
+                elseif ($sottoRoute === 'nuovo' && $metodoHTTP === 'GET') { //Corrisponde a: GET /eventi/nuovo (Creazione di un nuovo evento)
+                    $controller->mostraFormCreaEvento();
+                }
+
+                elseif ($sottoRoute === 'crea' && $metodoHTTP === 'POST') { //Corrisponde a: POST /eventi/crea (Creazione di un nuovo evento)
+                    $controller->creaEvento();
+                }
+
+                elseif ($sottoRoute === 'modifica' && $metodoHTTP === 'GET') { //Corrisponde a: GET /eventi/modifica (Modifica di un evento esistente)
+                    $controller->mostraFormModificaEvento();
+                }
+
+                else {
+                    //Se l'URL non corrisponde a nessuna rotta definita nel sistema, intercettiamo l'errore.
+                    $this->mostra404();
+                }
+                break;
+ */
             case 'offerte':
                 //Corrisponde a: GET /offerte
                 $controller = new COfferte();

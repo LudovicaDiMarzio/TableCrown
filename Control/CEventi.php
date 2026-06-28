@@ -9,6 +9,8 @@ use TableCrown\Entity\EEvento;
 use TableCrown\Entity\ESerata;
 use TableCrown\Entity\ETorneo;
 use Tablecrown\Entity\EChallenge;
+use TableCrown\Entity\EPrezzo;
+use TableCrown\Entity\EProdotto;
 use DateTime;
 
 /**
@@ -142,12 +144,14 @@ class CEventi extends BaseController {
         // LOGICA DI ISTANZIAZIONE TRAMITE POLIMORFISMO
         //==========================================================================
         if ($tipoEvento === 'serata') {
+            //Recupero i dati specifici della serata
             $tipoSerata = UHTTPMethods::postString('tipo_serata');
             //il costruttore di ESerata farà semplicemente da ponte verso parent::__construct
             $nuovoEvento = new ESerata($nome, $imgBlob, $descrizione, $dataInizio, $maxPartecipanti, $tipoSerata); 
         }
          
         elseif ($tipoEvento === 'torneo') {
+            //Recupero i dati specifici del torneo
             $valoreQuota = UHTTPMethods::postInt('quota_iscrizione');
             $idpremio = UHTTPMethods::postInt('id_premio');
             $idgioco = UHTTPMethods::postInt('id_gioco');
@@ -179,11 +183,86 @@ class CEventi extends BaseController {
             $punti1 = UHTTPMethods::postInt('punteggio_primo');
             $punti2 = UHTTPMethods::postInt('punteggio_secondo');
             $punti3 = UHTTPMethods::postInt('punteggio_terzo');
+            //Recuperiamo l'array di ID dei tornei selezionati nel form (es. nome="torni_selezionati[]")
+            //Se nessun torneo è selezionato, di default impostiamo un array vuoto
+            $idTorneiSelezionati = UHTTPMethods::postArray('torni_selezionati');
 
+            //==========================================================================
+            // QUANDO SARÀ PRONTO IL PERSISTENT MANAGER:
+            //==========================================================================
+           /*  //Caricamento delle relazioni (Premio o Quota)
+            $premio = FPersistentManager::visualizza(EProdotto::class, 'idProdotto', $idpremio);
+
+            if (!$premio) {
+                UFlashMessage::addMessage('danger', 'Il premio selezionato non è valido.');
+                header('Location: /gestore/eventi/nuovo');
+                exit();
+            }
+
+            $quotaIscrizione = new EPrezzo($valoreQuota); //DA CORREGGERE (RICHIEDE VALUTA)
+
+            //Recuperiamo gli oggetti ETorneo dal DB
+            $listaTornei = [];
+            foreach ($idTorneiSelezionati as $idTorneo) {
+                $torneo = FPersistentManager::visualizza(ETorneo::class, 'idEvento', $idTorneo);
+                if ($torneo) {
+                    $listaTornei[] = $torneo;
+                }
+            }
+
+            //Istanziamo la challenge passando i parametri richiesti dal costruttore
+            $nuovoEvento = new EChallenge($nome, $imgBlob, $descrizione, $dataInizio, $maxPartecipanti, $quotaIscrizione, $premio, $punti1, $punti2, $punti3, $listaTornei);
+ */
         }
 
 
          
+    }
+
+    /**
+     * Mostra il form per modificare un evento esistente.
+     * URL: /gestore/eventi/modifica?=X (Accesso Riservato Gestore)
+     */
+    public function mostraFormModificaEvento(): void {
+        $this->requireRole('gestore');
+
+        //Recuperiamo l'ID dell'evento da modificare
+        $idEvento = UHTTPMethods::get('id');
+        if (!$idEvento) {
+            UFlashMessage::addMessage('danger', 'ID evento non valido o mancante.');
+            header('Location: /gestore/eventi');
+            exit();
+        }
+
+        //Interroghiamo Foundation per recuperare l'oggetto reale dal DB
+        $evento = null;
+        //QUANDO SARÀ PRONTO FOUNDATION:
+        //$evento = FPersistentManager::visualizza(EEvento::class, 'idEvento', $idEvento);
+
+        //Controllo di sicurezza (evento esistente)
+        if (!$evento) {
+            UFlashMessage::addMessage('danger', 'L\'evento selezionato non esiste.');
+            header('Location: /gestore/eventi');
+            exit();
+        }
+
+        $datiLayout = $this->preparaDatiLayout('form_evento');
+
+        //Inseriamo l'oggetto evento nei dati: serve alla View per precompilare i campi HTML
+        $datiLayout['evento'] = $evento;
+/* 
+        //Se l'evento è un torneo o una challenge, la View potrebbe aver bisogno della lista di giochi o premi per popolare le tendine di select di modifica
+        if ($evento instanceof ETorneo || $evento instanceof EChallenge) {
+            $datiLayout['premi_disponibili'] = FPersistentManager::visualizzaTutti(EProdotto::class);
+        }
+        if ($evento instanceof EChallenge) {
+            $datiLayout['tornei_disponibili'] = FPersistentManager::visualizzaTutti(ETorneo::class);
+        }
+ */
+        
+        //QUANDO SARÀ PRONTO PRESENTATION:
+        //VGestioneEventi::mostraFormModificaEvento($datiLayout);
+        echo "Area gestore: Form di modifica per l'evento" . $idEvento;
     }
          
         

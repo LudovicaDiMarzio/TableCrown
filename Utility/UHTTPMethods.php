@@ -105,4 +105,26 @@ class UHTTPMethods {
         return $_FILES[$key];
     }
 
+    /**
+     * Recupera e valida un array inviato dal form POST
+     * is_array() verifica che il valore sia un array
+     * Se il campo non esiste o è vuoto, restituisce un array vuoto [] se richiesto.
+     */
+    public static function postArray(string $key, bool $required = false): array {
+        $value = $_POST[$key] ?? [];
+
+        if ($value === null){
+            if ($required) {
+                throw new InvalidArgumentException("Il campo '$key' è richiesto.");
+            }
+            return [];
+        }
+
+        if (!is_array($value)) {
+            throw new InvalidArgumentException("Il campo '$key' deve essere un elenco valido (array).");
+        }
+
+        return $value;
+    }
+
 }
