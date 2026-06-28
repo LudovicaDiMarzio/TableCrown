@@ -176,4 +176,14 @@ class CAutenticazione extends BaseController {
         header('Location: /');
         exit();
     }
+
+    /**
+     * Sovrascrive il metodo del BaseController per definire il percorso del Login.
+     */
+    protected function getBreadcrumbs(): array {
+        return [
+            ['label' => 'Home', 'url' => '/'],
+            ['label' => 'Login', 'url' => '/accedi']
+        ];
+    }
 }

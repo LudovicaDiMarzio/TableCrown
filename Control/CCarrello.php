@@ -3,6 +3,7 @@ namespace TableCrown\Control;
 
 use TableCrown\Utility\USession;
 use TableCrown\Utility\UHTTPMethods;
+use TableCrown\Entity\EProdotto;
 
 /**
  * Controller dedicato alla gestione del carrello acquisti.
@@ -36,13 +37,13 @@ class CCarrello extends BaseController {
 
         //Se l'array non è vuoto, significa che ci sono prodotti da elaborare
         if (!empty($carrello)) {
-            //QUANDO SARÀ PRONTO FOUNDATION (CLASSE FPRODOTTO):
+            //QUANDO SARÀ PRONTO FOUNDATION:
             //Ciclo sugli ID presenti nel carrello per caricare i dati reali dal DB
             /* 
             //Scorriamo il carrello prendendo la chiave (id prodotto) e il valore (quantità)
             foreach ($carrello as $idProdotto => $quantita) {
                 //Chiediamo a Foundation di caricarci l'oggetto Entity del prodotto dal DB
-                $prodotto = FProdotto::getProdottoById($idProdotto);
+                $prodotto = FPersistentManager::visualizza(EProdotto::class, 'idProdotto', $idProdotto);
 
                 //Se il prodotto esiste nel DB...
                 if ($prodotto) {
@@ -182,7 +183,7 @@ class CCarrello extends BaseController {
         //Scorriamo il nuovo carrello aggiornato e sommiamo i prezzi reali presi dal DB
         /* $nuovoTotale = 0.00;
         foreach ($carrello as $idProdotto => $quantita) {
-            $prodotto = FProdotto::getProdottoById($idProdotto);
+            $prodotto = FPersistentManager::visualizza(EProdotto::class, 'idProdotto', $idProdotto);
             if ($prodotto) {
                 $nuovoTotale += ($prodotto->getPrezzo() * $quantita);
             }

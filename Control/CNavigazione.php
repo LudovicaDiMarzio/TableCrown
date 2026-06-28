@@ -5,9 +5,10 @@
 namespace TableCrown\Control;
 
 use TableCrown\Control\BaseController;
+use TableCrown\Entity\EProdotto;
+
 /**
  * QUANDO SARANNO PRONTI I RISPETTIVI LAYER, L'AUTOLOADER TROVERà QUESTE CLASSI:
- * use TableCrown\Foundation\FProdotto;
  * use TableCrown\Presentation\VNavigazione;
  */
 
@@ -31,11 +32,13 @@ class CNavigazione extends BaseController {
         $offerte = [];
         $nuoviArrivi = [];
 
+        //QUANDO SARÀ PRONTO FOUNDATION:
         /* //Interfaccia con il livello Foundation
          try {
-            //Richiediamo un massimo di 5 prodotti per sezione (dovremmo prendere quelli con la scadenza più vicina, perchè la home dovrebbe mostrare le OFFERTE IN SCADENZA)
-            $offerte = FProdotto::getProdottiInOfferta(5);
-            $nuoviArrivi = FProdotto::getNuoviArrivo(5);
+            //SE NEL PERSISTENT MANAGER VENGONO IMPLEMENTATI METODI COMPLESSI O QUERY CONDIZIONALI,
+            //USERò DEI METODI AD HOC PER LE LISTE FILTRATE, AD ESEMPIO:
+            //$offerte = FPersistentManager::getObjListOnAttribute(EProdotto::class, 'inOfferta', true); //ipotizzando un metodo che restituisca tutti i prodotti in base ad un certo attributo, in questo caso 'inOfferta'
+            //$nuoviArrivi = FPersistentManager::visualizzaListaOrdinata(EProdotto::class, 'dataPubblicazione', 'DESC', 5); //ipotizzando un metodo che restituisca una lista dei 5 ultimi prodotti aggiunti al catalogo
         } catch (\Exception $e) {
             //Gestione dell'errore di connessione al db: logghiamo l'errore e lasciamo gli array vuoti per non far crashare l'intera pagina visibile all'utente.
         }  
@@ -51,6 +54,7 @@ class CNavigazione extends BaseController {
         //Passiamo "home" come nome della pagine corrente per attivare la classe "active" sulla barra di navigazione.
         $datiLayout = $this->preparaDatiLayout('home', $datiPagina);
 
+        //QUANDO SARÀ PRONTO PRESENTATION:
         /**
          * Passiamo i dati al layer Presentation:
          * Istanziamo la View specifica e gli passiamo l'array dei dati.

@@ -75,19 +75,19 @@ class CFrontController {
             case 'accedi':
                 //Corrisponde a: GET /accedi
                 $controller = new CAutenticazione();
-                $controller->mostraFormLogin();
+                $controller->mostraForm();
                 break;
 
             case 'registrati':
                 //Corrisponde a: GET /registrati
                 $controller = new CAutenticazione();
-                $controller->mostraFormRegistrazione();
+                $controller->mostraForm();
                 break;
 
             case 'logout':
                 //Corrisponde a: GET /logout
                 $controller = new CAutenticazione();
-                $controller->eseguiLogout();
+                $controller->logout();
                 break;
 
             case 'wishlist':
