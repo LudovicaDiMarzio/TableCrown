@@ -129,7 +129,6 @@ class FEntityManager {
 
     /**
     * Metodo per verificare l'esistenza di un oggetto nel db
-    * @param string $nomeColonnaId nome della colonna che identifica l'oggetto
     * @param string $table nome dell'entity
     * @param string $field nome del campo
     * @param mixed $value valore della colonna identificativa
