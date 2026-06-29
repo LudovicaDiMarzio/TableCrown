@@ -142,7 +142,7 @@ class FEntityManager {
         //recupero il nome della colonna identificativa mappata nell'entity con le annotation doctrine
         $nomeColonnaId = self::$entityManager->getClassMetadata($table)->getIdentifierFieldNames()[0];
         // contiamo le righe restituite
-        $qb->select('COUNT(e' . $nomeColonnaId. ')')
+        $qb->select('COUNT(e.' . $nomeColonnaId. ')')
            ->from($table, 'e')
            ->where('e.' . $field . ' = :value') 
            ->setParameter('value', $value);
@@ -155,6 +155,7 @@ class FEntityManager {
 
         } catch (Exception $e) {
             error_log("Errore durante il controllo di esistenza dell'oggeto: " . $e->getMessage()); 
+            echo "errore---------->" . $e->getMessage();
             return false;
         }
 
