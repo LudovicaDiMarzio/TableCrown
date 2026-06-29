@@ -30,12 +30,13 @@ class ETorneo extends EEvento {
     private ?EChallenge $challenge = null; //challenge associata al torneo
     
 
-    public function __construct(string $nomeEvento, string $imgEvento, string $descrizioneEvento, DateTime $dataInizio, int $maxPartecipanti, EPrezzo $quotaIscrizione, EProdotto $premio, EProdotto $gioco) {
+    public function __construct(string $nomeEvento, string $imgEvento, string $descrizioneEvento, DateTime $dataInizio, int $maxPartecipanti, EPrezzo $quotaIscrizione, EProdotto $premio, EProdotto $gioco, ?EChallenge $challenge = null) {
         parent::__construct($nomeEvento, $imgEvento, $descrizioneEvento, $dataInizio, $maxPartecipanti);
         $this->quotaIscrizione = $quotaIscrizione;
         $this->premio = $premio;
         $this->verificaPremio(); //verifica che il premio sia valido (che abbia lo stato disponibile)
         $this->gioco = $gioco;
+        $this->challenge = $challenge;
     }
 
     //GET methods
