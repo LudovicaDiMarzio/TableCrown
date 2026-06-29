@@ -8,14 +8,14 @@ require_once __DIR__ . '/vendor/autoload.php';
 
 // 2. Includi le classi che ti servono (se non avete un autoloader automatico)
 
-use TableCrown\Foundation\FEntityManager;
+use TableCrown\Foundation\FPersistentManager;
 use TableCrown\Entity\EUtente;
 use TableCrown\Entity\Enumerativi\PlayerLevel;
 
 // --- TEST 1: Verifica Esistenza ---
 $emailTest = "test@email.it";
-FEntityManager::getEntityManager();
-$esiste = FEntityManager::verificaEsistenza(EUtente::class, 'emailpersona', $emailTest);
+$pm =FPersistentManager::getPersistentManager();
+$esiste = $pm->PMverificaEsistenza(EUtente::class, 'emailpersona', $emailTest);
 
 var_dump($esiste);
 if ($esiste) {
@@ -26,7 +26,7 @@ if ($esiste) {
     
     // --- TEST 2: Salvataggio (SaveObj) ---
     $nuovoUtente = new EUtente("Mario Rossi", $emailTest, 'pswuser12345678', '23', PlayerLevel::PRINCIPIANTE);
-    $salvato = FEntityManager::saveObj($nuovoUtente);
+    $salvato = $pm->PMsaveObj($nuovoUtente);
     
     if ($salvato) {
         echo "✅ Utente salvato con successo!<br>";

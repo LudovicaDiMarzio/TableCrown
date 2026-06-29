@@ -1,5 +1,5 @@
 <?php
-namespace Foundation;
+namespace TableCrown\Foundation;
 
 use Doctrine\DBAL\LockMode;
 use TableCrown\Foundation\FEntityManager;
@@ -21,7 +21,7 @@ class FPersistentManager
     public static function getPersistentManager()
     {
         if (self::$persistentManager === null) {
-            new self();
+            self::$persistentManager = new self();
         }
         return self::$persistentManager;
     }
@@ -71,7 +71,7 @@ class FPersistentManager
      */
     public static function PMsaveObj($obj): bool
     {
-        return FEntityManager::getEntityManager()->saveObj($obj);
+        return FEntityManager::saveObj($obj);
     }
     
     
@@ -84,7 +84,7 @@ class FPersistentManager
      */
     public function PMgetObjOnAttribute($class, $field, $value): ?object
     {
-        return FEntityManager::getEntityManager()->getObjOnAttribute($class, $field, $value);
+        return FEntityManager::getObjOnAttribute($class, $field, $value);
     }
 
      /**
@@ -96,7 +96,7 @@ class FPersistentManager
      */
     public function PMgetObjListOnAttribute($class, $field, $value): array
     {
-        return FEntityManager::getEntityManager()->getObjListOnAttribute($class, $field, $value);
+        return FEntityManager::getObjListOnAttribute($class, $field, $value);
     }
 
      /**
@@ -108,7 +108,7 @@ class FPersistentManager
      */
     public function PMgetObjListBetween($class, $field, $value): array
     {
-        return FEntityManager::getEntityManager()->getObjListBetween($class, $field, $value);
+        return FEntityManager::getObjListBetween($class, $field, $value);
     }
 
     /**
@@ -120,7 +120,7 @@ class FPersistentManager
      */
     public function PMverificaEsistenza($table, $field, $value): bool
     {
-        return FEntityManager::getEntityManager()->verificaEsistenza($table, $field, $value);
+        return FEntityManager::verificaEsistenza($table, $field, $value);
     }
 
     /**
@@ -132,7 +132,7 @@ class FPersistentManager
      */
     public function PMRicerca($class, $str, $field ): array
     {
-        return FEntityManager::getEntityManager()->getRicerca($class, $str, $field);
+        return FEntityManager::getRicerca($class, $str, $field);
     }   
      
 
@@ -143,7 +143,7 @@ class FPersistentManager
      */
     public static function PMdeleteObj($obj): bool
     {
-        return FEntityManager::getEntityManager()->deleteObj($obj);
+        return FEntityManager::deleteObj($obj);
     }
 
     /** 
@@ -153,7 +153,7 @@ class FPersistentManager
      */
     public static function PMupdateObj($obj): bool
     {
-        return FEntityManager::getEntityManager()->saveObj($obj);
+        return FEntityManager::saveObj($obj);
     }
 
     /**
@@ -163,7 +163,7 @@ class FPersistentManager
      */
     public static function PMgetAll($class): array
     {
-        return FEntityManager::getEntityManager()->getAll($class);
+        return FEntityManager::getAll($class);
     }
 
 
