@@ -129,6 +129,135 @@ $recensioni = [
 
 
 
+// ── EVENTI: TORNEI ──
+$eventi_tornei = [
+    [
+        'idEvento' => 301,
+        'nomeEvento' => 'Torneo di Catan - Coppa Primavera',
+        'imgEvento' => 'placeholder.jpg',
+        'statoEvento' => 'Programmato',
+        'maxPartecipanti' => 16,
+        'numeroPartecipanti' => 10,
+        'dataInizio' => '2026-07-15 18:30:00',
+        'gioco' => ['nomeProdotto' => 'Catan'],
+        'quota' => [
+            'valore' => 10.00,
+            'valuta' => 'EUR',
+            'haSconto' => true,
+            'prezzoScontato' => 8.00,
+        ],
+    ],
+    [
+        'idEvento' => 302,
+        'nomeEvento' => 'Torneo 7 Wonders - Sfida Estiva',
+        'imgEvento' => 'placeholder.jpg',
+        'statoEvento' => 'Programmato',
+        'maxPartecipanti' => 12,
+        'numeroPartecipanti' => 12, // posti esauriti, utile per testare lo stepper a 0
+        'dataInizio' => '2026-08-02 17:00:00',
+        'gioco' => ['nomeProdotto' => '7 Wonders'],
+        'quota' => [
+            'valore' => 8.00,
+            'valuta' => 'EUR',
+            'haSconto' => false,
+            'prezzoScontato' => null,
+        ],
+    ],
+    [
+        'idEvento' => 303,
+        'nomeEvento' => 'Torneo Carcassonne - Edizione Invernale',
+        'imgEvento' => 'placeholder.jpg',
+        'statoEvento' => 'Terminato', // serve a testare il ramo "passato"
+        'maxPartecipanti' => 16,
+        'numeroPartecipanti' => 16,
+        'dataInizio' => '2026-01-20 18:00:00',
+        'gioco' => ['nomeProdotto' => 'Carcassonne'],
+        'quota' => [
+            'valore' => 10.00,
+            'valuta' => 'EUR',
+            'haSconto' => false,
+            'prezzoScontato' => null,
+        ],
+    ],
+];
+
+
+// ── EVENTI: SERATE ──
+$eventi_serate = [
+    [
+        'idEvento' => 401,
+        'nomeEvento' => 'Serata Gioco Libero al Tablecrown Pub',
+        'imgEvento' => 'placeholder.jpg',
+        'statoEvento' => 'Programmato',
+        'maxPartecipanti' => 30,
+        'numeroPartecipanti' => 18,
+        'dataInizio' => '2026-07-10 20:00:00',
+        'tipoSerata' => 'Gioco Libero',
+    ],
+    [
+        'idEvento' => 402,
+        'nomeEvento' => 'Presentazione Brass Birmingham',
+        'imgEvento' => 'placeholder.jpg',
+        'statoEvento' => 'Programmato',
+        'maxPartecipanti' => 20,
+        'numeroPartecipanti' => 5,
+        'dataInizio' => '2026-07-22 19:00:00',
+        'tipoSerata' => 'Presentazione',
+    ],
+    [
+        'idEvento' => 403,
+        'nomeEvento' => 'Serata Azul - Edizione Autunnale',
+        'imgEvento' => 'placeholder.jpg',
+        'statoEvento' => 'Terminato',
+        'maxPartecipanti' => 25,
+        'numeroPartecipanti' => 25,
+        'dataInizio' => '2025-11-05 20:30:00',
+        'tipoSerata' => 'Gioco Libero',
+    ],
+];
+
+// ── EVENTI: CHALLENGE ──
+$eventi_challenge = [
+    [
+        'idEvento' => 501,
+        'nomeEvento' => 'Challenge Wingspan - Stagione Migratoria',
+        'imgEvento' => 'placeholder.jpg',
+        'statoEvento' => 'Programmato',
+        'maxPartecipanti' => 8,
+        'numeroPartecipanti' => 3,
+        'dataInizio' => '2026-07-28 16:00:00',
+        'quota' => [
+            'valore' => 5.00,
+            'valuta' => 'EUR',
+            'haSconto' => true,
+            'prezzoScontato' => 4.00,
+        ],
+    ],
+    [
+        'idEvento' => 502,
+        'nomeEvento' => 'Challenge Catan - Resa dei Conti',
+        'imgEvento' => 'placeholder.jpg',
+        'statoEvento' => 'Terminato',
+        'maxPartecipanti' => 8,
+        'numeroPartecipanti' => 8,
+        'dataInizio' => '2026-02-14 18:00:00',
+        'quota' => [
+            'valore' => 5.00,
+            'valuta' => 'EUR',
+            'haSconto' => false,
+            'prezzoScontato' => null,
+        ],
+    ],
+];
+
+// ── FILTRI (riflette ciò che arriva da querystring, anche se il mock non filtra davvero) ──
+$filtri = [
+    'data'      => $_GET['data'] ?? '',
+    'stato'     => $_GET['stato'] ?? 'programma',
+    'tipologia' => $_GET['tipologia'] ?? [],
+];
+
+
 $smarty->setTemplateDir(SMARTY_DIR . 'templates/');
 $smarty->setCompileDir(SMARTY_DIR  . 'templates_c/');
 $smarty->setCacheDir(SMARTY_DIR    . 'cache/');
@@ -155,6 +284,8 @@ $smarty->assign('userHasPurchased',  true);
 
 
 
+
+
 $smarty->assign('base_url',     BASE_URL);
 $smarty->assign('offerte',      $offerte);
 $smarty->assign('nuovi_arrivi', $nuovi_arrivi);
@@ -162,5 +293,41 @@ $smarty->assign('utente', isset($_SESSION['utente_id']) ? ['nickname' => $_SESSI
 
 
 
+/*sta rona non so sicuro*/
 
-$smarty->display('prodotto.tpl');
+
+
+$uriPath   = parse_url($_SERVER['REQUEST_URI'], PHP_URL_PATH);
+$categoria = $_GET['categoria'] ?? null;
+
+if (!$categoria && preg_match('#^/catalogo/(tornei|serate|challenge)$#', $uriPath, $m)) {
+    $categoria = $m[1];
+}
+
+if ($categoria === 'tornei') {
+    $smarty->assign('eventi', $eventi_tornei);
+    $smarty->assign('filtri', $filtri);
+    $smarty->display('catalogo_tornei.tpl');
+    exit;
+}
+
+if ($categoria === 'serate') {
+    $smarty->assign('eventi', $eventi_serate);
+    $smarty->assign('filtri', $filtri);
+    $smarty->display('catalogo_serate.tpl');
+    exit;
+}
+
+if ($categoria === 'challenge') {
+    $smarty->assign('eventi', $eventi_challenge);
+    $smarty->assign('filtri', $filtri);
+    $smarty->display('catalogo_challenge.tpl');
+    exit;
+}
+
+
+
+$smarty->assign('eventi', $eventi_tornei);
+$smarty->assign('filtri', $filtri);
+
+$smarty->display('eventi.tpl');

@@ -1,18 +1,18 @@
 <?php
-/* Smarty version 5.8.0, created on 2026-06-19 16:43:46
+/* Smarty version 5.8.0, created on 2026-06-29 16:33:10
   from 'file:catalogo_serate.tpl' */
 
 /* @var \Smarty\Template $_smarty_tpl */
 if ($_smarty_tpl->getCompiled()->isFresh($_smarty_tpl, array (
   'version' => '5.8.0',
-  'unifunc' => 'content_6a3555a2140251_06876683',
+  'unifunc' => 'content_6a428226211013_40252227',
   'has_nocache_code' => false,
   'file_dependency' => 
   array (
     '16092433067089ac89f702dc702edf3d97285e8e' => 
     array (
       0 => 'catalogo_serate.tpl',
-      1 => 1781879702,
+      1 => 1782740732,
       2 => 'file',
     ),
   ),
@@ -20,18 +20,18 @@ if ($_smarty_tpl->getCompiled()->isFresh($_smarty_tpl, array (
   array (
   ),
 ))) {
-function content_6a3555a2140251_06876683 (\Smarty\Template $_smarty_tpl) {
+function content_6a428226211013_40252227 (\Smarty\Template $_smarty_tpl) {
 $_smarty_current_dir = 'C:\\Users\\damic\\Desktop\\uni\\APPUNTI\\anno3\\secondo_semenstre\\Pweb\\TableCrown\\Presentation\\smarty-dir\\templates';
 $_smarty_tpl->getInheritance()->init($_smarty_tpl, true);
 ?>
 
 
 <?php 
-$_smarty_tpl->getInheritance()->instanceBlock($_smarty_tpl, 'Block_8255779146a3555a2115012_02952134', "content");
+$_smarty_tpl->getInheritance()->instanceBlock($_smarty_tpl, 'Block_9365265706a4282261efbb8_41934650', "content");
 $_smarty_tpl->getInheritance()->endChild($_smarty_tpl, "common/layout.tpl", $_smarty_current_dir);
 }
 /* {block "content"} */
-class Block_8255779146a3555a2115012_02952134 extends \Smarty\Runtime\Block
+class Block_9365265706a4282261efbb8_41934650 extends \Smarty\Runtime\Block
 {
 public function callBlock(\Smarty\Template $_smarty_tpl) {
 $_smarty_current_dir = 'C:\\Users\\damic\\Desktop\\uni\\APPUNTI\\anno3\\secondo_semenstre\\Pweb\\TableCrown\\Presentation\\smarty-dir\\templates';
@@ -112,53 +112,53 @@ $foreach0DoElse = true;
 foreach ($_from ?? [] as $_smarty_tpl->getVariable('evento')->value) {
 $foreach0DoElse = false;
 ?>
-                    <?php $_smarty_tpl->assign('stato', $_smarty_tpl->getValue('evento')->getStatoEvento()->name, false, NULL);?>
+                    <?php $_smarty_tpl->assign('stato', $_smarty_tpl->getValue('evento')['statoEvento'], false, NULL);?>
                     <?php $_smarty_tpl->assign('passato', ($_smarty_tpl->getValue('stato') == 'Terminato'), false, NULL);?>
-                    <?php $_smarty_tpl->assign('postiDisponibili', $_smarty_tpl->getValue('evento')->getMaxPartecipanti()-$_smarty_tpl->getValue('evento')->getNumeroPartecipanti(), false, NULL);?>
+                    <?php $_smarty_tpl->assign('postiDisponibili', $_smarty_tpl->getValue('evento')['maxPartecipanti']-$_smarty_tpl->getValue('evento')['numeroPartecipanti'], false, NULL);?>
 
                     <article class="evento-list-card<?php if ($_smarty_tpl->getValue('passato')) {?> evento-list-card-passato<?php }?>">
 
                         <h3 class="evento-list-nome">
-                            <?php echo htmlspecialchars((string)$_smarty_tpl->getValue('evento')->getNomeEvento(), ENT_QUOTES, 'UTF-8', true);?>
+                            <?php echo htmlspecialchars((string)$_smarty_tpl->getValue('evento')['nomeEvento'], ENT_QUOTES, 'UTF-8', true);?>
 
                             <?php if ($_smarty_tpl->getValue('passato')) {?><span class="evento-passato-label">(passato)</span><?php }?>
                         </h3>
 
                         <div class="evento-list-image-wrapper">
                             <img src="<?php echo $_smarty_tpl->getValue('base_url');?>
-/image/eventi/<?php echo htmlspecialchars((string)$_smarty_tpl->getValue('evento')->getImgEvento(), ENT_QUOTES, 'UTF-8', true);?>
+/image/eventi/<?php echo htmlspecialchars((string)$_smarty_tpl->getValue('evento')['imgEvento'], ENT_QUOTES, 'UTF-8', true);?>
 "
-                                 alt="<?php echo htmlspecialchars((string)$_smarty_tpl->getValue('evento')->getNomeEvento(), ENT_QUOTES, 'UTF-8', true);?>
+                                 alt="<?php echo htmlspecialchars((string)$_smarty_tpl->getValue('evento')['nomeEvento'], ENT_QUOTES, 'UTF-8', true);?>
 "
                                  class="evento-list-image">
                         </div>
 
                         <div class="evento-list-meta-row">
-                            <span class="evento-tipo-badge"><?php echo htmlspecialchars((string)$_smarty_tpl->getValue('evento')->getTipoSerata(), ENT_QUOTES, 'UTF-8', true);?>
+                            <span class="evento-tipo-badge"><?php echo htmlspecialchars((string)$_smarty_tpl->getValue('evento')['tipoSerata'], ENT_QUOTES, 'UTF-8', true);?>
 </span>
                         </div>
 
                         <div class="evento-list-info-row">
                             <span class="evento-data">
-                                <i class="ti ti-calendar"></i> <?php echo $_smarty_tpl->getSmarty()->getModifierCallback('date_format')($_smarty_tpl->getValue('evento')->getDataInizio(),"%d/%m/%Y");?>
+                                <i class="ti ti-calendar"></i> <?php echo $_smarty_tpl->getSmarty()->getModifierCallback('date_format')($_smarty_tpl->getValue('evento')['dataInizio'],"%d/%m/%Y");?>
 
                             </span>
                             <span class="evento-ora">
-                                <i class="ti ti-clock"></i> <?php echo $_smarty_tpl->getSmarty()->getModifierCallback('date_format')($_smarty_tpl->getValue('evento')->getDataInizio(),"%H:%M");?>
+                                <i class="ti ti-clock"></i> <?php echo $_smarty_tpl->getSmarty()->getModifierCallback('date_format')($_smarty_tpl->getValue('evento')['dataInizio'],"%H:%M");?>
 
                             </span>
                         </div>
 
                         <div class="evento-posti">
                             Posti disponibili: <strong><?php echo $_smarty_tpl->getValue('postiDisponibili');?>
-/<?php echo $_smarty_tpl->getValue('evento')->getMaxPartecipanti();?>
+/<?php echo $_smarty_tpl->getValue('evento')['maxPartecipanti'];?>
 </strong>
                         </div>
 
                         <div class="evento-list-actions">
                             <?php if ($_smarty_tpl->getValue('passato')) {?>
                                 <a href="<?php echo $_smarty_tpl->getValue('base_url');?>
-/eventi/risultati/<?php echo $_smarty_tpl->getValue('evento')->getIdEvento();?>
+/eventi/risultati/<?php echo $_smarty_tpl->getValue('evento')['idEvento'];?>
 " class="btn-evento-secondary">
                                     Visualizza risultati
                                 </a>
@@ -171,7 +171,7 @@ $foreach0DoElse = false;
                                     <button type="button" class="evento-stepper-btn" data-action="increase">+</button>
                                 </div>
                                 <a href="<?php echo $_smarty_tpl->getValue('base_url');?>
-/eventi/prenota/<?php echo $_smarty_tpl->getValue('evento')->getIdEvento();?>
+/eventi/prenota/<?php echo $_smarty_tpl->getValue('evento')['idEvento'];?>
 " class="btn-evento-primary">
                                     Iscriviti
                                 </a>
@@ -180,7 +180,7 @@ $foreach0DoElse = false;
 
                         <?php if (!$_smarty_tpl->getValue('passato')) {?>
                         <a href="<?php echo $_smarty_tpl->getValue('base_url');?>
-/eventi/dettaglio/<?php echo $_smarty_tpl->getValue('evento')->getIdEvento();?>
+/eventi/dettaglio/<?php echo $_smarty_tpl->getValue('evento')['idEvento'];?>
 " class="evento-scopri-link">
                             Scopri di più
                         </a>

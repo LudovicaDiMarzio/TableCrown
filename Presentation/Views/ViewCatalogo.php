@@ -1,26 +1,20 @@
 <?php
 // Presentation/Views/CatalogoView.php
 
-require_once __DIR__ . '/../../config.php';
+require_once __DIR__ . '/SmartyConfiguration.php';
 
 class ViewCatalogo {
-    private $smarty;
-
-    public function __construct($smarty) {
-        $this->smarty = $smarty;
-    }
-
-    public function render(array $dati) {
-        $this->smarty->assign('utente',       $dati['utente']       ?? null);
-        $this->smarty->assign('prodotti',     $dati['prodotti']     ?? []);
-        $this->smarty->assign('categorie',    $dati['categorie']    ?? []);
-        $this->smarty->assign('filtri',       $dati['filtri']       ?? []);
-        $this->smarty->assign('pagina',       $dati['pagina']       ?? 1);
-        $this->smarty->assign('totale_pagine',$dati['totale_pagine']?? 1);
-        $this->smarty->assign('offerte',      $dati['offerte']      ?? []);
-        $this->smarty->assign('nuovi_arrivi', $dati['nuovi_arrivi'] ?? []);
-        $this->smarty->assign('base_url',     BASE_URL);
-
-        $this->smarty->display('catalogo.tpl');
+    public static function render(array $dati): void {
+        $smarty = SmartyConfiguration::getSmarty();
+        $smarty->assign('utente',        $dati['utente']        ?? null);
+        $smarty->assign('prodotti',      $dati['prodotti']      ?? []);
+        $smarty->assign('categorie',     $dati['categorie']     ?? []);
+        $smarty->assign('filtri',        $dati['filtri']        ?? []);
+        $smarty->assign('pagina',        $dati['pagina']        ?? 1);
+        $smarty->assign('totale_pagine', $dati['totale_pagine'] ?? 1);
+        $smarty->assign('offerte',       $dati['offerte']       ?? []);
+        $smarty->assign('nuovi_arrivi',  $dati['nuovi_arrivi']  ?? []);
+        $smarty->assign('base_url',      BASE_URL);
+        $smarty->display('catalogo.tpl');
     }
 }
