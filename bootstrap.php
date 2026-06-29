@@ -6,16 +6,18 @@ use Doctrine\ORM\EntityManager;
 use Doctrine\ORM\ORMSetup;
 use Doctrine\DBAL\DriverManager;
 
-function getEntityManager(): EntityManager
+function getEntityManagerBoot(): EntityManager
 {
-    //applico il pattern singleton per evitare di creare più di un'istanza di entitymanager
+    /* il pattern singleton lo applico direttamente nell'FEntityManager
+    //applico il pattern singleton per evitare di creare più di un'istanza di entitymanager*/
     static $entityManager = null;
 
     if ($entityManager !== null) {
         return $entityManager;
     }
+    
 
-    //metodo di doctrine per creare la configurazione del db basandosi sugli attributi doctrine che abbiamo messo nelle entity (traduttore delle classi da php a doctrine)
+    //metodo di doctrine della classe ORMSetup per creare la configurazione del db basandosi sugli attributi doctrine che abbiamo messo nelle entity (traduttore delle classi da php a doctrine)
     $config = ORMSetup::createAttributeMetadataConfiguration(
         paths: [__DIR__ . '/Entity'],  //comunico a doctrine dove sono le classi mappate
         isDevMode: true //siamo ancora in modalità sviluppo, quindi ogni volta che facciamo partire una pagina, doctrine si rilegge le entity da zero
