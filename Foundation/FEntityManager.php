@@ -128,6 +128,33 @@ class FEntityManager {
     }
 
     /**
+     * Metodo per recuperare una lista di oggetti ordinati per un campo
+     * @param string $table nome dell'entity
+     * @param string $field nome del campo
+     * @param string $ordinationType ordinamento (ASC o DESC)
+     * @param int $quantity numero massimo di elementi da recuperare
+     * @return array di oggetti
+     * @throws Exception
+     * 
+    */
+    public static function getObjListOrdered($table, $field, $ordinationType, $quantity): array
+    {
+        try{
+            $qb = self::$entityManager->createQueryBuilder();
+            
+            $qb->select('e')
+               ->from($table, 'e')
+               ->orderBy('e.' . $field, $ordinationType)
+               ->setMaxResults($quantity);
+            return $qb->getQuery()->getResult();
+        }
+        catch(Exception $e){
+            error_log("Errore durante il recupero degli oggetti: " . $e->getMessage());
+            return [];
+        }
+    }
+
+    /**
     * Metodo per verificare l'esistenza di un oggetto nel db
     * @param string $table nome dell'entity
     * @param string $field nome del campo
