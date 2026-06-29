@@ -50,52 +50,52 @@
             <div class="eventi-lista-main">
                 <div class="eventi-grid">
                     {foreach from=$eventi item=evento}
-                    {assign var="stato" value=$evento->getStatoEvento()->name}
+                    {assign var="stato" value=$evento.statoEvento}
                     {assign var="passato" value=($stato == 'Terminato')}
-                    {assign var="postiDisponibili" value=$evento->getMaxPartecipanti() - $evento->getNumeroPartecipanti()}
-                    {assign var="quota" value=$evento->getQuotaIscrizione()}
+                    {assign var="postiDisponibili" value=$evento.maxPartecipanti - $evento.numeroPartecipanti}
+                    {assign var="quota" value=$evento.quota}
 
                     <article class="evento-list-card{if $passato} evento-list-card-passato{/if}">
 
                         <h3 class="evento-list-nome">
-                            {$evento->getNomeEvento()|escape}
+                            {$evento.nomeEvento|escape}
                             {if $passato}<span class="evento-passato-label">(passata)</span>{/if}
                         </h3>
 
                         <div class="evento-list-image-wrapper">
-                            <img src="{$base_url}/image/eventi/{$evento->getImgEvento()|escape}"
-                                 alt="{$evento->getNomeEvento()|escape}"
+                            <img src="{$base_url}/image/eventi/{$evento.imgEvento|escape}"
+                                 alt="{$evento.nomeEvento|escape}"
                                  class="evento-list-image">
                         </div>
 
                         <div class="evento-list-meta-row">
                             <span class="evento-tipo-badge">Challenge</span>
                             <span class="evento-prezzo">
-                                {if $quota->hasSconto()}
-                                    <span class="evento-prezzo-originale">{$quota->getValore()|string_format:"%.2f"} {$quota->getValuta()->name}</span>
-                                    {$quota->calcolaPrezzoScontato()|string_format:"%.2f"} {$quota->getValuta()->name}
+                                {if $quota.haSconto}
+                                    <span class="evento-prezzo-originale">{$quota.valore|string_format:"%.2f"} {$quota.valuta}</span>
+                                    {$quota.prezzoScontato|string_format:"%.2f"} {$quota.valuta}
                                 {else}
-                                    {$quota->getValore()|string_format:"%.2f"} {$quota->getValuta()->name}
+                                    {$quota.valore|string_format:"%.2f"} {$quota.valuta}
                                 {/if}
                             </span>
                         </div>
 
                         <div class="evento-list-info-row">
                             <span class="evento-data">
-                                <i class="ti ti-calendar"></i> {$evento->getDataInizio()|date_format:"%d/%m/%Y"}
+                                <i class="ti ti-calendar"></i> {$evento.dataInizio|date_format:"%d/%m/%Y"}
                             </span>
                             <span class="evento-ora">
-                                <i class="ti ti-clock"></i> {$evento->getDataInizio()|date_format:"%H:%M"}
+                                <i class="ti ti-clock"></i> {$evento.dataInizio|date_format:"%H:%M"}
                             </span>
                         </div>
 
                         <div class="evento-posti">
-                            Posti disponibili: <strong>{$postiDisponibili}/{$evento->getMaxPartecipanti()}</strong>
+                            Posti disponibili: <strong>{$postiDisponibili}/{$evento.maxPartecipanti}</strong>
                         </div>
 
                         <div class="evento-list-actions">
                             {if $passato}
-                                <a href="{$base_url}/eventi/risultati/{$evento->getIdEvento()}" class="btn-evento-secondary">
+                                <a href="{$base_url}/eventi/risultati/{$evento.idEvento}" class="btn-evento-secondary">
                                     Visualizza risultati
                                 </a>
                             {else}
@@ -104,14 +104,14 @@
                                     <input type="number" class="evento-stepper-input" value="1" min="1" max="{$postiDisponibili}">
                                     <button type="button" class="evento-stepper-btn" data-action="increase">+</button>
                                 </div>
-                                <a href="{$base_url}/eventi/prenota/{$evento->getIdEvento()}" class="btn-evento-primary">
+                                <a href="{$base_url}/eventi/prenota/{$evento.idEvento}" class="btn-evento-primary">
                                     Prenota
                                 </a>
                             {/if}
                         </div>
 
                         {if !$passato}
-                        <a href="{$base_url}/eventi/dettaglio/{$evento->getIdEvento()}" class="evento-scopri-link">
+                        <a href="{$base_url}/eventi/dettaglio/{$evento.idEvento}" class="evento-scopri-link">
                             Scopri di più
                         </a>
                         {/if}
