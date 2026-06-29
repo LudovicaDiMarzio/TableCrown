@@ -113,7 +113,7 @@ class UHTTPMethods {
     public static function postArray(string $key, bool $required = false): array {
         $value = $_POST[$key] ?? [];
 
-        if ($value === null){
+        if ($value === null || $value === []){
             if ($required) {
                 throw new InvalidArgumentException("Il campo '$key' è richiesto.");
             }
