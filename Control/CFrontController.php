@@ -9,19 +9,14 @@ class CFrontController {
     public function run(string $url): void {
         //Visto che l'URL inizia con '/', facciamo il trim dello slash, così l'explode non creerà un primo elemento vuoto.
         $cleanUrl = ltrim($url, '/');
-
+        //Spacchiamo l'URL nei vari segmenti, usando lo slash come separatore
+        //es. "profilo/ordini" -> [0 => "profilo", 1 => "ordini"]
         //Se l'URL era solo "/", dopo il trim sarà una stringa vuota. In tal caso andiamo su 'home'.
-        if ($cleanUrl === '') {
-            $routePrincipale = 'home';
-            $sottoRoute = null;
-        } else {
-            //Spacchiamo l'URL nei vari segmenti, usando lo slash come separatore
-            //es. "profilo/ordini" -> [0 => "profilo", 1 => "ordini"]
-            $urlParts = explode('/', $cleanUrl);
-            $routePrincipale = strtolower($urlParts[0]);
-            //Il sottoRoute conterrà l'azione o l'ID (es. "ordini" o "45")
-            $sottoRoute = isset($urlParts[1]) ? strtolower($urlParts[1]) : null;
-        }
+        $urlParts = $cleanUrl === '' ? ['home'] : explode('/', $cleanUrl);
+
+        $routePrincipale = strtolower($urlParts[0]);
+        $sottoRoute = isset($urlParts[1]) ? strtolower($urlParts[1]) : null;
+        $sottoRoute2 = isset($urlParts[2]) ? strtolower($urlParts[2]) : null;
 
         $metodoHTTP = UHTTPMethods::method();
 
@@ -115,20 +110,23 @@ class CFrontController {
                 break;
 
             case 'wishlist':
-                //Corrisponde a: GET /wishlist
                 $controller = new CWishlist();
-                $controller->mostraWishlist();
+                if ($sottoRoute === 'aggiungi' && $metodoHTTP === 'POST') {
+                    $controller->aggiungiAllaWishlist();
+                } else {
+                    $controller->mostraWishlist();
+                }
                 break;
 
             case 'carrello':
                 $controller = new CCarrello();
                 //Verifico il metodo HTTP: se l'utente ha cliccato su "Aggiungi" nella Home, invierà una richiesta POST a /carrello/aggiungi
-                if ($metodoHTTP === 'POST') {
-                    if ($sottoRoute === 'aggiungi') {
-                        $controller->aggiungiAlCarrello();
-                    } elseif ($sottoRoute === 'rimuovi') {
-                        $controller->rimuoviDalCarrello();
-                    }
+                if ($sottoRoute === 'aggiungi' && $metodoHTTP === 'POST') {
+                    $controller->aggiungiAlCarrello();
+                } elseif ($sottoRoute === 'rimuovi' && $metodoHTTP === 'GET') {
+                        $controller->rimuoviDalCarrello((int)$sottoRoute2);
+                } elseif ($sottoRoute === 'aggiorna' && $metodoHTTP === 'GET'){
+                    $controller->aggiornaQuantita((int)$sottoRoute2);
                 } else {
                     //Altrimenti, di default con una normale GET, mostra la pagina del carrello
                     $controller->mostraCarrello();
@@ -165,16 +163,35 @@ class CFrontController {
                 $controller->doveSiamo();
                 break;
 
-            case 'recensioni':
-                //Corrisponde a: GET /recensioni/nuova (o POST se invia il form, gestibile dentro il metodo)
-                if ($sottoRoute === 'nuova') {
-                    $controller = new CRecensioni();
-                    $controller->nuovaRecensione();
+            case 'recensione':
+                if ($sottoRoute === 'aggiungi' && $metodoHTTP === 'POST') {
+                    $idProdotto = $sottoRoute2 !== null ? (int)$sottoRoute2 : null;
+                    if ($idProdotto) {
+                        $controller = new CRecensioni();
+                        $controller->aggiungiRecensione($idProdotto);
+                    } else {
+                        $this->mostra404();
+                    }
                 } else {
-                    $this->mostra404();
+                    $this->mostra404(); //Se l'URL non corrisponde a nessuna rotta definita nel sistema, intercettiamo l'errore.
                 }
                 break;
 
+            case 'checkout':
+                $controller = new COrdine();
+                $controller->mostraCheckout();
+                break;
+
+            case 'ordini':
+                $controller = new COrdine();
+                if ($sottoRoute !== null && is_numeric($sottoRoute)) {
+                    //Corrisponde a: GET /ordini/{id} (es. /ordini/45) - dettaglio singolo ordine
+                    $controller->mostraDettaglioOrdine((int)$sottoRoute);
+                } else {
+                    //Corrisponde a: GET /ordini - storico ordini (redirect a /profilo/ordini)
+                    $controller->mostraStoricoOrdini();
+                }
+                break;
 
             default:
                 //Se l'URL non corrisponde a nessuna rotta definita nel sistema, intercettiamo l'errore.

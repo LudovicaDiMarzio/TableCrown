@@ -7,18 +7,18 @@ namespace TableCrown\Control;
 use TableCrown\Utility\USession;
 use TableCrown\Utility\UHTTPMethods;
 use TableCrown\Utility\UFlashMessage;
+use TableCrown\Foundation\FPersistentManager;
 
 
 abstract class BaseController {
     //riferimento al livello Foundation da inserire
-    //protected FPersistentManager $persistentManager;
+    protected FPersistentManager $pm;
 
     protected array $validRoles; //Elenco di ruoli di sistema ammessi per il controllo dei permessi.
     
 
     public function __construct() {
-        //QUANDO è PRONTO FOUNDATION
-        //$this->persistentManager = FPersistentManager::getInstance();
+        $this->pm = FPersistentManager::getPersistentManager();
 
         //Definisco i ruoli validi del nostro sistema TableCrown
         $this->validRoles = [
@@ -39,27 +39,29 @@ abstract class BaseController {
         $globalData = [
             'base_url' => 'https://tablecrown.it', 
             'current_page' => $currentPage, //Indica la pagina attiva (es. 'catalogo', 'eventi', ecc.)
-            'search_query' => UHTTPMethods::get('search_query', ''), //Intercetta i parametri di ricerca nell'URL(es. ?q=nome_prodotto)
             'breadcrumbs' => $this->getBreadcrumbs(), //Il percorso di navigazione
         ];
 
         //Controllo dell'utente (/persona) in sessione
         if (USession::isSetSessionElement('id_persona')) {
-            //QUANDO SARà PRONTO FOUNDATION:
-            //Doctrine capirà se restituire un oggetto EUtente, EGestore o EAmministratore.
-            //
-            //$personaLoggata = FUtente::getById(USession::getSessionElement('id_persona'));
-            //$globalData['utente_loggato'] = $personaLoggata;
-            //$globalData['ruolo_loggato'] = USession::getSessionElement('ruolo');
+            //Utente loggato: costruiamo l'array minimo neccessario per Presentation
+            $globalData['utente'] = [
+                'nickname' => USession::getSessionElement('nickname'),
+            ];
 
-            //Calcolo degli articoli nel carrello (solo se chi è loggato è un semplice utente)
-            //QUANDO FOUNDATION SARà PRONTO
-            //if (USession::getSessionElement('ruolo') === 'utente') {
-                // $cartCount = FCarrello::getCountByUtente(USession::getSessionElement('id_persona'));
-                // if ($cartCount > 0) {
-                //     $globalData['cart_count'] = $cartCount; //Il badge appare solo se gli articoli sono > 0
-                // }
-            // }
+            //cart_count solo per gli utenti (non per gestore o amministratore)
+            if (USession::getSessionElement('ruolo') === 'utente') {
+                $carrello = USession::getSessionElement('carrello') ?? [];
+                //array_column estrae la colonna 'quantita' da ogni riga del carrello
+                //array_sum somma tutti i valori ottenuti
+                $cartCount = array_sum(array_column($carrello, 'quantita'));
+                if ($cartCount > 0) {
+                    $globalData['cart_count'] = $cartCount; //Il badge appare solo se gli articoli sono > 0
+                }
+            }
+        } else {
+            //Utente non loggato
+            $globalData['utente'] = null;
         }
 
         //Gestione dei Flash Messages
@@ -130,7 +132,7 @@ abstract class BaseController {
         if ($userRole !== $role) {
             //Se l'utente è loggato ma non ha i permessi (es. cliente prova a entrare nella dashboard del gestore)
             header("HTTP/1.1 403 Forbidden");
-            echo "Errore 403 - Accesso Negato: Non hai i permessi necessari per accedere a questa risorsa.";
+            echo "Errore 403 - Accesso Negato: Non hai i permessi necessari per accedere a questa risorsa."; //Error 403: utente loggato ma con ruolo sbagliato
             exit();
         }
     }

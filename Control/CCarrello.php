@@ -19,64 +19,97 @@ class CCarrello extends BaseController {
 
     /**
      * Mostra la pagina principale del carrello.
-     * URL: /carrello
+     * URL: GET /carrello
      */
     public function mostraCarrello(): void {
         //Il carrello è accessibile solo agli utenti normali
         $this->requireRole('utente');
 
-        //Inizializziamo l'array principale che conterrà tutti i dati da passare a Smarty
-        $datiCarrello = [];
-        //Inizializziamo la sotto-chiave dei prodotti come array vuoto (evita errori se il carrello è vuoto)
-        $datiCarrello['prodotti'] = [];
-        //Impostiamo il prezzo totale iniziale a zero con formato decimale
-        $datiCarrello['totale'] = 0.00; //il prezzo totale non è salvato nella sessione, lo ricalcoliamo ogni volta che l'utente carica la pagina
-
         //Recuperiamo il carrello attuale memorizzato nella sessione. Se non esiste, ne creiamo uno vuoto
         $carrello = USession::getSessionElement('carrello') ?? [];
 
+        //Le seguenti variabili accumuleranno i dati mentre scorriamo il carrello:
+        $carrelloItems = []; //inizializziamo l'array principale che conterrà tutti i dati da passare alla View
+        $totale = 0.00; //il prezzo totale non è salvato nella sessione, lo ricalcoliamo ogni volta che l'utente carica la pagina
+        $totaleSconto = 0.00; //totale degli sconti applicati
+
         //Se l'array non è vuoto, significa che ci sono prodotti da elaborare
         if (!empty($carrello)) {
-            //QUANDO SARÀ PRONTO FOUNDATION:
             //Ciclo sugli ID presenti nel carrello per caricare i dati reali dal DB
-            /* 
             //Scorriamo il carrello prendendo la chiave (id prodotto) e il valore (quantità)
             foreach ($carrello as $idProdotto => $quantita) {
                 //Chiediamo a Foundation di caricarci l'oggetto Entity del prodotto dal DB
-                $prodotto = FPersistentManager::visualizza(EProdotto::class, 'idProdotto', $idProdotto);
+                $prodotto = $this->pm->PMgetObjOnAttribute(EProdotto::class, 'id', $idProdotto);
 
-                //Se il prodotto esiste nel DB...
-                if ($prodotto) {
-                    //...lo aggiungiamo all'elenco dei prodotti da mandare alla View, insieme alla sua quantità
-                    $datiCarrello['prodotti'][] = [
-                        'oggetto' => $prodotto,
-                        'quantita' => $quantita
-                    ];
-                    //Sommiamo al totale generale il prezzo del prodotto moltiplicato per la sua quantità
-                    $datiCarrello['totale'] += ($prodotto->getPrezzo() * $quantita);
+                if (!$prodotto) {
+                    continue; //salta il prodotto e passa al prossimo
                 } 
-            }*/
-        
 
-            //PER ORA SIMULIAMO UN TOTALE FISSO PER EVITARE CHE LA PAGINA VISUALIZZI DATI VUOTI NEI TEST
-            $datiCarrello['totale'] = 15.50;
+                //Determiniamo il prezzo unitario corretto:
+                //se il prodotto è in sconto usiamo il prezzo scontato, altrimenti il prezzo pieno
+                $hasSconto = $prodotto->getPrezzo()->hasSconto();
+                $prezzoOriginale = $prodotto->getPrezzo()->getValore();
+                $prezzoUnitario = $hasSconto ? $prodotto->getPrezzo()->calcolaValoreScontato() : $prezzoOriginale;
+
+                //Calcoliamo il subtotale di questa riga (prezzo * quantità)
+                $subtotale = $prezzoUnitario * $quantita;
+
+                //Aggiorniamo i totali complessivi
+                $totale += $subtotale;
+ 
+                //Con totaleSconto intendiamo l'importo totale risparmiato considerando tutti i prodotti scontati presenti nel carrello
+                if ($hasSconto) {
+                    //Lo sconto totale è la differenza tra prezzo pieno e prezzo scontato, per la quantità
+                    $totaleSconto += ($prezzoOriginale - $prezzoUnitario) * $quantita;
+                }
+                
+
+                //Costruiamo la struttura esatta richiesta dalla View
+                $carrelloItems[] = [
+                    'id_item' => $idProdotto,
+                    'prezzo_unitario' => $prezzoUnitario,
+                    'subtotale' => $subtotale,
+                    'sconto' => $hasSconto,
+                    'prezzo_originale' => $prezzoOriginale,
+                    'quantita' => $quantita,
+                    'prodotto' => [
+                        'id' => $prodotto->getId(),
+                        'nome' => $prodotto->getNome(),
+                        'immagine' => $prodotto->getImgProdotto(),
+                    ],
+                ];
+            }
         }
 
+        //Costruiamo il riepilogo totali richiesto da View
+        $carrelloSummary = [
+            'n_articoli' => array_sum($carrello), //somma tutte le quantità nel carrello
+            'sconto' => $totaleSconto, //sconto totale
+            'spedizione' => null, //TODO: calcolare la spedizione BOOOHHH
+            'totale' => $totale, //totale del carrello
+        ];
 
-        //Prepariamo i dati per il layout per passarli alla View, unendo i dati specifici del carrello con i dati globali del layout (base_url, breadcrumbs, ecc.).
-        $data = $this->preparaDatiLayout('carrello', $datiCarrello);
+        //Impacchettiamo i dati specifici per carrello.tpl
+        $datiPagina = [
+            'carrello_items' => $carrelloItems,
+            'carrello_summary' => $carrelloSummary,
+        ];
+
+        //Uniamo i dati specifi della pagina con i dati globali del layout
+        $data = $this->preparaDatiLayout('carrello', $datiPagina);
 
         //Chiamata alla View per renderizzare il template di Smarty passando i dati
         //VCarrello::mostraCarrello($data);
 
         //Stampiamo un testo di controllo provvisorio a schermo
-        echo "Ecco la pagine del tuo carrello!";
+        echo "Pagina carrello - dati pronti:";
+        echo "<pre>" . print_r($data, true) . "</pre>";
     }
 
     /**
      * Aggiunge un prodotto al carrello (chiamata AJAX).
      * Risponde in JSON.
-     * URL: /carrello/aggiungi
+     * URL: POST /carrello/aggiungi
      */
     public function aggiungiAlCarrello(): void {
         //Impostiamo l'header per far capire al browser che stiamo inviando JSON
@@ -84,12 +117,10 @@ class CCarrello extends BaseController {
 
         //Controllo sicurezza: solo i clienti loggati hanno un carrello
         if (!$this->isLoggedIn() || USession::getSessionElement('ruolo') !== 'utente') {
-            //blocca subito l'operazione e risponde con un JSON di errore
-            //json_encode() trasforma un array PHP in una stringa JSON leggibile da JavaScript.
-            echo json_encode([
-                'success' => false,
-                'error' => 'Devi effettuare il login come utente per aggiungere prodotti al carrelo.'
-            ]);
+            //rispondiamo con HTTP 401. Il JS di Presentation intercetta questo status
+            //e apre il modal login lato client da JavaScript.
+            http_response_code(401);
+            echo json_encode(['error' => 'auth_required']);
             exit(); //interrompe immediatamente l'esecuzione dello script
         }
 
@@ -97,7 +128,7 @@ class CCarrello extends BaseController {
         //Usiamo l'utility per prendere il parametro 'id_prodotto' inviato in POST.
         $idProdotto = UHTTPMethods::post('id_prodotto');
         //Prendiamo anche la quantità. Se nel form non c'era questo campo, di default impostiamo 1.
-        $quantita = UHTTPMethods::post('quantita', 1);
+        $quantita = (int) UHTTPMethods::post('quantita', 1);
 
         //Controllo di validità dei dati:
         //Se l'ID del prodotto è vuoto o non è arrivato...
@@ -105,7 +136,8 @@ class CCarrello extends BaseController {
             //...segnala a JavaScript l'errore con un messaggio JSON
             echo json_encode([
                 'success' => false,
-                'error' => 'Prodotto non specificato.'
+                'error' => 'Prodotto non specificato.',
+                'message' => 'Prodotto non valido'
             ]);
             exit();
         }
@@ -130,73 +162,100 @@ class CCarrello extends BaseController {
         //generiamo il JSON definitivo che JavaScript riceverà indietro
         echo json_encode([
             'success' => true,
+            'cart_count' => $nuovoConteggio, //serve a Presentation per aggiornare il numero sul badge in tempo reale
             'message' => 'Prodotto aggiunto al carrello',
-            'cart_count' => $nuovoConteggio //serve a Presentation per aggiornare il numero sul badge in tempo reale
+        ]);
+        exit();
+    }
+
+    /**
+     * Aggiorna la quantità di un prodotto nel carrello (chiamata AJAX).
+     * L'id_item arriva come segmento URL, la nuova quantità come query string.
+     * URL: GET /carrello/aggiorna{id_item}?qty={quantita}
+     * Risponde in JSON.
+     */
+    public function aggiornaQuantita(int $idItem): void {
+        header('Content-Type: application/json');
+
+        if (!$this->isLoggedIn() || USession::getSessionElement('ruolo') !== 'utente') {
+            http_response_code(401);
+            echo json_encode(['error' => 'auth_required']);
+            exit(); //interrompe immediatamente l'esecuzione dello script
+        }
+
+        //La nuova quantità arriva come paramtro GET nella query string (?qty=N)
+        $nuovaQuantita = (int) UHTTPMethods::get('qty', 1);
+
+        //La quantità deve essere almeno 1 (il template ha min = 1, ma validiamo anche server-side)
+        if ($nuovaQuantita < 1) {
+            echo json_encode([
+                'success' => false,
+                'message' => 'Quantità non valida.'
+            ]);
+            exit();
+        }
+
+        $carrello = USession::getSessionElement('carrello') ?? [];
+
+        //Aggiorniamo la quantità solo se il prodotto esiste nel carrello
+        if (isset($carrello[$idItem])) {
+            $carrello[$idItem] = $nuovaQuantita;
+            USession::setSessionElement('carrello', $carrello);
+        }
+
+        echo json_encode([
+            'success' => true,
+            'message' => 'Prodotto aggiornato nel carrello',
         ]);
         exit();
     }
 
     /**
      * Rimuove o decrementa un prodotto dal carrello (chiamata AJAX).
-     * Risponde in JSON.
-     * URL: /carrello/rimuovi
+     * URL: GET /carrello/rimuovi/{id_item}
+     * Risponde in JSON. Se dopo la rimozione il carrello è vuoto,
+     * il JS ricarica la pagina automaticamente
      */
-    public function rimuoviDalCarrello(): void {
+    public function rimuoviDalCarrello(int $idItem): void {
         header('Content-Type: application/json');
 
         //Controllo sicurezza: impedisce l'azione se l'utente non è autenticato
         if (!$this->isLoggedIn() || USession::getSessionElement('ruolo') !== 'utente') {
-            echo json_encode([
-                'success' => false,
-                'error' => 'Non autorizzato.'
-            ]);
+            http_response_code(401);
+            echo json_encode(['error' => 'auth_required']);
             exit();
         }
 
-        //Recuperiamo via POST l'ID del prodotto che l'utente vuole rimuovere dal carrello
-        $idProdotto = UHTTPMethods::post('id_prodotto');
-
-        if (!$idProdotto) {
-            echo json_encode([
-                'success' => false,
-                'error' => 'Prodotto non valido.'
-            ]);
-            exit();
-        }
-
-        //Recuperiamo il carrello dalla sessione
         $carrello = USession::getSessionElement('carrello') ?? [];
 
-        //Se il prodotto esiste nel carrello, eliminiamo direttemente la sua chiave
-        if (isset($carrello[$idProdotto])) {
-            unset($carrello[$idProdotto]); 
+        //unset() rimuove completamente la chiave dall'array corrispondente al prodotto
+        if (isset($carrello[$idItem])) {
+            unset($carrello[$idItem]);
         }
 
-        //Salviamo lo stato del carrello aggiornato in sessione
+        //Salviamo lo stato del carrello aggiornato in sessione (potrebbe risultare vuoto a questo punto)
         USession::setSessionElement('carrello', $carrello);
 
         //Ricalcoliamo il totale degli elementi rimasti
         $nuovoConteggio = array_sum($carrello);
 
-        //Calcolo il nuovo prezzo totale
-        //QUANDO SARÀ PRONTO FOUNDATION (CLASSE FPRODOTTO):
-        //Scorriamo il nuovo carrello aggiornato e sommiamo i prezzi reali presi dal DB
-        /* $nuovoTotale = 0.00;
+        //Ricalcoliamo anche il nuovo totale, scorrendo i prodotti rimasti nel carrello
+        //e recuperando i prezzi reali dal DB tramite il pm
+        $nuovoTotale = 0.00;
         foreach ($carrello as $idProdotto => $quantita) {
-            $prodotto = FPersistentManager::visualizza(EProdotto::class, 'idProdotto', $idProdotto);
+            $prodotto = $this->pm->PMgetObjOnAttribute(EProdotto::class, 'idProdotto', $idProdotto);
             if ($prodotto) {
-                $nuovoTotale += ($prodotto->getPrezzo() * $quantita);
+                //Usiamo il prezzo scontato se presente, altrimenti il prezzo pieno
+                $prezzoUnitario = $prodotto->hasSconto() ? $prodotto->getPrezzo()->calcolaValoreScontato() : $prodotto->getPrezzo()->getValore();
+                $nuovoTotale += ($prezzoUnitario * $quantita);
             }
-        } */
-
-        //PER I TEST IMMEDIATI SIMULIAMO UN VALORE DI RITORNO
-        $nuovoTotale = 15.50;
+        }
 
         echo json_encode([
             'success' => true,
+            'cart_count' => $nuovoConteggio,
             'message' => 'Prodotto rimosso dal carrello',
-            'cart_count' => $nuovoConteggio, //Esempio simulato
-            'totale' => number_format($nuovoTotale, 2, '.', '') //Serve a Presentation per aggiornare il prezzo totale senza ricare la pagina
+            'totale' => number_format($nuovoTotale, 2, '.', '') //number_format forza 2 decimali con il punto come separatore, formato standard per JSON/JS
         ]);
         exit();
     }
