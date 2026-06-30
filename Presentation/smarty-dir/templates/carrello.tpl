@@ -217,12 +217,27 @@
 {literal}
 (function() {
 
+    // ── TOAST NOTIFICHE ──
+    function mostraToast(messaggio, tipo) {
+        var toast = document.createElement('div');
+        toast.textContent = messaggio;
+        toast.style.cssText = [
+            'position:fixed', 'bottom:1.5rem', 'right:1.5rem',
+            'padding:.75rem 1.25rem', 'border-radius:6px',
+            'color:#fff', 'font-size:.9rem', 'z-index:9999',
+            'box-shadow:0 2px 8px rgba(0,0,0,.25)',
+            'background:' + (tipo === 'errore' ? '#c0392b' : '#27ae60')
+        ].join(';');
+        document.body.appendChild(toast);
+        setTimeout(function() { toast.remove(); }, 4000);
+    }
+
     const summary = document.getElementById('carrello-summary');
     const sconto = summary ? (parseFloat(summary.dataset.sconto) || 0) : 0;
     const spedizioneRaw = summary ? summary.dataset.spedizione : '';
     const spedizione = spedizioneRaw !== '' ? (parseFloat(spedizioneRaw) || 0) : 0;
 
-    // ── RICALCOLO RIEPILOGO (lato client, per feedback immediato) ──
+    // ── RICALCOLO RIEPILOGO ──
     function ricalcolaRiepilogo() {
         var righe = document.querySelectorAll('.carrello-item');
         var nArticoli = 0;
@@ -253,20 +268,36 @@
         var unit        = parseFloat(riga.dataset.prezzoUnitario) || 0;
         var updateUrl   = riga.dataset.updateUrl;
 
+        // Inizializza dataset per tracking valore precedente
+        if (input) input.dataset.valPrecedente = input.value;
+
         function aggiornaRigaUI() {
             var qty = parseInt(input.value) || 1;
             if (subtotaleEl) subtotaleEl.textContent = '€' + (unit * qty).toFixed(2);
             ricalcolaRiepilogo();
         }
 
-        function inviaAggiornamento() {
+        function inviaAggiornamento(valPrecedente) {
             if (!updateUrl) return;
             var qty = parseInt(input.value) || 1;
             var controller = new AbortController();
             var timeout = setTimeout(function() { controller.abort(); }, 5000);
+
             fetch(updateUrl + '?qty=' + qty, { signal: controller.signal })
-                .then(function() { clearTimeout(timeout); })
-                .catch(function() { clearTimeout(timeout); });
+                .then(function(response) {
+                    clearTimeout(timeout);
+                    if (!response.ok) throw new Error('server');
+                })
+                .catch(function(err) {
+                    clearTimeout(timeout);
+                    input.value = valPrecedente;
+                    input.dataset.valPrecedente = valPrecedente;
+                    aggiornaRigaUI();
+                    var msg = err.name === 'AbortError'
+                        ? 'Connessione lenta, quantità non salvata.'
+                        : 'Errore nel salvataggio della quantità.';
+                    mostraToast(msg, 'errore');
+                });
         }
 
         if (btnMinus) {
@@ -275,8 +306,9 @@
                 var val = parseInt(input.value) || 1;
                 if (val > 1) {
                     input.value = val - 1;
+                    input.dataset.valPrecedente = val;
                     aggiornaRigaUI();
-                    inviaAggiornamento();
+                    inviaAggiornamento(val);
                 }
             });
         }
@@ -284,18 +316,22 @@
         if (btnPlus) {
             btnPlus.addEventListener('click', function(e) {
                 e.preventDefault();
-                input.value = (parseInt(input.value) || 1) + 1;
+                var val = parseInt(input.value) || 1;
+                input.value = val + 1;
+                input.dataset.valPrecedente = val;
                 aggiornaRigaUI();
-                inviaAggiornamento();
+                inviaAggiornamento(val);
             });
         }
 
         if (input) {
             input.addEventListener('input', function() {
+                var valPrecedente = parseInt(input.dataset.valPrecedente) || 1;
                 var val = parseInt(input.value);
                 if (isNaN(val) || val < 1) input.value = 1;
                 aggiornaRigaUI();
-                inviaAggiornamento();
+                inviaAggiornamento(valPrecedente);
+                input.dataset.valPrecedente = input.value;
             });
         }
     });
@@ -303,25 +339,44 @@
     // ── RIMOZIONE ARTICOLO ──
     document.querySelectorAll('.carrello-item-rimuovi').forEach(function(btn) {
         btn.addEventListener('click', function() {
-            var riga = this.closest('.carrello-item');
-            var url  = this.dataset.url;
+            var riga      = this.closest('.carrello-item');
+            var url       = this.dataset.url;
+            var parent    = riga.parentNode;
+            var nextSibling = riga.nextSibling;
 
-            if (url) {
-                var controller = new AbortController();
-                var timeout = setTimeout(function() { controller.abort(); }, 5000);
-                fetch(url, { signal: controller.signal })
-                    .then(function() { clearTimeout(timeout); })
-                    .catch(function() { clearTimeout(timeout); });
-            }
-
-            if (riga) riga.remove();
+            riga.remove();
 
             var righeRimaste = document.querySelectorAll('.carrello-item');
-            if (righeRimaste.length === 0) {
-                window.location.reload();
-            } else {
+            if (righeRimaste.length > 0) {
                 ricalcolaRiepilogo();
             }
+
+            if (!url) return;
+
+            var controller = new AbortController();
+            var timeout = setTimeout(function() { controller.abort(); }, 5000);
+
+            fetch(url, { signal: controller.signal })
+                .then(function(response) {
+                    clearTimeout(timeout);
+                    if (!response.ok) throw new Error('server');
+                    if (document.querySelectorAll('.carrello-item').length === 0) {
+                        window.location.reload();
+                    }
+                })
+                .catch(function(err) {
+                    clearTimeout(timeout);
+                    if (nextSibling) {
+                        parent.insertBefore(riga, nextSibling);
+                    } else {
+                        parent.appendChild(riga);
+                    }
+                    ricalcolaRiepilogo();
+                    var msg = err.name === 'AbortError'
+                        ? 'Connessione lenta, articolo non rimosso.'
+                        : 'Errore nella rimozione dell\'articolo.';
+                    mostraToast(msg, 'errore');
+                });
         });
     });
 

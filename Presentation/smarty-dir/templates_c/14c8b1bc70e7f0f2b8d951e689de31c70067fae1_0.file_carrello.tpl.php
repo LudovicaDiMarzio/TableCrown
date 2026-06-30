@@ -1,18 +1,18 @@
 <?php
-/* Smarty version 5.8.0, created on 2026-06-26 16:01:31
+/* Smarty version 5.8.0, created on 2026-06-30 15:15:04
   from 'file:carrello.tpl' */
 
 /* @var \Smarty\Template $_smarty_tpl */
 if ($_smarty_tpl->getCompiled()->isFresh($_smarty_tpl, array (
   'version' => '5.8.0',
-  'unifunc' => 'content_6a3e863bacd772_44262740',
+  'unifunc' => 'content_6a43c1583b5908_68099536',
   'has_nocache_code' => false,
   'file_dependency' => 
   array (
     '14c8b1bc70e7f0f2b8d951e689de31c70067fae1' => 
     array (
       0 => 'carrello.tpl',
-      1 => 1782482448,
+      1 => 1782825243,
       2 => 'file',
     ),
   ),
@@ -20,30 +20,30 @@ if ($_smarty_tpl->getCompiled()->isFresh($_smarty_tpl, array (
   array (
   ),
 ))) {
-function content_6a3e863bacd772_44262740 (\Smarty\Template $_smarty_tpl) {
+function content_6a43c1583b5908_68099536 (\Smarty\Template $_smarty_tpl) {
 $_smarty_current_dir = 'C:\\Users\\damic\\Desktop\\uni\\APPUNTI\\anno3\\secondo_semenstre\\Pweb\\TableCrown\\Presentation\\smarty-dir\\templates';
 $_smarty_tpl->getInheritance()->init($_smarty_tpl, true);
 ?>
 
 
 <?php 
-$_smarty_tpl->getInheritance()->instanceBlock($_smarty_tpl, 'Block_11164120346a3e863ba98941_13325647', "extra_css");
+$_smarty_tpl->getInheritance()->instanceBlock($_smarty_tpl, 'Block_10498773636a43c157f33ff8_62875996', "extra_css");
 ?>
 
 
 <?php 
-$_smarty_tpl->getInheritance()->instanceBlock($_smarty_tpl, 'Block_9412604086a3e863ba9c9c5_66432531', "content");
+$_smarty_tpl->getInheritance()->instanceBlock($_smarty_tpl, 'Block_11807752766a43c15808c380_05057394', "content");
 ?>
 
 
 <?php 
-$_smarty_tpl->getInheritance()->instanceBlock($_smarty_tpl, 'Block_16500804936a3e863baccba7_88245276', "extra_js");
+$_smarty_tpl->getInheritance()->instanceBlock($_smarty_tpl, 'Block_17818669636a43c1583b4727_37037582', "extra_js");
 ?>
 
 <?php $_smarty_tpl->getInheritance()->endChild($_smarty_tpl, "common/layout.tpl", $_smarty_current_dir);
 }
 /* {block "extra_css"} */
-class Block_11164120346a3e863ba98941_13325647 extends \Smarty\Runtime\Block
+class Block_10498773636a43c157f33ff8_62875996 extends \Smarty\Runtime\Block
 {
 public function callBlock(\Smarty\Template $_smarty_tpl) {
 $_smarty_current_dir = 'C:\\Users\\damic\\Desktop\\uni\\APPUNTI\\anno3\\secondo_semenstre\\Pweb\\TableCrown\\Presentation\\smarty-dir\\templates';
@@ -56,7 +56,7 @@ $_smarty_current_dir = 'C:\\Users\\damic\\Desktop\\uni\\APPUNTI\\anno3\\secondo_
 }
 /* {/block "extra_css"} */
 /* {block "content"} */
-class Block_9412604086a3e863ba9c9c5_66432531 extends \Smarty\Runtime\Block
+class Block_11807752766a43c15808c380_05057394 extends \Smarty\Runtime\Block
 {
 public function callBlock(\Smarty\Template $_smarty_tpl) {
 $_smarty_current_dir = 'C:\\Users\\damic\\Desktop\\uni\\APPUNTI\\anno3\\secondo_semenstre\\Pweb\\TableCrown\\Presentation\\smarty-dir\\templates';
@@ -330,7 +330,7 @@ $_smarty_tpl->getSmarty()->getRuntime('Foreach')->restore($_smarty_tpl, 1);?>
 }
 /* {/block "content"} */
 /* {block "extra_js"} */
-class Block_16500804936a3e863baccba7_88245276 extends \Smarty\Runtime\Block
+class Block_17818669636a43c1583b4727_37037582 extends \Smarty\Runtime\Block
 {
 public function callBlock(\Smarty\Template $_smarty_tpl) {
 $_smarty_current_dir = 'C:\\Users\\damic\\Desktop\\uni\\APPUNTI\\anno3\\secondo_semenstre\\Pweb\\TableCrown\\Presentation\\smarty-dir\\templates';
@@ -341,12 +341,27 @@ $_smarty_current_dir = 'C:\\Users\\damic\\Desktop\\uni\\APPUNTI\\anno3\\secondo_
 
 (function() {
 
+    // ── TOAST NOTIFICHE ──
+    function mostraToast(messaggio, tipo) {
+        var toast = document.createElement('div');
+        toast.textContent = messaggio;
+        toast.style.cssText = [
+            'position:fixed', 'bottom:1.5rem', 'right:1.5rem',
+            'padding:.75rem 1.25rem', 'border-radius:6px',
+            'color:#fff', 'font-size:.9rem', 'z-index:9999',
+            'box-shadow:0 2px 8px rgba(0,0,0,.25)',
+            'background:' + (tipo === 'errore' ? '#c0392b' : '#27ae60')
+        ].join(';');
+        document.body.appendChild(toast);
+        setTimeout(function() { toast.remove(); }, 4000);
+    }
+
     const summary = document.getElementById('carrello-summary');
     const sconto = summary ? (parseFloat(summary.dataset.sconto) || 0) : 0;
     const spedizioneRaw = summary ? summary.dataset.spedizione : '';
     const spedizione = spedizioneRaw !== '' ? (parseFloat(spedizioneRaw) || 0) : 0;
 
-    // ── RICALCOLO RIEPILOGO (lato client, per feedback immediato) ──
+    // ── RICALCOLO RIEPILOGO ──
     function ricalcolaRiepilogo() {
         var righe = document.querySelectorAll('.carrello-item');
         var nArticoli = 0;
@@ -377,20 +392,36 @@ $_smarty_current_dir = 'C:\\Users\\damic\\Desktop\\uni\\APPUNTI\\anno3\\secondo_
         var unit        = parseFloat(riga.dataset.prezzoUnitario) || 0;
         var updateUrl   = riga.dataset.updateUrl;
 
+        // Inizializza dataset per tracking valore precedente
+        if (input) input.dataset.valPrecedente = input.value;
+
         function aggiornaRigaUI() {
             var qty = parseInt(input.value) || 1;
             if (subtotaleEl) subtotaleEl.textContent = '€' + (unit * qty).toFixed(2);
             ricalcolaRiepilogo();
         }
 
-        function inviaAggiornamento() {
+        function inviaAggiornamento(valPrecedente) {
             if (!updateUrl) return;
             var qty = parseInt(input.value) || 1;
             var controller = new AbortController();
             var timeout = setTimeout(function() { controller.abort(); }, 5000);
+
             fetch(updateUrl + '?qty=' + qty, { signal: controller.signal })
-                .then(function() { clearTimeout(timeout); })
-                .catch(function() { clearTimeout(timeout); });
+                .then(function(response) {
+                    clearTimeout(timeout);
+                    if (!response.ok) throw new Error('server');
+                })
+                .catch(function(err) {
+                    clearTimeout(timeout);
+                    input.value = valPrecedente;
+                    input.dataset.valPrecedente = valPrecedente;
+                    aggiornaRigaUI();
+                    var msg = err.name === 'AbortError'
+                        ? 'Connessione lenta, quantità non salvata.'
+                        : 'Errore nel salvataggio della quantità.';
+                    mostraToast(msg, 'errore');
+                });
         }
 
         if (btnMinus) {
@@ -399,8 +430,9 @@ $_smarty_current_dir = 'C:\\Users\\damic\\Desktop\\uni\\APPUNTI\\anno3\\secondo_
                 var val = parseInt(input.value) || 1;
                 if (val > 1) {
                     input.value = val - 1;
+                    input.dataset.valPrecedente = val;
                     aggiornaRigaUI();
-                    inviaAggiornamento();
+                    inviaAggiornamento(val);
                 }
             });
         }
@@ -408,18 +440,22 @@ $_smarty_current_dir = 'C:\\Users\\damic\\Desktop\\uni\\APPUNTI\\anno3\\secondo_
         if (btnPlus) {
             btnPlus.addEventListener('click', function(e) {
                 e.preventDefault();
-                input.value = (parseInt(input.value) || 1) + 1;
+                var val = parseInt(input.value) || 1;
+                input.value = val + 1;
+                input.dataset.valPrecedente = val;
                 aggiornaRigaUI();
-                inviaAggiornamento();
+                inviaAggiornamento(val);
             });
         }
 
         if (input) {
             input.addEventListener('input', function() {
+                var valPrecedente = parseInt(input.dataset.valPrecedente) || 1;
                 var val = parseInt(input.value);
                 if (isNaN(val) || val < 1) input.value = 1;
                 aggiornaRigaUI();
-                inviaAggiornamento();
+                inviaAggiornamento(valPrecedente);
+                input.dataset.valPrecedente = input.value;
             });
         }
     });
@@ -427,25 +463,44 @@ $_smarty_current_dir = 'C:\\Users\\damic\\Desktop\\uni\\APPUNTI\\anno3\\secondo_
     // ── RIMOZIONE ARTICOLO ──
     document.querySelectorAll('.carrello-item-rimuovi').forEach(function(btn) {
         btn.addEventListener('click', function() {
-            var riga = this.closest('.carrello-item');
-            var url  = this.dataset.url;
+            var riga      = this.closest('.carrello-item');
+            var url       = this.dataset.url;
+            var parent    = riga.parentNode;
+            var nextSibling = riga.nextSibling;
 
-            if (url) {
-                var controller = new AbortController();
-                var timeout = setTimeout(function() { controller.abort(); }, 5000);
-                fetch(url, { signal: controller.signal })
-                    .then(function() { clearTimeout(timeout); })
-                    .catch(function() { clearTimeout(timeout); });
-            }
-
-            if (riga) riga.remove();
+            riga.remove();
 
             var righeRimaste = document.querySelectorAll('.carrello-item');
-            if (righeRimaste.length === 0) {
-                window.location.reload();
-            } else {
+            if (righeRimaste.length > 0) {
                 ricalcolaRiepilogo();
             }
+
+            if (!url) return;
+
+            var controller = new AbortController();
+            var timeout = setTimeout(function() { controller.abort(); }, 5000);
+
+            fetch(url, { signal: controller.signal })
+                .then(function(response) {
+                    clearTimeout(timeout);
+                    if (!response.ok) throw new Error('server');
+                    if (document.querySelectorAll('.carrello-item').length === 0) {
+                        window.location.reload();
+                    }
+                })
+                .catch(function(err) {
+                    clearTimeout(timeout);
+                    if (nextSibling) {
+                        parent.insertBefore(riga, nextSibling);
+                    } else {
+                        parent.appendChild(riga);
+                    }
+                    ricalcolaRiepilogo();
+                    var msg = err.name === 'AbortError'
+                        ? 'Connessione lenta, articolo non rimosso.'
+                        : 'Errore nella rimozione dell\'articolo.';
+                    mostraToast(msg, 'errore');
+                });
         });
     });
 
