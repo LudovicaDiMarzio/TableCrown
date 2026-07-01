@@ -124,7 +124,7 @@ class CFrontController {
                 if ($sottoRoute === 'aggiungi' && $metodoHTTP === 'POST') {
                     $controller->aggiungiAlCarrello();
                 } elseif ($sottoRoute === 'rimuovi' && $metodoHTTP === 'GET') {
-                        $controller->rimuoviDalCarrello((int)$sottoRoute2);
+                    $controller->rimuoviDalCarrello((int)$sottoRoute2);
                 } elseif ($sottoRoute === 'aggiorna' && $metodoHTTP === 'GET'){
                     $controller->aggiornaQuantita((int)$sottoRoute2);
                 } else {

@@ -39,7 +39,7 @@ class CCarrello extends BaseController {
             //Scorriamo il carrello prendendo la chiave (id prodotto) e il valore (quantità)
             foreach ($carrello as $idProdotto => $quantita) {
                 //Chiediamo a Foundation di caricarci l'oggetto Entity del prodotto dal DB
-                $prodotto = $this->pm->PMgetObjOnAttribute(EProdotto::class, 'id', $idProdotto);
+                $prodotto = $this->pm->PMgetObjOnAttribute(EProdotto::class, 'idProdotto', $idProdotto);
 
                 if (!$prodotto) {
                     continue; //salta il prodotto e passa al prossimo
@@ -66,33 +66,60 @@ class CCarrello extends BaseController {
 
                 //Costruiamo la struttura esatta richiesta dalla View
                 $carrelloItems[] = [
-                    'id_item' => $idProdotto,
-                    'prezzo_unitario' => $prezzoUnitario,
-                    'subtotale' => $subtotale,
-                    'sconto' => $hasSconto,
-                    'prezzo_originale' => $prezzoOriginale,
                     'quantita' => $quantita,
+                    'subtotale' => $subtotale,
+                    'update_url' => '/carrello/aggiorna/' . $idProdotto,
+                    'remove_url' => '/carrello/rimuovi/' . $idProdotto,
                     'prodotto' => [
-                        'id' => $prodotto->getId(),
-                        'nome' => $prodotto->getNome(),
+                        'id' => $prodotto->getIdProdotto(),
+                        'nome' => $prodotto->getNomeProdotto(),
                         'immagine' => $prodotto->getImgProdotto(),
+                        'prezzo_unitario' => $prezzoUnitario,
+                        'sconto' => $hasSconto,
+                        'prezzo_originale' => $prezzoOriginale,
                     ],
                 ];
             }
-        }
+        } //FORSE ANCHE LA COSTRUZIONE DEGLI ALTRI ARRAY VA DENTRO QUESTO IF??????
 
         //Costruiamo il riepilogo totali richiesto da View
         $carrelloSummary = [
             'n_articoli' => array_sum($carrello), //somma tutte le quantità nel carrello
             'sconto' => $totaleSconto, //sconto totale
-            'spedizione' => null, //TODO: calcolare la spedizione BOOOHHH
             'totale' => $totale, //totale del carrello
         ];
+
+        //Recuperiamo i prodotti correlati per il carosello "Potrebbe interessarti".
+        //CRITERIO PROVVISIORIO: TUTTI I PRODOTTI DISPONIBILI, ESCLUSI QUELLI GIà NEL CARRELLO, LIMITATI AI PRIMI 4.
+        $tuttiProdotti = $this->pm->PMgetAll(EProdotto::class);
+
+        //Escludiamo i prodotti già presenti nel carrello usando i loro ID come filtro
+        $idNelCarrello = array_keys($carrello);
+        $correlati = array_filter(
+            $tuttiProdotti, 
+            fn($p) => !in_array($p->getIdProdotto(), $idNelCarrello) //arrow function: $p è il nome che assume temporaneamente ogni elemento dell'array, mentre array_filter lo itera
+            );
+
+        //Prendiamo solo i primi 4 e reindicizziamo l'array
+        //array_filter mantiene gli indici originali, array_values li azzera.
+        $correlati = array_slice(array_values($correlati), 0, 4);
+
+        //Convertiamo in array nel formato richiesto dalla View
+        $correlatiArray = array_map(fn($p) => [
+            'id' => $p->getIdProdotto(),
+            'nome' => $p->getNomeProdotto(),
+            'immagine' => $p->getImgProdotto(),
+            'valutazione_media' => $p->getValutazioneMedia(),
+            'prezzo' => $p->hasSconto() ? null : $p->getPrezzo()->getValore(),
+            'prezzo_scontato' => $p->hasSconto() ? $p->getPrezzo()->calcolaValoreScontato() : null,
+            'sconto' => $p->hasSconto(),
+        ], $correlati);
 
         //Impacchettiamo i dati specifici per carrello.tpl
         $datiPagina = [
             'carrello_items' => $carrelloItems,
             'carrello_summary' => $carrelloSummary,
+            'correlati' => $correlatiArray, //omesso se vuoto (la view lo gestisce con isset)
         ];
 
         //Uniamo i dati specifi della pagina con i dati globali del layout
@@ -136,8 +163,7 @@ class CCarrello extends BaseController {
             //...segnala a JavaScript l'errore con un messaggio JSON
             echo json_encode([
                 'success' => false,
-                'error' => 'Prodotto non specificato.',
-                'message' => 'Prodotto non valido'
+                'message' => 'Prodotto non specificato.'
             ]);
             exit();
         }
@@ -188,6 +214,7 @@ class CCarrello extends BaseController {
 
         //La quantità deve essere almeno 1 (il template ha min = 1, ma validiamo anche server-side)
         if ($nuovaQuantita < 1) {
+            http_response_code(400);
             echo json_encode([
                 'success' => false,
                 'message' => 'Quantità non valida.'
