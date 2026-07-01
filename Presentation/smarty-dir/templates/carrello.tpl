@@ -24,8 +24,9 @@
                             {assign var="p" value=$item.prodotto}
 
                             <div class="carrello-item"
-                                 data-item-id="{$item.id_item}"
-                                 data-prezzo-unitario="{$item.prezzo_unitario}"
+                                 data-item-id="{$p.id}"
+                                 data-prezzo-unitario="{$p.prezzo_unitario}"
+                                 data-risparmio-unitario="{if $p.sconto}{$p.prezzo_originale-$p.prezzo_unitario}{else}0{/if}"
                                  data-update-url="{$item.update_url|escape}">
 
                                 <a href="{$base_url}/prodotto/{$p.id}" class="carrello-item-img-link">
@@ -41,11 +42,11 @@
                                     </a>
 
                                     <div class="carrello-item-prezzo-wrapper">
-                                        {if $item.sconto}
-                                            <span class="carrello-item-prezzo">€{$item.prezzo_unitario|number_format:2}</span>
-                                            <span class="carrello-item-prezzo-old">€{$item.prezzo_originale|number_format:2}</span>
-                                        {elseif isset($item.prezzo_unitario)}
-                                            <span class="carrello-item-prezzo">€{$item.prezzo_unitario|number_format:2}</span>
+                                        {if $p.sconto}
+                                            <span class="carrello-item-prezzo">€{$p.prezzo_unitario|number_format:2}</span>
+                                            <span class="carrello-item-prezzo-old">€{$p.prezzo_originale|number_format:2}</span>
+                                        {elseif isset($p.prezzo_unitario)}
+                                            <span class="carrello-item-prezzo">€{$p.prezzo_unitario|number_format:2}</span>
                                         {else}
                                             <span class="carrello-item-prezzo-nd">Prezzo N/D</span>
                                         {/if}
@@ -76,7 +77,7 @@
 
                                     <button class="carrello-item-rimuovi"
                                             type="button"
-                                            data-url="{$base_url}/carrello/rimuovi/{$item.id_item}"
+                                            data-url="{$base_url}/carrello/rimuovi/{$p.id}"
                                             aria-label="Rimuovi {$p.nome|escape} dal carrello">
                                         <i class="ti ti-trash"></i> Rimuovi
                                     </button>
@@ -86,6 +87,65 @@
                             </div>
                         {/foreach}
                     </div>
+
+                    {* ── TEMPLATE NASCOSTO: usato da JS per generare nuove righe senza reload ── *}
+                    <template id="tpl-carrello-item">
+                        <div class="carrello-item"
+                             data-item-id=""
+                             data-prezzo-unitario=""
+                             data-risparmio-unitario="0"
+                             data-update-url="">
+
+                            <a href="" class="carrello-item-img-link">
+                                <img src=""
+                                     onerror="this.onerror=null; this.src='{$base_url}/img/default.png'"
+                                     alt=""
+                                     class="carrello-item-img">
+                            </a>
+
+                            <div class="carrello-item-info">
+                                <a href="" class="carrello-item-nome"></a>
+
+                                <div class="carrello-item-prezzo-wrapper">
+                                    <span class="carrello-item-prezzo"></span>
+                                    <span class="carrello-item-prezzo-old" style="display:none;"></span>
+                                    <span class="carrello-item-prezzo-nd" style="display:none;">Prezzo N/D</span>
+                                </div>
+                            </div>
+
+                            <div class="carrello-item-controls">
+
+                                <div class="carrello-item-qty">
+                                    <button class="button quantita-btn carrello-qty-minus" type="button" aria-label="Diminuisci quantità">
+                                        <i class="ti ti-minus"></i>
+                                    </button>
+                                    <input type="number"
+                                           class="input quantita-input carrello-qty-input"
+                                           value="1"
+                                           min="1"
+                                           max="99"
+                                           aria-label="Quantità">
+                                    <button class="button quantita-btn carrello-qty-plus" type="button" aria-label="Aumenta quantità">
+                                        <i class="ti ti-plus"></i>
+                                    </button>
+                                </div>
+
+                                <div class="carrello-item-subtotale">
+                                    <span class="carrello-item-subtotale-label">Subtotale</span>
+                                    <span class="carrello-item-subtotale-value"></span>
+                                </div>
+
+                                <button class="carrello-item-rimuovi"
+                                        type="button"
+                                        data-url=""
+                                        aria-label="Rimuovi dal carrello">
+                                    <i class="ti ti-trash"></i> Rimuovi
+                                </button>
+
+                            </div>
+
+                        </div>
+                    </template>
 
                     {* ── SEZIONE: POTREBBE INTERESSARTI ── *}
                     {if isset($correlati) && $correlati|@count > 0}
@@ -129,11 +189,12 @@
                                                     </div>
                                                 </div>
                                             </a>
-                                            <a href="{$base_url}/carrello/aggiungi/{$correlato.id}"
-                                               class="button btn-correlato-cart"
-                                               aria-label="Aggiungi {$correlato.nome|escape} al carrello">
+                                            <button class="button btn-correlato-cart"
+                                                    type="button"
+                                                    data-url="{$base_url}/carrello/aggiungi/{$correlato.id}"
+                                                    aria-label="Aggiungi {$correlato.nome|escape} al carrello">
                                                 <i class="ti ti-shopping-cart"></i> Carrello
-                                            </a>
+                                            </button>
                                         </div>
                                     {/foreach}
                                 </div>
@@ -148,10 +209,7 @@
                 </div>
 
                 {* ── COLONNA DESTRA: RIEPILOGO ORDINE ── *}
-                <aside class="carrello-summary"
-                       id="carrello-summary"
-                       data-sconto="{$carrello_summary.sconto}"
-                       data-spedizione="{$carrello_summary.spedizione|default:''}">
+                <aside class="carrello-summary" id="carrello-summary">
 
                     <h2 class="carrello-summary-title">Totale Carrello</h2>
 
@@ -161,26 +219,14 @@
                             <dd id="summary-n-articoli" aria-live="polite">{$carrello_summary.n_articoli}</dd>
                         </div>
 
-                        {if $carrello_summary.sconto > 0}
-                            <div class="carrello-summary-row carrello-summary-sconto">
-                                <dt>Sconto</dt>
-                                <dd>-€{$carrello_summary.sconto|number_format:2}</dd>
-                            </div>
-                        {/if}
-
-                        <div class="carrello-summary-row">
-                            <dt>Spedizione</dt>
-                            <dd>
-                                {if $carrello_summary.spedizione === null}
-                                    Da calcolare
-                                {elseif $carrello_summary.spedizione == 0}
-                                    Gratuita
-                                {else}
-                                    €{$carrello_summary.spedizione|number_format:2}
-                                {/if}
-                            </dd>
+                        <div class="carrello-summary-row carrello-summary-risparmio"
+                             id="summary-risparmio-row"
+                             {if !($carrello_summary.sconto > 0)}style="display:none;"{/if}>
+                            <dt>Risparmio</dt>
+                            <dd id="summary-risparmio">-€{$carrello_summary.sconto|number_format:2}</dd>
                         </div>
-                    </dl>
+
+                        
 
                     <div class="carrello-summary-totale">
                         <span class="carrello-summary-totale-label">Totale</span>
@@ -231,36 +277,45 @@
         document.body.appendChild(toast);
         setTimeout(function() { toast.remove(); }, 4000);
     }
-
-    const summary = document.getElementById('carrello-summary');
-    const sconto = summary ? (parseFloat(summary.dataset.sconto) || 0) : 0;
-    const spedizioneRaw = summary ? summary.dataset.spedizione : '';
-    const spedizione = spedizioneRaw !== '' ? (parseFloat(spedizioneRaw) || 0) : 0;
+    
 
     // ── RICALCOLO RIEPILOGO ──
     function ricalcolaRiepilogo() {
         var righe = document.querySelectorAll('.carrello-item');
         var nArticoli = 0;
         var subtotale = 0;
+        var risparmioTotale = 0;
 
         righe.forEach(function(riga) {
             var input = riga.querySelector('.carrello-qty-input');
             var qty = parseInt(input ? input.value : 1) || 1;
             var unit = parseFloat(riga.dataset.prezzoUnitario) || 0;
+            var risparmioUnit = parseFloat(riga.dataset.risparmioUnitario) || 0;
             nArticoli += qty;
             subtotale += qty * unit;
+            risparmioTotale += qty * risparmioUnit;
         });
 
-        var totale = Math.max(subtotale - sconto + spedizione, 0);
+        // subtotale usa già il prezzo scontato per riga, quindi il totale
+        // non deve sottrarre di nuovo il risparmio (altrimenti sconto doppio)
+        var totale = Math.max(subtotale, 0);
 
-        var nArticoliEl = document.getElementById('summary-n-articoli');
-        var totaleEl    = document.getElementById('summary-totale');
-        if (nArticoliEl) nArticoliEl.textContent = nArticoli;
-        if (totaleEl)    totaleEl.textContent = '€' + totale.toFixed(2);
+        var nArticoliEl  = document.getElementById('summary-n-articoli');
+        var totaleEl     = document.getElementById('summary-totale');
+        var risparmioEl  = document.getElementById('summary-risparmio');
+        var risparmioRow = document.getElementById('summary-risparmio-row');
+
+        if (nArticoliEl)  nArticoliEl.textContent = nArticoli;
+        if (totaleEl)     totaleEl.textContent = '€' + totale.toFixed(2);
+        if (risparmioEl)  risparmioEl.textContent = '-€' + risparmioTotale.toFixed(2);
+        if (risparmioRow) risparmioRow.style.display = risparmioTotale > 0 ? '' : 'none';
     }
 
-    // ── STEPPER QUANTITÀ PER OGNI ARTICOLO ──
-    document.querySelectorAll('.carrello-item').forEach(function(riga) {
+    // ── BINDING RIGA CARRELLO (stepper qty + rimozione) ──
+    // Estratto in funzione riutilizzabile: viene chiamato sia sulle righe
+    // renderizzate da Smarty al caricamento, sia sulle righe create
+    // dinamicamente via JS quando si aggiunge un correlato al carrello.
+    function bindRigaCarrello(riga) {
         var input       = riga.querySelector('.carrello-qty-input');
         var btnMinus    = riga.querySelector('.carrello-qty-minus');
         var btnPlus     = riga.querySelector('.carrello-qty-plus');
@@ -268,7 +323,7 @@
         var unit        = parseFloat(riga.dataset.prezzoUnitario) || 0;
         var updateUrl   = riga.dataset.updateUrl;
 
-        // Inizializza dataset per tracking valore precedente
+        
         if (input) input.dataset.valPrecedente = input.value;
 
         function aggiornaRigaUI() {
@@ -334,47 +389,192 @@
                 input.dataset.valPrecedente = input.value;
             });
         }
-    });
 
-    // ── RIMOZIONE ARTICOLO ──
-    document.querySelectorAll('.carrello-item-rimuovi').forEach(function(btn) {
-        btn.addEventListener('click', function() {
-            var riga      = this.closest('.carrello-item');
-            var url       = this.dataset.url;
-            var parent    = riga.parentNode;
-            var nextSibling = riga.nextSibling;
+        var btnRimuovi = riga.querySelector('.carrello-item-rimuovi');
+        if (btnRimuovi) {
+            btnRimuovi.addEventListener('click', function() {
+                var url         = this.dataset.url;
+                var parent      = riga.parentNode;
+                var nextSibling = riga.nextSibling;
 
-            riga.remove();
+                riga.remove();
 
-            var righeRimaste = document.querySelectorAll('.carrello-item');
-            if (righeRimaste.length > 0) {
-                ricalcolaRiepilogo();
+                var righeRimaste = document.querySelectorAll('.carrello-item');
+                if (righeRimaste.length > 0) {
+                    ricalcolaRiepilogo();
+                }
+
+                if (!url) return;
+
+                var controller = new AbortController();
+                var timeout = setTimeout(function() { controller.abort(); }, 5000);
+
+                fetch(url, {
+                    method: 'POST',
+                    signal: controller.signal
+                })
+                    .then(function(response) {
+                        clearTimeout(timeout);
+                        if (!response.ok) throw new Error('server');
+                        if (document.querySelectorAll('.carrello-item').length === 0) {
+                            window.location.reload();
+                        }
+                    })
+                    .catch(function(err) {
+                        clearTimeout(timeout);
+                        if (nextSibling) {
+                            parent.insertBefore(riga, nextSibling);
+                        } else {
+                            parent.appendChild(riga);
+                        }
+                        ricalcolaRiepilogo();
+                        var msg = err.name === 'AbortError'
+                            ? 'Connessione lenta, articolo non rimosso.'
+                            : 'Errore nella rimozione dell\'articolo.';
+                        mostraToast(msg, 'errore');
+                    });
+            });
+        }
+    }
+
+    // Bind iniziale su tutte le righe già presenti nel DOM al caricamento
+    document.querySelectorAll('.carrello-item').forEach(bindRigaCarrello);
+
+    // ── CREAZIONE RIGA CARRELLO DA JSON (usata quando si aggiunge un correlato) ──
+    function aggiungiRigaCarrello(data) {
+        var tpl = document.getElementById('tpl-carrello-item');
+        var contenitore = document.getElementById('carrello-items');
+        if (!tpl || !contenitore) return;
+
+        var nodo = tpl.content.cloneNode(true);
+        var riga = nodo.querySelector('.carrello-item');
+
+        riga.dataset.itemId = data.id;
+        riga.dataset.prezzoUnitario = data.prezzo_unitario;
+        riga.dataset.risparmioUnitario = data.sconto
+            ? (data.prezzo_originale - data.prezzo_unitario)
+            : 0;
+        riga.dataset.updateUrl = data.update_url;
+
+        var linkImg = riga.querySelector('.carrello-item-img-link');
+        if (linkImg) linkImg.href = data.product_url;
+
+        var img = riga.querySelector('.carrello-item-img');
+        if (img) {
+            img.src = data.immagine_url;
+            img.alt = data.nome;
+        }
+
+        var nomeLink = riga.querySelector('.carrello-item-nome');
+        if (nomeLink) {
+            nomeLink.href = data.product_url;
+            nomeLink.textContent = data.nome;
+        }
+
+        var prezzoEl    = riga.querySelector('.carrello-item-prezzo');
+        var prezzoOldEl = riga.querySelector('.carrello-item-prezzo-old');
+        var prezzoNdEl  = riga.querySelector('.carrello-item-prezzo-nd');
+
+        if (data.sconto) {
+            prezzoEl.textContent = '€' + Number(data.prezzo_unitario).toFixed(2);
+            prezzoEl.style.display = '';
+            prezzoOldEl.textContent = '€' + Number(data.prezzo_originale).toFixed(2);
+            prezzoOldEl.style.display = '';
+            prezzoNdEl.style.display = 'none';
+        } else if (data.prezzo_unitario !== null && data.prezzo_unitario !== undefined) {
+            prezzoEl.textContent = '€' + Number(data.prezzo_unitario).toFixed(2);
+            prezzoEl.style.display = '';
+            prezzoOldEl.style.display = 'none';
+            prezzoNdEl.style.display = 'none';
+        } else {
+            prezzoEl.style.display = 'none';
+            prezzoOldEl.style.display = 'none';
+            prezzoNdEl.style.display = '';
+        }
+
+        var qtyInput = riga.querySelector('.carrello-qty-input');
+        if (qtyInput) qtyInput.value = data.quantita || 1;
+
+        var subtotaleEl = riga.querySelector('.carrello-item-subtotale-value');
+        if (subtotaleEl) {
+            var subtotaleCalcolato = (data.subtotale !== null && data.subtotale !== undefined)
+                ? Number(data.subtotale)
+                : Number(data.prezzo_unitario) * (data.quantita || 1);
+            subtotaleEl.textContent = '€' + subtotaleCalcolato.toFixed(2);
+        }
+
+        var btnRimuovi = riga.querySelector('.carrello-item-rimuovi');
+        if (btnRimuovi) {
+            btnRimuovi.dataset.url = data.remove_url;
+            btnRimuovi.setAttribute('aria-label', 'Rimuovi ' + data.nome + ' dal carrello');
+        }
+
+        contenitore.appendChild(riga);
+
+        // Ribinda subito la nuova riga (stepper + rimozione)
+        var nuovaRigaDom = contenitore.lastElementChild;
+        bindRigaCarrello(nuovaRigaDom);
+    }
+
+    // ── AGGIUNGE UNA NUOVA RIGA O AGGIORNA LA QUANTITÀ SE IL PRODOTTO C'È GIÀ ──
+    function aggiungiOAggiornaRigaCarrello(data) {
+        var rigaEsistente = document.querySelector('.carrello-item[data-item-id="' + data.id + '"]');
+
+        if (rigaEsistente) {
+            var input = rigaEsistente.querySelector('.carrello-qty-input');
+            if (input) {
+                input.value = data.quantita;
+                input.dataset.valPrecedente = data.quantita;
             }
+            var subtotaleEl = rigaEsistente.querySelector('.carrello-item-subtotale-value');
+            var unit = parseFloat(rigaEsistente.dataset.prezzoUnitario) || 0;
+            if (subtotaleEl) {
+                subtotaleEl.textContent = '€' + (unit * data.quantita).toFixed(2);
+            }
+        } else {
+            aggiungiRigaCarrello(data);
+        }
 
+        ricalcolaRiepilogo();
+    }
+
+    // ── AGGIUNTA ARTICOLO (da correlati) ──
+    document.querySelectorAll('.btn-correlato-cart').forEach(function(btn) {
+        btn.addEventListener('click', function() {
+            var url = this.dataset.url;
             if (!url) return;
 
             var controller = new AbortController();
             var timeout = setTimeout(function() { controller.abort(); }, 5000);
 
-            fetch(url, { signal: controller.signal })
+            fetch(url, {
+                method: 'POST',
+                signal: controller.signal
+            })
                 .then(function(response) {
                     clearTimeout(timeout);
                     if (!response.ok) throw new Error('server');
-                    if (document.querySelectorAll('.carrello-item').length === 0) {
+                    return response.json();
+                })
+                .then(function(data) {
+                    mostraToast('Prodotto aggiunto al carrello', 'successo');
+
+                    // Se il carrello era vuoto in partenza, #carrello-items
+                    // non esiste ancora nel DOM: in quel caso ricarichiamo
+                    // la pagina per far comparire tutto il layout corretto
+                    // (colonna riepilogo, sezione correlati ecc.)
+                    if (!document.getElementById('carrello-items')) {
                         window.location.reload();
+                        return;
                     }
+
+                    aggiungiOAggiornaRigaCarrello(data);
                 })
                 .catch(function(err) {
                     clearTimeout(timeout);
-                    if (nextSibling) {
-                        parent.insertBefore(riga, nextSibling);
-                    } else {
-                        parent.appendChild(riga);
-                    }
-                    ricalcolaRiepilogo();
                     var msg = err.name === 'AbortError'
-                        ? 'Connessione lenta, articolo non rimosso.'
-                        : 'Errore nella rimozione dell\'articolo.';
+                        ? 'Connessione lenta, prodotto non aggiunto.'
+                        : 'Errore nell\'aggiunta del prodotto.';
                     mostraToast(msg, 'errore');
                 });
         });
