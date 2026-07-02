@@ -13,6 +13,10 @@ use TableCrown\Entity\EProdotto;
 
 class CCarrello extends BaseController {
 
+    //URL base del sito, usato per costruire URL assoluti nelle risposte JSON
+    //(il JS ha bisogno di URL completi per costruire il DOM senza passare da Smarty).
+    private const BASE_URL = 'https://tablecrown.it'; //FORSE DA CAMBIARE, ANDREBBE DEFINITA IN UN FILE PIù GENERALE TIPO DI config
+
     public function __construct() {
         parent::__construct();
     }
@@ -76,11 +80,11 @@ class CCarrello extends BaseController {
                         'immagine' => $prodotto->getImgProdotto(),
                         'prezzo_unitario' => $prezzoUnitario,
                         'sconto' => $hasSconto,
-                        'prezzo_originale' => $prezzoOriginale,
+                        'prezzo_originale' => $prezzoOriginale, //rilevante solo se sconto=true, ma lo passiamo sempre (il template lo ignora se sconto=false)
                     ],
                 ];
             }
-        } //FORSE ANCHE LA COSTRUZIONE DEGLI ALTRI ARRAY VA DENTRO QUESTO IF??????
+        }
 
         //Costruiamo il riepilogo totali richiesto da View
         $carrelloSummary = [
@@ -90,7 +94,7 @@ class CCarrello extends BaseController {
         ];
 
         //Recuperiamo i prodotti correlati per il carosello "Potrebbe interessarti".
-        //CRITERIO PROVVISIORIO: TUTTI I PRODOTTI DISPONIBILI, ESCLUSI QUELLI GIà NEL CARRELLO, LIMITATI AI PRIMI 4.
+        //CRITERIO PROVVISIORIO: TUTTI I PRODOTTI DISPONIBILI, ESCLUSI QUELLI GIà NEL CARRELLO, LIMITATI AI PRIMI 8.
         $tuttiProdotti = $this->pm->PMgetAll(EProdotto::class);
 
         //Escludiamo i prodotti già presenti nel carrello usando i loro ID come filtro
@@ -100,9 +104,9 @@ class CCarrello extends BaseController {
             fn($p) => !in_array($p->getIdProdotto(), $idNelCarrello) //arrow function: $p è il nome che assume temporaneamente ogni elemento dell'array, mentre array_filter lo itera
             );
 
-        //Prendiamo solo i primi 4 e reindicizziamo l'array
+        //Prendiamo solo i primi 8 e reindicizziamo l'array
         //array_filter mantiene gli indici originali, array_values li azzera.
-        $correlati = array_slice(array_values($correlati), 0, 4);
+        $correlati = array_slice(array_values($correlati), 0, 8);
 
         //Convertiamo in array nel formato richiesto dalla View
         $correlatiArray = array_map(fn($p) => [
@@ -110,7 +114,7 @@ class CCarrello extends BaseController {
             'nome' => $p->getNomeProdotto(),
             'immagine' => $p->getImgProdotto(),
             'valutazione_media' => $p->getValutazioneMedia(),
-            'prezzo' => $p->hasSconto() ? null : $p->getPrezzo()->getValore(),
+            'prezzo' => $p->hasSconto() ? null : $p->getPrezzo()->getValore(), //se il prodotto è in sconto, il prezzo va a null e mostriamo solo il prezzo scontato.
             'prezzo_scontato' => $p->hasSconto() ? $p->getPrezzo()->calcolaValoreScontato() : null,
             'sconto' => $p->hasSconto(),
         ], $correlati);
@@ -153,9 +157,19 @@ class CCarrello extends BaseController {
 
         //Recuperiamo i dati inviati dal browser tramite la richiesta.
         //Usiamo l'utility per prendere il parametro 'id_prodotto' inviato in POST.
-        $idProdotto = UHTTPMethods::post('id_prodotto');
-        //Prendiamo anche la quantità. Se nel form non c'era questo campo, di default impostiamo 1.
-        $quantita = (int) UHTTPMethods::post('quantita', 1);
+        //Usiamo il metodo postInt che fa anche la validazione, ma poiché in caso di fallimento il metodo lancia un'eccezione, wrappiamo il blocco in try/catch.
+        try {
+            $idProdotto = UHTTPMethods::postInt('id_prodotto');
+            //Prendiamo anche la quantità. Se nel form non c'era questo campo, di default impostiamo 1.
+            $quantita = (int) UHTTPMethods::postInt('quantita', 1);
+        } catch (\InvalidArgumentException $e) {
+            echo json_encode([
+                'success' => false,
+                'message' => $e->getMessage()
+            ]);
+            exit();
+        }
+
 
         //Controllo di validità dei dati:
         //Se l'ID del prodotto è vuoto o non è arrivato...
@@ -164,6 +178,17 @@ class CCarrello extends BaseController {
             echo json_encode([
                 'success' => false,
                 'message' => 'Prodotto non specificato.'
+            ]);
+            exit();
+        }
+
+        //Recuperiamo il prodotto dal DB per construire la risposta JSON completa.
+        //Il JS ne ha bisogno per costruire la card HTML da zero senza passare da Smarty.
+        $prodotto = $this->pm->PMgetObjOnAttribute(EProdotto::class, 'idProdotto', $idProdotto);
+        if (!$prodotto) {
+            echo json_encode([
+                'success' => false,
+                'message' => 'Prodotto non trovato.'
             ]);
             exit();
         }
@@ -181,15 +206,28 @@ class CCarrello extends BaseController {
         //Salviamo nuovamente il carrello aggiornato in sessione
         USession::setSessionElement('carrello', $carrello);
 
-        //Calcoliamo il numero totale di elementi (somma delle singole quantità)
-        $nuovoConteggio = array_sum($carrello);
+        //Calcoliamo i dati del prodotto per la risposta JSON
+        $hasSconto = $prodotto->getPrezzo()->hasSconto();
+        $prezzoUnitario = $hasSconto ? $prodotto->getPrezzo()->calcolaValoreScontato() : $prodotto->getPrezzo()->getValore();
+        $prezzoOriginale = $prodotto->getPrezzo()->getValore();
+        $quantitaAggiornata = $carrello[$idProdotto]; //quantità totale dopo l'aggiunta
 
         //Risposta finale di successo:
-        //generiamo il JSON definitivo che JavaScript riceverà indietro
+        //generiamo il JSON definitivo che JavaScript riceverà indietro (ha campi "piatti")
+        //usiamo URL assoluti perché il JS non passa da Smarty e non ha accesso a base_url.
         echo json_encode([
-            'success' => true,
-            'cart_count' => $nuovoConteggio, //serve a Presentation per aggiornare il numero sul badge in tempo reale
-            'message' => 'Prodotto aggiunto al carrello',
+            'id' => $prodotto->getIdProdotto(),
+            'nome' => $prodotto->getNomeProdotto(),
+            'immagine_url' => self::BASE_URL . '/img/prodotti/' . $prodotto->getImgProdotto(),
+            'product_url' => self::BASE_URL . '/prodotto/' . $prodotto->getIdProdotto(),
+            'prezzo_unitario' => $prezzoUnitario,
+            'sconto' => $hasSconto,
+            'prezzo_originale' => $prezzoOriginale,
+            'quantita' => $quantitaAggiornata,
+            'subtotale' => $prezzoUnitario * $quantitaAggiornata,
+            'update_url' => self::BASE_URL . '/carrello/aggiorna/' . $prodotto->getIdProdotto(),
+            'remove_url' => self::BASE_URL . '/carrello/rimuovi/' . $prodotto->getIdProdotto(),
+            'cart_count' => array_sum($carrello), //per aggiornare il badge navbar
         ]);
         exit();
     }
@@ -239,7 +277,7 @@ class CCarrello extends BaseController {
 
     /**
      * Rimuove o decrementa un prodotto dal carrello (chiamata AJAX).
-     * URL: GET /carrello/rimuovi/{id_item}
+     * URL: GET /carrello/rimuovi/{id_item} (DOVREBBE ESSERE POST!!!!!!!!!!)
      * Risponde in JSON. Se dopo la rimozione il carrello è vuoto,
      * il JS ricarica la pagina automaticamente
      */
@@ -266,7 +304,7 @@ class CCarrello extends BaseController {
         //Ricalcoliamo il totale degli elementi rimasti
         $nuovoConteggio = array_sum($carrello);
 
-        //Ricalcoliamo anche il nuovo totale, scorrendo i prodotti rimasti nel carrello
+        //Ricalcoliamo anche il nuovo totale (prezzo), scorrendo i prodotti rimasti nel carrello
         //e recuperando i prezzi reali dal DB tramite il pm
         $nuovoTotale = 0.00;
         foreach ($carrello as $idProdotto => $quantita) {
@@ -280,8 +318,8 @@ class CCarrello extends BaseController {
 
         echo json_encode([
             'success' => true,
-            'cart_count' => $nuovoConteggio,
             'message' => 'Prodotto rimosso dal carrello',
+            'cart_count' => $nuovoConteggio,
             'totale' => number_format($nuovoTotale, 2, '.', '') //number_format forza 2 decimali con il punto come separatore, formato standard per JSON/JS
         ]);
         exit();
