@@ -330,4 +330,4 @@ if ($categoria === 'challenge') {
 $smarty->assign('eventi', $eventi_tornei);
 $smarty->assign('filtri', $filtri);
 
-$smarty->display('carrello.tpl');
+$smarty->display('catalogo.tpl');

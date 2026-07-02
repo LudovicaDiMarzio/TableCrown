@@ -1,18 +1,18 @@
 <?php
-/* Smarty version 5.8.0, created on 2026-07-01 14:31:29
+/* Smarty version 5.8.0, created on 2026-07-01 19:52:19
   from 'file:carrello.tpl' */
 
 /* @var \Smarty\Template $_smarty_tpl */
 if ($_smarty_tpl->getCompiled()->isFresh($_smarty_tpl, array (
   'version' => '5.8.0',
-  'unifunc' => 'content_6a4508a1ee4802_29901834',
+  'unifunc' => 'content_6a4553d3dd5301_00936031',
   'has_nocache_code' => false,
   'file_dependency' => 
   array (
     '14c8b1bc70e7f0f2b8d951e689de31c70067fae1' => 
     array (
       0 => 'carrello.tpl',
-      1 => 1782909086,
+      1 => 1782928337,
       2 => 'file',
     ),
   ),
@@ -20,30 +20,30 @@ if ($_smarty_tpl->getCompiled()->isFresh($_smarty_tpl, array (
   array (
   ),
 ))) {
-function content_6a4508a1ee4802_29901834 (\Smarty\Template $_smarty_tpl) {
+function content_6a4553d3dd5301_00936031 (\Smarty\Template $_smarty_tpl) {
 $_smarty_current_dir = 'C:\\Users\\damic\\Desktop\\uni\\APPUNTI\\anno3\\secondo_semenstre\\Pweb\\TableCrown\\Presentation\\smarty-dir\\templates';
 $_smarty_tpl->getInheritance()->init($_smarty_tpl, true);
 ?>
 
 
 <?php 
-$_smarty_tpl->getInheritance()->instanceBlock($_smarty_tpl, 'Block_10946639596a4508a1eabe13_96255085', "extra_css");
+$_smarty_tpl->getInheritance()->instanceBlock($_smarty_tpl, 'Block_15851738566a4553d3da46a7_20056280', "extra_css");
 ?>
 
 
 <?php 
-$_smarty_tpl->getInheritance()->instanceBlock($_smarty_tpl, 'Block_533549476a4508a1eb0149_26169267', "content");
+$_smarty_tpl->getInheritance()->instanceBlock($_smarty_tpl, 'Block_9077781396a4553d3da86f3_33486730', "content");
 ?>
 
 
 <?php 
-$_smarty_tpl->getInheritance()->instanceBlock($_smarty_tpl, 'Block_8115407996a4508a1ee3a60_69715594', "extra_js");
+$_smarty_tpl->getInheritance()->instanceBlock($_smarty_tpl, 'Block_19664116686a4553d3dd46c8_93116104', "extra_js");
 ?>
 
 <?php $_smarty_tpl->getInheritance()->endChild($_smarty_tpl, "common/layout.tpl", $_smarty_current_dir);
 }
 /* {block "extra_css"} */
-class Block_10946639596a4508a1eabe13_96255085 extends \Smarty\Runtime\Block
+class Block_15851738566a4553d3da46a7_20056280 extends \Smarty\Runtime\Block
 {
 public function callBlock(\Smarty\Template $_smarty_tpl) {
 $_smarty_current_dir = 'C:\\Users\\damic\\Desktop\\uni\\APPUNTI\\anno3\\secondo_semenstre\\Pweb\\TableCrown\\Presentation\\smarty-dir\\templates';
@@ -56,7 +56,7 @@ $_smarty_current_dir = 'C:\\Users\\damic\\Desktop\\uni\\APPUNTI\\anno3\\secondo_
 }
 /* {/block "extra_css"} */
 /* {block "content"} */
-class Block_533549476a4508a1eb0149_26169267 extends \Smarty\Runtime\Block
+class Block_9077781396a4553d3da86f3_33486730 extends \Smarty\Runtime\Block
 {
 public function callBlock(\Smarty\Template $_smarty_tpl) {
 $_smarty_current_dir = 'C:\\Users\\damic\\Desktop\\uni\\APPUNTI\\anno3\\secondo_semenstre\\Pweb\\TableCrown\\Presentation\\smarty-dir\\templates';
@@ -94,7 +94,7 @@ echo $_smarty_tpl->getValue('item')['prezzo_originale']-$_smarty_tpl->getValue('
 } else { ?>0<?php }?>"
                                  data-update-url="<?php echo htmlspecialchars((string)$_smarty_tpl->getValue('item')['update_url'], ENT_QUOTES, 'UTF-8', true);?>
 ">
-
+                                
                                 <a href="<?php echo $_smarty_tpl->getValue('base_url');?>
 /prodotto/<?php echo $_smarty_tpl->getValue('p')['id'];?>
 " class="carrello-item-img-link">
@@ -117,18 +117,18 @@ echo $_smarty_tpl->getValue('item')['prezzo_originale']-$_smarty_tpl->getValue('
                                     </a>
 
                                     <div class="carrello-item-prezzo-wrapper">
-                                        <?php if ($_smarty_tpl->getValue('item')['sconto']) {?>
-                                            <span class="carrello-item-prezzo">€<?php echo $_smarty_tpl->getSmarty()->getModifierCallback('number_format')($_smarty_tpl->getValue('item')['prezzo_unitario'],2);?>
+                                    <?php if ($_smarty_tpl->getValue('item')['sconto']) {?>
+                                        <span class="carrello-item-prezzo">€<?php echo $_smarty_tpl->getSmarty()->getModifierCallback('number_format')($_smarty_tpl->getValue('item')['prezzo_unitario'],2);?>
 </span>
-                                            <span class="carrello-item-prezzo-old">€<?php echo $_smarty_tpl->getSmarty()->getModifierCallback('number_format')($_smarty_tpl->getValue('item')['prezzo_originale'],2);?>
+                                        <span class="carrello-item-prezzo-old">€<?php echo $_smarty_tpl->getSmarty()->getModifierCallback('number_format')($_smarty_tpl->getValue('item')['prezzo_originale'],2);?>
 </span>
-                                        <?php } elseif ((true && (true && null !== ($_smarty_tpl->getValue('item')['prezzo_unitario'] ?? null)))) {?>
-                                            <span class="carrello-item-prezzo">€<?php echo $_smarty_tpl->getSmarty()->getModifierCallback('number_format')($_smarty_tpl->getValue('item')['prezzo_unitario'],2);?>
+                                    <?php } elseif ((true && (true && null !== ($_smarty_tpl->getValue('item')['prezzo_unitario'] ?? null)))) {?>
+                                        <span class="carrello-item-prezzo">€<?php echo $_smarty_tpl->getSmarty()->getModifierCallback('number_format')($_smarty_tpl->getValue('item')['prezzo_unitario'],2);?>
 </span>
-                                        <?php } else { ?>
-                                            <span class="carrello-item-prezzo-nd">Prezzo N/D</span>
-                                        <?php }?>
-                                    </div>
+                                    <?php } else { ?>
+                                        <span class="carrello-item-prezzo-nd">Prezzo N/D</span>
+                                    <?php }?>
+                                </div>
                                 </div>
 
                                 <div class="carrello-item-controls">
@@ -319,10 +319,7 @@ $_smarty_tpl->getSmarty()->getRuntime('Foreach')->restore($_smarty_tpl, 1);?>
 
                 </div>
 
-                                <aside class="carrello-summary"
-                       id="carrello-summary"
-                       data-spedizione="<?php echo (($tmp = $_smarty_tpl->getValue('carrello_summary')['spedizione'] ?? null)===null||$tmp==='' ? '' ?? null : $tmp);?>
-">
+                                <aside class="carrello-summary" id="carrello-summary">
 
                     <h2 class="carrello-summary-title">Totale Carrello</h2>
 
@@ -378,7 +375,7 @@ $_smarty_tpl->getSmarty()->getRuntime('Foreach')->restore($_smarty_tpl, 1);?>
 }
 /* {/block "content"} */
 /* {block "extra_js"} */
-class Block_8115407996a4508a1ee3a60_69715594 extends \Smarty\Runtime\Block
+class Block_19664116686a4553d3dd46c8_93116104 extends \Smarty\Runtime\Block
 {
 public function callBlock(\Smarty\Template $_smarty_tpl) {
 $_smarty_current_dir = 'C:\\Users\\damic\\Desktop\\uni\\APPUNTI\\anno3\\secondo_semenstre\\Pweb\\TableCrown\\Presentation\\smarty-dir\\templates';
@@ -403,6 +400,7 @@ $_smarty_current_dir = 'C:\\Users\\damic\\Desktop\\uni\\APPUNTI\\anno3\\secondo_
         document.body.appendChild(toast);
         setTimeout(function() { toast.remove(); }, 4000);
     }
+    
 
     // ── RICALCOLO RIEPILOGO ──
     function ricalcolaRiepilogo() {
@@ -448,6 +446,7 @@ $_smarty_current_dir = 'C:\\Users\\damic\\Desktop\\uni\\APPUNTI\\anno3\\secondo_
         var unit        = parseFloat(riga.dataset.prezzoUnitario) || 0;
         var updateUrl   = riga.dataset.updateUrl;
 
+        
         if (input) input.dataset.valPrecedente = input.value;
 
         function aggiornaRigaUI() {

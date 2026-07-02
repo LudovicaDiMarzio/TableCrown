@@ -70,9 +70,14 @@
                 
                 <div class="filter-header">
                     <h3 class="filter-title">Filtri</h3>
-                    <button class="filter-close-btn" id="filter-close-btn" aria-label="Chiudi filtri">
-                        <i class="ti ti-x"></i>
-                    </button>
+                    <div class="filter-header-actions">
+                        <button type="submit" form="filters-form" class="button btn-apply-filters-top">
+                            <i class="ti ti-check"></i> Applica
+                        </button>
+                        <button class="filter-close-btn" id="filter-close-btn" aria-label="Chiudi filtri">
+                            <i class="ti ti-x"></i>
+                        </button>
+                    </div>
                 </div>
 
                 <form class="filters-form" id="filters-form" method="get" action="{$base_url}/catalogo">
@@ -84,29 +89,73 @@
                         <input type="hidden" name="ordinamento" value="{$ordinamento|escape}">
                     {/if}
 
+                    {* ── FILTRO: SEZIONE ── *}
+                    <div class="filter-group">
+                        <h4 class="filter-group-title">
+                            <i class="ti ti-category"></i> Sezione
+                        </h4>
+                        <div class="checkbox-group" data-exclusive="sezione">
+                            <label class="checkbox-label">
+                                <input type="checkbox" 
+                                       name="sezione" 
+                                       value="giochi_tavolo"
+                                       id="sezione-giochi-tavolo"
+                                       {if isset($sezione) && $sezione == 'giochi_tavolo'} checked{/if}>
+                                <span class="checkbox-text">Giochi da Tavolo</span>
+                            </label>
+                            <label class="checkbox-label">
+                                <input type="checkbox" 
+                                       name="sezione" 
+                                       value="bustine"
+                                       {if isset($sezione) && $sezione == 'bustine'} checked{/if}>
+                                <span class="checkbox-text">Bustine</span>
+                            </label>
+                            <label class="checkbox-label">
+                                <input type="checkbox" 
+                                       name="sezione" 
+                                       value="porta_dadi"
+                                       {if isset($sezione) && $sezione == 'porta_dadi'} checked{/if}>
+                                <span class="checkbox-text">Porta Dadi</span>
+                            </label>
+                        </div>
+                    </div>
+
                     {* ── FILTRO: PREZZO ── *}
                     <div class="filter-group">
                         <h4 class="filter-group-title">
                             <i class="ti ti-currency-euro"></i> Prezzo
                         </h4>
                         <div class="price-range-wrapper">
-                            <div class="price-inputs">
-                                <input type="number" 
-                                       class="input price-input price-min" 
-                                       name="price_min" 
-                                       placeholder="Min"
-                                       value="{$price_min|default:''|escape}"
-                                       min="0"
+
+                            <div class="price-values-display">
+                                <span id="price-value-min">€{$price_min|default:$price_range_min|default:0}</span>
+                                <span class="price-values-separator">—</span>
+                                <span id="price-value-max">€{$price_max|default:$price_range_max|default:200}</span>
+                            </div>
+
+                            <div class="price-slider-container">
+                                <div class="price-slider-track"></div>
+                                <div class="price-slider-range" id="price-slider-range"></div>
+                                <input type="range"
+                                       class="price-range-input price-range-min"
+                                       name="price_min"
+                                       id="price-range-min"
+                                       min="{$price_range_min|default:0}"
+                                       max="{$price_range_max|default:200}"
+                                       step="1"
+                                       value="{$price_min|default:$price_range_min|default:0}"
                                        aria-label="Prezzo minimo">
-                                <span class="price-separator">—</span>
-                                <input type="number" 
-                                       class="input price-input price-max" 
-                                       name="price_max" 
-                                       placeholder="Max"
-                                       value="{$price_max|default:''|escape}"
-                                       min="0"
+                                <input type="range"
+                                       class="price-range-input price-range-max"
+                                       name="price_max"
+                                       id="price-range-max"
+                                       min="{$price_range_min|default:0}"
+                                       max="{$price_range_max|default:200}"
+                                       step="1"
+                                       value="{$price_max|default:$price_range_max|default:200}"
                                        aria-label="Prezzo massimo">
                             </div>
+                    
                         </div>
                     </div>
 
@@ -184,10 +233,21 @@
                         </div>
                     </div>
 
-                    {* ── FILTRO: CATEGORIA ── *}
-                    <div class="filter-group">
+                    {* ── FILTRO: CATEGORIA (attivo solo se sezione = giochi_tavolo) ── *}
+                    {assign var="categoria_abilitata" value=isset($sezione) && $sezione == 'giochi_tavolo'}
+                    <div class="filter-group" id="categoria-filter-group" {if !$categoria_abilitata}data-disabled="true"{/if}>
                         <h4 class="filter-group-title">
                             <i class="ti ti-list"></i> Categoria
+                            <button type="button"
+                                    class="filter-help-btn"
+                                    id="categoria-help-btn"
+                                    aria-label="Informazioni sul filtro Categoria"
+                                    aria-describedby="categoria-help-tooltip">
+                                <i class="ti ti-help"></i>
+                            </button>
+                            <span class="filter-help-tooltip" id="categoria-help-tooltip" role="tooltip">
+                                Disponibile solo per "Giochi da Tavolo"
+                            </span>
                         </h4>
                         <div class="checkbox-group" data-exclusive="categoria">
                             {if isset($categorie) && $categorie|@count > 0}
@@ -196,7 +256,8 @@
                                         <input type="checkbox" 
                                                name="categoria[]" 
                                                value="{$cat.id|escape}"
-                                               {if isset($categoria_selected) && in_array($cat.id, $categoria_selected)} checked{/if}>
+                                               {if isset($categoria_selected) && in_array($cat.id, $categoria_selected)} checked{/if}
+                                               {if !$categoria_abilitata} disabled{/if}>
                                         <span class="checkbox-text">{$cat.nome|escape}</span>
                                     </label>
                                 {/foreach}
@@ -214,16 +275,16 @@
                         <div class="checkbox-group" data-exclusive="espansioni">
                             <label class="checkbox-label">
                                 <input type="checkbox" 
-                                       name="espansioni" 
-                                       value="si"
-                                       {if isset($espansioni) && $espansioni == 'si'} checked{/if}>
+                                       name="solo_base_game" 
+                                       value="1"
+                                       {if $solo_base_game|default:false} checked{/if}>
                                 <span class="checkbox-text">Solo base game</span>
                             </label>
                             <label class="checkbox-label">
                                 <input type="checkbox" 
-                                       name="espansioni" 
-                                       value="no"
-                                       {if isset($espansioni) && $espansioni == 'no'} checked{/if}>
+                                       name="solo_espansioni" 
+                                       value="1"
+                                       {if $solo_espansioni|default:false} checked{/if}>
                                 <span class="checkbox-text">Solo espansioni</span>
                             </label>
                         </div>
@@ -338,18 +399,18 @@
                         </div>
                     </div>
 
-                    {* ── BOTTONI AZIONI FILTRI ── *}
+
+                    {* ── BOTTONE RESET FILTRI ── *}
                     <div class="filter-actions">
-                        <button type="submit" class="button btn-apply-filters">
-                            <i class="ti ti-check"></i> Applica Filtri
-                        </button>
                         <a href="{$base_url}/catalogo" class="button btn-reset-filters">
                             <i class="ti ti-refresh"></i> Ripristina
                         </a>
                     </div>
 
                 </form>
+                
             </aside>
+                
 
             {* ── GRID PRINCIPALE PRODOTTI ── *}
             <main class="catalogo-main">
@@ -554,6 +615,50 @@ document.addEventListener('DOMContentLoaded', function() {
         });
     });
 
+    // ── TOGGLE CATEGORIA IN BASE A SEZIONE ──
+    var sezioneCheckboxes   = document.querySelectorAll('input[name="sezione"]');
+    var categoriaGroup      = document.getElementById('categoria-filter-group');
+    var categoriaCheckboxes = categoriaGroup ? categoriaGroup.querySelectorAll('input[type="checkbox"]') : [];
+    var sezioneGiochiTavolo = document.getElementById('sezione-giochi-tavolo');
+
+    function aggiornaStatoCategoria() {
+        var giochiTavoloSelezionato = sezioneGiochiTavolo ? sezioneGiochiTavolo.checked : false;
+
+        if (categoriaGroup) {
+            categoriaGroup.classList.toggle('is-disabled', !giochiTavoloSelezionato);
+        }
+        categoriaCheckboxes.forEach(function(cb) {
+            cb.disabled = !giochiTavoloSelezionato;
+            if (!giochiTavoloSelezionato) cb.checked = false; // pulisce selezioni categoria se si esce da "giochi da tavolo"
+        });
+    }
+
+    sezioneCheckboxes.forEach(function(cb) {
+        cb.addEventListener('change', aggiornaStatoCategoria);
+    });
+
+    aggiornaStatoCategoria(); // stato iniziale coerente col valore renderizzato dal server
+
+    // ── TOOLTIP AIUTO CATEGORIA ──
+    var categoriaHelpBtn = document.getElementById('categoria-help-btn');
+    var categoriaHelpTooltip = document.getElementById('categoria-help-tooltip');
+
+    if (categoriaHelpBtn && categoriaHelpTooltip) {
+        categoriaHelpBtn.addEventListener('click', function(e) {
+            e.preventDefault();
+            e.stopPropagation();
+            categoriaHelpTooltip.classList.toggle('is-visible');
+            categoriaHelpBtn.classList.toggle('is-active');
+        });
+
+        document.addEventListener('click', function(e) {
+            if (!categoriaHelpTooltip.contains(e.target) && !categoriaHelpBtn.contains(e.target)) {
+                categoriaHelpTooltip.classList.remove('is-visible');
+                categoriaHelpBtn.classList.remove('is-active');
+            }
+        });
+    }
+
     // ── TOGGLE FILTRI MOBILE ──
     var toggleBtn = document.getElementById('btn-toggle-filters');
     var sidebar   = document.getElementById('catalogo-filters');
@@ -578,6 +683,54 @@ document.addEventListener('DOMContentLoaded', function() {
         ratingSlider.addEventListener('input', function() {
             document.getElementById('rating-value').textContent = this.value;
         });
+    }
+
+    // ── DUAL PRICE SLIDER ──
+    var priceMinSlider = document.getElementById('price-range-min');
+    var priceMaxSlider = document.getElementById('price-range-max');
+    var priceValueMin  = document.getElementById('price-value-min');
+    var priceValueMax  = document.getElementById('price-value-max');
+    var priceRangeFill = document.getElementById('price-slider-range');
+
+    if (priceMinSlider && priceMaxSlider) {
+
+        var sliderMin = parseFloat(priceMinSlider.min);
+        var sliderMax = parseFloat(priceMinSlider.max);
+
+        function updatePriceRangeFill() {
+            var minVal = parseFloat(priceMinSlider.value);
+            var maxVal = parseFloat(priceMaxSlider.value);
+            var range  = sliderMax - sliderMin || 1;
+
+            var leftPct  = ((minVal - sliderMin) / range) * 100;
+            var rightPct = ((maxVal - sliderMin) / range) * 100;
+
+            priceRangeFill.style.left  = leftPct + '%';
+            priceRangeFill.style.right = (100 - rightPct) + '%';
+
+            priceValueMin.textContent = '€' + minVal;
+            priceValueMax.textContent = '€' + maxVal;
+        }
+
+        priceMinSlider.addEventListener('input', function() {
+            var minVal = parseFloat(priceMinSlider.value);
+            var maxVal = parseFloat(priceMaxSlider.value);
+            if (minVal > maxVal) {
+                priceMinSlider.value = maxVal;
+            }
+            updatePriceRangeFill();
+            });
+
+        priceMaxSlider.addEventListener('input', function() {
+            var minVal = parseFloat(priceMinSlider.value);
+            var maxVal = parseFloat(priceMaxSlider.value);
+            if (maxVal < minVal) {
+            priceMaxSlider.value = minVal;
+        }
+        updatePriceRangeFill();
+        });
+
+        updatePriceRangeFill();
     }
 
     // ── CHIUDI FILTRI FUORI CLICK (mobile) ──

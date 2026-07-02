@@ -202,6 +202,32 @@
     flex-shrink: 0;
 }
  
+.filter-header-actions {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+}
+
+
+.btn-apply-filters-top {
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    background-color: var(--color-primary) !important;
+    color: #fff !important;
+    border: none !important;
+    padding: 0.4rem 0.75rem !important;
+    font-size: var(--font-size-sm) !important;
+    font-weight: 600 !important;
+    border-radius: var(--radius-sm) !important;
+    cursor: pointer;
+    transition: background-color var(--transition);
+}
+
+.btn-apply-filters-top:hover {
+    background-color: var(--color-primary-dark) !important;
+}
+
 .filter-title {
     font-size: 1.1rem;
     font-weight: 700;
@@ -283,6 +309,66 @@
 }
  
  
+/* ── HELP TOOLTIP (CATEGORIA) ─────────────────────────────── */
+
+.filter-help-btn {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    width: 18px;
+    height: 18px;
+    padding: 0;
+    margin-left: 2px;
+    background: transparent;
+    border: 1px solid var(--color-text-muted);
+    border-radius: 50%;
+    color: var(--color-text-muted);
+    cursor: pointer;
+    transition: all var(--transition);
+    flex-shrink: 0;
+}
+
+.filter-help-btn i {
+    font-size: 11px;
+    color: inherit;
+}
+
+.filter-help-btn:hover,
+.filter-help-btn.is-active {
+    border-color: var(--color-primary);
+    color: var(--color-primary);
+}
+
+.filter-help-tooltip {
+    position: absolute;
+    display: none;
+    max-width: 220px;
+    background-color: #111827;
+    color: var(--color-text-light);
+    border: 1px solid var(--color-border-dark);
+    border-radius: var(--radius-sm);
+    padding: 0.5rem 0.75rem;
+    font-size: var(--font-size-sm);
+    font-weight: 400;
+    line-height: 1.4;
+    z-index: 10;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.3);
+    margin-top: 6px;
+    top: 100%;
+    left: 0;
+}
+
+.filter-help-tooltip.is-visible {
+    display: block;
+}
+
+/* il titolo deve essere position:relative perché il tooltip si posizioni rispetto a lui */
+#categoria-filter-group .filter-group-title {
+    position: relative;
+    flex-wrap: wrap;
+}
+
+
 /* ── CHECKBOX GROUP ───────────────────────────────────────── */
  
 .checkbox-group {
@@ -327,52 +413,100 @@
 }
  
  
-/* ── PRICE RANGE ──────────────────────────────────────────── */
- 
+/* ── PRICE RANGE (DUAL SLIDER) ────────────────────────────── */
+
 .price-range-wrapper {
     display: flex;
     flex-direction: column;
-    gap: 1rem;
+    gap: 0.75rem;
 }
- 
-.price-inputs {
+
+.price-values-display {
     display: flex;
-    align-items: center;
-    gap: 2px;
+    align-items: baseline;
+    justify-content: center;
+    gap: 8px;
+    font-size: var(--font-size-md);
+    color: var(--color-text-light);
 }
- 
-.price-input {
-    flex: 1;
-    max-width: calc(50% - 2px);
-    background-color: #111827 !important;
-    border: 1px solid var(--color-border-dark) !important;
-    color: var(--color-text-light) !important;
-    padding: 0.25rem 0.25rem !important;
-    border-radius: var(--radius-sm) !important;
-    font-size: 11px !important;
-    text-align: center;
+
+.price-values-display span {
+    font-weight: 700;
+    color: var(--color-primary);
+    font-size: 1rem;
 }
- 
-.price-input::placeholder {
-    color: var(--color-text-muted);
+
+.price-values-separator {
+    color: var(--color-text-subtle) !important;
+    font-weight: 500 !important;
 }
- 
-.price-input:focus {
-    outline: none;
-    border-color: var(--color-primary) !important;
+
+.price-slider-container {
+    position: relative;
+    height: 6px;
+    width: 100%;
+    margin: 14px 4px 20px;
 }
- 
-.price-separator {
-    color: var(--color-text-subtle);
-    font-weight: 500;
-    font-size: 11px;
-}
- 
-.price-slider {
+
+.price-slider-track {
+    position: absolute;
     width: 100%;
     height: 6px;
-    accent-color: var(--color-primary);
+    background-color: var(--color-border-dark);
     border-radius: 3px;
+}
+
+.price-slider-range {
+    position: absolute;
+    height: 6px;
+    background-color: var(--color-primary);
+    border-radius: 3px;
+}
+
+.price-range-input {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 6px;
+    margin: 0;
+    background: transparent;
+    pointer-events: none;
+    -webkit-appearance: none;
+    appearance: none;
+}
+
+.price-range-input::-webkit-slider-runnable-track {
+    -webkit-appearance: none;
+    background: transparent;
+}
+
+.price-range-input::-moz-range-track {
+    background: transparent;
+    border: none;
+}
+
+.price-range-input::-webkit-slider-thumb {
+    -webkit-appearance: none;
+    pointer-events: auto;
+    width: 16px;
+    height: 16px;
+    border-radius: 50%;
+    background-color: var(--color-primary);
+    border: 2px solid #fff;
+    box-shadow: 0 0 0 1px var(--color-border-dark);
+    cursor: pointer;
+    margin-top: 0;
+}
+
+.price-range-input::-moz-range-thumb {
+    pointer-events: auto;
+    width: 16px;
+    height: 16px;
+    border-radius: 50%;
+    background-color: var(--color-primary);
+    border: 2px solid #fff;
+    box-shadow: 0 0 0 1px var(--color-border-dark);
     cursor: pointer;
 }
  
@@ -499,7 +633,6 @@
     border-radius: 0 0 var(--radius-md) var(--radius-md);
 }
 
-.btn-apply-filters,
 .btn-reset-filters {
     display: flex;
     align-items: center;
@@ -511,19 +644,6 @@
     border-radius: var(--radius-sm) !important;
     cursor: pointer;
     transition: all var(--transition);
-    border: none !important;
-}
-
-.btn-apply-filters {
-    background-color: var(--color-primary) !important;
-    color: #fff !important;
-}
-
-.btn-apply-filters:hover {
-    background-color: var(--color-primary-dark) !important;
-}
-
-.btn-reset-filters {
     background-color: transparent !important;
     color: var(--color-text-subtle) !important;
     border: 1px solid var(--color-border-dark) !important;

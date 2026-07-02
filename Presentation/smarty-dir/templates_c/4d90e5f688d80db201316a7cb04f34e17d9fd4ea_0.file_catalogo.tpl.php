@@ -1,18 +1,18 @@
 <?php
-/* Smarty version 5.8.0, created on 2026-06-26 16:00:55
+/* Smarty version 5.8.0, created on 2026-07-02 17:22:14
   from 'file:catalogo.tpl' */
 
 /* @var \Smarty\Template $_smarty_tpl */
 if ($_smarty_tpl->getCompiled()->isFresh($_smarty_tpl, array (
   'version' => '5.8.0',
-  'unifunc' => 'content_6a3e8617896101_20077014',
+  'unifunc' => 'content_6a4682269e34b3_29582761',
   'has_nocache_code' => false,
   'file_dependency' => 
   array (
     '4d90e5f688d80db201316a7cb04f34e17d9fd4ea' => 
     array (
       0 => 'catalogo.tpl',
-      1 => 1781972678,
+      1 => 1783005730,
       2 => 'file',
     ),
   ),
@@ -20,28 +20,28 @@ if ($_smarty_tpl->getCompiled()->isFresh($_smarty_tpl, array (
   array (
   ),
 ))) {
-function content_6a3e8617896101_20077014 (\Smarty\Template $_smarty_tpl) {
+function content_6a4682269e34b3_29582761 (\Smarty\Template $_smarty_tpl) {
 $_smarty_current_dir = 'C:\\Users\\damic\\Desktop\\uni\\APPUNTI\\anno3\\secondo_semenstre\\Pweb\\TableCrown\\Presentation\\smarty-dir\\templates';
 $_smarty_tpl->getInheritance()->init($_smarty_tpl, true);
 ?>
 
 
 <?php 
-$_smarty_tpl->getInheritance()->instanceBlock($_smarty_tpl, 'Block_8143136806a3e86173afb70_87693127', "extra_css");
+$_smarty_tpl->getInheritance()->instanceBlock($_smarty_tpl, 'Block_608617886a4682269ac8f7_73525355', "extra_css");
 ?>
 
 
 <?php 
-$_smarty_tpl->getInheritance()->instanceBlock($_smarty_tpl, 'Block_7381637036a3e8617450114_41157932', "content");
+$_smarty_tpl->getInheritance()->instanceBlock($_smarty_tpl, 'Block_21336188726a4682269afab8_23076652', "content");
 ?>
 
 
 <?php 
-$_smarty_tpl->getInheritance()->instanceBlock($_smarty_tpl, 'Block_15615446106a3e8617895624_21000930', "extra_js");
+$_smarty_tpl->getInheritance()->instanceBlock($_smarty_tpl, 'Block_11283416506a4682269e2ce9_19424770', "extra_js");
 $_smarty_tpl->getInheritance()->endChild($_smarty_tpl, "common/layout.tpl", $_smarty_current_dir);
 }
 /* {block "extra_css"} */
-class Block_8143136806a3e86173afb70_87693127 extends \Smarty\Runtime\Block
+class Block_608617886a4682269ac8f7_73525355 extends \Smarty\Runtime\Block
 {
 public function callBlock(\Smarty\Template $_smarty_tpl) {
 $_smarty_current_dir = 'C:\\Users\\damic\\Desktop\\uni\\APPUNTI\\anno3\\secondo_semenstre\\Pweb\\TableCrown\\Presentation\\smarty-dir\\templates';
@@ -54,7 +54,7 @@ $_smarty_current_dir = 'C:\\Users\\damic\\Desktop\\uni\\APPUNTI\\anno3\\secondo_
 }
 /* {/block "extra_css"} */
 /* {block "content"} */
-class Block_7381637036a3e8617450114_41157932 extends \Smarty\Runtime\Block
+class Block_21336188726a4682269afab8_23076652 extends \Smarty\Runtime\Block
 {
 public function callBlock(\Smarty\Template $_smarty_tpl) {
 $_smarty_current_dir = 'C:\\Users\\damic\\Desktop\\uni\\APPUNTI\\anno3\\secondo_semenstre\\Pweb\\TableCrown\\Presentation\\smarty-dir\\templates';
@@ -126,9 +126,14 @@ $_smarty_current_dir = 'C:\\Users\\damic\\Desktop\\uni\\APPUNTI\\anno3\\secondo_
                 
                 <div class="filter-header">
                     <h3 class="filter-title">Filtri</h3>
-                    <button class="filter-close-btn" id="filter-close-btn" aria-label="Chiudi filtri">
-                        <i class="ti ti-x"></i>
-                    </button>
+                    <div class="filter-header-actions">
+                        <button type="submit" form="filters-form" class="button btn-apply-filters-top">
+                            <i class="ti ti-check"></i> Applica
+                        </button>
+                        <button class="filter-close-btn" id="filter-close-btn" aria-label="Chiudi filtri">
+                            <i class="ti ti-x"></i>
+                        </button>
+                    </div>
                 </div>
 
                 <form class="filters-form" id="filters-form" method="get" action="<?php echo $_smarty_tpl->getValue('base_url');?>
@@ -145,28 +150,77 @@ $_smarty_current_dir = 'C:\\Users\\damic\\Desktop\\uni\\APPUNTI\\anno3\\secondo_
 
                                         <div class="filter-group">
                         <h4 class="filter-group-title">
+                            <i class="ti ti-category"></i> Sezione
+                        </h4>
+                        <div class="checkbox-group" data-exclusive="sezione">
+                            <label class="checkbox-label">
+                                <input type="checkbox" 
+                                       name="sezione" 
+                                       value="giochi_tavolo"
+                                       id="sezione-giochi-tavolo"
+                                       <?php if ((true && ($_smarty_tpl->hasVariable('sezione') && null !== ($_smarty_tpl->getValue('sezione') ?? null))) && $_smarty_tpl->getValue('sezione') == 'giochi_tavolo') {?> checked<?php }?>>
+                                <span class="checkbox-text">Giochi da Tavolo</span>
+                            </label>
+                            <label class="checkbox-label">
+                                <input type="checkbox" 
+                                       name="sezione" 
+                                       value="bustine"
+                                       <?php if ((true && ($_smarty_tpl->hasVariable('sezione') && null !== ($_smarty_tpl->getValue('sezione') ?? null))) && $_smarty_tpl->getValue('sezione') == 'bustine') {?> checked<?php }?>>
+                                <span class="checkbox-text">Bustine</span>
+                            </label>
+                            <label class="checkbox-label">
+                                <input type="checkbox" 
+                                       name="sezione" 
+                                       value="porta_dadi"
+                                       <?php if ((true && ($_smarty_tpl->hasVariable('sezione') && null !== ($_smarty_tpl->getValue('sezione') ?? null))) && $_smarty_tpl->getValue('sezione') == 'porta_dadi') {?> checked<?php }?>>
+                                <span class="checkbox-text">Porta Dadi</span>
+                            </label>
+                        </div>
+                    </div>
+
+                                        <div class="filter-group">
+                        <h4 class="filter-group-title">
                             <i class="ti ti-currency-euro"></i> Prezzo
                         </h4>
                         <div class="price-range-wrapper">
-                            <div class="price-inputs">
-                                <input type="number" 
-                                       class="input price-input price-min" 
-                                       name="price_min" 
-                                       placeholder="Min"
-                                       value="<?php echo htmlspecialchars((string)(($tmp = $_smarty_tpl->getValue('price_min') ?? null)===null||$tmp==='' ? '' ?? null : $tmp), ENT_QUOTES, 'UTF-8', true);?>
+
+                            <div class="price-values-display">
+                                <span id="price-value-min">€<?php echo (($tmp = (($tmp = $_smarty_tpl->getValue('price_min') ?? null)===null||$tmp==='' ? $_smarty_tpl->getValue('price_range_min') ?? null : $tmp) ?? null)===null||$tmp==='' ? 0 ?? null : $tmp);?>
+</span>
+                                <span class="price-values-separator">—</span>
+                                <span id="price-value-max">€<?php echo (($tmp = (($tmp = $_smarty_tpl->getValue('price_max') ?? null)===null||$tmp==='' ? $_smarty_tpl->getValue('price_range_max') ?? null : $tmp) ?? null)===null||$tmp==='' ? 200 ?? null : $tmp);?>
+</span>
+                            </div>
+
+                            <div class="price-slider-container">
+                                <div class="price-slider-track"></div>
+                                <div class="price-slider-range" id="price-slider-range"></div>
+                                <input type="range"
+                                       class="price-range-input price-range-min"
+                                       name="price_min"
+                                       id="price-range-min"
+                                       min="<?php echo (($tmp = $_smarty_tpl->getValue('price_range_min') ?? null)===null||$tmp==='' ? 0 ?? null : $tmp);?>
 "
-                                       min="0"
+                                       max="<?php echo (($tmp = $_smarty_tpl->getValue('price_range_max') ?? null)===null||$tmp==='' ? 200 ?? null : $tmp);?>
+"
+                                       step="1"
+                                       value="<?php echo (($tmp = (($tmp = $_smarty_tpl->getValue('price_min') ?? null)===null||$tmp==='' ? $_smarty_tpl->getValue('price_range_min') ?? null : $tmp) ?? null)===null||$tmp==='' ? 0 ?? null : $tmp);?>
+"
                                        aria-label="Prezzo minimo">
-                                <span class="price-separator">—</span>
-                                <input type="number" 
-                                       class="input price-input price-max" 
-                                       name="price_max" 
-                                       placeholder="Max"
-                                       value="<?php echo htmlspecialchars((string)(($tmp = $_smarty_tpl->getValue('price_max') ?? null)===null||$tmp==='' ? '' ?? null : $tmp), ENT_QUOTES, 'UTF-8', true);?>
+                                <input type="range"
+                                       class="price-range-input price-range-max"
+                                       name="price_max"
+                                       id="price-range-max"
+                                       min="<?php echo (($tmp = $_smarty_tpl->getValue('price_range_min') ?? null)===null||$tmp==='' ? 0 ?? null : $tmp);?>
 "
-                                       min="0"
+                                       max="<?php echo (($tmp = $_smarty_tpl->getValue('price_range_max') ?? null)===null||$tmp==='' ? 200 ?? null : $tmp);?>
+"
+                                       step="1"
+                                       value="<?php echo (($tmp = (($tmp = $_smarty_tpl->getValue('price_max') ?? null)===null||$tmp==='' ? $_smarty_tpl->getValue('price_range_max') ?? null : $tmp) ?? null)===null||$tmp==='' ? 200 ?? null : $tmp);?>
+"
                                        aria-label="Prezzo massimo">
                             </div>
+                    
                         </div>
                     </div>
 
@@ -242,9 +296,20 @@ $_smarty_current_dir = 'C:\\Users\\damic\\Desktop\\uni\\APPUNTI\\anno3\\secondo_
                         </div>
                     </div>
 
-                                        <div class="filter-group">
+                                        <?php $_smarty_tpl->assign('categoria_abilitata', (true && ($_smarty_tpl->hasVariable('sezione') && null !== ($_smarty_tpl->getValue('sezione') ?? null))) && $_smarty_tpl->getValue('sezione') == 'giochi_tavolo', false, NULL);?>
+                    <div class="filter-group" id="categoria-filter-group" <?php if (!$_smarty_tpl->getValue('categoria_abilitata')) {?>data-disabled="true"<?php }?>>
                         <h4 class="filter-group-title">
                             <i class="ti ti-list"></i> Categoria
+                            <button type="button"
+                                    class="filter-help-btn"
+                                    id="categoria-help-btn"
+                                    aria-label="Informazioni sul filtro Categoria"
+                                    aria-describedby="categoria-help-tooltip">
+                                <i class="ti ti-help"></i>
+                            </button>
+                            <span class="filter-help-tooltip" id="categoria-help-tooltip" role="tooltip">
+                                Disponibile solo per "Giochi da Tavolo"
+                            </span>
                         </h4>
                         <div class="checkbox-group" data-exclusive="categoria">
                             <?php if ((true && ($_smarty_tpl->hasVariable('categorie') && null !== ($_smarty_tpl->getValue('categorie') ?? null))) && $_smarty_tpl->getSmarty()->getModifierCallback('count')($_smarty_tpl->getValue('categorie')) > 0) {?>
@@ -259,7 +324,8 @@ $foreach0DoElse = false;
                                                name="categoria[]" 
                                                value="<?php echo htmlspecialchars((string)$_smarty_tpl->getValue('cat')['id'], ENT_QUOTES, 'UTF-8', true);?>
 "
-                                               <?php if ((true && ($_smarty_tpl->hasVariable('categoria_selected') && null !== ($_smarty_tpl->getValue('categoria_selected') ?? null))) && $_smarty_tpl->getSmarty()->getModifierCallback('in_array')($_smarty_tpl->getValue('cat')['id'],$_smarty_tpl->getValue('categoria_selected'))) {?> checked<?php }?>>
+                                               <?php if ((true && ($_smarty_tpl->hasVariable('categoria_selected') && null !== ($_smarty_tpl->getValue('categoria_selected') ?? null))) && $_smarty_tpl->getSmarty()->getModifierCallback('in_array')($_smarty_tpl->getValue('cat')['id'],$_smarty_tpl->getValue('categoria_selected'))) {?> checked<?php }?>
+                                               <?php if (!$_smarty_tpl->getValue('categoria_abilitata')) {?> disabled<?php }?>>
                                         <span class="checkbox-text"><?php echo htmlspecialchars((string)$_smarty_tpl->getValue('cat')['nome'], ENT_QUOTES, 'UTF-8', true);?>
 </span>
                                     </label>
@@ -279,16 +345,16 @@ $_smarty_tpl->getSmarty()->getRuntime('Foreach')->restore($_smarty_tpl, 1);?>
                         <div class="checkbox-group" data-exclusive="espansioni">
                             <label class="checkbox-label">
                                 <input type="checkbox" 
-                                       name="espansioni" 
-                                       value="si"
-                                       <?php if ((true && ($_smarty_tpl->hasVariable('espansioni') && null !== ($_smarty_tpl->getValue('espansioni') ?? null))) && $_smarty_tpl->getValue('espansioni') == 'si') {?> checked<?php }?>>
+                                       name="solo_base_game" 
+                                       value="1"
+                                       <?php if ((($tmp = $_smarty_tpl->getValue('solo_base_game') ?? null)===null||$tmp==='' ? false ?? null : $tmp)) {?> checked<?php }?>>
                                 <span class="checkbox-text">Solo base game</span>
                             </label>
                             <label class="checkbox-label">
                                 <input type="checkbox" 
-                                       name="espansioni" 
-                                       value="no"
-                                       <?php if ((true && ($_smarty_tpl->hasVariable('espansioni') && null !== ($_smarty_tpl->getValue('espansioni') ?? null))) && $_smarty_tpl->getValue('espansioni') == 'no') {?> checked<?php }?>>
+                                       name="solo_espansioni" 
+                                       value="1"
+                                       <?php if ((($tmp = $_smarty_tpl->getValue('solo_espansioni') ?? null)===null||$tmp==='' ? false ?? null : $tmp)) {?> checked<?php }?>>
                                 <span class="checkbox-text">Solo espansioni</span>
                             </label>
                         </div>
@@ -422,10 +488,8 @@ $_smarty_tpl->getSmarty()->getRuntime('Foreach')->restore($_smarty_tpl, 1);?>
                         </div>
                     </div>
 
+
                                         <div class="filter-actions">
-                        <button type="submit" class="button btn-apply-filters">
-                            <i class="ti ti-check"></i> Applica Filtri
-                        </button>
                         <a href="<?php echo $_smarty_tpl->getValue('base_url');?>
 /catalogo" class="button btn-reset-filters">
                             <i class="ti ti-refresh"></i> Ripristina
@@ -433,7 +497,9 @@ $_smarty_tpl->getSmarty()->getRuntime('Foreach')->restore($_smarty_tpl, 1);?>
                     </div>
 
                 </form>
+                
             </aside>
+                
 
                         <main class="catalogo-main">
 
@@ -666,7 +732,7 @@ if ((true && ($_smarty_tpl->hasVariable('search_query') && null !== ($_smarty_tp
 }
 /* {/block "content"} */
 /* {block "extra_js"} */
-class Block_15615446106a3e8617895624_21000930 extends \Smarty\Runtime\Block
+class Block_11283416506a4682269e2ce9_19424770 extends \Smarty\Runtime\Block
 {
 public function callBlock(\Smarty\Template $_smarty_tpl) {
 $_smarty_current_dir = 'C:\\Users\\damic\\Desktop\\uni\\APPUNTI\\anno3\\secondo_semenstre\\Pweb\\TableCrown\\Presentation\\smarty-dir\\templates';
@@ -692,6 +758,50 @@ document.addEventListener('DOMContentLoaded', function() {
         });
     });
 
+    // ── TOGGLE CATEGORIA IN BASE A SEZIONE ──
+    var sezioneCheckboxes   = document.querySelectorAll('input[name="sezione"]');
+    var categoriaGroup      = document.getElementById('categoria-filter-group');
+    var categoriaCheckboxes = categoriaGroup ? categoriaGroup.querySelectorAll('input[type="checkbox"]') : [];
+    var sezioneGiochiTavolo = document.getElementById('sezione-giochi-tavolo');
+
+    function aggiornaStatoCategoria() {
+        var giochiTavoloSelezionato = sezioneGiochiTavolo ? sezioneGiochiTavolo.checked : false;
+
+        if (categoriaGroup) {
+            categoriaGroup.classList.toggle('is-disabled', !giochiTavoloSelezionato);
+        }
+        categoriaCheckboxes.forEach(function(cb) {
+            cb.disabled = !giochiTavoloSelezionato;
+            if (!giochiTavoloSelezionato) cb.checked = false; // pulisce selezioni categoria se si esce da "giochi da tavolo"
+        });
+    }
+
+    sezioneCheckboxes.forEach(function(cb) {
+        cb.addEventListener('change', aggiornaStatoCategoria);
+    });
+
+    aggiornaStatoCategoria(); // stato iniziale coerente col valore renderizzato dal server
+
+    // ── TOOLTIP AIUTO CATEGORIA ──
+    var categoriaHelpBtn = document.getElementById('categoria-help-btn');
+    var categoriaHelpTooltip = document.getElementById('categoria-help-tooltip');
+
+    if (categoriaHelpBtn && categoriaHelpTooltip) {
+        categoriaHelpBtn.addEventListener('click', function(e) {
+            e.preventDefault();
+            e.stopPropagation();
+            categoriaHelpTooltip.classList.toggle('is-visible');
+            categoriaHelpBtn.classList.toggle('is-active');
+        });
+
+        document.addEventListener('click', function(e) {
+            if (!categoriaHelpTooltip.contains(e.target) && !categoriaHelpBtn.contains(e.target)) {
+                categoriaHelpTooltip.classList.remove('is-visible');
+                categoriaHelpBtn.classList.remove('is-active');
+            }
+        });
+    }
+
     // ── TOGGLE FILTRI MOBILE ──
     var toggleBtn = document.getElementById('btn-toggle-filters');
     var sidebar   = document.getElementById('catalogo-filters');
@@ -716,6 +826,54 @@ document.addEventListener('DOMContentLoaded', function() {
         ratingSlider.addEventListener('input', function() {
             document.getElementById('rating-value').textContent = this.value;
         });
+    }
+
+    // ── DUAL PRICE SLIDER ──
+    var priceMinSlider = document.getElementById('price-range-min');
+    var priceMaxSlider = document.getElementById('price-range-max');
+    var priceValueMin  = document.getElementById('price-value-min');
+    var priceValueMax  = document.getElementById('price-value-max');
+    var priceRangeFill = document.getElementById('price-slider-range');
+
+    if (priceMinSlider && priceMaxSlider) {
+
+        var sliderMin = parseFloat(priceMinSlider.min);
+        var sliderMax = parseFloat(priceMinSlider.max);
+
+        function updatePriceRangeFill() {
+            var minVal = parseFloat(priceMinSlider.value);
+            var maxVal = parseFloat(priceMaxSlider.value);
+            var range  = sliderMax - sliderMin || 1;
+
+            var leftPct  = ((minVal - sliderMin) / range) * 100;
+            var rightPct = ((maxVal - sliderMin) / range) * 100;
+
+            priceRangeFill.style.left  = leftPct + '%';
+            priceRangeFill.style.right = (100 - rightPct) + '%';
+
+            priceValueMin.textContent = '€' + minVal;
+            priceValueMax.textContent = '€' + maxVal;
+        }
+
+        priceMinSlider.addEventListener('input', function() {
+            var minVal = parseFloat(priceMinSlider.value);
+            var maxVal = parseFloat(priceMaxSlider.value);
+            if (minVal > maxVal) {
+                priceMinSlider.value = maxVal;
+            }
+            updatePriceRangeFill();
+            });
+
+        priceMaxSlider.addEventListener('input', function() {
+            var minVal = parseFloat(priceMinSlider.value);
+            var maxVal = parseFloat(priceMaxSlider.value);
+            if (maxVal < minVal) {
+            priceMaxSlider.value = minVal;
+        }
+        updatePriceRangeFill();
+        });
+
+        updatePriceRangeFill();
     }
 
     // ── CHIUDI FILTRI FUORI CLICK (mobile) ──
