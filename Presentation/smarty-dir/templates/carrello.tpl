@@ -25,8 +25,8 @@
 
                             <div class="carrello-item"
                                  data-item-id="{$p.id}"
-                                 data-prezzo-unitario="{$p.prezzo_unitario}"
-                                 data-risparmio-unitario="{if $p.sconto}{$p.prezzo_originale-$p.prezzo_unitario}{else}0{/if}"
+                                 data-prezzo-unitario="{$item.prezzo_unitario}"
+                                 data-risparmio-unitario="{if $item.sconto}{$item.prezzo_originale-$item.prezzo_unitario}{else}0{/if}"
                                  data-update-url="{$item.update_url|escape}">
 
                                 <a href="{$base_url}/prodotto/{$p.id}" class="carrello-item-img-link">
@@ -42,11 +42,11 @@
                                     </a>
 
                                     <div class="carrello-item-prezzo-wrapper">
-                                        {if $p.sconto}
-                                            <span class="carrello-item-prezzo">€{$p.prezzo_unitario|number_format:2}</span>
-                                            <span class="carrello-item-prezzo-old">€{$p.prezzo_originale|number_format:2}</span>
-                                        {elseif isset($p.prezzo_unitario)}
-                                            <span class="carrello-item-prezzo">€{$p.prezzo_unitario|number_format:2}</span>
+                                        {if $item.sconto}
+                                            <span class="carrello-item-prezzo">€{$item.prezzo_unitario|number_format:2}</span>
+                                            <span class="carrello-item-prezzo-old">€{$item.prezzo_originale|number_format:2}</span>
+                                        {elseif isset($item.prezzo_unitario)}
+                                            <span class="carrello-item-prezzo">€{$item.prezzo_unitario|number_format:2}</span>
                                         {else}
                                             <span class="carrello-item-prezzo-nd">Prezzo N/D</span>
                                         {/if}
@@ -226,7 +226,7 @@
                             <dd id="summary-risparmio">-€{$carrello_summary.sconto|number_format:2}</dd>
                         </div>
 
-                        
+                    </dl>
 
                     <div class="carrello-summary-totale">
                         <span class="carrello-summary-totale-label">Totale</span>

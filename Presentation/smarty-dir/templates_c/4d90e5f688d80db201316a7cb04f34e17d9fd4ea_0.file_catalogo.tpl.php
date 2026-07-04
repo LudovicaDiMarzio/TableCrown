@@ -1,18 +1,18 @@
 <?php
-/* Smarty version 5.8.0, created on 2026-07-02 17:22:14
+/* Smarty version 5.8.0, created on 2026-07-04 15:18:31
   from 'file:catalogo.tpl' */
 
 /* @var \Smarty\Template $_smarty_tpl */
 if ($_smarty_tpl->getCompiled()->isFresh($_smarty_tpl, array (
   'version' => '5.8.0',
-  'unifunc' => 'content_6a4682269e34b3_29582761',
+  'unifunc' => 'content_6a49082710ae41_79429588',
   'has_nocache_code' => false,
   'file_dependency' => 
   array (
     '4d90e5f688d80db201316a7cb04f34e17d9fd4ea' => 
     array (
       0 => 'catalogo.tpl',
-      1 => 1783005730,
+      1 => 1783171107,
       2 => 'file',
     ),
   ),
@@ -20,28 +20,30 @@ if ($_smarty_tpl->getCompiled()->isFresh($_smarty_tpl, array (
   array (
   ),
 ))) {
-function content_6a4682269e34b3_29582761 (\Smarty\Template $_smarty_tpl) {
+function content_6a49082710ae41_79429588 (\Smarty\Template $_smarty_tpl) {
 $_smarty_current_dir = 'C:\\Users\\damic\\Desktop\\uni\\APPUNTI\\anno3\\secondo_semenstre\\Pweb\\TableCrown\\Presentation\\smarty-dir\\templates';
 $_smarty_tpl->getInheritance()->init($_smarty_tpl, true);
 ?>
 
 
 <?php 
-$_smarty_tpl->getInheritance()->instanceBlock($_smarty_tpl, 'Block_608617886a4682269ac8f7_73525355', "extra_css");
+$_smarty_tpl->getInheritance()->instanceBlock($_smarty_tpl, 'Block_11619701646a4908270b7cb1_30181557', "extra_css");
 ?>
 
 
 <?php 
-$_smarty_tpl->getInheritance()->instanceBlock($_smarty_tpl, 'Block_21336188726a4682269afab8_23076652', "content");
+$_smarty_tpl->getInheritance()->instanceBlock($_smarty_tpl, 'Block_14177921796a4908270bbb19_90299100', "content");
 ?>
 
 
 <?php 
-$_smarty_tpl->getInheritance()->instanceBlock($_smarty_tpl, 'Block_11283416506a4682269e2ce9_19424770', "extra_js");
-$_smarty_tpl->getInheritance()->endChild($_smarty_tpl, "common/layout.tpl", $_smarty_current_dir);
+$_smarty_tpl->getInheritance()->instanceBlock($_smarty_tpl, 'Block_10924669206a49082710a251_10754094', "extra_js");
+?>
+
+<?php $_smarty_tpl->getInheritance()->endChild($_smarty_tpl, "common/layout.tpl", $_smarty_current_dir);
 }
 /* {block "extra_css"} */
-class Block_608617886a4682269ac8f7_73525355 extends \Smarty\Runtime\Block
+class Block_11619701646a4908270b7cb1_30181557 extends \Smarty\Runtime\Block
 {
 public function callBlock(\Smarty\Template $_smarty_tpl) {
 $_smarty_current_dir = 'C:\\Users\\damic\\Desktop\\uni\\APPUNTI\\anno3\\secondo_semenstre\\Pweb\\TableCrown\\Presentation\\smarty-dir\\templates';
@@ -54,7 +56,7 @@ $_smarty_current_dir = 'C:\\Users\\damic\\Desktop\\uni\\APPUNTI\\anno3\\secondo_
 }
 /* {/block "extra_css"} */
 /* {block "content"} */
-class Block_21336188726a4682269afab8_23076652 extends \Smarty\Runtime\Block
+class Block_14177921796a4908270bbb19_90299100 extends \Smarty\Runtime\Block
 {
 public function callBlock(\Smarty\Template $_smarty_tpl) {
 $_smarty_current_dir = 'C:\\Users\\damic\\Desktop\\uni\\APPUNTI\\anno3\\secondo_semenstre\\Pweb\\TableCrown\\Presentation\\smarty-dir\\templates';
@@ -150,36 +152,6 @@ $_smarty_current_dir = 'C:\\Users\\damic\\Desktop\\uni\\APPUNTI\\anno3\\secondo_
 
                                         <div class="filter-group">
                         <h4 class="filter-group-title">
-                            <i class="ti ti-category"></i> Sezione
-                        </h4>
-                        <div class="checkbox-group" data-exclusive="sezione">
-                            <label class="checkbox-label">
-                                <input type="checkbox" 
-                                       name="sezione" 
-                                       value="giochi_tavolo"
-                                       id="sezione-giochi-tavolo"
-                                       <?php if ((true && ($_smarty_tpl->hasVariable('sezione') && null !== ($_smarty_tpl->getValue('sezione') ?? null))) && $_smarty_tpl->getValue('sezione') == 'giochi_tavolo') {?> checked<?php }?>>
-                                <span class="checkbox-text">Giochi da Tavolo</span>
-                            </label>
-                            <label class="checkbox-label">
-                                <input type="checkbox" 
-                                       name="sezione" 
-                                       value="bustine"
-                                       <?php if ((true && ($_smarty_tpl->hasVariable('sezione') && null !== ($_smarty_tpl->getValue('sezione') ?? null))) && $_smarty_tpl->getValue('sezione') == 'bustine') {?> checked<?php }?>>
-                                <span class="checkbox-text">Bustine</span>
-                            </label>
-                            <label class="checkbox-label">
-                                <input type="checkbox" 
-                                       name="sezione" 
-                                       value="porta_dadi"
-                                       <?php if ((true && ($_smarty_tpl->hasVariable('sezione') && null !== ($_smarty_tpl->getValue('sezione') ?? null))) && $_smarty_tpl->getValue('sezione') == 'porta_dadi') {?> checked<?php }?>>
-                                <span class="checkbox-text">Porta Dadi</span>
-                            </label>
-                        </div>
-                    </div>
-
-                                        <div class="filter-group">
-                        <h4 class="filter-group-title">
                             <i class="ti ti-currency-euro"></i> Prezzo
                         </h4>
                         <div class="price-range-wrapper">
@@ -232,16 +204,16 @@ $_smarty_current_dir = 'C:\\Users\\damic\\Desktop\\uni\\APPUNTI\\anno3\\secondo_
                             <label class="checkbox-label">
                                 <input type="checkbox" 
                                        name="disponibilita[]" 
-                                       value="annunciato"
-                                       <?php if ((true && ($_smarty_tpl->hasVariable('disponibilita') && null !== ($_smarty_tpl->getValue('disponibilita') ?? null))) && $_smarty_tpl->getSmarty()->getModifierCallback('in_array')('annunciato',$_smarty_tpl->getValue('disponibilita'))) {?> checked<?php }?>>
-                                <span class="checkbox-text">Annunciato</span>
+                                       value="disponibile"
+                                       <?php if ((true && ($_smarty_tpl->hasVariable('disponibilita') && null !== ($_smarty_tpl->getValue('disponibilita') ?? null))) && $_smarty_tpl->getSmarty()->getModifierCallback('in_array')('disponibile',$_smarty_tpl->getValue('disponibilita'))) {?> checked<?php }?>>
+                                <span class="checkbox-text">Disponibile Subito</span>
                             </label>
                             <label class="checkbox-label">
                                 <input type="checkbox" 
                                        name="disponibilita[]" 
-                                       value="disponibile"
-                                       <?php if ((true && ($_smarty_tpl->hasVariable('disponibilita') && null !== ($_smarty_tpl->getValue('disponibilita') ?? null))) && $_smarty_tpl->getSmarty()->getModifierCallback('in_array')('disponibile',$_smarty_tpl->getValue('disponibilita'))) {?> checked<?php }?>>
-                                <span class="checkbox-text">Disponibile Subito</span>
+                                       value="in_arrivo"
+                                       <?php if ((true && ($_smarty_tpl->hasVariable('disponibilita') && null !== ($_smarty_tpl->getValue('disponibilita') ?? null))) && $_smarty_tpl->getSmarty()->getModifierCallback('in_array')('in_arrivo',$_smarty_tpl->getValue('disponibilita'))) {?> checked<?php }?>>
+                                <span class="checkbox-text">In Arrivo</span>
                             </label>
                             <label class="checkbox-label">
                                 <input type="checkbox" 
@@ -296,20 +268,9 @@ $_smarty_current_dir = 'C:\\Users\\damic\\Desktop\\uni\\APPUNTI\\anno3\\secondo_
                         </div>
                     </div>
 
-                                        <?php $_smarty_tpl->assign('categoria_abilitata', (true && ($_smarty_tpl->hasVariable('sezione') && null !== ($_smarty_tpl->getValue('sezione') ?? null))) && $_smarty_tpl->getValue('sezione') == 'giochi_tavolo', false, NULL);?>
-                    <div class="filter-group" id="categoria-filter-group" <?php if (!$_smarty_tpl->getValue('categoria_abilitata')) {?>data-disabled="true"<?php }?>>
+                                        <div class="filter-group" id="categoria-filter-group">
                         <h4 class="filter-group-title">
                             <i class="ti ti-list"></i> Categoria
-                            <button type="button"
-                                    class="filter-help-btn"
-                                    id="categoria-help-btn"
-                                    aria-label="Informazioni sul filtro Categoria"
-                                    aria-describedby="categoria-help-tooltip">
-                                <i class="ti ti-help"></i>
-                            </button>
-                            <span class="filter-help-tooltip" id="categoria-help-tooltip" role="tooltip">
-                                Disponibile solo per "Giochi da Tavolo"
-                            </span>
                         </h4>
                         <div class="checkbox-group" data-exclusive="categoria">
                             <?php if ((true && ($_smarty_tpl->hasVariable('categorie') && null !== ($_smarty_tpl->getValue('categorie') ?? null))) && $_smarty_tpl->getSmarty()->getModifierCallback('count')($_smarty_tpl->getValue('categorie')) > 0) {?>
@@ -324,8 +285,7 @@ $foreach0DoElse = false;
                                                name="categoria[]" 
                                                value="<?php echo htmlspecialchars((string)$_smarty_tpl->getValue('cat')['id'], ENT_QUOTES, 'UTF-8', true);?>
 "
-                                               <?php if ((true && ($_smarty_tpl->hasVariable('categoria_selected') && null !== ($_smarty_tpl->getValue('categoria_selected') ?? null))) && $_smarty_tpl->getSmarty()->getModifierCallback('in_array')($_smarty_tpl->getValue('cat')['id'],$_smarty_tpl->getValue('categoria_selected'))) {?> checked<?php }?>
-                                               <?php if (!$_smarty_tpl->getValue('categoria_abilitata')) {?> disabled<?php }?>>
+                                               <?php if ((true && ($_smarty_tpl->hasVariable('categoria_selected') && null !== ($_smarty_tpl->getValue('categoria_selected') ?? null))) && $_smarty_tpl->getSmarty()->getModifierCallback('in_array')($_smarty_tpl->getValue('cat')['id'],$_smarty_tpl->getValue('categoria_selected'))) {?> checked<?php }?>>
                                         <span class="checkbox-text"><?php echo htmlspecialchars((string)$_smarty_tpl->getValue('cat')['nome'], ENT_QUOTES, 'UTF-8', true);?>
 </span>
                                     </label>
@@ -488,7 +448,6 @@ $_smarty_tpl->getSmarty()->getRuntime('Foreach')->restore($_smarty_tpl, 1);?>
                         </div>
                     </div>
 
-
                                         <div class="filter-actions">
                         <a href="<?php echo $_smarty_tpl->getValue('base_url');?>
 /catalogo" class="button btn-reset-filters">
@@ -532,8 +491,8 @@ $foreach3DoElse = false;
                                         
                                         <?php if ($_smarty_tpl->getValue('prodotto')['disponibilita'] == 'esaurito') {?>
                                             <span class="product-badge product-badge-esaurito">Esaurito</span>
-                                        <?php } elseif ($_smarty_tpl->getValue('prodotto')['disponibilita'] == 'annunciato') {?>
-                                            <span class="product-badge product-badge-annunciato">Annunciato</span>
+                                        <?php } elseif ($_smarty_tpl->getValue('prodotto')['disponibilita'] == 'in_arrivo') {?>
+                                            <span class="product-badge product-badge-in-arrivo">In Arrivo</span>
                                         <?php }?>
 
                                         <?php if ($_smarty_tpl->getValue('prodotto')['sconto']) {?>
@@ -732,7 +691,7 @@ if ((true && ($_smarty_tpl->hasVariable('search_query') && null !== ($_smarty_tp
 }
 /* {/block "content"} */
 /* {block "extra_js"} */
-class Block_11283416506a4682269e2ce9_19424770 extends \Smarty\Runtime\Block
+class Block_10924669206a49082710a251_10754094 extends \Smarty\Runtime\Block
 {
 public function callBlock(\Smarty\Template $_smarty_tpl) {
 $_smarty_current_dir = 'C:\\Users\\damic\\Desktop\\uni\\APPUNTI\\anno3\\secondo_semenstre\\Pweb\\TableCrown\\Presentation\\smarty-dir\\templates';
@@ -757,50 +716,6 @@ document.addEventListener('DOMContentLoaded', function() {
             });
         });
     });
-
-    // ── TOGGLE CATEGORIA IN BASE A SEZIONE ──
-    var sezioneCheckboxes   = document.querySelectorAll('input[name="sezione"]');
-    var categoriaGroup      = document.getElementById('categoria-filter-group');
-    var categoriaCheckboxes = categoriaGroup ? categoriaGroup.querySelectorAll('input[type="checkbox"]') : [];
-    var sezioneGiochiTavolo = document.getElementById('sezione-giochi-tavolo');
-
-    function aggiornaStatoCategoria() {
-        var giochiTavoloSelezionato = sezioneGiochiTavolo ? sezioneGiochiTavolo.checked : false;
-
-        if (categoriaGroup) {
-            categoriaGroup.classList.toggle('is-disabled', !giochiTavoloSelezionato);
-        }
-        categoriaCheckboxes.forEach(function(cb) {
-            cb.disabled = !giochiTavoloSelezionato;
-            if (!giochiTavoloSelezionato) cb.checked = false; // pulisce selezioni categoria se si esce da "giochi da tavolo"
-        });
-    }
-
-    sezioneCheckboxes.forEach(function(cb) {
-        cb.addEventListener('change', aggiornaStatoCategoria);
-    });
-
-    aggiornaStatoCategoria(); // stato iniziale coerente col valore renderizzato dal server
-
-    // ── TOOLTIP AIUTO CATEGORIA ──
-    var categoriaHelpBtn = document.getElementById('categoria-help-btn');
-    var categoriaHelpTooltip = document.getElementById('categoria-help-tooltip');
-
-    if (categoriaHelpBtn && categoriaHelpTooltip) {
-        categoriaHelpBtn.addEventListener('click', function(e) {
-            e.preventDefault();
-            e.stopPropagation();
-            categoriaHelpTooltip.classList.toggle('is-visible');
-            categoriaHelpBtn.classList.toggle('is-active');
-        });
-
-        document.addEventListener('click', function(e) {
-            if (!categoriaHelpTooltip.contains(e.target) && !categoriaHelpBtn.contains(e.target)) {
-                categoriaHelpTooltip.classList.remove('is-visible');
-                categoriaHelpBtn.classList.remove('is-active');
-            }
-        });
-    }
 
     // ── TOGGLE FILTRI MOBILE ──
     var toggleBtn = document.getElementById('btn-toggle-filters');

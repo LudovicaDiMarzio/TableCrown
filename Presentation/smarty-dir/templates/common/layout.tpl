@@ -41,10 +41,29 @@
                     </a>
                     
                     <div class="navbar-center-links">
-                        <a class="navbar-item{if isset($current_page) && $current_page == 'catalogo'} is-active{/if}" href="{$base_url}/catalogo">Catalogo</a>
-                        <a class="navbar-item{if isset($current_page) && $current_page == 'eventi'} is-active{/if}" href="{$base_url}/eventi">Eventi</a>
-                        <a class="navbar-item{if isset($current_page) && $current_page == 'offerte'} is-active{/if}" href="{$base_url}/offerte">Offerte</a>
-                    </div>
+
+                        <div class="has-catalogo-dropdown" id="catalogo-dropdown">
+                                <span class="navbar-item catalogo-label{if isset($current_page) && $current_page == 'catalogo'} is-active{/if}">
+                                    Catalogo
+                                    <i class="ti ti-chevron-down navbar-dropdown-arrow"></i>
+                                </span>
+                                <div class="navbar-dropdown-catalogo">
+                                    <a class="navbar-item" href="{$base_url}/catalogo/giochi-da-tavolo">
+                                        <i class="ti ti-dice-5"></i> Giochi da tavolo
+                                    </a>
+                                    <a class="navbar-item" href="{$base_url}/catalogo/bustine">
+                                        <i class="ti ti-cards"></i> Bustine
+                                    </a>
+                                    <a class="navbar-item" href="{$base_url}/catalogo/porta-dadi">
+                                        <i class="ti ti-package"></i> Porta dadi
+                                    </a>
+                                </div>
+                            </div>
+                        
+                            <a class="navbar-item{if isset($current_page) && $current_page == 'eventi'} is-active{/if}" href="{$base_url}/eventi">Eventi</a>
+                            <a class="navbar-item{if isset($current_page) && $current_page == 'offerte'} is-active{/if}" href="{$base_url}/offerte">Offerte</a>
+                        
+                        </div>
 
                     <div class="navbar-end-actions">
                         

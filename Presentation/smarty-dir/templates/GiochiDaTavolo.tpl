@@ -89,37 +89,6 @@
                         <input type="hidden" name="ordinamento" value="{$ordinamento|escape}">
                     {/if}
 
-                    {* ── FILTRO: SEZIONE ── *}
-                    <div class="filter-group">
-                        <h4 class="filter-group-title">
-                            <i class="ti ti-category"></i> Sezione
-                        </h4>
-                        <div class="checkbox-group" data-exclusive="sezione">
-                            <label class="checkbox-label">
-                                <input type="checkbox" 
-                                       name="sezione" 
-                                       value="giochi_tavolo"
-                                       id="sezione-giochi-tavolo"
-                                       {if isset($sezione) && $sezione == 'giochi_tavolo'} checked{/if}>
-                                <span class="checkbox-text">Giochi da Tavolo</span>
-                            </label>
-                            <label class="checkbox-label">
-                                <input type="checkbox" 
-                                       name="sezione" 
-                                       value="bustine"
-                                       {if isset($sezione) && $sezione == 'bustine'} checked{/if}>
-                                <span class="checkbox-text">Bustine</span>
-                            </label>
-                            <label class="checkbox-label">
-                                <input type="checkbox" 
-                                       name="sezione" 
-                                       value="porta_dadi"
-                                       {if isset($sezione) && $sezione == 'porta_dadi'} checked{/if}>
-                                <span class="checkbox-text">Porta Dadi</span>
-                            </label>
-                        </div>
-                    </div>
-
                     {* ── FILTRO: PREZZO ── *}
                     <div class="filter-group">
                         <h4 class="filter-group-title">
@@ -168,16 +137,16 @@
                             <label class="checkbox-label">
                                 <input type="checkbox" 
                                        name="disponibilita[]" 
-                                       value="annunciato"
-                                       {if isset($disponibilita) && in_array('annunciato', $disponibilita)} checked{/if}>
-                                <span class="checkbox-text">Annunciato</span>
+                                       value="disponibile"
+                                       {if isset($disponibilita) && in_array('disponibile', $disponibilita)} checked{/if}>
+                                <span class="checkbox-text">Disponibile Subito</span>
                             </label>
                             <label class="checkbox-label">
                                 <input type="checkbox" 
                                        name="disponibilita[]" 
-                                       value="disponibile"
-                                       {if isset($disponibilita) && in_array('disponibile', $disponibilita)} checked{/if}>
-                                <span class="checkbox-text">Disponibile Subito</span>
+                                       value="in_arrivo"
+                                       {if isset($disponibilita) && in_array('in_arrivo', $disponibilita)} checked{/if}>
+                                <span class="checkbox-text">In Arrivo</span>
                             </label>
                             <label class="checkbox-label">
                                 <input type="checkbox" 
@@ -233,21 +202,10 @@
                         </div>
                     </div>
 
-                    {* ── FILTRO: CATEGORIA (attivo solo se sezione = giochi_tavolo) ── *}
-                    {assign var="categoria_abilitata" value=isset($sezione) && $sezione == 'giochi_tavolo'}
-                    <div class="filter-group" id="categoria-filter-group" {if !$categoria_abilitata}data-disabled="true"{/if}>
+                    {* ── FILTRO: CATEGORIA ── *}
+                    <div class="filter-group" id="categoria-filter-group">
                         <h4 class="filter-group-title">
                             <i class="ti ti-list"></i> Categoria
-                            <button type="button"
-                                    class="filter-help-btn"
-                                    id="categoria-help-btn"
-                                    aria-label="Informazioni sul filtro Categoria"
-                                    aria-describedby="categoria-help-tooltip">
-                                <i class="ti ti-help"></i>
-                            </button>
-                            <span class="filter-help-tooltip" id="categoria-help-tooltip" role="tooltip">
-                                Disponibile solo per "Giochi da Tavolo"
-                            </span>
                         </h4>
                         <div class="checkbox-group" data-exclusive="categoria">
                             {if isset($categorie) && $categorie|@count > 0}
@@ -256,8 +214,7 @@
                                         <input type="checkbox" 
                                                name="categoria[]" 
                                                value="{$cat.id|escape}"
-                                               {if isset($categoria_selected) && in_array($cat.id, $categoria_selected)} checked{/if}
-                                               {if !$categoria_abilitata} disabled{/if}>
+                                               {if isset($categoria_selected) && in_array($cat.id, $categoria_selected)} checked{/if}>
                                         <span class="checkbox-text">{$cat.nome|escape}</span>
                                     </label>
                                 {/foreach}
@@ -399,7 +356,6 @@
                         </div>
                     </div>
 
-
                     {* ── BOTTONE RESET FILTRI ── *}
                     <div class="filter-actions">
                         <a href="{$base_url}/catalogo" class="button btn-reset-filters">
@@ -435,8 +391,8 @@
                                         
                                         {if $prodotto.disponibilita == 'esaurito'}
                                             <span class="product-badge product-badge-esaurito">Esaurito</span>
-                                        {elseif $prodotto.disponibilita == 'annunciato'}
-                                            <span class="product-badge product-badge-annunciato">Annunciato</span>
+                                        {elseif $prodotto.disponibilita == 'in_arrivo'}
+                                            <span class="product-badge product-badge-in-arrivo">In Arrivo</span>
                                         {/if}
 
                                         {if $prodotto.sconto}
@@ -614,50 +570,6 @@ document.addEventListener('DOMContentLoaded', function() {
             });
         });
     });
-
-    // ── TOGGLE CATEGORIA IN BASE A SEZIONE ──
-    var sezioneCheckboxes   = document.querySelectorAll('input[name="sezione"]');
-    var categoriaGroup      = document.getElementById('categoria-filter-group');
-    var categoriaCheckboxes = categoriaGroup ? categoriaGroup.querySelectorAll('input[type="checkbox"]') : [];
-    var sezioneGiochiTavolo = document.getElementById('sezione-giochi-tavolo');
-
-    function aggiornaStatoCategoria() {
-        var giochiTavoloSelezionato = sezioneGiochiTavolo ? sezioneGiochiTavolo.checked : false;
-
-        if (categoriaGroup) {
-            categoriaGroup.classList.toggle('is-disabled', !giochiTavoloSelezionato);
-        }
-        categoriaCheckboxes.forEach(function(cb) {
-            cb.disabled = !giochiTavoloSelezionato;
-            if (!giochiTavoloSelezionato) cb.checked = false; // pulisce selezioni categoria se si esce da "giochi da tavolo"
-        });
-    }
-
-    sezioneCheckboxes.forEach(function(cb) {
-        cb.addEventListener('change', aggiornaStatoCategoria);
-    });
-
-    aggiornaStatoCategoria(); // stato iniziale coerente col valore renderizzato dal server
-
-    // ── TOOLTIP AIUTO CATEGORIA ──
-    var categoriaHelpBtn = document.getElementById('categoria-help-btn');
-    var categoriaHelpTooltip = document.getElementById('categoria-help-tooltip');
-
-    if (categoriaHelpBtn && categoriaHelpTooltip) {
-        categoriaHelpBtn.addEventListener('click', function(e) {
-            e.preventDefault();
-            e.stopPropagation();
-            categoriaHelpTooltip.classList.toggle('is-visible');
-            categoriaHelpBtn.classList.toggle('is-active');
-        });
-
-        document.addEventListener('click', function(e) {
-            if (!categoriaHelpTooltip.contains(e.target) && !categoriaHelpBtn.contains(e.target)) {
-                categoriaHelpTooltip.classList.remove('is-visible');
-                categoriaHelpBtn.classList.remove('is-active');
-            }
-        });
-    }
 
     // ── TOGGLE FILTRI MOBILE ──
     var toggleBtn = document.getElementById('btn-toggle-filters');
