@@ -111,6 +111,19 @@ class FPersistentManager
         return FEntityManager::getObjListBetween($class, $field, $value);
     }
 
+     /**
+     * @param string $class Nome della classe(tabella)
+     * @param string $field attributo dell'oggetto da recuperare
+     * @param string $ordinationType ordinamento (ASC o DESC)
+     * @param int $quantity numero massimo di elementi da recuperare
+     * @return object || null
+     * @throws Exception
+     */
+    public function PMgetObjListOrdered($class, $field, $ordinationType, $quantity): array
+    {
+        return FEntityManager::getObjListOrdered($class, $field, $ordinationType, $quantity);
+    }
+
     /**
      * @param string $table Nome della classe(tabella)
      * @param string $field attributo dell'oggetto da recuperare
