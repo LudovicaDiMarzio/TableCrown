@@ -7,6 +7,8 @@ use InvalidArgumentException;
 use DateTime;
 use TableCrown\Entity\Enumerativi\DisponibilitaProdotto;
 use TableCrown\Entity\Enumerativi\Categoria;
+use TableCrown\Entity\Enumerativi\LinguaGioco;
+use TableCrown\Entity\Enumerativi\DifficoltaGioco;
 
 #[ORM\Entity]
 #[ORM\Table(name: "gioco_da_tavolo")]
@@ -22,7 +24,6 @@ class EGiocoDaTavolo extends EProdotto {
 
     #[ORM\JoinColumn(name : "gioco_base_id", referencedColumnName: "idProdotto", nullable: true)]
     private ?EGiocoDaTavolo $giocoBase=null; //riferimento a un eventuale gioco da tavolo di cui è espansione
-
 
     #[ORM\Column(type: "integer")]
     private int $numeroGiocatoriMin;
@@ -43,13 +44,21 @@ class EGiocoDaTavolo extends EProdotto {
     #[ORM\Column(type: "text", nullable: true)]
     private ?string $descrizioneDanno; //descrizione del danno, se presente
 
+    #[ORM\Column(type: "string", enumType: LinguaGioco::class)]
+    private LinguaGioco $lingua;
+
+    #[ORM\Column(type: "string", enumType: DifficoltaGioco::class)]
+    private DifficoltaGioco $difficolta;
+
     //Il costruttore, per effettuare i controlli sui vincoli, chiama al suo interno i metodi di verifica dei vincoli, che lanciano un'eccezione se i vincoli non sono rispettati
-    public function __construct(string $nomeProdotto, string $descrizioneProdotto, DisponibilitaProdotto $disponibilitaProdotto, int $quantita, array $categoria, array $componenti, ?string $imgProdotto = null, ?EPrezzo $prezzo = null, ?EGiocoDaTavolo $giocoBase = null, int $numeroGiocatoriMin = 1, int $numeroGiocatoriMax = 1, int $etaMinima = 1, int $durataMedia = 1, ?EDanno $danno = null, ?string $descrizioneDanno = null) {
+    public function __construct(string $nomeProdotto, string $descrizioneProdotto, DisponibilitaProdotto $disponibilitaProdotto, int $quantita, array $categoria, array $componenti, DifficoltaGioco $difficolta, LinguaGioco $lingua, ?string $imgProdotto = null, ?EPrezzo $prezzo = null, ?EGiocoDaTavolo $giocoBase = null, int $numeroGiocatoriMin = 1, int $numeroGiocatoriMax = 1, int $etaMinima = 1, int $durataMedia = 1, ?EDanno $danno = null, ?string $descrizioneDanno = null) {
         parent::__construct($nomeProdotto, $descrizioneProdotto, $disponibilitaProdotto, $quantita, $imgProdotto, $prezzo);
         $this->categoria = $categoria;
         $this->verificaCategoria(); //se fallisce, l'eccezione viene lanciata e il gioco da tavolo non viene creato (per tutti i metodi di verifica)
         $this->componenti = $componenti;
         $this->verificaComponenti();
+        $this->difficolta = $difficolta;
+        $this->lingua = $lingua;
         $this->giocoBase = $giocoBase;
         $this->verificaVincoliEspansione();
         $this->numeroGiocatoriMin = $numeroGiocatoriMin;
@@ -101,7 +110,29 @@ class EGiocoDaTavolo extends EProdotto {
         return $this->descrizioneDanno;
     }
 
+    public function getDifficolta(): DifficoltaGioco {
+        return $this->difficolta;
+    }
+
+    public function getLingua(): LinguaGioco {
+        return $this->lingua;
+    }
+
     //Metodi di dominio
+
+    /**
+     * Imposta la lingua del gioco da tavolo.
+     */
+    public function impostaLingua(LinguaGioco $lingua): void {
+        $this->lingua = $lingua;
+    }
+
+    /**
+     * Imposta la difficoltà del gioco da tavolo.
+     */
+    public function impostaDifficolta(DifficoltaGioco $difficolta): void {
+        $this->difficolta = $difficolta;
+    }
 
     /**
      * Aggiunge una categoria al gioco da tavolo.
