@@ -48,13 +48,13 @@
                                     <i class="ti ti-chevron-down navbar-dropdown-arrow"></i>
                                 </span>
                                 <div class="navbar-dropdown-catalogo">
-                                    <a class="navbar-item" href="{$base_url}/catalogo/giochi-da-tavolo">
+                                    <a class="navbar-item{if isset($current_subpage) && $current_subpage == 'giochi-da-tavolo'} is-active{/if}" href="{$base_url}/catalogo/giochi-da-tavolo">
                                         <i class="ti ti-dice-5"></i> Giochi da tavolo
                                     </a>
-                                    <a class="navbar-item" href="{$base_url}/catalogo/bustine">
+                                    <a class="navbar-item{if isset($current_subpage) && $current_subpage == 'bustine'} is-active{/if}" href="{$base_url}/catalogo/bustine">
                                         <i class="ti ti-cards"></i> Bustine
                                     </a>
-                                    <a class="navbar-item" href="{$base_url}/catalogo/porta-dadi">
+                                    <a class="navbar-item{if isset($current_subpage) && $current_subpage == 'porta-dadi'} is-active{/if}" href="{$base_url}/catalogo/porta-dadi">
                                         <i class="ti ti-package"></i> Porta dadi
                                     </a>
                                 </div>

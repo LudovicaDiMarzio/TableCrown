@@ -20,13 +20,25 @@ $nuovi_arrivi = [
 
 // ── PRODOTTI CATALOGO ──
 $prodotti = [
-    ['id' => 101, 'nome' => 'Catan',            'immagine' => 'placeholder.jpg', 'valutazione_media' => 4.5, 'disponibilita' => 'disponibile', 'prezzo' => 34.90, 'sconto' => true,  'percentuale_sconto' => 20, 'prezzo_scontato' => 27.92],
-    ['id' => 102, 'nome' => 'Carcassonne',       'immagine' => 'placeholder.jpg', 'valutazione_media' => 4.0, 'disponibilita' => 'disponibile', 'prezzo' => 29.90, 'sconto' => true,  'percentuale_sconto' => 15, 'prezzo_scontato' => 25.42],
-    ['id' => 103, 'nome' => '7 Wonders',         'immagine' => 'placeholder.jpg', 'valutazione_media' => 4.7, 'disponibilita' => 'esaurito',    'prezzo' => 39.90, 'sconto' => false, 'percentuale_sconto' => null, 'prezzo_scontato' => null],
-    ['id' => 201, 'nome' => 'Wingspan',          'immagine' => 'placeholder.jpg', 'valutazione_media' => 4.8, 'disponibilita' => 'disponibile', 'prezzo' => 49.90, 'sconto' => false, 'percentuale_sconto' => null, 'prezzo_scontato' => null],
-    ['id' => 202, 'nome' => 'Azul',              'immagine' => 'placeholder.jpg', 'valutazione_media' => 4.6, 'disponibilita' => 'disponibile', 'prezzo' => 32.90, 'sconto' => true,  'percentuale_sconto' => 10, 'prezzo_scontato' => 29.61],
-    ['id' => 203, 'nome' => 'Brass Birmingham',  'immagine' => 'placeholder.jpg', 'valutazione_media' => 4.9, 'disponibilita' => 'annunciato',  'prezzo' => 59.90, 'sconto' => false, 'percentuale_sconto' => null, 'prezzo_scontato' => null],
+    ['id' => 101, 'nome' => 'Catan',            'immagine' => 'placeholder.jpg', 'valutazione_media' => 4.5, 'disponibilita' => 'disponibile', 'prezzo' => 34.90, 'sconto' => true,  'percentuale_sconto' => 20, 'prezzo_scontato' => 27.92,
+        'categoria' => 'strategia', 'lingue' => 'IT,EN', 'danno' => '', 'eta_min' => 10, 'difficolta' => 'media', 'giocatori_min' => 3, 'giocatori_max' => 4, 'is_espansione' => false, 'novita' => false, 'in_top_venduti' => true, 'numero_vendite' => 340, 'data_inserimento' => '2024-03-10'],
+
+    ['id' => 102, 'nome' => 'Carcassonne',       'immagine' => 'placeholder.jpg', 'valutazione_media' => 4.0, 'disponibilita' => 'disponibile', 'prezzo' => 29.90, 'sconto' => true,  'percentuale_sconto' => 15, 'prezzo_scontato' => 25.42,
+        'categoria' => 'famiglia', 'lingue' => 'IT', 'danno' => '', 'eta_min' => 7, 'difficolta' => 'facile', 'giocatori_min' => 2, 'giocatori_max' => 5, 'is_espansione' => false, 'novita' => false, 'in_top_venduti' => false, 'numero_vendite' => 210, 'data_inserimento' => '2024-01-05'],
+
+    ['id' => 103, 'nome' => '7 Wonders',         'immagine' => 'placeholder.jpg', 'valutazione_media' => 4.7, 'disponibilita' => 'esaurito',    'prezzo' => 39.90, 'sconto' => false, 'percentuale_sconto' => null, 'prezzo_scontato' => null,
+        'categoria' => 'strategia', 'lingue' => 'IT,EN,FR', 'danno' => '', 'eta_min' => 10, 'difficolta' => 'media', 'giocatori_min' => 3, 'giocatori_max' => 7, 'is_espansione' => false, 'novita' => false, 'in_top_venduti' => true, 'numero_vendite' => 275, 'data_inserimento' => '2023-11-20'],
+
+    ['id' => 201, 'nome' => 'Wingspan',          'immagine' => 'placeholder.jpg', 'valutazione_media' => 4.8, 'disponibilita' => 'disponibile', 'prezzo' => 49.90, 'sconto' => false, 'percentuale_sconto' => null, 'prezzo_scontato' => null,
+        'categoria' => 'famiglia', 'lingue' => 'IT,EN', 'danno' => '', 'eta_min' => 10, 'difficolta' => 'media', 'giocatori_min' => 1, 'giocatori_max' => 5, 'is_espansione' => false, 'novita' => true, 'in_top_venduti' => false, 'numero_vendite' => 95, 'data_inserimento' => '2026-05-15'],
+
+    ['id' => 202, 'nome' => 'Azul',              'immagine' => 'placeholder.jpg', 'valutazione_media' => 4.6, 'disponibilita' => 'disponibile', 'prezzo' => 32.90, 'sconto' => true,  'percentuale_sconto' => 10, 'prezzo_scontato' => 29.61,
+        'categoria' => 'famiglia', 'lingue' => 'IT,EN,ES,DE', 'danno' => '', 'eta_min' => 8, 'difficolta' => 'facile', 'giocatori_min' => 2, 'giocatori_max' => 4, 'is_espansione' => false, 'novita' => false, 'in_top_venduti' => true, 'numero_vendite' => 410, 'data_inserimento' => '2023-06-01'],
+
+    ['id' => 203, 'nome' => 'Brass Birmingham',  'immagine' => 'placeholder.jpg', 'valutazione_media' => 4.9, 'disponibilita' => 'annunciato',  'prezzo' => 59.90, 'sconto' => false, 'percentuale_sconto' => null, 'prezzo_scontato' => null,
+        'categoria' => 'strategia', 'lingue' => 'EN', 'danno' => '', 'eta_min' => 14, 'difficolta' => 'difficile', 'giocatori_min' => 2, 'giocatori_max' => 4, 'is_espansione' => false, 'novita' => true, 'in_top_venduti' => false, 'numero_vendite' => 60, 'data_inserimento' => '2026-06-01'],
 ];
+
 
 // ── CATEGORIE ──
 $categorie = [
@@ -330,4 +342,4 @@ if ($categoria === 'challenge') {
 $smarty->assign('eventi', $eventi_tornei);
 $smarty->assign('filtri', $filtri);
 
-$smarty->display('catalogo.tpl');
+$smarty->display('GiochiDaTavolo.tpl');
