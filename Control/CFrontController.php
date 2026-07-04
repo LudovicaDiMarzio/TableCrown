@@ -39,10 +39,15 @@ class CFrontController {
                 break;
 
             case 'catalogo':
-                //Corrisponde a: GET /catalogo
-                //Nota: se l'utente richiede /catalogo?ordinamento=novita, i parametri in query string non alterano il routing principale e verranno letti direttamente dentro la classe CCatalogo.
                 $controller = new CCatalogo();
-                $controller->mostraCatalogo();
+
+                if ($sottoRoute === 'giochi-da-tavolo' && $metodoHTTP === 'GET') {
+                    $controller->mostraCatalogoGiochi(); //GET /catalogo/giochi-da-tavolo
+                } elseif ($sottoRoute === 'bustine' && $metodoHTTP === 'GET') {
+                    $controller->mostraCatalogoBustine(); //GET /catalogo/bustine
+                } elseif ($sottoRoute === 'porta-dadi' && $metodoHTTP === 'GET') {
+                    $controller->mostraCatalogoPortaDadi(); //GET /catalogo/porta-dadi
+                }
                 break;
 
             case 'eventi':
