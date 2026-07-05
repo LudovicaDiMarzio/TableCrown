@@ -9,23 +9,27 @@ class FEntityManager {
     
     // creo l'entity manager seguendo il pattern singleton, solo una connessione al db alla volta deve essere attiva, il pattern singleton mi garantisce questo
     //lo implemtento dichiarando l'attributo statico, che può quindi esistere solo una volta in tutta l'app web
-    private static  $entityManager = null;
-    
+    private  $entityManager = null;
+    private static $instance = null;
     // Il costruttore privato garantisce che nessuno possa fare "new FEntityManager()"
     private function __construct() {
         //self è per fare riferimento al'oggetto unico che esiste in tutta l'app web (quello restituito da new EntityManager($connection, $config); in bootstrap.php
         //in generale si usa per costanti o variabili statiche 
-        self::$entityManager = getEntityManagerBoot(); // ottiene l'entity manager dalla funzione di bootstrap.php
+        $this->entityManager = getEntityManagerBoot(); // ottiene l'entity manager dalla funzione di bootstrap.php
     }
-    
-    //Per creare un oggetto con il costruttore di FentityManager
-    public static function getEntityManager() {
-        // Se la variabile entity manager è vuota (non esiste ancora), chiamiamo il costruttore di FEntityManager per riempirla (Singleton)
-        if (self::$entityManager === null) {
-            new self();
+    /**
+     * Metodo per ottenere l'istanza della classe
+     */
+    public static function getInstance(){
+        if (self::$instance == null) {
+            self::$instance = new self(); //crea un'istanza della classe
         }
-        // consegnamo l'entity manager appena creata (se non esisteva) oppure quella già esistente
-        return self::$entityManager;
+        return self::$instance;
+    }
+
+    //Per creare un oggetto con il costruttore di FentityManager
+    public function getEntityManager() {
+       return $this->entityManager;
     }
 
     //Metodi della classe FEntityManager//
@@ -36,18 +40,18 @@ class FEntityManager {
     *@return bool True se salvato con successo, false altrimenti.
     *@throws Exception Se il salvataggio fallisce.
     */
-    public static function saveObj(Object $obj): bool{
+    public function saveObj(Object $obj): bool{
         try{
             /**
              * potevano essere usati anche i metodi doctrine specifici pe rla gestione delle transaction  self::$entityManager->getConnection()->beginTransaction(); 
-             *self::$entityManager->getConnection()->commit(); ma non è necessario usarlo, perchè la classe EntityManager si occupa già di gestire le transazioni con flush
+             *$this->$entityManager->getConnection()->commit(); ma non è necessario usarlo, perchè la classe EntityManager si occupa già di gestire le transazioni con flush
              *se l'esecuzione di una query non va a buon fine  e si verifica un errore, nessuna query sarà eseguita, 
              *la transazione sarà annullata e sarà generato un rollback automatico
             */
 
             //se si effettua l'aggiornamento di un oggetto già tracciato da doctrine (ad esempio a causa dell'esecuzione di un'altra query precedente), persist viene ignorato da doctrine, l'oggetto non viene tracciato di nuovo
-            self::$entityManager->persist($obj);
-            self::$entityManager->flush();
+            $this->entityManager->persist($obj);
+            $this->entityManager->flush();
             //il salvataggio è andato a buon fine
             return true;
         }
@@ -67,11 +71,11 @@ class FEntityManager {
      * @return object || null  
      * @throws Exception
      */
-    public static function getObjOnAttribute($class, $field, $value): ?object
+    public function getObjOnAttribute($class, $field, $value): ?object
     {
         try{
             //echo "Cerca in $class dove $field = $value\n";
-            return self::$entityManager->getRepository($class)->findOneBy([$field => $value]);
+            return $this->entityManager->getRepository($class)->findOneBy([$field => $value]);
         }
         catch (Exception $e){
             error_log("Errore durante il recupero dell'oggetto: " . $e->getMessage());
@@ -87,10 +91,10 @@ class FEntityManager {
      * @return object || null  
      * @throws Exception
      */
-    public static function getObjListOnAttribute($table, $field, $value): array
+    public  function getObjListOnAttribute($table, $field, $value): array
     {
         try{
-            return self::$entityManager->getRepository($table)->findBy([$field => $value]);
+            return $this->entityManager->getRepository($table)->findBy([$field => $value]);
 
         } catch(Exception $e){
             error_log("Errore durante il recupero degli oggetti: " . $e->getMessage());
@@ -107,10 +111,10 @@ class FEntityManager {
      * @return array con gli oggetti risultati dalla query
      * @throws Exception
      */ 
-    public static function getObjListBetween($table, $field, $value): array{
+    public function getObjListBetween($table, $field, $value): array{
             try {
                 //createQueryBuilder() è un metodo dell'entity manager che restituisce un oggetto QueryBuilder
-                $qb = self::$entityManager->createQueryBuilder();
+                $qb = $this->entityManager->createQueryBuilder();
                 //questi sono tutti metodi del QueryBuilder che modificano il suo oggetto
                 $qb->select('e')//prendo tutti i campi dell'entità
                     ->from($table, 'e') //e è l'alias dell'entità che stiamo interrogando
@@ -137,10 +141,10 @@ class FEntityManager {
      * @throws Exception
      * 
     */
-    public static function getObjListOrdered($table, $field, $ordinationType, $quantity): array
+    public function getObjListOrdered($table, $field, $ordinationType, $quantity): array
     {
         try{
-            $qb = self::$entityManager->createQueryBuilder();
+            $qb = $this->entityManager->createQueryBuilder();
             
             $qb->select('e')
                ->from($table, 'e')
@@ -162,12 +166,12 @@ class FEntityManager {
     * @return bool true se esiste, false altrimenti
     * @throws Exception
     */
-    public static function verificaEsistenza( $table, $field, $value,): bool 
+    public function verificaEsistenza( $table, $field, $value,): bool 
     {
        try {
-        $qb = self::$entityManager->createQueryBuilder();
+        $qb = $this->entityManager->createQueryBuilder();
         //recupero il nome della colonna identificativa mappata nell'entity con le annotation doctrine
-        $nomeColonnaId = self::$entityManager->getClassMetadata($table)->getIdentifierFieldNames()[0];
+        $nomeColonnaId = $this->entityManager->getClassMetadata($table)->getIdentifierFieldNames()[0];
         // contiamo le righe restituite
         $qb->select('COUNT(e.' . $nomeColonnaId. ')')
            ->from($table, 'e')
@@ -192,7 +196,7 @@ class FEntityManager {
         public function verificaEsistenza($id, $table, $value, $field): bool 
     {
         try {
-            $qb = self::$entityManager->createQueryBuilder();
+            $qb = $this->entityManager->createQueryBuilder();
             
             // Chiediamo a Doctrine di CONTARE le righe, non di scaricarle!
             $qb->select('COUNT(u.id' . $id . ')')
@@ -221,9 +225,9 @@ class FEntityManager {
      * @return array di oggetti
      * @throws Exception
      */
-    public static function getRicerca($entityClass, $str, $field): array{
+    public function getRicerca($entityClass, $str, $field): array{
         try{
-            $qb=self:: $entityManager->createQueryBuilder();
+            $qb=$this->entityManager->createQueryBuilder();
 
             $qb->select('e');
             $qb->from($entityClass, 'e');
@@ -245,14 +249,14 @@ class FEntityManager {
      * @return bool true se l'operazione ha successo, false altrimenti
      * @throws Exception
      */
-    public static function deleteObj(object $obj): bool
+    public function deleteObj(object $obj): bool
     {
         try {
             // Mettiamo l'etichetta "da cancellare" sull'oggetto
-            self::$entityManager->remove($obj); 
+            $this->entityManager->remove($obj); 
             
             // Doctrine esegue la DELETE dentro una sua transazione sicura
-            self::$entityManager->flush();
+            $this->entityManager->flush();
             
             return true;
 
@@ -269,10 +273,10 @@ class FEntityManager {
      * @return array di oggetti
      * @throws Exception
      */
-    public static function getAll(string $entityClass): array
+    public function getAll(string $entityClass): array
     {
         try {
-            $qb = self::$entityManager->createQueryBuilder();
+            $qb = $this->entityManager->createQueryBuilder();
             
             // Struttura fluida, sicura e pulitissima
             $qb->select('e')

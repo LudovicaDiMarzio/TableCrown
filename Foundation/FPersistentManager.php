@@ -15,7 +15,7 @@ class FPersistentManager
 
     private function __construct()
     {
-        $this->emORM = FEntityManager::getEntityManager();
+        //non c'è bisogno di un costruttore, questa classe serve solo per incapsulare i metodi dello strato foundation, per farli usare al control
     }
 
     public static function getPersistentManager()
@@ -28,35 +28,35 @@ class FPersistentManager
 
     // Metodi per incapsulare le operazioni di doctrine e renderle fruibili dal controller 
 
-    public function beginTransaction() {
-        $this->emORM->getConnection()->beginTransaction();
+    public static function beginTransaction() {
+        return FEntityManager::getInstance()->getEntityManager()->getConnection()->beginTransaction();
     }
 
-    public function isTransactionActive(): bool {
-        return $this->emORM->getConnection()->isTransactionActive();
+    public static function isTransactionActive(): bool {
+        return FEntityManager::getInstance()->getEntityManager()->getConnection()->isTransactionActive();
     }
 
-    public function commit(){
-        $this->emORM->getConnection()->commit();
+    public static function commit(){
+        FentityManager::getInstance()->getEntityManager()->getConnection()->commit();
     }
 
-    public function rollback() {
-        $this->emORM->getConnection()->rollBack();
+    public static function rollback() {
+        FentityManager::getInstance()->getEntityManager()->getConnection()->rollBack();
     }
 
-    public function flush(){
-        $this->emORM->flush();
+    public static function flush(){
+       FentityManager::getInstance()->getEntityManager()->flush();
     }
 
-    public function persist($obj){
-        $this->emORM->persist($obj);
+    public static function persist($obj){
+        FentityManager::getInstance()->getEntityManager()->persist($obj);
     }
 
     /*metodo per bloccare le operazioni a tutti tranne ad un utente x che l'ha iniziata per primo 
      il LockMode è un enumerativo che può essere PESSIMISTIC_READ, PESSIMISTIC_WRITE o OPTIMISTIC
     */
-    public function locking($entityClass, $id, int $lockMode = LockMode::PESSIMISTIC_WRITE){
-        return $this->emORM->find($entityClass, $id, $lockMode);
+    public static function locking($entityClass, $id, int $lockMode = LockMode::PESSIMISTIC_WRITE){
+        return FEntityManager::getInstance()->getEntityManager()->find($entityClass, $id, $lockMode);
     }
 
 
@@ -71,7 +71,7 @@ class FPersistentManager
      */
     public static function PMsaveObj($obj): bool
     {
-        return FEntityManager::saveObj($obj);
+        return FEntityManager::getInstance()->saveObj($obj);
     }
     
     
@@ -82,9 +82,9 @@ class FPersistentManager
      * @return object || null
      * @throws Exception
      */
-    public function PMgetObjOnAttribute($class, $field, $value): ?object
+    public static function PMgetObjOnAttribute($class, $field, $value): ?object
     {
-        return FEntityManager::getObjOnAttribute($class, $field, $value);
+        return FEntityManager::getInstance()->getObjOnAttribute($class, $field, $value);
     }
 
      /**
@@ -94,9 +94,9 @@ class FPersistentManager
      * @return object || null
      * @throws Exception
      */
-    public function PMgetObjListOnAttribute($class, $field, $value): array
+    public static function PMgetObjListOnAttribute($class, $field, $value): array
     {
-        return FEntityManager::getObjListOnAttribute($class, $field, $value);
+        return FEntityManager::getInstance()->getObjListOnAttribute($class, $field, $value);
     }
 
      /**
@@ -106,9 +106,9 @@ class FPersistentManager
      * @return object || null
      * @throws Exception
      */
-    public function PMgetObjListBetween($class, $field, $value): array
+    public static function PMgetObjListBetween($class, $field, $value): array
     {
-        return FEntityManager::getObjListBetween($class, $field, $value);
+        return FEntityManager::getInstance()->getObjListBetween($class, $field, $value);
     }
 
      /**
@@ -119,9 +119,9 @@ class FPersistentManager
      * @return object || null
      * @throws Exception
      */
-    public function PMgetObjListOrdered($class, $field, $ordinationType, $quantity): array
+    public static function PMgetObjListOrdered($class, $field, $ordinationType, $quantity): array
     {
-        return FEntityManager::getObjListOrdered($class, $field, $ordinationType, $quantity);
+        return FEntityManager::getInstance()->getObjListOrdered($class, $field, $ordinationType, $quantity);
     }
 
     /**
@@ -131,9 +131,9 @@ class FPersistentManager
      * @return bool 
      * @throws Exception
      */
-    public function PMverificaEsistenza($table, $field, $value): bool
+    public static function PMverificaEsistenza($table, $field, $value): bool
     {
-        return FEntityManager::verificaEsistenza($table, $field, $value);
+        return FEntityManager::getInstance()->verificaEsistenza($table, $field, $value);
     }
 
     /**
@@ -143,9 +143,9 @@ class FPersistentManager
      * @return array
      * @throws Exception
      */
-    public function PMRicerca($class, $str, $field ): array
+    public static function PMRicerca($class, $str, $field ): array
     {
-        return FEntityManager::getRicerca($class, $str, $field);
+        return FEntityManager::getInstance()->getRicerca($class, $str, $field);
     }   
      
 
@@ -156,7 +156,7 @@ class FPersistentManager
      */
     public static function PMdeleteObj($obj): bool
     {
-        return FEntityManager::deleteObj($obj);
+        return FEntityManager::getInstance()->deleteObj($obj);
     }
 
     /** 
@@ -166,7 +166,7 @@ class FPersistentManager
      */
     public static function PMupdateObj($obj): bool
     {
-        return FEntityManager::saveObj($obj);
+        return FEntityManager::getInstance()->saveObj($obj);
     }
 
     /**
@@ -176,7 +176,7 @@ class FPersistentManager
      */
     public static function PMgetAll($class): array
     {
-        return FEntityManager::getAll($class);
+        return FEntityManager::getInstance()->getAll($class);
     }
 
 
