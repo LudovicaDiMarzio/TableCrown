@@ -180,4 +180,18 @@ class FPersistentManager
     }
 
 
+    //METODI SPECIFICI PER LE ENTITY
+
+    /**
+     * @param array $filtri array associativo con i filtri da applicare per la ricerca dei giochi da tavolo
+     * @param int $limit numero massimo di giochi da restituire
+     * @param int $offset numero di giochi da saltare dall'inizio della lista
+     * @return array con i giochi da tavolo risultanti dalla ricerca
+     * @throws Exception
+     */
+    public static function PMfindGiochi(array $filtri, int $limit, int $offset): array
+    {
+        return FGiocoDaTavolo::findGiochi($filtri, $limit, $offset);
+    }
+
 }

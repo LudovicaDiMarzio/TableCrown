@@ -9,6 +9,13 @@ use Exception;
 
 class FGiocoDaTavolo 
 {
+    /**
+     * @param array $filtri: un array associativo che contiene i filtri da applicare alla query. Le chiavi dell'array rappresentano i nomi dei filtri, mentre i valori rappresentano i valori dei filtri.
+     * @param int $limit: il numero massimo di risultati da restituire. Questo parametro viene utilizzato per implementare la paginazione dei risultati.
+     * @param int $offset: il numero di risultati da saltare prima di selezionare i risultati richiesti (utile sempre per la paginazione).
+     * @return array con i risultati della ricerca, incluso il numero totale di risultati
+     * @throws Exception
+     */
     public static function findGiochi(array $filtri, int $limit, int $offset): array
     {
         try {
@@ -65,14 +72,17 @@ class FGiocoDaTavolo
                 }
             }
 
-            //clono la query appena creata per poterla modificare ed effettuare un count su tutti i prodotti filtrati e 
-            //sapere quanti prodotti sono usciti in tutto dalla query fatta 
+            /*clono la query appena creata per poterla modificare ed effettuare un count su tutti i prodotti filtrati e 
+              sapere quanti prodotti sono usciti in tutto dalla query fatta 
+            */
+            //la clonatura della query viene fatta prima della suddivisione dei risultati per le pagine, perchè altrimenti il count sarebbe falzato e basato sui risultati "limitati" della query
             $qbCount = clone $qb;
             $qbCount->select('count(g.id)');
             //poichè count restituisce un numero scalare non possiamo usare il getResult(), ma usiamo il getSingleScalarResult() che restituisce un numero scalare
             $totale = $qbCount->getQuery()->getSingleScalarResult();
 
             //sulla query effettuata inizialmete applichiamo il limit e l'offset per la paginazione (per dividere i risultati in pagine)
+            
             $qb->setFirstResult($offset)
                ->setMaxResults($limit);
             $risultati = $qb->getQuery()->getResult();
