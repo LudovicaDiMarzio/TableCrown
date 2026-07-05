@@ -12,13 +12,13 @@ use TableCrown\Foundation\FPersistentManager;
 
 abstract class BaseController {
     //riferimento al livello Foundation da inserire
-    protected FPersistentManager $pm;
+    protected FPersistentManager $pm; //DA RIMUOVERE??
 
     protected array $validRoles; //Elenco di ruoli di sistema ammessi per il controllo dei permessi.
     
 
     public function __construct() {
-        $this->pm = FPersistentManager::getPersistentManager();
+        $this->pm = FPersistentManager::getPersistentManager(); //DA RIMUOVERE??
 
         //Definisco i ruoli validi del nostro sistema TableCrown
         $this->validRoles = [

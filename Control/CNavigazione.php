@@ -12,7 +12,6 @@ class CNavigazione extends BaseController {
 
     public function __construct() {
         //Richiama il costruttore di BaseController che inizializza:
-        //- $this->pm (PersistentManager)
         //- $this->validRoles (array di ruoli validi)
         parent::__construct();
     }
@@ -24,8 +23,8 @@ class CNavigazione extends BaseController {
     public function mostraHome(): void {
         //Recuperiamo i prodotti in offerta e i nuovi arrivi tramite il pm
         //Il pm gestisce già gli errori internamente e restituisce [] in caso di fallimento
-        $offerte = $this->pm->PMgetObjListOnAttribute(EProdotto::class, 'inOfferta', true);
-        $nuoviArrivi = $this->pm->PMgetObjListOrdered(EProdotto::class, 'dataPubblicazione', 'DESC', 5);//metodo da creare
+        $offerte = FPersistentManager::PMgetObjListOnAttribute(EProdotto::class, 'inOfferta', true);
+        $nuoviArrivi = FPersistentManager::PMgetObjListOrdered(EProdotto::class, 'dataPubblicazione', 'DESC', 5);//metodo da creare
 
         //Convertiamo gli oggetti Entity in array associativi per Presentation
         $offerteArray = array_map(fn($p) => $p->toArray(), $offerte);

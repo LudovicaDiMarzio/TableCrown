@@ -7,6 +7,7 @@ use TableCrown\Utility\UFlashMessage;
 use TableCrown\Entity\EUtente;
 use TableCrown\Entity\EAmministratore;
 use TableCrown\Entity\EGestore;
+use TableCrown\Foundation\FPersistentManager;
 
 /**
  * Controller deputato alla gestione del ciclo di vita dell'autenticazione.
@@ -56,7 +57,7 @@ class CAutenticazione extends BaseController {
 
         //Verifichiamo le credenziali sul DB reale:
         //Chiediamo a Foundation di cercare la persona nel DB tramite la mail inserita
-        $persona = $this->pm->PMgetObjOnAttribute(EUtente::class, 'emailpersona', $email);
+        $persona = FPersistentManager::PMgetObjOnAttribute(EUtente::class, 'emailpersona', $email);
 
         if(!$persona || !$persona->verificaPassword($password)) {
             UFlashMessage::addMessage('danger', 'Email o password errate. Riprova.');
@@ -110,7 +111,7 @@ class CAutenticazione extends BaseController {
         }
 
         //Verifichiamo che l'email non sia già registrata nel DB per evitare duplicati
-        $esiste = $this->pm->PMverificaEsistenza(EUtente::class, 'emailpersona', $email);
+        $esiste = FPersistentManager::PMverificaEsistenza(EUtente::class, 'emailpersona', $email);
 
         if ($esiste) {
             UFlashMessage::addMessage('danger', 'Questa email è già registrata.');

@@ -11,6 +11,7 @@ use TableCrown\Entity\ETorneo;
 use Tablecrown\Entity\EChallenge;
 use TableCrown\Entity\EPrezzo;
 use TableCrown\Entity\EProdotto;
+use TableCrown\Foundation\FPersistentManager;
 use DateTime;
 
 /**
@@ -32,7 +33,7 @@ class CEventi extends BaseController {
     public function mostraEventi(): void {
         $eventi = [];
         //QUANDO SARÀ PRONTO FOUNDATION:
-        //$eventi = FPersistentManager::getAll(EEvento::class);
+        //$eventi = FPersistentManager::PMgetAll(EEvento::class);
 
         $datiLayout = $this->preparaDatiLayout('eventi', ['eventi' => $eventi]);
         //QUANDO SARÀ PRONTO PRESENTATION:

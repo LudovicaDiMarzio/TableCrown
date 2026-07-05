@@ -18,7 +18,7 @@ class CCatalogo extends BaseController {
 
         //TODO: l'array dei risultati deve essere di questo tipo $risultato = ['risultati' => [], 'totaleRisultati' => 0];
         /* 
-        $risultato = $this->pm->findGiochi(  //SE $filtri E' VUOTO, RESTITUISCE TUTTI I GIOCHI DA TAVOLO
+        $risultato = FPersistentManager::findGiochi(  //SE $filtri E' VUOTO, RESTITUISCE TUTTI I GIOCHI DA TAVOLO
             $filtri,
             offset: ($pagina - 1) * self::RISULTATI_PER_PAGINA,
             limit: self::RISULTATI_PER_PAGINA
@@ -48,6 +48,49 @@ class CCatalogo extends BaseController {
     public function mostraCatalogoPortaDadi(): void {
         //TODO
     }
+
+    /**
+     * Mostra i risultati della ricerca
+     * La barra di ricerca è un componente del layout globale,
+     * ma una ricerca eseguita in questo modo (effettuata in una qualunque
+     * delle pagine del sito), viene sempre gestita dal controller del catalogo
+     */
+    public function mostraRisultatiRicerca(): void {
+        $query = UHTTPMethods::get('q');
+        $pagina = $this->estraiPaginaRichiesta();
+
+        if ($query === null || trim($query) === '') {
+            //Se non c'è nessun termine di ricerca:
+            //TODO: decidere il comportamento (mostrare la 
+            //prima pagina dei giochi da tavolo? Reindirizzare alla home?)
+
+        }
+
+        $query = trim($query);
+/*      //TODO: Implementare la ricerca nel database, con paginazione.
+        //Cerca su tutti e 3 i tipi di prodotto
+        $risultati = FPersistentManager::findProdottiBySearchQuery(
+            $query,
+            offset: ($pagina - 1) * self::RISULTATI_PER_PAGINA,
+            limit: self::RISULTATI_PER_PAGINA
+        );
+ */
+        $risultati = ['risultati' => [], 'totaleRisultati' => 0]; //DA RIMUOVERE QUANDO TOLGO LA PARTE COMMENTATA
+
+        $totalePagine = $this->calcolaTotalePagine($risultati['totaleRisultati']);
+        $pagina = $this->clampPagina($pagina, $totalePagine);
+
+        //TODO: Chiamata alla view
+/* 
+        $this->render('risultati_ricerca', [
+            'prodotti' => $risultati['risultati'],
+            'terminecercato' => $query,
+            'paginaCorrente' => $pagina,
+            'totalePagine' => $totalePagine,
+        ]);
+         */
+    }
+
 
     //==========================================================================
     //METODI PRIVATI CONDIVISI

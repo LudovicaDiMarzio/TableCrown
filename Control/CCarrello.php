@@ -4,6 +4,7 @@ namespace TableCrown\Control;
 use TableCrown\Utility\USession;
 use TableCrown\Utility\UHTTPMethods;
 use TableCrown\Entity\EProdotto;
+use TableCrown\Foundation\FPersistentManager;
 
 /**
  * Controller dedicato alla gestione del carrello acquisti.
@@ -43,7 +44,7 @@ class CCarrello extends BaseController {
             //Scorriamo il carrello prendendo la chiave (id prodotto) e il valore (quantità)
             foreach ($carrello as $idProdotto => $quantita) {
                 //Chiediamo a Foundation di caricarci l'oggetto Entity del prodotto dal DB
-                $prodotto = $this->pm->PMgetObjOnAttribute(EProdotto::class, 'idProdotto', $idProdotto);
+                $prodotto = FPersistentManager::PMgetObjOnAttribute(EProdotto::class, 'idProdotto', $idProdotto);
 
                 if (!$prodotto) {
                     continue; //salta il prodotto e passa al prossimo
@@ -95,7 +96,7 @@ class CCarrello extends BaseController {
 
         //Recuperiamo i prodotti correlati per il carosello "Potrebbe interessarti".
         //CRITERIO PROVVISIORIO: TUTTI I PRODOTTI DISPONIBILI, ESCLUSI QUELLI GIà NEL CARRELLO, LIMITATI AI PRIMI 8.
-        $tuttiProdotti = $this->pm->PMgetAll(EProdotto::class);
+        $tuttiProdotti = FPersistentManager::PMgetAll(EProdotto::class);
 
         //Escludiamo i prodotti già presenti nel carrello usando i loro ID come filtro
         $idNelCarrello = array_keys($carrello);
@@ -184,7 +185,7 @@ class CCarrello extends BaseController {
 
         //Recuperiamo il prodotto dal DB per construire la risposta JSON completa.
         //Il JS ne ha bisogno per costruire la card HTML da zero senza passare da Smarty.
-        $prodotto = $this->pm->PMgetObjOnAttribute(EProdotto::class, 'idProdotto', $idProdotto);
+        $prodotto = FPersistentManager::PMgetObjOnAttribute(EProdotto::class, 'idProdotto', $idProdotto);
         if (!$prodotto) {
             echo json_encode([
                 'success' => false,
@@ -308,7 +309,7 @@ class CCarrello extends BaseController {
         //e recuperando i prezzi reali dal DB tramite il pm
         $nuovoTotale = 0.00;
         foreach ($carrello as $idProdotto => $quantita) {
-            $prodotto = $this->pm->PMgetObjOnAttribute(EProdotto::class, 'idProdotto', $idProdotto);
+            $prodotto = FPersistentManager::PMgetObjOnAttribute(EProdotto::class, 'idProdotto', $idProdotto);
             if ($prodotto) {
                 //Usiamo il prezzo scontato se presente, altrimenti il prezzo pieno
                 $prezzoUnitario = $prodotto->hasSconto() ? $prodotto->getPrezzo()->calcolaValoreScontato() : $prodotto->getPrezzo()->getValore();

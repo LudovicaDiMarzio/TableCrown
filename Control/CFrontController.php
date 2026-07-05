@@ -38,6 +38,15 @@ class CFrontController {
                 $controller->mostraHome();
                 break;
 
+            case 'ricerca':
+                //Corrisponde a: GET /ricerca
+                $controller = new CCatalogo();
+
+                if ($metodoHTTP === 'GET') {
+                    $controller->mostraRisultatiRicerca();
+                }
+                break;
+
             case 'catalogo':
                 $controller = new CCatalogo();
 
