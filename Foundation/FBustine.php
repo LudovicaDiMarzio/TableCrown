@@ -5,6 +5,14 @@ use TableCrown\Entity\EBustine;
 use Exception;
 
 class FBustine{
+
+    /**
+     * @param array $filtri: un array associativo che contiene i filtri da applicare alla query. Le chiavi dell'array rappresentano i nomi dei filtri, mentre i valori rappresentano i valori dei filtri.
+     * @param int $limit: il numero massimo di risultati da restituire. Questo parametro viene utilizzato per implementare la paginazione dei risultati.
+     * @param int $offset: il numero di risultati da saltare prima di selezionare i risultati richiesti (utile sempre per la paginazione).
+     * @return array con i risultati della ricerca, incluso il numero totale di risultati
+     * @throws Exception
+     */
     public static function findBustine(array $filtri, int $limit, int $offset): array
     {
         try{
