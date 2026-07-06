@@ -1,0 +1,59 @@
+<?php
+namespace TableCrown\Foundation;
+
+use TableCrown\Entity\EBustine;
+use Exception;
+
+class FBustine{
+
+    /**
+     * @param array $filtri: un array associativo che contiene i filtri da applicare alla query. Le chiavi dell'array rappresentano i nomi dei filtri, mentre i valori rappresentano i valori dei filtri.
+     * @param int $limit: il numero massimo di risultati da restituire. Questo parametro viene utilizzato per implementare la paginazione dei risultati.
+     * @param int $offset: il numero di risultati da saltare prima di selezionare i risultati richiesti (utile sempre per la paginazione).
+     * @return array con i risultati della ricerca, incluso il numero totale di risultati
+     * @throws Exception
+     */
+    public static function findBustine(array $filtri, int $limit, int $offset): array
+    {
+        try{
+            $qb=FEntityManager::getInstance()->getEntityManager()->createQueryBuilder();
+            $qb->select('b')
+                ->from(EBustine::class, 'b');
+
+            //gestione dei filtri sul prezzo
+
+            if (isset($filtri['prezzo_min'])) {
+                $qb->andWhere('b.prezzo >= :prezzo_min')
+                   ->setParameter('prezzo_min', $filtri['prezzo_min']);
+            }
+
+            if (isset($filtiri['prezzo_max'])){
+                $qb->andwhere('b.prezzo <= :prezzo_max')
+                   ->setParameter('prezzo_max', $filtri['prezzo_max']);
+            }
+            
+            //cloniamo la query per poterla modificare ed effettuarci un count
+            $qbCount = clone $qb;
+            $qbCount->select('count(b.id)');
+            $totale = $qbCount->getQuery()->getSingleScalarResult();
+
+            //sulla query iniziale applico le limitazioni per la paginazione
+            $qb->setFirstResult($offset)
+               ->setMaxResults($limit);
+            $risultati = $qb->getQuery()->getResult();
+
+            return [
+                //un array con i prodotti filtrati
+                'risultati' => $risultati,
+                'totale' => $totale
+            ];
+
+            //ci sono filtri sulla disponibilità?
+
+        }
+        catch(Exception $e){
+            error_log("Errore in findBustine: " . $e->getMessage());
+            return ['risultati' => [], 'totale' => 0];
+        }
+    }
+}
