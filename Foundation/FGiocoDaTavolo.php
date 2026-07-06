@@ -97,9 +97,9 @@ class FGiocoDaTavolo
                    ->setParameter('durataMedia', $filtri['durataMedia']);
             }
 
-            //Va Aggiunto il danno?
+            //=====================VA AGGIUNTO IL DANNO?=========================
 
-            
+
 
             /*clono la query appena creata per poterla modificare ed effettuare un count su tutti i prodotti filtrati e 
               sapere quanti prodotti sono usciti in tutto dalla query fatta 
