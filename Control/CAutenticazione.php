@@ -33,6 +33,7 @@ class CAutenticazione extends BaseController {
         //Prepariamo i dati del layout (in questo caso non servono dati specifici dal DB).
         $data = $this->preparaDatiLayout('autenticazione');
 
+        //TODO:
         //VAutenticazione::mostraForm($data);
         echo "Ecco il form di Login e Registrazione!"; //TEST PROVVISORIO (DA CANCELLARE)
     }
@@ -123,7 +124,7 @@ class CAutenticazione extends BaseController {
 
         $nuovoUtente = new EUtente($nome, $email, $passwordCriptata, $eta); //MANCA IL PLAYERLEVEL (DA SISTEMAE NELL'ENTITY)
 
-        $salvato = $this->pm->PMsaveObj($nuovoUtente);
+        $salvato = FPersistentManager::PMsaveObj($nuovoUtente);
 
         if ($salvato) {
             UFlashMessage::addMessage('success', 'Registrazione completata! Effettua il login.');

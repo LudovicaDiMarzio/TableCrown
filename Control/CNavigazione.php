@@ -7,6 +7,7 @@ namespace TableCrown\Control;
 use TableCrown\Control\BaseController;
 use TableCrown\Entity\EProdotto;
 //use TableCrown\Presentation\VHome;
+use TableCrown\Foundation\FPersistentManager;
 
 class CNavigazione extends BaseController {
 

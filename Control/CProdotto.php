@@ -20,7 +20,7 @@ class CProdotto extends BaseController {
      */
     public function mostraDettaglioProdotto(int $idProdotto): void {
         //Recuperiamo il prodotto dal DB
-        $prodotto = $this->pm->PMgetObjOnAttribute(EProdotto::class, 'idProdotto', $idProdotto);
+        $prodotto = FPersistentManager::PMgetObjOnAttribute(EProdotto::class, 'idProdotto', $idProdotto);
 
         if (!$prodotto) {
             //TODO: gestire errore
