@@ -20,8 +20,8 @@ class FGiocoDaTavolo
     {
         try {
             $qb=FEntityManager::getInstance()->getEntityManager()->createQueryBuilder();
-            $qb->select('e')
-                ->from(EGiocoDaTavolo::class, 'e');
+            $qb->select('g')
+                ->from(EGiocoDaTavolo::class, 'g');
 
             //gestione dei filtri dinamica
 
@@ -32,7 +32,7 @@ class FGiocoDaTavolo
                     throw new Exception("La stringa passata non corrsiponde a nessun enumerativo");
                 } 
                 else {
-                    $qb->andWhere('e.difficolta = :difficolta')
+                    $qb->andWhere('g.difficolta = :difficolta')
                         ->setParameter('difficolta', $difficoltaEnum);
                 }
             }
@@ -43,7 +43,7 @@ class FGiocoDaTavolo
                     throw new Exception("La stringa passata non corrsiponde a nessun enumerativo");
                 }
                 else{
-                    $qb->andWhere('e.lingua = :lingua')
+                    $qb->andWhere('g.lingua = :lingua')
                        ->setParameter('lingua', $linguaEnum);
                 }
             }
@@ -71,6 +71,35 @@ class FGiocoDaTavolo
                     ->setParameter('categoria', '%"' . $categoriaEnum->value . '"%');
                 }
             }
+
+            if (isset($filtri['giocoBase'])) {
+                $qb->andWhere('g.giocoBase = :giocoBase')
+                   ->setParameter('giocoBase', $filtri['giocoBase']);
+            }
+
+            if (isset($filtri['numeroGiocatoriMin'])) {
+                $qb->andWhere('g.numeroGiocatoriMin = :numeroGiocatoriMin')
+                   ->setParameter('numeroGiocatoriMin', $filtri['numeroGiocatoriMin']);
+            }
+
+            if (isset($filtri['numeroGiocatoriMax'])) {
+                $qb->andWhere('g.numeroGiocatoriMax = :numeroGiocatoriMax')
+                   ->setParameter('numeroGiocatoriMax', $filtri['numeroGiocatoriMax']);
+            }
+
+            if (isset($filtri['etaMinima'])) {
+                $qb->andWhere('g.etaMinima = :etaMinima')
+                   ->setParameter('etaMinima', $filtri['etaMinima']);
+            }
+
+            if (isset($filtri['durataMedia'])) {
+                $qb->andWhere('g.durataMedia = :durataMedia')
+                   ->setParameter('durataMedia', $filtri['durataMedia']);
+            }
+
+            //Va Aggiunto il danno?
+
+            
 
             /*clono la query appena creata per poterla modificare ed effettuare un count su tutti i prodotti filtrati e 
               sapere quanti prodotti sono usciti in tutto dalla query fatta 
