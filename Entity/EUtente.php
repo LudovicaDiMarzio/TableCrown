@@ -48,6 +48,9 @@ class EUtente extends EPersona {
     #[ORM\OneToMany(targetEntity: EOrdine::class, mappedBy: "utente")]
     private Collection $ordini;
 
+    #[ORM\OneToMany(targetEntity: EIndirizzo::class, mappedBy: "utente")]
+    private Collection $indirizzi; //elenco di tutti gli indirizzi associati all'utente
+
         
    
 
@@ -63,8 +66,9 @@ class EUtente extends EPersona {
         $this->segnalazioni = new ArrayCollection(); //inizializziamo la collezione di segnalazioni come un ArrayCollection vuoto
         $this->provvedimenti = new ArrayCollection(); //inizializziamo la collezione di provvedimenti come un ArrayCollection vuoto
         $this->partecipazioni = new ArrayCollection(); //inizializziamo la collezione di partecipazioni come un ArrayCollection vuoto
-        $this->recensioni = new ArrayCollection();
-        $this->ordini = new ArrayCollection();
+        $this->recensioni = new ArrayCollection(); //inizializziamo la collezione di recensioni come un ArrayCollection vuoto
+        $this->ordini = new ArrayCollection(); //inizializziamo la collezione di ordini come un ArrayCollection vuoto
+        $this->indirizzi = new ArrayCollection(); //inizializziamo la collezione di indirizzi come un ArrayCollection vuoto
     }
 
     //Metodi di dominio
@@ -159,6 +163,12 @@ class EUtente extends EPersona {
         }
     }
 
+    public function riceviIndirizzo(EIndirizzo $indirizzo): void {
+        if (!$this->indirizzi->contains($indirizzo)) {
+            $this->indirizzi->add($indirizzo);
+        }
+    }
+
     //GET methods
  
 
@@ -198,5 +208,9 @@ class EUtente extends EPersona {
 
     public function getPartecipazioni(): Collection { 
         return $this->partecipazioni; 
+    }
+
+    public function getIndirizzi(): Collection {
+        return $this->indirizzi;
     }
 }
