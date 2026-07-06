@@ -51,7 +51,7 @@ class EUtente extends EPersona {
         
    
 
-    public function __construct(string $nomeuser, string $emailuser, string $passworduser, int $eta, PlayerLevel $PlayerLevel, mixed $imgprofilouser=null) {
+    public function __construct(string $nomeuser, string $emailuser, string $passworduser, int $eta, PlayerLevel $PlayerLevel= PlayerLevel::PRINCIPIANTE, mixed $imgprofilouser=null) {
         //invoca il costruttore della classe padre (EPersona) per inizializzare le proprietà comuni a tutte le persone, e poi inizializziamo le proprietà specifiche dell'utente (EUtente).
         parent::__construct($nomeuser, $emailuser, $passworduser, $imgprofilouser);
        
