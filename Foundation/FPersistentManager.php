@@ -37,19 +37,19 @@ class FPersistentManager
     }
 
     public static function commit(){
-        FentityManager::getInstance()->getEntityManager()->getConnection()->commit();
+        FEntityManager::getInstance()->getEntityManager()->getConnection()->commit();
     }
 
     public static function rollback() {
-        FentityManager::getInstance()->getEntityManager()->getConnection()->rollBack();
+        FEntityManager::getInstance()->getEntityManager()->getConnection()->rollBack();
     }
 
     public static function flush(){
-       FentityManager::getInstance()->getEntityManager()->flush();
+       FEntityManager::getInstance()->getEntityManager()->flush();
     }
 
     public static function persist($obj){
-        FentityManager::getInstance()->getEntityManager()->persist($obj);
+        FEntityManager::getInstance()->getEntityManager()->persist($obj);
     }
 
     /*metodo per bloccare le operazioni a tutti tranne ad un utente x che l'ha iniziata per primo 
