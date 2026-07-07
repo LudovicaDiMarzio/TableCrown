@@ -5,6 +5,8 @@ use TableCrown\Entity\EGiocoDaTavolo;
 use TableCrown\Entity\Enumerativi\Categoria;
 use TableCrown\Entity\Enumerativi\LinguaGioco;
 use TableCrown\Entity\Enumerativi\DifficoltaGioco;
+use TableCrown\Entity\Enumerativi\LivelloDannoGiochi;
+use TableCrown\Entity\Enumerativi\DisponibilitaProdotto;
 use Exception;
 
 class FGiocoDaTavolo 
@@ -97,7 +99,28 @@ class FGiocoDaTavolo
                    ->setParameter('durataMedia', $filtri['durataMedia']);
             }
 
-            //=====================VA AGGIUNTO IL DANNO?=========================
+            if (isset($filtri['danno'])) {
+                $dannoEnum = LivelloDannoGiochi::tryFrom($filtri['danno']);
+                if ($dannoEnum === null) {
+                    throw new Exception("La stringa passata non corrsiponde a nessun enumerativo");
+                }
+                else {
+                    $qb->andWhere('g.danno = :danno')
+                       ->setParameter('danno', $dannoEnum);
+                }
+            }
+
+            if( isset($filtri['disponibilita'])) {
+                $disponibilitaEnum = DisponibilitaProdotto::tryFrom($filtri['disponibilita']);
+                if ($disponibilitaEnum === null) {
+                    throw new Exception("La stringa passata non corrsiponde a nessun enumerativo");
+                }
+                else{
+                    $qb->andWhere('g.disponibilita = :disponibilita')
+                        ->setParameter('disponibilita', $filtri['disponibilita']);
+                }
+            }
+
 
 
 

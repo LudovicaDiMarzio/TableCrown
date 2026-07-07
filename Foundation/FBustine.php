@@ -2,6 +2,7 @@
 namespace TableCrown\Foundation;
 
 use TableCrown\Entity\EBustine;
+use TableCrown\Entity\Enumerativi\DisponibilitaProdotto;
 use Exception;
 
 class FBustine{
@@ -30,6 +31,17 @@ class FBustine{
             if (isset($filtiri['prezzo_max'])){
                 $qb->andwhere('b.prezzo <= :prezzo_max')
                    ->setParameter('prezzo_max', $filtri['prezzo_max']);
+            }
+
+            if (isset($filtri['disponibilita'])) {
+                $disponibilitaEnum = DisponibilitaProdotto::tryFrom($filtri['disponibilita']);
+                if ($disponibilitaEnum === null) {
+                    throw new Exception("La stringa passata non corrsiponde a nessun enumerativo");
+                }
+                else{
+                    $qb->andWhere('b.disponibilitaProdotto = :disponibilita')
+                        ->setParameter('disponibilita', $filtri['disponibilita']);
+                }
             }
             
             //cloniamo la query per poterla modificare ed effettuarci un count
