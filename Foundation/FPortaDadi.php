@@ -2,10 +2,7 @@
 namespace TableCrown\Foundation;
 
 use TableCrown\Entity\EPortaDadi;
-<<<<<<< HEAD
 use TableCrown\Entity\Enumerativi\DisponibilitaProdotto;
-=======
->>>>>>> develop
 use Exception;
 
 class FPortaDadi{
