@@ -79,7 +79,8 @@ class GiocoDaTavoloFixture extends AbstractFixture implements DependentFixtureIn
                 categoria: $categorieTesto, //categoria
                 componenti: $componenti, //componenti
                 prezzo: $prezzo,                     // prezzo
-                
+                lingua: $faker->randomElement(['Italiano', 'Inglese', 'Francese', 'Spagnolo']),
+                difficolta: $faker->randomElement(['Casuale', 'Normale', 'Difficile']),
                 );
 
                 
