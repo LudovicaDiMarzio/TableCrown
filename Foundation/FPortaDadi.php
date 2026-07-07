@@ -32,7 +32,6 @@ class FPortaDadi{
                 $qb->andwhere('p.prezzo <= :prezzo_max')
                    ->setParameter('prezzo_max', $filtri['prezzo_max']);
             }
-<<<<<<< HEAD
 
             if (isset($filtri['disponibilita'])) {
                 $disponibilitaEnum = DisponibilitaProdotto::tryFrom($filtri['disponibilita']);
@@ -44,8 +43,6 @@ class FPortaDadi{
                         ->setParameter('disponibilita', $filtri['disponibilita']);
                 }
             }
-=======
->>>>>>> develop
             
             //cloniamo la query per poterla modificare ed effettuarci un count
             $qbCount = clone $qb;
@@ -57,11 +54,8 @@ class FPortaDadi{
                ->setMaxResults($limit);
             $risultati = $qb->getQuery()->getResult();
 
-<<<<<<< HEAD
 
 
-=======
->>>>>>> develop
             return [
                 //un array con i prodotti filtrati
                 'risultati' => $risultati,
