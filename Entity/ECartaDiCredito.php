@@ -26,9 +26,6 @@ class ECartaDiCredito {
     #[ORM\Column(type: "string", length: 16)]
     private string $numero;
 
-    #[ORM\Column(type: "string", length: 3)]
-    private string $ccv;
-
     #[ORM\ManyToOne(targetEntity: EUtente::class)]
     #[ORM\JoinColumn(name: "utente_id", referencedColumnName: "idpersona", nullable: false)]
     private EUtente $utente;
@@ -39,7 +36,9 @@ class ECartaDiCredito {
         $this->impostaCognomeTitolare($cognomeTitolare);
         $this->impostaDataScadenza($dataScadenza);
         $this->impostaNumero($numero);
-        $this->impostaCcv($ccv);
+
+        // Il CCV viene validato alla nascita dell'oggetto, ma non viene salvato in nessuna proprietà per motivi di sicurezza
+        $this->validaCCV($ccv);
     }
 
     // Metodi di dominio
@@ -71,11 +70,10 @@ class ECartaDiCredito {
         $this->numero = trim($numero);
     }
 
-    public function impostaCcv(string $ccv): void {
+    public function validaCCV(string $ccv): void {
         if (!preg_match('/^\d{3}$/', trim($ccv))) {
             throw new InvalidArgumentException("Il CCV deve essere composto da 3 cifre.");
         }
-        $this->ccv = trim($ccv);
     }
 
     // GET methods
@@ -99,11 +97,22 @@ class ECartaDiCredito {
         return $this->numero;
     }
 
-    public function getCcv(): string {
-        return $this->ccv;
-    }
-
     public function getUtente(): EUtente {
         return $this->utente;
+    }
+
+    /**
+     * Metodo di utility per Presentation: restituisce
+     * il numero di carta mascherato (es. **** **** **** 1234) per motivi di sicurezza.
+     */
+    public function getNumeroOffuscato(): string {
+        // TODO: da aggiungere altri metodi per cifrare (o salvare solo le ultime 4 cifre). Da decidere
+        $numeroInChiaro = $this->getNumero();
+        if (strlen($numeroInChiaro) < 4) { //per qualche errore (aggiornamento del server o assenza dell'estensione openssl)
+            return '**** **** **** ****'; 
+        }
+        $ultimeCifre = substr($numeroInChiaro, -4);
+        return '**** **** **** ' . $ultimeCifre;
+        
     }
 }

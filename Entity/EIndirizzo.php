@@ -56,6 +56,7 @@ class EIndirizzo {
         $this->impostaNazione($nazione);
         $this->impostaNomeCitofono($nomeCitofono);
         $this->utente = $utente;
+        $utente->riceviIndirizzo($this); //Associa l'indirizzo all'utente per sincrinizzare la relazione bidirezionale
     }
 
     // ─── Metodi di dominio ───────────────────────────────────────────────
