@@ -218,4 +218,23 @@ class FPersistentManager
         return FPortaDadi::findPortaDadi($filtri, $limit, $offset);
     }
 
+    /**
+     * @param string $StringaDiRicerca stringa da ricercare nella colonna nomeProdotto o descrizioneProdotto 
+     * @return array di oggetti
+     * @throws Exception
+     */
+    public static function PMricercaProdotto(string $StringaDiRicerca): array
+    {
+        return FProdotto::ricercaProdotto($StringaDiRicerca);
+    }
+
+    /**
+     *Ritorna tutti i prodotti che hanno uno sconto applicato (sconto > 0) 
+     * @return array di oggetti
+     */
+    public static function PMfindProdottiInOfferta(): array {
+        return FProdotto::findProdottiInOfferta();
+    }
+
+
 }
