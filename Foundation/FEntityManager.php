@@ -222,10 +222,12 @@ class FEntityManager {
      * @param string $entityClass nome dell'entità da cercare
      * @param string $str stringa da cercare
      * @param string $field nome del campo da cercare
+     * @param int $limit numero massimo di prodotti da restituire
+     * @param int $offset numero di prodotti da saltare dall'inizio della lista
      * @return array di oggetti
      * @throws Exception
      */
-    public function getRicerca($entityClass, $str, $field): array{
+    public function getRicerca($entityClass, $str, $field, $limit, $offset): array{
         try{
             $qb=$this->entityManager->createQueryBuilder();
 
@@ -233,12 +235,30 @@ class FEntityManager {
             $qb->from($entityClass, 'e');
             $qb->where('e.' . $field . 'LIKE :ricerca');
             $qb->setParameter('ricerca', '%' . $str .  '%');
+
+            /*clono la query appena creata per poterla modificare ed effettuare un count su tutti i prodotti filtrati e 
+              sapere quanti prodotti sono usciti in tutto dalla query fatta 
+            */
+            //la clonatura della query viene fatta prima della suddivisione dei risultati per le pagine, perchè altrimenti il count sarebbe falzato e basato sui risultati "limitati" della query
+            $qbCount = clone $qb;
+            $qbCount->select('count(g.id)');
+            //poichè count restituisce un numero scalare non possiamo usare il getResult(), ma usiamo il getSingleScalarResult() che restituisce un numero scalare
+            $totale = $qbCount->getQuery()->getSingleScalarResult();
+
+            //sulla query effettuata inizialmete applichiamo il limit e l'offset per la paginazione (per dividere i risultati in pagine)
             
-            //se la query restituisce un array di oggetti, restituisce il risultato, altrimenti restituisce un array vuoto
-            return $qb->getQuery()->getResult();
+            $qb->setFirstResult($offset)
+               ->setMaxResults($limit);
+            $risultati = $qb->getQuery()->getResult();
+
+            return [
+                'risultati' => $risultati,
+                'totale' => $totale
+            ];
+           
         } catch (Exception $e){
             error_log("Errore durante la ricerca: " . $e->getMessage());
-            return [];
+            return ['risultati' => [], 'totale' => 0];
         }
     }
 

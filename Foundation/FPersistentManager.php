@@ -143,9 +143,9 @@ class FPersistentManager
      * @return array
      * @throws Exception
      */
-    public static function PMRicerca($class, $str, $field ): array
+    public static function PMRicerca($class, $str, $field, int $limit, int $offset): array
     {
-        return FEntityManager::getInstance()->getRicerca($class, $str, $field);
+        return FEntityManager::getInstance()->getRicerca($class, $str, $field, $limit, $offset);
     }   
      
 
@@ -220,20 +220,24 @@ class FPersistentManager
 
     /**
      * @param string $StringaDiRicerca stringa da ricercare nella colonna nomeProdotto o descrizioneProdotto 
+     * @param int $limit numero massimo di prodotti da restituire
+     * @param int $offset numero di prodotti da saltare dall'inizio della lista
      * @return array di oggetti
      * @throws Exception
      */
-    public static function PMricercaProdotto(string $StringaDiRicerca): array
+    public static function PMricercaProdotto(string $StringaDiRicerca, int $limit, int $offset): array
     {
-        return FProdotto::ricercaProdotto($StringaDiRicerca);
+        return FProdotto::ricercaProdotto($StringaDiRicerca, $limit, $offset);
     }
 
     /**
      *Ritorna tutti i prodotti che hanno uno sconto applicato (sconto > 0) 
+     * @param int $limit numero massimo di prodotti da restituire
+     * @param int $offset numero di prodotti da saltare dall'inizio della lista
      * @return array di oggetti
      */
-    public static function PMfindProdottiInOfferta(): array {
-        return FProdotto::findProdottiInOfferta();
+    public static function PMfindProdottiInOfferta(int $limit, int $offset): array {
+        return FProdotto::findProdottiInOfferta($limit, $offset);
     }
 
 
