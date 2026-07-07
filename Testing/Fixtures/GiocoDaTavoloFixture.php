@@ -20,6 +20,7 @@ use TableCrown\Entity\EDanno;
 use TableCrown\Entity\Enumerativi\Valuta;
 use TableCrown\Entity\Enumerativi\DisponibilitaProdotto;
 use TableCrown\Entity\Enumerativi\Categoria;
+use TableCrown\Entity\Enumerativi\DifficoltaGioco;
 
 
 class GiocoDaTavoloFixture extends AbstractFixture implements DependentFixtureInterface
@@ -80,7 +81,7 @@ class GiocoDaTavoloFixture extends AbstractFixture implements DependentFixtureIn
                 componenti: $componenti, //componenti
                 prezzo: $prezzo,                     // prezzo
                 lingua: $faker->randomElement(['Italiano', 'Inglese', 'Francese', 'Spagnolo']),
-                difficolta: $faker->randomElement(['Casuale', 'Normale', 'Difficile']),
+                difficolta: $faker->randomElement(DifficoltaGioco::cases()),
                 );
 
                 
