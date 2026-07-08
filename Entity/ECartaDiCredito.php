@@ -4,6 +4,7 @@ namespace TableCrown\Entity;
 use InvalidArgumentException;
 use DateTime;
 use Doctrine\ORM\Mapping as ORM;
+use Exception;
 
 #[ORM\Entity]
 #[ORM\Table(name: "carta_di_credito")]
@@ -15,104 +16,124 @@ class ECartaDiCredito {
     private ?int $idCartaDiCredito = null;
 
     #[ORM\Column(type: "string", length: 100)]
-    private string $nomeTitolare;
-
-    #[ORM\Column(type: "string", length: 100)]
-    private string $cognomeTitolare;
+    private string $titolare;
 
     #[ORM\Column(type: "datetime")]
     private DateTime $dataScadenza;
 
-    #[ORM\Column(type: "string", length: 16)]
-    private string $numero;
+    #[ORM\Column(type: "string", length: 4)]
+    private string $ultimeQuattroCifre;
+
+    //ogni token generato sarà della tipologia tok_<odice random generato dalla mock lungo 16 caratteri>
+    //la lunghezza del token è 255 perchè nella realtà stripe usa lunghezze diverse per i token, quindi limitarlo a 20 sarebbe rischioso nel caso di un'evoluzione del sistema di pagamento
+    #[ORM\Column(type: "string", length: 255, unique: true)]
+    private string $token;
 
     #[ORM\ManyToOne(targetEntity: EUtente::class)]
-    #[ORM\JoinColumn(name: "utente_id", referencedColumnName: "idpersona", nullable: false)]
+    #[ORM\JoinColumn(name: "utente_id", referencedColumnName: "idpersona", nullable: false, onDelete: 'CASCADE')]
     private EUtente $utente;
 
-    public function __construct(string $nomeTitolare, string $cognomeTitolare, DateTime $dataScadenza, string $numero, string $ccv, EUtente $utente) {
+    public function __construct(EUtente $utente, string $titolare, string $ultimeQuattroCifre, string $dataScadenza, string $token) {
         $this->utente = $utente;
-        $this->impostaNomeTitolare($nomeTitolare);
-        $this->impostaCognomeTitolare($cognomeTitolare);
-        $this->impostaDataScadenza($dataScadenza);
-        $this->impostaNumero($numero);
-
-        // Il CCV viene validato alla nascita dell'oggetto, ma non viene salvato in nessuna proprietà per motivi di sicurezza
-        $this->validaCCV($ccv);
+        $this->impostaNomeTitolare($titolare);
+        $this->traduciStringaData($dataScadenza);
+        $this->impostaUltimeQuattroCifre($ultimeQuattroCifre);
+        $this->token = $token;
     }
 
     // Metodi di dominio
-    public function impostaNomeTitolare(string $nomeTitolare): void {
-        if (trim($nomeTitolare) === '') {
+
+    public function impostaNomeTitolare(string $titolare): void 
+    {
+        $titolarePulito = trim($titolare);
+        if (empty($titolarePulito)) {
             throw new InvalidArgumentException("Il nome del titolare non può essere vuoto.");
         }
-        $this->nomeTitolare = trim($nomeTitolare);
+        $this->titolare = strtoupper($titolarePulito); // Salviamo sempre in maiuscolo per pulizia
     }
 
-    public function impostaCognomeTitolare(string $cognomeTitolare): void {
-        if (trim($cognomeTitolare) === '') {
-            throw new InvalidArgumentException("Il cognome del titolare non può essere vuoto.");
+    public function impostaUltimeQuattroCifre(string $ultimeQuattroCifre): void 
+    {
+        if (strlen($ultimeQuattroCifre) !== 4 || !is_numeric($ultimeQuattroCifre)) {
+            throw new Exception("Le ultime cifre devono essere esattamente 4 numeri.");
         }
-        $this->cognomeTitolare = trim($cognomeTitolare);
+        $this->ultimeQuattroCifre = $ultimeQuattroCifre;
     }
 
-    public function impostaDataScadenza(DateTime $dataScadenza): void {
-        if ($dataScadenza < new DateTime()) {
-            throw new InvalidArgumentException("La carta di credito è scaduta.");
+    //trasformo la stringa "12/26" in un oggetto DateTime da inserire nel db
+    public function traduciStringaData(string $scadenzaStringa): void 
+    {
+        // 1. Validiamo la stringa con la Regex come prima
+        if (!preg_match('/^(0[1-9]|1[0-2])\/\d{2}$/', $scadenzaStringa)) {
+            throw new Exception("La scadenza deve essere nel formato MM/AA.");
         }
-        $this->dataScadenza = $dataScadenza;
+
+        // 2. Rompiamo la stringa "12/26" -> mese = 12, anno = 26
+        [$mese, $anno] = explode('/', $scadenzaStringa);
+        
+        // 3. Creiamo il DateTime impostandolo al PRIMO giorno di quel mese (es. "2026-12-01")
+        // Usiamo l'eccezione se la creazione fallisce per date assurde
+        try {
+            $this->dataScadenza = new \DateTime("20$anno-$mese-01 00:00:00");
+        } 
+        catch (Exception $e) {
+            throw new \InvalidArgumentException("Data di scadenza non valida.");
+        }
+
+        //controllo se la carta è già scaduta
+        if ($this->isScaduta()) {
+            throw new \InvalidArgumentException("La carta è già scaduta.");
+        }
     }
 
-    public function impostaNumero(string $numero): void {
-        if (!preg_match('/^\d{16}$/', trim($numero))) {
-            throw new InvalidArgumentException("Il numero della carta deve essere composto da 16 cifre.");
-        }
-        $this->numero = trim($numero);
-    }
-
-    public function validaCCV(string $ccv): void {
-        if (!preg_match('/^\d{3}$/', trim($ccv))) {
-            throw new InvalidArgumentException("Il CCV deve essere composto da 3 cifre.");
-        }
+    public function isScaduta(): bool 
+    {
+        $fineValidita = clone $this->dataScadenza;  // ← clone per non modificare l'originale
+        $fineValidita->modify('last day of this month');
+        return new \DateTime() > $fineValidita;
     }
 
     // GET methods
-    public function getIdCartaDiCredito(): ?int {
-        return $this->idCartaDiCredito;
+
+    public function getScadenzaFormattata(): string 
+    {
+        // ->format('m/y') trasforma il DateTime direttamente in "12/26"
+        return $this->dataScadenza->format('m/y');
     }
 
-    public function getNomeTitolare(): string {
-        return $this->nomeTitolare;
+    public function getNumeroMascherato(): string 
+    {
+        return '**** **** **** ' . $this->ultimeQuattroCifre;
     }
 
-    public function getCognomeTitolare(): string {
-        return $this->cognomeTitolare;
-    }
-
-    public function getDataScadenza(): DateTime {
-        return $this->dataScadenza;
-    }
-
-    public function getNumero(): string {
-        return $this->numero;
-    }
-
-    public function getUtente(): EUtente {
+    public function getUtente(): EUtente 
+    {
         return $this->utente;
     }
 
-    /**
-     * Metodo di utility per Presentation: restituisce
-     * il numero di carta mascherato (es. **** **** **** 1234) per motivi di sicurezza.
-     */
-    public function getNumeroOffuscato(): string {
-        // TODO: da aggiungere altri metodi per cifrare (o salvare solo le ultime 4 cifre). Da decidere
-        $numeroInChiaro = $this->getNumero();
-        if (strlen($numeroInChiaro) < 4) { //per qualche errore (aggiornamento del server o assenza dell'estensione openssl)
-            return '**** **** **** ****'; 
-        }
-        $ultimeCifre = substr($numeroInChiaro, -4);
-        return '**** **** **** ' . $ultimeCifre;
-        
+    public function getIdCartaDiCredito(): ?int 
+    {
+         return $this->idCartaDiCredito; 
     }
+
+    public function getTitolare(): string        
+    {
+         return $this->titolare;
+    }
+
+    public function getDataScadenza(): DateTime  
+    {
+         return $this->dataScadenza; 
+    }
+
+    public function getUltimeQuattroCifre(): string 
+    {
+         return $this->ultimeQuattroCifre; 
+    }
+
+    public function getToken(): string        
+    {
+         return $this->token; 
+    }
+   
 }
