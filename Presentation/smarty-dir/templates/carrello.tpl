@@ -25,9 +25,10 @@
 
                             <div class="carrello-item"
                                  data-item-id="{$p.id}"
-                                 data-prezzo-unitario="{$item.prezzo_unitario}"
-                                 data-risparmio-unitario="{if $item.sconto}{$item.prezzo_originale-$item.prezzo_unitario}{else}0{/if}"
-                                 data-update-url="{$item.update_url|escape}">
+                                 data-prezzo-unitario="{$p.prezzo_unitario}"
+                                 data-risparmio-unitario="{if $p.sconto}{$p.prezzo_originale-$p.prezzo_unitario}{else}0{/if}"
+                                 data-update-url="{$base_url}{$item.update_url|escape}"
+                                 data-remove-url="{$base_url}{$item.remove_url|escape}">
 
                                 <a href="{$base_url}/prodotto/{$p.id}" class="carrello-item-img-link">
                                     <img src="{$base_url}/img/prodotti/{$p.immagine|escape}"
@@ -42,11 +43,11 @@
                                     </a>
 
                                     <div class="carrello-item-prezzo-wrapper">
-                                        {if $item.sconto}
-                                            <span class="carrello-item-prezzo">€{$item.prezzo_unitario|number_format:2}</span>
-                                            <span class="carrello-item-prezzo-old">€{$item.prezzo_originale|number_format:2}</span>
-                                        {elseif isset($item.prezzo_unitario)}
-                                            <span class="carrello-item-prezzo">€{$item.prezzo_unitario|number_format:2}</span>
+                                        {if $p.sconto}
+                                            <span class="carrello-item-prezzo">€{$p.prezzo_unitario|number_format:2}</span>
+                                            <span class="carrello-item-prezzo-old">€{$p.prezzo_originale|number_format:2}</span>
+                                        {elseif isset($p.prezzo_unitario)}
+                                            <span class="carrello-item-prezzo">€{$p.prezzo_unitario|number_format:2}</span>
                                         {else}
                                             <span class="carrello-item-prezzo-nd">Prezzo N/D</span>
                                         {/if}
@@ -77,7 +78,7 @@
 
                                     <button class="carrello-item-rimuovi"
                                             type="button"
-                                            data-url="{$base_url}/carrello/rimuovi/{$p.id}"
+                                            data-url="{$base_url}{$item.remove_url|escape}"
                                             aria-label="Rimuovi {$p.nome|escape} dal carrello">
                                         <i class="ti ti-trash"></i> Rimuovi
                                     </button>
@@ -94,7 +95,8 @@
                              data-item-id=""
                              data-prezzo-unitario=""
                              data-risparmio-unitario="0"
-                             data-update-url="">
+                             data-update-url=""
+                             data-remove-url="">
 
                             <a href="" class="carrello-item-img-link">
                                 <img src=""
@@ -191,7 +193,8 @@
                                             </a>
                                             <button class="button btn-correlato-cart"
                                                     type="button"
-                                                    data-url="{$base_url}/carrello/aggiungi/{$correlato.id}"
+                                                    data-product-id="{$correlato.id}"
+                                                    data-url="{$base_url}/carrello/aggiungi"
                                                     aria-label="Aggiungi {$correlato.nome|escape} al carrello">
                                                 <i class="ti ti-shopping-cart"></i> Carrello
                                             </button>
@@ -277,7 +280,7 @@
         document.body.appendChild(toast);
         setTimeout(function() { toast.remove(); }, 4000);
     }
-    
+
 
     // ── RICALCOLO RIEPILOGO ──
     function ricalcolaRiepilogo() {
@@ -323,7 +326,6 @@
         var unit        = parseFloat(riga.dataset.prezzoUnitario) || 0;
         var updateUrl   = riga.dataset.updateUrl;
 
-        
         if (input) input.dataset.valPrecedente = input.value;
 
         function aggiornaRigaUI() {
@@ -338,6 +340,7 @@
             var controller = new AbortController();
             var timeout = setTimeout(function() { controller.abort(); }, 5000);
 
+            // GET, come richiesto dalla rotta /carrello/aggiorna/{id}?qty=N nel FrontController
             fetch(updateUrl + '?qty=' + qty, { signal: controller.signal })
                 .then(function(response) {
                     clearTimeout(timeout);
@@ -409,10 +412,10 @@
                 var controller = new AbortController();
                 var timeout = setTimeout(function() { controller.abort(); }, 5000);
 
-                fetch(url, {
-                    method: 'POST',
-                    signal: controller.signal
-                })
+                // GET, come richiesto dalla rotta attuale /carrello/rimuovi/{id} nel FrontController.
+                // NB: dal punto di vista REST una rimozione dovrebbe essere POST/DELETE,
+                // è un punto da rivedere con t1 sul routing.
+                fetch(url, { signal: controller.signal })
                     .then(function(response) {
                         clearTimeout(timeout);
                         if (!response.ok) throw new Error('server');
@@ -539,16 +542,21 @@
     }
 
     // ── AGGIUNTA ARTICOLO (da correlati) ──
+    // Il controller CCarrello::aggiungiAlCarrello() legge id_prodotto e quantita
+    // dal BODY della richiesta POST (UHTTPMethods::postInt), non dal path URL.
     document.querySelectorAll('.btn-correlato-cart').forEach(function(btn) {
         btn.addEventListener('click', function() {
             var url = this.dataset.url;
-            if (!url) return;
+            var idProdotto = this.dataset.productId;
+            if (!url || !idProdotto) return;
 
             var controller = new AbortController();
             var timeout = setTimeout(function() { controller.abort(); }, 5000);
 
             fetch(url, {
                 method: 'POST',
+                headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
+                body: 'id_prodotto=' + encodeURIComponent(idProdotto) + '&quantita=1',
                 signal: controller.signal
             })
                 .then(function(response) {
@@ -557,6 +565,11 @@
                     return response.json();
                 })
                 .then(function(data) {
+                    if (data.success === false) {
+                        mostraToast(data.message || 'Errore nell\'aggiunta del prodotto.', 'errore');
+                        return;
+                    }
+
                     mostraToast('Prodotto aggiunto al carrello', 'successo');
 
                     // Se il carrello era vuoto in partenza, #carrello-items
