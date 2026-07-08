@@ -56,32 +56,36 @@ $pagination = [
 
 $carrello_items = [
     [
-        'id_item'          => 1,
-        'quantita'         => 2,
-        'prezzo_unitario'  => 27.92,
-        'subtotale'        => 55.84,
-        'sconto'           => true,
-        'prezzo_originale' => 34.90,
+        'id_item'    => 1,
+        'quantita'   => 2,
+        'subtotale'  => 55.84,
         'prodotto' => [
-            'id'      => 101,
-            'nome'    => 'Catan',
-            'immagine'=> 'placeholder.jpg',
+            'id'                 => 101,
+            'nome'               => 'Catan',
+            'immagine'           => 'placeholder.jpg',
+            'prezzo_unitario'    => 27.92,
+            'prezzo_originale'   => 34.90,
+            'sconto'             => true,
+            'percentuale_sconto' => 20,
         ],
         'update_url' => '/carrello/aggiorna/1',
+        'remove_url' => '/carrello/rimuovi/1', // mancava anche questa, usata nel tpl
     ],
     [
-        'id_item'          => 2,
-        'quantita'         => 1,
-        'prezzo_unitario'  => 49.90,
-        'subtotale'        => 49.90,
-        'sconto'           => false,
-        'prezzo_originale' => null,
+        'id_item'    => 2,
+        'quantita'   => 1,
+        'subtotale'  => 49.90,
         'prodotto' => [
-            'id'      => 201,
-            'nome'    => 'Wingspan',
-            'immagine'=> 'placeholder.jpg',
+            'id'                 => 201,
+            'nome'               => 'Wingspan',
+            'immagine'           => 'placeholder.jpg',
+            'prezzo_unitario'    => 49.90,
+            'prezzo_originale'   => null,
+            'sconto'             => false,
+            'percentuale_sconto' => null,
         ],
         'update_url' => '/carrello/aggiorna/2',
+        'remove_url' => '/carrello/rimuovi/2',
     ],
 ];
 
@@ -342,4 +346,4 @@ if ($categoria === 'challenge') {
 $smarty->assign('eventi', $eventi_tornei);
 $smarty->assign('filtri', $filtri);
 
-$smarty->display('GiochiDaTavolo.tpl');
+$smarty->display('carrello.tpl');

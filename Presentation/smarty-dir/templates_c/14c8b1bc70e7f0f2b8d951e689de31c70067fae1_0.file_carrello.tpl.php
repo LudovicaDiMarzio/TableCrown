@@ -1,18 +1,18 @@
 <?php
-/* Smarty version 5.8.0, created on 2026-07-03 17:32:22
+/* Smarty version 5.8.0, created on 2026-07-08 15:31:12
   from 'file:carrello.tpl' */
 
 /* @var \Smarty\Template $_smarty_tpl */
 if ($_smarty_tpl->getCompiled()->isFresh($_smarty_tpl, array (
   'version' => '5.8.0',
-  'unifunc' => 'content_6a47d6068014b0_63466408',
+  'unifunc' => 'content_6a4e51200f3ae1_27906902',
   'has_nocache_code' => false,
   'file_dependency' => 
   array (
     '14c8b1bc70e7f0f2b8d951e689de31c70067fae1' => 
     array (
       0 => 'carrello.tpl',
-      1 => 1783092737,
+      1 => 1783517462,
       2 => 'file',
     ),
   ),
@@ -20,30 +20,30 @@ if ($_smarty_tpl->getCompiled()->isFresh($_smarty_tpl, array (
   array (
   ),
 ))) {
-function content_6a47d6068014b0_63466408 (\Smarty\Template $_smarty_tpl) {
+function content_6a4e51200f3ae1_27906902 (\Smarty\Template $_smarty_tpl) {
 $_smarty_current_dir = 'C:\\Users\\damic\\Desktop\\uni\\APPUNTI\\anno3\\secondo_semenstre\\Pweb\\TableCrown\\Presentation\\smarty-dir\\templates';
 $_smarty_tpl->getInheritance()->init($_smarty_tpl, true);
 ?>
 
 
 <?php 
-$_smarty_tpl->getInheritance()->instanceBlock($_smarty_tpl, 'Block_5890527536a47d6067d0c63_62471853', "extra_css");
+$_smarty_tpl->getInheritance()->instanceBlock($_smarty_tpl, 'Block_889376776a4e512007a575_60389315', "extra_css");
 ?>
 
 
 <?php 
-$_smarty_tpl->getInheritance()->instanceBlock($_smarty_tpl, 'Block_8764139076a47d6067d4a37_18311354', "content");
+$_smarty_tpl->getInheritance()->instanceBlock($_smarty_tpl, 'Block_17558009826a4e512007e324_20217629', "content");
 ?>
 
 
 <?php 
-$_smarty_tpl->getInheritance()->instanceBlock($_smarty_tpl, 'Block_13109679406a47d606800d27_29231013', "extra_js");
+$_smarty_tpl->getInheritance()->instanceBlock($_smarty_tpl, 'Block_11352735416a4e51200f2da7_40262069', "extra_js");
 ?>
 
 <?php $_smarty_tpl->getInheritance()->endChild($_smarty_tpl, "common/layout.tpl", $_smarty_current_dir);
 }
 /* {block "extra_css"} */
-class Block_5890527536a47d6067d0c63_62471853 extends \Smarty\Runtime\Block
+class Block_889376776a4e512007a575_60389315 extends \Smarty\Runtime\Block
 {
 public function callBlock(\Smarty\Template $_smarty_tpl) {
 $_smarty_current_dir = 'C:\\Users\\damic\\Desktop\\uni\\APPUNTI\\anno3\\secondo_semenstre\\Pweb\\TableCrown\\Presentation\\smarty-dir\\templates';
@@ -56,7 +56,7 @@ $_smarty_current_dir = 'C:\\Users\\damic\\Desktop\\uni\\APPUNTI\\anno3\\secondo_
 }
 /* {/block "extra_css"} */
 /* {block "content"} */
-class Block_8764139076a47d6067d4a37_18311354 extends \Smarty\Runtime\Block
+class Block_17558009826a4e512007e324_20217629 extends \Smarty\Runtime\Block
 {
 public function callBlock(\Smarty\Template $_smarty_tpl) {
 $_smarty_current_dir = 'C:\\Users\\damic\\Desktop\\uni\\APPUNTI\\anno3\\secondo_semenstre\\Pweb\\TableCrown\\Presentation\\smarty-dir\\templates';
@@ -87,12 +87,16 @@ $foreach0DoElse = false;
                             <div class="carrello-item"
                                  data-item-id="<?php echo $_smarty_tpl->getValue('p')['id'];?>
 "
-                                 data-prezzo-unitario="<?php echo $_smarty_tpl->getValue('item')['prezzo_unitario'];?>
+                                 data-prezzo-unitario="<?php echo $_smarty_tpl->getValue('p')['prezzo_unitario'];?>
 "
-                                 data-risparmio-unitario="<?php if ($_smarty_tpl->getValue('item')['sconto']) {
-echo $_smarty_tpl->getValue('item')['prezzo_originale']-$_smarty_tpl->getValue('item')['prezzo_unitario'];
+                                 data-risparmio-unitario="<?php if ($_smarty_tpl->getValue('p')['sconto']) {
+echo $_smarty_tpl->getValue('p')['prezzo_originale']-$_smarty_tpl->getValue('p')['prezzo_unitario'];
 } else { ?>0<?php }?>"
-                                 data-update-url="<?php echo htmlspecialchars((string)$_smarty_tpl->getValue('item')['update_url'], ENT_QUOTES, 'UTF-8', true);?>
+                                 data-update-url="<?php echo $_smarty_tpl->getValue('base_url');
+echo htmlspecialchars((string)$_smarty_tpl->getValue('item')['update_url'], ENT_QUOTES, 'UTF-8', true);?>
+"
+                                 data-remove-url="<?php echo $_smarty_tpl->getValue('base_url');
+echo htmlspecialchars((string)$_smarty_tpl->getValue('item')['remove_url'], ENT_QUOTES, 'UTF-8', true);?>
 ">
 
                                 <a href="<?php echo $_smarty_tpl->getValue('base_url');?>
@@ -117,18 +121,25 @@ echo $_smarty_tpl->getValue('item')['prezzo_originale']-$_smarty_tpl->getValue('
                                     </a>
 
                                     <div class="carrello-item-prezzo-wrapper">
-                                        <?php if ($_smarty_tpl->getValue('item')['sconto']) {?>
-                                            <span class="carrello-item-prezzo">€<?php echo $_smarty_tpl->getSmarty()->getModifierCallback('number_format')($_smarty_tpl->getValue('item')['prezzo_unitario'],2);?>
+                                        <?php if ($_smarty_tpl->getValue('p')['sconto']) {?>
+                                            <span class="carrello-item-prezzo">€<?php echo $_smarty_tpl->getSmarty()->getModifierCallback('number_format')($_smarty_tpl->getValue('p')['prezzo_unitario'],2);?>
 </span>
-                                            <span class="carrello-item-prezzo-old">€<?php echo $_smarty_tpl->getSmarty()->getModifierCallback('number_format')($_smarty_tpl->getValue('item')['prezzo_originale'],2);?>
+                                            <span class="carrello-item-prezzo-old">€<?php echo $_smarty_tpl->getSmarty()->getModifierCallback('number_format')($_smarty_tpl->getValue('p')['prezzo_originale'],2);?>
 </span>
-                                        <?php } elseif ((true && (true && null !== ($_smarty_tpl->getValue('item')['prezzo_unitario'] ?? null)))) {?>
-                                            <span class="carrello-item-prezzo">€<?php echo $_smarty_tpl->getSmarty()->getModifierCallback('number_format')($_smarty_tpl->getValue('item')['prezzo_unitario'],2);?>
+                                        <?php } elseif ((true && (true && null !== ($_smarty_tpl->getValue('p')['prezzo_unitario'] ?? null)))) {?>
+                                            <span class="carrello-item-prezzo">€<?php echo $_smarty_tpl->getSmarty()->getModifierCallback('number_format')($_smarty_tpl->getValue('p')['prezzo_unitario'],2);?>
 </span>
                                         <?php } else { ?>
                                             <span class="carrello-item-prezzo-nd">Prezzo N/D</span>
                                         <?php }?>
                                     </div>
+
+                                    <?php if ($_smarty_tpl->getValue('p')['sconto']) {?>
+                                        <span class="carrello-item-sconto-badge">
+                                            -<?php echo sprintf("%.0f",$_smarty_tpl->getValue('p')['percentuale_sconto']);?>
+%
+                                        </span>
+                                    <?php }?>
                                 </div>
 
                                 <div class="carrello-item-controls">
@@ -157,8 +168,8 @@ echo $_smarty_tpl->getValue('item')['prezzo_originale']-$_smarty_tpl->getValue('
 
                                     <button class="carrello-item-rimuovi"
                                             type="button"
-                                            data-url="<?php echo $_smarty_tpl->getValue('base_url');?>
-/carrello/rimuovi/<?php echo $_smarty_tpl->getValue('p')['id'];?>
+                                            data-url="<?php echo $_smarty_tpl->getValue('base_url');
+echo htmlspecialchars((string)$_smarty_tpl->getValue('item')['remove_url'], ENT_QUOTES, 'UTF-8', true);?>
 "
                                             aria-label="Rimuovi <?php echo htmlspecialchars((string)$_smarty_tpl->getValue('p')['nome'], ENT_QUOTES, 'UTF-8', true);?>
  dal carrello">
@@ -178,7 +189,8 @@ $_smarty_tpl->getSmarty()->getRuntime('Foreach')->restore($_smarty_tpl, 1);?>
                              data-item-id=""
                              data-prezzo-unitario=""
                              data-risparmio-unitario="0"
-                             data-update-url="">
+                             data-update-url=""
+                             data-remove-url="">
 
                             <a href="" class="carrello-item-img-link">
                                 <img src=""
@@ -196,6 +208,8 @@ $_smarty_tpl->getSmarty()->getRuntime('Foreach')->restore($_smarty_tpl, 1);?>
                                     <span class="carrello-item-prezzo-old" style="display:none;"></span>
                                     <span class="carrello-item-prezzo-nd" style="display:none;">Prezzo N/D</span>
                                 </div>
+
+                                <span class="carrello-item-sconto-badge" style="display:none;"></span>
                             </div>
 
                             <div class="carrello-item-controls">
@@ -297,9 +311,10 @@ $_smarty_tpl->getSmarty()->getRuntime('Foreach')->restore($_smarty_tpl, 1);?>
                                             </a>
                                             <button class="button btn-correlato-cart"
                                                     type="button"
-                                                    data-url="<?php echo $_smarty_tpl->getValue('base_url');?>
-/carrello/aggiungi/<?php echo $_smarty_tpl->getValue('correlato')['id'];?>
+                                                    data-product-id="<?php echo $_smarty_tpl->getValue('correlato')['id'];?>
 "
+                                                    data-url="<?php echo $_smarty_tpl->getValue('base_url');?>
+/carrello/aggiungi"
                                                     aria-label="Aggiungi <?php echo htmlspecialchars((string)$_smarty_tpl->getValue('correlato')['nome'], ENT_QUOTES, 'UTF-8', true);?>
  al carrello">
                                                 <i class="ti ti-shopping-cart"></i> Carrello
@@ -375,7 +390,7 @@ $_smarty_tpl->getSmarty()->getRuntime('Foreach')->restore($_smarty_tpl, 1);?>
 }
 /* {/block "content"} */
 /* {block "extra_js"} */
-class Block_13109679406a47d606800d27_29231013 extends \Smarty\Runtime\Block
+class Block_11352735416a4e51200f2da7_40262069 extends \Smarty\Runtime\Block
 {
 public function callBlock(\Smarty\Template $_smarty_tpl) {
 $_smarty_current_dir = 'C:\\Users\\damic\\Desktop\\uni\\APPUNTI\\anno3\\secondo_semenstre\\Pweb\\TableCrown\\Presentation\\smarty-dir\\templates';
@@ -400,7 +415,7 @@ $_smarty_current_dir = 'C:\\Users\\damic\\Desktop\\uni\\APPUNTI\\anno3\\secondo_
         document.body.appendChild(toast);
         setTimeout(function() { toast.remove(); }, 4000);
     }
-    
+
 
     // ── RICALCOLO RIEPILOGO ──
     function ricalcolaRiepilogo() {
@@ -446,7 +461,6 @@ $_smarty_current_dir = 'C:\\Users\\damic\\Desktop\\uni\\APPUNTI\\anno3\\secondo_
         var unit        = parseFloat(riga.dataset.prezzoUnitario) || 0;
         var updateUrl   = riga.dataset.updateUrl;
 
-        
         if (input) input.dataset.valPrecedente = input.value;
 
         function aggiornaRigaUI() {
@@ -461,6 +475,7 @@ $_smarty_current_dir = 'C:\\Users\\damic\\Desktop\\uni\\APPUNTI\\anno3\\secondo_
             var controller = new AbortController();
             var timeout = setTimeout(function() { controller.abort(); }, 5000);
 
+            // GET, come richiesto dalla rotta /carrello/aggiorna/{id}?qty=N nel FrontController
             fetch(updateUrl + '?qty=' + qty, { signal: controller.signal })
                 .then(function(response) {
                     clearTimeout(timeout);
@@ -532,10 +547,10 @@ $_smarty_current_dir = 'C:\\Users\\damic\\Desktop\\uni\\APPUNTI\\anno3\\secondo_
                 var controller = new AbortController();
                 var timeout = setTimeout(function() { controller.abort(); }, 5000);
 
-                fetch(url, {
-                    method: 'POST',
-                    signal: controller.signal
-                })
+                // GET, come richiesto dalla rotta attuale /carrello/rimuovi/{id} nel FrontController.
+                // NB: dal punto di vista REST una rimozione dovrebbe essere POST/DELETE,
+                // è un punto da rivedere con t1 sul routing.
+                fetch(url, { signal: controller.signal })
                     .then(function(response) {
                         clearTimeout(timeout);
                         if (!response.ok) throw new Error('server');
@@ -597,6 +612,7 @@ $_smarty_current_dir = 'C:\\Users\\damic\\Desktop\\uni\\APPUNTI\\anno3\\secondo_
         var prezzoEl    = riga.querySelector('.carrello-item-prezzo');
         var prezzoOldEl = riga.querySelector('.carrello-item-prezzo-old');
         var prezzoNdEl  = riga.querySelector('.carrello-item-prezzo-nd');
+        var scontoBadge = riga.querySelector('.carrello-item-sconto-badge');
 
         if (data.sconto) {
             prezzoEl.textContent = '€' + Number(data.prezzo_unitario).toFixed(2);
@@ -604,15 +620,22 @@ $_smarty_current_dir = 'C:\\Users\\damic\\Desktop\\uni\\APPUNTI\\anno3\\secondo_
             prezzoOldEl.textContent = '€' + Number(data.prezzo_originale).toFixed(2);
             prezzoOldEl.style.display = '';
             prezzoNdEl.style.display = 'none';
+
+            if (scontoBadge) {
+                scontoBadge.textContent = '-' + Math.round(Number(data.percentuale_sconto)) + '%';
+                scontoBadge.style.display = '';
+            }
         } else if (data.prezzo_unitario !== null && data.prezzo_unitario !== undefined) {
             prezzoEl.textContent = '€' + Number(data.prezzo_unitario).toFixed(2);
             prezzoEl.style.display = '';
             prezzoOldEl.style.display = 'none';
             prezzoNdEl.style.display = 'none';
+            if (scontoBadge) scontoBadge.style.display = 'none';
         } else {
             prezzoEl.style.display = 'none';
             prezzoOldEl.style.display = 'none';
             prezzoNdEl.style.display = '';
+            if (scontoBadge) scontoBadge.style.display = 'none';
         }
 
         var qtyInput = riga.querySelector('.carrello-qty-input');
@@ -662,16 +685,21 @@ $_smarty_current_dir = 'C:\\Users\\damic\\Desktop\\uni\\APPUNTI\\anno3\\secondo_
     }
 
     // ── AGGIUNTA ARTICOLO (da correlati) ──
+    // Il controller CCarrello::aggiungiAlCarrello() legge id_prodotto e quantita
+    // dal BODY della richiesta POST (UHTTPMethods::postInt), non dal path URL.
     document.querySelectorAll('.btn-correlato-cart').forEach(function(btn) {
         btn.addEventListener('click', function() {
             var url = this.dataset.url;
-            if (!url) return;
+            var idProdotto = this.dataset.productId;
+            if (!url || !idProdotto) return;
 
             var controller = new AbortController();
             var timeout = setTimeout(function() { controller.abort(); }, 5000);
 
             fetch(url, {
                 method: 'POST',
+                headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
+                body: 'id_prodotto=' + encodeURIComponent(idProdotto) + '&quantita=1',
                 signal: controller.signal
             })
                 .then(function(response) {
@@ -680,6 +708,11 @@ $_smarty_current_dir = 'C:\\Users\\damic\\Desktop\\uni\\APPUNTI\\anno3\\secondo_
                     return response.json();
                 })
                 .then(function(data) {
+                    if (data.success === false) {
+                        mostraToast(data.message || 'Errore nell\'aggiunta del prodotto.', 'errore');
+                        return;
+                    }
+
                     mostraToast('Prodotto aggiunto al carrello', 'successo');
 
                     // Se il carrello era vuoto in partenza, #carrello-items

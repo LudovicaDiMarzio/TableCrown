@@ -52,6 +52,12 @@
                                             <span class="carrello-item-prezzo-nd">Prezzo N/D</span>
                                         {/if}
                                     </div>
+
+                                    {if $p.sconto}
+                                        <span class="carrello-item-sconto-badge">
+                                            -{$p.percentuale_sconto|string_format:"%.0f"}%
+                                        </span>
+                                    {/if}
                                 </div>
 
                                 <div class="carrello-item-controls">
@@ -113,6 +119,8 @@
                                     <span class="carrello-item-prezzo-old" style="display:none;"></span>
                                     <span class="carrello-item-prezzo-nd" style="display:none;">Prezzo N/D</span>
                                 </div>
+
+                                <span class="carrello-item-sconto-badge" style="display:none;"></span>
                             </div>
 
                             <div class="carrello-item-controls">
@@ -477,6 +485,7 @@
         var prezzoEl    = riga.querySelector('.carrello-item-prezzo');
         var prezzoOldEl = riga.querySelector('.carrello-item-prezzo-old');
         var prezzoNdEl  = riga.querySelector('.carrello-item-prezzo-nd');
+        var scontoBadge = riga.querySelector('.carrello-item-sconto-badge');
 
         if (data.sconto) {
             prezzoEl.textContent = '€' + Number(data.prezzo_unitario).toFixed(2);
@@ -484,15 +493,22 @@
             prezzoOldEl.textContent = '€' + Number(data.prezzo_originale).toFixed(2);
             prezzoOldEl.style.display = '';
             prezzoNdEl.style.display = 'none';
+
+            if (scontoBadge) {
+                scontoBadge.textContent = '-' + Math.round(Number(data.percentuale_sconto)) + '%';
+                scontoBadge.style.display = '';
+            }
         } else if (data.prezzo_unitario !== null && data.prezzo_unitario !== undefined) {
             prezzoEl.textContent = '€' + Number(data.prezzo_unitario).toFixed(2);
             prezzoEl.style.display = '';
             prezzoOldEl.style.display = 'none';
             prezzoNdEl.style.display = 'none';
+            if (scontoBadge) scontoBadge.style.display = 'none';
         } else {
             prezzoEl.style.display = 'none';
             prezzoOldEl.style.display = 'none';
             prezzoNdEl.style.display = '';
+            if (scontoBadge) scontoBadge.style.display = 'none';
         }
 
         var qtyInput = riga.querySelector('.carrello-qty-input');
