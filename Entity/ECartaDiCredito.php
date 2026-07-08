@@ -33,7 +33,7 @@ class ECartaDiCredito {
     #[ORM\JoinColumn(name: "utente_id", referencedColumnName: "idpersona", nullable: false, onDelete: 'CASCADE')]
     private EUtente $utente;
 
-    public function __construct(EUtente $utente, string $titolare, string $ultimeQuattroCifre, string $dataScadenza, string $token) {
+    public function __construct(EUtente $utente, string $titolare,  string $dataScadenza, string $ultimeQuattroCifre, string $token) {
         $this->utente = $utente;
         $this->impostaNomeTitolare($titolare);
         $this->traduciStringaData($dataScadenza);
@@ -116,7 +116,7 @@ class ECartaDiCredito {
          return $this->idCartaDiCredito; 
     }
 
-    public function getTitolare(): string        
+    public function getNomeTitolare(): string        
     {
          return $this->titolare;
     }
@@ -126,7 +126,7 @@ class ECartaDiCredito {
          return $this->dataScadenza; 
     }
 
-    public function getUltimeQuattroCifre(): string 
+    public function getNumero(): string 
     {
          return $this->ultimeQuattroCifre; 
     }
