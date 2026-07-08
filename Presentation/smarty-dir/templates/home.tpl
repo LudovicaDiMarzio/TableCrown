@@ -70,6 +70,9 @@
         <div class="card-row-vector">
             {if isset($offerte) && $offerte|@count > 0}
                 {foreach $offerte as $prodotto}
+                    {assign var="haSconto" value=$prodotto.sconto|default:false}
+                    {assign var="prezzoEffettivo" value=$haSconto && isset($prodotto.prezzo_scontato) ? $prodotto.prezzo_scontato : $prodotto.prezzo|default:null}
+
                     <div class="card-vector-item">
                             <a href="{$base_url}/prodotto/{$prodotto.id}" class="card-link-wrapper">
                                 <div class="card home-card-fixed">
@@ -80,7 +83,7 @@
                                     </div>
                                     <div class="card-content">
                                         <p class="card-title-custom">{$prodotto.nome|escape}</p>
-                    
+
                                         <div class="card-rating">
                                             {assign var="media" value=$prodotto.valutazione_media}
                                             {assign var="stelle" value=[1,2,3,4,5]}
@@ -94,25 +97,25 @@
                                                 {/if}
                                             {/foreach}
                                         </div>
-                    
+
                                         <div class="price-container">
-                                            {if isset($prodotto.prezzo)}
-                                                {if $prodotto.sconto}
-                                                    <span class="price">€{$prodotto.prezzo_scontato|number_format:2}</span>
+                                            {if $haSconto && isset($prodotto.prezzo_scontato)}
+                                                <span class="price">€{$prodotto.prezzo_scontato|number_format:2}</span>
+                                                {if isset($prodotto.prezzo)}
                                                     <span class="price-old">€{$prodotto.prezzo|number_format:2}</span>
-                                                {else}
-                                                    <span class="price">€{$prodotto.prezzo|number_format:2}</span>
                                                 {/if}
+                                            {elseif isset($prodotto.prezzo)}
+                                                <span class="price">€{$prodotto.prezzo|number_format:2}</span>
                                             {else}
                                                 <span class="price-unavailable">Prezzo non disponibile</span>
                                             {/if}
                                         </div>
-                    
+
                                         <button class="btn-cart"
                                                 data-id="{$prodotto.id}"
                                                 data-nome="{$prodotto.nome|escape}"
                                                 data-img="{$base_url}/img/prodotti/{$prodotto.immagine}"
-                                                data-prezzo="{$prodotto.prezzo}">
+                                                data-prezzo="{$prezzoEffettivo}">
                                             <i class="ti ti-shopping-cart"></i> Acquista
                                         </button>
                                     </div>
@@ -195,6 +198,9 @@
         <div class="card-row-vector">
             {if isset($nuovi_arrivi) && $nuovi_arrivi|@count > 0}
                 {foreach $nuovi_arrivi as $prodotto}
+                    {assign var="haSconto" value=$prodotto.sconto|default:false}
+                    {assign var="prezzoEffettivo" value=$haSconto && isset($prodotto.prezzo_scontato) ? $prodotto.prezzo_scontato : $prodotto.prezzo|default:null}
+
                     <div class="card-vector-item">
                             <a href="{$base_url}/prodotto/{$prodotto.id}" class="card-link-wrapper">
                                 <div class="card home-card-fixed">
@@ -205,7 +211,7 @@
                                     </div>
                                     <div class="card-content">
                                         <p class="card-title-custom">{$prodotto.nome|escape}</p>
-                    
+
                                         <div class="card-rating">
                                             {assign var="media" value=$prodotto.valutazione_media}
                                             {assign var="stelle" value=[1,2,3,4,5]}
@@ -219,25 +225,25 @@
                                                 {/if}
                                             {/foreach}
                                         </div>
-                    
+
                                         <div class="price-container">
-                                            {if isset($prodotto.prezzo)}
-                                                {if $prodotto.sconto}
-                                                    <span class="price">€{$prodotto.prezzo_scontato|number_format:2}</span>
+                                            {if $haSconto && isset($prodotto.prezzo_scontato)}
+                                                <span class="price">€{$prodotto.prezzo_scontato|number_format:2}</span>
+                                                {if isset($prodotto.prezzo)}
                                                     <span class="price-old">€{$prodotto.prezzo|number_format:2}</span>
-                                                {else}
-                                                    <span class="price">€{$prodotto.prezzo|number_format:2}</span>
                                                 {/if}
+                                            {elseif isset($prodotto.prezzo)}
+                                                <span class="price">€{$prodotto.prezzo|number_format:2}</span>
                                             {else}
                                                 <span class="price-unavailable">Prezzo non disponibile</span>
                                             {/if}
                                         </div>
-                    
+
                                         <button class="btn-cart"
                                                 data-id="{$prodotto.id}"
                                                 data-nome="{$prodotto.nome|escape}"
                                                 data-img="{$base_url}/img/prodotti/{$prodotto.immagine}"
-                                                data-prezzo="{$prodotto.prezzo}">
+                                                data-prezzo="{$prezzoEffettivo}">
                                             <i class="ti ti-shopping-cart"></i> Acquista
                                         </button>
                                     </div>
