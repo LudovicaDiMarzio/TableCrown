@@ -38,12 +38,12 @@ class CartaDiCreditoFixture extends AbstractFixture implements DependentFixtureI
             $dataScadenza->modify('+' . $faker->numberBetween(1, 5) . ' years');
 
             $carta = new ECartaDiCredito(
-                $faker->firstName(),
-                $faker->lastName(),
-                $dataScadenza,
-                $faker->numerify('################'),
-                $faker->numerify('###'),
-                $utente
+                $utente,
+                $faker->name(),
+                $faker->dateTimeBetween('+1 month', '+5 years')->format('m/y'),
+                $faker->numerify('####'),
+                'tok_' . bin2hex(random_bytes(8))
+                
             );
 
             $this->addReference('carta_' . $contatore, $carta);

@@ -59,7 +59,7 @@ class EOrdine {
 
         // salviamo snapshot della carta — non il riferimento
         $this->ultimeQuattroCifreCarta = substr($carta->getNumero(), -4);
-        $this->nomeTitolareCarta = $carta->getNomeTitolare() . ' ' . $carta->getCognomeTitolare();
+        $this->nomeTitolareCarta = $carta->getNomeTitolare() ;
 
         // coerenza bidirezionale
         $utente->riceviOrdine($this);
