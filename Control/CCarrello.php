@@ -5,6 +5,7 @@ use TableCrown\Utility\USession;
 use TableCrown\Utility\UHTTPMethods;
 use TableCrown\Entity\EProdotto;
 use TableCrown\Foundation\FPersistentManager;
+use TableCrown\Presentation\Views\ViewCarrello;
 
 /**
  * Controller dedicato alla gestione del carrello acquisti.
@@ -33,111 +34,140 @@ class CCarrello extends BaseController {
         //Recuperiamo il carrello attuale memorizzato nella sessione. Se non esiste, ne creiamo uno vuoto
         $carrello = USession::getSessionElement('carrello') ?? [];
 
-        //Le seguenti variabili accumuleranno i dati mentre scorriamo il carrello:
-        $carrelloItems = []; //inizializziamo l'array principale che conterrà tutti i dati da passare alla View
-        $totale = 0.00; //il prezzo totale non è salvato nella sessione, lo ricalcoliamo ogni volta che l'utente carica la pagina
-        $totaleSconto = 0.00; //totale degli sconti applicati
-
-        //Se l'array non è vuoto, significa che ci sono prodotti da elaborare
-        if (!empty($carrello)) {
-            //Ciclo sugli ID presenti nel carrello per caricare i dati reali dal DB
-            //Scorriamo il carrello prendendo la chiave (id prodotto) e il valore (quantità)
-            foreach ($carrello as $idProdotto => $quantita) {
-                //Chiediamo a Foundation di caricarci l'oggetto Entity del prodotto dal DB
-                $prodotto = FPersistentManager::PMgetObjOnAttribute(EProdotto::class, 'idProdotto', $idProdotto);
-
-                if (!$prodotto) {
-                    continue; //salta il prodotto e passa al prossimo
-                } 
-
-                //Determiniamo il prezzo unitario corretto:
-                //se il prodotto è in sconto usiamo il prezzo scontato, altrimenti il prezzo pieno
-                $hasSconto = $prodotto->getPrezzo()->hasSconto();
-                $prezzoOriginale = $prodotto->getPrezzo()->getValore();
-                $prezzoUnitario = $hasSconto ? $prodotto->getPrezzo()->calcolaValoreScontato() : $prezzoOriginale;
-
-                //Calcoliamo il subtotale di questa riga (prezzo * quantità)
-                $subtotale = $prezzoUnitario * $quantita;
-
-                //Aggiorniamo i totali complessivi
-                $totale += $subtotale;
+        //Costruiamo le tre sezioni di dati richieste dalla view, delegandone la costruzione a metodi specifici.
+        //buildCarrelloSummary riceve carrelloItems già costruito, così non deve ricalcolare nulla dal DB
+        $carrelloItems = $this->buildCarrelloItems($carrello);
+        $carrelloSummary = $this->buildCarrelloSummary($carrelloItems, $carrello);
+        $correlati = $this->buildCorrelati($carrello);
  
-                //Con totaleSconto intendiamo l'importo totale risparmiato considerando tutti i prodotti scontati presenti nel carrello
-                if ($hasSconto) {
-                    //Lo sconto totale è la differenza tra prezzo pieno e prezzo scontato, per la quantità
-                    $totaleSconto += ($prezzoOriginale - $prezzoUnitario) * $quantita;
-                }
-                
+        //Impacchettiamo i dati specifici per carrello.tpl
+        $datiPagina = [
+            'carrello_items' => $carrelloItems,
+            'carrello_summary' => $carrelloSummary,
+            'correlati' => $correlati,
+        ];
+ 
+        //Uniamo i dati specifici della pagina con i dati globali del layout
+        $data = $this->preparaDatiLayout('carrello', $datiPagina);
+ 
+        //Chiamata alla View per renderizzare il template di Smarty passando i dati
+        ViewCarrello::mostraCarrello($data); 
+    }
 
-                //Costruiamo la struttura esatta richiesta dalla View
-                $carrelloItems[] = [
-                    'quantita' => $quantita,
-                    'subtotale' => $subtotale,
-                    'update_url' => '/carrello/aggiorna/' . $idProdotto,
-                    'remove_url' => '/carrello/rimuovi/' . $idProdotto,
-                    'prodotto' => [
-                        'id' => $prodotto->getIdProdotto(),
-                        'nome' => $prodotto->getNomeProdotto(),
-                        'immagine' => $prodotto->getImgProdotto(),
-                        'prezzo_unitario' => $prezzoUnitario,
-                        'sconto' => $hasSconto,
-                        'prezzo_originale' => $prezzoOriginale, //rilevante solo se sconto=true, ma lo passiamo sempre (il template lo ignora se sconto=false)
-                    ],
-                ];
+    //==========================================================================
+    // METODI PRIVATI - per costruire i dati richiesti dalla view del carrello
+    //==========================================================================
+    /**
+     * Costruisce l'array di righe del carrello, ciascuna con i dati reali del prodotto
+     * caricati dal DB tramite FPersistentManager.
+     * Metodo puro: nessuno stato di classe, riceve il carrello e restituisce l'array pronto per la view.
+     */
+    private function buildCarrelloItems(array $carrello): array {
+        if (empty($carrello)) {
+            return [];
+        }
+ 
+        $carrelloItems = [];
+ 
+        //Scorriamo il carrello prendendo la chiave (id prodotto) e il valore (quantità)
+        foreach ($carrello as $idProdotto => $quantita) {
+            //Chiediamo a Foundation di caricarci l'oggetto Entity del prodotto dal DB
+            $prodotto = FPersistentManager::PMgetObjOnAttribute(EProdotto::class, 'idProdotto', $idProdotto);
+ 
+            if (!$prodotto) {
+                continue; //salta il prodotto e passa al prossimo
+            }
+ 
+            //Determiniamo il prezzo unitario corretto:
+            //se il prodotto è in sconto usiamo il prezzo scontato, altrimenti il prezzo pieno
+            $hasSconto = $prodotto->getPrezzo()->hasSconto();
+            $prezzoOriginale = (float) $prodotto->getPrezzo()->getValore();
+            $prezzoUnitario = $hasSconto ? (float) $prodotto->getPrezzo()->calcolaPrezzoScontato() : $prezzoOriginale;
+ 
+            //Calcoliamo il subtotale di questa riga (prezzo * quantità)
+            $subtotale = $prezzoUnitario * $quantita;
+ 
+            //Costruiamo la struttura esatta richiesta dalla View
+            $carrelloItems[] = [
+                'quantita' => $quantita,
+                'subtotale' => $subtotale,
+                'update_url' => '/carrello/aggiorna/' . $idProdotto,
+                'remove_url' => '/carrello/rimuovi/' . $idProdotto,
+                'prodotto' => [
+                    'id' => (int) $prodotto->getIdProdotto(),
+                    'nome' => $prodotto->getNomeProdotto(),
+                    'immagine' => $prodotto->getImgProdotto(),
+                    'prezzo_unitario' => $prezzoUnitario,
+                    'sconto' => $hasSconto,
+                    'prezzo_originale' => $prezzoOriginale, //rilevante solo se sconto=true, ma lo passiamo sempre (il template lo ignora se sconto=false)
+                    'percentuale_sconto' => $hasSconto ? $prodotto->getPrezzo()->getSconto() : null,
+                ],
+            ];
+        }
+ 
+        return $carrelloItems;
+    }
+
+    /**
+     * Calcola i totali del carrello a partire dalle righe già costruite da buildCarrelloItems,
+     * evitando di ricalcolare prezzi o ricontattare il DB.
+     * Ritorna sempre le stesse chiavi (anche a zero) per non costringere la view a fare isset().
+     */
+    private function buildCarrelloSummary(array $carrelloItems, array $carrello): array {
+        $totale = 0.00;
+        $totaleSconto = 0.00;
+ 
+        foreach ($carrelloItems as $item) {
+            $totale += $item['subtotale'];
+ 
+            if ($item['prodotto']['sconto']) {
+                //Lo sconto totale (cioè il risparmio totale) è la differenza tra prezzo pieno e prezzo scontato, per la quantità
+                $totaleSconto += ($item['prodotto']['prezzo_originale'] - $item['prodotto']['prezzo_unitario']) * $item['quantita'];
             }
         }
-
-        //Costruiamo il riepilogo totali richiesto da View
-        $carrelloSummary = [
-            'n_articoli' => array_sum($carrello), //somma tutte le quantità nel carrello
-            'sconto' => $totaleSconto, //sconto totale
-            'totale' => $totale, //totale del carrello
+ 
+        return [
+            'n_articoli' => array_sum($carrello), //somma tutte le quantità nel carrello (0 se carrello vuoto)
+            'sconto' => $totaleSconto,
+            'totale' => $totale,
         ];
+    }
+ 
 
-        //Recuperiamo i prodotti correlati per il carosello "Potrebbe interessarti".
-        //CRITERIO PROVVISIORIO: TUTTI I PRODOTTI DISPONIBILI, ESCLUSI QUELLI GIà NEL CARRELLO, LIMITATI AI PRIMI 8.
+    /**
+     * Determina i prodotti consigliati in base al contenuto del carrello.
+     * CRITERIO PROVVISORIO: tutti i prodotti disponibili, esclusi quelli già nel carrello, limitati ai primi 8.
+     */
+    private function buildCorrelati(array $carrello): array {
+        //Prendiamo tutti i prodotti dal DB
         $tuttiProdotti = FPersistentManager::PMgetAll(EProdotto::class);
-
+ 
         //Escludiamo i prodotti già presenti nel carrello usando i loro ID come filtro
         $idNelCarrello = array_keys($carrello);
         $correlati = array_filter(
-            $tuttiProdotti, 
+            $tuttiProdotti,
             fn($p) => !in_array($p->getIdProdotto(), $idNelCarrello) //arrow function: $p è il nome che assume temporaneamente ogni elemento dell'array, mentre array_filter lo itera
-            );
-
+        );
+ 
         //Prendiamo solo i primi 8 e reindicizziamo l'array
         //array_filter mantiene gli indici originali, array_values li azzera.
         $correlati = array_slice(array_values($correlati), 0, 8);
-
+ 
         //Convertiamo in array nel formato richiesto dalla View
-        $correlatiArray = array_map(fn($p) => [
+        return array_map(fn($p) => [
             'id' => $p->getIdProdotto(),
             'nome' => $p->getNomeProdotto(),
             'immagine' => $p->getImgProdotto(),
             'valutazione_media' => $p->getValutazioneMedia(),
             'prezzo' => $p->hasSconto() ? null : $p->getPrezzo()->getValore(), //se il prodotto è in sconto, il prezzo va a null e mostriamo solo il prezzo scontato.
-            'prezzo_scontato' => $p->hasSconto() ? $p->getPrezzo()->calcolaValoreScontato() : null,
+            'prezzo_scontato' => $p->hasSconto() ? $p->getPrezzo()->calcolaPrezzoScontato() : null,
             'sconto' => $p->hasSconto(),
         ], $correlati);
-
-        //Impacchettiamo i dati specifici per carrello.tpl
-        $datiPagina = [
-            'carrello_items' => $carrelloItems,
-            'carrello_summary' => $carrelloSummary,
-            'correlati' => $correlatiArray, //omesso se vuoto (la view lo gestisce con isset)
-        ];
-
-        //Uniamo i dati specifi della pagina con i dati globali del layout
-        $data = $this->preparaDatiLayout('carrello', $datiPagina);
-
-        //Chiamata alla View per renderizzare il template di Smarty passando i dati
-        //VCarrello::mostraCarrello($data);
-
-        //Stampiamo un testo di controllo provvisorio a schermo
-        echo "Pagina carrello - dati pronti:";
-        echo "<pre>" . print_r($data, true) . "</pre>";
     }
 
+    //==========================================================================
+ 
+ 
     /**
      * Aggiunge un prodotto al carrello (chiamata AJAX).
      * Risponde in JSON.
@@ -209,7 +239,7 @@ class CCarrello extends BaseController {
 
         //Calcoliamo i dati del prodotto per la risposta JSON
         $hasSconto = $prodotto->getPrezzo()->hasSconto();
-        $prezzoUnitario = $hasSconto ? $prodotto->getPrezzo()->calcolaValoreScontato() : $prodotto->getPrezzo()->getValore();
+        $prezzoUnitario = $hasSconto ? $prodotto->getPrezzo()->calcolaPrezzoScontato() : $prodotto->getPrezzo()->getValore();
         $prezzoOriginale = $prodotto->getPrezzo()->getValore();
         $quantitaAggiornata = $carrello[$idProdotto]; //quantità totale dopo l'aggiunta
 
@@ -312,7 +342,7 @@ class CCarrello extends BaseController {
             $prodotto = FPersistentManager::PMgetObjOnAttribute(EProdotto::class, 'idProdotto', $idProdotto);
             if ($prodotto) {
                 //Usiamo il prezzo scontato se presente, altrimenti il prezzo pieno
-                $prezzoUnitario = $prodotto->hasSconto() ? $prodotto->getPrezzo()->calcolaValoreScontato() : $prodotto->getPrezzo()->getValore();
+                $prezzoUnitario = $prodotto->hasSconto() ? $prodotto->getPrezzo()->calcolaPrezzoScontato() : $prodotto->getPrezzo()->getValore();
                 $nuovoTotale += ($prezzoUnitario * $quantita);
             }
         }

@@ -11,42 +11,96 @@ class CCatalogo extends BaseController {
     // METODI PUBBLICI - uno per ciascuna sottoRoute del catalogo.
     //==========================================================================
 
+    /**
+     * Mostra la pagina del catalogo dei giochi da tavolo.
+     * URL: GET /catalogo/giochi-da-tavolo
+     */
     public function mostraCatalogoGiochi(): void {
         //Per le azioni condivise fra i tre metodi, implementiamo dei metodi privati, in modo da non ripetere il codice ogni volta.
         $pagina = $this->estraiPaginaRichiesta();
         $filtri = $this->estraiFiltriGiochi(); //sarà [] se non ci sono filtri
 
-        //TODO: l'array dei risultati deve essere di questo tipo $risultato = ['risultati' => [], 'totaleRisultati' => 0];
-        /* 
-        $risultato = FPersistentManager::findGiochi(  //SE $filtri E' VUOTO, RESTITUISCE TUTTI I GIOCHI DA TAVOLO
-            $filtri,
-            offset: ($pagina - 1) * self::RISULTATI_PER_PAGINA,
-            limit: self::RISULTATI_PER_PAGINA
+        //Chiamata a Foundation
+        $risultatoGrezzo = FPersistentManager::PMfindGiochi(  //SE $filtri E' VUOTO, RESTITUISCE TUTTI I GIOCHI DA TAVOLO
+            filtri: $filtri,
+            limit: self::RISULTATI_PER_PAGINA,
+            offset: ($pagina - 1) * self::RISULTATI_PER_PAGINA
             );
- */
+
         
-/* 
-        $totalePagine = $this->calcolaTotalePagine($risultato['totaleRisultati']);
+        $totaleRisultati = $risultatoGrezzo['totale'] ?? 0; //se non c'è la chiave 'totale', assumiamo 0 risultati
+        $totalePagine = $this->calcolaTotalePagine($totaleRisultati);
         $pagina = $this->clampPagina($pagina, $totalePagine);
-         */
+        
 
+        $prodottiMappati = $this->mappaProdottiPerCatalogo($risultatoGrezzo['risultati'] ?? []); //se non c'è la chiave 'risultati', assumiamo []
 
-/* 
-        AGGIUNGERE CHIAMATA ALLA VIEW???
-        $this->render('catalogo_giochi', [
-            'giochi' => $risultato['risultati'],
-            'paginaCorrente' => $pagina,
-            'totalePagine' => $totalePagine,
-        ]);
- */
+        //Impacchettiamo i dati secondo la ViewCatalogo //DA CAMBIAREEEEEEEEEE!!!!
+        $datiPagina = [
+            'prodotti' => $prodottiMappati,
+            'filtri' => $filtri,
+            'pagina' => $pagina,
+            'totale_pagine' => $totalePagine,
+            'categorie' => ['Giochi da tavolo', 'Bustine', 'Porta dadi'],
+        ];
+
+        $datiLayout = $this->preparaDatiLayout('catalogo_giochi', $datiPagina);
+        ViewCatalogo::render($datiLayout);
+
     }
 
-    public function mostraCatalogoBustine(): void {
-        //TODO
+    public function mostraCatalogoBustine(): void { //DA RIVEDEREEEEE!!!!!!
+        $pagina = $this->estraiPaginaRichiesta();
+        $filtri = $this->estraiFiltriPrezzo(); 
+
+        $risultatoGrezzo = FPersistentManager::PMfindBustine(
+            filtri: $filtri,
+            limit: self::RISULTATI_PER_PAGINA,
+            offset: ($pagina - 1) * self::RISULTATI_PER_PAGINA
+        );
+
+        $totaleRisultati = $risultatoGrezzo['totale'] ?? 0;
+        $totalePagine = $this->calcolaTotalePagine($totaleRisultati);
+        $pagina = $this->clampPagina($pagina, $totalePagine);
+
+        $prodottiMappati = $this->mappaProdottiPerCatalogo($risultatoGrezzo['risultati'] ?? []);
+
+        $datiPagina = [
+            'prodotti'       => $prodottiMappati,
+            'filtri'         => $filtri,
+            'pagina'         => $pagina,
+            'totale_pagine'  => $totalePagine
+        ];
+
+        $datiLayout = $this->preparaDatiLayout('catalogo_bustine', $datiPagina);
+        ViewCatalogo::render($datiLayout);
     }
 
-    public function mostraCatalogoPortaDadi(): void {
-        //TODO
+    public function mostraCatalogoPortaDadi(): void { //DA RIVEDEREEEEE!!!!!!
+        $pagina = $this->estraiPaginaRichiesta();
+        $filtri = $this->estraiFiltriPrezzo(); 
+
+        $risultatoGrezzo = FPersistentManager::PMfindPortaDadi(
+            filtri: $filtri,
+            limit: self::RISULTATI_PER_PAGINA,
+            offset: ($pagina - 1) * self::RISULTATI_PER_PAGINA
+        );
+
+        $totaleRisultati = $risultatoGrezzo['totale'] ?? 0;
+        $totalePagine = $this->calcolaTotalePagine($totaleRisultati);
+        $pagina = $this->clampPagina($pagina, $totalePagine);
+
+        $prodottiMappati = $this->mappaProdottiPerCatalogo($risultatoGrezzo['risultati'] ?? []);
+
+        $datiPagina = [
+            'prodotti'       => $prodottiMappati,
+            'filtri'         => $filtri,
+            'pagina'         => $pagina,
+            'totale_pagine'  => $totalePagine
+        ];
+
+        $datiLayout = $this->preparaDatiLayout('catalogo_portadadi', $datiPagina);
+        ViewCatalogo::render($datiLayout);
     }
 
     /**
@@ -60,40 +114,42 @@ class CCatalogo extends BaseController {
         $pagina = $this->estraiPaginaRichiesta();
 
         if ($query === null || trim($query) === '') {
-            //Se non c'è nessun termine di ricerca:
-            //TODO: decidere il comportamento (mostrare la 
-            //prima pagina dei giochi da tavolo? Reindirizzare alla home?)
-
+            //Se non c'è nessun termine di ricerca, reindirizziamo al catalogo principale dei giochi (DA DECIDERE!!!!!!!)
+            header("Location: /catalogo/giochi-da-tavolo");
+            exit();
         }
 
         $query = trim($query);
-/*      //TODO: Implementare la ricerca nel database, con paginazione.
-        //Cerca su tutti e 3 i tipi di prodotto
-        $risultati = FPersistentManager::findProdottiBySearchQuery(
-            $query,
-            offset: ($pagina - 1) * self::RISULTATI_PER_PAGINA,
-            limit: self::RISULTATI_PER_PAGINA
-        );
- */
-        $risultati = ['risultati' => [], 'totaleRisultati' => 0]; //DA RIMUOVERE QUANDO TOLGO LA PARTE COMMENTATA
 
-        $totalePagine = $this->calcolaTotalePagine($risultati['totaleRisultati']);
+        //Cerca su tutti e 3 i tipi di prodotto
+        $risultatoGrezzo = FPersistentManager::PMricercaProdotto(
+            StringaDiRicerca:$query,
+            limit: self::RISULTATI_PER_PAGINA,
+            offset: ($pagina - 1) * self::RISULTATI_PER_PAGINA
+        );
+
+
+        $totaleRisultati = $risultatoGrezzo['totale'] ?? 0;
+        $totalePagine = $this->calcolaTotalePagine($totaleRisultati);
         $pagina = $this->clampPagina($pagina, $totalePagine);
 
-        //TODO: Chiamata alla view
-/* 
-        $this->render('risultati_ricerca', [
-            'prodotti' => $risultati['risultati'],
-            'terminecercato' => $query,
-            'paginaCorrente' => $pagina,
-            'totalePagine' => $totalePagine,
-        ]);
-         */
+        $prodottiMappati = $this->mappaProdottiPerCatalogo($risultatoGrezzo['risultati'] ?? []);
+
+        $datiPagina = [
+            'prodotti' => $prodottiMappati,
+            'pagina' => $pagina,
+            'totale_pagine' => $totalePagine,
+            'filtri' => ['q' => $query], //Conserviamo la query testuale per poterla mostrare a schermo o paginare
+        ];
+
+        $datiLayout = $this->preparaDatiLayout('ricerca', $datiPagina);
+        ViewCatalogo::render($datiLayout);
+        
     }
 
 
     //==========================================================================
-    //METODI PRIVATI CONDIVISI
+    // METODI PRIVATI CONDIVISI
     //==========================================================================
 
     /**
@@ -146,6 +202,34 @@ class CCatalogo extends BaseController {
     private function estraiFiltriPrezzo(): array {
         //TODO
         return [];
+    }
+
+    //==========================================================================
+    // DA RIVEDERE
+    //==========================================================================
+    /**
+     * Metodo helper centralizzato per convertire un array di oggetti Entity Prodotto
+     * in array associativi piatti compatibili con il file catalogo.tpl di Marco.
+     */
+    private function mappaProdottiPerCatalogo(array $prodottiEntity): array {
+        $arrayMappato = [];
+        foreach ($prodottiEntity as $prod) {
+            $prezzoObj = $prod->getPrezzo();
+            $hasSconto = $prezzoObj->hasSconto();
+            $prezzoOriginale = (float) $prezzoObj->getValore();
+
+            $arrayMappato[] = [
+                'id'                 => (int) $prod->getIdProdotto(),
+                'nome'               => $prod->getNomeProdotto(),
+                'immagine'           => $prod->getImgProdotto(),
+                'valutazione_media'  => (float) $prod->getMediaValutazioni(), 
+                'sconto'             => $hasSconto,
+                'prezzo_originale'   => $prezzoOriginale,
+                'prezzo_unitario'    => $hasSconto ? (float) $prezzoObj->calcolaPrezzoScontato() : $prezzoOriginale,
+                'percentuale_sconto' => $hasSconto ? $prezzoObj->getSconto() : 0
+            ];
+        }
+        return $arrayMappato;
     }
 
 

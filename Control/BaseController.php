@@ -12,6 +12,14 @@ use TableCrown\Utility\UFlashMessage;
 abstract class BaseController {
 
     protected array $validRoles; //Elenco di ruoli di sistema ammessi per il controllo dei permessi.
+
+    //Definisco i tipi di prodotto validi per il catalogo, che a livello entity sono
+    //classi diverse, in modo da poter restituire l'informazione sotto forma di array associativo.
+    protected const TIPI_PRODOTTO = [
+        'giochi-da-tavolo' => 'Gioco da Tavolo',
+        'bustine' => 'Bustine',
+        'porta-dadi' => 'Porta Dadi',
+    ];
     
 
     public function __construct() {
