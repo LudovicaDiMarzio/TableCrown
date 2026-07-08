@@ -7,6 +7,11 @@ use InvalidArgumentException;
 //questa classe implementa i metodi della interfaccia PaymentInterface utili per il pagamento
 class BancaMockService implements PaymentInterface
 {
+    //costruttore vuoto
+    public function __construct() 
+    {
+    }
+
     //serve per generare un token tipo quello che genererebbe stripe
     public function generaToken(string $numeroCarta, string $cvv): array 
     {
