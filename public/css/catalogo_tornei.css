@@ -1,0 +1,434 @@
+/* ============================================================
+   TableCrown — catalogo_tornei.css
+   ============================================================ */
+
+
+/* ── CONTENITORE PRINCIPALE ───────────────────────────────── */
+
+.eventi-lista-container {
+    padding: 2rem 0 4rem;
+    min-height: 60vh;
+}
+
+.eventi-lista-container .container {
+    max-width: 1200px;
+    margin-left: auto;
+    margin-right: auto;
+    padding-left: 1rem;
+    padding-right: 1rem;
+}
+
+
+/* ── BREADCRUMB ───────────────────────────────────────────── */
+
+.eventi-breadcrumb {
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    font-size: var(--font-size-sm);
+    color: var(--color-text-muted);
+    margin-bottom: 1.5rem;
+}
+
+.eventi-breadcrumb a {
+    color: var(--color-text-muted);
+    transition: color var(--transition);
+}
+
+.eventi-breadcrumb a:hover {
+    color: var(--color-primary);
+}
+
+.eventi-breadcrumb i {
+    font-size: 14px;
+}
+
+.eventi-breadcrumb span {
+    color: var(--color-text-muted);
+    font-weight: 600;
+}
+
+
+/* ── LAYOUT: SIDEBAR + GRID ───────────────────────────────── */
+
+.eventi-lista-layout {
+    display: grid;
+    grid-template-columns: 260px 1fr;
+    gap: 2rem;
+}
+
+@media screen and (max-width: 1023px) {
+    .eventi-lista-layout {
+        grid-template-columns: 1fr;
+    }
+}
+
+
+/* ── SIDEBAR FILTRI ───────────────────────────────────────── */
+
+.eventi-sidebar {
+    background-color: var(--color-bg-dark-2);
+    border: 1px solid var(--color-border-dark);
+    border-radius: var(--radius-md);
+    padding: 1.5rem;
+    height: fit-content;
+    position: sticky;
+    top: 100px;
+}
+
+.eventi-filtri-title {
+    font-size: 1.1rem;
+    font-weight: 700;
+    color: var(--color-text-light);
+    margin: 0 0 1.5rem 0;
+    padding-bottom: 1rem;
+    border-bottom: 1px solid var(--color-border-dark);
+}
+
+.eventi-filter-group {
+    margin-bottom: 1.75rem;
+    padding-bottom: 1.75rem;
+    border-bottom: 1px solid var(--color-border-dark);
+}
+
+.eventi-filter-group-last {
+    border-bottom: none;
+    padding-bottom: 0;
+    margin-bottom: 0;
+}
+
+.eventi-filter-group-title {
+    font-size: var(--font-size-md);
+    font-weight: 600;
+    color: var(--color-text-light);
+    margin: 0 0 0.75rem 0;
+}
+
+.eventi-date-input {
+    width: 100%;
+    background-color: var(--color-bg-dark) !important;
+    border: 1px solid var(--color-border-dark) !important;
+    color: var(--color-text-light) !important;
+    padding: 0.5rem !important;
+    border-radius: var(--radius-sm) !important;
+    font-size: var(--font-size-sm) !important;
+}
+
+.eventi-date-input:focus {
+    outline: none;
+    border-color: var(--color-primary) !important;
+}
+
+.eventi-radio-options {
+    display: flex;
+    flex-direction: column;
+    gap: 0.6rem;
+}
+
+.eventi-radio-label {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    cursor: pointer;
+    user-select: none;
+    transition: opacity var(--transition);
+}
+
+.eventi-radio-label:hover {
+    opacity: 0.85;
+}
+
+.eventi-radio-label input[type="radio"] {
+    width: 18px;
+    height: 18px;
+    cursor: pointer;
+    accent-color: var(--color-primary);
+    flex-shrink: 0;
+}
+
+.eventi-radio-text {
+    font-size: var(--font-size-md);
+    color: var(--color-text-subtle);
+}
+
+
+/* ── GRID EVENTI ──────────────────────────────────────────── */
+
+.eventi-grid {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: 1.5rem;
+}
+
+@media screen and (max-width: 768px) {
+    .eventi-grid {
+        grid-template-columns: 1fr;
+    }
+}
+
+
+/* ── CARD EVENTO ──────────────────────────────────────────── */
+
+.evento-list-card {
+    background-color: var(--color-bg-dark-2);
+    border: 1px solid var(--color-border-dark);
+    border-radius: var(--radius-md);
+    padding: 1.5rem;
+    display: flex;
+    flex-direction: column;
+    gap: 0.85rem;
+    transition: all var(--transition);
+}
+
+.evento-list-card:hover {
+    border-color: var(--color-primary);
+    box-shadow: 0 8px 24px rgba(232, 160, 32, 0.1);
+}
+
+.evento-list-card-passato {
+    opacity: 0.85;
+}
+
+.evento-list-nome {
+    font-size: 1.3rem;
+    font-weight: 700;
+    color: var(--color-text-light);
+    margin: 0;
+}
+
+.evento-passato-label {
+    font-size: var(--font-size-sm);
+    font-weight: 400;
+    color: var(--color-text-muted);
+    font-style: italic;
+}
+
+.evento-list-image-wrapper {
+    width: 100%;
+    aspect-ratio: 16 / 9;
+    background-color: var(--color-bg-dark);
+    border: 1px solid var(--color-border-dark);
+    border-radius: var(--radius-sm);
+    overflow: hidden;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.evento-list-image {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+}
+
+.evento-list-meta-row {
+    display: flex;
+    align-items: center;
+    gap: 0.75rem;
+    flex-wrap: wrap;
+}
+
+.evento-tipo-badge {
+    display: inline-block;
+    background-color: #fef3e2;
+    color: #92400e;
+    font-size: 12px;
+    font-weight: 600;
+    padding: 2px 10px;
+    border-radius: 9999px;
+}
+
+.evento-prezzo {
+    font-size: var(--font-size-md);
+    font-weight: 700;
+    color: var(--color-primary);
+    margin-left: auto;
+    display: flex;
+    flex-direction: column;
+    align-items: flex-end;
+    gap: 2px;
+}
+
+.evento-prezzo-originale {
+    font-size: var(--font-size-sm);
+    font-weight: 400;
+    color: var(--color-text-muted);
+    text-decoration: line-through;
+}
+
+.evento-list-info-row {
+    display: flex;
+    align-items: center;
+    gap: 1.25rem;
+    font-size: var(--font-size-sm);
+    color: var(--color-text-subtle);
+}
+
+.evento-list-info-row i {
+    color: var(--color-primary);
+    margin-right: 4px;
+}
+
+.evento-posti {
+    font-size: var(--font-size-sm);
+    color: var(--color-text-subtle);
+}
+
+.evento-posti strong {
+    color: var(--color-text-light);
+}
+
+
+/* ── AZIONI CARD ──────────────────────────────────────────── */
+
+.evento-list-actions {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 1rem;
+    margin-top: 0.5rem;
+}
+
+.evento-stepper {
+    display: flex;
+    align-items: stretch;
+    border: 1px solid var(--color-border-dark);
+    border-radius: var(--radius-sm);
+    overflow: hidden;
+}
+
+.evento-stepper-btn {
+    width: 32px;
+    background-color: var(--color-bg-dark);
+    border: none;
+    color: var(--color-text-light);
+    font-size: 16px;
+    cursor: pointer;
+    transition: background-color var(--transition);
+}
+
+.evento-stepper-btn:hover {
+    background-color: var(--color-primary);
+    color: #000;
+}
+
+.evento-stepper-input {
+    width: 40px;
+    text-align: center;
+    border: none;
+    border-left: 1px solid var(--color-border-dark);
+    border-right: 1px solid var(--color-border-dark);
+    background-color: var(--color-bg-dark);
+    color: var(--color-text-light);
+    font-size: var(--font-size-md);
+    font-weight: 600;
+    -moz-appearance: textfield;
+}
+
+.evento-stepper-input::-webkit-inner-spin-button,
+.evento-stepper-input::-webkit-outer-spin-button {
+    -webkit-appearance: none;
+}
+
+.btn-evento-primary,
+.btn-evento-secondary {
+    flex: 1;
+    text-align: center;
+    padding: 0.55rem 1rem;
+    border-radius: var(--radius-sm);
+    font-size: var(--font-size-md);
+    font-weight: 600;
+    cursor: pointer;
+    text-decoration: none;
+    transition: background-color var(--transition), color var(--transition);
+}
+
+.btn-evento-primary {
+    background-color: var(--color-primary);
+    color: #000;
+}
+
+.btn-evento-primary:hover {
+    background-color: var(--color-primary-dark);
+}
+
+.btn-evento-secondary {
+    background-color: transparent;
+    border: 1px solid var(--color-border-dark);
+    color: var(--color-text-subtle);
+}
+
+.btn-evento-secondary:hover {
+    border-color: var(--color-primary);
+    color: var(--color-primary);
+}
+
+
+.btn-apply-data {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 6px;
+    width: 100%;
+    margin-top: 0.5rem;
+    padding: 0.5rem 1rem;
+    background-color: var(--color-primary);
+    color: #000;
+    border: none;
+    border-radius: var(--radius-sm);
+    font-size: var(--font-size-sm);
+    font-weight: 600;
+    cursor: pointer;
+    transition: background-color var(--transition);
+}
+
+.btn-apply-data:hover {
+    background-color: var(--color-primary-dark);
+}
+
+
+.evento-scopri-link {
+    align-self: flex-end;
+    font-size: var(--font-size-sm);
+    color: var(--color-text-muted);
+    text-decoration: underline;
+    transition: color var(--transition);
+}
+
+.evento-scopri-link:hover {
+    color: var(--color-primary);
+}
+
+
+/* ── STATO VUOTO ──────────────────────────────────────────── */
+
+.eventi-lista-empty {
+    grid-column: 1 / -1;
+    text-align: center;
+    color: var(--color-text-muted);
+    font-style: italic;
+    padding: 3rem 0;
+}
+
+
+/* ── RESPONSIVE ───────────────────────────────────────────── */
+
+@media screen and (max-width: 480px) {
+    .evento-list-actions {
+        flex-direction: column;
+        align-items: stretch;
+    }
+
+    .evento-stepper {
+        justify-content: center;
+    }
+}
+
+.eventi-date-wrapper {
+    display: flex;
+    gap: 6px;
+}
+
+.eventi-date-input {
+    flex: 1;
+}
