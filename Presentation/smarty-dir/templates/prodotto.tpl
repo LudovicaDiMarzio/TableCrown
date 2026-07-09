@@ -206,7 +206,7 @@
                 </div>
 
                 {* Bottone Aggiungi al Carrello *}
-                {if $prodotto.disponibilita != 'esaurito'}
+                {if $prodotto.isAcquistabile}
                     <a href="{$base_url}/carrello/aggiungi/{$prodotto.id}"
                        class="button btn-add-cart-prodotto"
                        id="btn-add-cart"

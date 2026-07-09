@@ -67,6 +67,7 @@ $carrello_items = [
             'prezzo_originale'   => 34.90,
             'sconto'             => true,
             'percentuale_sconto' => 20,
+            
         ],
         'update_url' => '/carrello/aggiorna/1',
         'remove_url' => '/carrello/rimuovi/1', // mancava anche questa, usata nel tpl
@@ -110,7 +111,7 @@ $prodotto = [
     'nome'          => 'Catan',
     'immagine'      => 'placeholder.jpg',
     'immagini'      => ['placeholder.jpg', 'placeholder.jpg'],
-    'disponibilita' => 'disponibile',
+    'disponibilita' => 'in arrivo',
     'valutazione_media' => 4.5,
     'giocatori_min' => 3,
     'giocatori_max' => 4,
@@ -122,6 +123,7 @@ $prodotto = [
     'componenti'    => ['95 carte risorse', '60 tessere territorio', '2 dadi', '4 schede giocatore', '1 dado eventi'],
     'sconto'        => true,
     'percentuale_sconto' => 20,
+    'isAcquistabile' => false,
     'prezzo'        => 34.90,
     'prezzo_scontato' => 27.92,
 ];
@@ -129,13 +131,13 @@ $prodotto = [
 // ── RECENSIONI ──
 $recensioni = [
     [
-        'nickname' => 'Marco92',
+        'name' => 'Marco92',
         'voto'     => 5,
         'titolo'   => 'Gioco fantastico!',
         'testo'    => "Lo gioco da anni con la mia famiglia, non ci stanchiamo mai.\nConsigliato a tutti!",
     ],
     [
-        'nickname' => 'GiulyGamer',
+        'name' => 'GiulyGamer',
         'voto'     => 4,
         'titolo'   => 'Ottimo ma un po\' lungo',
         'testo'    => 'Bellissimo gioco strategico, forse un po\' lungo per i bambini piccoli.',
@@ -280,7 +282,10 @@ $smarty->setCacheDir(SMARTY_DIR    . 'cache/');
 $smarty->setConfigDir(SMARTY_DIR   . 'configs/');
 
 $smarty->assign('base_url',       BASE_URL);
-$smarty->assign('utente',         isset($_SESSION['utente_id']) ? ['nickname' => $_SESSION['utente_nickname']] : null);
+$smarty->assign('utente', isset($_SESSION['utente_id']) 
+    ? ['name' => $_SESSION['utente_name'] ?? 'Ospite'] 
+    : null
+);
 $smarty->assign('current_page',   'catalogo');
 $smarty->assign('prodotti',       $prodotti);
 $smarty->assign('categorie',      $categorie);
@@ -297,7 +302,7 @@ $smarty->assign('prodotto',          $prodotto);
 $smarty->assign('recensioni',        $recensioni);
 $smarty->assign('userHasPurchased',  true);
 
-
+$smarty->assign('cart_count', 5);
 
 
 
@@ -305,7 +310,10 @@ $smarty->assign('userHasPurchased',  true);
 $smarty->assign('base_url',     BASE_URL);
 $smarty->assign('offerte',      $offerte);
 $smarty->assign('nuovi_arrivi', $nuovi_arrivi);
-$smarty->assign('utente', isset($_SESSION['utente_id']) ? ['nickname' => $_SESSION['utente_nickname']] : null);
+$smarty->assign('utente', isset($_SESSION['utente_id']) 
+    ? ['name' => $_SESSION['utente_name'] ?? 'Ospite'] 
+    : null
+);
 
 
 
@@ -346,4 +354,4 @@ if ($categoria === 'challenge') {
 $smarty->assign('eventi', $eventi_tornei);
 $smarty->assign('filtri', $filtri);
 
-$smarty->display('bustine.tpl');
+$smarty->display('prodotto.tpl');
