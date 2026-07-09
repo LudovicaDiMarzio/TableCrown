@@ -7,6 +7,8 @@ namespace TableCrown\Control;
 use TableCrown\Utility\USession;
 use TableCrown\Utility\UHTTPMethods;
 use TableCrown\Utility\UFlashMessage;
+use TableCrown\Entity\EProdotto;
+use TableCrown\Entity\Enumerativi\DisponibilitaProdotto;
 
 
 abstract class BaseController {
@@ -44,28 +46,16 @@ abstract class BaseController {
             'base_url' => 'https://tablecrown.it', 
             'current_page' => $currentPage, //Indica la pagina attiva (es. 'catalogo', 'eventi', ecc.)
             'breadcrumbs' => $this->getBreadcrumbs(), //Il percorso di navigazione
+            'utente' => $this->utenteToArray(),
         ];
 
-        //Controllo dell'utente (/persona) in sessione
-        if (USession::isSetSessionElement('id_persona')) {
-            //Utente loggato: costruiamo l'array minimo neccessario per Presentation
-            $globalData['utente'] = [
-                'nickname' => USession::getSessionElement('nickname'),
-            ];
-
-            //cart_count solo per gli utenti (non per gestore o amministratore)
-            if (USession::getSessionElement('ruolo') === 'utente') {
-                $carrello = USession::getSessionElement('carrello') ?? [];
-                //array_column estrae la colonna 'quantita' da ogni riga del carrello
-                //array_sum somma tutti i valori ottenuti
-                $cartCount = array_sum(array_column($carrello, 'quantita'));
-                if ($cartCount > 0) {
-                    $globalData['cart_count'] = $cartCount; //Il badge appare solo se gli articoli sono > 0
-                }
+        //cart_count solo per gli utenti loggati con ruolo 'utente'
+        if ($this->isLoggedIn() && USession::getSessionElement('ruolo') === 'utente') {
+            $carrello = USession::getSessionElement('carrello') ?? [];
+            $cartCount = array_sum(array_column($carrello, 'quantita')); //array_column estrae la colonna 'quantita' da ogni riga del carrello
+            if ($cartCount > 0) {
+                $globalData['cart_count'] = $cartCount; //Il badge appare solo se gli articoli sono > 0
             }
-        } else {
-            //Utente non loggato
-            $globalData['utente'] = null;
         }
 
         //Gestione dei Flash Messages
@@ -140,4 +130,66 @@ abstract class BaseController {
             exit();
         }
     }
+
+    //==========================================================================
+    // METODI UTILI PER PASSAGGIO DATI A PRESENTATION
+    //==========================================================================
+
+    /**
+     * Converte un'entity EProdotto (e sottoclasse) in un array
+     * per tutte le liste di prodotti (home, catalogo, carrello, etc.).
+     */
+    protected function prodottoToArray(EProdotto $prodotto): array {
+        $prezzoObj = $prodotto->getPrezzo();
+        $inSconto = $prezzoObj !== null && $prezzoObj->hasSconto();
+
+        return [
+            'id'                 => (int) $prodotto->getIdProdotto(),
+            'nome'               => $prodotto->getNomeProdotto(),
+            'immagine'           => $prodotto->getImgProdotto(),
+            'valutazione_media'  => (float) $prodotto->getValutazioneMedia(),
+            'prezzo'             => $prezzoObj?->getValore() ?? 0.0,
+            'sconto'             => $inSconto,
+            'prezzo_scontato'    => $inSconto ? (float) $prezzoObj->calcolaPrezzoScontato() : null,
+            'percentuale_sconto' => $inSconto ? $prezzoObj->getSconto() : null,
+            'disponibilita'      => self::disponibilitaToString($prodotto->getDisponibilitaProdotto()),
+            'isAcquistabile'     => $prodotto->isAcquistabile(),
+        ];
+    }
+
+    /**
+     * Applica prodottoToArray() ad una lista di prodotti
+     */
+    protected function prodottiToArray(iterable $prodotti): array { //iterable è un tipo di dato che consente di iterare sia su un array che, per esempio, su una Collection
+        $result = [];
+        foreach ($prodotti as $prodotto) {
+            $result[] = self::prodottoToArray($prodotto);
+        }
+        return $result;
+    }
+
+    /**
+     * Mappa l'enum DisponibilitaProdotto a delle stringhe fisse
+     */
+    private function disponibilitaToString(DisponibilitaProdotto $disponibilita): string {
+        return match ($disponibilita) {
+            DisponibilitaProdotto::Disponibile => 'disponibile',
+            DisponibilitaProdotto::NonDisponibile => 'non_disponibile',
+            DisponibilitaProdotto::Esaurito => 'esaurito',
+            DisponibilitaProdotto::InArrivo => 'in_arrivo',
+        };
+    }
+
+    /**
+     * Converte l'utente loggato (se presente) nella forma minimale richiesta dal layout
+     */
+    protected function utenteToArray(): ?array {
+        if (!$this->isLoggedIn()) {
+            return null;
+        }
+        return [
+            'name' => USession::getSessionElement('nickname'), //La sessione salva 'nickname' (PERCHè? COME LO SO?), esposto come 'name' verso Presentation
+        ];
+    }
+
 }
