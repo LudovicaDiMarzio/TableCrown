@@ -1,6 +1,6 @@
 <IfModule mod_rewrite.c>
 RewriteEngine On
-RewriteBase /
+RewriteBase /tablecrown/
 
 #Se la richiesta è un file o una cartella vera (es. i CSS, le immagini di Presentation, ecc.), servila direttamente
 RewriteCond %{REQUEST_FILENAME} -f [OR]
