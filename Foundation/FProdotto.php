@@ -1,0 +1,109 @@
+<?php
+namespace TableCrown\Foundation;
+
+use TableCrown\Entity\EProdotto;
+use Exception;
+
+class FProdotto{
+
+    /** 
+     * @param string $StringaDiRicerca stringa da ricercare nella colonna nomeProdotto o descrizioneProdotto 
+     * @param int $limit numero massimo di prodotti da restituire
+     * @param int $offset numero di prodotti da saltare dall'inizio della lista
+     * @return array di oggetti
+     * @throws Exception
+    */
+    public static function ricercaProdotto(string $StringaDiRicerca, int $limit, int $offset): array{
+
+        try{
+
+            $testoPulito = trim($StringaDiRicerca);
+            //Se dopo aver tolto gli spazi, la stringa è vuota, non effettuo la ricerca
+            if (empty($testoPulito)) {
+                return []; // Restituiamo un array vuoto immediato
+            }
+
+            $qb=FEntityManager::getInstance()->getEntityManager()->createQueryBuilder();
+            $qb->select('p')
+                ->from(EProdotto::class, 'p');
+            $qb->where('p.nomeProdotto LIKE :ricerca OR p.descrizioneProdotto LIKE :ricerca')
+               ->setParameter('ricerca', '%' . $testoPulito . '%');
+
+            /*clono la query appena creata per poterla modificare ed effettuare un count su tutti i prodotti filtrati e 
+              sapere quanti prodotti sono usciti in tutto dalla query fatta 
+            */
+            //la clonatura della query viene fatta prima della suddivisione dei risultati per le pagine, perchè altrimenti il count sarebbe falzato e basato sui risultati "limitati" della query
+            $qbCount = clone $qb;
+            $qbCount->select('count(g.id)');
+            //poichè count restituisce un numero scalare non possiamo usare il getResult(), ma usiamo il getSingleScalarResult() che restituisce un numero scalare
+            $totale = $qbCount->getQuery()->getSingleScalarResult();
+
+            //sulla query effettuata inizialmete applichiamo il limit e l'offset per la paginazione (per dividere i risultati in pagine)
+            
+            $qb->setFirstResult($offset)
+               ->setMaxResults($limit);
+            $risultati = $qb->getQuery()->getResult();
+            
+            return [
+                'risultati' => $risultati,
+                'totale' => $totale
+            ];
+        }
+        catch(Exception $e){
+            error_log("Errore nella ricerca del prodotto: " . $e->getMessage());
+            return [
+                'risultati' => [],
+                'totale' => 0
+            ];
+        }
+        
+    }
+
+    /**
+     *Ritorna tutti i prodotti che hanno uno sconto applicato (sconto > 0) 
+    * @param int $limit numero massimo di prodotti da restituire
+    * @param int $offset numero di prodotti da saltare dall'inizio della lista
+     * @return array di oggetti
+     */
+    public static function findProdottiInOfferta(int $limit, int $offset): array {
+    try {
+            $em = FEntityManager::getInstance()->getEntityManager();
+            $qb = $em->createQueryBuilder();
+
+            //seleziona i prodotti con uno sconto applicato e il corrispondente prezzo
+            $qb->select('p', 'pr') 
+            ->from(EProdotto::class, 'p')
+            ->innerJoin('p.prezzo', 'pr')
+            ->where('pr.sconto > 0'); 
+
+            /*clono la query appena creata per poterla modificare ed effettuare un count su tutti i prodotti filtrati e 
+              sapere quanti prodotti sono usciti in tutto dalla query fatta 
+            */
+            //la clonatura della query viene fatta prima della suddivisione dei risultati per le pagine, perchè altrimenti il count sarebbe falzato e basato sui risultati "limitati" della query
+            $qbCount = clone $qb;
+            $qbCount->select('count(g.id)');
+            //poichè count restituisce un numero scalare non possiamo usare il getResult(), ma usiamo il getSingleScalarResult() che restituisce un numero scalare
+            $totale = $qbCount->getQuery()->getSingleScalarResult();
+
+            //sulla query effettuata inizialmete applichiamo il limit e l'offset per la paginazione (per dividere i risultati in pagine)
+            
+            $qb->setFirstResult($offset)
+               ->setMaxResults($limit);
+            $risultati = $qb->getQuery()->getResult();
+            
+            return [
+                'risultati' => $risultati,
+                'totale' => $totale
+            ];
+
+            
+        } 
+        catch (Exception $e) {
+            error_log("Errore in findProdottiInOfferta: " . $e->getMessage());
+            return [
+                'risultati' => [],
+                'totale' => 0
+            ];
+        }
+    }
+} 

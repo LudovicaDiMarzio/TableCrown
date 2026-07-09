@@ -2,6 +2,7 @@
 namespace TableCrown\Foundation;
 
 use TableCrown\Entity\EPortaDadi;
+use TableCrown\Entity\Enumerativi\DisponibilitaProdotto;
 use Exception;
 
 class FPortaDadi{
@@ -31,6 +32,17 @@ class FPortaDadi{
                 $qb->andwhere('p.prezzo <= :prezzo_max')
                    ->setParameter('prezzo_max', $filtri['prezzo_max']);
             }
+
+            if (isset($filtri['disponibilita'])) {
+                $disponibilitaEnum = DisponibilitaProdotto::tryFrom($filtri['disponibilita']);
+                if ($disponibilitaEnum === null) {
+                    throw new Exception("La stringa passata non corrsiponde a nessun enumerativo");
+                }
+                else{
+                    $qb->andWhere('p.disponibilitaProdotto = :disponibilita')
+                        ->setParameter('disponibilita', $filtri['disponibilita']);
+                }
+            }
             
             //cloniamo la query per poterla modificare ed effettuarci un count
             $qbCount = clone $qb;
@@ -41,6 +53,8 @@ class FPortaDadi{
             $qb->setFirstResult($offset)
                ->setMaxResults($limit);
             $risultati = $qb->getQuery()->getResult();
+
+
 
             return [
                 //un array con i prodotti filtrati
