@@ -4,6 +4,7 @@ namespace TableCrown\Entity;
 use Doctrine\ORM\Mapping as ORM;
 use InvalidArgumentException;
 use TableCrown\Entity\Enumerativi\Valuta;
+use DateTime;
 
 #[ORM\Entity]
 #[ORM\Table(name: 'prezzo')]
@@ -22,6 +23,9 @@ class EPrezzo {
 
     #[ORM\Column(type: 'float')]
     private float $sconto; //sconto in percentuale, ad esempio 20 per uno sconto del 20% (Se non viene specificato, lo sconto è 0, ovvero nessuno sconto)
+
+    #[ORM\Column(type: 'datetime', nullable: true)]
+    private ?DateTime $scadenzaOfferta = null; //data di scadenza dello sconto, se presente
 
     public function __construct(float $valore, Valuta $valuta, float $sconto = 0) {
         $this->sconto = 0; //inizializzazione dello sconto (necessaria per aggiornaSconto() che usa += che richiede inizializzazione)
@@ -47,6 +51,10 @@ class EPrezzo {
         return $this->sconto;
     }
 
+    public function getScadenzaOfferta(): ?DateTime {
+        return $this->scadenzaOfferta;
+    }
+
     //Metodi di dominio
 
     /**
@@ -70,13 +78,16 @@ class EPrezzo {
      * Aggiorna lo sconto del prezzo. (Se è già presente uno sconto, aggiunge il nuovo sconto a quello esistente, invece di sovrascriverlo, per permettere di applicare più sconti cumulativi).
      * La somma degli sconti supera 100, lo sconto viene impostato a 100 (lo sconto massimo è 100%).
      */
-    public function aggiornaSconto(float $sconto): void {
+    public function aggiornaSconto(float $sconto, ?DateTime $scadenzaOfferta = null): void {
         if ($sconto < 0 || $sconto > 100) {
             throw new InvalidArgumentException("Lo sconto deve essere compreso tra 0 e 100.");
         }
         $this->sconto += $sconto;
         if ($this->sconto > 100) {
             $this->sconto = 100; //lo sconto massimo è 100%
+        }
+        if ($scadenzaOfferta !== null) {
+            $this->scadenzaOfferta = $scadenzaOfferta;
         }
     }
 
@@ -85,13 +96,14 @@ class EPrezzo {
      */
     public function rimuoviSconto(): void {
         $this->sconto = 0;
+        $this->scadenzaOfferta = null;
     }
 
     /**
      * Calcola il prezzo finale, applicando lo sconto al valore del prezzo.
      */
     public function calcolaPrezzoScontato(): float {
-        if ($this->sconto !== 0) {
+        if ($this->hasSconto()) {
             return $this->valore * (1 - $this->sconto / 100);
         }
         return $this->valore;
@@ -101,7 +113,9 @@ class EPrezzo {
      * Controlla se il prezzo è in sconto, ovvero se lo sconto è diverso da 0.
      */
     public function hasSconto(): bool {
-        return $this->sconto !== 0;
+        return $this->sconto !== 0
+            && $this->scadenzaOfferta !== null
+            && $this->scadenzaOfferta > new DateTime();
     }
 
 
