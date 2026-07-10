@@ -78,6 +78,7 @@
                                     <a class="navbar-item" href="{$base_url}/profilo"><i class="ti ti-user"></i> Il mio account</a>
                                     <a class="navbar-item" href="{$base_url}/profilo/ordini"><i class="ti ti-package"></i> I miei ordini</a>
                                     <a class="navbar-item" href="{$base_url}/profilo/eventi"><i class="ti ti-calendar"></i> I miei eventi</a>
+                                    <a class="navbar-item" href="{$base_url}/profilo/recensioni"><i class="ti ti-star"></i> Le mie recensioni</a>
                                     <hr class="navbar-divider">
                                     <a class="navbar-item navbar-logout" href="{$base_url}/logout"><i class="ti ti-logout"></i> Logout</a>
                                 </div>
