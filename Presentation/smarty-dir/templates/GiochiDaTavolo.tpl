@@ -7,18 +7,18 @@
 {block name="content"}
 
 <div class="catalogo-container">
-    
+
     {* ── SEARCH BAR E HEADER CATALOGO ── *}
     <section class="catalogo-header">
         <div class="container">
-            
+
             <div class="catalogo-search-wrapper">
                 <form class="catalogo-search-form" action="{$base_url}/catalogo/giochi-da-tavolo" method="get" id="search-form">
                     <input class="input catalogo-search-input"
                            type="search"
                            name="q"
                            placeholder="Cerca nel catalogo..."
-                           value="{$search_query|default:''|escape}"
+                           value="{$filtri.q|default:''|escape}"
                            aria-label="Cerca giochi da tavolo">
                     <button class="button catalogo-search-btn" type="submit" aria-label="Cerca">
                         <i class="ti ti-search"></i>
@@ -29,8 +29,8 @@
             <div class="catalogo-results-header">
                 <div class="results-info">
                     <h2 class="results-title">
-                        {if isset($search_query) && $search_query}
-                            Risultati per "<strong>{$search_query|escape}</strong>"
+                        {if isset($filtri.q) && $filtri.q}
+                            Risultati per "<strong>{$filtri.q|escape}</strong>"
                         {else}
                             Catalogo Completo
                         {/if}
@@ -50,12 +50,11 @@
                     {* form="filters-form" collega questa select al form della sidebar
                        anche se sta fisicamente altrove nel DOM *}
                     <select id="sort-select" class="select catalogo-sort-select" name="ordinamento" form="filters-form">
-                        <option value="rilevanza"   {if isset($ordinamento) && $ordinamento == 'rilevanza'}   selected{/if}>Rilevanza</option>
-                        <option value="prezzo-asc"  {if isset($ordinamento) && $ordinamento == 'prezzo-asc'}  selected{/if}>Prezzo: crescente</option>
-                        <option value="prezzo-desc" {if isset($ordinamento) && $ordinamento == 'prezzo-desc'} selected{/if}>Prezzo: decrescente</option>
-                        <option value="novita"      {if isset($ordinamento) && $ordinamento == 'novita'}      selected{/if}>Novità</option>
-                        <option value="popolarita"  {if isset($ordinamento) && $ordinamento == 'popolarita'}  selected{/if}>Più venduti</option>
-                        <option value="rating"      {if isset($ordinamento) && $ordinamento == 'rating'}      selected{/if}>Valutazione</option>
+                        {* NOTA: rimossi "rilevanza" e "novita" dai valori ammessi (vedi report) *}
+                        <option value="prezzo-asc"  {if isset($filtri.ordinamento) && $filtri.ordinamento == 'prezzo-asc'}  selected{/if}>Prezzo: crescente</option>
+                        <option value="prezzo-desc" {if isset($filtri.ordinamento) && $filtri.ordinamento == 'prezzo-desc'} selected{/if}>Prezzo: decrescente</option>
+                        <option value="popolarita"  {if isset($filtri.ordinamento) && $filtri.ordinamento == 'popolarita'}  selected{/if}>Più venduti</option>
+                        <option value="rating"      {if isset($filtri.ordinamento) && $filtri.ordinamento == 'rating'}      selected{/if}>Valutazione</option>
                     </select>
                 </div>
             </div>
@@ -69,7 +68,7 @@
 
             {* ── SIDEBAR FILTRI ── *}
             <aside class="catalogo-sidebar" id="catalogo-filters">
-                
+
                 <div class="filter-header">
                     <h3 class="filter-title">Filtri</h3>
                     <div class="filter-header-actions">
@@ -82,8 +81,8 @@
                 <form class="filters-form" id="filters-form" method="get" action="{$base_url}/catalogo/giochi-da-tavolo">
 
                     {* Preserva la ricerca testuale quando si sottomettono i filtri *}
-                    {if isset($search_query) && $search_query}
-                        <input type="hidden" name="q" value="{$search_query|escape}">
+                    {if isset($filtri.q) && $filtri.q}
+                        <input type="hidden" name="q" value="{$filtri.q|escape}">
                     {/if}
 
                     {* ── FILTRO: PREZZO ── *}
@@ -94,9 +93,9 @@
                         <div class="price-range-wrapper">
 
                             <div class="price-values-display">
-                                <span id="price-value-min">€{$price_min|default:$price_range_min|default:0}</span>
+                                <span id="price-value-min">€{$filtri.price_min|default:$price_range_min|default:0}</span>
                                 <span class="price-values-separator">—</span>
-                                <span id="price-value-max">€{$price_max|default:$price_range_max|default:200}</span>
+                                <span id="price-value-max">€{$filtri.price_max|default:$price_range_max|default:200}</span>
                             </div>
 
                             <div class="price-slider-container">
@@ -109,7 +108,7 @@
                                        min="{$price_range_min|default:0}"
                                        max="{$price_range_max|default:200}"
                                        step="1"
-                                       value="{$price_min|default:$price_range_min|default:0}"
+                                       value="{$filtri.price_min|default:$price_range_min|default:0}"
                                        aria-label="Prezzo minimo">
                                 <input type="range"
                                        class="price-range-input price-range-max"
@@ -118,39 +117,46 @@
                                        min="{$price_range_min|default:0}"
                                        max="{$price_range_max|default:200}"
                                        step="1"
-                                       value="{$price_max|default:$price_range_max|default:200}"
+                                       value="{$filtri.price_max|default:$price_range_max|default:200}"
                                        aria-label="Prezzo massimo">
                             </div>
-                    
+
                         </div>
                     </div>
 
-                    {* ── FILTRO: DISPONIBILITA' ── *}
+                    {* ── FILTRO: DISPONIBILITA' ── (aggiunto 4° valore: non_disponibile) *}
                     <div class="filter-group">
                         <h4 class="filter-group-title">
                             <i class="ti ti-package"></i> Disponibilità
                         </h4>
                         <div class="checkbox-group" data-exclusive="disponibilita">
                             <label class="checkbox-label">
-                                <input type="checkbox" 
-                                       name="disponibilita[]" 
+                                <input type="checkbox"
+                                       name="disponibilita[]"
                                        value="disponibile"
-                                       {if isset($disponibilita) && in_array('disponibile', $disponibilita)} checked{/if}>
+                                       {if isset($filtri.disponibilita) && in_array('disponibile', $filtri.disponibilita)} checked{/if}>
                                 <span class="checkbox-text">Disponibile Subito</span>
                             </label>
                             <label class="checkbox-label">
-                                <input type="checkbox" 
-                                       name="disponibilita[]" 
+                                <input type="checkbox"
+                                       name="disponibilita[]"
                                        value="in_arrivo"
-                                       {if isset($disponibilita) && in_array('in_arrivo', $disponibilita)} checked{/if}>
+                                       {if isset($filtri.disponibilita) && in_array('in_arrivo', $filtri.disponibilita)} checked{/if}>
                                 <span class="checkbox-text">In Arrivo</span>
                             </label>
                             <label class="checkbox-label">
-                                <input type="checkbox" 
-                                       name="disponibilita[]" 
+                                <input type="checkbox"
+                                       name="disponibilita[]"
                                        value="esaurito"
-                                       {if isset($disponibilita) && in_array('esaurito', $disponibilita)} checked{/if}>
+                                       {if isset($filtri.disponibilita) && in_array('esaurito', $filtri.disponibilita)} checked{/if}>
                                 <span class="checkbox-text">Esaurito</span>
+                            </label>
+                            <label class="checkbox-label">
+                                <input type="checkbox"
+                                       name="disponibilita[]"
+                                       value="non_disponibile"
+                                       {if isset($filtri.disponibilita) && in_array('non_disponibile', $filtri.disponibilita)} checked{/if}>
+                                <span class="checkbox-text">Non Disponibile</span>
                             </label>
                         </div>
                     </div>
@@ -162,32 +168,30 @@
                         </h4>
                         <div class="checkbox-group" data-exclusive="in_evidenza">
                             <label class="checkbox-label">
-                                <input type="checkbox" 
-                                       name="in_evidenza[]" 
+                                <input type="checkbox"
+                                       name="in_evidenza[]"
                                        value="sconti"
-                                       {if isset($in_evidenza_filtro) && in_array('sconti', $in_evidenza_filtro)} checked{/if}>
+                                       {if isset($filtri.in_evidenza) && in_array('sconti', $filtri.in_evidenza)} checked{/if}>
                                 <span class="checkbox-text">Sconti Attivi</span>
                             </label>
                             <label class="checkbox-label">
-                                <input type="checkbox" 
-                                       name="in_evidenza[]" 
+                                <input type="checkbox"
+                                       name="in_evidenza[]"
                                        value="novita"
-                                       {if isset($in_evidenza_filtro) && in_array('novita', $in_evidenza_filtro)} checked{/if}>
+                                       {if isset($filtri.in_evidenza) && in_array('novita', $filtri.in_evidenza)} checked{/if}>
                                 <span class="checkbox-text">Novità</span>
                             </label>
                             <label class="checkbox-label">
-                                <input type="checkbox" 
-                                       name="in_evidenza[]" 
+                                <input type="checkbox"
+                                       name="in_evidenza[]"
                                        value="venduti"
-                                       {if isset($in_evidenza_filtro) && in_array('venduti', $in_evidenza_filtro)} checked{/if}>
+                                       {if isset($filtri.in_evidenza) && in_array('venduti', $filtri.in_evidenza)} checked{/if}>
                                 <span class="checkbox-text">I più venduti</span>
                             </label>
                         </div>
                     </div>
 
-                    {* ── FILTRO: CATEGORIA (enum Categoria) ──
-                       NOTA: idealmente $categorie_enum va assegnato dal Controller
-                       leggendo Categoria::cases(), non ridefinito qui nel tpl. ── *}
+                    {* ── FILTRO: CATEGORIA (enum Categoria) ── *}
                     <div class="filter-group" id="categoria-filter-group">
                         <h4 class="filter-group-title">
                             <i class="ti ti-list"></i> Categoria
@@ -195,35 +199,33 @@
                         <div class="checkbox-group" data-exclusive="categoria">
                             {foreach $categorie_enum as $cat}
                                 <label class="checkbox-label">
-                                    <input type="checkbox" 
-                                           name="categoria[]" 
+                                    <input type="checkbox"
+                                           name="categoria[]"
                                            value="{$cat.value|escape}"
-                                           {if isset($categoria_selected) && in_array($cat.value, $categoria_selected)} checked{/if}>
+                                           {if isset($filtri.categoria_selected) && in_array($cat.value, $filtri.categoria_selected)} checked{/if}>
                                     <span class="checkbox-text">{$cat.label|escape}</span>
                                 </label>
                             {/foreach}
                         </div>
                     </div>
 
-                    {* ── FILTRO: ESPANSIONI ── *}
+                    {* ── FILTRO: ESPANSIONI ──
+                       Ora è un SOLO campo booleano "mostra_espansioni" (default true).
+                       Hidden input di supporto necessario: un checkbox non checkato
+                       non manda nessun valore, quindi senza l'hidden non potremmo
+                       mai ricevere "0" (decheckato) dal form. *}
                     <div class="filter-group">
                         <h4 class="filter-group-title">
                             <i class="ti ti-puzzle-2"></i> Espansioni
                         </h4>
-                        <div class="checkbox-group" data-exclusive="espansioni">
+                        <div class="checkbox-group">
                             <label class="checkbox-label">
-                                <input type="checkbox" 
-                                       name="solo_base_game" 
+                                <input type="hidden" name="mostra_espansioni" value="0">
+                                <input type="checkbox"
+                                       name="mostra_espansioni"
                                        value="1"
-                                       {if $solo_base_game|default:false} checked{/if}>
-                                <span class="checkbox-text">Solo base game</span>
-                            </label>
-                            <label class="checkbox-label">
-                                <input type="checkbox" 
-                                       name="solo_espansioni" 
-                                       value="1"
-                                       {if $solo_espansioni|default:false} checked{/if}>
-                                <span class="checkbox-text">Solo espansioni</span>
+                                       {if $filtri.mostra_espansioni|default:true} checked{/if}>
+                                <span class="checkbox-text">Mostra espansioni</span>
                             </label>
                         </div>
                     </div>
@@ -234,16 +236,16 @@
                             <i class="ti ti-star"></i> Valutazione
                         </h4>
                         <div class="rating-range-wrapper">
-                            <input type="range" 
-                                   class="range rating-slider" 
-                                   name="rating_min" 
-                                   min="0" 
-                                   max="5" 
+                            <input type="range"
+                                   class="range rating-slider"
+                                   name="rating_min"
+                                   min="0"
+                                   max="5"
                                    step="0.5"
-                                   value="{$rating_min|default:'0'|escape}"
+                                   value="{$filtri.rating_min|default:'0'|escape}"
                                    aria-label="Valutazione minima">
                             <div class="rating-display">
-                                <span id="rating-value">{$rating_min|default:'0'|escape}</span>
+                                <span id="rating-value">{$filtri.rating_min|default:'0'|escape}</span>
                                 <span class="rating-max">/ 5</span>
                             </div>
                         </div>
@@ -255,31 +257,37 @@
                             <i class="ti ti-baby-carriage"></i> Età
                         </h4>
                         <div class="age-inputs">
-                            <input type="number" 
-                                   class="input age-input" 
-                                   name="age_min" 
+                            <input type="number"
+                                   class="input age-input"
+                                   name="age_min"
                                    placeholder="Età minima"
-                                   value="{$age_min|default:''|escape}"
+                                   value="{$filtri.age_min|default:''|escape}"
                                    min="0"
                                    max="18"
                                    aria-label="Età minima">
                         </div>
                     </div>
 
-                    {* ── FILTRO: DIFFICOLTA' ── *}
+                    {* ── FILTRO: DIFFICOLTA' ──
+                       NOTA: valori aggiornati secondo report: facile, media, difficile, esperto *}
                     <div class="filter-group">
                         <h4 class="filter-group-title">
                             <i class="ti ti-flame"></i> Difficoltà
                         </h4>
                         <div class="checkbox-group" data-exclusive="difficolta">
-                            {assign var="difficolta_levels" value=['Facile', 'Media', 'Difficile', 'Molto difficile']}
+                            {assign var="difficolta_levels" value=[
+                                ['value' => 'facile',    'label' => 'Facile'],
+                                ['value' => 'media',     'label' => 'Media'],
+                                ['value' => 'difficile', 'label' => 'Difficile'],
+                                ['value' => 'esperto',   'label' => 'Esperto']
+                            ]}
                             {foreach $difficolta_levels as $level}
                                 <label class="checkbox-label">
                                     <input type="checkbox"
                                            name="difficolta[]"
-                                           value="{$level|lower}"
-                                           {if isset($difficolta) && in_array($level|lower, $difficolta)} checked{/if}>
-                                    <span class="checkbox-text">{$level}</span>
+                                           value="{$level.value}"
+                                           {if isset($filtri.difficolta) && in_array($level.value, $filtri.difficolta)} checked{/if}>
+                                    <span class="checkbox-text">{$level.label}</span>
                                 </label>
                             {/foreach}
                         </div>
@@ -291,11 +299,11 @@
                             <i class="ti ti-users"></i> Giocatori
                         </h4>
                         <div class="players-inputs">
-                            <input type="number" 
-                                   class="input players-input" 
-                                   name="players_min" 
+                            <input type="number"
+                                   class="input players-input"
+                                   name="players_min"
                                    placeholder="Numero minimo"
-                                   value="{$players_min|default:''|escape}"
+                                   value="{$filtri.players_min|default:''|escape}"
                                    min="1"
                                    aria-label="Numero giocatori minimo">
                         </div>
@@ -312,7 +320,7 @@
                                     <input type="checkbox"
                                            name="lingua[]"
                                            value="{$lang.value|escape}"
-                                           {if isset($lingua) && in_array($lang.value, $lingua)} checked{/if}>
+                                           {if isset($filtri.lingua_selected) && in_array($lang.value, $filtri.lingua_selected)} checked{/if}>
                                     <span class="checkbox-text">{$lang.label|escape}</span>
                                 </label>
                             {/foreach}
@@ -330,7 +338,7 @@
                                     <input type="checkbox"
                                            name="danno[]"
                                            value="{$liv.value|escape}"
-                                           {if isset($danno) && in_array($liv.value, $danno)} checked{/if}>
+                                           {if isset($filtri.danno_selected) && in_array($liv.value, $filtri.danno_selected)} checked{/if}>
                                     <span class="checkbox-text">{$liv.label|escape}</span>
                                 </label>
                             {/foreach}
@@ -345,9 +353,9 @@
                     </div>
 
                 </form>
-                
+
             </aside>
-                
+
 
             {* ── GRID PRINCIPALE PRODOTTI ── *}
             <main class="catalogo-main">
@@ -364,16 +372,18 @@
                         {foreach $prodotti as $prodotto}
                             <div class="product-card">
                                 <a href="{$base_url}/prodotto/{$prodotto.id}" class="product-card-link">
-                                    
+
                                     <div class="product-image-wrapper">
-                                        <img src="{$base_url}/img/prodotti/{$prodotto.immagine|escape}" 
-                                             alt="{$prodotto.nome|escape}" 
+                                        <img src="{$base_url}/img/prodotti/{$prodotto.immagine|escape}"
+                                             alt="{$prodotto.nome|escape}"
                                              class="product-image">
-                                        
+
                                         {if $prodotto.disponibilita == 'esaurito'}
                                             <span class="product-badge product-badge-esaurito">Esaurito</span>
                                         {elseif $prodotto.disponibilita == 'in_arrivo'}
                                             <span class="product-badge product-badge-in-arrivo">In Arrivo</span>
+                                        {elseif $prodotto.disponibilita == 'non_disponibile'}
+                                            <span class="product-badge product-badge-non-disponibile">Non Disponibile</span>
                                         {/if}
 
                                         {if $prodotto.sconto}
@@ -383,7 +393,7 @@
 
                                     <div class="product-info">
                                         <h3 class="product-name">{$prodotto.nome|escape}</h3>
-                                        
+
                                         <div class="product-rating">
                                             {assign var="media" value=$prodotto.valutazione_media}
                                             {assign var="stelle" value=[1,2,3,4,5]}
@@ -400,12 +410,12 @@
                                         </div>
 
                                         <div class="product-price-wrapper">
-                                            {if isset($prodotto.prezzo)}
+                                            {if isset($prodotto.prezzo_unitario)}
                                                 {if $prodotto.sconto}
-                                                    <span class="product-price">€{$prodotto.prezzo_scontato|number_format:2}</span>
-                                                    <span class="product-price-old">€{$prodotto.prezzo|number_format:2}</span>
+                                                    <span class="product-price">€{$prodotto.prezzo_unitario|number_format:2}</span>
+                                                    <span class="product-price-old">€{$prodotto.prezzo_originale|number_format:2}</span>
                                                 {else}
-                                                    <span class="product-price">€{$prodotto.prezzo|number_format:2}</span>
+                                                    <span class="product-price">€{$prodotto.prezzo_unitario|number_format:2}</span>
                                                 {/if}
                                             {else}
                                                 <span class="product-price-unavailable">Prezzo N/D</span>
@@ -415,14 +425,21 @@
 
                                 </a>
 
-                                <button class="button btn-add-cart"
-                                        data-id="{$prodotto.id}"
-                                        data-nome="{$prodotto.nome|escape}"
-                                        data-img="{$base_url}/img/prodotti/{$prodotto.immagine}"
-                                        data-prezzo="{$prodotto.prezzo}"
-                                        aria-label="Aggiungi a carrello">
-                                    <i class="ti ti-shopping-cart"></i> Aggiungi
-                                </button>
+                                {* ── NUOVO: gestione isAcquistabile ── *}
+                                {if $prodotto.isAcquistabile}
+                                    <button class="button btn-add-cart"
+                                            data-id="{$prodotto.id}"
+                                            data-nome="{$prodotto.nome|escape}"
+                                            data-img="{$base_url}/img/prodotti/{$prodotto.immagine}"
+                                            data-prezzo="{$prodotto.prezzo_unitario}"
+                                            aria-label="Aggiungi a carrello">
+                                        <i class="ti ti-shopping-cart"></i> Aggiungi
+                                    </button>
+                                {else}
+                                    <button class="button btn-add-cart is-disabled" type="button" disabled aria-label="Prodotto non acquistabile">
+                                        <i class="ti ti-ban"></i> Non disponibile
+                                    </button>
+                                {/if}
                             </div>
                         {/foreach}
                     </div>
@@ -431,25 +448,25 @@
                     <div class="pagination-wrapper">
                         <nav class="pagination" aria-label="Paginazione">
                             {if $pagination.current_page > 1}
-                                <a class="pagination-previous" href="{$base_url}/catalogo/giochi-da-tavolo?page={$pagination.current_page - 1}{if isset($search_query)}&q={$search_query|escape}{/if}">
+                                <a class="pagination-previous" href="{$base_url}/catalogo/giochi-da-tavolo?page={$pagination.current_page - 1}{if isset($filtri.q)}&q={$filtri.q|escape}{/if}">
                                     <i class="ti ti-chevron-left"></i> Precedente
                                 </a>
                             {/if}
-                            
+
                             <ul class="pagination-list">
                                 {for $i=1 to $pagination.total_pages}
                                     <li>
                                         {if $i == $pagination.current_page}
                                             <span class="pagination-link is-current" aria-label="Pagina {$i}" aria-current="page">{$i}</span>
                                         {else}
-                                            <a class="pagination-link" aria-label="Vai a pagina {$i}" href="{$base_url}/catalogo/giochi-da-tavolo?page={$i}{if isset($search_query)}&q={$search_query|escape}{/if}">{$i}</a>
+                                            <a class="pagination-link" aria-label="Vai a pagina {$i}" href="{$base_url}/catalogo/giochi-da-tavolo?page={$i}{if isset($filtri.q)}&q={$filtri.q|escape}{/if}">{$i}</a>
                                         {/if}
                                     </li>
                                 {/for}
                             </ul>
 
                             {if $pagination.current_page < $pagination.total_pages}
-                                <a class="pagination-next" href="{$base_url}/catalogo/giochi-da-tavolo?page={$pagination.current_page + 1}{if isset($search_query)}&q={$search_query|escape}{/if}">
+                                <a class="pagination-next" href="{$base_url}/catalogo/giochi-da-tavolo?page={$pagination.current_page + 1}{if isset($filtri.q)}&q={$filtri.q|escape}{/if}">
                                     Successiva <i class="ti ti-chevron-right"></i>
                                 </a>
                             {/if}
@@ -791,8 +808,8 @@ document.addEventListener('DOMContentLoaded', function() {
         });
     }
 
-    // ── CLICK BOTTONI AGGIUNGI ──
-    document.querySelectorAll('.btn-add-cart').forEach(function(btn) {
+    // ── CLICK BOTTONI AGGIUNGI (esclude i disabilitati/is-disabled) ──
+    document.querySelectorAll('.btn-add-cart:not(.is-disabled)').forEach(function(btn) {
         btn.addEventListener('click', function(e) {
             e.preventDefault();
             e.stopPropagation();
