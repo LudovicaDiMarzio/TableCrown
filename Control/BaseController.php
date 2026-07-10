@@ -152,7 +152,7 @@ abstract class BaseController {
             'sconto'             => $inSconto,
             'prezzo_scontato'    => $inSconto ? (float) $prezzoObj->calcolaPrezzoScontato() : null,
             'percentuale_sconto' => $inSconto ? $prezzoObj->getSconto() : null,
-            'disponibilita'      => self::disponibilitaToString($prodotto->getDisponibilitaProdotto()),
+            'disponibilita'      => $prodotto->getDisponibilitaProdotto()->value,
             'isAcquistabile'     => $prodotto->isAcquistabile(),
         ];
     }
@@ -169,18 +169,6 @@ abstract class BaseController {
     }
 
     /**
-     * Mappa l'enum DisponibilitaProdotto a delle stringhe fisse
-     */
-    private function disponibilitaToString(DisponibilitaProdotto $disponibilita): string {
-        return match ($disponibilita) {
-            DisponibilitaProdotto::Disponibile => 'disponibile',
-            DisponibilitaProdotto::NonDisponibile => 'non_disponibile',
-            DisponibilitaProdotto::Esaurito => 'esaurito',
-            DisponibilitaProdotto::InArrivo => 'in_arrivo',
-        };
-    }
-
-    /**
      * Converte l'utente loggato (se presente) nella forma minimale richiesta dal layout
      */
     protected function utenteToArray(): ?array {
@@ -190,6 +178,28 @@ abstract class BaseController {
         return [
             'name' => USession::getSessionElement('nickname'), //La sessione salva 'nickname' (PERCHè? COME LO SO?), esposto come 'name' verso Presentation
         ];
+    }
+
+    /**
+     * Converte i case di un enum PHP nativo in coppie {value, label} per i dropdown.
+     * Modifica i values dei cases in un formato maggiormente leggibile per il front-end.
+     */
+    protected function enumToOptions(array $cases, array $labelOverrides = []): array {
+        return array_map(fn($c) => [
+            'value' => $c->value,
+            //tramite ?? controlliamo se esiste un override manuale in $labelOverrides per quel valore specifico; se sì usa quello, altrimenti usa il calcolo automatico
+            'label' => $labelOverrides[$c->value] ?? ucwords(str_replace('_', ' ', $c->value)), //ucwords rende il primo carattere di ogni parola maiuscolo
+        ], $cases);
+    }
+
+    /**
+     * Filtra un array di valori stringa provenienti dalla request, mantenendo solo
+     * quelli quelli ammessi dall'enum indicato. Valori non validi vengono scartati silenziosamente
+     * (scelta esplicita: un valore inventato in query string non deve rompere la pagina).
+     */
+    protected function validaValoriEnum(array $valori, string $enumClass): array {
+        $validi = array_column($enumClass::cases(), 'value');
+        return array_values(array_intersect($valori, $validi));
     }
 
 }
