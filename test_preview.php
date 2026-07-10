@@ -381,4 +381,4 @@ $smarty->assign('filtri', $filtri);
 
 
 
-$smarty->display('ModificaAccount.tpl');
+$smarty->display('AreaPersonale.tpl');
