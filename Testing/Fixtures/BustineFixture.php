@@ -15,6 +15,7 @@ use TableCrown\Entity\EBustine;
 use TableCrown\Entity\EPrezzo;
 use TableCrown\Entity\Enumerativi\Valuta;
 use TableCrown\Entity\Enumerativi\DisponibilitaProdotto;
+use DateTime;
 
 
 
@@ -43,6 +44,14 @@ class BustineFixture extends AbstractFixture
                 $faker->numberBetween(10, 100),   // quantita
                 prezzo: $prezzo,                     // prezzo
                 );
+
+                //per le ultime 2 bustine aggiungiamo uno sconto
+                if($i===8){
+                    $prezzo->aggiornaSconto(20, new DateTime('2026-08-01')); //sconto del 20%
+                }
+                elseif($i===9){
+                    $prezzo->aggiornaSconto(30, new DateTime('2026-07-25')); //sconto del 30%
+                }
 
                 // salva riferimento per usarlo in altre fixture
                 $this->addReference('bustine_' . $i, $bustina);
