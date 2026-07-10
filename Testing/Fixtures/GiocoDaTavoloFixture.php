@@ -69,6 +69,7 @@ class GiocoDaTavoloFixture extends AbstractFixture implements DependentFixtureIn
             // Creiamo un prezzo casuale (sfruttando il Cascade Persist di cui parlavamo!)
             $prezzo = new EPrezzo($faker->randomFloat(2, 2, 15), Valuta::EUR);
 
+
             // 2. Peschiamo un valore a caso dall'Enum della disponibilità
             $disponibilita = $faker->randomElement(DisponibilitaProdotto::cases());
 
@@ -92,11 +93,13 @@ class GiocoDaTavoloFixture extends AbstractFixture implements DependentFixtureIn
                     $gioco->aggiungiDanno($danno, 'Piccola piega sul tabellone');
                     $prezzoscontato=$prezzo->getValore()-$prezzo->getValore()*$danno->getScontoDanno()/100;
                     $prezzo->aggiornaValore($prezzoscontato);
+                    $prezzo->aggiornaSconto($danno->getScontoDanno()); //aggiungiamo uno sconto del 10% per il danno
                 } elseif ($i === 9) {
                     $danno = $this->getReference('danno_2', EDanno::class);
                     $gioco->aggiungiDanno($danno, 'Carta leggermente rovinata');
                     $prezzoscontato=$prezzo->getValore()-$prezzo->getValore()*$danno->getScontoDanno()/100;
                     $prezzo->aggiornaValore($prezzoscontato);
+                    $prezzo->aggiornaSconto($danno->getScontoDanno());
                 }
 
                 // salva riferimento per usarlo in altre fixture

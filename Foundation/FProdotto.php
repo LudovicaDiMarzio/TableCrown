@@ -74,7 +74,17 @@ class FProdotto{
             $qb->select('p', 'pr') 
             ->from(EProdotto::class, 'p')
             ->innerJoin('p.prezzo', 'pr')
-            ->where('pr.sconto > 0'); 
+            ->where('pr.sconto > 0');
+            /*mettiamo un altro parametro di seleizone nella query fatta prima, con CASE WHEN restituiamo 1 se è null e 0 se non è null, per ogni prodotto
+            0<1 quindi i prodotti senza scadenzaOfferta (null) verranno messi in fondo alla lista, mentre quelli con scadenzaOfferta (non null) verranno messi in cima alla lista
+            AS HIDDEN crea una colonna virtuale, con un alias, che viene usata internamente nella query ma non esiste realmente
+            */
+            $qb->addSelect('(CASE WHEN prezzo.scadenzaOfferta IS NULL THEN 1 ELSE 0 END) AS HIDDEN prodottiSenzaScadenza');
+
+            //mettiamo prima tutti i prodotti con scadenza offerta e poi quelli senza 
+            $qb->orderBy('prodottiSenzaScadenza', 'ASC');
+            //i prodotti con scadenza offerta li ordiniamo per data di scadenza
+            $qb->addOrderBy('pr.scadenzaOfferta', 'ASC');
 
             /*clono la query appena creata per poterla modificare ed effettuare un count su tutti i prodotti filtrati e 
               sapere quanti prodotti sono usciti in tutto dalla query fatta 
