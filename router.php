@@ -31,6 +31,9 @@ if ($uri === '/carrello/aggiungi' && $_SERVER['REQUEST_METHOD'] === 'POST') {
 // ────────────────────────────────────────────────────────────
 $staticFile = __DIR__ . DIRECTORY_SEPARATOR . 'public' . str_replace('/', DIRECTORY_SEPARATOR, $uri);
 
+
+
+
 if (is_file($staticFile)) {
     $ext = strtolower(pathinfo($staticFile, PATHINFO_EXTENSION));
     $mime = [

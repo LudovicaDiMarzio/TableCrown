@@ -1,0 +1,277 @@
+/* ============================================================
+   TableCrown — ModificaAccount.css
+   Pagina modifica account: avatar, dati personali, cambio password
+   ============================================================ */
+
+
+/* ── CONTENITORE PRINCIPALE ───────────────────────────────── */
+
+.modifica-account-container {
+    padding: 2rem 0 4rem;
+}
+
+.modifica-account-container .container {
+    max-width: 700px;
+    margin-left: auto;
+    margin-right: auto;
+    padding-left: 1rem;
+    padding-right: 1rem;
+}
+
+
+/* ── TOPBAR: BREADCRUMB + ELIMINA ACCOUNT ─────────────────── */
+
+.modifica-account-topbar {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    margin-bottom: 2.5rem;
+}
+
+.modifica-account-breadcrumb {
+    font-size: var(--font-size-sm);
+    color: var(--color-text-muted);
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+}
+
+.modifica-account-breadcrumb-link {
+    color: var(--color-text-muted);
+    text-decoration: underline;
+    transition: color var(--transition);
+}
+
+.modifica-account-breadcrumb-link:hover {
+    color: var(--color-primary);
+}
+
+.modifica-account-breadcrumb-sep {
+    color: var(--color-text-muted);
+}
+
+.modifica-account-breadcrumb-current {
+    color: var(--color-primary);
+    font-weight: 600;
+}
+
+.modifica-account-elimina {
+    font-size: var(--font-size-sm);
+    color: #f87171;
+    text-decoration: underline;
+    transition: color var(--transition);
+}
+
+.modifica-account-elimina:hover {
+    color: #ef4444;
+}
+
+
+/* ── AVATAR ────────────────────────────────────────────────── */
+
+.modifica-account-avatar-wrap {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 0.75rem;
+    margin-bottom: 2.5rem;
+}
+
+.modifica-account-avatar {
+    width: 140px;
+    height: 140px;
+    border-radius: 50%;
+    background-color: var(--color-bg-dark-2);
+    border: 1px solid var(--color-border-dark);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    overflow: hidden;
+}
+
+.modifica-account-avatar-img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+}
+
+.modifica-account-avatar-placeholder {
+    font-size: var(--font-size-md);
+    font-weight: 600;
+    color: var(--color-text-muted);
+}
+
+.modifica-account-avatar-edit {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.35rem;
+    font-size: var(--font-size-sm);
+    color: var(--color-text-muted);
+    border: 1px solid var(--color-border-dark);
+    border-radius: 999px;
+    padding: 0.3rem 0.9rem;
+    cursor: pointer;
+    transition: color var(--transition), border-color var(--transition);
+}
+
+.modifica-account-avatar-edit:hover {
+    color: var(--color-primary);
+    border-color: var(--color-primary);
+}
+
+.modifica-account-avatar-input {
+    display: none;
+}
+
+
+/* ── CAMPI FORM ────────────────────────────────────────────── */
+
+.modifica-account-fields {
+    display: flex;
+    flex-direction: column;
+    gap: 1.5rem;
+    margin-bottom: 2rem;
+}
+
+.modifica-account-field {
+    display: flex;
+    flex-direction: column;
+    gap: 0.4rem;
+}
+
+.modifica-account-label {
+    font-size: var(--font-size-sm);
+    font-weight: 600;
+    color: var(--color-text-light);
+}
+
+.modifica-account-input {
+    background-color: var(--color-bg-dark-2);
+    border: 1px solid var(--color-border-dark);
+    border-radius: var(--radius-sm);
+    padding: 0.65rem 0.9rem;
+    font-size: var(--font-size-md);
+    color: var(--color-text-light);
+    transition: border-color var(--transition);
+}
+
+.modifica-account-input:focus {
+    outline: none;
+    border-color: var(--color-primary);
+}
+
+.modifica-account-field-checkbox {
+    flex-direction: row;
+    align-items: center;
+}
+
+.modifica-account-checkbox-label {
+    display: flex;
+    align-items: center;
+    gap: 0.6rem;
+    font-size: var(--font-size-sm);
+    color: var(--color-text-muted);
+    cursor: pointer;
+}
+
+.modifica-account-checkbox-label input[type="checkbox"] {
+    accent-color: var(--color-primary);
+    width: 16px;
+    height: 16px;
+    cursor: pointer;
+}
+
+
+/* ── AZIONI ────────────────────────────────────────────────── */
+
+.modifica-account-actions {
+    display: flex;
+    align-items: center;
+    justify-content: flex-end;
+    gap: 1rem;
+    margin-bottom: 1.5rem;
+}
+
+.modifica-account-btn-primary {
+    background-color: var(--color-primary);
+    color: var(--color-bg-dark);
+    font-weight: 700;
+    font-size: var(--font-size-sm);
+    border: none;
+    border-radius: var(--radius-sm);
+    padding: 0.6rem 1.75rem;
+    cursor: pointer;
+    transition: opacity var(--transition);
+}
+
+.modifica-account-btn-primary:hover {
+    opacity: 0.85;
+}
+
+.modifica-account-btn-secondary {
+    background-color: transparent;
+    color: var(--color-text-light);
+    font-weight: 600;
+    font-size: var(--font-size-sm);
+    border: 1px solid var(--color-border-dark);
+    border-radius: var(--radius-sm);
+    padding: 0.6rem 1.5rem;
+    cursor: pointer;
+    transition: border-color var(--transition), color var(--transition);
+}
+
+.modifica-account-btn-secondary:hover,
+.modifica-account-btn-secondary[aria-expanded="true"] {
+    border-color: var(--color-primary);
+    color: var(--color-primary);
+}
+
+
+/* ── CARD MODIFICA PASSWORD ───────────────────────────────── */
+
+.modifica-account-password-card {
+    background-color: var(--color-bg-dark-2);
+    border: 1px solid var(--color-border-dark);
+    border-radius: var(--radius-md);
+    padding: 1.75rem;
+    margin-top: 0.5rem;
+}
+
+.modifica-account-password-form {
+    display: flex;
+    flex-direction: column;
+    gap: 1.25rem;
+}
+
+.modifica-account-btn-password-salva {
+    align-self: flex-end;
+}
+
+
+/* ============================================================
+   ── RESPONSIVE DESIGN (MEDIA QUERIES) ───────────────────────
+   ============================================================ */
+
+@media (max-width: 600px) {
+    .modifica-account-topbar {
+        flex-direction: column;
+        align-items: flex-start;
+        gap: 0.75rem;
+    }
+
+    .modifica-account-actions {
+        flex-direction: column-reverse;
+        align-items: stretch;
+    }
+
+    .modifica-account-btn-primary,
+    .modifica-account-btn-secondary {
+        width: 100%;
+        text-align: center;
+    }
+
+    .modifica-account-avatar {
+        width: 110px;
+        height: 110px;
+    }
+}

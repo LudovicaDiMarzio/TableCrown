@@ -1,9 +1,22 @@
 <?php
 require_once __DIR__ . '/config.php';
+
+
+
 require_once __DIR__ . '/vendor/autoload.php';
+
+
 
 use Smarty\Smarty;
 $smarty = new Smarty();
+$smarty->setTemplateDir(SMARTY_DIR . 'templates/');
+$smarty->setCompileDir(SMARTY_DIR  . 'templates_c/');
+$smarty->setCacheDir(SMARTY_DIR    . 'cache/');
+$smarty->setConfigDir(SMARTY_DIR   . 'configs/');
+
+
+
+
 
 $offerte = [
     ['id' => 101, 'nome' => 'Catan',       'immagine' => 'placeholder.jpg', 'valutazione_media' => 4.5, 'prezzo' => 34.90, 'sconto' => true,  'prezzo_scontato' => 27.92],
@@ -276,16 +289,31 @@ $filtri = [
 ];
 
 
-$smarty->setTemplateDir(SMARTY_DIR . 'templates/');
-$smarty->setCompileDir(SMARTY_DIR  . 'templates_c/');
-$smarty->setCacheDir(SMARTY_DIR    . 'cache/');
-$smarty->setConfigDir(SMARTY_DIR   . 'configs/');
+
+$smarty->assign('utente', isset($_SESSION['utente_id'])
+    ? ['nome' => $_SESSION['utente_nickname'] ?? 'Ospite', 'avatar' => null]
+    : ['nome' => 'Ospite', 'avatar' => null]
+);
+
+$smarty->assign('account_menu', [
+    ['label' => 'Modifica Account',    'url' => '/account/modifica'],
+    ['label' => 'I Miei Ordini',       'url' => '/account/ordini'],
+    ['label' => 'Le Mie Recensioni',   'url' => '/account/recensioni'],
+    ['label' => 'I Miei Dadi',         'url' => '/account/dadi'],
+    ['label' => 'Wishlist',            'url' => '/wishlist'],
+    ['label' => 'Eventi',              'url' => '/eventi'],
+    ['label' => 'I Miei Indirizzi',    'url' => '/account/indirizzi'],
+]);
+
+$smarty->assign('tornei_vinti',     3);
+$smarty->assign('tornei_obiettivo', 10);
+
+
+
+
 
 $smarty->assign('base_url',       BASE_URL);
-$smarty->assign('utente', isset($_SESSION['utente_id']) 
-    ? ['name' => $_SESSION['utente_name'] ?? 'Ospite'] 
-    : null
-);
+
 $smarty->assign('current_page',   'catalogo');
 $smarty->assign('prodotti',       $prodotti);
 $smarty->assign('categorie',      $categorie);
@@ -310,10 +338,6 @@ $smarty->assign('cart_count', 5);
 $smarty->assign('base_url',     BASE_URL);
 $smarty->assign('offerte',      $offerte);
 $smarty->assign('nuovi_arrivi', $nuovi_arrivi);
-$smarty->assign('utente', isset($_SESSION['utente_id']) 
-    ? ['name' => $_SESSION['utente_name'] ?? 'Ospite'] 
-    : null
-);
 
 
 
@@ -354,4 +378,7 @@ if ($categoria === 'challenge') {
 $smarty->assign('eventi', $eventi_tornei);
 $smarty->assign('filtri', $filtri);
 
-$smarty->display('registrati.tpl');
+
+
+
+$smarty->display('ModificaAccount.tpl');
