@@ -3,7 +3,7 @@
 namespace TableCrown\Presentation\Views;
 
 class ViewGiochiDaTavolo extends BaseViewCatalogo {
-    private const TEMPLATE = 'catalogo/giochi_da_tavolo.tpl';
+    private const TEMPLATE = 'catalogo/GiochiDaTavolo.tpl';
 
     public function render(array $dati): void {
         $smarty = SmartyConfiguration::getSmarty();
