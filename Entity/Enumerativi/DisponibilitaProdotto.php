@@ -2,8 +2,8 @@
 namespace TableCrown\Entity\Enumerativi;
 
 enum DisponibilitaProdotto: string {
-    case Disponibile = "Disponibile";
-    case NonDisponibile = "Non disponibile";
-    case Esaurito = "Esaurito";
-    case InArrivo = "In arrivo";
+    case Disponibile = "disponibile";
+    case NonDisponibile = "non_disponibile";
+    case Esaurito = "esaurito";
+    case InArrivo = "in_arrivo";
 }
