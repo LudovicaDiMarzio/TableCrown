@@ -61,12 +61,12 @@ class CProdotto extends BaseController {
         if ($prodotto instanceof EGiocoDaTavolo) {
             $dati['categoria'] = $prodotto->getCategoria();
             $dati['componenti'] = $prodotto->getComponenti();
-            $dati['giocoBase'] = $prodotto->getGiocoBase();
+            $dati['giocoBase'] = $prodotto->getGiocoBase(); //da decidere come restituirlo
             $dati['numeroGiocatoriMin'] = $prodotto->getNumeroGiocatoriMin();
             $dati['numeroGiocatoriMax'] = $prodotto->getNumeroGiocatoriMax();
             $dati['etaMinima'] = $prodotto->getEtaMinima();
             $dati['durataMedia'] = $prodotto->getDurataMedia();
-            $dati['danno'] = $prodotto->getDanno();
+            $dati['danno'] = $prodotto->getDanno(); //da decidere come restituirlo
             $dati['descrizioneDanno'] = $prodotto->getDescrizioneDanno();
             $dati['lingua'] = $prodotto->getLingua();
             $dati['difficolta'] = $prodotto->getDifficolta();
