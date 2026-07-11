@@ -9,6 +9,8 @@ use TableCrown\Utility\UHTTPMethods;
 use TableCrown\Utility\UFlashMessage;
 use TableCrown\Entity\EProdotto;
 use TableCrown\Entity\Enumerativi\DisponibilitaProdotto;
+use TableCrown\Entity\ERecensione;
+use TableCrown\Foundation\FPersistentManager;
 
 
 abstract class BaseController {
@@ -200,6 +202,48 @@ abstract class BaseController {
     protected function validaValoriEnum(array $valori, string $enumClass): array {
         $validi = array_column($enumClass::cases(), 'value');
         return array_values(array_intersect($valori, $validi));
+    }
+
+    /**
+     * Converte una ERecensione in array associativo per Presentation.
+     */
+    protected function recensioneToArray(ERecensione $recensione): array {
+        return [
+            'id'          => (int) $recensione->getIdRecensione(),
+            'valutazione' => $recensione->getValutazione(),
+            'testo'       => $recensione->getTesto(),
+            'data'        => $recensione->getData(),
+            'utente'      => $recensione->getUtente()->getNomePersona(),
+        ];
+    }
+
+    /**
+     * Applica recensioneToArray() ad una lista/collezione di recensioni.
+     */
+    protected function recensioniToArray(iterable $recensioni): array {
+        $result = [];
+        foreach ($recensioni as $recensione) {
+            $result[] = $this->recensioneToArray($recensione);
+        }
+        return $result;
+    }
+
+    /**
+     * Restituisce prodotti "correlati" con CRITERIO PROVVISORIO: TUTTI I PRODOTTI
+     * DISPONIBILI NEL CATALOGO, ESCLUSI QUELLI IN $idEsclusi, LIMITATI A $limit.
+     * DA SOSTITUIRE QUANDO DISPONIBILE IL METODO NEL PM.
+     */
+    protected function prodottiCorrelati(array $idsEsclusi, int $limit = 8): array {
+        $tuttiProdotti = FPersistentManager::PMgetAll(EProdotto::class);
+
+        $correlati = array_filter(
+            $tuttiProdotti,
+            fn($p) => !in_array($p->getIdProdotto(), $idsEsclusi) 
+        );
+
+        $correlati = array_slice(array_values($correlati), 0, $limit);
+
+        return $this->prodottiToArray($correlati);
     }
 
 }
