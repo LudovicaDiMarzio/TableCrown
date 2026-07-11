@@ -49,7 +49,7 @@ class CProdotto extends BaseController {
         $dati = array_merge($this->prodottoToArray($prodotto),[
             'descrizioneProdotto' => $prodotto->getDescrizioneProdotto(),
             'quantita' => $prodotto->getQuantita(),
-            'dataPubblicazione' => $prodotto->getDataPubblicazione(),
+            'dataPubblicazione' => $prodotto->getDataPubblicazione()->format('Y-m-d H:i:s'),
             'recensioni' => $this->recensioniToArray($prodotto->getRecensioni()),
             'correlati' => $this->prodottiCorrelati([$prodotto->getIdProdotto()]),
             'userHasPurchased' => $this->haAcquistatoProdotto($prodotto->getIdProdotto()),

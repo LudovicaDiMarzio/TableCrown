@@ -13,7 +13,7 @@ use TableCrown\Presentation\Views\ViewCatalogo;
 class CCatalogo extends BaseController {
     private const RISULTATI_PER_PAGINA = 20; //valore di default
     private const ORDINAMENTO_VALIDI = ['prezzo-asc', 'prezzo-desc', 'popolarita', 'rating'];
-    private const IN_EVIDENZA_VALIDI = ['sconti', 'novita', 'venduti'];
+    private const IN_EVIDENZA_VALIDI = ['sconti', 'novita'];
 
     //==========================================================================
     // METODI PUBBLICI - uno per ciascuna sottoRoute del catalogo.

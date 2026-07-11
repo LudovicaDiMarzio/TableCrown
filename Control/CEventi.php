@@ -27,20 +27,161 @@ class CEventi extends BaseController {
     // AREA PUBBLICA / UTENTE
     //==========================================================================
 
-    /**
-     * URL: /eventi (Accesso libero)
-     */
-    public function mostraEventi(): void {
-        $eventi = [];
-        //QUANDO SARÀ PRONTO FOUNDATION:
-        //$eventi = FPersistentManager::PMgetAll(EEvento::class);
+    //VISUALIZZAZIONE
 
-        $datiLayout = $this->preparaDatiLayout('eventi', ['eventi' => $eventi]);
-        //QUANDO SARÀ PRONTO PRESENTATION:
-        //VEventi::mostraEventi($datiLayout);
-        echo "Pagina pubblica: Elenco eventi";
+    /**
+     * Mostra l'hub degli eventi.
+     */
+    public function mostraHubEventi(): void {
+        $datiPagina = ['vista' => 'eventi_home'];
+        $datiLayout = $this->preparaDatiLayout('eventi_home', $datiPagina);
+
+        //Chiamata alla View
+        ViewEventi::render($datiLayout); //METODO DA VERIFICARE
     }
 
+    /**
+     * Mostra la lista di eventi di tipo serata.
+     * URL: /eventi/serata
+     */
+    public function mostraListaSerate(): void {
+        $filtroData = $this->estraiFiltroData();
+        $ricerca = $this->estraiRicerca();
+
+        //TODO: da implementare in FPersistentManager;
+        //bisogna filtrare internamente su statoEvento = Programmato, oltre a data/ricerca
+        //Non vengono quindi mostrati eventi con altri stati diversi da Programmato.
+        $serate = FPersistentManager::PMfindSerate($filtroData, $ricerca);
+
+        $this->renderListaEventi('eventi_serate', $serate, [$this, 'serataToArray'], $filtroData, $ricerca);
+        
+    }
+
+    /**
+     * Mostra la lista di eventi di tipo torneo.
+     * URL: /eventi/torneo
+     */
+    public function mostraListaTornei(): void {
+        $filtroData = $this->estraiFiltroData();
+        $ricerca = $this->estraiRicerca();
+
+        //TODO: da implementare in FPersistentManager;
+        $tornei = FPersistentManager::PMfindTornei($filtroData, $ricerca);
+
+        $this->renderListaEventi('eventi_tornei', $tornei, [$this, 'torneoToArray'], $filtroData, $ricerca);
+    }
+
+    /**
+     * Mostra la lista di eventi di tipo challenge.
+     * URL: /eventi/challenge
+     */
+    public function mostraListaChallenge(): void {
+        $filtroData = $this->estraiFiltroData();
+        $ricerca = $this->estraiRicerca();
+
+        //TODO: da implementare in FPersistentManager;
+        $challenge = FPersistentManager::PMfindChallenge($filtroData, $ricerca);
+
+        $this->renderListaEventi('eventi_challenge', $challenge, [$this, 'challengeToArray'], $filtroData, $ricerca);
+    }
+
+    //PRENOTAZIONE
+
+    /**
+     * Gestisce la partecipazione ad un evento (Richiesta POST).
+     * URL: /eventi/prenotazione
+     */
+    public function partecipaEvento(): void {
+        $this->requireRole('utente');
+        $idEvento = UHTTPMethods::postInt('id_evento');
+
+        if (!$idEvento) {
+            UFlashMessage::addMessage('danger', 'Evento non specificato.');
+            header('Location: /eventi');
+            exit();
+        }
+
+        //TODO: FPersistentManager - recupero evento, verifica hasPostiDisponibili(),
+        //creazione e salvataggio di EPartecipazione.
+
+        UFlashMessage::addMessage('success', 'Partecipazione effettuata con successo!');
+        header('Location: /eventi/dettaglio?id=' . $idEvento);
+        exit();
+    }
+
+    //==========================================================================
+    // METODI PRIVATI CONDIVISI
+    //==========================================================================
+
+    /**
+     * Costruisce i dati comuni a tutte le pagine lista eventi e delega il render.
+     */
+    private function renderListaEventi(string $vista, iterable $eventiEntities, callable $toArrayFn, ?DateTime $filtroData, ?string $ricerca): void {
+        $eventiArray = [];
+        foreach ($eventiEntities as $evento) {
+            $eventiArray[] = $toArrayFn($evento);
+        }
+
+        $datiPagina = [
+            'vista'  => $vista,
+            'eventi' => $eventiArray,
+            'filtri' => [
+                'filtro_data' => $filtroData?->format('Y-m-d'),
+                'ricerca' => $ricerca,
+            ],
+        ];
+
+        $datiLayout = $this->preparaDatiLayout($vista, $datiPagina);
+        ViewEventi::render($datiLayout);
+    }
+
+    /**
+     * Legge il filtro data dalla request (formato atteso: YYYY-MM-DD) e lo converte
+     * in DateTime per l'uso interno nella query; ritorna null se assente/non valido.
+     */
+    private function estraiFiltroData(): ?DateTime {
+        $raw = UHTTPMethods::get('filtro_data');
+        if (!$raw) {
+            return null;
+        }
+        try {
+            return new DateTime($raw);
+        } catch (\Exception $e) {
+            return null; //valore non parsabile: ignorato silenziosamente, coerente con la gestione degli altri filtri non validi
+        }
+    }
+
+    /**
+     * Estrae la ricerca da parte dell'utente (barra di ricerca degli eventi).
+     */
+    private function estraiRicerca(): ?string {
+        $query = UHTTPMethods::get('ricerca');
+        return ($query !== null && trim($query) !== '') ? trim($query) : null;
+    }
+
+    protected function getBreadcrumbs(): array {
+        return [
+            ['label' => 'Home', 'url' => '/'],
+            ['label' => 'Eventi', 'url' => '/eventi']
+        ];
+    }
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+//DA CANCELLARE TUTTO QUELLO CHE SEGUE
+    
     /**
      * URL: /eventi/dettaglio?id=X (Accesso libero)
      */
@@ -62,21 +203,9 @@ class CEventi extends BaseController {
         echo "Pagina pubblica: Dettaglio evento" . $idEvento;
     }
 
-    /**
-     * URL: /eventi/partecipa (Riservato Utente Loggato)
-     */
-    public function partecipaEvento(): void {
-        $this->requireRole('utente');
-        $idEvento = UHTTPMethods::post('id_evento');
+    
 
-        //QUANDO SARÀ PRONTO FOUNDATION:
-        //Inserimento Entity EPartecipazione nel DB tramite FParsistentManager
-
-        UFlashMessage::addMessage('success', 'Partecipazione effettuata con successo!');
-        header('Location: /eventi/dettaglio?id=' . $idEvento);
-        exit();
-    }
-
+    
     //==========================================================================
     // AREA GESTORE
     //==========================================================================
@@ -265,10 +394,6 @@ class CEventi extends BaseController {
         //VGestioneEventi::mostraFormModificaEvento($datiLayout);
         echo "Area gestore: Form di modifica per l'evento" . $idEvento;
     }
-         
-        
-        
-        
-           
-        
+
+    
 }

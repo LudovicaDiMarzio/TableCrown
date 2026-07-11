@@ -11,6 +11,10 @@ use TableCrown\Entity\EProdotto;
 use TableCrown\Entity\Enumerativi\DisponibilitaProdotto;
 use TableCrown\Entity\ERecensione;
 use TableCrown\Foundation\FPersistentManager;
+use TableCrown\Entity\EEvento;
+use TableCrown\Entity\ESerata;
+use TableCrown\Entity\ETorneo;
+use TableCrown\Entity\EChallenge;
 
 
 abstract class BaseController {
@@ -205,7 +209,7 @@ abstract class BaseController {
     }
 
     /**
-     * Converte una ERecensione in array associativo per Presentation.
+     * Converte una ERecensione in un array associativo per Presentation.
      */
     protected function recensioneToArray(ERecensione $recensione): array {
         return [
@@ -226,6 +230,65 @@ abstract class BaseController {
             $result[] = $this->recensioneToArray($recensione);
         }
         return $result;
+    }
+
+    /**
+     * Converte un EEvento in un array associativo per Presentation.
+     * (considera solo i campi comuni a tutti i tipi di evento)
+     */
+    protected function eventoToArray(EEvento $evento): array {
+        return [
+            'idEvento'          => (int) $evento->getIdEvento(),
+            'nomeEvento'        => $evento->getNomeEvento(),
+            'imgEvento'         => $evento->getImgEvento(),
+            'dataInizio'        => $evento->getDataInizio()->format('Y-m-d H:i:s'),
+            'maxPartecipanti'   => $evento->getMaxPartecipanti(),
+            'statoEvento'       => $evento->getStatoEvento()->value, //valori non ancora "puliti", da rivedere se/quando serve esporli come identificatore tecnico altrove
+            'numeroPartecipanti'=> $evento->getNumeroPartecipanti(),
+        ];
+    }
+
+    /**
+     * Converte un ESerata in un array associativo per Presentation.
+     */
+    protected function serataToArray(ESerata $serata): array {
+        return array_merge($this->eventoToArray($serata), [
+            'tipoSerata' => $serata->getTipoSerata(),
+        ]);
+    }
+
+    /**
+     * Converte un ETorneo in un array associativo per Presentation.
+     */
+    protected function torneoToArray(ETorneo $torneo): array {
+        $challenge = $torneo->getChallenge();
+        return array_merge($this->eventoToArray($torneo), [
+            'quotaIscrizione' => $torneo->getQuotaIscrizione()->getValore(),
+            'premio' => $torneo->getPremio()->getNomeProdotto(),
+            'gioco' => $torneo->getGioco()->getNomeProdotto(),
+            'challenge' => $challenge !== null ? $this->eventoLinkMinimo($challenge): null,
+        ]);
+    }
+
+    /**
+     * Converte un EChallenge in un array associativo per Presentation.
+     */
+    protected function challengeToArray(EChallenge $challenge): array {
+        return array_merge($this->eventoToArray($challenge), [
+            'quotaIscrizione' => $challenge->getQuotaIscrizione()->getValore(),
+            'premio' => $challenge->getPremio()->getNomeProdotto(),
+            'tornei' => array_map(fn($t) => $this->eventoLinkMinimo($t), $challenge->getTornei()->toArray()),
+        ]);
+    }
+
+    /**
+     * Rappresentazione minimale di un EEvento, per link cliccabili.
+     */
+    protected function eventoLinkMinimo(EEvento $evento): array {
+        return [
+            'idEvento'          => (int) $evento->getIdEvento(),
+            'nomeEvento'        => $evento->getNomeEvento(),
+        ];
     }
 
     /**
