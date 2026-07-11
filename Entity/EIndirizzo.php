@@ -139,5 +139,5 @@ class EIndirizzo {
     public function getNazione(): string      { return $this->nazione; }
     public function getNomeCitofono(): string { return $this->nomeCitofono; }
     public function getUtente(): EUtente      { return $this->utente; }
-    public function getPredefinito(): bool    { return $this->predefinito; }
+    public function isPredefinito(): bool    { return $this->predefinito; }
 }
