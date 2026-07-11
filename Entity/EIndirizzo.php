@@ -38,6 +38,9 @@ class EIndirizzo {
     #[ORM\JoinColumn(name: "utente_id", referencedColumnName: "idpersona", nullable: false)]
     private EUtente $utente;
 
+    #[ORM\Column(type: "boolean")]
+    private bool $predefinito;
+
     public function __construct(
         string $nome,
         string $via,
@@ -46,7 +49,8 @@ class EIndirizzo {
         string $provincia,
         string $nazione,
         string $nomeCitofono,
-        EUtente $utente
+        EUtente $utente,
+        bool $predefinito = false
     ) {
         $this->impostaNome($nome);
         $this->impostaVia($via);
@@ -56,6 +60,7 @@ class EIndirizzo {
         $this->impostaNazione($nazione);
         $this->impostaNomeCitofono($nomeCitofono);
         $this->utente = $utente;
+        $this->predefinito = $predefinito;
         $utente->riceviIndirizzo($this); //Associa l'indirizzo all'utente per sincrinizzare la relazione bidirezionale
     }
 
@@ -115,6 +120,15 @@ class EIndirizzo {
         $this->nomeCitofono = $nomeCitofono;
     }
 
+    //L'unicità dell'indirizzo predefinito viene verificata lato Control.
+    public function impostaPredefinito(): void {
+        $this->predefinito = true;
+    }
+
+    public function rimuoviPredefinito(): void {
+        $this->predefinito = false;
+    }
+
     // ─── Getter ─────────────────────────────────────────────────────────
     public function getIdIndirizzo(): ?int    { return $this->idIndirizzo; }
     public function getNome(): string         { return $this->nome; }
@@ -125,4 +139,5 @@ class EIndirizzo {
     public function getNazione(): string      { return $this->nazione; }
     public function getNomeCitofono(): string { return $this->nomeCitofono; }
     public function getUtente(): EUtente      { return $this->utente; }
+    public function getPredefinito(): bool    { return $this->predefinito; }
 }
