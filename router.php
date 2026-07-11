@@ -27,12 +27,23 @@ if ($uri === '/carrello/aggiungi' && $_SERVER['REQUEST_METHOD'] === 'POST') {
 }
 
 // ────────────────────────────────────────────────────────────
+// ENDPOINT MOCK: /account/password
+// Da sostituire con il vero Controller quando sarà pronto.
+// ────────────────────────────────────────────────────────────
+if ($uri === '/account/password' && $_SERVER['REQUEST_METHOD'] === 'POST') {
+    require __DIR__ . '/mock_account_password.php';
+    exit;
+}
+
+if ($uri === '/account/elimina' && $_SERVER['REQUEST_METHOD'] === 'POST') {
+    require __DIR__ . '/mock_account_elimina.php';
+    exit;
+}
+
+// ────────────────────────────────────────────────────────────
 // FILE STATICI (css, js, immagini, font...)
 // ────────────────────────────────────────────────────────────
 $staticFile = __DIR__ . DIRECTORY_SEPARATOR . 'public' . str_replace('/', DIRECTORY_SEPARATOR, $uri);
-
-
-
 
 if (is_file($staticFile)) {
     $ext = strtolower(pathinfo($staticFile, PATHINFO_EXTENSION));

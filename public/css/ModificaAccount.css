@@ -19,11 +19,11 @@
 }
 
 
-/* ── TOPBAR: BREADCRUMB + ELIMINA ACCOUNT ─────────────────── */
+/* ── TOPBAR: BREADCRUMB + LOGOUT + ELIMINA ACCOUNT ────────── */
 
 .modifica-account-topbar {
     display: flex;
-    align-items: center;
+    align-items: flex-start;
     justify-content: space-between;
     margin-bottom: 2.5rem;
 }
@@ -55,15 +55,33 @@
     font-weight: 600;
 }
 
-.modifica-account-elimina {
-    font-size: var(--font-size-sm);
-    color: #f87171;
-    text-decoration: underline;
-    transition: color var(--transition);
+.modifica-account-topbar-actions {
+    display: flex;
+    flex-direction: column;
+    align-items: flex-end;
+    gap: 0.5rem;
 }
 
+.modifica-account-logout,
+.modifica-account-elimina {
+    display: inline-block;
+    font-size: var(--font-size-sm);
+    font-weight: 600;
+    text-decoration: none;
+    text-align: center;
+    background-color: #ffffff;
+    color: var(--color-bg-dark);
+    border: 1px solid #ef4444;
+    border-radius: var(--radius-sm);
+    padding: 0.5rem 1.25rem;
+    transition: background-color var(--transition), color var(--transition), border-color var(--transition);
+}
+
+.modifica-account-logout:hover,
 .modifica-account-elimina:hover {
-    color: #ef4444;
+    background-color: #ef4444;
+    border-color: #ef4444;
+    color: #ffffff;
 }
 
 
@@ -145,6 +163,10 @@
     color: var(--color-text-light);
 }
 
+.modifica-account-label--blue {
+    color: #2c3e7a;
+}
+
 .modifica-account-input {
     background-color: var(--color-bg-dark-2);
     border: 1px solid var(--color-border-dark);
@@ -209,11 +231,11 @@
 }
 
 .modifica-account-btn-secondary {
-    background-color: transparent;
-    color: var(--color-text-light);
+    background-color: #2c3e7a;
+    color: #ffffff;
     font-weight: 600;
     font-size: var(--font-size-sm);
-    border: 1px solid var(--color-border-dark);
+    border: 1px solid #2c3e7a;
     border-radius: var(--radius-sm);
     padding: 0.6rem 1.5rem;
     cursor: pointer;
@@ -222,8 +244,8 @@
 
 .modifica-account-btn-secondary:hover,
 .modifica-account-btn-secondary[aria-expanded="true"] {
-    border-color: var(--color-primary);
-    color: var(--color-primary);
+    border-color: #e8a020;
+    color: #e8a020;
 }
 
 
@@ -248,6 +270,52 @@
 }
 
 
+/* ── POPUP MESSAGGI PASSWORD ───────────────────────────────── */
+
+.modifica-account-popup-overlay {
+    position: fixed;
+    inset: 0;
+    background-color: rgba(0, 0, 0, 0.6);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    z-index: 1000;
+}
+
+.modifica-account-popup-overlay[hidden] {
+    display: none;
+}
+
+.modifica-account-popup-box {
+    background-color: var(--color-bg-dark-2);
+    border: 1px solid var(--color-border-dark);
+    border-radius: var(--radius-md);
+    padding: 1.75rem;
+    max-width: 380px;
+    width: 90%;
+    display: flex;
+    flex-direction: column;
+    gap: 1.25rem;
+    text-align: center;
+}
+
+.modifica-account-popup-message {
+    color: var(--color-text-light);
+    font-size: var(--font-size-md);
+}
+
+.modifica-account-popup-error {
+    color: #ef4444;
+    font-size: var(--font-size-sm);
+    font-weight: 600;
+}
+
+.modifica-account-popup-actions {
+    display: flex;
+    justify-content: center;
+    gap: 1rem;
+}
+
 /* ============================================================
    ── RESPONSIVE DESIGN (MEDIA QUERIES) ───────────────────────
    ============================================================ */
@@ -257,6 +325,12 @@
         flex-direction: column;
         align-items: flex-start;
         gap: 0.75rem;
+    }
+
+    .modifica-account-topbar-actions {
+        flex-direction: row;
+        align-items: center;
+        gap: 1rem;
     }
 
     .modifica-account-actions {
