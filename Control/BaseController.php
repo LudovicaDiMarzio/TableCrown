@@ -7,6 +7,10 @@ namespace TableCrown\Control;
 use TableCrown\Utility\USession;
 use TableCrown\Utility\UHTTPMethods;
 use TableCrown\Utility\UFlashMessage;
+use TableCrown\Entity\EProdotto;
+use TableCrown\Entity\Enumerativi\DisponibilitaProdotto;
+use TableCrown\Entity\ERecensione;
+use TableCrown\Foundation\FPersistentManager;
 
 
 abstract class BaseController {
@@ -44,28 +48,16 @@ abstract class BaseController {
             'base_url' => 'https://tablecrown.it', 
             'current_page' => $currentPage, //Indica la pagina attiva (es. 'catalogo', 'eventi', ecc.)
             'breadcrumbs' => $this->getBreadcrumbs(), //Il percorso di navigazione
+            'utente' => $this->utenteToArray(),
         ];
 
-        //Controllo dell'utente (/persona) in sessione
-        if (USession::isSetSessionElement('id_persona')) {
-            //Utente loggato: costruiamo l'array minimo neccessario per Presentation
-            $globalData['utente'] = [
-                'nickname' => USession::getSessionElement('nickname'),
-            ];
-
-            //cart_count solo per gli utenti (non per gestore o amministratore)
-            if (USession::getSessionElement('ruolo') === 'utente') {
-                $carrello = USession::getSessionElement('carrello') ?? [];
-                //array_column estrae la colonna 'quantita' da ogni riga del carrello
-                //array_sum somma tutti i valori ottenuti
-                $cartCount = array_sum(array_column($carrello, 'quantita'));
-                if ($cartCount > 0) {
-                    $globalData['cart_count'] = $cartCount; //Il badge appare solo se gli articoli sono > 0
-                }
+        //cart_count solo per gli utenti loggati con ruolo 'utente'
+        if ($this->isLoggedIn() && USession::getSessionElement('ruolo') === 'utente') {
+            $carrello = USession::getSessionElement('carrello') ?? [];
+            $cartCount = array_sum(array_column($carrello, 'quantita')); //array_column estrae la colonna 'quantita' da ogni riga del carrello
+            if ($cartCount > 0) {
+                $globalData['cart_count'] = $cartCount; //Il badge appare solo se gli articoli sono > 0
             }
-        } else {
-            //Utente non loggato
-            $globalData['utente'] = null;
         }
 
         //Gestione dei Flash Messages
@@ -140,4 +132,118 @@ abstract class BaseController {
             exit();
         }
     }
+
+    //==========================================================================
+    // METODI UTILI PER PASSAGGIO DATI A PRESENTATION
+    //==========================================================================
+
+    /**
+     * Converte un'entity EProdotto (e sottoclasse) in un array
+     * per tutte le liste di prodotti (home, catalogo, carrello, etc.).
+     */
+    protected function prodottoToArray(EProdotto $prodotto): array {
+        $prezzoObj = $prodotto->getPrezzo();
+        $inSconto = $prezzoObj !== null && $prezzoObj->hasSconto();
+
+        return [
+            'id'                 => (int) $prodotto->getIdProdotto(),
+            'nome'               => $prodotto->getNomeProdotto(),
+            'immagine'           => $prodotto->getImgProdotto(),
+            'valutazione_media'  => (float) $prodotto->getValutazioneMedia(),
+            'prezzo'             => $prezzoObj?->getValore() ?? 0.0,
+            'sconto'             => $inSconto,
+            'prezzo_scontato'    => $inSconto ? (float) $prezzoObj->calcolaPrezzoScontato() : null,
+            'percentuale_sconto' => $inSconto ? $prezzoObj->getSconto() : null,
+            'disponibilita'      => $prodotto->getDisponibilitaProdotto()->value,
+            'isAcquistabile'     => $prodotto->isAcquistabile(),
+        ];
+    }
+
+    /**
+     * Applica prodottoToArray() ad una lista di prodotti
+     */
+    protected function prodottiToArray(iterable $prodotti): array { //iterable è un tipo di dato che consente di iterare sia su un array che, per esempio, su una Collection
+        $result = [];
+        foreach ($prodotti as $prodotto) {
+            $result[] = self::prodottoToArray($prodotto);
+        }
+        return $result;
+    }
+
+    /**
+     * Converte l'utente loggato (se presente) nella forma minimale richiesta dal layout
+     */
+    protected function utenteToArray(): ?array {
+        if (!$this->isLoggedIn()) {
+            return null;
+        }
+        return [
+            'name' => USession::getSessionElement('nickname'), //La sessione salva 'nickname' (PERCHè? COME LO SO?), esposto come 'name' verso Presentation
+        ];
+    }
+
+    /**
+     * Converte i case di un enum PHP nativo in coppie {value, label} per i dropdown.
+     * Modifica i values dei cases in un formato maggiormente leggibile per il front-end.
+     */
+    protected function enumToOptions(array $cases, array $labelOverrides = []): array {
+        return array_map(fn($c) => [
+            'value' => $c->value,
+            //tramite ?? controlliamo se esiste un override manuale in $labelOverrides per quel valore specifico; se sì usa quello, altrimenti usa il calcolo automatico
+            'label' => $labelOverrides[$c->value] ?? ucwords(str_replace('_', ' ', $c->value)), //ucwords rende il primo carattere di ogni parola maiuscolo
+        ], $cases);
+    }
+
+    /**
+     * Filtra un array di valori stringa provenienti dalla request, mantenendo solo
+     * quelli quelli ammessi dall'enum indicato. Valori non validi vengono scartati silenziosamente
+     * (scelta esplicita: un valore inventato in query string non deve rompere la pagina).
+     */
+    protected function validaValoriEnum(array $valori, string $enumClass): array {
+        $validi = array_column($enumClass::cases(), 'value');
+        return array_values(array_intersect($valori, $validi));
+    }
+
+    /**
+     * Converte una ERecensione in array associativo per Presentation.
+     */
+    protected function recensioneToArray(ERecensione $recensione): array {
+        return [
+            'id'          => (int) $recensione->getIdRecensione(),
+            'valutazione' => $recensione->getValutazione(),
+            'testo'       => $recensione->getTesto(),
+            'data'        => $recensione->getData(),
+            'utente'      => $recensione->getUtente()->getNomePersona(),
+        ];
+    }
+
+    /**
+     * Applica recensioneToArray() ad una lista/collezione di recensioni.
+     */
+    protected function recensioniToArray(iterable $recensioni): array {
+        $result = [];
+        foreach ($recensioni as $recensione) {
+            $result[] = $this->recensioneToArray($recensione);
+        }
+        return $result;
+    }
+
+    /**
+     * Restituisce prodotti "correlati" con CRITERIO PROVVISORIO: TUTTI I PRODOTTI
+     * DISPONIBILI NEL CATALOGO, ESCLUSI QUELLI IN $idEsclusi, LIMITATI A $limit.
+     * DA SOSTITUIRE QUANDO DISPONIBILE IL METODO NEL PM.
+     */
+    protected function prodottiCorrelati(array $idsEsclusi, int $limit = 8): array {
+        $tuttiProdotti = FPersistentManager::PMgetAll(EProdotto::class);
+
+        $correlati = array_filter(
+            $tuttiProdotti,
+            fn($p) => !in_array($p->getIdProdotto(), $idsEsclusi) 
+        );
+
+        $correlati = array_slice(array_values($correlati), 0, $limit);
+
+        return $this->prodottiToArray($correlati);
+    }
+
 }

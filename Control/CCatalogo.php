@@ -3,9 +3,17 @@ namespace TableCrown\Control;
 
 use TableCrown\Foundation\FPersistentManager;
 use TableCrown\Utility\UHTTPMethods;
+use TableCrown\Entity\Enumerativi\DisponibilitaProdotto;
+use TableCrown\Entity\Enumerativi\LinguaGioco;
+use TableCrown\Entity\Enumerativi\DifficoltaGioco;
+use TableCrown\Entity\Enumerativi\Categoria;
+use TableCrown\Entity\Enumerativi\LivelloDannoGiochi;
+use TableCrown\Presentation\Views\ViewCatalogo;
 
 class CCatalogo extends BaseController {
     private const RISULTATI_PER_PAGINA = 20; //valore di default
+    private const ORDINAMENTO_VALIDI = ['prezzo-asc', 'prezzo-desc', 'popolarita', 'rating'];
+    private const IN_EVIDENZA_VALIDI = ['sconti', 'novita', 'venduti'];
 
     //==========================================================================
     // METODI PUBBLICI - uno per ciascuna sottoRoute del catalogo.
@@ -21,32 +29,16 @@ class CCatalogo extends BaseController {
         $filtri = $this->estraiFiltriGiochi(); //sarà [] se non ci sono filtri
 
         //Chiamata a Foundation
+        //Nota: PMfindGiochi(), così come i metodi successivi del pm, restituiscono
+        //un array [risultati, totaleRisultati], in cui risultati è a sua volta un array
+        //contenente tutti i prodotti che soddisfano i filtri richiesti.
         $risultatoGrezzo = FPersistentManager::PMfindGiochi(  //SE $filtri E' VUOTO, RESTITUISCE TUTTI I GIOCHI DA TAVOLO
             filtri: $filtri,
             limit: self::RISULTATI_PER_PAGINA,
             offset: ($pagina - 1) * self::RISULTATI_PER_PAGINA
-            );
+        );
 
-        
-        $totaleRisultati = $risultatoGrezzo['totale'] ?? 0; //se non c'è la chiave 'totale', assumiamo 0 risultati
-        $totalePagine = $this->calcolaTotalePagine($totaleRisultati);
-        $pagina = $this->clampPagina($pagina, $totalePagine);
-        
-
-        $prodottiMappati = $this->mappaProdottiPerCatalogo($risultatoGrezzo['risultati'] ?? []); //se non c'è la chiave 'risultati', assumiamo []
-
-        //Impacchettiamo i dati secondo la ViewCatalogo //DA CAMBIAREEEEEEEEEE!!!!
-        $datiPagina = [
-            'prodotti' => $prodottiMappati,
-            'filtri' => $filtri,
-            'pagina' => $pagina,
-            'totale_pagine' => $totalePagine,
-            'categorie' => ['Giochi da tavolo', 'Bustine', 'Porta dadi'],
-        ];
-
-        $datiLayout = $this->preparaDatiLayout('catalogo_giochi', $datiPagina);
-        ViewCatalogo::render($datiLayout);
-
+        $this->renderCatalogo('catalogo_giochi', $risultatoGrezzo, $pagina, $filtri);
     }
 
     public function mostraCatalogoBustine(): void { //DA RIVEDEREEEEE!!!!!!
@@ -59,21 +51,7 @@ class CCatalogo extends BaseController {
             offset: ($pagina - 1) * self::RISULTATI_PER_PAGINA
         );
 
-        $totaleRisultati = $risultatoGrezzo['totale'] ?? 0;
-        $totalePagine = $this->calcolaTotalePagine($totaleRisultati);
-        $pagina = $this->clampPagina($pagina, $totalePagine);
-
-        $prodottiMappati = $this->mappaProdottiPerCatalogo($risultatoGrezzo['risultati'] ?? []);
-
-        $datiPagina = [
-            'prodotti'       => $prodottiMappati,
-            'filtri'         => $filtri,
-            'pagina'         => $pagina,
-            'totale_pagine'  => $totalePagine
-        ];
-
-        $datiLayout = $this->preparaDatiLayout('catalogo_bustine', $datiPagina);
-        ViewCatalogo::render($datiLayout);
+        $this->renderCatalogo('catalogo_bustine', $risultatoGrezzo, $pagina, $filtri);
     }
 
     public function mostraCatalogoPortaDadi(): void { //DA RIVEDEREEEEE!!!!!!
@@ -86,21 +64,7 @@ class CCatalogo extends BaseController {
             offset: ($pagina - 1) * self::RISULTATI_PER_PAGINA
         );
 
-        $totaleRisultati = $risultatoGrezzo['totale'] ?? 0;
-        $totalePagine = $this->calcolaTotalePagine($totaleRisultati);
-        $pagina = $this->clampPagina($pagina, $totalePagine);
-
-        $prodottiMappati = $this->mappaProdottiPerCatalogo($risultatoGrezzo['risultati'] ?? []);
-
-        $datiPagina = [
-            'prodotti'       => $prodottiMappati,
-            'filtri'         => $filtri,
-            'pagina'         => $pagina,
-            'totale_pagine'  => $totalePagine
-        ];
-
-        $datiLayout = $this->preparaDatiLayout('catalogo_portadadi', $datiPagina);
-        ViewCatalogo::render($datiLayout);
+        $this->renderCatalogo('catalogo_portadadi', $risultatoGrezzo, $pagina, $filtri);
     }
 
     /**
@@ -128,29 +92,36 @@ class CCatalogo extends BaseController {
             offset: ($pagina - 1) * self::RISULTATI_PER_PAGINA
         );
 
-
-        $totaleRisultati = $risultatoGrezzo['totale'] ?? 0;
-        $totalePagine = $this->calcolaTotalePagine($totaleRisultati);
-        $pagina = $this->clampPagina($pagina, $totalePagine);
-
-        $prodottiMappati = $this->mappaProdottiPerCatalogo($risultatoGrezzo['risultati'] ?? []);
-
-        $datiPagina = [
-            'prodotti' => $prodottiMappati,
-            'pagina' => $pagina,
-            'totale_pagine' => $totalePagine,
-            'filtri' => ['q' => $query], //Conserviamo la query testuale per poterla mostrare a schermo o paginare
-        ];
-
-        $datiLayout = $this->preparaDatiLayout('ricerca', $datiPagina);
-        ViewCatalogo::render($datiLayout);
-        
+        $this->renderCatalogo('ricerca', $risultatoGrezzo, $pagina, ['q' => $query], $query);
     }
 
 
     //==========================================================================
     // METODI PRIVATI CONDIVISI
     //==========================================================================
+
+    /**
+     * Costruisce un array $datiPagina e delega il render a ViewCatalogo.
+     * Tramite questo metodo centralizziamo la logica comune alle 4 pagine
+     * pubbliche, per evitare di ripetere la stessa struttura di array in ognuna.
+     */
+    private function renderCatalogo(string $vista, array $risultatoGrezzo, int $pagina, array $filtri, ?string $searchQuery = null): void {
+        $totaleRisultati = $risultatoGrezzo['totale'] ?? 0;
+        $totalePagine = $this->calcolaTotalePagine($totaleRisultati);
+        $pagina = $this->clampPagina($pagina, $totalePagine);
+
+        $datiPagina = [
+            'vista'          => $vista,
+            'prodotti'       => $this->prodottiToArray($risultatoGrezzo['risultati'] ?? []),
+            'total_results'  => $totaleRisultati,
+            'pagination'     => ['current_page' => $pagina, 'total_pages' => $totalePagine],
+            'search_query'   => $searchQuery,
+            'filtri'         => $filtri,
+        ];
+
+        $datiLayout = $this->preparaDatiLayout($vista, $datiPagina);
+        ViewCatalogo::render($datiLayout);
+    }
 
     /**
      * Valida il numero di pagina richiesto.
@@ -162,14 +133,14 @@ class CCatalogo extends BaseController {
             return 1; //se la pagina non è valida per qualche motivo, reindirizziamo l'utente alla pagina 1 del catalogo
         }
 
-        $pagina = (int) $pagina;
-        return $pagina;
+        return (int) $pagina;
     }
 
     /**
      * Riporta $pagina entro il range valido [1, $totalePagine].
      * Utile per il caso limite in cui l'utente richieda una pagina 
-     * oltre l'ultima disponibile (es. dopo che i filtri hanno ridotto i risultati).
+     * oltre l'ultima disponibile 
+     * (es. dopo che i filtri hanno ridotto i risultati, o modificando manualmente l'url).
      */
     private function clampPagina(int $pagina, int $totalePagine): int {
         if ($totalePagine === 0) {
@@ -180,56 +151,83 @@ class CCatalogo extends BaseController {
 
     /**
      * Calcola il numero totale di pagine disponibili, 
-     * dato il numero totale di risultati e il numero di risultati per pagina.
+     * dato il numero totale di risultati e il numero di risultati per pagina (fisso a RISULTATI_PER_PAGINA).
      */
     private function calcolaTotalePagine(int $totaleRisultati): int {
-        return (int) ceil($totaleRisultati / self::RISULTATI_PER_PAGINA);
+        return (int) ceil($totaleRisultati / self::RISULTATI_PER_PAGINA); //ceil per evitare errori di arrotondamento
     }
 
     /**
-     * Estrae e valida i filtri specifici per i giochi da tavolo 
-     * (prezzo, disponibilità, categoria, espansioni, rating, lingua, 
-     * età, difficoltà, numero giocatori, condizione danno).
+     * Legge un parametro GET che può arrivare come valore singolo,
+     * array, o essere assente, normalizzandolo sempre in array.
      */
-    private function estraiFiltriGiochi(): array {
-        //TODO
-        return [];
+    private function estraiArrayDaRequest(string $chiave): array {
+        $valore = UHTTPMethods::get($chiave);
+        if ($valore === null) {
+            return [];
+        }
+        return is_array($valore) ? $valore : [$valore];
     }
 
     /**
-     * Estrae e valida il filtro prezzo, condiviso tra Bustine e Porta dadi.
+     * Filtro prezzo + disponibilità + in_evidenza + rating + ordinamento,
+     * condiviso da tutte le pagine del catalogo (giochi, bustine, porta dadi).
      */
     private function estraiFiltriPrezzo(): array {
-        //TODO
-        return [];
+        //TODO: price_range_min e price_range_max andranno calcolati da FPersistentManager
+        //in base ai prodotti realmente presenti nel catalogo/risultato filtrato.
+        //Per ora metto dei dafault fissi 
+        $priceRangeMin = 0.0; //DA CAMBIARE!!!!!!!
+        $priceRangeMax = 200.0; //DA CAMBIARE!!!!!!!
+
+        //Valori selezionati dall'utente sullo slider
+        $priceMinRaw = UHTTPMethods::get('price_min');  
+        $priceMaxRaw = UHTTPMethods::get('price_max');
+
+        $ratingMinRaw = UHTTPMethods::get('rating_min');
+        $ordinamentoRaw = UHTTPMethods::get('ordinamento');
+
+        return [
+            'price_min'          => is_numeric($priceMinRaw) ? (float) $priceMinRaw : $priceRangeMin,
+            'price_max'          => is_numeric($priceMaxRaw) ? (float) $priceMaxRaw : $priceRangeMax,
+            'price_range_min'    => $priceRangeMin,
+            'price_range_max'    => $priceRangeMax,
+            'disponibilita'      => $this->validaValoriEnum($this->estraiArrayDaRequest('disponibilita'), DisponibilitaProdotto::class),
+            'in_evidenza_filtro' => array_values(array_intersect($this->estraiArrayDaRequest('in_evidenza_filtro'), self::IN_EVIDENZA_VALIDI)),
+            'rating_min'         => is_numeric($ratingMinRaw) ? (float) $ratingMinRaw : 0.0,
+            'ordinamento'        => in_array($ordinamentoRaw, self::ORDINAMENTO_VALIDI, true) ? $ordinamentoRaw : null,
+        ];
     }
 
-    //==========================================================================
-    // DA RIVEDERE
-    //==========================================================================
     /**
-     * Metodo helper centralizzato per convertire un array di oggetti Entity Prodotto
-     * in array associativi piatti compatibili con il file catalogo.tpl di Marco.
+     * Estende i filtri comuni con quelli specifici dei giochi da tavolo.
      */
-    private function mappaProdottiPerCatalogo(array $prodottiEntity): array {
-        $arrayMappato = [];
-        foreach ($prodottiEntity as $prod) {
-            $prezzoObj = $prod->getPrezzo();
-            $hasSconto = $prezzoObj->hasSconto();
-            $prezzoOriginale = (float) $prezzoObj->getValore();
+    private function estraiFiltriGiochi(): array {
+        $filtri = $this->estraiFiltriPrezzo();
 
-            $arrayMappato[] = [
-                'id'                 => (int) $prod->getIdProdotto(),
-                'nome'               => $prod->getNomeProdotto(),
-                'immagine'           => $prod->getImgProdotto(),
-                'valutazione_media'  => (float) $prod->getMediaValutazioni(), 
-                'sconto'             => $hasSconto,
-                'prezzo_originale'   => $prezzoOriginale,
-                'prezzo_unitario'    => $hasSconto ? (float) $prezzoObj->calcolaPrezzoScontato() : $prezzoOriginale,
-                'percentuale_sconto' => $hasSconto ? $prezzoObj->getSconto() : 0
-            ];
-        }
-        return $arrayMappato;
+        $ageMinRaw = UHTTPMethods::get('age_min');
+        $playersMinRaw = UHTTPMethods::get('players_min');
+
+        $filtri['categorie_enum'] = $this->enumToOptions(Categoria::cases(), ['gdr' => 'GDR']); 
+        $filtri['categoria_selected'] = $this->validaValoriEnum($this->estraiArrayDaRequest('categoria_selected'), Categoria::class);
+
+        //Nota: per le espansioni introduciamo un singolo filtro.
+        //Se true, mostra giochi base + espansioni, se false solo giochi base.
+        //Di default è true (checkbox checkata) per non nascondere contenuti a chi non applica filtri.
+        $filtri['mostra_espansioni'] = UHTTPMethods::get('mostra_espansioni') !== '0';
+
+        $filtri['age_min'] = is_numeric($ageMinRaw) ? (int) $ageMinRaw : null;
+        $filtri['difficolta'] = $this->validaValoriEnum($this->estraiArrayDaRequest('difficolta'), DifficoltaGioco::class);
+        $filtri['players_min'] = is_numeric($playersMinRaw) ? (int) $playersMinRaw : null;
+
+        //per lingue_enum non uso enumToOptions perché il nome dei cases non è derivabile automaticamente dal value corrispondente che è un codice (es. 'EN', 'IT', ecc.)
+        $filtri['lingue_enum'] = array_map(fn($c) => ['value' => $c->value, 'label' => $c->name], LinguaGioco::cases());
+        $filtri['lingua_selected'] = $this->validaValoriEnum($this->estraiArrayDaRequest('lingua_selected'), LinguaGioco::class);
+
+        $filtri['danno_enum'] = $this->enumToOptions(LivelloDannoGiochi::cases());
+        $filtri['danno_selected'] = $this->validaValoriEnum($this->estraiArrayDaRequest('danno_selected'), LivelloDannoGiochi::class);
+
+        return $filtri;
     }
 
 
