@@ -6,13 +6,18 @@
 <div class="eventi-lista-container">
     <div class="container">
 
+        {if isset($breadcrumbs) && $breadcrumbs|@count > 0}
         <nav class="eventi-breadcrumb">
-            <a href="{$base_url}/">Home</a>
-            <i class="ti ti-chevron-right"></i>
-            <a href="{$base_url}/eventi">Eventi</a>
-            <i class="ti ti-chevron-right"></i>
-            <span>Serate</span>
+            {foreach $breadcrumbs as $crumb}
+                {if $crumb@last}
+                    <span>{$crumb.label|escape}</span>
+                {else}
+                    <a href="{$crumb.url|escape}">{$crumb.label|escape}</a>
+                    <i class="ti ti-chevron-right"></i>
+                {/if}
+            {/foreach}
         </nav>
+        {/if}
 
         <div class="eventi-lista-layout">
 
@@ -22,42 +27,20 @@
                 <form id="form-filtri-eventi" class="eventi-filtri-form" method="get" action="{$base_url}/catalogo/serate">
 
                     <div class="eventi-filter-group">
-                        <h3 class="eventi-filter-group-title">Data</h3>
-                        <input type="date" name="data" class="eventi-date-input" value="{$filtri.data|default:''}">
-                        <button type="submit" class="button btn-apply-data">
-                            <i class="ti ti-check"></i> Applica Data
-                        </button>
-                    </div>
-
-                    <div class="eventi-filter-group">
-                        <h3 class="eventi-filter-group-title">Tipologia</h3>
-                        <div class="eventi-checkbox-group">
-                            <label class="eventi-checkbox-label">
-                                <input type="checkbox" name="tipologia[]" value="presentazione"
-                                       {if $filtri.tipologia && in_array('presentazione', $filtri.tipologia)}checked{/if}>
-                                <span class="eventi-checkbox-text">Presentazione</span>
-                            </label>
-                            <label class="eventi-checkbox-label">
-                                <input type="checkbox" name="tipologia[]" value="gioco_libero"
-                                       {if $filtri.tipologia && in_array('gioco_libero', $filtri.tipologia)}checked{/if}>
-                                <span class="eventi-checkbox-text">Gioco Libero</span>
-                            </label>
-                        </div>
+                        <h3 class="eventi-filter-group-title">Cerca</h3>
+                        <input type="text"
+                               name="query_string"
+                               class="eventi-ricerca-input"
+                               placeholder="Cerca per nome..."
+                               value="{$filtri.query_string|default:''|escape}">
                     </div>
 
                     <div class="eventi-filter-group eventi-filter-group-last">
-                        <div class="eventi-radio-options">
-                            <label class="eventi-radio-label">
-                                <input type="radio" name="stato" value="passati"
-                                       {if $filtri.stato == 'passati'}checked{/if}>
-                                <span class="eventi-radio-text">Eventi passati</span>
-                            </label>
-                            <label class="eventi-radio-label">
-                                <input type="radio" name="stato" value="programma"
-                                       {if $filtri.stato == 'programma' || !$filtri.stato}checked{/if}>
-                                <span class="eventi-radio-text">Eventi in programma</span>
-                            </label>
-                        </div>
+                        <h3 class="eventi-filter-group-title">Data</h3>
+                        <input type="date" name="data" class="eventi-date-input" value="{$filtri.data|default:''}">
+                        <button type="submit" class="button btn-apply-data">
+                            <i class="ti ti-check"></i> Applica filtri
+                        </button>
                     </div>
 
                 </form>
@@ -69,8 +52,13 @@
                     {assign var="stato" value=$evento.statoEvento}
                     {assign var="passato" value=($stato == 'Terminato')}
                     {assign var="postiDisponibili" value=$evento.maxPartecipanti - $evento.numeroPartecipanti}
+                    {assign var="esaurito" value=($postiDisponibili <= 0)}
 
-                    <article class="evento-list-card{if $passato} evento-list-card-passato{/if}">
+                    <article class="evento-list-card{if $passato} evento-list-card-passato{/if}{if $esaurito} evento-list-card-esaurito{/if}">
+
+                        {if $esaurito}
+                        <span class="evento-badge-esaurito">Posti esauriti</span>
+                        {/if}
 
                         <h3 class="evento-list-nome">
                             {$evento.nomeEvento|escape}
@@ -84,7 +72,15 @@
                         </div>
 
                         <div class="evento-list-meta-row">
-                            <span class="evento-tipo-badge">{$evento.tipoSerata|escape}</span>
+                            <span class="evento-tipo-badge">
+                                {if $evento.tipoSerata == 'presentazione'}
+                                    Presentazione
+                                {elseif $evento.tipoSerata == 'gioco_libero'}
+                                    Gioco Libero
+                                {else}
+                                    {$evento.tipoSerata|escape}
+                                {/if}
+                            </span>
                         </div>
 
                         <div class="evento-list-info-row">
@@ -106,22 +102,11 @@
                                     Visualizza risultati
                                 </a>
                             {else}
-                                <div class="evento-stepper" data-max="{$postiDisponibili}">
-                                    <button type="button" class="evento-stepper-btn" data-action="decrease">−</button>
-                                    <input type="number" class="evento-stepper-input" value="1" min="1" max="{$postiDisponibili}">
-                                    <button type="button" class="evento-stepper-btn" data-action="increase">+</button>
-                                </div>
-                                <a href="{$base_url}/eventi/prenota/{$evento.idEvento}" class="btn-evento-primary">
-                                    Iscriviti
+                                <a href="{$base_url}/eventi/dettaglio/{$evento.idEvento}" class="btn-evento-primary">
+                                    Scopri di più
                                 </a>
                             {/if}
                         </div>
-
-                        {if !$passato}
-                        <a href="{$base_url}/eventi/dettaglio/{$evento.idEvento}" class="evento-scopri-link">
-                            Scopri di più
-                        </a>
-                        {/if}
 
                     </article>
                     {foreachelse}
@@ -133,31 +118,4 @@
         </div>
     </div>
 </div>
-
-<script>
-document.addEventListener('DOMContentLoaded', function () {
-    const form = document.getElementById('form-filtri-eventi');
-    if (form) {
-        form.querySelectorAll('input[type="checkbox"], input[type="radio"]').forEach(function (input) {
-            input.addEventListener('change', function () {
-                form.submit();
-            });
-        });
-    }
-
-    document.querySelectorAll('.evento-stepper').forEach(function (stepper) {
-        const max = parseInt(stepper.dataset.max, 10) || 99;
-        const input = stepper.querySelector('.evento-stepper-input');
-
-        stepper.querySelectorAll('.evento-stepper-btn').forEach(function (btn) {
-            btn.addEventListener('click', function () {
-                let value = parseInt(input.value, 10) || 1;
-                if (btn.dataset.action === 'increase' && value < max) value++;
-                if (btn.dataset.action === 'decrease' && value > 1) value--;
-                input.value = value;
-            });
-        });
-    });
-});
-</script>
 {/block}

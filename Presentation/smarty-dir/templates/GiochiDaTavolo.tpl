@@ -181,13 +181,7 @@
                                        {if isset($filtri.in_evidenza) && in_array('novita', $filtri.in_evidenza)} checked{/if}>
                                 <span class="checkbox-text">Novità</span>
                             </label>
-                            <label class="checkbox-label">
-                                <input type="checkbox"
-                                       name="in_evidenza[]"
-                                       value="venduti"
-                                       {if isset($filtri.in_evidenza) && in_array('venduti', $filtri.in_evidenza)} checked{/if}>
-                                <span class="checkbox-text">I più venduti</span>
-                            </label>
+                            
                         </div>
                     </div>
 
@@ -224,7 +218,7 @@
                                 <input type="checkbox"
                                        name="mostra_espansioni"
                                        value="1"
-                                       {if $filtri.mostra_espansioni|default:true} checked{/if}>
+                                       {if !isset($filtri.mostra_espansioni) || $filtri.mostra_espansioni} checked{/if}>
                                 <span class="checkbox-text">Mostra espansioni</span>
                             </label>
                         </div>

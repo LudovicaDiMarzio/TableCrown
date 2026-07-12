@@ -33,22 +33,28 @@ $nuovi_arrivi = [
 
 // ── PRODOTTI CATALOGO ──
 $prodotti = [
-    ['id' => 101, 'nome' => 'Catan',            'immagine' => 'placeholder.jpg', 'valutazione_media' => 4.5, 'disponibilita' => 'disponibile', 'prezzo' => 34.90, 'sconto' => true,  'percentuale_sconto' => 20, 'prezzo_scontato' => 27.92,
+    ['id' => 101, 'nome' => 'Catan',            'immagine' => 'placeholder.jpg', 'valutazione_media' => 4.5, 'disponibilita' => 'disponibile',
+        'prezzo_unitario' => 27.92, 'prezzo_originale' => 34.90, 'sconto' => true,  'percentuale_sconto' => 20, 'isAcquistabile' => true,
         'categoria' => 'strategia', 'lingue' => 'IT,EN', 'danno' => '', 'eta_min' => 10, 'difficolta' => 'media', 'giocatori_min' => 3, 'giocatori_max' => 4, 'is_espansione' => false, 'novita' => false, 'in_top_venduti' => true, 'numero_vendite' => 340, 'data_inserimento' => '2024-03-10'],
 
-    ['id' => 102, 'nome' => 'Carcassonne',       'immagine' => 'placeholder.jpg', 'valutazione_media' => 4.0, 'disponibilita' => 'disponibile', 'prezzo' => 29.90, 'sconto' => true,  'percentuale_sconto' => 15, 'prezzo_scontato' => 25.42,
+    ['id' => 102, 'nome' => 'Carcassonne',       'immagine' => 'placeholder.jpg', 'valutazione_media' => 4.0, 'disponibilita' => 'disponibile',
+        'prezzo_unitario' => 25.42, 'prezzo_originale' => 29.90, 'sconto' => true,  'percentuale_sconto' => 15, 'isAcquistabile' => true,
         'categoria' => 'famiglia', 'lingue' => 'IT', 'danno' => '', 'eta_min' => 7, 'difficolta' => 'facile', 'giocatori_min' => 2, 'giocatori_max' => 5, 'is_espansione' => false, 'novita' => false, 'in_top_venduti' => false, 'numero_vendite' => 210, 'data_inserimento' => '2024-01-05'],
 
-    ['id' => 103, 'nome' => '7 Wonders',         'immagine' => 'placeholder.jpg', 'valutazione_media' => 4.7, 'disponibilita' => 'esaurito',    'prezzo' => 39.90, 'sconto' => false, 'percentuale_sconto' => null, 'prezzo_scontato' => null,
+    ['id' => 103, 'nome' => '7 Wonders',         'immagine' => 'placeholder.jpg', 'valutazione_media' => 4.7, 'disponibilita' => 'esaurito',
+        'prezzo_unitario' => 39.90, 'prezzo_originale' => null, 'sconto' => false, 'percentuale_sconto' => null, 'isAcquistabile' => false,
         'categoria' => 'strategia', 'lingue' => 'IT,EN,FR', 'danno' => '', 'eta_min' => 10, 'difficolta' => 'media', 'giocatori_min' => 3, 'giocatori_max' => 7, 'is_espansione' => false, 'novita' => false, 'in_top_venduti' => true, 'numero_vendite' => 275, 'data_inserimento' => '2023-11-20'],
 
-    ['id' => 201, 'nome' => 'Wingspan',          'immagine' => 'placeholder.jpg', 'valutazione_media' => 4.8, 'disponibilita' => 'disponibile', 'prezzo' => 49.90, 'sconto' => false, 'percentuale_sconto' => null, 'prezzo_scontato' => null,
+    ['id' => 201, 'nome' => 'Wingspan',          'immagine' => 'placeholder.jpg', 'valutazione_media' => 4.8, 'disponibilita' => 'disponibile',
+        'prezzo_unitario' => 49.90, 'prezzo_originale' => null, 'sconto' => false, 'percentuale_sconto' => null, 'isAcquistabile' => true,
         'categoria' => 'famiglia', 'lingue' => 'IT,EN', 'danno' => '', 'eta_min' => 10, 'difficolta' => 'media', 'giocatori_min' => 1, 'giocatori_max' => 5, 'is_espansione' => false, 'novita' => true, 'in_top_venduti' => false, 'numero_vendite' => 95, 'data_inserimento' => '2026-05-15'],
 
-    ['id' => 202, 'nome' => 'Azul',              'immagine' => 'placeholder.jpg', 'valutazione_media' => 4.6, 'disponibilita' => 'disponibile', 'prezzo' => 32.90, 'sconto' => true,  'percentuale_sconto' => 10, 'prezzo_scontato' => 29.61,
+    ['id' => 202, 'nome' => 'Azul',              'immagine' => 'placeholder.jpg', 'valutazione_media' => 4.6, 'disponibilita' => 'disponibile',
+        'prezzo_unitario' => 29.61, 'prezzo_originale' => 32.90, 'sconto' => true,  'percentuale_sconto' => 10, 'isAcquistabile' => true,
         'categoria' => 'famiglia', 'lingue' => 'IT,EN,ES,DE', 'danno' => '', 'eta_min' => 8, 'difficolta' => 'facile', 'giocatori_min' => 2, 'giocatori_max' => 4, 'is_espansione' => false, 'novita' => false, 'in_top_venduti' => true, 'numero_vendite' => 410, 'data_inserimento' => '2023-06-01'],
 
-    ['id' => 203, 'nome' => 'Brass Birmingham',  'immagine' => 'placeholder.jpg', 'valutazione_media' => 4.9, 'disponibilita' => 'annunciato',  'prezzo' => 59.90, 'sconto' => false, 'percentuale_sconto' => null, 'prezzo_scontato' => null,
+    ['id' => 203, 'nome' => 'Brass Birmingham',  'immagine' => 'placeholder.jpg', 'valutazione_media' => 4.9, 'disponibilita' => 'annunciato',
+        'prezzo_unitario' => 59.90, 'prezzo_originale' => null, 'sconto' => false, 'percentuale_sconto' => null, 'isAcquistabile' => false,
         'categoria' => 'strategia', 'lingue' => 'EN', 'danno' => '', 'eta_min' => 14, 'difficolta' => 'difficile', 'giocatori_min' => 2, 'giocatori_max' => 4, 'is_espansione' => false, 'novita' => true, 'in_top_venduti' => false, 'numero_vendite' => 60, 'data_inserimento' => '2026-06-01'],
 ];
 
@@ -161,6 +167,7 @@ $recensioni = [
 
 
 // ── EVENTI: TORNEI ──
+// ── EVENTI: TORNEI ──
 $eventi_tornei = [
     [
         'idEvento' => 301,
@@ -170,12 +177,11 @@ $eventi_tornei = [
         'maxPartecipanti' => 16,
         'numeroPartecipanti' => 10,
         'dataInizio' => '2026-07-15 18:30:00',
-        'gioco' => ['nomeProdotto' => 'Catan'],
-        'quota' => [
-            'valore' => 10.00,
-            'valuta' => 'EUR',
-            'haSconto' => true,
-            'prezzoScontato' => 8.00,
+        'gioco' => 'Catan',
+        'quotaIscrizione' => 10.00,
+        'challenge' => [
+            'idEvento'   => 501,
+            'nomeEvento' => 'Challenge Wingspan - Stagione Migratoria',
         ],
     ],
     [
@@ -186,13 +192,9 @@ $eventi_tornei = [
         'maxPartecipanti' => 12,
         'numeroPartecipanti' => 12, // posti esauriti, utile per testare lo stepper a 0
         'dataInizio' => '2026-08-02 17:00:00',
-        'gioco' => ['nomeProdotto' => '7 Wonders'],
-        'quota' => [
-            'valore' => 8.00,
-            'valuta' => 'EUR',
-            'haSconto' => false,
-            'prezzoScontato' => null,
-        ],
+        'gioco' => '7 Wonders',
+        'quotaIscrizione' => 8.00,
+        'challenge' => null,
     ],
     [
         'idEvento' => 303,
@@ -202,13 +204,9 @@ $eventi_tornei = [
         'maxPartecipanti' => 16,
         'numeroPartecipanti' => 16,
         'dataInizio' => '2026-01-20 18:00:00',
-        'gioco' => ['nomeProdotto' => 'Carcassonne'],
-        'quota' => [
-            'valore' => 10.00,
-            'valuta' => 'EUR',
-            'haSconto' => false,
-            'prezzoScontato' => null,
-        ],
+        'gioco' => 'Carcassonne',
+        'quotaIscrizione' => 10.00,
+        'challenge' => null,
     ],
 ];
 
@@ -223,7 +221,7 @@ $eventi_serate = [
         'maxPartecipanti' => 30,
         'numeroPartecipanti' => 18,
         'dataInizio' => '2026-07-10 20:00:00',
-        'tipoSerata' => 'Gioco Libero',
+        'tipoSerata' => 'gioco_libero',
     ],
     [
         'idEvento' => 402,
@@ -233,7 +231,7 @@ $eventi_serate = [
         'maxPartecipanti' => 20,
         'numeroPartecipanti' => 5,
         'dataInizio' => '2026-07-22 19:00:00',
-        'tipoSerata' => 'Presentazione',
+        'tipoSerata' => 'presentazione',
     ],
     [
         'idEvento' => 403,
@@ -243,10 +241,11 @@ $eventi_serate = [
         'maxPartecipanti' => 25,
         'numeroPartecipanti' => 25,
         'dataInizio' => '2025-11-05 20:30:00',
-        'tipoSerata' => 'Gioco Libero',
+        'tipoSerata' => 'gioco_libero',
     ],
 ];
 
+// ── EVENTI: CHALLENGE ──
 // ── EVENTI: CHALLENGE ──
 $eventi_challenge = [
     [
@@ -257,11 +256,10 @@ $eventi_challenge = [
         'maxPartecipanti' => 8,
         'numeroPartecipanti' => 3,
         'dataInizio' => '2026-07-28 16:00:00',
-        'quota' => [
-            'valore' => 5.00,
-            'valuta' => 'EUR',
-            'haSconto' => true,
-            'prezzoScontato' => 4.00,
+        'quotaIscrizione' => 5.00,
+        'premio' => 'Wingspan',
+        'tornei' => [
+            ['idEvento' => 301, 'nomeEvento' => 'Torneo di Catan - Coppa Primavera'],
         ],
     ],
     [
@@ -272,21 +270,30 @@ $eventi_challenge = [
         'maxPartecipanti' => 8,
         'numeroPartecipanti' => 8,
         'dataInizio' => '2026-02-14 18:00:00',
-        'quota' => [
-            'valore' => 5.00,
-            'valuta' => 'EUR',
-            'haSconto' => false,
-            'prezzoScontato' => null,
-        ],
+        'quotaIscrizione' => 5.00,
+        'premio' => 'Catan',
+        'tornei' => [],
     ],
 ];
 
-// ── FILTRI (riflette ciò che arriva da querystring, anche se il mock non filtra davvero) ──
+// ── FILTRI ──
 $filtri = [
-    'data'      => $_GET['data'] ?? '',
-    'stato'     => $_GET['stato'] ?? 'programma',
-    'tipologia' => $_GET['tipologia'] ?? [],
+    'data'              => $_GET['data'] ?? '',
+    'query_string'      => $_GET['query_string'] ?? '',
+    'mostra_espansioni' => !isset($_GET['mostra_espansioni']) || $_GET['mostra_espansioni'] !== '0',
 ];
+
+// ── BREADCRUMBS (per vista) ──
+function breadcrumbsEventi(string $baseUrl, ?array $ultimo = null): array {
+    $crumbs = [
+        ['label' => 'Home',   'url' => $baseUrl . '/'],
+        ['label' => 'Eventi', 'url' => $baseUrl . '/eventi'],
+    ];
+    if ($ultimo) {
+        $crumbs[] = $ultimo;
+    }
+    return $crumbs;
+}
 
 
 
@@ -355,6 +362,7 @@ if (!$categoria && preg_match('#^/catalogo/(tornei|serate|challenge)$#', $uriPat
 if ($categoria === 'tornei') {
     $smarty->assign('eventi', $eventi_tornei);
     $smarty->assign('filtri', $filtri);
+    $smarty->assign('breadcrumbs', breadcrumbsEventi(BASE_URL, ['label' => 'Tornei', 'url' => BASE_URL . '/catalogo/tornei']));
     $smarty->display('catalogo_tornei.tpl');
     exit;
 }
@@ -362,6 +370,7 @@ if ($categoria === 'tornei') {
 if ($categoria === 'serate') {
     $smarty->assign('eventi', $eventi_serate);
     $smarty->assign('filtri', $filtri);
+    $smarty->assign('breadcrumbs', breadcrumbsEventi(BASE_URL, ['label' => 'Serate', 'url' => BASE_URL . '/catalogo/serate']));
     $smarty->display('catalogo_serate.tpl');
     exit;
 }
@@ -369,16 +378,12 @@ if ($categoria === 'serate') {
 if ($categoria === 'challenge') {
     $smarty->assign('eventi', $eventi_challenge);
     $smarty->assign('filtri', $filtri);
+    $smarty->assign('breadcrumbs', breadcrumbsEventi(BASE_URL, ['label' => 'Challenge', 'url' => BASE_URL . '/catalogo/challenge']));
     $smarty->display('catalogo_challenge.tpl');
     exit;
 }
 
-
-
-$smarty->assign('eventi', $eventi_tornei);
+// Home eventi (le 3 card)
 $smarty->assign('filtri', $filtri);
-
-
-
-
-$smarty->display('ModificaAccount.tpl');
+$smarty->assign('breadcrumbs', breadcrumbsEventi(BASE_URL));
+$smarty->display('eventi.tpl');
