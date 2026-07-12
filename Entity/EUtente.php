@@ -120,6 +120,9 @@ class EUtente extends EPersona {
         if ($eta < 0) {
             throw new \InvalidArgumentException("L'età non può essere negativa.");
         }
+        if ($eta < 18) {
+            throw new \InvalidArgumentException("Devi avere almeno 18 anni per registrarti.");
+        }
         $this->eta = $eta;
     }
    
