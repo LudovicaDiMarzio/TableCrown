@@ -28,16 +28,9 @@ class FGiocoDaTavolo
 
             //gestione dei filtri dinamica
 
-            if (isset($filtri['difficolta'])){
-                // Prova a creare l'Enum. Se la stringa non corrisponde ad uno degli enumerativi, restituisce null
-                $difficoltaEnum = DifficoltaGioco::tryFrom($filtri['difficolta']);
-                if ($difficoltaEnum === null) {
-                    throw new Exception("La stringa passata non corrsiponde a nessun enumerativo");
-                } 
-                else {
-                    $qb->andWhere('g.difficolta = :difficolta')
-                        ->setParameter('difficolta', $difficoltaEnum);
-                }
+            if (!empty($filtri['difficolta'])){
+                $qb->andWhere('g.difficolta = :difficolta')
+                   ->setParameter('difficolta', $filtri['difficolta']);
             }
 
             if (!empty($filtri['categoria_selected'])) {
@@ -53,19 +46,20 @@ class FGiocoDaTavolo
             }
 
             if (isset($filtri['price_min'])) {
-                $qb->andWhere('g.prezzo >= :price_min')
+                $qb->andWhere('pr.valore>= :price_min')
                    ->setParameter('price_min', $filtri['price_min']);
             }
 
+            /*non c'è come filtro, ma se va aggiunto già pronto
             if (isset($filtri['price_max'])) {
-                $qb->andWhere('g.prezzo <= :price_max')
+                $qb->andWhere('pr.valore <= :price_max')
                    ->setParameter('price_max', $filtri['price_max']);
-            }
+            }*/
 
             
             //se è settato questo filtro e il suo valore è flse mostriamo solo i giochi base (quelli che non hanno riferimento al giooo padre))
             if (isset($filtri['mostra_espansioni']) && $filtri['mostra_espansioni'] === false) {
-                $qb->andWhere('g.gioco_base_id IS NULL');
+                $qb->andWhere('g.giocoBase IS NULL');
             }
 
             if (isset($filtri['players_min'])) {
@@ -92,46 +86,68 @@ class FGiocoDaTavolo
 
            //usiamo !empty e non isset perchè se il filtro è settato ma è un array vuoto, non vogliamo filtrare nulla
             if (!empty($filtri['danno_selected'])) {
-               $qb->innerJoin('g.livelloDanno', 'ld')
-               //controllo se il livello di danno del gioco è uno di quello passato nellarray filtro
-                ->andWhere($qb->expr()->in('ld.nome', ':danni')) 
-                ->setParameter('danni', $filtri['danno_selected']);
+               $qb->innerJoin('g.danno', 'ld')
+                //controllo se il livello di danno del gioco è uno di quello passato nellarray filtro
+                    ->andWhere($qb->expr()->in('ld.livelloDanno', ':danni')) 
+                    ->setParameter('danni', $filtri['danno_selected']);
             }
 
-            /*non so se lo volgiamo includere
-            if( isset($filtri['disponibilita'])) {
-                $disponibilitaEnum = DisponibilitaProdotto::tryFrom($filtri['disponibilita']);
-                if ($disponibilitaEnum === null) {
-                    throw new Exception("La stringa passata non corrsiponde a nessun enumerativo");
-                }
-                else{
-                    $qb->andWhere('g.disponibilita = :disponibilita')
-                        ->setParameter('disponibilita', $filtri['disponibilita']);
-                }
-            }*/
+            if (!empty($filtri['disponibilita'])) {
+                $qb->andWhere('g.disponibilitaProdotto = :disponibilita')
+                    ->setParameter('disponibilita', $filtri['disponibilita']);
+            }
 
             //filtro per l'ordinamento dei risultati
+            //usiamo switch case perchè serve la mutua esclusione per l'ordinamento
             if (!empty($filtri['ordinamento'])) {
                 switch ($filtri['ordinamento']) {
-                    case 'prezzo_asc':
+                    case 'prezzo-asc':
                         $qb->orderBy('pr.valore', 'ASC'); // Dal più economico
                         break;
-                    case 'prezzo_desc':
+                    case 'prezzo-desc':
                         $qb->orderBy('pr.valore', 'DESC'); // Dal più costoso
                         break;
-                    case 'piu_venduti':
-                        $qb->orderBy('g.numeroVendite', 'DESC'); // I più venduti
+                    case 'popolarita':
+                        $qb->orderBy('g.numeroVendite', 'DESC'); // dal più venduto al meno venduto
+                        break;
+                    case 'rating':
+                        $qb->orderBy('g.valutazioneMedia', 'DESC'); // Dalla media voto più alta alla più bassa
                         break;
                 }
             }
+            else {
+                //in generale diamo un ordinamento di default per i giochi mostranodli dal più recente al meno recente
+                $qb->orderBy('g.dataPubblicazione', 'DESC');
+            }
 
+            //posso voler vedere sia le novità che i prodotti in sconto
+            if (!empty($filtri['in_evidenza_filtro'])) {
+                //recupero i giochi pubblicati nell'ultimo mese e li ordino per data di pubblicazione decrescente (dal più recente al meno recente)
+                if (in_array('novita', $filtri['in_evidenza_filtro'])) {
+                    $datalimite = new \DateTime();
+                    $datalimite->modify('-1 month');
+                    $qb->andWhere('g.dataPubblicazione >= :datalimite')
+                        ->setParameter('datalimite', $datalimite);
+                }   
+                
+                if (in_array('sconti', $filtri['in_evidenza_filtro'])) {
+                    $qb->andWhere('pr.sconto > 0');
+                }
+            }
+            
+            //per recuperare i giochi con valutazione media superiore ad una certa soglia
+            if (isset ($filtri['rating_min'])&& $filtri['rating_min'] >0) { 
+                $qb->andWhere('g.valutazioneMedia >= :ratingMin')
+                    ->setParameter('ratingMin', $filtri['rating_min']);
+            }
 
             /*clono la query appena creata per poterla modificare ed effettuare un count su tutti i prodotti filtrati e 
               sapere quanti prodotti sono usciti in tutto dalla query fatta 
             */
             //la clonatura della query viene fatta prima della suddivisione dei risultati per le pagine, perchè altrimenti il count sarebbe falzato e basato sui risultati "limitati" della query
             $qbCount = clone $qb;
-            $qbCount->select('count(g.id)');
+            $qbCount->select('count(g.idProdotto)');
+            $qbCount->resetDQLPart('orderBy');//cancelliamo l'ordinamento della query clonata, perchè non serve per il count e potrebbe rallentare la query o generare errori
             //poichè count restituisce un numero scalare non possiamo usare il getResult(), ma usiamo il getSingleScalarResult() che restituisce un numero scalare
             $totale = $qbCount->getQuery()->getSingleScalarResult();
 
