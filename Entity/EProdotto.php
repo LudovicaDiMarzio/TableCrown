@@ -251,25 +251,6 @@ abstract class EProdotto {
         return $somma / $this->recensioni->count();
     }
 
-    /*dovrebbe essere così per aggiornare la valutazione media ogni volta, mentre il get restituisce soltanto
-    private function aggiornaValutazioneMedia(): void {
-        if ($this->recensioni->isEmpty()) {
-            $this->valutazioneMedia = 0.0;
-            return;
-        }
-
-        $somma = 0.0;
-        foreach ($this->recensioni as $recensione) {
-            $somma += $recensione->getValutazione();
-        }
-
-        $this->valutazioneMedia = round($somma / $this->recensioni->count(), 1);
-    }
-
-    public function getValutazioneMedia(): float {
-        return $this->valutazioneMedia;
-    }
-    */
 
     public function getNumeroVendite(): int {
         return $this->numeroVendite;
