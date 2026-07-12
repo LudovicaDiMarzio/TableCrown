@@ -48,6 +48,12 @@ abstract class EProdotto {
     #[ORM\JoinColumn(name: "prezzo_id", referencedColumnName: "idPrezzo", nullable: true)]
     private ?EPrezzo $prezzo = null; //prezzo del prodotto, se presente (se il prodotto è esaurito o in arrivo, il prezzo potrebbe non essere disponibile, quindi è nullable)
 
+    #[ORM\Column(type: 'integer', options: ['default' => 0])]
+    protected int $numeroVendite = 0;
+
+    #[ORM\Column(type: 'float', options: ['default' => 0.0])]
+    protected float $valutazioneMedia = 0.0;
+
     #[ORM\OneToMany(targetEntity: ERecensione::class, mappedBy: "prodotto", cascade: ["persist", "remove"])]
     private Collection $recensioni; //elenco delle recensioni del prodotto
 
@@ -60,6 +66,8 @@ abstract class EProdotto {
         $this->dataPubblicazione = new DateTime();
         $this->prezzo = $prezzo;
         $this->recensioni = new ArrayCollection(); //inizializzazione della collezione di recensioni
+        $this->numeroVendite = 0;       // Nasce con 0 vendite
+        $this->valutazioneMedia = 0.0;
     }
 
     //GET methods
@@ -213,6 +221,7 @@ abstract class EProdotto {
     public function addRecensione(ERecensione $recensione): void {
         if (!$this->recensioni->contains($recensione)) {
             $this->recensioni->add($recensione);
+            $this->getvalutazioneMedia();//aggiorna la valutaione media automaticamente
         }
     }
 
@@ -221,6 +230,8 @@ abstract class EProdotto {
      */
     public function removeRecensione(ERecensione $recensione): void {
         $this->recensioni->removeElement($recensione);
+        $this->getvalutazioneMedia();//aggiorna la valutaione media automaticamente
+
     }
 
     /**
@@ -228,6 +239,7 @@ abstract class EProdotto {
      */
     public function getValutazioneMedia(): float {
         if ($this->recensioni->isEmpty()) {
+            $this->valutazioneMedia = 0.0;
             return 0.0;
         }
 
@@ -237,5 +249,19 @@ abstract class EProdotto {
         }
 
         return $somma / $this->recensioni->count();
+    }
+
+
+    public function getNumeroVendite(): int {
+        return $this->numeroVendite;
+    }
+
+    //Incrementa il contatore delle vendite dopo un acquisto
+    
+    public function aggiungiVendite(int $quantitaAcquistata): void {
+        if ($quantitaAcquistata <= 0) {
+            throw new InvalidArgumentException("La quantità di vendite da aggiungere non può essere negativa.");
+        }
+        $this->numeroVendite += $quantitaAcquistata;
     }
 }
