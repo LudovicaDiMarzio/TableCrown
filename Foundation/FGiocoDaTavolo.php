@@ -22,8 +22,9 @@ class FGiocoDaTavolo
     {
         try {
             $qb=FEntityManager::getInstance()->getEntityManager()->createQueryBuilder();
-            $qb->select('g')
-                ->from(EGiocoDaTavolo::class, 'g');
+            $qb->select('g', 'pr')
+                ->from(EGiocoDaTavolo::class, 'g')
+                ->innerJoin('g.prezzo', 'pr');
 
             //gestione dei filtri dinamica
 
@@ -39,77 +40,65 @@ class FGiocoDaTavolo
                 }
             }
 
-            if (isset($filtri['lingua'])) {
-                $linguaEnum = LinguaGioco::tryFrom($filtri['lingua']);
-                if ($linguaEnum === null) {
-                    throw new Exception("La stringa passata non corrsiponde a nessun enumerativo");
-                }
-                else{
-                    $qb->andWhere('g.lingua = :lingua')
-                       ->setParameter('lingua', $linguaEnum);
-                }
+            if (!empty($filtri['categoria_selected'])) {
+                // Se l'utente ha spuntato [Fantasy, Fantascienza]
+                // Doctrine traduce in: WHERE categoria IN ('Fantasy', 'Fantascienza')
+                $qb->andWhere($qb->expr()->in('g.categoria', ':categorie'))
+                ->setParameter('categorie', $filtri['categoria_selected']);
             }
 
-            if (isset($filtri['prezzo_min'])) {
-                $qb->andWhere('g.prezzo >= :prezzo_min')
-                   ->setParameter('prezzo_min', $filtri['prezzo_min']);
+            if (!empty($filtri['lingua_selected'])) {
+                $qb->andWhere($qb->expr()->in('g.lingua', ':lingue'))
+                ->setParameter('lingue', $filtri['lingua_selected']);
             }
 
-            if (isset($filtri['prezzo_max'])) {
-                $qb->andWhere('g.prezzo <= :prezzo_max')
-                   ->setParameter('prezzo_max', $filtri['prezzo_max']);
+            if (isset($filtri['price_min'])) {
+                $qb->andWhere('g.prezzo >= :price_min')
+                   ->setParameter('price_min', $filtri['price_min']);
             }
 
-            if (isset($filtri['categoria'])) {
-                // 1. Verifichiamo che la categoria esista davvero nel tuo Enum (sicurezza!)
-                $categoriaEnum = Categoria::tryFrom($filtri['categoria']);
-                if ($categoriaEnum === null) {
-                    throw new Exception("La stringa passata non corrsiponde a nessun enumerativo");
-                }
-                else {
-                    $qb->andWhere('g.categoria LIKE :categoria')
-                    // Usiamo ->value per estrarre la stringa (es. "strategia") dall'oggetto Enum
-                    // e la avvolgiamo tra virgolette doppie e percentuali per cercare nel JSON
-                    ->setParameter('categoria', '%"' . $categoriaEnum->value . '"%');
-                }
+            if (isset($filtri['price_max'])) {
+                $qb->andWhere('g.prezzo <= :price_max')
+                   ->setParameter('price_max', $filtri['price_max']);
             }
 
-            if (isset($filtri['giocoBase'])) {
-                $qb->andWhere('g.giocoBase = :giocoBase')
-                   ->setParameter('giocoBase', $filtri['giocoBase']);
+            
+            //se è settato questo filtro e il suo valore è flse mostriamo solo i giochi base (quelli che non hanno riferimento al giooo padre))
+            if (isset($filtri['mostra_espansioni']) && $filtri['mostra_espansioni'] === false) {
+                $qb->andWhere('g.gioco_base_id IS NULL');
             }
 
-            if (isset($filtri['numeroGiocatoriMin'])) {
-                $qb->andWhere('g.numeroGiocatoriMin = :numeroGiocatoriMin')
-                   ->setParameter('numeroGiocatoriMin', $filtri['numeroGiocatoriMin']);
+            if (isset($filtri['players_min'])) {
+                $qb->andWhere('g.numeroGiocatoriMin = :players_min')
+                   ->setParameter('players_min', $filtri['players_min']);
             }
 
-            if (isset($filtri['numeroGiocatoriMax'])) {
-                $qb->andWhere('g.numeroGiocatoriMax = :numeroGiocatoriMax')
-                   ->setParameter('numeroGiocatoriMax', $filtri['numeroGiocatoriMax']);
+            if (isset($filtri['players_max'])) {
+                $qb->andWhere('g.numeroGiocatoriMax = :players_max')
+                   ->setParameter('players_max', $filtri['players_max']);
             }
 
-            if (isset($filtri['etaMinima'])) {
-                $qb->andWhere('g.etaMinima = :etaMinima')
-                   ->setParameter('etaMinima', $filtri['etaMinima']);
+            if (isset($filtri['age_min'])) {
+                $qb->andWhere('g.etaMinima = :age_min')
+                   ->setParameter('age_min', $filtri['age_min']);
             }
 
+            /*forse non serve, non lo so, non c'è nei filtri 
             if (isset($filtri['durataMedia'])) {
                 $qb->andWhere('g.durataMedia = :durataMedia')
                    ->setParameter('durataMedia', $filtri['durataMedia']);
             }
+            */
 
-            if (isset($filtri['danno'])) {
-                $dannoEnum = LivelloDannoGiochi::tryFrom($filtri['danno']);
-                if ($dannoEnum === null) {
-                    throw new Exception("La stringa passata non corrsiponde a nessun enumerativo");
-                }
-                else {
-                    $qb->andWhere('g.danno = :danno')
-                       ->setParameter('danno', $dannoEnum);
-                }
+           //usiamo !empty e non isset perchè se il filtro è settato ma è un array vuoto, non vogliamo filtrare nulla
+            if (!empty($filtri['danno_selected'])) {
+               $qb->innerJoin('g.livelloDanno', 'ld')
+               //controllo se il livello di danno del gioco è uno di quello passato nellarray filtro
+                ->andWhere($qb->expr()->in('ld.nome', ':danni')) 
+                ->setParameter('danni', $filtri['danno_selected']);
             }
 
+            /*non so se lo volgiamo includere
             if( isset($filtri['disponibilita'])) {
                 $disponibilitaEnum = DisponibilitaProdotto::tryFrom($filtri['disponibilita']);
                 if ($disponibilitaEnum === null) {
@@ -119,9 +108,22 @@ class FGiocoDaTavolo
                     $qb->andWhere('g.disponibilita = :disponibilita')
                         ->setParameter('disponibilita', $filtri['disponibilita']);
                 }
+            }*/
+
+            //filtro per l'ordinamento dei risultati
+            if (!empty($filtri['ordinamento'])) {
+                switch ($filtri['ordinamento']) {
+                    case 'prezzo_asc':
+                        $qb->orderBy('pr.valore', 'ASC'); // Dal più economico
+                        break;
+                    case 'prezzo_desc':
+                        $qb->orderBy('pr.valore', 'DESC'); // Dal più costoso
+                        break;
+                    case 'piu_venduti':
+                        $qb->orderBy('g.numeroVendite', 'DESC'); // I più venduti
+                        break;
+                }
             }
-
-
 
 
             /*clono la query appena creata per poterla modificare ed effettuare un count su tutti i prodotti filtrati e 
