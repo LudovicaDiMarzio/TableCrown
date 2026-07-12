@@ -1,0 +1,166 @@
+<?php
+namespace TableCrown\Control;
+
+use TableCrown\Utility\UHTTPMethods;
+use TableCrown\Utility\UFlashMessage;
+use TableCrown\Utility\USession;
+use TableCrown\Entity\EEvento;
+use TableCrown\Entity\ESerata;
+use TableCrown\Entity\ETorneo;
+use TableCrown\Entity\EChallenge;
+use TableCrown\Entity\EPartecipazione;
+use TableCrown\Entity\EUtente;
+use TableCrown\Foundation\FPersistentManager;
+use TableCrown\Presentation\Views\ViewDettaglioEvento;
+
+class CDettaglioEvento extends BaseController {
+    public function __construct() {
+        parent::__construct();
+    }
+
+    /**
+     * Mostra la pagina di dettaglio di un evento specifico.
+     * URL: /eventi/dettaglio?id=X (Accesso libero)
+     */
+    public function mostraDettaglioEvento(int $idEvento): void {
+        $evento = FPersistentManager::PMgetObjOnAttribute(EEvento::class, 'idEvento', $idEvento);
+
+        if (!$evento) {
+            UFlashMessage::addMessage('danger', 'L\'evento richiesto non esiste o non è più disponibile.');
+            header('Location: /eventi');
+            exit();
+        }
+
+        $datiPagina = $this->costruisciDatiVista($evento);
+        $datiLayout = $this->preparaDatiLayout('evento', $datiPagina);
+
+        //Chiamata alla View
+        ViewDettaglioEvento::mostraDettaglioEvento($datiLayout);
+    }
+
+    /**
+     * Costruisce i dati di dettaglio partendo dagli helper già esistenti
+     * nel BaseController (serataToArray, torneoToArray, challengeToArray),
+     * aggiungendo i campi extra necessari solo alla pagina di dettaglio.
+     */
+    private function costruisciDatiVista(EEvento $evento): array {
+        if ($evento instanceof ESerata) {
+            $dati = $this->serataToArray($evento);
+            $vista = 'dettaglio_serata';
+        } elseif ($evento instanceof ETorneo) {
+            $dati = $this->torneoToArray($evento);
+            //Nel catalogo 'premio' è un link minimale (id, nome, immagine); qui invece
+            //per la view serve la card completa del prodotto, come nel catalogo dei prodotti.
+            $dati['premio'] = $this->prodottoToArray($evento->getPremio());
+            $vista = 'dettaglio_torneo';
+        } elseif ($evento instanceof EChallenge) {
+            $dati = $this->challengeToArray($evento);
+            $dati['premio'] = $this->prodottoToArray($evento->getPremio());
+            //'tornei' nel catalogo è un array di link minimali (id, nome); qui invece
+            //serve la card completa di ogni torneo, quindi sostituiamo con torneoToArray().
+            //Nota: con torneoToArray() ogni torneo avra a sua volta un link minimale alla 
+            //challenge, ma nella UI quel campo può semplicemente essere ignorato
+            $dati['tornei'] = array_map(
+                fn($t) => $this->torneoToArray($t),
+                $evento->getTornei()->toArray()
+            );
+            $dati['punteggi'] = [ //i punteggi non ci sono in challengeToArray() perché non servono nel catalogo, qui li aggiungiamo
+                'primo' => $evento->getPunteggioPrimoClassificato(),
+                'secondo' => $evento->getPunteggioSecondoClassificato(),
+                'terzo' => $evento->getPunteggioTerzoClassificato(),
+            ];
+            $vista = 'dettaglio_challenge';
+        } else {
+            //Difensivo: non dovrebbe mai accadere dato il DiscriminatorMap di EEvento, ma lo aggiungiamo per sicurezza
+            throw new \LogicException('Tipo di evento non riconosciuto: ' . get_class($evento));
+        }
+
+        $dati['vista'] = $vista;
+        $dati['descrizioneEvento'] = $evento->getDescrizioneEvento();
+        $dati['postiRimanenti'] = $evento->getMaxPartecipanti() - $evento->getNumeroPartecipanti();
+        $dati['hasPostiDisponibili'] = $evento->hasPostiDisponibili();
+        $dati['userIscritto'] = $this->utenteIscritto($evento);
+
+        return $dati;
+    }
+
+    /**
+     * Verifica se l'utente attualmente loggato è già iscritto a questo evento.
+     */
+    private function utenteIscritto(EEvento $evento): bool {
+        if (!$this->isLoggedIn() || USession::getSessionElement('ruolo') !== 'utente') {
+            return false;        
+        }
+        $idUtente = USession::getSessionElement('idUtente');
+
+        foreach ($evento->getPartecipazioni() as $partecipazione) {
+            if ($partecipazione->getUtente()->getIdPersona() === $idUtente) {
+                return true;
+            }
+        }
+
+        return false;
+    }
+
+    /**
+     * Gestisce la prenotazione a un evento.
+     * URL: /eventi/partecipa
+     */
+    public function partecipaEvento(): void {
+        $this->requireRole('utente');
+
+        $idEvento = UHTTPMethods::postInt('id_evento');
+        if (!$idEvento) {
+            UFlashMessage::addMessage('danger', 'Evento non specificato.');
+            header('Location: /eventi');
+            exit();
+        }
+
+        $evento = FPersistentManager::PMgetObjOnAttribute(EEvento::class, 'idEvento', $idEvento);
+        if (!$evento) {
+            UFlashMessage::addMessage('danger', 'L\'evento selezionato non esiste.');
+            header('Location: /eventi');
+            exit();
+        }
+
+        $idUtente = USession::getSessionElement('id_persona');
+        $utente = FPersistentManager::PMgetObjOnAttribute(EUtente::class, 'idPersona', $idUtente);
+
+        if ($this->utenteIscritto($evento)) {
+            UFlashMessage::addMessage('danger', 'Sei già iscritto a questo evento.');
+            header('Location: /eventi/dettaglio?id=' . $idEvento);
+            exit();
+        }
+
+        try {
+            $nuovaPartecipazione = new EPartecipazione($utente, $evento);
+        } catch (\InvalidArgumentException $e) {
+            UFlashMessage::addMessage('danger', $e->getMessage());
+            header('Location: /eventi/dettaglio?id=' . $idEvento);
+            exit();
+        }
+
+        //TODO: se $evento->richiedeQuota() è true (caso di torneo o challenge), qui manca
+        //ancora il flusso di pagamento della quota (la partecipazione viene creata con quotaPagata = false di dafault)
+        //Da definire come/quando gestire il pagamento
+
+        $salvato = FPersistentManager::PMsaveObj($nuovaPartecipazione);
+
+        if ($salvato) {
+            UFlashMessage::addMessage('success', 'Partecipazione effettuata con successo!');
+        } else {
+            UFlashMessage::addMessage('danger', 'Si è verificato un errore durante la prenotazione. Riprova.');
+        }
+
+        header('Location: /eventi/dettaglio?id=' . $idEvento);
+        exit();
+    }
+
+    protected function getBreadcrumbs(string $currentPage = ''): array {
+        return [
+            ['label' => 'Home', 'url' => '/'],
+            ['label' => 'Eventi', 'url' => '/eventi'],
+            ['label' => 'Dettaglio evento', 'url' => '/eventi/dettaglio?id=' . $this->idEvento],
+        ];
+    }
+}

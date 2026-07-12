@@ -246,6 +246,7 @@ abstract class BaseController {
             'maxPartecipanti'   => $evento->getMaxPartecipanti(),
             'statoEvento'       => $evento->getStatoEvento()->value, //valori non ancora "puliti", da rivedere se/quando serve esporli come identificatore tecnico altrove
             'numeroPartecipanti'=> $evento->getNumeroPartecipanti(),
+            'richiedeQuota'     => $evento->richiedeQuota(),
         ];
     }
 
