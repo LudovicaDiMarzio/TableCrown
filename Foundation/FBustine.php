@@ -18,30 +18,69 @@ class FBustine{
     {
         try{
             $qb=FEntityManager::getInstance()->getEntityManager()->createQueryBuilder();
-            $qb->select('b')
-                ->from(EBustine::class, 'b');
+            $qb->select('b', 'pr')
+                ->from(EBustine::class, 'b')
+                ->innerJoin('b.prezzo', 'pr');
 
             //gestione dei filtri sul prezzo
 
-            if (isset($filtri['prezzo_min'])) {
-                $qb->andWhere('b.prezzo >= :prezzo_min')
-                   ->setParameter('prezzo_min', $filtri['prezzo_min']);
+            if (isset($filtri['price_min'])) {
+                $qb->andWhere('pr.valore >= :price_min')
+                   ->setParameter('price_min', $filtri['price_min']);
             }
 
-            if (isset($filtiri['prezzo_max'])){
-                $qb->andwhere('b.prezzo <= :prezzo_max')
-                   ->setParameter('prezzo_max', $filtri['prezzo_max']);
+            if (isset($filtiri['price_max'])){
+                $qb->andwhere('pr.valore <= :price_max')
+                   ->setParameter('price_max', $filtri['price_max']);
             }
 
-            if (isset($filtri['disponibilita'])) {
-                $disponibilitaEnum = DisponibilitaProdotto::tryFrom($filtri['disponibilita']);
-                if ($disponibilitaEnum === null) {
-                    throw new Exception("La stringa passata non corrsiponde a nessun enumerativo");
+            if (!empty($filtri['disponibilita'])) {
+                $qb->andWhere('b.disponibilitaProdotto = :disponibilita')
+                    ->setParameter('disponibilita', $filtri['disponibilita']);
+            }
+
+               //filtro per l'ordinamento dei risultati
+            //usiamo switch case perchè serve la mutua esclusione per l'ordinamento
+            if (!empty($filtri['ordinamento'])) {
+                switch ($filtri['ordinamento']) {
+                    case 'prezzo-asc':
+                        $qb->orderBy('pr.valore', 'ASC'); // Dal più economico
+                        break;
+                    case 'prezzo-desc':
+                        $qb->orderBy('pr.valore', 'DESC'); // Dal più costoso
+                        break;
+                    case 'popolarita':
+                        $qb->orderBy('b.numeroVendite', 'DESC'); // dal più venduto al meno venduto
+                        break;
+                    case 'rating':
+                        $qb->orderBy('b.valutazioneMedia', 'DESC'); // Dalla media voto più alta alla più bassa
+                        break;
                 }
-                else{
-                    $qb->andWhere('b.disponibilitaProdotto = :disponibilita')
-                        ->setParameter('disponibilita', $filtri['disponibilita']);
+            }
+            else {
+                //in generale diamo un ordinamento di default per i giochi mostranodli dal più recente al meno recente
+                $qb->orderBy('b.dataPubblicazione', 'DESC');
+            }
+
+            //posso voler vedere sia le novità che i prodotti in sconto
+            if (!empty($filtri['in_evidenza_filtro'])) {
+                //recupero i giochi pubblicati nell'ultimo mese e li ordino per data di pubblicazione decrescente (dal più recente al meno recente)
+                if (in_array('novita', $filtri['in_evidenza_filtro'])) {
+                    $datalimite = new \DateTime();
+                    $datalimite->modify('-1 month');
+                    $qb->andWhere('b.dataPubblicazione >= :datalimite')
+                        ->setParameter('datalimite', $datalimite);
+                }   
+                
+                if (in_array('sconti', $filtri['in_evidenza_filtro'])) {
+                    $qb->andWhere('pr.sconto > 0');
                 }
+            }
+            
+            //per recuperare i giochi con valutazione media superiore ad una certa soglia
+            if (isset ($filtri['rating_min'])&& $filtri['rating_min'] >0) { 
+                $qb->andWhere('b.valutazioneMedia >= :ratingMin')
+                    ->setParameter('ratingMin', $filtri['rating_min']);
             }
             
             //cloniamo la query per poterla modificare ed effettuarci un count
