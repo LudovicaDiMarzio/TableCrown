@@ -516,6 +516,90 @@ $ordini_utente = [
     ],
 ];
 
+
+
+
+// 1) Aggiungi 'profilo_eventi' alla whitelist $_GET['page']
+$paginheWhitelist = [
+    // ... le tue pagine esistenti
+    'profilo_eventi',
+];
+
+// 2) Blocco mock per 'profilo_eventi'
+
+// ── PROFILO EVENTI (mock) ──
+$eventi_profilo = [
+    [
+        'idEvento'              => 1,
+        'nomeEvento'            => 'Serata Giochi da Tavolo',
+        'imgEvento'             => 'placeholder.jpg',
+        'dataInizio'            => '20/07/2026',
+        'maxPartecipanti'       => 20,
+        'statoEvento'           => 'confermato',
+        'numeroPartecipanti'    => 14,
+        'tipoEvento'            => 'serata',
+        'tipoSerata'            => 'Giochi di strategia',
+        'dataIscrizione'        => '01/07/2026',
+        'posizioneInClassifica' => null,
+        'quotaPagata'           => true,
+        'isDisdicibile'         => true,
+    ],
+    [
+        'idEvento'              => 2,
+        'nomeEvento'            => 'Torneo Scacchi Estivo',
+        'imgEvento'             => 'placeholder.jpg',
+        'dataInizio'            => '25/07/2026',
+        'maxPartecipanti'       => 32,
+        'statoEvento'           => 'confermato',
+        'numeroPartecipanti'    => 30,
+        'tipoEvento'            => 'torneo',
+        'quotaIscrizione'       => '10.00',
+        'premio'                => 'Trofeo + buono da 50€',
+        'gioco'                 => 'Scacchi',
+        'challenge'             => [
+            'idEvento'   => 12,
+            'nomeEvento' => "Challenge d'Autunno",
+        ],
+        'dataIscrizione'        => '05/07/2026',
+        'posizioneInClassifica' => 3,
+        'quotaPagata'           => false,
+        'isDisdicibile'         => true,
+    ],
+    [
+        'idEvento'              => 12,
+        'nomeEvento'            => "Challenge d'Autunno",
+        'imgEvento'             => null,
+        'dataInizio'            => '10/09/2026',
+        'maxPartecipanti'       => 64,
+        'statoEvento'           => 'aperto',
+        'numeroPartecipanti'    => 40,
+        'tipoEvento'            => 'challenge',
+        'quotaIscrizione'       => '20.00',
+        'premio'                => 'Coppa Challenge + montepremi',
+        'tornei'                => [
+            ['idEvento' => 21, 'nomeEvento' => 'Torneo Scacchi - Girone A'],
+            ['idEvento' => 22, 'nomeEvento' => 'Torneo Scacchi - Girone B'],
+        ],
+        'dataIscrizione'        => '02/07/2026',
+        'posizioneInClassifica' => null,
+        'quotaPagata'           => true,
+        'isDisdicibile'         => false,
+    ],
+];
+
+// ── Home eventi (le 3 card) ──
+$smarty->assign('eventi', $eventi_profilo);
+$smarty->assign('ordinamento_eventi', $_GET['ordinamento'] ?? 'futuri');
+$smarty->assign('filtri', $filtri);
+$smarty->assign('breadcrumbs', breadcrumbsEventi(BASE_URL));
+
+
+
+
+
+
+
+
 $smarty->assign('ordini', $ordini_utente);
 
 
@@ -598,4 +682,4 @@ if ($categoria === 'challenge') {
 // Home eventi (le 3 card)
 $smarty->assign('filtri', $filtri);
 $smarty->assign('breadcrumbs', breadcrumbsEventi(BASE_URL));
-$smarty->display('MioOrdine.tpl');
+$smarty->display('ProfiloEventi.tpl');
