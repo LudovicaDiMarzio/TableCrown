@@ -44,7 +44,8 @@ class EPartecipazione {
         $this->posizioneInClassifica = $posizioneInClassifica;
         $this->punteggioTotale = $punteggioTotale;
         $this->quotaPagata = $quotaPagata;
-        $utente->riceviPartecipazione($this);
+        $utente->riceviPartecipazione($this); //sincronizza lato utente
+        $evento->addPartecipazione($this); //sincronizza lato evento
     }
 
     //GET methods
