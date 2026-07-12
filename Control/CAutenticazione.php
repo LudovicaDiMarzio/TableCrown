@@ -8,6 +8,8 @@ use TableCrown\Entity\EUtente;
 use TableCrown\Entity\EAmministratore;
 use TableCrown\Entity\EGestore;
 use TableCrown\Foundation\FPersistentManager;
+use TableCrown\Presentation\Views\ViewAutenticazione;
+use InvalidArgumentException;
 
 /**
  * Controller deputato alla gestione del ciclo di vita dell'autenticazione.
@@ -20,10 +22,10 @@ class CAutenticazione extends BaseController {
     }
 
     /**
-     * Mostra la pagina con il form di login / registrazione (Richesta GET).
-     * URL: /accedi
+     * Mostra il form di login (Richesta GET).
+     * URL: GET /accedi
      */
-    public function mostraForm(): void {
+    public function mostraFormLogin(): void {
         //Se l'utente è già loggato, lo reindirizziamo alla home.
         if ($this->isLoggedIn()) {
             header('Location: /');
@@ -31,11 +33,28 @@ class CAutenticazione extends BaseController {
         }
 
         //Prepariamo i dati del layout (in questo caso non servono dati specifici dal DB).
-        $data = $this->preparaDatiLayout('autenticazione');
+        $datiLayout = $this->preparaDatiLayout('accedi');
 
-        //TODO:
-        //VAutenticazione::mostraForm($data);
-        echo "Ecco il form di Login e Registrazione!"; //TEST PROVVISORIO (DA CANCELLARE)
+        //Chiamata alla View
+        ViewAutenticazione::mostraFormLogin($datiLayout);
+    }
+
+    /**
+     * Mostra il form di registrazione (Richesta GET).
+     * URL: GET /registrati
+     */
+    public function mostraFormRegistrazione(): void {
+        //Se l'utente è già loggato, lo reindirizziamo alla home.
+        if ($this->isLoggedIn()) {
+            header('Location: /');
+            exit();
+        }
+
+        //Prepariamo i dati del layout (in questo caso non servono dati specifici dal DB).
+        $datiLayout = $this->preparaDatiLayout('registrati');
+
+        //Chiamata alla View
+        ViewAutenticazione::mostraFormRegistrazione($datiLayout);
     }
 
     /**
@@ -57,8 +76,11 @@ class CAutenticazione extends BaseController {
         }
 
         //Verifichiamo le credenziali sul DB reale:
-        //Chiediamo a Foundation di cercare la persona nel DB tramite la mail inserita
-        $persona = FPersistentManager::PMgetObjOnAttribute(EUtente::class, 'emailpersona', $email);
+        //EPersona è una MappedSuperclass (non esiste una tabella comune da interrogare).
+        //Dobbiamo provare le tre tabelle in sequenza, finché una non risponde.
+        $persona = FPersistentManager::PMgetObjOnAttribute(EUtente::class, 'emailpersona', $email)
+            ?? FPersistentManager::PMgetObjOnAttribute(EAmministratore::class, 'emailpersona', $email)
+            ?? FPersistentManager::PMgetObjOnAttribute(EGestore::class, 'emailpersona', $email);
 
         if(!$persona || !$persona->verificaPassword($password)) {
             UFlashMessage::addMessage('danger', 'Email o password errate. Riprova.');
@@ -78,14 +100,10 @@ class CAutenticazione extends BaseController {
             USession::setSessionElement('ruolo', 'gestore');
             UFlashMessage::addMessage('success', 'Bentornato Gestore!');
             header("Location: /gestore/dashboard"); //reindirizza alla dashboard gestore
-        } elseif ($persona instanceof EUtente) {
+        } else { //in questo caso è un EUtente
             USession::setSessionElement('ruolo', 'utente');
             UFlashMessage::addMessage('success', 'Login effettuato con successo!');
             header("Location: /"); //reindirizza alla home
-        } else {
-            //Se le credenziali sono errate (mail non trovata o password sbagliata), impostiamo un messaggio di errore rapido
-            UFlashMessage::addMessage('danger', 'Ruolo utente non riconosciuto. Riprova.');
-            header('Location: /accedi');
         }
 
         exit();
@@ -100,14 +118,14 @@ class CAutenticazione extends BaseController {
         $nome = UHTTPMethods::post('nome');
         $email = UHTTPMethods::post('email');
         $password = UHTTPMethods::post('password');
-        $eta = UHTTPMethods::post('eta'); //OBBLIGATORIA?????????
+        $eta = (int) UHTTPMethods::post('eta'); 
 
         //Controllo di validità dei campi obbligatori
-        if (!$nome || !$email || !$password) {
+        if (!$nome || !$email || !$password || !$eta) { 
             //Se manca uno dei tre, impostiamo un messaggio di errore rapido
             UFlashMessage::addMessage('danger', 'Tutti i campi sono obbligatori.');
             //Pattern PRG: ricarichiamo la pagina del form per mostrare l'errore in sicurezza
-            header('Location: /accedi');
+            header('Location: /registrati');
             exit();
         }
 
@@ -116,13 +134,21 @@ class CAutenticazione extends BaseController {
 
         if ($esiste) {
             UFlashMessage::addMessage('danger', 'Questa email è già registrata.');
-            header('Location: /accedi');
+            header('Location: /registrati');
             exit();
         }
 
-        $passwordCriptata = password_hash($password, PASSWORD_BCRYPT);
-
-        $nuovoUtente = new EUtente($nome, $email, $passwordCriptata, $eta); //MANCA IL PLAYERLEVEL (DA SISTEMAE NELL'ENTITY)
+        try {
+            //Il costruttore di EUtente valida internamente nome, email, password e età e
+            //lancia InvalidArgumentException se qualcosa non va; qui la intercettiamo
+            //per mostrare un messaggio leggibile invece di un errore fatale.
+            $nuovoUtente = new EUtente($nome, $email, $password, $eta); //la password viene criptata nell'entity
+        } catch (InvalidArgumentException $e) {
+            //Se l'utente non ha completato i campi obbligatori, mostriamo un messaggio di errore
+            UFlashMessage::addMessage('danger', $e->getMessage());
+            header('Location: /registrati');
+            exit();
+        }
 
         $salvato = FPersistentManager::PMsaveObj($nuovoUtente);
 
@@ -132,7 +158,7 @@ class CAutenticazione extends BaseController {
             exit();
         } else {
             UFlashMessage::addMessage('danger', 'Si è verificato un errore durante la registrazione. Riprova.');
-            header("Location: /accedi");
+            header("Location: /registrati");
         }
 
         exit();
@@ -155,12 +181,19 @@ class CAutenticazione extends BaseController {
     }
 
     /**
-     * Sovrascrive il metodo del BaseController per definire il percorso del Login.
+     * Sovrascrive il metodo del BaseController.
+     * Breadcrumb differenziato in pase alla pagina corrente (login vs registrazione).
      */
-    protected function getBreadcrumbs(): array {
-        return [
-            ['label' => 'Home', 'url' => '/'],
-            ['label' => 'Login', 'url' => '/accedi']
-        ];
+    protected function getBreadcrumbs(string $currentPage = ''): array {
+        return match ($currentPage) {
+            'registrati' => [
+                ['label' => 'Home', 'url' => '/'],
+                ['label' => 'Registrati', 'url' => '/registrati']
+            ],
+            default => [
+                ['label' => 'Home', 'url' => '/'],
+                ['label' => 'Login', 'url' => '/accedi']
+            ],
+        };
     }
 }

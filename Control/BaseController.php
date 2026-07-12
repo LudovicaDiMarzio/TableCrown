@@ -17,6 +17,7 @@ use TableCrown\Entity\ETorneo;
 use TableCrown\Entity\EChallenge;
 
 
+
 abstract class BaseController {
 
     protected array $validRoles; //Elenco di ruoli di sistema ammessi per il controllo dei permessi.
@@ -51,7 +52,7 @@ abstract class BaseController {
         $globalData = [
             'base_url' => 'https://tablecrown.it', 
             'current_page' => $currentPage, //Indica la pagina attiva (es. 'catalogo', 'eventi', ecc.)
-            'breadcrumbs' => $this->getBreadcrumbs(), //Il percorso di navigazione
+            'breadcrumbs' => $this->getBreadcrumbs($currentPage), //Il percorso di navigazione
             'utente' => $this->utenteToArray(),
         ];
 
@@ -87,7 +88,7 @@ abstract class BaseController {
      * Metodo di default per la gestione dei Breadcrumbs (le pagine interne faranno l'override per restituire il loro percorso specifico).
      * Restituisce un array vuoto perchè di default la homepage non mostra i breadcrumbs.
      */
-    protected function getBreadcrumbs(): array {
+    protected function getBreadcrumbs(string $currentPage = ''): array {
         return [];
     }
 
