@@ -1,42 +1,102 @@
-{extends file="common/layout.tpl"}
+<?php
+/* Smarty version 5.8.0, created on 2026-07-12 16:51:45
+  from 'file:ModificaAccount.tpl' */
 
-{block name="extra_css"}
-    <link rel="stylesheet" href="{$base_url}/css/ModificaAccount.css">
-{/block}
+/* @var \Smarty\Template $_smarty_tpl */
+if ($_smarty_tpl->getCompiled()->isFresh($_smarty_tpl, array (
+  'version' => '5.8.0',
+  'unifunc' => 'content_6a53aa01408d29_45489169',
+  'has_nocache_code' => false,
+  'file_dependency' => 
+  array (
+    '03e2d17f09341c2d42ee277078b146f3539dcc41' => 
+    array (
+      0 => 'ModificaAccount.tpl',
+      1 => 1783867901,
+      2 => 'file',
+    ),
+  ),
+  'includes' => 
+  array (
+  ),
+))) {
+function content_6a53aa01408d29_45489169 (\Smarty\Template $_smarty_tpl) {
+$_smarty_current_dir = 'C:\\xampp\\htdocs\\TableCrown\\Presentation\\smarty-dir\\templates';
+$_smarty_tpl->getInheritance()->init($_smarty_tpl, true);
+?>
 
-{block name="content"}
+
+<?php 
+$_smarty_tpl->getInheritance()->instanceBlock($_smarty_tpl, 'Block_7382317296a53aa013f44e7_47564868', "extra_css");
+?>
+
+
+<?php 
+$_smarty_tpl->getInheritance()->instanceBlock($_smarty_tpl, 'Block_14986350726a53aa013f86b0_97886892', "content");
+?>
+
+
+<?php 
+$_smarty_tpl->getInheritance()->instanceBlock($_smarty_tpl, 'Block_5673957706a53aa014079c2_91343147', "extra_js");
+$_smarty_tpl->getInheritance()->endChild($_smarty_tpl, "common/layout.tpl", $_smarty_current_dir);
+}
+/* {block "extra_css"} */
+class Block_7382317296a53aa013f44e7_47564868 extends \Smarty\Runtime\Block
+{
+public function callBlock(\Smarty\Template $_smarty_tpl) {
+$_smarty_current_dir = 'C:\\xampp\\htdocs\\TableCrown\\Presentation\\smarty-dir\\templates';
+?>
+
+    <link rel="stylesheet" href="<?php echo $_smarty_tpl->getValue('base_url');?>
+/css/ModificaAccount.css">
+<?php
+}
+}
+/* {/block "extra_css"} */
+/* {block "content"} */
+class Block_14986350726a53aa013f86b0_97886892 extends \Smarty\Runtime\Block
+{
+public function callBlock(\Smarty\Template $_smarty_tpl) {
+$_smarty_current_dir = 'C:\\xampp\\htdocs\\TableCrown\\Presentation\\smarty-dir\\templates';
+?>
+
 <div class="modifica-account-container">
     <div class="container">
 
-        {* ── AZIONI: LOGOUT + ELIMINA ACCOUNT ── *}
-        <div class="modifica-account-topbar">
+                <div class="modifica-account-topbar">
             <div class="modifica-account-topbar-actions">
-                <a href="{$base_url}/logout" class="modifica-account-logout">
+                <a href="<?php echo $_smarty_tpl->getValue('base_url');?>
+/logout" class="modifica-account-logout">
                     <i class="ti ti-logout"></i> Log-out
                 </a>
 
-                <a href="{$base_url}/account/elimina" class="modifica-account-elimina" id="modifica-account-elimina-link">
+                <a href="<?php echo $_smarty_tpl->getValue('base_url');?>
+/account/elimina" class="modifica-account-elimina" id="modifica-account-elimina-link">
                     <i class="ti ti-trash"></i> Elimina account
                 </a>
             </div>
         </div>
 
-        <form action="{$base_url}/account/modifica" method="post" class="modifica-account-form" enctype="multipart/form-data" id="modifica-account-form">
+        <form action="<?php echo $_smarty_tpl->getValue('base_url');?>
+/account/modifica" method="post" class="modifica-account-form" enctype="multipart/form-data" id="modifica-account-form">
 
             
-            {* ── AVATAR ── *}
-            <div class="modifica-account-avatar-wrap">
+                        <div class="modifica-account-avatar-wrap">
                 <div class="modifica-account-avatar-circle">
                     <div class="modifica-account-avatar">
-                        {if isset($immagineUtente) && $immagineUtente}
-                            <img src="{$base_url}/img/avatar/{$immagineUtente|escape}"
-                                 onerror="this.onerror=null; this.src='{$base_url}/img/avatar-default.png'"
-                                 alt="{$nomeUtente|default:''|escape}"
+                        <?php if ((true && ($_smarty_tpl->hasVariable('immagineUtente') && null !== ($_smarty_tpl->getValue('immagineUtente') ?? null))) && $_smarty_tpl->getValue('immagineUtente')) {?>
+                            <img src="<?php echo $_smarty_tpl->getValue('base_url');?>
+/img/avatar/<?php echo htmlspecialchars((string)$_smarty_tpl->getValue('immagineUtente'), ENT_QUOTES, 'UTF-8', true);?>
+"
+                                 onerror="this.onerror=null; this.src='<?php echo $_smarty_tpl->getValue('base_url');?>
+/img/avatar-default.png'"
+                                 alt="<?php echo htmlspecialchars((string)(($tmp = $_smarty_tpl->getValue('nomeUtente') ?? null)===null||$tmp==='' ? '' ?? null : $tmp), ENT_QUOTES, 'UTF-8', true);?>
+"
                                  class="modifica-account-avatar-img"
                                  id="modifica-account-avatar-preview">
-                        {else}
+                        <?php } else { ?>
                             <span class="modifica-account-avatar-placeholder" id="modifica-account-avatar-preview">IMG</span>
-                        {/if}
+                        <?php }?>
                     </div>
 
                     <label for="modifica-account-avatar-input" class="modifica-account-avatar-edit">
@@ -56,8 +116,7 @@
                 <span class="modifica-account-avatar-hint">Tocca la matita per cambiare foto</span>
             </div>
 
-            {* ── CAMPI PRINCIPALI ── *}
-            <div class="modifica-account-card">
+                        <div class="modifica-account-card">
                 <div class="modifica-account-fields">
 
                     <div class="modifica-account-field">
@@ -68,7 +127,8 @@
                                id="nickname"
                                name="nickname"
                                class="modifica-account-input"
-                               value="{$nomeUtente|default:''|escape}">
+                               value="<?php echo htmlspecialchars((string)(($tmp = $_smarty_tpl->getValue('nomeUtente') ?? null)===null||$tmp==='' ? '' ?? null : $tmp), ENT_QUOTES, 'UTF-8', true);?>
+">
                     </div>
 
                     <div class="modifica-account-field">
@@ -79,7 +139,8 @@
                                id="email"
                                name="email"
                                class="modifica-account-input"
-                               value="{$emailUtente|default:''|escape}">
+                               value="<?php echo htmlspecialchars((string)(($tmp = $_smarty_tpl->getValue('emailUtente') ?? null)===null||$tmp==='' ? '' ?? null : $tmp), ENT_QUOTES, 'UTF-8', true);?>
+">
                     </div>
 
                     <div class="modifica-account-field">
@@ -91,14 +152,14 @@
                                name="eta"
                                min="18"
                                class="modifica-account-input"
-                               value="{$etaUtente|default:''|escape}">
+                               value="<?php echo htmlspecialchars((string)(($tmp = $_smarty_tpl->getValue('etaUtente') ?? null)===null||$tmp==='' ? '' ?? null : $tmp), ENT_QUOTES, 'UTF-8', true);?>
+">
                     </div>
 
                 </div>
             </div>
 
-            {* ── AZIONI: SALVA / MODIFICA PASSWORD ── *}
-            <div class="modifica-account-actions">
+                        <div class="modifica-account-actions">
                 <button type="button"
                         class="modifica-account-btn-secondary"
                         id="modifica-account-password-toggle"
@@ -114,13 +175,13 @@
 
         </form>
 
-        {* ── CARD PASSWORD (nascosta finché non si clicca "Modifica Password") ── *}
-        <div class="modifica-account-password-card" id="modifica-account-password-card" hidden>
+                <div class="modifica-account-password-card" id="modifica-account-password-card" hidden>
             <h3 class="modifica-account-password-title">
                 <i class="ti ti-shield-lock"></i> Cambia Password
             </h3>
 
-            <form action="{$base_url}/account/password" method="post" class="modifica-account-password-form" id="modifica-account-password-form">
+            <form action="<?php echo $_smarty_tpl->getValue('base_url');?>
+/account/password" method="post" class="modifica-account-password-form" id="modifica-account-password-form">
 
                 <div class="modifica-account-field">
                     <label for="psw_vecchia" class="modifica-account-label">Psw Vecchia</label>
@@ -144,16 +205,14 @@
             </form>
         </div>
 
-        {* ── POPUP MESSAGGI PASSWORD (modifica account) ── *}
-        <div class="modifica-account-popup-overlay" id="modifica-account-popup" hidden>
+                <div class="modifica-account-popup-overlay" id="modifica-account-popup" hidden>
             <div class="modifica-account-popup-box">
                 <p class="modifica-account-popup-message" id="modifica-account-popup-message"></p>
                 <button type="button" class="modifica-account-btn-primary" id="modifica-account-popup-close">Chiudi</button>
             </div>
         </div>
 
-        {* ── POPUP CONFERMA ELIMINAZIONE ACCOUNT ── *}
-        <div class="modifica-account-popup-overlay" id="modifica-account-elimina-popup" hidden>
+                <div class="modifica-account-popup-overlay" id="modifica-account-elimina-popup" hidden>
             <div class="modifica-account-popup-box">
                 <i class="ti ti-alert-triangle modifica-account-popup-icon"></i>
                 <p class="modifica-account-popup-message">Sei sicuro di voler eliminare l'account?</p>
@@ -174,11 +233,20 @@
 
     </div>
 </div>
-{/block}
+<?php
+}
+}
+/* {/block "content"} */
+/* {block "extra_js"} */
+class Block_5673957706a53aa014079c2_91343147 extends \Smarty\Runtime\Block
+{
+public function callBlock(\Smarty\Template $_smarty_tpl) {
+$_smarty_current_dir = 'C:\\xampp\\htdocs\\TableCrown\\Presentation\\smarty-dir\\templates';
+?>
 
-{block name="extra_js"}
-<script>
-{literal}
+<?php echo '<script'; ?>
+>
+
 (function() {
 
     // ── TOGGLE CARD MODIFICA PASSWORD ──
@@ -287,7 +355,8 @@
             })
             .then(function(data) {
                 if (data.status === 'ok') {
-                    window.location.href = '{/literal}{$base_url}{literal}/account';
+                    window.location.href = '<?php echo $_smarty_tpl->getValue('base_url');?>
+/account';
                 } else if (data.reason === 'nuova_non_valida') {
                     mostraPopup('La nuova password non va bene, provane un\'altra.');
                 } else if (data.reason === 'vecchia_errata') {
@@ -342,7 +411,8 @@
                 return;
             }
 
-            fetch('{/literal}{$base_url}{literal}/account/elimina', {
+            fetch('<?php echo $_smarty_tpl->getValue('base_url');?>
+/account/elimina', {
                 method: 'POST',
                 headers: { 'Content-Type': 'application/json' },
                 credentials: 'same-origin',
@@ -353,7 +423,8 @@
             })
             .then(function(data) {
                 if (data.status === 'ok') {
-                    window.location.href = '{/literal}{$base_url}{literal}/';
+                    window.location.href = '<?php echo $_smarty_tpl->getValue('base_url');?>
+/';
                 } else if (data.reason === 'password_errata') {
                     eliminaError.textContent = 'La password è errata, riprova.';
                     eliminaError.removeAttribute('hidden');
@@ -372,6 +443,11 @@
     }
 
 })();
-{/literal}
-</script>
-{/block}
+
+<?php echo '</script'; ?>
+>
+<?php
+}
+}
+/* {/block "extra_js"} */
+}

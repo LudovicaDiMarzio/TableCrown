@@ -306,11 +306,223 @@ $smarty->assign('account_menu', [
     ['label' => 'Modifica Account',    'url' => '/account/modifica'],
     ['label' => 'I Miei Ordini',       'url' => '/account/ordini'],
     ['label' => 'Le Mie Recensioni',   'url' => '/account/recensioni'],
-    ['label' => 'I Miei Dadi',         'url' => '/account/dadi'],
     ['label' => 'Wishlist',            'url' => '/wishlist'],
     ['label' => 'Eventi',              'url' => '/eventi'],
     ['label' => 'I Miei Indirizzi',    'url' => '/account/indirizzi'],
 ]);
+
+
+// ── WISHLIST (dati di test) ──
+$wishlist = [
+    [
+        'id'                 => 101,
+        'nome'               => 'Catan',
+        'immagine'           => 'placeholder.jpg',
+        'valutazione_media'  => 4.5,
+        'prezzo'             => 34.90,
+        'sconto'             => true,
+        'prezzo_scontato'    => 27.92,
+        'percentuale_sconto' => 20,
+        'disponibilita'      => 'disponibile',
+        'isAcquistabile'     => true,
+    ],
+    [
+        'id'                 => 201,
+        'nome'               => 'Wingspan',
+        'immagine'           => 'placeholder.jpg',
+        'valutazione_media'  => 4.8,
+        'prezzo'             => 49.90,
+        'sconto'             => false,
+        'prezzo_scontato'    => null,
+        'percentuale_sconto' => null,
+        'disponibilita'      => 'disponibile',
+        'isAcquistabile'     => true,
+    ],
+    [
+        'id'                 => 103,
+        'nome'               => '7 Wonders',
+        'immagine'           => 'placeholder.jpg',
+        'valutazione_media'  => 4.7,
+        'prezzo'             => 39.90,
+        'sconto'             => false,
+        'prezzo_scontato'    => null,
+        'percentuale_sconto' => null,
+        'disponibilita'      => 'esaurito',
+        'isAcquistabile'     => false,
+    ],
+    [
+        'id'                 => 202,
+        'nome'               => 'Azul',
+        'immagine'           => 'placeholder.jpg',
+        'valutazione_media'  => 4.6,
+        'prezzo'             => 32.90,
+        'sconto'             => true,
+        'prezzo_scontato'    => 29.61,
+        'percentuale_sconto' => 10,
+        'disponibilita'      => 'disponibile',
+        'isAcquistabile'     => true,
+    ],
+];
+
+
+// ── LE MIE RECENSIONI (dati di test) ──
+$recensioni_utente = [
+    [
+        'id'          => 1,
+        'valutazione' => 5,
+        'testo'       => "Lo gioco da anni con la mia famiglia, non ci stanchiamo mai.\nConsigliato a tutti!",
+        'data'        => '10/07/2026',
+        'prodotto'    => [
+            'id'       => 101,
+            'nome'     => 'Catan',
+            'immagine' => 'placeholder.jpg',
+        ],
+        'isSegnalata' => false,
+    ],
+    [
+        'id'          => 2,
+        'valutazione' => 4,
+        'testo'       => "Bellissimo gioco strategico, forse un po' lungo per i bambini piccoli.",
+        'data'        => '02/06/2026',
+        'prodotto'    => [
+            'id'       => 201,
+            'nome'     => 'Wingspan',
+            'immagine' => 'placeholder.jpg',
+        ],
+        'isSegnalata' => false,
+    ],
+    [
+        'id'          => 3,
+        'valutazione' => 1,
+        'testo'       => "Gioco terribile, non funziona niente, sconsigliatissimo a tutti quanti!!!",
+        'data'        => '18/04/2026',
+        'prodotto'    => [
+            'id'       => 202,
+            'nome'     => 'Azul',
+            'immagine' => 'placeholder.jpg',
+        ],
+        'isSegnalata' => true,
+    ],
+];
+
+// ── I MIEI ORDINI (dati di test) ──
+$ordini_utente = [
+    [
+        'id'                      => 5001,
+        'data'                    => '05/07/2026',
+        'stato'                   => 'in_lavorazione',
+        'totale'                  => 83.32,
+        'indirizzoSpedizione'     => [
+            'via'        => 'Via Roma 12',
+            'citta'      => 'Pescara',
+            'cap'        => '65121',
+            'provincia'  => 'PE',
+            'nazione'    => 'Italia',
+        ],
+        'ultimeQuattroCifreCarta' => '4242',
+        'nomeTitolareCarta'       => 'Mario Rossi',
+        'isAnnullabile'           => true,
+        'items'                   => [
+            [
+                'prodotto'        => ['id' => 101, 'nome' => 'Catan', 'immagine' => 'placeholder.jpg'],
+                'quantita'        => 1,
+                'prezzoUnitario'  => 34.90,
+                'scontoApplicato' => 20,
+                'totaleItem'      => 27.92,
+            ],
+            [
+                'prodotto'        => ['id' => 202, 'nome' => 'Azul', 'immagine' => 'placeholder.jpg'],
+                'quantita'        => 1,
+                'prezzoUnitario'  => 32.90,
+                'scontoApplicato' => 10,
+                'totaleItem'      => 29.61,
+            ],
+        ],
+    ],
+    [
+        'id'                      => 4988,
+        'data'                    => '20/06/2026',
+        'stato'                   => 'spedito',
+        'totale'                  => 49.90,
+        'indirizzoSpedizione'     => [
+            'via'        => 'Via Roma 12',
+            'citta'      => 'Pescara',
+            'cap'        => '65121',
+            'provincia'  => 'PE',
+            'nazione'    => 'Italia',
+        ],
+        'ultimeQuattroCifreCarta' => '4242',
+        'nomeTitolareCarta'       => 'Mario Rossi',
+        'isAnnullabile'           => false,
+        'items'                   => [
+            [
+                'prodotto'        => ['id' => 201, 'nome' => 'Wingspan', 'immagine' => 'placeholder.jpg'],
+                'quantita'        => 1,
+                'prezzoUnitario'  => 49.90,
+                'scontoApplicato' => 0,
+                'totaleItem'      => 49.90,
+            ],
+        ],
+    ],
+    [
+        'id'                      => 4870,
+        'data'                    => '02/03/2026',
+        'stato'                   => 'consegnato',
+        'totale'                  => 39.90,
+        'indirizzoSpedizione'     => [
+            'via'        => 'Via Roma 12',
+            'citta'      => 'Pescara',
+            'cap'        => '65121',
+            'provincia'  => 'PE',
+            'nazione'    => 'Italia',
+        ],
+        'ultimeQuattroCifreCarta' => '4242',
+        'nomeTitolareCarta'       => 'Mario Rossi',
+        'isAnnullabile'           => false,
+        'items'                   => [
+            [
+                'prodotto'        => ['id' => 103, 'nome' => '7 Wonders', 'immagine' => 'placeholder.jpg'],
+                'quantita'        => 1,
+                'prezzoUnitario'  => 39.90,
+                'scontoApplicato' => 0,
+                'totaleItem'      => 39.90,
+            ],
+        ],
+    ],
+    [
+        'id'                      => 4801,
+        'data'                    => '10/01/2026',
+        'stato'                   => 'annullato',
+        'totale'                  => 25.42,
+        'indirizzoSpedizione'     => [
+            'via'        => 'Via Roma 12',
+            'citta'      => 'Pescara',
+            'cap'        => '65121',
+            'provincia'  => 'PE',
+            'nazione'    => 'Italia',
+        ],
+        'ultimeQuattroCifreCarta' => '4242',
+        'nomeTitolareCarta'       => 'Mario Rossi',
+        'isAnnullabile'           => false,
+        'items'                   => [
+            [
+                'prodotto'        => ['id' => 102, 'nome' => 'Carcassonne', 'immagine' => 'placeholder.jpg'],
+                'quantita'        => 1,
+                'prezzoUnitario'  => 29.90,
+                'scontoApplicato' => 15,
+                'totaleItem'      => 25.42,
+            ],
+        ],
+    ],
+];
+
+$smarty->assign('ordini', $ordini_utente);
+
+
+
+
+$smarty->assign('recensioni', $recensioni_utente);
+
 
 $smarty->assign('tornei_vinti',     3);
 $smarty->assign('tornei_obiettivo', 10);
@@ -334,7 +546,7 @@ $smarty->assign('carrello_summary', $carrello_summary);
 $smarty->assign('correlati',        $correlati);
 
 $smarty->assign('prodotto',          $prodotto);
-$smarty->assign('recensioni',        $recensioni);
+
 $smarty->assign('userHasPurchased',  true);
 
 $smarty->assign('cart_count', 5);
@@ -386,4 +598,4 @@ if ($categoria === 'challenge') {
 // Home eventi (le 3 card)
 $smarty->assign('filtri', $filtri);
 $smarty->assign('breadcrumbs', breadcrumbsEventi(BASE_URL));
-$smarty->display('eventi.tpl');
+$smarty->display('MioOrdine.tpl');

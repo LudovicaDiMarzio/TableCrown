@@ -28,10 +28,13 @@
                     </div>
 
                     <div class="account-welcome">
+                        <span class="account-eyebrow">Area Personale</span>
                         <h1 class="account-titolo">Ciao, {$utente.nome|escape}!</h1>
 
                         <div class="account-header-links">
-                            <a href="{$base_url}/logout" class="account-link-secondary">Logout</a>
+                            <a href="{$base_url}/logout" class="account-link-secondary">
+                                <i class="ti ti-logout"></i> Logout
+                            </a>
                         </div>
                     </div>
 
@@ -40,9 +43,18 @@
                 {* ── GRIGLIA VOCI ACCOUNT ── *}
                 <div class="account-grid">
                     {foreach $account_menu as $voce}
-                        <a href="{$base_url}{$voce.url|escape}" class="account-card">
-                            <span class="account-card-label">{$voce.label|escape}</span>
-                        </a>
+                        {* Escludo la voce "I Miei Dadi" (confronto Smarty nativo, nessuna funzione PHP) *}
+                        {if $voce.label != 'I Miei Dadi'}
+                            <a href="{$base_url}{$voce.url|escape}" class="account-card">
+                                <span class="account-card-icon">
+                                    <i class="ti ti-chevron-right"></i>
+                                </span>
+                                <span class="account-card-label">{$voce.label|escape}</span>
+                                <span class="account-card-arrow">
+                                    <i class="ti ti-arrow-right"></i>
+                                </span>
+                            </a>
+                        {/if}
                     {/foreach}
                 </div>
 
@@ -52,15 +64,24 @@
             <aside class="account-summary" id="account-summary">
 
                 <div class="account-summary-block">
-                    <h2 class="account-summary-title">Tornei Vinti</h2>
+                    <h2 class="account-summary-title">
+                        <i class="ti ti-trophy"></i> Tornei Vinti
+                    </h2>
                     <div class="account-summary-tornei-value">
                         <span class="account-tornei-attuali">{$tornei_vinti}</span><span class="account-tornei-sep">/</span><span class="account-tornei-totali">{$tornei_obiettivo}</span>
+                    </div>
+
+                    <div class="account-progress-track">
+                        <div class="account-progress-fill"
+                             style="width: {if $tornei_obiettivo > 0}{($tornei_vinti / $tornei_obiettivo) * 100}{else}0{/if}%;"></div>
                     </div>
                 </div>
 
                 <div class="account-livello-wrapper">
                     <div class="account-livello-row">
-                        <span class="account-livello-label">Livello Giocatore</span>
+                        <span class="account-livello-label">
+                            <i class="ti ti-star"></i> Livello Giocatore
+                        </span>
                         <button type="button"
                                 class="account-livello-info"
                                 id="account-livello-info-btn"

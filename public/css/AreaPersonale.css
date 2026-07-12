@@ -8,7 +8,7 @@
 /* ── CONTENITORE PRINCIPALE ───────────────────────────────── */
 
 .account-container {
-    padding: 2rem 0 4rem;
+    padding: 2.5rem 0 4rem;
 }
 
 .account-container .container {
@@ -41,15 +41,21 @@
 .account-header {
     display: flex;
     align-items: center;
-    gap: 1.5rem;
+    gap: 1.75rem;
+    padding: 1.75rem 2rem;
+    background: linear-gradient(120deg, var(--color-bg-dark-2) 0%, var(--color-bg-dark) 100%);
+    border: 1px solid var(--color-border-dark);
+    border-radius: var(--radius-md);
+    overflow: hidden;
 }
 
 .account-avatar {
-    width: 90px;
-    height: 90px;
+    width: 92px;
+    height: 92px;
     border-radius: 50%;
-    background-color: var(--color-bg-dark-2);
-    border: 1px solid var(--color-border-dark);
+    background-color: var(--color-bg-dark);
+    border: 2px solid var(--color-primary);
+    box-shadow: 0 0 0 4px rgba(255,255,255,0.03), 0 6px 18px rgba(0,0,0,0.35);
     display: flex;
     align-items: center;
     justify-content: center;
@@ -71,11 +77,19 @@
 .account-welcome {
     display: flex;
     flex-direction: column;
-    gap: 0.5rem;
+    gap: 0.4rem;
+}
+
+.account-eyebrow {
+    font-size: 0.75rem;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 0.08em;
+    color: var(--color-text-muted);
 }
 
 .account-titolo {
-    font-size: 2rem;
+    font-size: 2.1rem;
     font-weight: 700;
     color: var(--color-primary);
     margin: 0;
@@ -85,12 +99,16 @@
     display: flex;
     align-items: center;
     gap: 0.6rem;
+    margin-top: 0.3rem;
 }
 
 .account-link-secondary {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.35rem;
     font-size: var(--font-size-sm);
     color: var(--color-text-muted);
-    text-decoration: underline;
+    text-decoration: none;
     transition: color var(--transition);
 }
 
@@ -121,13 +139,52 @@
     min-height: 100px;
     display: flex;
     align-items: center;
+    gap: 1rem;
     text-decoration: none;
-    transition: transform var(--transition), border-color var(--transition);
+    overflow: hidden;
+    transition: transform var(--transition), border-color var(--transition), box-shadow var(--transition);
+}
+
+.account-card::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    height: 3px;
+    background: var(--color-primary);
+    transform: scaleX(0);
+    transform-origin: left;
+    transition: transform var(--transition);
 }
 
 .account-card:hover {
     transform: translateY(-4px);
     border-color: var(--color-primary);
+    box-shadow: 0 10px 24px rgba(0,0,0,0.3);
+}
+
+.account-card:hover::before {
+    transform: scaleX(1);
+}
+
+.account-card-icon {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 42px;
+    height: 42px;
+    border-radius: 50%;
+    background-color: rgba(255,255,255,0.04);
+    color: var(--color-primary);
+    font-size: 1.1rem;
+    flex-shrink: 0;
+    transition: background-color var(--transition);
+}
+
+.account-card:hover .account-card-icon {
+    background-color: var(--color-primary);
+    color: var(--color-bg-dark);
 }
 
 .account-card-label {
@@ -135,6 +192,20 @@
     font-weight: 600;
     color: var(--color-text-light);
     line-height: 1.4;
+    flex: 1;
+}
+
+.account-card-arrow {
+    color: var(--color-text-muted);
+    opacity: 0;
+    transform: translateX(-6px);
+    transition: opacity var(--transition), transform var(--transition), color var(--transition);
+}
+
+.account-card:hover .account-card-arrow {
+    opacity: 1;
+    transform: translateX(0);
+    color: var(--color-primary);
 }
 
 
@@ -155,16 +226,24 @@
 .account-summary-block {
     display: flex;
     flex-direction: column;
-    gap: 0.5rem;
+    gap: 0.6rem;
 }
 
 .account-summary-title {
+    display: flex;
+    align-items: center;
+    gap: 0.4rem;
     font-size: 0.85rem;
     font-weight: 700;
     text-transform: uppercase;
     letter-spacing: 0.05em;
     color: var(--color-text-muted);
     margin: 0;
+}
+
+.account-summary-title i {
+    color: var(--color-primary);
+    font-size: 1rem;
 }
 
 .account-summary-tornei-value {
@@ -184,6 +263,22 @@
     font-size: 1.25rem;
 }
 
+.account-progress-track {
+    width: 100%;
+    height: 8px;
+    border-radius: 999px;
+    background-color: rgba(255,255,255,0.06);
+    overflow: hidden;
+    margin-top: 0.25rem;
+}
+
+.account-progress-fill {
+    height: 100%;
+    border-radius: 999px;
+    background: linear-gradient(90deg, var(--color-primary), rgba(255,255,255,0.6));
+    transition: width 0.4s ease;
+}
+
 /* Livello giocatore + tooltip info */
 .account-livello-wrapper {
     position: relative;
@@ -198,9 +293,17 @@
 }
 
 .account-livello-label {
+    display: flex;
+    align-items: center;
+    gap: 0.4rem;
     font-size: var(--font-size-md);
     font-weight: 600;
     color: var(--color-text-light);
+}
+
+.account-livello-label i {
+    color: var(--color-primary);
+    font-size: 1rem;
 }
 
 .account-livello-info {
@@ -287,6 +390,7 @@
 @media (max-width: 768px) {
     .account-header {
         flex-wrap: wrap;
+        padding: 1.5rem;
     }
 }
 
@@ -302,5 +406,10 @@
 
     .account-titolo {
         font-size: 1.5rem;
+    }
+
+    .account-header {
+        padding: 1.25rem;
+        gap: 1.25rem;
     }
 }
