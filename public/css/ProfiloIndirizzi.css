@@ -1,0 +1,486 @@
+/* ============================================
+   PROFILO INDIRIZZI — I Miei Indirizzi
+   ============================================ */
+
+.indirizzi-container {
+    padding: 2.5rem 0 4rem;
+    min-height: 60vh;
+}
+
+/* ── TOPBAR ── */
+.indirizzi-topbar {
+    margin-bottom: 1.25rem;
+}
+
+.indirizzi-back-link {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.4rem;
+    color: var(--color-text-muted);
+    font-size: var(--font-size-md);
+    font-weight: 500;
+    text-decoration: none;
+    transition: color var(--transition);
+}
+
+.indirizzi-back-link:hover {
+    color: var(--color-primary);
+}
+
+/* ── HEADER ── */
+.indirizzi-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    flex-wrap: wrap;
+    gap: 1rem;
+    margin-bottom: 2rem;
+}
+
+.indirizzi-header-text {
+    display: flex;
+    flex-direction: column;
+}
+
+.indirizzi-eyebrow {
+    display: block;
+    font-size: var(--font-size-sm);
+    font-weight: 600;
+    text-transform: uppercase;
+    letter-spacing: 0.06em;
+    color: var(--color-primary);
+    margin-bottom: 0.25rem;
+}
+
+.indirizzi-titolo {
+    display: flex;
+    align-items: center;
+    gap: 0.6rem;
+    font-size: 1.9rem;
+    font-weight: 700;
+    color: #1f2937;
+    margin: 0;
+}
+
+.indirizzi-header-actions {
+    display: flex;
+    align-items: center;
+    gap: 1rem;
+}
+
+.indirizzi-count-badge {
+    display: flex;
+    align-items: baseline;
+    gap: 0.4rem;
+    background: #faf6ef;
+    border: 1px solid var(--color-border-light);
+    border-radius: var(--radius-md);
+    padding: 0.5rem 1rem;
+}
+
+.indirizzi-count-num {
+    font-size: 1.3rem;
+    font-weight: 700;
+    color: var(--color-primary);
+}
+
+.indirizzi-count-label {
+    font-size: var(--font-size-sm);
+    color: var(--color-text-muted);
+}
+
+/* ── BOTTONE CIRCOLARE AGGIUNGI ── */
+.indirizzi-add-btn {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    flex-shrink: 0;
+    width: 3rem;
+    height: 3rem;
+    border-radius: 50%;
+    background: var(--color-primary);
+    color: #fff;
+    border: none;
+    cursor: pointer;
+    font-size: 1.4rem;
+    box-shadow: 0 3px 10px rgba(232, 160, 32, 0.35);
+    transition: background var(--transition), transform var(--transition);
+}
+
+.indirizzi-add-btn:hover {
+    background: var(--color-primary-dark);
+    transform: scale(1.06);
+}
+
+.indirizzi-add-btn i {
+    line-height: 1;
+}
+
+/* ── LISTA INDIRIZZI ── */
+.indirizzi-list {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+    align-items: stretch;
+    gap: 1.25rem;
+}
+
+.indirizzi-card {
+    display: flex;
+    flex-direction: column;
+    height: 100%;
+    background: var(--color-bg-dark);
+    border: 1px solid var(--color-border-light);
+    border-radius: var(--radius-md);
+    overflow: hidden;
+    padding: 1.2rem 1.25rem 1.3rem;
+    gap: 0.9rem;
+    transition: box-shadow var(--transition), transform var(--transition), border-color var(--transition);
+}
+
+.indirizzi-card:hover {
+    box-shadow: 0 4px 16px rgba(232, 160, 32, 0.12);
+    border-color: #e8d4ab;
+    transform: translateY(-2px);
+}
+
+.indirizzi-card-predefinito {
+    border-color: var(--color-primary);
+}
+
+/* ── TOP CARD (nome + badge predefinito) ── */
+.indirizzi-card-top {
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-start;
+    gap: 0.5rem;
+    flex-shrink: 0;
+}
+
+.indirizzi-nome {
+    font-size: 1.05rem;
+    font-weight: 700;
+    color: #fff;
+    line-height: 1.3;
+}
+
+.indirizzi-predefinito-badge {
+    flex-shrink: 0;
+    display: inline-flex;
+    align-items: center;
+    gap: 0.3rem;
+    padding: 0.25rem 0.6rem;
+    border-radius: var(--radius-sm);
+    font-size: 0.72rem;
+    font-weight: 700;
+    background: rgba(232, 160, 32, 0.16);
+    color: var(--color-primary);
+    white-space: nowrap;
+}
+
+/* ── LISTA INFO VERTICALE ── */
+.indirizzi-info-list {
+    display: flex;
+    flex-direction: column;
+    gap: 0.5rem;
+    padding-top: 0.7rem;
+    border-top: 1px solid rgba(255, 255, 255, 0.1);
+    flex: 1 1 auto;
+    min-height: 0;
+}
+
+.indirizzi-info-row {
+    display: flex;
+    align-items: flex-start;
+    gap: 0.55rem;
+    font-size: var(--font-size-sm);
+    color: var(--color-text-muted);
+    line-height: 1.35;
+}
+
+.indirizzi-info-row i {
+    flex-shrink: 0;
+    width: 1.1rem;
+    text-align: center;
+    color: var(--color-primary);
+    font-size: 1rem;
+    margin-top: 0.1rem;
+}
+
+.indirizzi-info-value {
+    color: #fff;
+    font-weight: 600;
+}
+
+/* ── AZIONI (sempre ancorate in fondo) ── */
+.indirizzi-actions {
+    display: flex;
+    flex-direction: column;
+    gap: 0.5rem;
+    flex-shrink: 0;
+    margin-top: auto;
+    padding-top: 0.5rem;
+}
+
+.indirizzi-btn-secondary,
+.indirizzi-btn-predefinito,
+.indirizzi-btn-elimina {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    gap: 0.35rem;
+    width: 100%;
+    padding: 0.55rem 0.9rem;
+    border-radius: var(--radius-sm);
+    font-size: var(--font-size-md);
+    font-weight: 600;
+    border: 1px solid var(--color-border-light);
+    cursor: pointer;
+    text-decoration: none;
+    background: transparent;
+    transition: background var(--transition), color var(--transition), border-color var(--transition);
+}
+
+.indirizzi-btn-secondary {
+    color: #fff;
+    border-color: rgba(255, 255, 255, 0.25);
+}
+
+.indirizzi-btn-secondary:hover {
+    border-color: var(--color-primary);
+    color: var(--color-primary);
+}
+
+.indirizzi-btn-predefinito {
+    color: var(--color-primary);
+    border-color: rgba(232, 160, 32, 0.4);
+}
+
+.indirizzi-btn-predefinito:hover {
+    background: var(--color-primary);
+    color: #fff;
+}
+
+.indirizzi-btn-elimina {
+    color: #dc2626;
+    border-color: rgba(220, 38, 38, 0.35);
+}
+
+.indirizzi-btn-elimina:hover {
+    background: #dc2626;
+    color: #fff;
+    border-color: #dc2626;
+}
+
+/* ── STATO VUOTO ── */
+.indirizzi-empty {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    text-align: center;
+    padding: 4rem 1.5rem;
+    background: #faf6ef;
+    border: 1px dashed var(--color-border-light);
+    border-radius: var(--radius-md);
+}
+
+.indirizzi-empty-icon {
+    font-size: 2.5rem;
+    color: var(--color-text-muted);
+    margin-bottom: 1rem;
+}
+
+.indirizzi-empty-titolo {
+    font-size: 1.25rem;
+    font-weight: 700;
+    color: #1f2937;
+    margin: 0 0 0.4rem;
+}
+
+.indirizzi-empty-testo {
+    font-size: var(--font-size-md);
+    color: var(--color-text-muted);
+    max-width: 380px;
+    margin: 0 0 1.5rem;
+}
+
+.indirizzi-empty-btn {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.4rem;
+    padding: 0.65rem 1.2rem;
+    border-radius: var(--radius-sm);
+    background: var(--color-primary);
+    color: #fff;
+    font-weight: 600;
+    border: none;
+    cursor: pointer;
+    transition: background var(--transition);
+}
+
+.indirizzi-empty-btn:hover {
+    background: var(--color-primary-dark);
+}
+
+/* ── POPUP GENERICO (overlay condiviso) ── */
+.indirizzi-popup-overlay {
+    position: fixed;
+    inset: 0;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background: rgba(0, 0, 0, 0.55);
+    z-index: 1000;
+    padding: 1rem;
+}
+
+.indirizzi-popup-overlay[hidden] {
+    display: none;
+}
+
+.indirizzi-popup-box {
+    display: flex;
+    flex-direction: column;
+    background: #fff;
+    border: 1px solid var(--color-border-light);
+    border-radius: var(--radius-md);
+    padding: 1.75rem;
+    max-width: 460px;
+    width: 100%;
+    max-height: 90vh;
+    overflow-y: auto;
+}
+
+/* ── POPUP CONFERMA (eliminazione) ── */
+.indirizzi-popup-box-confirm {
+    align-items: center;
+    text-align: center;
+    max-width: 360px;
+}
+
+.indirizzi-popup-icon {
+    font-size: 2rem;
+    color: #d97706;
+    margin-bottom: 0.75rem;
+}
+
+.indirizzi-popup-message {
+    font-size: var(--font-size-lg);
+    color: #1f2937;
+    margin: 0 0 1.5rem;
+}
+
+.indirizzi-popup-actions {
+    display: flex;
+    gap: 0.75rem;
+    width: 100%;
+}
+
+.indirizzi-popup-actions .indirizzi-form-btn-secondary,
+.indirizzi-popup-actions .indirizzi-form-btn-primary {
+    flex: 1;
+}
+
+/* ── POPUP FORM (aggiungi/modifica) ── */
+.indirizzi-form-titolo {
+    font-size: 1.2rem;
+    font-weight: 700;
+    color: #1f2937;
+    margin: 0 0 1.25rem;
+}
+
+.indirizzi-form-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 1rem;
+    margin-bottom: 1.5rem;
+}
+
+.indirizzi-form-field {
+    display: flex;
+    flex-direction: column;
+    gap: 0.35rem;
+}
+
+.indirizzi-form-field-full {
+    grid-column: 1 / -1;
+}
+
+.indirizzi-form-label {
+    font-size: var(--font-size-sm);
+    font-weight: 600;
+    color: #1f2937;
+}
+
+.indirizzi-form-input {
+    padding: 0.6rem 0.75rem;
+    border: 1px solid var(--color-border-light);
+    border-radius: var(--radius-sm);
+    font-size: var(--font-size-md);
+    font-family: inherit;
+    color: #1f2937;
+    background: #fff;
+    transition: border-color var(--transition);
+}
+
+.indirizzi-form-input:focus {
+    outline: none;
+    border-color: var(--color-primary);
+}
+
+.indirizzi-form-error {
+    font-size: 0.78rem;
+    color: #dc2626;
+    min-height: 1rem;
+}
+
+.indirizzi-form-actions {
+    display: flex;
+    gap: 0.75rem;
+}
+
+.indirizzi-form-btn-secondary,
+.indirizzi-form-btn-primary {
+    flex: 1;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    gap: 0.35rem;
+    padding: 0.65rem 1rem;
+    border-radius: var(--radius-sm);
+    font-size: var(--font-size-md);
+    font-weight: 600;
+    cursor: pointer;
+    border: 1px solid var(--color-border-light);
+    background: transparent;
+    color: #1f2937;
+    transition: background var(--transition), color var(--transition), border-color var(--transition);
+}
+
+.indirizzi-form-btn-secondary:hover {
+    border-color: var(--color-text-muted);
+}
+
+.indirizzi-form-btn-primary {
+    background: var(--color-primary);
+    color: #fff;
+    border-color: var(--color-primary);
+}
+
+.indirizzi-form-btn-primary:hover {
+    background: var(--color-primary-dark);
+}
+
+/* ── RESPONSIVE ── */
+@media (max-width: 640px) {
+    .indirizzi-titolo {
+        font-size: 1.5rem;
+    }
+
+    .indirizzi-list {
+        grid-template-columns: 1fr;
+    }
+
+    .indirizzi-form-grid {
+        grid-template-columns: 1fr;
+    }
+}

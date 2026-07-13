@@ -587,6 +587,37 @@ $eventi_profilo = [
     ],
 ];
 
+
+
+
+// ── PROFILO INDIRIZZI (mock) ──
+$indirizzi_profilo = [
+    [
+        'id'           => 1,
+        'nome'         => 'Casa',
+        'via'          => 'Via Roma 12',
+        'citta'        => 'Pescara',
+        'cap'          => '65121',
+        'provincia'    => 'PE',
+        'nazione'      => 'Italia',
+        'nomeCitofono' => 'Rossi',
+        'predefinito'  => true,
+    ],
+    [
+        'id'           => 2,
+        'nome'         => 'Ufficio',
+        'via'          => 'Corso Umberto I 45',
+        'citta'        => 'Giulianova',
+        'cap'          => '64021',
+        'provincia'    => 'TE',
+        'nazione'      => 'Italia',
+        'nomeCitofono' => '',
+        'predefinito'  => false,
+    ],
+];
+
+$smarty->assign('indirizzi', $indirizzi_profilo);
+
 // ── Home eventi (le 3 card) ──
 $smarty->assign('eventi', $eventi_profilo);
 $smarty->assign('ordinamento_eventi', $_GET['ordinamento'] ?? 'futuri');
@@ -682,4 +713,4 @@ if ($categoria === 'challenge') {
 // Home eventi (le 3 card)
 $smarty->assign('filtri', $filtri);
 $smarty->assign('breadcrumbs', breadcrumbsEventi(BASE_URL));
-$smarty->display('ProfiloEventi.tpl');
+$smarty->display('ProfiloIndirizzi.tpl');
