@@ -292,6 +292,8 @@
                     mostraPopup('La nuova password non va bene, provane un\'altra.');
                 } else if (data.reason === 'vecchia_errata') {
                     mostraPopup('La vecchia password non è quella corretta, riprova.');
+                } else if (data.reason === 'errore_salvataggio') {
+                    mostraPopup('Si è verificato un errore durante il salvataggio della password, riprova più tardi.');
                 } else {
                     mostraPopup('Si è verificato un errore, riprova più tardi.');
                 }

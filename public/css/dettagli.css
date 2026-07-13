@@ -1,0 +1,726 @@
+/* ============================================================
+   TableCrown — dettagli.css
+   Foglio di stile condiviso per:
+     - dettagliSerata.tpl
+     - dettagliTorneo.tpl
+     - dettagliChallenge.tpl
+   ============================================================ */
+
+/* ── CONTENITORE PRINCIPALE ───────────────────────────────── */
+.dettaglio-container {
+    padding: 2rem 0 4rem;
+}
+
+.dettaglio-container .container {
+    max-width: 1200px;
+    margin-left: auto;
+    margin-right: auto;
+    padding-left: 1rem;
+    padding-right: 1rem;
+}
+
+/* ── BREADCRUMB ───────────────────────────────────────────── */
+.dettaglio-breadcrumb {
+    margin-bottom: 2rem;
+    font-size: var(--font-size-sm);
+    color: var(--color-text-muted);
+}
+
+.dettaglio-breadcrumb a {
+    color: var(--color-text-muted);
+    text-decoration: none;
+    transition: color var(--transition);
+}
+
+.dettaglio-breadcrumb a:hover {
+    color: var(--color-primary);
+}
+
+/* ── BLOCCO SUPERIORE (galleria + info [+ prezzo]) ────────── */
+.dettaglio-top {
+    display: grid;
+    grid-template-columns: 420px 1fr;
+    gap: 2.5rem;
+    align-items: start;
+    padding-bottom: 2.5rem;
+    border-bottom: 1px solid var(--color-border-dark);
+    margin-bottom: 2.5rem;
+}
+
+/* Modificatore: presente solo su Torneo e Challenge (colonna prezzo) */
+.dettaglio-top--con-prezzo {
+    grid-template-columns: 420px 1fr 320px;
+}
+
+/* ── GALLERIA IMMAGINE ────────────────────────────────────── */
+.dettaglio-gallery {
+    position: relative;
+    background-color: var(--color-bg-dark-2);
+    border: 1px solid var(--color-border-dark);
+    border-radius: var(--radius-md);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    aspect-ratio: 1 / 1;
+    overflow: hidden;
+    padding: 1rem;
+}
+
+.dettaglio-img {
+    max-width: 100%;
+    max-height: 100%;
+    object-fit: contain;
+    transition: transform var(--transition);
+}
+
+.dettaglio-gallery:hover .dettaglio-img {
+    transform: scale(1.03);
+}
+
+/* Badge attività, in overlay sull'angolo della galleria (nuovo) */
+.dettaglio-badge-attivita {
+    position: absolute;
+    top: 1rem;
+    left: 1rem;
+    background-color: var(--color-primary);
+    color: #000;
+    font-size: 11px;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 0.04em;
+    padding: 0.4rem 0.9rem;
+    border-radius: 999px;
+    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.25);
+    z-index: 2;
+}
+
+/* ── COLONNA INFO ─────────────────────────────────────────── */
+.dettaglio-info {
+    display: flex;
+    flex-direction: column;
+    gap: 1.25rem;
+}
+
+.dettaglio-nome {
+    font-size: 2rem;
+    font-weight: 700;
+    color: var(--color-text-light);
+    margin: 0;
+    line-height: 1.25;
+}
+
+/* Solo per dettagliSerata.tpl: titolo con lo stesso colore della card recensioni */
+.dettaglio-nome--serata {
+    color: var(--color-text-subtle);
+}
+
+.dettaglio-meta {
+    list-style: none;
+    display: flex;
+    flex-direction: column;
+    gap: 0.6rem;
+    margin: 0;
+    padding: 0;
+}
+
+.dettaglio-meta li {
+    display: flex;
+    align-items: center;
+    gap: 0.6rem;
+    font-size: var(--font-size-md);
+    color: var(--color-text-subtle);
+}
+
+.dettaglio-meta li i {
+    color: var(--color-primary);
+    font-size: 18px;
+}
+
+/* Variante "card" della meta-list (nuovo, usata da dettagliSerata.tpl) */
+.dettaglio-meta--card {
+    gap: 0.6rem;
+}
+
+.dettaglio-meta-item {
+    display: flex;
+    align-items: center;
+    gap: 0.85rem;
+    background-color: var(--color-bg-dark-2);
+    border: 1px solid var(--color-border-dark);
+    border-radius: var(--radius-sm);
+    padding: 0.7rem 1rem;
+    font-size: var(--font-size-md);
+    color: var(--color-text-subtle);
+    transition: border-color var(--transition);
+}
+
+.dettaglio-meta-item:hover {
+    border-color: var(--color-primary);
+}
+
+.dettaglio-meta-item-icon {
+    flex: 0 0 36px;
+    width: 36px;
+    height: 36px;
+    border-radius: 50%;
+    background-color: var(--color-bg-dark);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.dettaglio-meta-item-icon i {
+    color: var(--color-primary);
+    font-size: 16px;
+}
+
+.dettaglio-meta-item-text {
+    display: flex;
+    flex-direction: column;
+    gap: 0.15rem;
+}
+
+.dettaglio-meta-item-label {
+    font-size: 11px;
+    text-transform: uppercase;
+    letter-spacing: 0.04em;
+    color: var(--color-text-muted);
+}
+
+.dettaglio-meta-item-value {
+    font-size: var(--font-size-sm);
+    font-weight: 600;
+    color: var(--color-text-light);
+}
+
+/* ── BARRA DISPONIBILITÀ POSTI (nuovo) ────────────────────── */
+.dettaglio-disponibilita {
+    display: flex;
+    flex-direction: column;
+    gap: 0.4rem;
+}
+
+.dettaglio-disponibilita-testo span:last-child {
+    color: var(--color-text-dark);
+    font-weight: 600;
+}
+
+.dettaglio-disponibilita-bar {
+    width: 100%;
+    height: 8px;
+    border-radius: 999px;
+    background-color: var(--color-bg-dark);
+    overflow: hidden;
+}
+
+.dettaglio-disponibilita-fill {
+    height: 100%;
+    border-radius: 999px;
+    background-color: var(--color-primary);
+    transition: width var(--transition);
+}
+
+.dettaglio-disponibilita-fill--scarsa {
+    background-color: #e05a4e;
+}
+
+.dettaglio-recensioni-link {
+    display: inline-block;
+    width: fit-content;
+    font-size: var(--font-size-sm);
+    font-weight: 600;
+    color: var(--color-text-light);
+    background-color: var(--color-bg-dark);
+    border: 1px solid var(--color-border-dark);
+    border-radius: var(--radius-sm);
+    padding: 0.5rem 1rem;
+    text-decoration: none;
+    transition: border-color var(--transition), color var(--transition);
+}
+
+.dettaglio-recensioni-link:hover {
+    border-color: var(--color-primary);
+    color: var(--color-primary);
+}
+
+/* ── CARD AZIONE PRENOTAZIONE (nuovo, usata da dettagliSerata.tpl) ── */
+.dettaglio-azione-card {
+    background-color: var(--color-bg-dark-2);
+    border: 1px solid var(--color-border-dark);
+    border-radius: var(--radius-md);
+    padding: 1.25rem 1.5rem;
+    display: flex;
+    flex-direction: column;
+    gap: 1rem;
+}
+
+.dettaglio-azione-label {
+    font-size: 12px;
+    text-transform: uppercase;
+    letter-spacing: 0.04em;
+    color: var(--color-text-muted);
+    font-weight: 600;
+}
+
+.dettaglio-azione-row {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 1rem;
+    flex-wrap: wrap;
+}
+
+/* Pulsante azione principale quando NON c'è il box prezzo (Serata) */
+.btn-partecipa {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    gap: 0.5rem;
+    width: 100%;
+    background-color: var(--color-primary) !important;
+    color: #000 !important;
+    font-size: var(--font-size-md) !important;
+    font-weight: 700 !important;
+    padding: 0.85rem 2.5rem !important;
+    border: none !important;
+    border-radius: var(--radius-sm) !important;
+    cursor: pointer;
+    transition: background-color var(--transition), transform var(--transition);
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.2);
+}
+
+.btn-partecipa:hover {
+    background-color: var(--color-primary-dark) !important;
+    transform: translateY(-1px);
+}
+
+.btn-partecipa:disabled {
+    background-color: var(--color-bg-dark) !important;
+    color: var(--color-text-muted) !important;
+    box-shadow: none;
+    cursor: not-allowed;
+    transform: none;
+}
+
+/* ── BOX PREZZO (solo Torneo/Challenge) ───────────────────── */
+.dettaglio-prezzo-box {
+    background-color: var(--color-bg-dark-2);
+    border: 1px solid var(--color-border-dark);
+    border-radius: var(--radius-md);
+    padding: 1.75rem;
+    display: flex;
+    flex-direction: column;
+    gap: 1.25rem;
+    position: sticky;
+    top: 100px;
+}
+
+/* ── CARD PREMIO (Torneo/Challenge, dentro il box prezzo) ── */
+.dettaglio-premio-card {
+    display: flex;
+    align-items: center;
+    gap: 1rem;
+    background-color: var(--color-bg-dark);
+    border: 1px solid var(--color-border-dark);
+    border-radius: var(--radius-sm);
+    padding: 0.85rem;
+    text-decoration: none;
+    transition: border-color var(--transition), transform var(--transition);
+}
+
+.dettaglio-premio-card:hover {
+    border-color: var(--color-primary);
+    transform: translateY(-2px);
+}
+
+.dettaglio-premio-img-wrapper {
+    flex: 0 0 56px;
+    width: 56px;
+    height: 56px;
+    background-color: var(--color-bg-dark-2);
+    border-radius: var(--radius-sm);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    overflow: hidden;
+    padding: 0.35rem;
+}
+
+.dettaglio-premio-img {
+    max-width: 100%;
+    max-height: 100%;
+    object-fit: contain;
+}
+
+.dettaglio-premio-info {
+    display: flex;
+    flex-direction: column;
+    gap: 0.2rem;
+    min-width: 0;
+}
+
+.dettaglio-premio-label {
+    font-size: 12px;
+    font-weight: 600;
+    color: #ffffff;
+    text-transform: uppercase;
+    letter-spacing: 0.03em;
+}
+
+.dettaglio-premio-nome {
+    font-size: var(--font-size-sm);
+    font-weight: 700;
+    color: var(--color-text-light);
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+}
+
+.dettaglio-qty {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 0;
+}
+
+.dettaglio-qty-btn {
+    width: 38px;
+    height: 38px;
+    background-color: var(--color-bg-dark) !important;
+    border: 1px solid var(--color-border-dark) !important;
+    color: var(--color-text-light) !important;
+    font-size: 1.1rem;
+    font-weight: 700;
+    cursor: pointer;
+    transition: border-color var(--transition), color var(--transition);
+}
+
+.dettaglio-qty-btn:first-child {
+    border-radius: var(--radius-sm) 0 0 var(--radius-sm) !important;
+}
+
+.dettaglio-qty-btn:last-child {
+    border-radius: 0 var(--radius-sm) var(--radius-sm) 0 !important;
+}
+
+.dettaglio-qty-btn:hover {
+    border-color: var(--color-primary) !important;
+    color: var(--color-primary) !important;
+}
+
+.dettaglio-qty-btn:disabled {
+    opacity: 0.4;
+    cursor: not-allowed;
+}
+
+.dettaglio-qty-input {
+    width: 60px;
+    height: 38px;
+    text-align: center;
+    border: 1px solid var(--color-border-dark) !important;
+    border-left: none !important;
+    border-right: none !important;
+    background-color: var(--color-bg-dark) !important;
+    color: var(--color-text-light) !important;
+    font-size: var(--font-size-md) !important;
+    font-weight: 600;
+    border-radius: 0 !important;
+    -moz-appearance: textfield;
+}
+
+.dettaglio-qty-input::-webkit-inner-spin-button,
+.dettaglio-qty-input::-webkit-outer-spin-button {
+    -webkit-appearance: none;
+}
+
+.dettaglio-prezzo-tot {
+    display: flex;
+    align-items: baseline;
+    justify-content: space-between;
+    padding: 1rem 0;
+    border-top: 1px solid var(--color-border-dark);
+    border-bottom: 1px solid var(--color-border-dark);
+}
+
+.dettaglio-prezzo-tot-label {
+    font-size: var(--font-size-md);
+    font-weight: 600;
+    color: var(--color-text-light);
+}
+
+.dettaglio-prezzo-tot-value {
+    font-size: 1.75rem;
+    font-weight: 700;
+    color: var(--color-primary);
+}
+
+.btn-iscriviti {
+    width: 100%;
+    background-color: var(--color-primary) !important;
+    color: #000 !important;
+    font-size: var(--font-size-md) !important;
+    font-weight: 700 !important;
+    padding: 0.85rem 1.5rem !important;
+    border: none !important;
+    border-radius: var(--radius-sm) !important;
+    cursor: pointer;
+    transition: background-color var(--transition);
+    box-shadow: 0 4px 12px rgba(0,0,0,0.2);
+}
+
+.btn-iscriviti:hover {
+    background-color: var(--color-primary-dark) !important;
+}
+
+/* ── DESCRIZIONE ───────────────────────────────────────────── */
+.dettaglio-descrizione {
+    padding-bottom: 2.5rem;
+    border-bottom: 1px solid var(--color-border-dark);
+    margin-bottom: 2.5rem;
+}
+
+.dettaglio-section-title {
+    font-size: 1.3rem;
+    font-weight: 700;
+    color: var(--color-primary);
+    margin: 0 0 1.25rem 0;
+    padding-bottom: 0.5rem;
+    border-bottom: 2px solid var(--color-primary);
+    display: inline-block;
+}
+
+.dettaglio-descrizione-testo {
+    font-size: var(--font-size-md);
+    color: var(--color-text-subtle);
+    line-height: 1.7;
+    margin: 0;
+}
+
+/* ── CARD CORRELATE (Tornei inclusi / Challenge di appartenenza) ── */
+.dettaglio-correlati {
+    padding-bottom: 2.5rem;
+    border-bottom: 1px solid var(--color-border-dark);
+    margin-bottom: 2.5rem;
+}
+
+.dettaglio-correlati-grid {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 1.25rem;
+}
+
+.dettaglio-correlato-card {
+    flex: 0 0 220px;
+    background-color: var(--color-bg-dark-2);
+    border: 1px solid var(--color-border-dark);
+    border-radius: var(--radius-md);
+    padding: 1rem;
+    display: flex;
+    flex-direction: column;
+    gap: 0.6rem;
+    text-decoration: none;
+    transition: transform var(--transition), border-color var(--transition);
+}
+
+.dettaglio-correlato-card:hover {
+    transform: translateY(-4px);
+    border-color: var(--color-primary);
+}
+
+.dettaglio-correlato-img-wrapper {
+    background-color: var(--color-bg-dark);
+    border-radius: var(--radius-sm);
+    aspect-ratio: 4 / 3;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 0.6rem;
+    overflow: hidden;
+}
+
+.dettaglio-correlato-img {
+    max-width: 100%;
+    max-height: 100%;
+    object-fit: contain;
+}
+
+.dettaglio-correlato-nome {
+    font-size: var(--font-size-sm);
+    font-weight: 600;
+    color: var(--color-text-light);
+    margin: 0;
+    line-height: 1.4;
+}
+
+.dettaglio-correlato-data {
+    font-size: 12px;
+    color: var(--color-text-muted);
+    margin: 0;
+}
+
+/* ── RECENSIONI (fondo pagina) ────────────────────────────── */
+.dettaglio-recensioni {
+    scroll-margin-top: 100px;
+}
+
+.dettaglio-recensioni-lista {
+    display: flex;
+    flex-direction: column;
+    gap: 1rem;
+    margin-top: 1.25rem;
+}
+
+.dettaglio-recensione-card {
+    background-color: var(--color-bg-dark-2);
+    border: 1px solid var(--color-border-dark);
+    border-radius: var(--radius-md);
+    padding: 1.25rem;
+}
+
+.dettaglio-recensione-header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    margin-bottom: 0.5rem;
+}
+
+.dettaglio-recensione-utente {
+    font-weight: 600;
+    color: var(--color-text-light);
+    font-size: var(--font-size-sm);
+}
+
+.dettaglio-recensione-data {
+    font-size: 12px;
+    color: var(--color-text-muted);
+}
+
+.dettaglio-recensione-testo {
+    font-size: var(--font-size-sm);
+    color: var(--color-text-subtle);
+    line-height: 1.6;
+    margin: 0;
+}
+
+.dettaglio-recensioni-vuoto {
+    color: var(--color-text-muted);
+    font-size: var(--font-size-sm);
+    margin-top: 1.25rem;
+}
+
+/* ============================================================
+   ── RESPONSIVE DESIGN ────────────────────────────────────────
+   ============================================================ */
+@media (max-width: 992px) {
+    .dettaglio-top,
+    .dettaglio-top--con-prezzo {
+        grid-template-columns: 1fr;
+    }
+
+    .dettaglio-prezzo-box {
+        position: static;
+    }
+}
+
+@media (max-width: 480px) {
+    .dettaglio-correlato-card {
+        flex: 1 1 100%;
+    }
+
+    .dettaglio-azione-row {
+        flex-direction: column;
+        align-items: stretch;
+    }
+}
+
+/* ── MODALE CONFERMA PRENOTAZIONE ─────────────────────────── */
+.dettaglio-modal-overlay {
+    position: fixed;
+    inset: 0;
+    background-color: rgba(0, 0, 0, 0.65);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    z-index: 1000;
+    opacity: 0;
+    pointer-events: none;
+    transition: opacity var(--transition);
+}
+
+.dettaglio-modal-overlay.is-visibile {
+    opacity: 1;
+    pointer-events: auto;
+}
+
+.dettaglio-modal {
+    background-color: var(--color-bg-dark-2);
+    border: 1px solid var(--color-border-dark);
+    border-radius: var(--radius-md);
+    padding: 2rem;
+    width: 100%;
+    max-width: 380px;
+    text-align: center;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 1rem;
+    transform: translateY(16px) scale(0.97);
+    transition: transform var(--transition);
+    box-shadow: 0 20px 40px rgba(0, 0, 0, 0.35);
+}
+
+.dettaglio-modal-overlay.is-visibile .dettaglio-modal {
+    transform: translateY(0) scale(1);
+}
+
+.dettaglio-modal-icona {
+    width: 60px;
+    height: 60px;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 28px;
+}
+
+.dettaglio-modal--successo .dettaglio-modal-icona {
+    background-color: rgba(0, 200, 120, 0.15);
+    color: #2ecc71;
+}
+
+.dettaglio-modal--errore .dettaglio-modal-icona {
+    background-color: rgba(224, 90, 78, 0.15);
+    color: #e05a4e;
+}
+
+.dettaglio-modal-titolo {
+    font-size: 1.15rem;
+    font-weight: 700;
+    color: var(--color-text-light);
+    margin: 0;
+}
+
+.dettaglio-modal-testo {
+    font-size: var(--font-size-sm);
+    color: var(--color-text-subtle);
+    line-height: 1.6;
+    margin: 0;
+}
+
+.dettaglio-modal-chiudi {
+    margin-top: 0.5rem;
+    width: 100%;
+    background-color: var(--color-primary) !important;
+    color: #000 !important;
+    font-size: var(--font-size-md) !important;
+    font-weight: 700 !important;
+    padding: 0.7rem 1.5rem !important;
+    border: none !important;
+    border-radius: var(--radius-sm) !important;
+    cursor: pointer;
+    transition: background-color var(--transition);
+}
+
+.dettaglio-modal-chiudi:hover {
+    background-color: var(--color-primary-dark) !important;
+}

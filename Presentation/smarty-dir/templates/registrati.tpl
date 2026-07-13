@@ -18,13 +18,6 @@
                 <p class="auth-subtitle">Unisciti alla community TableCrown</p>
             </div>
 
-            {if isset($errore) && $errore}
-                <div class="auth-alert auth-alert-error">
-                    <i class="ti ti-alert-circle"></i>
-                    <span>{$errore|escape}</span>
-                </div>
-            {/if}
-
             <form class="auth-form" action="{$base_url}/registrati" method="post" id="register-form">
 
                 <div class="auth-field">
@@ -33,7 +26,7 @@
                         <i class="ti ti-user"></i>
                         <input class="input auth-input"
                                type="text"
-                               name="nickname"
+                               name="nome"
                                id="nickname"
                                placeholder="MastroDadi92"
                                value="{$nickname_value|default:''|escape}"

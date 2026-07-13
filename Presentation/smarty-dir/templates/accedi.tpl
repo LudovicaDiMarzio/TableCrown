@@ -18,20 +18,6 @@
                 <p class="auth-subtitle">Accedi al tuo account TableCrown</p>
             </div>
 
-            {if isset($errore) && $errore}
-                <div class="auth-alert auth-alert-error">
-                    <i class="ti ti-alert-circle"></i>
-                    <span>{$errore|escape}</span>
-                </div>
-            {/if}
-
-            {if isset($messaggio) && $messaggio}
-                <div class="auth-alert auth-alert-success">
-                    <i class="ti ti-circle-check"></i>
-                    <span>{$messaggio|escape}</span>
-                </div>
-            {/if}
-
             <form class="auth-form" action="{$base_url}/accedi" method="post" id="login-form">
 
                 {if isset($redirect_to)}

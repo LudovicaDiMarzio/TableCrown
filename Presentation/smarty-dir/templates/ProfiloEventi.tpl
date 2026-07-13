@@ -188,20 +188,30 @@
                             {* ── AZIONI ── *}
                             <div class="mieeventi-actions">
                                 {if $evento.tipoEvento == 'serata'}
+
                                     <a href="{$base_url}/{$evento.tipoEvento|escape}/{$evento.idEvento|escape}" class="mieeventi-btn-secondary">
                                         <i class="ti ti-info-circle"></i> Maggiori info
                                     </a>
-                                {else}
-                                    <a href="{$base_url}/{$evento.tipoEvento|escape}/{$evento.idEvento|escape}#classifica" class="mieeventi-btn-secondary">
-                                        <i class="ti ti-trophy"></i> Esito
-                                    </a>
-                                {/if}
 
-                                {* isDisdicibile è opzionale: se assente, il bottone compare comunque (default true) *}
-                                {if $evento.statoEvento == 'in programma' && (!isset($evento.isDisdicibile) || $evento.isDisdicibile)}
-                                    <button type="button" class="mieeventi-btn-disdici" data-id="{$evento.idEvento|escape}">
-                                        <i class="ti ti-x"></i> Disdici partecipazione
-                                    </button>
+                                    {* -- solo le serate sono disdicibili -- *}
+                                    {* isDisdicibile è opzionale: se assente, il bottone compare comunque (default true) *}
+                                    {if $evento.statoEvento == 'in programma' && (!isset($evento.isDisdicibile) || $evento.isDisdicibile)}
+                                        <button type="button" class="mieeventi-btn-disdici" data-id="{$evento.idEvento|escape}">
+                                            <i class="ti ti-x"></i> Disdici partecipazione
+                                        </button>
+                                    {/if}
+
+                                {else}
+                                    {* -- torneo/challenge: non disdicibili, solo link informativo -- *}
+                                    {if $evento.statoEvento == 'in programma'}
+                                        <a href="{$base_url}/{$evento.tipoEvento|escape}/{$evento.idEvento|escape}" class="mieeventi-btn-secondary">
+                                            <i class="ti ti-info-circle"></i> Maggiori info
+                                        </a>
+                                    {else}
+                                        <a href="{$base_url}/{$evento.tipoEvento|escape}/{$evento.idEvento|escape}#classifica" class="mieeventi-btn-secondary">
+                                            <i class="ti ti-trophy"></i> Esito
+                                        </a>
+                                    {/if}
                                 {/if}
                             </div>
 

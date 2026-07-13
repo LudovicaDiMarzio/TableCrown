@@ -616,6 +616,71 @@ $indirizzi_profilo = [
     ],
 ];
 
+
+
+// ── CHALLENGE SINGOLA (per dettagliChallenge.tpl) ──
+$challenge_dettaglio = [
+    'id'            => 501,
+    'nome'          => 'Challenge Wingspan - Stagione Migratoria',
+    'immagine'      => 'placeholder.jpg',
+    'data'          => '28/07/2026',
+    'postiLiberi'   => 5,
+    'postiTotali'   => 8,
+    'nomeAttivita'  => 'Wingspan',
+    'descrizione'   => "Metti alla prova le tue abilità in Wingspan in questa challenge stagionale.\nAffronta più tornei collegati e scala la classifica generale.",
+    'prezzo'        => 5.00,
+    'premio'        => ['id' => 201, 'nome' => 'Wingspan', 'immagine' => 'placeholder.jpg'],
+    'tornei'        => [
+        ['id' => 301, 'nome' => 'Torneo di Catan - Coppa Primavera', 'immagine' => 'placeholder.jpg', 'data' => '15/07/2026'],
+    ],
+];
+
+
+
+// ── TORNEO SINGOLO (per dettagliTorneo.tpl) ──
+$torneo_dettaglio = [
+    'id'            => 301,
+    'nome'          => 'Torneo di Catan - Coppa Primavera',
+    'immagine'      => 'placeholder.jpg',
+    'data'          => '15/07/2026',
+    'postiLiberi'   => 6,
+    'postiTotali'   => 16,
+    'nomeAttivita'  => 'Catan',
+    'descrizione'   => "Sfida gli altri giocatori nel torneo ufficiale di Catan.\nFormula a gironi, finale in diretta con premiazione.",
+    'prezzo'        => 10.00,
+    'premio'        => ['id' => 101, 'nome' => 'Catan', 'immagine' => 'placeholder.jpg'],
+    'challenge'     => [
+        'id'       => 501,
+        'nome'     => 'Challenge Wingspan - Stagione Migratoria',
+        'immagine' => 'placeholder.jpg',
+    ],
+];
+
+// ── SERATA SINGOLA (per dettagliSerata.tpl) ──
+$serata_dettaglio = [
+    'id'            => 401,
+    'nome'          => 'Serata Gioco Libero al Tablecrown Pub',
+    'immagine'      => 'placeholder.jpg',
+    'data'          => '10/07/2026',
+    'postiLiberi'   => 12,
+    'postiTotali'   => 30,
+    'nomeAttivita'  => 'Gioco Libero',
+    'descrizione'   => "Una serata di gioco libero aperta a tutti gli appassionati.\nPortare la propria copia o usare quelle disponibili in sede.",
+    'recensioni'    => [
+        ['utente' => 'Marco92',    'data' => '01/07/2026', 'testo' => "Ambiente accogliente, tornerò sicuramente!"],
+        ['utente' => 'GiulyGamer', 'data' => '20/06/2026', 'testo' => "Bella iniziativa, un po' affollata ma divertente."],
+    ],
+];
+
+$smarty->assign('serata', $serata_dettaglio);
+
+
+$smarty->assign('torneo', $torneo_dettaglio);
+
+
+$smarty->assign('challenge', $challenge_dettaglio);
+
+
 $smarty->assign('indirizzi', $indirizzi_profilo);
 
 // ── Home eventi (le 3 card) ──
@@ -713,4 +778,4 @@ if ($categoria === 'challenge') {
 // Home eventi (le 3 card)
 $smarty->assign('filtri', $filtri);
 $smarty->assign('breadcrumbs', breadcrumbsEventi(BASE_URL));
-$smarty->display('ProfiloIndirizzi.tpl');
+$smarty->display('dettagliSerata.tpl');
