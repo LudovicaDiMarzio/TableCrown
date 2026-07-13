@@ -26,6 +26,10 @@ class EDanno {
     }
 
     //GET methods
+    public function getIddanno(): ?int {
+        return $this->iddanno;
+    }
+    
     public function getLivelloDanno(): LivelloDannoGiochi {
         return $this->livelloDanno;
     }

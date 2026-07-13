@@ -4,7 +4,7 @@ namespace TableCrown\Entity\Enumerativi;
 enum Categoria: string {
     case Strategia = "strategia";
     case Famiglia = "famiglia";
-    case PartyGame = "party game";
+    case PartyGame = "party_game";
     case Cooperativo = "cooperativo";
     case Avventura = "avventura";
     case Carte = "carte";

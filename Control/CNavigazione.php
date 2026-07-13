@@ -27,19 +27,11 @@ class CNavigazione extends BaseController {
         $offerte = FPersistentManager::PMfindProdottiInOfferta(5, 0); //DA CREARE
         $nuoviArrivi = FPersistentManager::PMgetObjListOrdered(EProdotto::class, 'dataPubblicazione', 'DESC', 5);
 
-        //Convertiamo gli oggetti Entity in array associativi per Presentation
-        $offerteArray = array_map(fn($p) => $p->toArray(), $offerte);
-        $nuoviArriviArray = array_map(fn($p) => $p->toArray(), $nuoviArrivi);
-
-        
-        //TODO: capire cosa serve dell'utente, recuperarlo dal DB e restituirlo assieme ai dati globali
-
 
         //Impacchettiamo i dati specifici richiesti da home.tpl
         $datiPagina = [
-            'offerte' => $offerteArray,
-            'nuovi_arrivi' => $nuoviArriviArray,
-            'categorie' => self::TIPI_PRODOTTO, //Passiamo anche le categorie valide per il catalogo
+            'offerte' => $this->prodottiToArray($offerte),
+            'nuovi_arrivi' => $this->prodottiToArray($nuoviArrivi),
         ];
 
         //Uniamo i dati specifici con quello globali del layout
@@ -48,10 +40,10 @@ class CNavigazione extends BaseController {
 
         /**
          * Passiamo i dati al layer Presentation:
-         * poichè il metodo render() è statico, non serve istanziare la classe View.
+         * poichè il metodo mostraHome() è statico, non serve istanziare la classe View.
          * Sarà poi la View a fare gli assign su Smarty e il display('home.tpl').  
          */
-        ViewHome::render($datiLayout);
+        ViewHome::mostraHome($datiLayout);
 
     }
 

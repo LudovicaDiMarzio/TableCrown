@@ -2,12 +2,13 @@
 namespace TableCrown\Control;
 
 use TableCrown\Utility\UHTTPMethods;
+use TableCrown\Utility\UFlashMessage;
 use TableCrown\Entity\EProdotto;
 use TableCrown\Entity\EGiocoDaTavolo;
 use TableCrown\Entity\EBustine;
 use TableCrown\Entity\EPortaDadi;
 use TableCrown\Foundation\FPersistentManager;
-use TableCrown\Presentation\Views\VProdotto;
+use TableCrown\Presentation\Views\ViewProdotto;
 
 /**
  * Controller dedicato alla gestione dei dettagli di un prodotto.
@@ -23,58 +24,74 @@ class CProdotto extends BaseController {
         $prodotto = FPersistentManager::PMgetObjOnAttribute(EProdotto::class, 'idProdotto', $idProdotto);
 
         if (!$prodotto) {
-            //TODO: gestire errore
+            UFlashMessage::addMessage('danger', 'Il prodotto non esiste o non è più disponibile.');
+            header('Location: /catalogo/giochi-da-tavolo');
+            exit();
         }
 
-        //Recuperiamo i dati specifici del prodotto
-        $datiVista = $this->costruisciDatiVista($prodotto);
+        
+        $datiPagina = $this->costruisciDatiVista($prodotto);
+        $datiLayout = $this->preparaDatiLayout('prodotto', $datiPagina);
 
         //Chiamata alla View per renderizzare il template di Smarty passando i dati
-        //VProdotto::render($datiVista);
+        ViewProdotto::mostraDettaglioProdotto($datiLayout);
 
     }
 
     /**
      * Costruisce l'array di dati da passare alla View 
-     * per il rendering del dettaglio del prodotto,
-     * includendo gli attributi comuni a tutti i prodotti e quelli
-     * specifici in base al tipo di prodotto (grazie all'inheritance mapping di Doctrine).
+     * per il rendering del dettaglio del prodotto.
+     * Usa prodottoToArray() del BaseController per i dati comuni.
+     * Aggiunge poi i campi esclusivi di questa vista e, se applicabile,
+     * i campi specifici dei giochi da tavolo.
      */
     private function costruisciDatiVista(EProdotto $prodotto): array {
-        //Attributi comuni a tutti i prodotti (di EProdotto), presenti per qualunque tipo di prodotto
-        $dati = [
-            'idProdotto' => $prodotto->getIdProdotto(),
-            'nomeProdotto' => $prodotto->getNomeProdotto(),
-            'imgProdotto' => $prodotto->getImgProdotto(),
+        $dati = array_merge($this->prodottoToArray($prodotto),[
             'descrizioneProdotto' => $prodotto->getDescrizioneProdotto(),
-            'disponibilitaProdotto' => $prodotto->getDisponibilitaProdotto(),
             'quantita' => $prodotto->getQuantita(),
             'dataPubblicazione' => $prodotto->getDataPubblicazione(),
-            'prezzo' => $prodotto->getPrezzo(),
-            'valutazioneMedia' => $prodotto->getValutazioneMedia(),
-            'recensioni' => $prodotto->getRecensioni(),
-            //isAcquistabile() o isDisponibile() si possono eventualmente aggiungere
-            //TODO: $correlati ?
-        ];
-
+            'recensioni' => $this->recensioniToArray($prodotto->getRecensioni()),
+            'correlati' => $this->prodottiCorrelati([$prodotto->getIdProdotto()]),
+            'userHasPurchased' => $this->haAcquistatoProdotto($prodotto->getIdProdotto()),
+        ]);
+       
         //Attributi specifici dei giochi da tavolo
         if ($prodotto instanceof EGiocoDaTavolo) {
-            $dati['categoria'] = $prodotto->getCategoria();
+            $dati['categoria'] = array_map(fn($c) => $c->value, $prodotto->getCategoria());
             $dati['componenti'] = $prodotto->getComponenti();
-            $dati['giocoBase'] = $prodotto->getGiocoBase();
+
+            $giocoBase = $prodotto->getGiocoBase();
+            $dati['giocoBase'] = $giocoBase !== null
+                ? ['id' => $giocoBase->getIdProdotto(), 'nome' => $giocoBase->getNomeProdotto()]
+                : null;
+
             $dati['numeroGiocatoriMin'] = $prodotto->getNumeroGiocatoriMin();
             $dati['numeroGiocatoriMax'] = $prodotto->getNumeroGiocatoriMax();
             $dati['etaMinima'] = $prodotto->getEtaMinima();
             $dati['durataMedia'] = $prodotto->getDurataMedia();
-            $dati['danno'] = $prodotto->getDanno();
+
+            $danno = $prodotto->getDanno(); //se il danno è presente, EGiocoDaTavolo garantisce che descrizioneDanno non sia vuota
+            $dati['danno'] = $danno?->getLivelloDanno()->value;
             $dati['descrizioneDanno'] = $prodotto->getDescrizioneDanno();
-            $dati['lingua'] = $prodotto->getLingua();
-            $dati['difficolta'] = $prodotto->getDifficolta();
+
+            $dati['lingua'] = $prodotto->getLingua()->value;
+            $dati['difficolta'] = $prodotto->getDifficolta()->value;
         }
 
         //EBustine e EPortaDadi non hanno sttributi specifici aggiuntivi,
         //quindi per loro $dati resta con i soli campi comuni.
         
         return $dati;
+    }
+
+    /**
+     * Verifica se l'utente loggato ha gia acquistato questo prodotto.
+     */
+    private function haAcquistatoProdotto(int $idProdotto): bool {
+        if (!$this->isLoggedIn()) {
+            return false;
+        }
+        //TODO: FPersistentManager::PMuserHasPurchased($idUtente, $idProdotto);
+        return false; //DA TOGLIERE QUANDO DISPONIBILE IL METODO DEL PM
     }
 }

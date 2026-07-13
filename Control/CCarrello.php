@@ -38,7 +38,7 @@ class CCarrello extends BaseController {
         //buildCarrelloSummary riceve carrelloItems già costruito, così non deve ricalcolare nulla dal DB
         $carrelloItems = $this->buildCarrelloItems($carrello);
         $carrelloSummary = $this->buildCarrelloSummary($carrelloItems, $carrello);
-        $correlati = $this->buildCorrelati($carrello);
+        $correlati = $this->prodottiCorrelati(array_keys($carrello));
  
         //Impacchettiamo i dati specifici per carrello.tpl
         $datiPagina = [
@@ -48,10 +48,10 @@ class CCarrello extends BaseController {
         ];
  
         //Uniamo i dati specifici della pagina con i dati globali del layout
-        $data = $this->preparaDatiLayout('carrello', $datiPagina);
+        $datiLayout = $this->preparaDatiLayout('carrello', $datiPagina);
  
         //Chiamata alla View per renderizzare il template di Smarty passando i dati
-        ViewCarrello::mostraCarrello($data); 
+        ViewCarrello::mostraCarrello($datiLayout); 
     }
 
     //==========================================================================
@@ -59,15 +59,16 @@ class CCarrello extends BaseController {
     //==========================================================================
     /**
      * Costruisce l'array di righe del carrello, ciascuna con i dati reali del prodotto
-     * caricati dal DB tramite FPersistentManager.
-     * Metodo puro: nessuno stato di classe, riceve il carrello e restituisce l'array pronto per la view.
+     * (tramite prodottoToArray, stessa convenzione usata in home/catalogo/prodotto),
+     * più i campi specifici della riga carrello (quantità, subtotale, url azioni).
      */
-    private function buildCarrelloItems(array $carrello): array {
+    private function buildCarrelloItems(array &$carrello): array { //con & prima di $carrello la funzione riceve un riferimento diretto alla variabile originale (per aggiornare la quantità)
         if (empty($carrello)) {
             return [];
         }
  
         $carrelloItems = [];
+        $idsDaRimuovere = [];
  
         //Scorriamo il carrello prendendo la chiave (id prodotto) e il valore (quantità)
         foreach ($carrello as $idProdotto => $quantita) {
@@ -75,34 +76,31 @@ class CCarrello extends BaseController {
             $prodotto = FPersistentManager::PMgetObjOnAttribute(EProdotto::class, 'idProdotto', $idProdotto);
  
             if (!$prodotto) {
+                $idsDaRimuovere[] = $idProdotto; //così verrà rimosso e non verrà contato in aggiornaQuantita()
                 continue; //salta il prodotto e passa al prossimo
             }
  
-            //Determiniamo il prezzo unitario corretto:
-            //se il prodotto è in sconto usiamo il prezzo scontato, altrimenti il prezzo pieno
-            $hasSconto = $prodotto->getPrezzo()->hasSconto();
-            $prezzoOriginale = (float) $prodotto->getPrezzo()->getValore();
-            $prezzoUnitario = $hasSconto ? (float) $prodotto->getPrezzo()->calcolaPrezzoScontato() : $prezzoOriginale;
- 
-            //Calcoliamo il subtotale di questa riga (prezzo * quantità)
-            $subtotale = $prezzoUnitario * $quantita;
- 
+            $prodottoArray = $this->prodottoToArray($prodotto);
+            //Prezzo effettivo da usare per i calcoli: scontato se presente, altrimenti pieno
+            $prodottoArray['prezzo_unitario'] = $prodottoArray['prezzo_scontato'] ?? $prodottoArray['prezzo'];
+
             //Costruiamo la struttura esatta richiesta dalla View
             $carrelloItems[] = [
                 'quantita' => $quantita,
-                'subtotale' => $subtotale,
+                'subtotale' => $prodottoArray['prezzo_unitario'] * $quantita,
                 'update_url' => '/carrello/aggiorna/' . $idProdotto,
                 'remove_url' => '/carrello/rimuovi/' . $idProdotto,
-                'prodotto' => [
-                    'id' => (int) $prodotto->getIdProdotto(),
-                    'nome' => $prodotto->getNomeProdotto(),
-                    'immagine' => $prodotto->getImgProdotto(),
-                    'prezzo_unitario' => $prezzoUnitario,
-                    'sconto' => $hasSconto,
-                    'prezzo_originale' => $prezzoOriginale, //rilevante solo se sconto=true, ma lo passiamo sempre (il template lo ignora se sconto=false)
-                    'percentuale_sconto' => $hasSconto ? $prodotto->getPrezzo()->getSconto() : null,
-                ],
+                'prodotto' => $prodottoArray,
             ];
+        }
+
+        //Pulizia: rimuove dalla sessione i prodotti non più trovati nel DB,
+        //così n_articoli e il carrello restanp coearenti con ciò che l'utente vede.
+        if (!empty($idsDaRimuovere)) {
+            foreach ($idsDaRimuovere as $idProdotto) {
+                unset($carrello[$idProdotto]);
+            }
+            USession::setSessionElement('carrello', $carrello);
         }
  
         return $carrelloItems;
@@ -111,7 +109,6 @@ class CCarrello extends BaseController {
     /**
      * Calcola i totali del carrello a partire dalle righe già costruite da buildCarrelloItems,
      * evitando di ricalcolare prezzi o ricontattare il DB.
-     * Ritorna sempre le stesse chiavi (anche a zero) per non costringere la view a fare isset().
      */
     private function buildCarrelloSummary(array $carrelloItems, array $carrello): array {
         $totale = 0.00;
@@ -121,8 +118,8 @@ class CCarrello extends BaseController {
             $totale += $item['subtotale'];
  
             if ($item['prodotto']['sconto']) {
-                //Lo sconto totale (cioè il risparmio totale) è la differenza tra prezzo pieno e prezzo scontato, per la quantità
-                $totaleSconto += ($item['prodotto']['prezzo_originale'] - $item['prodotto']['prezzo_unitario']) * $item['quantita'];
+                $risparmioUnitario = $item['prodotto']['prezzo'] - $item['prodotto']['prezzo_unitario'];
+                $totaleSconto += $risparmioUnitario * $item['quantita'];
             }
         }
  
@@ -132,41 +129,10 @@ class CCarrello extends BaseController {
             'totale' => $totale,
         ];
     }
- 
-
-    /**
-     * Determina i prodotti consigliati in base al contenuto del carrello.
-     * CRITERIO PROVVISORIO: tutti i prodotti disponibili, esclusi quelli già nel carrello, limitati ai primi 8.
-     */
-    private function buildCorrelati(array $carrello): array {
-        //Prendiamo tutti i prodotti dal DB
-        $tuttiProdotti = FPersistentManager::PMgetAll(EProdotto::class);
- 
-        //Escludiamo i prodotti già presenti nel carrello usando i loro ID come filtro
-        $idNelCarrello = array_keys($carrello);
-        $correlati = array_filter(
-            $tuttiProdotti,
-            fn($p) => !in_array($p->getIdProdotto(), $idNelCarrello) //arrow function: $p è il nome che assume temporaneamente ogni elemento dell'array, mentre array_filter lo itera
-        );
- 
-        //Prendiamo solo i primi 8 e reindicizziamo l'array
-        //array_filter mantiene gli indici originali, array_values li azzera.
-        $correlati = array_slice(array_values($correlati), 0, 8);
- 
-        //Convertiamo in array nel formato richiesto dalla View
-        return array_map(fn($p) => [
-            'id' => $p->getIdProdotto(),
-            'nome' => $p->getNomeProdotto(),
-            'immagine' => $p->getImgProdotto(),
-            'valutazione_media' => $p->getValutazioneMedia(),
-            'prezzo' => $p->hasSconto() ? null : $p->getPrezzo()->getValore(), //se il prodotto è in sconto, il prezzo va a null e mostriamo solo il prezzo scontato.
-            'prezzo_scontato' => $p->hasSconto() ? $p->getPrezzo()->calcolaPrezzoScontato() : null,
-            'sconto' => $p->hasSconto(),
-        ], $correlati);
-    }
 
     //==========================================================================
- 
+    // AZIONI AJAX
+    //==========================================================================
  
     /**
      * Aggiunge un prodotto al carrello (chiamata AJAX).
@@ -224,6 +190,15 @@ class CCarrello extends BaseController {
             exit();
         }
 
+        //Controlliamo che un prodotto esaurito/non disponibile/ senza prezzo non vada nel carrello
+        if (!$prodotto->isAcquistabile()) {
+            echo json_encode([
+                'success' => false,
+                'message' => 'Prodotto non disponibile per l\'acquisto.'
+            ]);
+            exit();
+        }
+
         //Recuperiamo l'array del carrello attuale dalla sessione o ne creiamo uno vuoto se non esiste
         $carrello = USession::getSessionElement('carrello') ?? [];
 
@@ -237,27 +212,26 @@ class CCarrello extends BaseController {
         //Salviamo nuovamente il carrello aggiornato in sessione
         USession::setSessionElement('carrello', $carrello);
 
-        //Calcoliamo i dati del prodotto per la risposta JSON
-        $hasSconto = $prodotto->getPrezzo()->hasSconto();
-        $prezzoUnitario = $hasSconto ? $prodotto->getPrezzo()->calcolaPrezzoScontato() : $prodotto->getPrezzo()->getValore();
-        $prezzoOriginale = $prodotto->getPrezzo()->getValore();
-        $quantitaAggiornata = $carrello[$idProdotto]; //quantità totale dopo l'aggiunta
+        $prodottoArray = $this->prodottoToArray($prodotto);
+        $prezzoUnitario = $prodottoArray['prezzo_scontato'] ?? $prodottoArray['prezzo'];
+        $quantitaAggiornata = $carrello[$idProdotto];
 
         //Risposta finale di successo:
         //generiamo il JSON definitivo che JavaScript riceverà indietro (ha campi "piatti")
         //usiamo URL assoluti perché il JS non passa da Smarty e non ha accesso a base_url.
         echo json_encode([
-            'id' => $prodotto->getIdProdotto(),
-            'nome' => $prodotto->getNomeProdotto(),
-            'immagine_url' => self::BASE_URL . '/img/prodotti/' . $prodotto->getImgProdotto(),
-            'product_url' => self::BASE_URL . '/prodotto/' . $prodotto->getIdProdotto(),
+            'id' => $prodottoArray['id'],
+            'nome' => $prodottoArray['nome'],
+            'immagine_url' => self::BASE_URL . '/img/prodotti/' . $prodottoArray['immagine'], //DA VERIFICARE
+            'product_url' => self::BASE_URL . '/prodotto/' . $prodottoArray['id'],
             'prezzo_unitario' => $prezzoUnitario,
-            'sconto' => $hasSconto,
-            'prezzo_originale' => $prezzoOriginale,
+            'sconto' => $prodottoArray['sconto'],
+            'prezzo_originale' => $prodottoArray['prezzo'],
+            'percentuale_sconto' => $prodottoArray['percentuale_sconto'],
             'quantita' => $quantitaAggiornata,
             'subtotale' => $prezzoUnitario * $quantitaAggiornata,
-            'update_url' => self::BASE_URL . '/carrello/aggiorna/' . $prodotto->getIdProdotto(),
-            'remove_url' => self::BASE_URL . '/carrello/rimuovi/' . $prodotto->getIdProdotto(),
+            'update_url' => self::BASE_URL . '/carrello/aggiorna/' . $idProdotto,
+            'remove_url' => self::BASE_URL . '/carrello/rimuovi/' . $idProdotto,
             'cart_count' => array_sum($carrello), //per aggiornare il badge navbar
         ]);
         exit();
@@ -294,14 +268,38 @@ class CCarrello extends BaseController {
         $carrello = USession::getSessionElement('carrello') ?? [];
 
         //Aggiorniamo la quantità solo se il prodotto esiste nel carrello
-        if (isset($carrello[$idItem])) {
-            $carrello[$idItem] = $nuovaQuantita;
-            USession::setSessionElement('carrello', $carrello);
+        if (!isset($carrello[$idItem])) {
+            http_response_code(404);
+            echo json_encode([
+                'success' => false,
+                'message' => 'Prodotto non trovato nel carrello.'
+            ]);
+            exit();
+        }
+
+        $carrello[$idItem] = $nuovaQuantita;
+        USession::setSessionElement('carrello', $carrello);
+
+        //Riusiamo la stessa logica di mostraCarrello per i totali, evitando di 
+        //duplicare e disallineare il calcolo dei prezzi.
+        $carrelloItems = $this->buildCarrelloItems($carrello);
+        $carrelloSummary = $this->buildCarrelloSummary($carrelloItems, $carrello);
+
+        $itemAggiornato = null;
+        foreach ($carrelloItems as $item) {
+            if ($item['prodotto']['id'] === $idItem) {
+                $itemAggiornato = $item;
+                break;
+            }
         }
 
         echo json_encode([
             'success' => true,
-            'message' => 'Prodotto aggiornato nel carrello',
+            'message' => 'Prodotto aggiornato nel carrello.',
+            'subtotale' => $itemAggiornato['subtotale'] ?? 0.00,
+            'cart_count' => array_sum($carrello),
+            'totale' => $carrelloSummary['totale'],
+            'sconto' => $carrelloSummary['sconto'],
         ]);
         exit();
     }
@@ -332,26 +330,14 @@ class CCarrello extends BaseController {
         //Salviamo lo stato del carrello aggiornato in sessione (potrebbe risultare vuoto a questo punto)
         USession::setSessionElement('carrello', $carrello);
 
-        //Ricalcoliamo il totale degli elementi rimasti
-        $nuovoConteggio = array_sum($carrello);
-
-        //Ricalcoliamo anche il nuovo totale (prezzo), scorrendo i prodotti rimasti nel carrello
-        //e recuperando i prezzi reali dal DB tramite il pm
-        $nuovoTotale = 0.00;
-        foreach ($carrello as $idProdotto => $quantita) {
-            $prodotto = FPersistentManager::PMgetObjOnAttribute(EProdotto::class, 'idProdotto', $idProdotto);
-            if ($prodotto) {
-                //Usiamo il prezzo scontato se presente, altrimenti il prezzo pieno
-                $prezzoUnitario = $prodotto->hasSconto() ? $prodotto->getPrezzo()->calcolaPrezzoScontato() : $prodotto->getPrezzo()->getValore();
-                $nuovoTotale += ($prezzoUnitario * $quantita);
-            }
-        }
+        $carrelloItems = $this->buildCarrelloItems($carrello);
+        $carrelloSummary = $this->buildCarrelloSummary($carrelloItems, $carrello);
 
         echo json_encode([
             'success' => true,
             'message' => 'Prodotto rimosso dal carrello',
-            'cart_count' => $nuovoConteggio,
-            'totale' => number_format($nuovoTotale, 2, '.', '') //number_format forza 2 decimali con il punto come separatore, formato standard per JSON/JS
+            'cart_count' => $carrelloSummary['n_articoli'],
+            'totale' => number_format($carrelloSummary['totale'], 2, '.', ''), //number_format forza 2 decimali con il punto come separatore, formato standard per JSON/JS
         ]);
         exit();
     }

@@ -3,6 +3,7 @@ namespace TableCrown\Foundation;
 
 use Doctrine\DBAL\LockMode;
 use TableCrown\Foundation\FEntityManager;
+use DateTime;
 use Exception;
 
 class FPersistentManager
@@ -67,7 +68,6 @@ class FPersistentManager
      /**
      * @param Object $obj Oggetto da salvare nel db.
      * @return bool True se salvato con successo, false altrimenti.
-     * @throws Exception
      */
     public static function PMsaveObj($obj): bool
     {
@@ -80,7 +80,6 @@ class FPersistentManager
      * @param string $field attributo univoco dell'oggetto da recuperare
      * @param mixed $value valore dell'attributo dell'oggetto da recuperare
      * @return object || null
-     * @throws Exception
      */
     public static function PMgetObjOnAttribute($class, $field, $value): ?object
     {
@@ -92,7 +91,6 @@ class FPersistentManager
      * @param string $field attributo univoco dell'oggetto da recuperare
      * @param mixed $value valore dell'attributo dell'oggetto da recuperare
      * @return object || null
-     * @throws Exception
      */
     public static function PMgetObjListOnAttribute($class, $field, $value): array
     {
@@ -104,7 +102,6 @@ class FPersistentManager
      * @param string $field attributo dell'oggetto da recuperare
      * @param mixed $value valore dell'attributo dell'oggetto da recuperare
      * @return object || null
-     * @throws Exception
      */
     public static function PMgetObjListBetween($class, $field, $value): array
     {
@@ -117,7 +114,6 @@ class FPersistentManager
      * @param string $ordinationType ordinamento (ASC o DESC)
      * @param int $quantity numero massimo di elementi da recuperare
      * @return object || null
-     * @throws Exception
      */
     public static function PMgetObjListOrdered($class, $field, $ordinationType, $quantity): array
     {
@@ -129,7 +125,6 @@ class FPersistentManager
      * @param string $field attributo dell'oggetto da recuperare
      * @param mixed $value valore dell'attributo dell'oggetto da recuperare
      * @return bool 
-     * @throws Exception
      */
     public static function PMverificaEsistenza($table, $field, $value): bool
     {
@@ -141,7 +136,6 @@ class FPersistentManager
      * @param string $str  parte dell' attributo dell'oggetto da recuperare
      * @param mixed $field valore dell'attributo dell'oggetto da recuperare
      * @return array
-     * @throws Exception
      */
     public static function PMRicerca($class, $str, $field, int $limit, int $offset): array
     {
@@ -152,7 +146,6 @@ class FPersistentManager
     /**
      * @param Object $obj Oggetto da eliminare dal db.
      * @return bool True se eliminato con successo, false altrimenti.
-     * @throws Exception
      */
     public static function PMdeleteObj($obj): bool
     {
@@ -162,7 +155,6 @@ class FPersistentManager
     /** 
      * @param Object $obj Oggetto da salvare nel db.
      * @return bool True se salvato con successo, false altrimenti.
-     * @throws Exception
      */
     public static function PMupdateObj($obj): bool
     {
@@ -172,7 +164,6 @@ class FPersistentManager
     /**
      * @param string $class nome dell'entity
      * @return array di oggetti
-     * @throws Exception
      */
     public static function PMgetAll($class): array
     {
@@ -187,7 +178,6 @@ class FPersistentManager
      * @param int $limit numero massimo di giochi da restituire
      * @param int $offset numero di giochi da saltare dall'inizio della lista
      * @return array con i giochi da tavolo risultanti dalla ricerca
-     * @throws Exception
      */
     public static function PMfindGiochi(array $filtri, int $limit, int $offset): array
     {
@@ -199,7 +189,6 @@ class FPersistentManager
      * @param int $limit: il numero massimo di risultati da restituire. Questo parametro viene utilizzato per implementare la paginazione dei risultati.
      * @param int $offset: il numero di risultati da saltare prima di selezionare i risultati richiesti (utile sempre per la paginazione).
      * @return array con i risultati della ricerca, incluso il numero totale di risultati
-     * @throws Exception
      */
     public static function PMfindBustine(array $filtri, int $limit, int $offset): array
     {
@@ -211,7 +200,6 @@ class FPersistentManager
      * @param int $limit: il numero massimo di risultati da restituire. Questo parametro viene utilizzato per implementare la paginazione dei risultati.
      * @param int $offset: il numero di risultati da saltare prima di selezionare i risultati richiesti (utile sempre per la paginazione).
      * @return array con i risultati della ricerca, incluso il numero totale di risultati
-     * @throws Exception
      */
     public static function PMfindPortaDadi(array $filtri, int $limit, int $offset): array
     {
@@ -223,7 +211,6 @@ class FPersistentManager
      * @param int $limit numero massimo di prodotti da restituire
      * @param int $offset numero di prodotti da saltare dall'inizio della lista
      * @return array di oggetti
-     * @throws Exception
      */
     public static function PMricercaProdotto(string $StringaDiRicerca, int $limit, int $offset): array
     {
@@ -238,6 +225,33 @@ class FPersistentManager
      */
     public static function PMfindProdottiInOfferta(int $limit, int $offset): array {
         return FProdotto::findProdottiInOfferta($limit, $offset);
+    }
+
+    /**
+     * @param DateTime $filtroData data di inizio del filtro
+     * @param string $ricerca stringa da ricercare nella colonna nomeEvento
+     * @return array di oggetti
+     */
+    public static function PMfindSerate(?DateTime $filtroData, ?string $ricerca): array {
+        return FSerate::findSerate($filtroData, $ricerca);
+    }
+
+    /**
+     * @param DateTime $filtroData data di inizio del filtro
+     * @param string $ricerca stringa da ricercare nella colonna nomeEvento
+     * @return array di oggetti
+     */
+    public static function PMfindTornei(?DateTime $filtroData, ?string $ricerca): array {
+        return FTornei::findTornei($filtroData, $ricerca);
+    }
+
+    /**
+     * @param DateTime $filtroData data di inizio del filtro
+     * @param string $ricerca stringa da ricercare nella colonna nomeEvento
+     * @return array di oggetti
+     */
+    public static function PMfindChallenge(?DateTime $filtroData, ?string $ricerca): array {
+        return FChallenge::findChallenge($filtroData, $ricerca);
     }
 
 
