@@ -1,0 +1,421 @@
+/* ============================================================
+   TableCrown — ModificaAccount.css
+   Pagina modifica account: avatar, dati personali, cambio password
+   ============================================================ */
+
+
+/* ── CONTENITORE PRINCIPALE ───────────────────────────────── */
+
+.modifica-account-container {
+    padding: 2.5rem 0 4rem;
+}
+
+.modifica-account-container .container {
+    max-width: 700px;
+    margin-left: auto;
+    margin-right: auto;
+    padding-left: 1rem;
+    padding-right: 1rem;
+}
+
+
+/* ── TOPBAR: LOGOUT + ELIMINA ACCOUNT (piena larghezza, allineata a destra) ── */
+
+.modifica-account-topbar {
+    width: 100%;
+    padding: 1.5rem 1rem 0;
+    margin-bottom: 1rem;
+}
+
+.modifica-account-topbar-inner {
+    max-width: 1200px;
+    margin: 0 auto;
+    display: flex;
+    justify-content: flex-end;
+    gap: 0.75rem;
+}
+
+
+.modifica-account-breadcrumb-link {
+    color: var(--color-text-muted);
+    text-decoration: underline;
+    transition: color var(--transition);
+}
+
+.modifica-account-breadcrumb-link:hover {
+    color: var(--color-primary);
+}
+
+.modifica-account-breadcrumb-sep {
+    color: var(--color-text-muted);
+}
+
+.modifica-account-breadcrumb-current {
+    color: var(--color-primary);
+    font-weight: 600;
+}
+
+.modifica-account-topbar-actions {
+    display: flex;
+    flex-direction: column;
+    align-items: flex-end;
+    gap: 0.6rem;
+}
+
+.modifica-account-logout,
+.modifica-account-elimina {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.4rem;
+    font-size: var(--font-size-sm);
+    font-weight: 600;
+    text-decoration: none;
+    background-color: transparent;
+    color: var(--color-text-muted);
+    border: 1px solid var(--color-border-dark);
+    border-radius: var(--radius-sm);
+    padding: 0.5rem 1.1rem;
+    transition: background-color var(--transition), color var(--transition), border-color var(--transition);
+}
+
+.modifica-account-logout:hover {
+    background-color: rgba(255,255,255,0.05);
+    border-color: var(--color-primary);
+    color: var(--color-primary);
+}
+
+.modifica-account-elimina {
+    color: #ef4444;
+    border-color: rgba(239, 68, 68, 0.35);
+}
+
+.modifica-account-elimina:hover {
+    background-color: #ef4444;
+    border-color: #ef4444;
+    color: #ffffff;
+}
+
+
+/* ── AVATAR ────────────────────────────────────────────────── */
+
+.modifica-account-avatar-wrap {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 0.6rem;
+    margin-bottom: 2.5rem;
+}
+
+.modifica-account-avatar-circle {
+    position: relative;
+    display: inline-flex;
+}
+
+.modifica-account-avatar {
+    position: relative;
+    width: 140px;
+    height: 140px;
+    border-radius: 50%;
+    background-color: var(--color-bg-dark-2);
+    border: 2px solid var(--color-primary);
+    box-shadow: 0 0 0 4px rgba(255,255,255,0.03), 0 8px 20px rgba(0,0,0,0.35);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    overflow: hidden;
+}
+
+.modifica-account-avatar-img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+}
+
+.modifica-account-avatar-placeholder {
+    font-size: var(--font-size-md);
+    font-weight: 600;
+    color: var(--color-text-muted);
+}
+
+.modifica-account-avatar-edit {
+    position: absolute;
+    bottom: 4px;
+    right: 4px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 36px;
+    height: 36px;
+    background-color: var(--color-primary);
+    color: var(--color-bg-dark);
+    border: 3px solid var(--color-bg-dark-2);
+    border-radius: 50%;
+    cursor: pointer;
+    transition: transform var(--transition), opacity var(--transition);
+}
+
+.modifica-account-avatar-edit svg {
+    width: 16px;
+    height: 16px;
+    flex-shrink: 0;
+}
+
+.modifica-account-avatar-edit:hover {
+    transform: scale(1.08);
+    opacity: 0.9;
+}
+
+.modifica-account-avatar-input {
+    display: none;
+}
+
+.modifica-account-avatar-hint {
+    font-size: var(--font-size-sm);
+    color: var(--color-text-muted);
+}
+
+
+/* ── CARD CAMPI FORM ───────────────────────────────────────── */
+
+.modifica-account-card {
+    background-color: var(--color-bg-dark-2);
+    border: 1px solid var(--color-border-dark);
+    border-radius: var(--radius-md);
+    padding: 1.75rem 2rem;
+    margin-bottom: 2rem;
+}
+
+.modifica-account-fields {
+    display: flex;
+    flex-direction: column;
+    gap: 1.5rem;
+}
+
+.modifica-account-field {
+    display: flex;
+    flex-direction: column;
+    gap: 0.45rem;
+}
+
+.modifica-account-label {
+    display: flex;
+    align-items: center;
+    gap: 0.4rem;
+    font-size: var(--font-size-sm);
+    font-weight: 600;
+    color: var(--color-text-muted);
+    text-transform: uppercase;
+    letter-spacing: 0.03em;
+}
+
+.modifica-account-label i {
+    color: var(--color-primary);
+    font-size: 14px;
+}
+
+.modifica-account-input {
+    background-color: var(--color-bg-dark);
+    border: 1px solid var(--color-border-dark);
+    border-radius: var(--radius-sm);
+    padding: 0.7rem 0.95rem;
+    font-size: var(--font-size-md);
+    color: var(--color-text-light);
+    transition: border-color var(--transition), box-shadow var(--transition);
+}
+
+.modifica-account-input:focus {
+    outline: none;
+    border-color: var(--color-primary);
+    box-shadow: 0 0 0 3px rgba(255, 255, 255, 0.05);
+}
+
+
+/* ── AZIONI ────────────────────────────────────────────────── */
+
+.modifica-account-actions {
+    display: flex;
+    align-items: center;
+    justify-content: flex-end;
+    gap: 1rem;
+    margin-bottom: 1.5rem;
+}
+
+.modifica-account-btn-primary {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.4rem;
+    background-color: var(--color-primary);
+    color: var(--color-bg-dark);
+    font-weight: 700;
+    font-size: var(--font-size-sm);
+    border: none;
+    border-radius: var(--radius-sm);
+    padding: 0.65rem 1.75rem;
+    cursor: pointer;
+    transition: transform var(--transition), box-shadow var(--transition), opacity var(--transition);
+}
+
+.modifica-account-btn-primary:hover {
+    opacity: 0.9;
+    transform: translateY(-2px);
+    box-shadow: 0 6px 14px rgba(0,0,0,0.25);
+}
+
+.modifica-account-btn-secondary {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.4rem;
+    background-color: var(--color-bg-dark-2);
+    color: var(--color-text-light);
+    font-weight: 600;
+    font-size: var(--font-size-sm);
+    border: 1px solid var(--color-border-dark);
+    border-radius: var(--radius-sm);
+    padding: 0.65rem 1.5rem;
+    cursor: pointer;
+    transition: border-color var(--transition), color var(--transition), background-color var(--transition);
+}
+
+.modifica-account-btn-secondary:hover,
+.modifica-account-btn-secondary[aria-expanded="true"] {
+    border-color: var(--color-primary);
+    color: var(--color-primary);
+    background-color: var(--color-bg-dark);
+}
+
+
+/* ── CARD MODIFICA PASSWORD ───────────────────────────────── */
+
+.modifica-account-password-card {
+    background-color: var(--color-bg-dark-2);
+    border: 1px solid var(--color-border-dark);
+    border-radius: var(--radius-md);
+    padding: 1.75rem 2rem;
+    margin-top: 0.5rem;
+}
+
+.modifica-account-password-title {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    font-size: var(--font-size-md);
+    font-weight: 700;
+    color: var(--color-text-light);
+    margin: 0 0 1.25rem;
+}
+
+.modifica-account-password-title i {
+    color: var(--color-primary);
+}
+
+.modifica-account-password-form {
+    display: flex;
+    flex-direction: column;
+    gap: 1.25rem;
+}
+
+.modifica-account-btn-password-salva {
+    align-self: flex-end;
+}
+
+
+/* ── POPUP MESSAGGI PASSWORD ───────────────────────────────── */
+
+.modifica-account-popup-overlay {
+    position: fixed;
+    inset: 0;
+    background-color: rgba(0, 0, 0, 0.65);
+    backdrop-filter: blur(2px);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    z-index: 1000;
+}
+
+.modifica-account-popup-overlay[hidden] {
+    display: none;
+}
+
+.modifica-account-popup-box {
+    background-color: var(--color-bg-dark-2);
+    border: 1px solid var(--color-border-dark);
+    border-radius: var(--radius-md);
+    padding: 2rem 1.75rem;
+    max-width: 380px;
+    width: 90%;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 1.25rem;
+    text-align: center;
+    box-shadow: 0 20px 45px rgba(0,0,0,0.4);
+}
+
+.modifica-account-popup-icon {
+    font-size: 2.25rem;
+    color: #ef4444;
+}
+
+.modifica-account-popup-message {
+    color: var(--color-text-light);
+    font-size: var(--font-size-md);
+}
+
+.modifica-account-popup-error {
+    color: #ef4444;
+    font-size: var(--font-size-sm);
+    font-weight: 600;
+}
+
+.modifica-account-popup-actions {
+    display: flex;
+    justify-content: center;
+    gap: 1rem;
+    width: 100%;
+}
+
+.modifica-account-popup-actions .modifica-account-btn-secondary,
+.modifica-account-popup-actions .modifica-account-btn-primary {
+    flex: 1;
+    justify-content: center;
+}
+
+/* ============================================================
+   ── RESPONSIVE DESIGN (MEDIA QUERIES) ───────────────────────
+   ============================================================ */
+
+@media (max-width: 600px) {
+    .modifica-account-topbar {
+        flex-direction: column;
+        align-items: flex-start;
+        gap: 1rem;
+    }
+
+    .modifica-account-topbar-actions {
+        flex-direction: row;
+        align-items: center;
+        gap: 0.75rem;
+    }
+
+    .modifica-account-card,
+    .modifica-account-password-card {
+        padding: 1.5rem;
+    }
+
+    .modifica-account-actions {
+        flex-direction: column-reverse;
+        align-items: stretch;
+    }
+
+    .modifica-account-btn-primary,
+    .modifica-account-btn-secondary {
+        width: 100%;
+        justify-content: center;
+        text-align: center;
+    }
+
+    .modifica-account-avatar {
+        width: 110px;
+        height: 110px;
+    }
+}

@@ -1,0 +1,492 @@
+/* ============================================
+   PROFILO EVENTI — I Miei Eventi
+   ============================================ */
+
+.mieeventi-container {
+    padding: 2.5rem 0 4rem;
+    min-height: 60vh;
+}
+
+/* ── TOPBAR ── */
+.mieeventi-topbar {
+    margin-bottom: 1.25rem;
+}
+
+.mieeventi-back-link {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.4rem;
+    color: var(--color-text-muted);
+    font-size: var(--font-size-md);
+    font-weight: 500;
+    text-decoration: none;
+    transition: color var(--transition);
+}
+
+.mieeventi-back-link:hover {
+    color: var(--color-primary);
+}
+
+/* ── HEADER ── */
+.mieeventi-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-end;
+    flex-wrap: wrap;
+    gap: 1rem;
+    margin-bottom: 1.5rem;
+}
+
+.mieeventi-eyebrow {
+    display: block;
+    font-size: var(--font-size-sm);
+    font-weight: 600;
+    text-transform: uppercase;
+    letter-spacing: 0.06em;
+    color: var(--color-primary);
+    margin-bottom: 0.25rem;
+}
+
+.mieeventi-titolo {
+    display: flex;
+    align-items: center;
+    gap: 0.6rem;
+    font-size: 1.9rem;
+    font-weight: 700;
+    color: #1f2937;
+    margin: 0;
+}
+
+.mieeventi-count-badge {
+    display: flex;
+    align-items: baseline;
+    gap: 0.4rem;
+    background: #faf6ef;
+    border: 1px solid var(--color-border-light);
+    border-radius: var(--radius-md);
+    padding: 0.5rem 1rem;
+}
+
+.mieeventi-count-num {
+    font-size: 1.3rem;
+    font-weight: 700;
+    color: var(--color-primary);
+}
+
+.mieeventi-count-label {
+    font-size: var(--font-size-sm);
+    color: var(--color-text-muted);
+}
+
+/* ── TAB ORDINAMENTO ── */
+.mieeventi-tabs {
+    display: flex;
+    gap: 0.5rem;
+    flex-wrap: wrap;
+    border-bottom: 1px solid var(--color-border-light);
+    margin-bottom: 2rem;
+}
+
+.mieeventi-tab {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.4rem;
+    padding: 0.65rem 1rem;
+    font-size: var(--font-size-md);
+    font-weight: 600;
+    color: var(--color-text-muted);
+    text-decoration: none;
+    border-bottom: 2px solid transparent;
+    transition: color var(--transition), border-color var(--transition);
+}
+
+.mieeventi-tab:hover {
+    color: #1f2937;
+}
+
+.mieeventi-tab-active {
+    color: var(--color-primary);
+    border-bottom-color: var(--color-primary);
+}
+
+/* ── LISTA EVENTI ── */
+.mieeventi-list {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+    align-items: stretch;
+    gap: 1.25rem;
+}
+
+.mieeventi-card {
+    display: flex;
+    flex-direction: column;
+    height: 100%;
+    background: var(--color-bg-dark);
+    border: 1px solid var(--color-border-light);
+    border-radius: var(--radius-md);
+    overflow: hidden;
+    transition: box-shadow var(--transition), transform var(--transition), border-color var(--transition);
+}
+
+.mieeventi-card:hover {
+    box-shadow: 0 4px 16px rgba(232, 160, 32, 0.12);
+    border-color: #e8d4ab;
+    transform: translateY(-2px);
+}
+
+.mieeventi-card-media {
+    position: relative;
+    display: block;
+    flex-shrink: 0;
+    aspect-ratio: 16 / 9;
+    background: #f3f4f6;
+    overflow: hidden;
+}
+
+.mieeventi-card-img {
+    position: absolute;
+    inset: 0;
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    display: block;
+    z-index: 1;
+}
+
+.mieeventi-card-img-placeholder {
+    position: absolute;
+    inset: 0;
+    width: 100%;
+    height: 100%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: var(--color-text-muted);
+    font-size: 2rem;
+    background: #f3f4f6;
+}
+
+.mieeventi-tipo-badge {
+    position: absolute;
+    top: 0.6rem;
+    left: 0.6rem;
+    z-index: 2;
+    display: inline-flex;
+    align-items: center;
+    gap: 0.3rem;
+    padding: 0.3rem 0.6rem;
+    border-radius: var(--radius-sm);
+    font-size: 0.75rem;
+    font-weight: 700;
+    background: rgba(0, 0, 0, 0.65);
+    color: #fff;
+    backdrop-filter: blur(3px);
+}
+
+.mieeventi-tipo-serata { color: #d8b4fe; }
+.mieeventi-tipo-torneo { color: #fcd34d; }
+.mieeventi-tipo-challenge { color: #fca5a5; }
+
+/* ── CORPO CARD ── */
+.mieeventi-card-body {
+    display: flex;
+    flex-direction: column;
+    gap: 0.9rem;
+    padding: 1rem 1.1rem 1.2rem;
+    flex: 1 1 auto;
+    min-height: 0;
+}
+
+.mieeventi-card-top {
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-start;
+    gap: 0.5rem;
+    flex-shrink: 0;
+}
+
+.mieeventi-nome {
+    font-size: 1.05rem;
+    font-weight: 700;
+    color: #fff;
+    text-decoration: none;
+    line-height: 1.3;
+    transition: color var(--transition);
+}
+
+.mieeventi-nome:hover {
+    color: var(--color-primary);
+}
+
+/* ── LISTA INFO VERTICALE ── */
+.mieeventi-info-list {
+    display: flex;
+    flex-direction: column;
+    gap: 0.5rem;
+    padding-top: 0.7rem;
+    border-top: 1px solid rgba(255, 255, 255, 0.1);
+    flex-shrink: 0;
+}
+
+.mieeventi-info-row {
+    display: flex;
+    align-items: center;
+    gap: 0.55rem;
+    font-size: var(--font-size-sm);
+    color: var(--color-text-muted);
+    line-height: 1.3;
+}
+
+.mieeventi-info-row i {
+    flex-shrink: 0;
+    width: 1.1rem;
+    text-align: center;
+    color: var(--color-primary);
+    font-size: 1rem;
+}
+
+.mieeventi-info-label {
+    flex-shrink: 0;
+    color: var(--color-text-muted);
+}
+
+.mieeventi-info-value {
+    color: #fff;
+    font-weight: 600;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+    text-transform: capitalize;
+}
+
+.mieeventi-info-row-link .mieeventi-info-value {
+    color: var(--color-primary);
+    text-decoration: none;
+}
+
+a.mieeventi-info-row {
+    text-decoration: none;
+    transition: color var(--transition);
+}
+
+a.mieeventi-info-row:hover .mieeventi-info-value {
+    color: var(--color-primary);
+}
+
+/* ── RIGA STATO (valore colorato in base a in programma / concluso) ── */
+.mieeventi-stato-riga-in-programma i,
+.mieeventi-stato-riga-in-programma .mieeventi-info-value {
+    color: #4ade80;
+}
+
+.mieeventi-stato-riga-concluso i,
+.mieeventi-stato-riga-concluso .mieeventi-info-value {
+    color: var(--color-text-muted);
+}
+
+/* ── SOTTOLISTA TORNEI (dentro challenge) ── */
+.mieeventi-sotto-tornei {
+    display: flex;
+    flex-direction: column;
+    gap: 0.4rem;
+    margin-top: 0.15rem;
+    padding-left: 1.65rem;
+}
+
+.mieeventi-sotto-torneo-link {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.4rem;
+    font-size: 0.82rem;
+    font-weight: 500;
+    color: var(--color-primary);
+    text-decoration: none;
+}
+
+.mieeventi-sotto-torneo-link:hover {
+    text-decoration: underline;
+}
+
+/* ── STATO PARTECIPAZIONE (quota / classifica) ── */
+.mieeventi-quota-pagata .mieeventi-info-value,
+.mieeventi-quota-pagata i {
+    color: #4ade80;
+}
+
+.mieeventi-classifica-row .mieeventi-info-value,
+.mieeventi-classifica-row i {
+    color: #a5b4fc;
+}
+
+/* ── AZIONI (sempre ancorate in fondo) ── */
+.mieeventi-actions {
+    display: flex;
+    flex-direction: column;
+    gap: 0.5rem;
+    flex-shrink: 0;
+    margin-top: auto;
+    padding-top: 0.9rem;
+}
+
+.mieeventi-btn-secondary,
+.mieeventi-btn-primary,
+.mieeventi-btn-disdici {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    gap: 0.35rem;
+    width: 100%;
+    padding: 0.6rem 0.9rem;
+    border-radius: var(--radius-sm);
+    font-size: var(--font-size-md);
+    font-weight: 600;
+    border: 1px solid var(--color-border-light);
+    cursor: pointer;
+    text-decoration: none;
+    transition: background var(--transition), color var(--transition), border-color var(--transition);
+}
+
+.mieeventi-btn-secondary {
+    background: transparent;
+    color: #fff;
+    border-color: rgba(255, 255, 255, 0.25);
+}
+
+.mieeventi-btn-secondary:hover {
+    border-color: var(--color-primary);
+    color: var(--color-primary);
+}
+
+.mieeventi-btn-disdici {
+    background: transparent;
+    color: #dc2626;
+    border-color: rgba(220, 38, 38, 0.35);
+}
+
+.mieeventi-btn-disdici:hover {
+    background: #dc2626;
+    color: #fff;
+    border-color: #dc2626;
+}
+
+.mieeventi-btn-primary {
+    background: var(--color-primary);
+    color: #fff;
+    border-color: var(--color-primary);
+}
+
+.mieeventi-btn-primary:hover {
+    background: var(--color-primary-dark);
+}
+
+/* ── STATO VUOTO ── */
+.mieeventi-empty {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    text-align: center;
+    padding: 4rem 1.5rem;
+    background: #faf6ef;
+    border: 1px dashed var(--color-border-light);
+    border-radius: var(--radius-md);
+}
+
+.mieeventi-empty-icon {
+    font-size: 2.5rem;
+    color: var(--color-text-muted);
+    margin-bottom: 1rem;
+}
+
+.mieeventi-empty-titolo {
+    font-size: 1.25rem;
+    font-weight: 700;
+    color: #1f2937;
+    margin: 0 0 0.4rem;
+}
+
+.mieeventi-empty-testo {
+    font-size: var(--font-size-md);
+    color: var(--color-text-muted);
+    max-width: 380px;
+    margin: 0 0 1.5rem;
+}
+
+.mieeventi-empty-btn {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.4rem;
+    padding: 0.65rem 1.2rem;
+    border-radius: var(--radius-sm);
+    background: var(--color-primary);
+    color: #fff;
+    font-weight: 600;
+    text-decoration: none;
+    transition: background var(--transition);
+}
+
+.mieeventi-empty-btn:hover {
+    background: var(--color-primary-dark);
+}
+
+/* ── POPUP ── */
+.mieeventi-popup-overlay {
+    position: fixed;
+    inset: 0;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background: rgba(0, 0, 0, 0.55);
+    z-index: 1000;
+    padding: 1rem;
+}
+
+.mieeventi-popup-overlay[hidden] {
+    display: none;
+}
+
+.mieeventi-popup-box {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    text-align: center;
+    background: #fff;
+    border: 1px solid var(--color-border-light);
+    border-radius: var(--radius-md);
+    padding: 2rem 1.5rem;
+    max-width: 360px;
+    width: 100%;
+}
+
+.mieeventi-popup-icon {
+    font-size: 2rem;
+    color: #d97706;
+    margin-bottom: 0.75rem;
+}
+
+.mieeventi-popup-message {
+    font-size: var(--font-size-lg);
+    color: #1f2937;
+    margin: 0 0 1.5rem;
+}
+
+.mieeventi-popup-actions {
+    display: flex;
+    gap: 0.75rem;
+    width: 100%;
+}
+
+.mieeventi-popup-actions .mieeventi-btn-secondary,
+.mieeventi-popup-actions .mieeventi-btn-primary {
+    flex: 1;
+}
+
+/* ── RESPONSIVE ── */
+@media (max-width: 640px) {
+    .mieeventi-titolo {
+        font-size: 1.5rem;
+    }
+
+    .mieeventi-list {
+        grid-template-columns: 1fr;
+    }
+}
