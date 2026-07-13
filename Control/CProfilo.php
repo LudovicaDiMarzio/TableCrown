@@ -294,7 +294,7 @@ class CProfilo extends BaseController {
 
         return [
             'id' => $ordine->getIdOrdine(),
-            'data' => $ordine->getDataSpedizione()->format('Y-m-d H:i:s'),
+            'data' => $ordine->getData()->format('Y-m-d H:i:s'),
             'stato' => $ordine->getStato()->value,
             'totale' => $this->formattaImporto($ordine->calcolaTotale()),
             'indirizzoSpedizione' => [
@@ -323,10 +323,11 @@ class CProfilo extends BaseController {
                 'immagine' => $prodotto->getImgProdotto(),
             ],
             'quantita' => $ordineItem->getQuantita(),
-            'prezzoUnitario' => $this->formattaImporto($item->getPrezzoUnitario()),
+            'prezzoUnitario' => $this->formattaImporto($ordineItem->getPrezzoUnitario()),
             'scontoApplicato' => $ordineItem->getScontoApplicato(),
             'totaleItem' => $this->formattaImporto($ordineItem->calcolaTotaleItem()),
         ];
+    }
 
 
     //==========================================================================
