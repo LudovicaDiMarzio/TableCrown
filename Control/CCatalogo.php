@@ -230,5 +230,7 @@ class CCatalogo extends BaseController {
         return $filtri;
     }
 
+    //MANCA IL METODO GETBREADCRUMBS!!!!!!!
+
 
 }

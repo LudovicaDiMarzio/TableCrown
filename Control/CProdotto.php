@@ -94,4 +94,6 @@ class CProdotto extends BaseController {
         //TODO: FPersistentManager::PMuserHasPurchased($idUtente, $idProdotto);
         return false; //DA TOGLIERE QUANDO DISPONIBILE IL METODO DEL PM
     }
+
+    //MANCA IL METODO GETBREADCRUMBS!!!!!!!
 }

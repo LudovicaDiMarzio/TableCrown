@@ -37,7 +37,7 @@ class CEventi extends BaseController {
         $datiLayout = $this->preparaDatiLayout('eventi_home', $datiPagina);
 
         //Chiamata alla View
-        ViewEventi::render($datiLayout); //METODO DA VERIFICARE
+        ViewEventi::mostraEventi($datiLayout); 
     }
 
     /**
@@ -132,7 +132,7 @@ class CEventi extends BaseController {
         ];
 
         $datiLayout = $this->preparaDatiLayout($vista, $datiPagina);
-        ViewEventi::render($datiLayout);
+        ViewEventi::mostraEventi($datiLayout);
     }
 
     /**
@@ -159,7 +159,7 @@ class CEventi extends BaseController {
         return ($query !== null && trim($query) !== '') ? trim($query) : null;
     }
 
-    protected function getBreadcrumbs(): array {
+    protected function getBreadcrumbs(string $currentPage = ''): array {
         return [
             ['label' => 'Home', 'url' => '/'],
             ['label' => 'Eventi', 'url' => '/eventi']

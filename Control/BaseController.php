@@ -298,6 +298,7 @@ abstract class BaseController {
      * DISPONIBILI NEL CATALOGO, ESCLUSI QUELLI IN $idEsclusi, LIMITATI A $limit.
      * DA SOSTITUIRE QUANDO DISPONIBILE IL METODO NEL PM.
      */
+    //DA MODIFICAREEEEE!!!!!!
     protected function prodottiCorrelati(array $idsEsclusi, int $limit = 8): array {
         $tuttiProdotti = FPersistentManager::PMgetAll(EProdotto::class);
 
@@ -309,6 +310,16 @@ abstract class BaseController {
         $correlati = array_slice(array_values($correlati), 0, $limit);
 
         return $this->prodottiToArray($correlati);
+    }
+
+    /**
+     * Formatta un importo come stringa con 2 decimali fissi, usando il 
+     * punto come separatore. Necessario perché alcuni .tpl in Presentation
+     * non applicano number_format(), quindi il dato deve arrivare già pronto
+     * per la stampa duretta.
+     */
+    protected function formattaImporto(float $importo): string {
+        return number_format($importo, 2, '.', '');
     }
 
 }

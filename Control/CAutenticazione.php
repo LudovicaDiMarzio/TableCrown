@@ -59,9 +59,9 @@ class CAutenticazione extends BaseController {
 
     /**
      * Gestisce l'invio dei dati del form di Login (Richiesta POST).
-     * URL: /login
+     * URL: POST /login
      */
-    public function login(): void {
+    public function login(): void { //DA CAMBIARE: USARE METODI postString CON TRY CATCH
         //Recuperiamo i dati inseriti dall'utente nel form tramite l'utility HTTP
         $email = UHTTPMethods::post('email');
         $password = UHTTPMethods::post('password');
@@ -111,9 +111,9 @@ class CAutenticazione extends BaseController {
 
     /**
      * Gestisce la registrazione di un nuovo utente normale (Richiesta POST)
-     * URL: /registrazione
+     * URL: POST /registrazione
      */
-    public function registrazione(): void {
+    public function registrazione(): void { //DA CAMBIARE: USARE METODI postString CON TRY CATCH
         //Recuperiamo i campi della registrazione
         $nome = UHTTPMethods::post('nome');
         $email = UHTTPMethods::post('email');
@@ -166,7 +166,7 @@ class CAutenticazione extends BaseController {
 
     /**
      * Gestisce il logout dell'utente (Richiesta GET o POST).
-     * URL: /logout
+     * URL: GET /logout
      */
     public function logout(): void {
         //Distruggiamo la sessione corrente, svuotando i token di autenticazione
