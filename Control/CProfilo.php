@@ -8,11 +8,20 @@ use TableCrown\Entity\EUtente;
 use TableCrown\Entity\ETorneo;
 use TableCrown\Entity\EOrdine;
 use TableCrown\Entity\EOrdineItem;
+use TableCrown\Entity\EWishlist;
+use TableCrown\Entity\EIndirizzo;
 use TableCrown\Entity\Enumerativi\PlayerLevel;
 use TableCrown\Entity\Enumerativi\StatoOrdine;
 use TableCrown\Foundation\FPersistentManager;
 use TableCrown\Presentation\Views\ViewProfiloFactory;
 
+/**
+ * Controller deputato alla gestione del profilo dell'utente.
+ * In particolare gestisce la visualizzazione delle pagine pubbliche del profilo,
+ * quindi le richieste in GET (visaulizzazione dello storico). Ha il compito 
+ * di prendere i dati dal DB e passarli a Presentation.
+ * Gestisce anche la modifica dell'account, in quanto costituisce azioni CRUD sull'entity EUtente.
+ */
 class CProfilo extends BaseController {
 
     private const SOGLIE_LIVELLO = [
@@ -289,7 +298,7 @@ class CProfilo extends BaseController {
     /**
      * Privato: usato solo qui, converte EOrdine nella struttura utile a Presentation
      */
-    private function ordineToArray(EOrdine $ordine): array {
+    private function ordineToArray(EOrdine $ordine): array { //SPOSTARE IN BASE CONTROLLER SE SERVE DA ALTRE PARTI
         $indirizzo = $ordine->getIndirizzoSpedizione();
 
         return [
@@ -308,12 +317,12 @@ class CProfilo extends BaseController {
             'nomeTitolareCarta' => $ordine->getNomeTitolareCarta(),
             'items' => array_map(
                 fn($item) => $this->ordineItemToArray($item),
-                $ordine->getOrdineItems()->toArray()
+                $ordine->getOrdineItems()->toArray() //DA RIVEDERE
             ),
         ];
     }
 
-    private function ordineItemToArray(EOrdineItem $ordineItem): array {
+    private function ordineItemToArray(EOrdineItem $ordineItem): array { //SPOSTARE IN BASE CONTROLLER SE SERVE DA ALTRE PARTI
         $prodotto = $ordineItem->getProdotto();
 
         return [
@@ -334,17 +343,124 @@ class CProfilo extends BaseController {
     //WISHLIST
     //==========================================================================
 
+    /**
+     * URL: GET /profilo/wishlist
+     */
+    public function mostraWishlist(): void {
+        $utente = $this->utenteCorrente();
+
+        //Recuperiamo la wishlist dal DB
+        $wishlist = FPersistentManager::PMgetObjOnAttribute(EWishlist::class, 'utente', $utente);
+
+        $prodottiCollection = $wishlist ? $wishlist->getProdotti() : [];
+
+        //Convertiamo i prodotti della wishlist in array usando il metodo ereditato da BaseController
+        $prodottiWishlist = $this->prodottiToArray($prodottiCollection);
+
+        $datiPagina = [
+            'vista' => 'profilo_wishlist',
+            'prodotti' => $prodottiWishlist,
+        ];
+
+        $datiLayout = $this->preparaDatiLayout('profilo_wishlist', $datiPagina);
+        ViewProfiloFactory::render($datiLayout);
+    }
 
     //==========================================================================
     // EVENTI
     //==========================================================================
 
+    /**
+     * URL: GET /profilo/eventi
+     */
+    public function mostraEventi(): void {
+        $utente = $this->utenteCorrente();
+
+        //Recuperiamo tutte le partecipazioni dell'utente
+        $partecipazioni = $utente->getPartecipazioni()->toArray();
+        $eventiIscritto = [];
+
+        foreach ($partecipazioni as $p) {
+            $evento = $p->getEvento();
+            $eventoArray = $this->eventoToArray($evento);
+
+            //Aggiungiamo informazioni specifiche della partecipazione utili a Presentation
+            $eventoArray['dataiscrizione'] = $p->getDataIscrizione()->format('Y-m-d H:i:s');
+            $eventoArray['posizioneClassifica'] = $p->getPosizioneInClassifica();
+
+            $eventiIscritto[] = $eventoArray;
+        }
+
+        $datiPagina = [
+            'vista' => 'profilo_eventi',
+            'eventi' => $eventiIscritto,
+        ];
+
+        $datiLayout = $this->preparaDatiLayout('profilo_eventi', $datiPagina);
+        ViewProfiloFactory::render($datiLayout);
+    }
 
 
     //==========================================================================
     // INDIRIZZI
     //==========================================================================
 
+    /**
+     * URL: GET /profilo/indirizzi
+     */
+    public function mostraIndirizzi(): void {
+        $utente = $this->utenteCorrente();
+
+        $indirizziArray = [];
+        foreach ($utente->getIndirizzi() as $indirizzo) {
+            $indirizziArray[] = $this->indirizzoToArray($indirizzo);
+        }
+        
+        $datiPagina = [
+            'vista' => 'profilo_indirizzi',
+            'indirizzi' => $indirizziArray,
+        ];
+        
+        $datiLayout = $this->preparaDatiLayout('profilo_indirizzi', $datiPagina);
+        ViewProfiloFactory::render($datiLayout);
+    }
+
+    /**
+     * Privato: usato solo qui, converte EIndirizzo nella struttura utile a Presentation
+     */
+    private function indirizzoToArray(EIndirizzo $indirizzo): array { //SPOSTARE IN BASE CONTROLLER SE SERVE DA ALTRE PARTI
+        return [
+            'id' => $indirizzo->getIdIndirizzo(),
+            'nome' => $indirizzo->getNome(),
+            'via' => $indirizzo->getVia(),
+            'citta' => $indirizzo->getCitta(),
+            'cap' => $indirizzo->getCap(),
+            'provincia' => $indirizzo->getProvincia(),
+            'nazione' => $indirizzo->getNazione(),
+            'nomeCitofono' => $indirizzo->getNomeCitofono(),
+            'predefinito' => $indirizzo->isPredefinito(),
+        ];
+    }
 
 
+    //==========================================================================
+    // RECENSIONI
+    //==========================================================================
+
+    /**
+     * URL: GET /profilo/recensioni
+     */
+    public function mostraRecensioni(): void {
+        $utente = $this->utenteCorrente();
+
+        $recensioniArray = $this->recensioniToArray($utente->getRecensioni());
+
+        $datiPagina = [
+            'vista' => 'profilo_recensioni',
+            'recensioni' => $recensioniArray,
+        ];
+
+        $datiLayout = $this->preparaDatiLayout('profilo_recensioni', $datiPagina);
+        ViewProfiloFactory::render($datiLayout);
+    }
 }
