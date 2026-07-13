@@ -345,7 +345,7 @@ class CCarrello extends BaseController {
     /**
      * Sovrascrive il metodo del BaseController per definire il percorso del Carrello.
      */
-    protected function getBreadcrumbs(): array {
+    protected function getBreadcrumbs(string $currentPage = ''): array {
         return [
             ['label' => 'Home', 'url' => '/'],
             ['label' => 'Carrello', 'url' => '/carrello']

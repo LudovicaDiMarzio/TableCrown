@@ -13,7 +13,7 @@ use TableCrown\Presentation\Views\ViewCatalogo;
 class CCatalogo extends BaseController {
     private const RISULTATI_PER_PAGINA = 20; //valore di default
     private const ORDINAMENTO_VALIDI = ['prezzo-asc', 'prezzo-desc', 'popolarita', 'rating'];
-    private const IN_EVIDENZA_VALIDI = ['sconti', 'novita', 'venduti'];
+    private const IN_EVIDENZA_VALIDI = ['sconti', 'novita'];
 
     //==========================================================================
     // METODI PUBBLICI - uno per ciascuna sottoRoute del catalogo.
@@ -41,7 +41,7 @@ class CCatalogo extends BaseController {
         $this->renderCatalogo('catalogo_giochi', $risultatoGrezzo, $pagina, $filtri);
     }
 
-    public function mostraCatalogoBustine(): void { //DA RIVEDEREEEEE!!!!!!
+    public function mostraCatalogoBustine(): void { 
         $pagina = $this->estraiPaginaRichiesta();
         $filtri = $this->estraiFiltriPrezzo(); 
 
@@ -54,7 +54,7 @@ class CCatalogo extends BaseController {
         $this->renderCatalogo('catalogo_bustine', $risultatoGrezzo, $pagina, $filtri);
     }
 
-    public function mostraCatalogoPortaDadi(): void { //DA RIVEDEREEEEE!!!!!!
+    public function mostraCatalogoPortaDadi(): void { 
         $pagina = $this->estraiPaginaRichiesta();
         $filtri = $this->estraiFiltriPrezzo(); 
 
@@ -229,6 +229,8 @@ class CCatalogo extends BaseController {
 
         return $filtri;
     }
+
+    //MANCA IL METODO GETBREADCRUMBS!!!!!!!
 
 
 }
