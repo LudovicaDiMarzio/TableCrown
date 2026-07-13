@@ -7,6 +7,8 @@ namespace TableCrown\Control;
 use TableCrown\Utility\USession;
 use TableCrown\Utility\UHTTPMethods;
 use TableCrown\Utility\UFlashMessage;
+use TableCrown\Utility\UCookie;
+use TableCrown\Entity\EUtente;
 use TableCrown\Entity\EProdotto;
 use TableCrown\Entity\Enumerativi\DisponibilitaProdotto;
 use TableCrown\Entity\ERecensione;
@@ -48,6 +50,9 @@ abstract class BaseController {
      * Restituisce l'array completo di tutti i dati uniti.
      */
     public function preparaDatiLayout(string $currentPage, $data = []): array {
+        //Controllo automatico remember me prima di generare il layout
+        $this->controllaRememberMe();
+
         //Variabili globali sempre richieste dal layout
         $globalData = [
             'base_url' => 'https://tablecrown.it', 
@@ -183,7 +188,7 @@ abstract class BaseController {
             return null;
         }
         return [
-            'name' => USession::getSessionElement('nickname'), //La sessione salva 'nickname' (PERCHè? COME LO SO?), esposto come 'name' verso Presentation
+            'name' => USession::getSessionElement('nickname'), //La sessione salva 'nickname', esposto come 'name' verso Presentation
         ];
     }
 
@@ -320,6 +325,35 @@ abstract class BaseController {
      */
     protected function formattaImporto(float $importo): string {
         return number_format($importo, 2, '.', '');
+    }
+
+    /**
+     * Verifica la presenza del cookie Remember Me e, se valido,
+     * ripristina la sessione dell'utente in modo trasparente.
+     */
+    private function controllaRememberMe(): void {
+        //Se l'utente è già loggaro in sessione, non dobbiamo fare nulla
+        if ($this->isLoggedIn()) {
+            return;
+        }
+
+        //Cerchiamo se il browser ha il cookie del "Remember Me"
+        $token = UCookie::getCookie('remember_me');
+
+        if ($token) {
+            //Chiediamo al DB se esiste un utente con questo token preciso
+            $utente = FPersistentManager::PMgetObjOnAttribute(EUtente::class, 'rememberToken', $token);
+
+            if ($utente) {
+                //Se il token coincide, ripristiniamo la sessione
+                USession::setSessionElement('id_persona', $utente->getIdPersona());
+                USession::setSessionElement('ruolo', 'utente');
+                USession::setSessionElement('nickname', $utente->getNomePersona());
+            } else {
+                //Se il cookie sul PC è alterato o scaduto sul DB, lo cancelliamo per sicurezza
+                UCookie::deleteCookie('remember_me');
+            }
+        }
     }
 
 }
