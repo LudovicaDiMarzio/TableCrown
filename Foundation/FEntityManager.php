@@ -88,7 +88,7 @@ class FEntityManager {
      * @param string $table Nome della tabella
      * @param string $field attributo dell'oggetto da recuperare
      * @param mixed $value valore dell'attributo dell'oggetto da recuperare
-     * @return object || null  
+     * @return array || null  
      * @throws Exception
      */
     public  function getObjListOnAttribute($table, $field, $value): array
