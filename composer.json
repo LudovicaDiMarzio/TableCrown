@@ -18,11 +18,16 @@
             "TableCrown\\Presentation\\": "Presentation/",
             "TableCrown\\Foundation\\": "Foundation/",
             "TableCrown\\Utility\\": "Utility/",
-            "TableCrown\\Testing\\Fixtures\\": "Testing/Fixtures/"
-        }
+            "TableCrown\\Testing\\Fixtures\\": "Testing/Fixtures/",
+            "TableCrown\\": ""
+        },
+        "classmap": [
+        "SmartyConfiguration.php"
+        ] 
     },
     "require-dev": {
         "doctrine/data-fixtures": "^2.2",
         "fakerphp/faker": "^1.24"
     }
+    
 }

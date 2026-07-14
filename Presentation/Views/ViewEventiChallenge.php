@@ -2,6 +2,9 @@
 // Presentation/Views/ViewEventiChallenge.php
 namespace TableCrown\Presentation\Views;
 
+use SmartyConfiguration;
+
+
 class ViewEventiChallenge extends BaseViewEventi {
     private const TEMPLATE = 'eventi/catalogo_challenge.tpl';
 
