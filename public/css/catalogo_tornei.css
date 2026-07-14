@@ -170,6 +170,7 @@
 /* ── CARD EVENTO ──────────────────────────────────────────── */
 
 .evento-list-card {
+    position: relative;
     background-color: var(--color-bg-dark-2);
     border: 1px solid var(--color-border-dark);
     border-radius: var(--radius-md);
@@ -187,6 +188,26 @@
 
 .evento-list-card-passato {
     opacity: 0.85;
+}
+
+.evento-list-card-esaurito {
+    opacity: 0.9;
+}
+
+.evento-badge-esaurito {
+    position: absolute;
+    top: 12px;
+    right: 12px;
+    background-color: #dc2626;
+    color: #fff;
+    font-size: 11px;
+    font-weight: 700;
+    letter-spacing: 0.03em;
+    text-transform: uppercase;
+    padding: 4px 10px;
+    border-radius: 9999px;
+    box-shadow: 0 2px 8px rgba(220, 38, 38, 0.4);
+    z-index: 2;
 }
 
 .evento-list-nome {
@@ -226,20 +247,22 @@
     align-items: center;
     gap: 0.75rem;
     flex-wrap: wrap;
+    font-size: 1.15rem;
+    font-weight: 600;
 }
 
 .evento-tipo-badge {
     display: inline-block;
     background-color: #fef3e2;
     color: #92400e;
-    font-size: 12px;
+    font-size: 1rem;
     font-weight: 600;
-    padding: 2px 10px;
+    padding: 4px 12px;
     border-radius: 9999px;
 }
 
 .evento-prezzo {
-    font-size: var(--font-size-md);
+    font-size: 1.25rem;
     font-weight: 700;
     color: var(--color-primary);
     margin-left: auto;
@@ -260,7 +283,8 @@
     display: flex;
     align-items: center;
     gap: 1.25rem;
-    font-size: var(--font-size-sm);
+    font-size: 1.15rem;
+    font-weight: 600;
     color: var(--color-text-subtle);
 }
 
@@ -270,11 +294,13 @@
 }
 
 .evento-posti {
-    font-size: var(--font-size-sm);
+    font-size: 1.15rem;
+    font-weight: 600;
     color: var(--color-text-subtle);
 }
 
 .evento-posti strong {
+    font-size: 1.3rem;
     color: var(--color-text-light);
 }
 
@@ -287,47 +313,6 @@
     justify-content: space-between;
     gap: 1rem;
     margin-top: 0.5rem;
-}
-
-.evento-stepper {
-    display: flex;
-    align-items: stretch;
-    border: 1px solid var(--color-border-dark);
-    border-radius: var(--radius-sm);
-    overflow: hidden;
-}
-
-.evento-stepper-btn {
-    width: 32px;
-    background-color: var(--color-bg-dark);
-    border: none;
-    color: var(--color-text-light);
-    font-size: 16px;
-    cursor: pointer;
-    transition: background-color var(--transition);
-}
-
-.evento-stepper-btn:hover {
-    background-color: var(--color-primary);
-    color: #000;
-}
-
-.evento-stepper-input {
-    width: 40px;
-    text-align: center;
-    border: none;
-    border-left: 1px solid var(--color-border-dark);
-    border-right: 1px solid var(--color-border-dark);
-    background-color: var(--color-bg-dark);
-    color: var(--color-text-light);
-    font-size: var(--font-size-md);
-    font-weight: 600;
-    -moz-appearance: textfield;
-}
-
-.evento-stepper-input::-webkit-inner-spin-button,
-.evento-stepper-input::-webkit-outer-spin-button {
-    -webkit-appearance: none;
 }
 
 .btn-evento-primary,
@@ -363,7 +348,6 @@
     color: var(--color-primary);
 }
 
-
 .btn-apply-data {
     display: flex;
     align-items: center;
@@ -385,7 +369,6 @@
 .btn-apply-data:hover {
     background-color: var(--color-primary-dark);
 }
-
 
 .evento-scopri-link {
     align-self: flex-end;
@@ -418,10 +401,6 @@
         flex-direction: column;
         align-items: stretch;
     }
-
-    .evento-stepper {
-        justify-content: center;
-    }
 }
 
 .eventi-date-wrapper {
@@ -431,4 +410,24 @@
 
 .eventi-date-input {
     flex: 1;
+}
+
+.evento-challenge-link {
+    font-size: var(--font-size-sm);
+    font-weight: 600;
+    color: var(--color-primary);
+    text-decoration: none;
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    transition: color var(--transition);
+}
+
+.evento-challenge-link i {
+    color: var(--color-primary);
+}
+
+.evento-challenge-link:hover {
+    color: var(--color-primary-dark);
+    text-decoration: underline;
 }

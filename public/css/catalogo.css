@@ -401,7 +401,7 @@
  
 .checkbox-text {
     font-size: var(--font-size-md);
-    color: var(--color-text-subtle);
+    color: var(--color-text-light) !important;
     line-height: 1.3;
 }
  

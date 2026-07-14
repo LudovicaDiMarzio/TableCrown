@@ -1,0 +1,466 @@
+/* ============================================================
+   TableCrown — MieRecensioni.css
+   Pagina "Le Mie Recensioni": lista recensioni scritte dall'utente
+   ============================================================ */
+
+
+/* ── CONTENITORE PRINCIPALE ───────────────────────────────── */
+
+.mierecensioni-container {
+    padding: 2.5rem 0 4rem;
+}
+
+.mierecensioni-container .container {
+    max-width: 900px;
+    margin-left: auto;
+    margin-right: auto;
+    padding-left: 1rem;
+    padding-right: 1rem;
+}
+
+
+/* ── TOPBAR ────────────────────────────────────────────────── */
+
+.mierecensioni-topbar {
+    margin-bottom: 1.5rem;
+}
+
+.mierecensioni-back-link {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.4rem;
+    font-size: var(--font-size-sm);
+    font-weight: 600;
+    color: var(--color-text-muted);
+    text-decoration: none;
+    transition: color var(--transition), transform var(--transition);
+}
+
+.mierecensioni-back-link:hover {
+    color: var(--color-primary);
+    transform: translateX(-3px);
+}
+
+
+/* ── HEADER ────────────────────────────────────────────────── */
+
+.mierecensioni-header {
+    display: flex;
+    align-items: flex-end;
+    justify-content: space-between;
+    flex-wrap: wrap;
+    gap: 1rem;
+    margin-bottom: 2rem;
+}
+
+.mierecensioni-eyebrow {
+    display: block;
+    font-size: var(--font-size-sm);
+    font-weight: 600;
+    text-transform: uppercase;
+    letter-spacing: 0.06em;
+    color: var(--color-primary);
+    margin-bottom: 0.35rem;
+}
+
+.mierecensioni-titolo {
+    display: flex;
+    align-items: center;
+    gap: 0.6rem;
+    font-size: 1.9rem;
+    font-weight: 800;
+    color: var(--color-text-light);
+    margin: 0;
+}
+
+.mierecensioni-titolo i {
+    color: var(--color-primary);
+}
+
+.mierecensioni-count-badge {
+    display: flex;
+    align-items: baseline;
+    gap: 0.35rem;
+    background-color: var(--color-bg-dark-2);
+    border: 1px solid var(--color-border-dark);
+    border-radius: var(--radius-md);
+    padding: 0.55rem 1.1rem;
+}
+
+.mierecensioni-count-num {
+    font-size: 1.2rem;
+    font-weight: 800;
+    color: var(--color-primary);
+}
+
+.mierecensioni-count-label {
+    font-size: var(--font-size-sm);
+    color: var(--color-text-muted);
+}
+
+
+/* ── LISTA RECENSIONI ──────────────────────────────────────── */
+
+.mierecensioni-list {
+    display: flex;
+    flex-direction: column;
+    gap: 1.25rem;
+}
+
+.mierecensioni-card {
+    display: flex;
+    align-items: stretch;
+    gap: 1.25rem;
+    background-color: var(--color-bg-dark-2);
+    border: 1px solid var(--color-border-dark);
+    border-radius: var(--radius-md);
+    padding: 1.25rem;
+    transition: border-color var(--transition), box-shadow var(--transition), opacity 0.3s ease, transform 0.3s ease;
+}
+
+.mierecensioni-card:hover {
+    border-color: var(--color-primary);
+    box-shadow: 0 10px 24px rgba(0,0,0,0.3);
+}
+
+.mierecensioni-card-uscita {
+    opacity: 0;
+    transform: scale(0.96);
+    pointer-events: none;
+}
+
+
+/* ── IMMAGINE PRODOTTO ─────────────────────────────────────── */
+
+.mierecensioni-card-media {
+    flex-shrink: 0;
+    width: 96px;
+    height: 96px;
+    border-radius: var(--radius-sm);
+    overflow: hidden;
+    background-color: var(--color-bg-dark);
+    display: block;
+}
+
+.mierecensioni-card-img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    display: block;
+}
+
+.mierecensioni-card-img-placeholder {
+    width: 100%;
+    height: 100%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: var(--color-text-muted);
+    font-size: 1.5rem;
+}
+
+
+/* ── CORPO CARD ────────────────────────────────────────────── */
+
+.mierecensioni-card-body {
+    flex: 1;
+    min-width: 0;
+    display: flex;
+    flex-direction: column;
+    gap: 0.5rem;
+}
+
+.mierecensioni-card-top {
+    display: flex;
+    flex-direction: column;
+    gap: 0.3rem;
+}
+
+.mierecensioni-card-nome {
+    font-size: var(--font-size-md);
+    font-weight: 700;
+    color: var(--color-text-light);
+    text-decoration: none;
+    transition: color var(--transition);
+}
+
+.mierecensioni-card-nome:hover {
+    color: var(--color-primary);
+}
+
+.mierecensioni-card-meta {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    font-size: var(--font-size-sm);
+    color: var(--color-text-muted);
+}
+
+.mierecensioni-card-stelle {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.1rem;
+    color: var(--color-primary);
+    font-size: 0.85rem;
+}
+
+.mierecensioni-card-stelle i.ti-star {
+    color: var(--color-border-dark);
+}
+
+.mierecensioni-card-sep {
+    color: var(--color-border-dark);
+}
+
+.mierecensioni-badge-segnalata {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.3rem;
+    background-color: rgba(239, 68, 68, 0.15);
+    color: #ef4444;
+    font-size: 0.72rem;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 0.03em;
+    padding: 0.2rem 0.55rem;
+    border-radius: var(--radius-sm);
+}
+
+.mierecensioni-badge-segnalata i {
+    font-size: 12px;
+}
+
+.mierecensioni-card-segnalata {
+    border-color: rgba(239, 68, 68, 0.4);
+}
+
+.mierecensioni-card-testo {
+    color: var(--color-text-light);
+    font-size: var(--font-size-md);
+    line-height: 1.5;
+    margin: 0;
+    opacity: 0.9;
+}
+
+
+/* ── BOTTONE ELIMINA ───────────────────────────────────────── */
+
+.mierecensioni-btn-elimina {
+    flex-shrink: 0;
+    align-self: center;
+    display: inline-flex;
+    align-items: center;
+    gap: 0.4rem;
+    background-color: transparent;
+    color: #ef4444;
+    font-weight: 600;
+    font-size: var(--font-size-sm);
+    border: 1px solid rgba(239, 68, 68, 0.35);
+    border-radius: var(--radius-sm);
+    padding: 0.55rem 1.1rem;
+    cursor: pointer;
+    transition: background-color var(--transition), border-color var(--transition), color var(--transition);
+    white-space: nowrap;
+}
+
+.mierecensioni-btn-elimina:hover {
+    background-color: #ef4444;
+    border-color: #ef4444;
+    color: #ffffff;
+}
+
+
+/* ── STATO VUOTO ───────────────────────────────────────────── */
+
+.mierecensioni-empty {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    text-align: center;
+    gap: 0.75rem;
+    padding: 5rem 1.5rem;
+    background-color: var(--color-bg-dark-2);
+    border: 1px dashed var(--color-border-dark);
+    border-radius: var(--radius-md);
+}
+
+.mierecensioni-empty-icon {
+    width: 72px;
+    height: 72px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border-radius: 50%;
+    background-color: var(--color-bg-dark);
+    border: 2px solid var(--color-primary);
+    color: var(--color-primary);
+    font-size: 2rem;
+    margin-bottom: 0.5rem;
+}
+
+.mierecensioni-empty-titolo {
+    font-size: 1.3rem;
+    font-weight: 800;
+    color: var(--color-text-light);
+    margin: 0;
+}
+
+.mierecensioni-empty-testo {
+    color: var(--color-text-muted);
+    font-size: var(--font-size-md);
+    max-width: 380px;
+}
+
+.mierecensioni-empty-btn {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.45rem;
+    background-color: var(--color-primary);
+    color: var(--color-bg-dark);
+    font-weight: 700;
+    font-size: var(--font-size-sm);
+    text-decoration: none;
+    border-radius: var(--radius-sm);
+    padding: 0.7rem 1.6rem;
+    margin-top: 0.75rem;
+    transition: transform var(--transition), box-shadow var(--transition), opacity var(--transition);
+}
+
+.mierecensioni-empty-btn:hover {
+    opacity: 0.9;
+    transform: translateY(-2px);
+    box-shadow: 0 6px 14px rgba(0,0,0,0.25);
+}
+
+
+/* ── POPUP (CONFERMA + MESSAGGI) ──────────────────────────── */
+
+.mierecensioni-popup-overlay {
+    position: fixed;
+    inset: 0;
+    background-color: rgba(0, 0, 0, 0.65);
+    backdrop-filter: blur(2px);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    z-index: 1000;
+}
+
+.mierecensioni-popup-overlay[hidden] {
+    display: none;
+}
+
+.mierecensioni-popup-box {
+    background-color: var(--color-bg-dark-2);
+    border: 1px solid var(--color-border-dark);
+    border-radius: var(--radius-md);
+    padding: 2rem 1.75rem;
+    max-width: 380px;
+    width: 90%;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 1.25rem;
+    text-align: center;
+    box-shadow: 0 20px 45px rgba(0,0,0,0.4);
+}
+
+.mierecensioni-popup-icon {
+    font-size: 2.25rem;
+    color: #ef4444;
+}
+
+.mierecensioni-popup-message {
+    color: var(--color-text-light);
+    font-size: var(--font-size-md);
+}
+
+.mierecensioni-popup-actions {
+    display: flex;
+    justify-content: center;
+    gap: 1rem;
+    width: 100%;
+}
+
+.mierecensioni-popup-actions .mierecensioni-btn-secondary,
+.mierecensioni-popup-actions .mierecensioni-btn-primary {
+    flex: 1;
+    justify-content: center;
+}
+
+.mierecensioni-btn-primary {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    gap: 0.4rem;
+    background-color: var(--color-primary);
+    color: var(--color-bg-dark);
+    font-weight: 700;
+    font-size: var(--font-size-sm);
+    border: none;
+    border-radius: var(--radius-sm);
+    padding: 0.65rem 1.75rem;
+    cursor: pointer;
+    transition: transform var(--transition), box-shadow var(--transition), opacity var(--transition);
+}
+
+.mierecensioni-btn-primary:hover {
+    opacity: 0.9;
+    transform: translateY(-2px);
+    box-shadow: 0 6px 14px rgba(0,0,0,0.25);
+}
+
+.mierecensioni-btn-secondary {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    gap: 0.4rem;
+    background-color: var(--color-bg-dark);
+    color: var(--color-text-light);
+    font-weight: 600;
+    font-size: var(--font-size-sm);
+    border: 1px solid var(--color-border-dark);
+    border-radius: var(--radius-sm);
+    padding: 0.65rem 1.5rem;
+    cursor: pointer;
+    transition: border-color var(--transition), color var(--transition);
+}
+
+.mierecensioni-btn-secondary:hover {
+    border-color: var(--color-primary);
+    color: var(--color-primary);
+}
+
+
+/* ============================================================
+   ── RESPONSIVE DESIGN (MEDIA QUERIES) ───────────────────────
+   ============================================================ */
+
+@media (max-width: 600px) {
+    .mierecensioni-card {
+        flex-wrap: wrap;
+        padding: 1rem;
+    }
+
+    .mierecensioni-card-media {
+        width: 72px;
+        height: 72px;
+    }
+
+    .mierecensioni-btn-elimina {
+        width: 100%;
+        justify-content: center;
+    }
+
+    .mierecensioni-titolo {
+        font-size: 1.5rem;
+    }
+
+    .mierecensioni-header {
+        align-items: flex-start;
+    }
+
+    .mierecensioni-empty {
+        padding: 3.5rem 1.25rem;
+    }
+}

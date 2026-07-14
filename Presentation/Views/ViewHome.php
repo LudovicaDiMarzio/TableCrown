@@ -28,12 +28,7 @@ class ViewHome {
         $smarty->assign('offerte',      $dati['offerte'] ?? []);
         $smarty->assign('nuovi_arrivi', $dati['nuovi_arrivi'] ?? []);
 
-        // NOTA: 'in_evidenza' e 'categorie' non sono ancora prodotti dal controller
-        // (CNavigazione::mostraHome() genera solo 'offerte' e 'nuovi_arrivi').
-        // Le lascio assegnate come array vuoto per non rompere il tpl se le usa già,
-        // ma vanno tolte dal tpl oppure aggiunte al controller — da chiarire con t1.
-        $smarty->assign('in_evidenza', $dati['in_evidenza'] ?? []);
-        $smarty->assign('categorie',   $dati['categorie'] ?? []);
+    
 
         $smarty->display('home.tpl');
     }
