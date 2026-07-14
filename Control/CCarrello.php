@@ -69,11 +69,20 @@ class CCarrello extends BaseController {
  
         $carrelloItems = [];
         $idsDaRimuovere = [];
+        $idsProdotto = array_keys($carrello);
+
+        $prodottiCaricati = FPersistentManager::PMgetObjListOnAttribute(EProdotto::class, 'idProdotto', $idsProdotto);
+
+        //Indicizzazione per evitare query nel ciclo
+        $prodottiIndicizzati = [];
+        foreach ($prodottiCaricati as $prodotto) {
+            $prodottiIndicizzati[$prodotto->getIdProdotto()] = $prodotto;
+        }
  
         //Scorriamo il carrello prendendo la chiave (id prodotto) e il valore (quantità)
         foreach ($carrello as $idProdotto => $quantita) {
             //Chiediamo a Foundation di caricarci l'oggetto Entity del prodotto dal DB
-            $prodotto = FPersistentManager::PMgetObjOnAttribute(EProdotto::class, 'idProdotto', $idProdotto);
+            $prodotto = $prodottiIndicizzati[$idProdotto] ?? null;
  
             if (!$prodotto) {
                 $idsDaRimuovere[] = $idProdotto; //così verrà rimosso e non verrà contato in aggiornaQuantita()

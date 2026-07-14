@@ -33,27 +33,13 @@ class CProfilo extends BaseController {
         ['label' => 'Modifica account', 'url' => '/profilo/modifica'],
         ['label' => 'I Miei Ordini', 'url' => '/profilo/ordini'],
         ['label' => 'Le Mie Recensioni', 'url' => '/profilo/recensioni'],
-        ['label' => 'Wishlist', 'url' => 'profilo/wishlist'], //Non dovrebbe essere solo /wishlist, visto che ci si può accedere anche da altre pagine?
+        ['label' => 'Wishlist', 'url' => 'profilo/wishlist'], 
         ['label' => 'Eventi', 'url' => '/profilo/eventi'],
         ['label' => 'I Miei Indirizzi', 'url' => '/profilo/indirizzi'],
     ];
 
     public function __construct() {
         parent::__construct();
-    }
-
-    //==========================================================================
-    // HELPER PRIVATO CONDIVISO
-    //==========================================================================
-
-    /**
-     * Recupera l'utente loggato nel DB. Centralizzato qui perché ogni metodo 
-     * pubblico di questo controller ne ha bisogno.
-     */
-    private function utenteCorrente(): EUtente {
-        $this->requireRole('utente');
-        $idUtente = USession::getSessionElement('id_persona');
-        return FPersistentManager::PMgetObjOnAttribute(EUtente::class, 'idPersona', $idUtente);
     }
 
     //==========================================================================
@@ -165,11 +151,15 @@ class CProfilo extends BaseController {
             //uplaod" allo stesso modo per ora (nessuna modifica all'immagine esistente).
             //DA CAMBIARE
             try {
+                //Proviamo a recuperare il file. Se l'utente non lo ha caricato,
+                //postFile lancerà un'eccezione che cattureremo subito.
                 $immagine = UHTTPMethods::postFile('img_profilo'); //opzionale, l'utente potrebbe non cambiarla!
+                //Se non è stata lanciata nessuna eccezione, procediamo con la lettura e l'aggiornamento 
                 $imgBlob = file_get_contents($immagine['tmp_name']);
                 $utente->aggiornaImmagine($imgBlob);
             } catch (\InvalidArgumentException $e) {
-                //Nessuna nuova immagine caricata, si mantiene quella esistente
+                //Silenziamo l'errore: significa semplicemente che l'utente non ha caricato
+                //una nuova immagine, quindi teniamo quella vecchia senza interrompere il flusso.
             }
         } catch (\InvalidArgumentException $e) {
             UFlashMessage::addMessage('danger', $e->getMessage());
@@ -197,7 +187,7 @@ class CProfilo extends BaseController {
         header('Content-Type: application/json');
         $utente = $this->utenteCorrente();
 
-        //DA CONTROLLARE IL METODO post
+        //DA CONTROLLARE IL METODO post (CAMBIARE CON postString)
         $vecchiaPassword = UHTTPMethods::post('vecchia_password');
         $nuovaPassword = UHTTPMethods::post('nuova_password');
         $confermaPassword = UHTTPMethods::post('conferma_password');

@@ -17,6 +17,9 @@ use TableCrown\Entity\EEvento;
 use TableCrown\Entity\ESerata;
 use TableCrown\Entity\ETorneo;
 use TableCrown\Entity\EChallenge;
+use TableCrown\Entity\EGiocoDaTavolo;
+use TableCrown\Entity\EBustine;
+use TableCrown\Entity\EPortaDadi;
 
 
 
@@ -326,6 +329,38 @@ abstract class BaseController {
     protected function formattaImporto(float $importo): string {
         return number_format($importo, 2, '.', '');
     }
+
+    /**
+     * Recupera l'utente correntemente loggato nel DB, verificando che abbia il 
+     * ruolo 'utente'.
+     */
+    protected function utenteCorrente(): EUtente {
+        $this->requireRole('utente');
+        $idUtente = USession::getSessionElement('id_persona');
+        return FPersistentManager::PMgetObjOnAttribute(EUtente::class, 'idPersona', $idUtente);
+    }
+
+    /**
+     * Determina l'URL del catalogo specifico in base alla classe 
+     * dell'oggetto prodotto.
+     */
+    protected function urlCatalogo(EProdotto $prodotto): string {
+        if ($prodotto instanceof EGiocoDaTavolo) {
+            return '/catalogo/giochi-da-tavolo';
+        } 
+
+        if ($prodotto instanceof EBustine) {
+            return '/catalogo/bustine';
+        }
+
+        if ($prodotto instanceof EPortaDadi) {
+            return '/catalogo/porta-dadi';
+        }
+
+        //Fallback generico di sicurezza
+        return '/';
+    }
+
 
     /**
      * Verifica la presenza del cookie Remember Me e, se valido,
