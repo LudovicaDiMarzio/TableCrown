@@ -58,7 +58,7 @@ abstract class BaseController {
 
         //Variabili globali sempre richieste dal layout
         $globalData = [
-            'base_url' => 'https://tablecrown.it', 
+            'base_url' => BASE_URL, 
             'current_page' => $currentPage, //Indica la pagina attiva (es. 'catalogo', 'eventi', ecc.)
             'breadcrumbs' => $this->getBreadcrumbs($currentPage), //Il percorso di navigazione
             'utente' => $this->utenteToArray(),

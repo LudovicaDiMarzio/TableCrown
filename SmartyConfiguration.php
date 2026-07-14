@@ -11,8 +11,8 @@ class SmartyConfiguration {
     public static function getSmarty(): Smarty {
         if (self::$instance === null) {
             self::$instance = new Smarty();
-            self::$instance->setTemplateDir(PRESENTATION_PATH . '/templates/');
-            self::$instance->setCompileDir(PRESENTATION_PATH . '/templates_c/');
+            self::$instance->setTemplateDir(SMARTY_DIR . '/templates/');
+            self::$instance->setCompileDir(SMARTY_DIR . '/templates_c/');
         }
         return self::$instance;
     }
