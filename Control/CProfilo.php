@@ -8,11 +8,20 @@ use TableCrown\Entity\EUtente;
 use TableCrown\Entity\ETorneo;
 use TableCrown\Entity\EOrdine;
 use TableCrown\Entity\EOrdineItem;
+use TableCrown\Entity\EWishlist;
+use TableCrown\Entity\EIndirizzo;
 use TableCrown\Entity\Enumerativi\PlayerLevel;
 use TableCrown\Entity\Enumerativi\StatoOrdine;
 use TableCrown\Foundation\FPersistentManager;
 use TableCrown\Presentation\Views\ViewProfiloFactory;
 
+/**
+ * Controller deputato alla gestione del profilo dell'utente.
+ * In particolare gestisce la visualizzazione delle pagine pubbliche del profilo,
+ * quindi le richieste in GET (visaulizzazione dello storico). Ha il compito 
+ * di prendere i dati dal DB e passarli a Presentation.
+ * Gestisce anche la modifica dell'account, in quanto costituisce azioni CRUD sull'entity EUtente.
+ */
 class CProfilo extends BaseController {
 
     private const SOGLIE_LIVELLO = [
@@ -24,27 +33,13 @@ class CProfilo extends BaseController {
         ['label' => 'Modifica account', 'url' => '/profilo/modifica'],
         ['label' => 'I Miei Ordini', 'url' => '/profilo/ordini'],
         ['label' => 'Le Mie Recensioni', 'url' => '/profilo/recensioni'],
-        ['label' => 'Wishlist', 'url' => 'profilo/wishlist'], //Non dovrebbe essere solo /wishlist, visto che ci si può accedere anche da altre pagine?
+        ['label' => 'Wishlist', 'url' => 'profilo/wishlist'], 
         ['label' => 'Eventi', 'url' => '/profilo/eventi'],
         ['label' => 'I Miei Indirizzi', 'url' => '/profilo/indirizzi'],
     ];
 
     public function __construct() {
         parent::__construct();
-    }
-
-    //==========================================================================
-    // HELPER PRIVATO CONDIVISO
-    //==========================================================================
-
-    /**
-     * Recupera l'utente loggato nel DB. Centralizzato qui perché ogni metodo 
-     * pubblico di questo controller ne ha bisogno.
-     */
-    private function utenteCorrente(): EUtente {
-        $this->requireRole('utente');
-        $idUtente = USession::getSessionElement('id_persona');
-        return FPersistentManager::PMgetObjOnAttribute(EUtente::class, 'idPersona', $idUtente);
     }
 
     //==========================================================================
@@ -156,11 +151,15 @@ class CProfilo extends BaseController {
             //uplaod" allo stesso modo per ora (nessuna modifica all'immagine esistente).
             //DA CAMBIARE
             try {
+                //Proviamo a recuperare il file. Se l'utente non lo ha caricato,
+                //postFile lancerà un'eccezione che cattureremo subito.
                 $immagine = UHTTPMethods::postFile('img_profilo'); //opzionale, l'utente potrebbe non cambiarla!
+                //Se non è stata lanciata nessuna eccezione, procediamo con la lettura e l'aggiornamento 
                 $imgBlob = file_get_contents($immagine['tmp_name']);
                 $utente->aggiornaImmagine($imgBlob);
             } catch (\InvalidArgumentException $e) {
-                //Nessuna nuova immagine caricata, si mantiene quella esistente
+                //Silenziamo l'errore: significa semplicemente che l'utente non ha caricato
+                //una nuova immagine, quindi teniamo quella vecchia senza interrompere il flusso.
             }
         } catch (\InvalidArgumentException $e) {
             UFlashMessage::addMessage('danger', $e->getMessage());
@@ -188,7 +187,7 @@ class CProfilo extends BaseController {
         header('Content-Type: application/json');
         $utente = $this->utenteCorrente();
 
-        //DA CONTROLLARE IL METODO post
+        //DA CONTROLLARE IL METODO post (CAMBIARE CON postString)
         $vecchiaPassword = UHTTPMethods::post('vecchia_password');
         $nuovaPassword = UHTTPMethods::post('nuova_password');
         $confermaPassword = UHTTPMethods::post('conferma_password');
@@ -289,7 +288,7 @@ class CProfilo extends BaseController {
     /**
      * Privato: usato solo qui, converte EOrdine nella struttura utile a Presentation
      */
-    private function ordineToArray(EOrdine $ordine): array {
+    private function ordineToArray(EOrdine $ordine): array { //SPOSTARE IN BASE CONTROLLER SE SERVE DA ALTRE PARTI
         $indirizzo = $ordine->getIndirizzoSpedizione();
 
         return [
@@ -308,12 +307,12 @@ class CProfilo extends BaseController {
             'nomeTitolareCarta' => $ordine->getNomeTitolareCarta(),
             'items' => array_map(
                 fn($item) => $this->ordineItemToArray($item),
-                $ordine->getOrdineItems()->toArray()
+                $ordine->getOrdineItems()->toArray() //DA RIVEDERE
             ),
         ];
     }
 
-    private function ordineItemToArray(EOrdineItem $ordineItem): array {
+    private function ordineItemToArray(EOrdineItem $ordineItem): array { //SPOSTARE IN BASE CONTROLLER SE SERVE DA ALTRE PARTI
         $prodotto = $ordineItem->getProdotto();
 
         return [
@@ -334,17 +333,124 @@ class CProfilo extends BaseController {
     //WISHLIST
     //==========================================================================
 
+    /**
+     * URL: GET /profilo/wishlist
+     */
+    public function mostraWishlist(): void {
+        $utente = $this->utenteCorrente();
+
+        //Recuperiamo la wishlist dal DB
+        $wishlist = FPersistentManager::PMgetObjOnAttribute(EWishlist::class, 'utente', $utente);
+
+        $prodottiCollection = $wishlist ? $wishlist->getProdotti() : [];
+
+        //Convertiamo i prodotti della wishlist in array usando il metodo ereditato da BaseController
+        $prodottiWishlist = $this->prodottiToArray($prodottiCollection);
+
+        $datiPagina = [
+            'vista' => 'profilo_wishlist',
+            'prodotti' => $prodottiWishlist,
+        ];
+
+        $datiLayout = $this->preparaDatiLayout('profilo_wishlist', $datiPagina);
+        ViewProfiloFactory::render($datiLayout);
+    }
 
     //==========================================================================
     // EVENTI
     //==========================================================================
 
+    /**
+     * URL: GET /profilo/eventi
+     */
+    public function mostraEventi(): void {
+        $utente = $this->utenteCorrente();
+
+        //Recuperiamo tutte le partecipazioni dell'utente
+        $partecipazioni = $utente->getPartecipazioni()->toArray();
+        $eventiIscritto = [];
+
+        foreach ($partecipazioni as $p) {
+            $evento = $p->getEvento();
+            $eventoArray = $this->eventoToArray($evento);
+
+            //Aggiungiamo informazioni specifiche della partecipazione utili a Presentation
+            $eventoArray['dataiscrizione'] = $p->getDataIscrizione()->format('Y-m-d H:i:s');
+            $eventoArray['posizioneClassifica'] = $p->getPosizioneInClassifica();
+
+            $eventiIscritto[] = $eventoArray;
+        }
+
+        $datiPagina = [
+            'vista' => 'profilo_eventi',
+            'eventi' => $eventiIscritto,
+        ];
+
+        $datiLayout = $this->preparaDatiLayout('profilo_eventi', $datiPagina);
+        ViewProfiloFactory::render($datiLayout);
+    }
 
 
     //==========================================================================
     // INDIRIZZI
     //==========================================================================
 
+    /**
+     * URL: GET /profilo/indirizzi
+     */
+    public function mostraIndirizzi(): void {
+        $utente = $this->utenteCorrente();
+
+        $indirizziArray = [];
+        foreach ($utente->getIndirizzi() as $indirizzo) {
+            $indirizziArray[] = $this->indirizzoToArray($indirizzo);
+        }
+        
+        $datiPagina = [
+            'vista' => 'profilo_indirizzi',
+            'indirizzi' => $indirizziArray,
+        ];
+        
+        $datiLayout = $this->preparaDatiLayout('profilo_indirizzi', $datiPagina);
+        ViewProfiloFactory::render($datiLayout);
+    }
+
+    /**
+     * Privato: usato solo qui, converte EIndirizzo nella struttura utile a Presentation
+     */
+    private function indirizzoToArray(EIndirizzo $indirizzo): array { //SPOSTARE IN BASE CONTROLLER SE SERVE DA ALTRE PARTI
+        return [
+            'id' => $indirizzo->getIdIndirizzo(),
+            'nome' => $indirizzo->getNome(),
+            'via' => $indirizzo->getVia(),
+            'citta' => $indirizzo->getCitta(),
+            'cap' => $indirizzo->getCap(),
+            'provincia' => $indirizzo->getProvincia(),
+            'nazione' => $indirizzo->getNazione(),
+            'nomeCitofono' => $indirizzo->getNomeCitofono(),
+            'predefinito' => $indirizzo->isPredefinito(),
+        ];
+    }
 
 
+    //==========================================================================
+    // RECENSIONI
+    //==========================================================================
+
+    /**
+     * URL: GET /profilo/recensioni
+     */
+    public function mostraRecensioni(): void {
+        $utente = $this->utenteCorrente();
+
+        $recensioniArray = $this->recensioniToArray($utente->getRecensioni());
+
+        $datiPagina = [
+            'vista' => 'profilo_recensioni',
+            'recensioni' => $recensioniArray,
+        ];
+
+        $datiLayout = $this->preparaDatiLayout('profilo_recensioni', $datiPagina);
+        ViewProfiloFactory::render($datiLayout);
+    }
 }

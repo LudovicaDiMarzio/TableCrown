@@ -8,7 +8,7 @@ use TableCrown\Utility\UFlashMessage;
 use TableCrown\Entity\EEvento;
 use TableCrown\Entity\ESerata;
 use TableCrown\Entity\ETorneo;
-use Tablecrown\Entity\EChallenge;
+use TableCrown\Entity\EChallenge;
 use TableCrown\Entity\EPrezzo;
 use TableCrown\Entity\EProdotto;
 use TableCrown\Foundation\FPersistentManager;
@@ -85,29 +85,6 @@ class CEventi extends BaseController {
         $this->renderListaEventi('eventi_challenge', $challenge, [$this, 'challengeToArray'], $filtroData, $ricerca);
     }
 
-    //PRENOTAZIONE
-
-    /**
-     * Gestisce la partecipazione ad un evento (Richiesta POST).
-     * URL: /eventi/prenotazione
-     */
-    public function partecipaEvento(): void {
-        $this->requireRole('utente');
-        $idEvento = UHTTPMethods::postInt('id_evento');
-
-        if (!$idEvento) {
-            UFlashMessage::addMessage('danger', 'Evento non specificato.');
-            header('Location: /eventi');
-            exit();
-        }
-
-        //TODO: FPersistentManager - recupero evento, verifica hasPostiDisponibili(),
-        //creazione e salvataggio di EPartecipazione.
-
-        UFlashMessage::addMessage('success', 'Partecipazione effettuata con successo!');
-        header('Location: /eventi/dettaglio?id=' . $idEvento);
-        exit();
-    }
 
     //==========================================================================
     // METODI PRIVATI CONDIVISI

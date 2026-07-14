@@ -91,7 +91,7 @@ class CDettaglioEvento extends BaseController {
         if (!$this->isLoggedIn() || USession::getSessionElement('ruolo') !== 'utente') {
             return false;        
         }
-        $idUtente = USession::getSessionElement('idUtente');
+        $idUtente = USession::getSessionElement('id_persona');
 
         foreach ($evento->getPartecipazioni() as $partecipazione) {
             if ($partecipazione->getUtente()->getIdPersona() === $idUtente) {
@@ -157,10 +157,11 @@ class CDettaglioEvento extends BaseController {
     }
 
     protected function getBreadcrumbs(string $currentPage = ''): array {
+        $idEvento = UHTTPMethods::get('id');
         return [
             ['label' => 'Home', 'url' => '/'],
             ['label' => 'Eventi', 'url' => '/eventi'],
-            ['label' => 'Dettaglio evento', 'url' => '/eventi/dettaglio?id=' . $this->idEvento],
+            ['label' => 'Dettaglio evento', 'url' => '/eventi/dettaglio?id=' . $idEvento],
         ];
     }
 }
