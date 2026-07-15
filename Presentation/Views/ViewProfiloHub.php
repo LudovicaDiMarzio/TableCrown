@@ -1,7 +1,9 @@
 <?php
 // Presentation/Views/ViewProfiloHub.php
 
-require_once __DIR__ . '/SmartyConfiguration.php';
+namespace TableCrown\Presentation\Views;
+
+use SmartyConfiguration;
 
 class ViewProfiloHub {
 

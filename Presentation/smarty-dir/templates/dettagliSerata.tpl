@@ -95,34 +95,13 @@
     </div>
 </div>
 
-{* ── MODAL FEEDBACK PRENOTAZIONE ── *}
-<div class="dettaglio-modal-overlay" id="modal-prenotazione">
-    <div class="dettaglio-modal-box" id="modal-prenotazione-box">
-        <div class="dettaglio-modal-icona" id="modal-prenotazione-icona"></div>
-        <h3 class="dettaglio-modal-titolo" id="modal-prenotazione-titolo"></h3>
-        <p class="dettaglio-modal-testo" id="modal-prenotazione-testo"></p>
-        <button type="button" class="button dettaglio-modal-chiudi" id="modal-prenotazione-chiudi">Chiudi</button>
-    </div>
-</div>
-
-{/block}
-
-{block name="extra_js"}
 <script>
-{literal}
 (function () {
-    const maxPosti = parseInt("{/literal}{$serata.postiLiberi|default:0}{literal}", 10);
+    const maxPosti = parseInt("{$serata.postiLiberi|default:0}", 10);
     const input = document.getElementById('input-qty-posti');
     const btnMinus = document.getElementById('btn-qty-minus');
     const btnPlus = document.getElementById('btn-qty-plus');
     const btnPrenota = document.getElementById('btn-prenota');
-
-    const modalOverlay = document.getElementById('modal-prenotazione');
-    const modalBox = document.getElementById('modal-prenotazione-box');
-    const modalIcona = document.getElementById('modal-prenotazione-icona');
-    const modalTitolo = document.getElementById('modal-prenotazione-titolo');
-    const modalTesto = document.getElementById('modal-prenotazione-testo');
-    const modalChiudi = document.getElementById('modal-prenotazione-chiudi');
 
     function clamp(val) {
         if (val < 1) return 1;
@@ -130,89 +109,21 @@
         return val;
     }
 
-    if (btnMinus) {
-        btnMinus.addEventListener('click', function () {
-            input.value = clamp(parseInt(input.value, 10) - 1);
-        });
-    }
+    btnMinus.addEventListener('click', function () {
+        input.value = clamp(parseInt(input.value, 10) - 1);
+    });
 
-    if (btnPlus) {
-        btnPlus.addEventListener('click', function () {
-            input.value = clamp(parseInt(input.value, 10) + 1);
-        });
-    }
-
-    function mostraModale(successo, titolo, testo) {
-        modalBox.classList.remove('dettaglio-modal--successo', 'dettaglio-modal--errore');
-        modalBox.classList.add(successo ? 'dettaglio-modal--successo' : 'dettaglio-modal--errore');
-        modalIcona.innerHTML = successo
-            ? '<i class="ti ti-check"></i>'
-            : '<i class="ti ti-x"></i>';
-        modalTitolo.textContent = titolo;
-        modalTesto.textContent = testo;
-        modalOverlay.classList.add('is-visibile');
-    }
-
-    function nascondiModale() {
-        modalOverlay.classList.remove('is-visibile');
-    }
-
-    if (modalChiudi) modalChiudi.addEventListener('click', nascondiModale);
-    if (modalOverlay) {
-        modalOverlay.addEventListener('click', function (e) {
-            if (e.target === modalOverlay) nascondiModale();
-        });
-    }
-    document.addEventListener('keydown', function (e) {
-        if (e.key === 'Escape') nascondiModale();
+    btnPlus.addEventListener('click', function () {
+        input.value = clamp(parseInt(input.value, 10) + 1);
     });
 
     if (btnPrenota) {
         btnPrenota.addEventListener('click', function () {
             const posti = parseInt(input.value, 10);
-
-            btnPrenota.disabled = true;
-
-            fetch("{/literal}{$base_url}{literal}/prenotazioneSerata", {
-                method: "POST",
-                headers: {
-                    "Content-Type": "application/x-www-form-urlencoded",
-                    "X-Requested-With": "XMLHttpRequest"
-                },
-                body: "idSerata=" + encodeURIComponent(btnPrenota.dataset.id) + "&posti=" + encodeURIComponent(posti)
-            })
-                .then(function (res) {
-                    if (!res.ok) throw new Error("Risposta non valida dal server");
-                    return res.json();
-                })
-                .then(function (data) {
-                    if (data.status === 'ok') {
-                        mostraModale(
-                            true,
-                            "Iscrizione confermata",
-                            "Hai prenotato " + posti + (posti === 1 ? " posto" : " posti") + " per questa serata. A presto!"
-                        );
-                    } else {
-                        mostraModale(
-                            false,
-                            "Prenotazione non riuscita",
-                            data.messaggio || "Non è stato possibile completare la prenotazione. Riprova più tardi."
-                        );
-                    }
-                })
-                .catch(function () {
-                    mostraModale(
-                        false,
-                        "Prenotazione non riuscita",
-                        "Non è stato possibile completare la prenotazione. Riprova più tardi o contatta lo staff."
-                    );
-                })
-                .finally(function () {
-                    btnPrenota.disabled = false;
-                });
+            // TODO: chiamata fetch al Controller per la prenotazione
+            console.log('Prenotazione serata', btnPrenota.dataset.id, 'posti:', posti);
         });
     }
 })();
-{/literal}
 </script>
 {/block}

@@ -1,7 +1,9 @@
 <?php
 // Presentation/Views/ViewProfiloWishlist.php
 
-require_once __DIR__ . '/SmartyConfiguration.php';
+namespace TableCrown\Presentation\Views;
+
+use SmartyConfiguration;
 
 class ViewProfiloWishlist {
 

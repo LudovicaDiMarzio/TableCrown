@@ -59,7 +59,7 @@
                     <span class="dettaglio-prezzo-tot-value" id="prezzo-tot-{$torneo.id}">€ {$torneo.prezzo}</span>
                 </div>
 
-                <button type="button" class="btn-iscriviti" data-id="{$torneo.id}" id="btn-iscriviti">
+                <button type="button" class="btn-iscriviti" data-id="{$torneo.id}">
                     Iscriviti
                 </button>
             </div>
@@ -89,24 +89,15 @@
 
     </div>
 </div>
-
-{* ── MODAL FEEDBACK ISCRIZIONE ── *}
-<div class="dettaglio-modal-overlay" id="modal-prenotazione">
-    <div class="dettaglio-modal-box" id="modal-prenotazione-box">
-        <div class="dettaglio-modal-icona" id="modal-prenotazione-icona"></div>
-        <h3 class="dettaglio-modal-titolo" id="modal-prenotazione-titolo"></h3>
-        <p class="dettaglio-modal-testo" id="modal-prenotazione-testo"></p>
-        <button type="button" class="button dettaglio-modal-chiudi" id="modal-prenotazione-chiudi">Chiudi</button>
-    </div>
-</div>
-
 {/block}
 
-{block name="extra_js"}
 <script>
-{literal}
 (function () {
-    const btnIscriviti = document.getElementById('btn-iscriviti');
+    const maxPosti = parseInt("{$serata.postiLiberi|default:0}", 10);
+    const input = document.getElementById('input-qty-posti');
+    const btnMinus = document.getElementById('btn-qty-minus');
+    const btnPlus = document.getElementById('btn-qty-plus');
+    const btnPrenota = document.getElementById('btn-prenota');
 
     const modalOverlay = document.getElementById('modal-prenotazione');
     const modalBox = document.getElementById('modal-prenotazione-box');
@@ -114,6 +105,20 @@
     const modalTitolo = document.getElementById('modal-prenotazione-titolo');
     const modalTesto = document.getElementById('modal-prenotazione-testo');
     const modalChiudi = document.getElementById('modal-prenotazione-chiudi');
+
+    function clamp(val) {
+        if (val < 1) return 1;
+        if (val > maxPosti) return maxPosti;
+        return val;
+    }
+
+    btnMinus.addEventListener('click', function () {
+        input.value = clamp(parseInt(input.value, 10) - 1);
+    });
+
+    btnPlus.addEventListener('click', function () {
+        input.value = clamp(parseInt(input.value, 10) + 1);
+    });
 
     function mostraModale(successo, titolo, testo) {
         modalBox.classList.remove('dettaglio-modal--successo', 'dettaglio-modal--errore');
@@ -130,60 +135,49 @@
         modalOverlay.classList.remove('is-visibile');
     }
 
-    if (modalChiudi) modalChiudi.addEventListener('click', nascondiModale);
-    if (modalOverlay) {
-        modalOverlay.addEventListener('click', function (e) {
-            if (e.target === modalOverlay) nascondiModale();
-        });
-    }
+    modalChiudi.addEventListener('click', nascondiModale);
+    modalOverlay.addEventListener('click', function (e) {
+        if (e.target === modalOverlay) nascondiModale();
+    });
     document.addEventListener('keydown', function (e) {
         if (e.key === 'Escape') nascondiModale();
     });
 
-    if (btnIscriviti) {
-        btnIscriviti.addEventListener('click', function () {
-            btnIscriviti.disabled = true;
+    if (btnPrenota) {
+        btnPrenota.addEventListener('click', function () {
+            const posti = parseInt(input.value, 10);
 
-            fetch("{/literal}{$base_url}{literal}/iscrizioneTorneo", {
+            btnPrenota.disabled = true;
+
+            // TODO: sostituire con la vera chiamata al Controller quando l'endpoint sarà pronto
+            fetch("{$base_url}/prenotazioneSerata", {
                 method: "POST",
-                headers: {
-                    "Content-Type": "application/x-www-form-urlencoded",
-                    "X-Requested-With": "XMLHttpRequest"
-                },
-                body: "idTorneo=" + encodeURIComponent(btnIscriviti.dataset.id)
+                headers: { "Content-Type": "application/x-www-form-urlencoded" },
+                body: "idSerata=" + encodeURIComponent(btnPrenota.dataset.id) + "&posti=" + encodeURIComponent(posti)
             })
                 .then(function (res) {
                     if (!res.ok) throw new Error("Risposta non valida dal server");
-                    return res.json();
+                    return res.text();
                 })
-                .then(function (data) {
-                    if (data.status === 'ok') {
-                        mostraModale(
-                            true,
-                            "Iscrizione confermata",
-                            "Ti sei iscritto con successo a questo torneo. A presto!"
-                        );
-                    } else {
-                        mostraModale(
-                            false,
-                            "Iscrizione non riuscita",
-                            data.messaggio || "Non è stato possibile completare l'iscrizione. Riprova più tardi."
-                        );
-                    }
+                .then(function () {
+                    mostraModale(
+                        true,
+                        "Iscrizione confermata",
+                        "Hai prenotato " + posti + (posti === 1 ? " posto" : " posti") + " per questa serata. A presto!"
+                    );
                 })
                 .catch(function () {
                     mostraModale(
                         false,
-                        "Iscrizione non riuscita",
-                        "Non è stato possibile completare l'iscrizione. Riprova più tardi o contatta lo staff."
+                        "Prenotazione non riuscita",
+                        "Non è stato possibile completare la prenotazione. Riprova più tardi o contatta lo staff."
                     );
                 })
                 .finally(function () {
-                    btnIscriviti.disabled = false;
+                    btnPrenota.disabled = false;
                 });
         });
     }
 })();
-{/literal}
 </script>
 {/block}
