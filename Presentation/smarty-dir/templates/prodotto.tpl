@@ -14,7 +14,7 @@
             <ul class="breadcrumb-list">
                 <li><a href="{$base_url}/">Home</a></li>
                 <li><a href="{$base_url}/catalogo">Catalogo</a></li>
-                <li class="is-active"><span>{$prodotto.nome|escape}</span></li>
+                <li class="is-active"><span>{$nomeProdotto|escape}</span></li>
             </ul>
         </nav>
 
@@ -23,123 +23,87 @@
 
             {* ── COLONNA SINISTRA: GALLERIA IMMAGINI ── *}
             <div class="prodotto-gallery">
-
                 <div class="gallery-main-wrapper">
-                    <button class="gallery-nav gallery-prev" id="gallery-prev" aria-label="Immagine precedente">
-                        <i class="ti ti-chevron-left"></i>
-                    </button>
-
                     <div class="gallery-main" id="gallery-main">
-                        {if isset($prodotto.immagini) && $prodotto.immagini|@count > 0}
-                            {foreach $prodotto.immagini as $key => $img}
-                                <img src="{$base_url}/img/prodotti/{$img|escape}"
-                                     alt="{$prodotto.nome|escape} - immagine {$key+1}"
-                                     class="gallery-main-img{if $key == 0} is-active{/if}"
-                                     data-index="{$key}">
-                            {/foreach}
-                        {else}
-                            <img src="{$base_url}/img/prodotti/{$prodotto.immagine|escape}"
-                                 alt="{$prodotto.nome|escape}"
-                                 class="gallery-main-img is-active"
-                                 data-index="0">
-                        {/if}
+                        <img src="{$base_url}/img/prodotti/{$imgProdotto|escape}"
+                             alt="{$nomeProdotto|escape}"
+                             class="gallery-main-img is-active"
+                             data-index="0">
                     </div>
-
-                    <button class="gallery-nav gallery-next" id="gallery-next" aria-label="Immagine successiva">
-                        <i class="ti ti-chevron-right"></i>
-                    </button>
                 </div>
-
-                {* Thumbnails *}
-                {if isset($prodotto.immagini) && $prodotto.immagini|@count > 1}
-                    <div class="gallery-thumbs" id="gallery-thumbs">
-                        {foreach $prodotto.immagini as $key => $img}
-                            <img src="{$base_url}/img/prodotti/{$img|escape}"
-                                 alt="Thumbnail {$key+1}"
-                                 class="gallery-thumb{if $key == 0} is-active{/if}"
-                                 data-index="{$key}">
-                        {/foreach}
-                    </div>
-                {/if}
-
             </div>
 
             {* ── COLONNA CENTRO: INFO PRODOTTO ── *}
             <div class="prodotto-info">
 
                 {* Badge disponibilità *}
-                {if $prodotto.disponibilita == 'esaurito'}
+                {if $disponibilitaProdotto == 'esaurito'}
                     <span class="prodotto-badge prodotto-badge-esaurito">Esaurito</span>
-                {elseif $prodotto.disponibilita == 'annunciato'}
+                {elseif $disponibilitaProdotto == 'annunciato'}
                     <span class="prodotto-badge prodotto-badge-annunciato">Annunciato</span>
-                {elseif $prodotto.disponibilita == 'non disponibile'}
+                {elseif $disponibilitaProdotto == 'non disponibile'}
                     <span class="prodotto-badge prodotto-badge-non-disponibile">Non disponibile</span>
-                {elseif $prodotto.disponibilita == 'in arrivo'}
+                {elseif $disponibilitaProdotto == 'in arrivo'}
                     <span class="prodotto-badge prodotto-badge-in-arrivo">In arrivo</span>
                 {else}
                     <span class="prodotto-badge prodotto-badge-disponibile">Disponibile</span>
                 {/if}
 
-                <h1 class="prodotto-nome">{$prodotto.nome|escape}</h1>
+                <h1 class="prodotto-nome">{$nomeProdotto|escape}</h1>
 
                 {* Rating *}
                 <div class="prodotto-rating">
-                    {assign var="media" value=$prodotto.valutazione_media}
                     {foreach [1,2,3,4,5] as $s}
-                        {if $s <= $media}
+                        {if $s <= $valutazioneMedia}
                             <i class="ti ti-star-filled"></i>
-                        {elseif ($s - $media) < 1}
+                        {elseif ($s - $valutazioneMedia) < 1}
                             <i class="ti ti-star-half-filled"></i>
                         {else}
                             <i class="ti ti-star"></i>
                         {/if}
                     {/foreach}
-                    <span class="prodotto-rating-value">({$media|number_format:1})</span>
+                    <span class="prodotto-rating-value">({$valutazioneMedia|number_format:1})</span>
                     <a href="#recensioni" class="prodotto-rating-link">Leggi Recensioni</a>
                 </div>
 
                 {* Meta info prodotto *}
                 <div class="prodotto-meta">
-                    {if isset($prodotto.giocatori_min) && isset($prodotto.giocatori_max)}
+                    {if isset($numeroGiocatoriMin) && isset($numeroGiocatoriMax)}
                         <span class="prodotto-meta-item">
                             <i class="ti ti-users"></i>
-                            {$prodotto.giocatori_min}–{$prodotto.giocatori_max} giocatori
+                            {$numeroGiocatoriMin}–{$numeroGiocatoriMax} giocatori
                         </span>
                     {/if}
-                    {if isset($prodotto.eta_min)}
+                    {if isset($etaMinima)}
                         <span class="prodotto-meta-item">
                             <i class="ti ti-baby-carriage"></i>
-                            {$prodotto.eta_min}+ anni
+                            {$etaMinima}+ anni
                         </span>
                     {/if}
-                    {if isset($prodotto.durata)}
+                    {if isset($durataMedia)}
                         <span class="prodotto-meta-item">
                             <i class="ti ti-clock"></i>
-                            {$prodotto.durata} min
+                            {$durataMedia} min
                         </span>
                     {/if}
-                    {if isset($prodotto.difficolta)}
+                    {if isset($difficolta)}
                         <span class="prodotto-meta-item">
                             <i class="ti ti-flame"></i>
-                            {$prodotto.difficolta|escape}
+                            {$difficolta|escape}
                         </span>
                     {/if}
-                    {if isset($prodotto.lingua)}
+                    {if isset($lingua)}
                         <span class="prodotto-meta-item">
                             <i class="ti ti-language"></i>
-                            {$prodotto.lingua|escape}
+                            {$lingua|escape}
                         </span>
                     {/if}
                 </div>
 
                 {* Prezzo *}
                 <div class="prodotto-prezzo-wrapper">
-                    {if $prodotto.sconto}
-                        <span class="prodotto-prezzo">€{$prodotto.prezzo_scontato|number_format:2}</span>
-                        <span class="prodotto-prezzo-old">€{$prodotto.prezzo|number_format:2}</span>
-                        <span class="prodotto-badge-sconto">-{$prodotto.percentuale_sconto}%</span>
-                    {elseif isset($prodotto.prezzo)}
-                        <span class="prodotto-prezzo">€{$prodotto.prezzo|number_format:2}</span>
+                    {if isset($prezzo)}
+                        <span class="prodotto-prezzo">€{$prezzo|number_format:2}</span>
                     {else}
                         <span class="prodotto-prezzo-nd">Prezzo N/D</span>
                     {/if}
@@ -152,16 +116,16 @@
 
                 {* Disponibilità visiva *}
                 <div class="acquisto-disponibilita">
-                    {if $prodotto.disponibilita == 'disponibile'}
+                    {if $disponibilitaProdotto == 'disponibile'}
                         <i class="ti ti-circle-check"></i>
                         <span>Disponibile</span>
-                    {elseif $prodotto.disponibilita == 'esaurito'}
+                    {elseif $disponibilitaProdotto == 'esaurito'}
                         <i class="ti ti-circle-x"></i>
                         <span>Esaurito</span>
-                    {elseif $prodotto.disponibilita == 'non disponibile'}
+                    {elseif $disponibilitaProdotto == 'non disponibile'}
                         <i class="ti ti-circle-x"></i>
                         <span>Non disponibile</span>
-                    {elseif $prodotto.disponibilita == 'in arrivo'}
+                    {elseif $disponibilitaProdotto == 'in arrivo'}
                         <i class="ti ti-clock"></i>
                         <span>In arrivo</span>
                     {else}
@@ -191,26 +155,21 @@
                 </div>
 
                 {* Prezzo totale *}
-                <div class="acquisto-prezzo-tot">
-                    {if $prodotto.sconto}
+                {if isset($prezzo)}
+                    <div class="acquisto-prezzo-tot">
                         <span class="prezzo-tot-label">Totale:</span>
-                        <span class="prezzo-tot-value" id="prezzo-tot" data-unit="{$prodotto.prezzo_scontato}">
-                            €{$prodotto.prezzo_scontato|number_format:2}
+                        <span class="prezzo-tot-value" id="prezzo-tot" data-unit="{$prezzo}">
+                            €{$prezzo|number_format:2}
                         </span>
-                    {elseif isset($prodotto.prezzo)}
-                        <span class="prezzo-tot-label">Totale:</span>
-                        <span class="prezzo-tot-value" id="prezzo-tot" data-unit="{$prodotto.prezzo}">
-                            €{$prodotto.prezzo|number_format:2}
-                        </span>
-                    {/if}
-                </div>
+                    </div>
+                {/if}
 
                 {* Bottone Aggiungi al Carrello *}
-                {if $prodotto.isAcquistabile}
-                    <a href="{$base_url}/carrello/aggiungi/{$prodotto.id}"
+                {if $disponibilitaProdotto == 'disponibile'}
+                    <a href="{$base_url}/carrello/aggiungi/{$idProdotto}"
                        class="button btn-add-cart-prodotto"
                        id="btn-add-cart"
-                       data-id="{$prodotto.id}"
+                       data-id="{$idProdotto}"
                        aria-label="Aggiungi al carrello">
                         <i class="ti ti-shopping-cart"></i> Aggiungi al Carrello
                     </a>
@@ -222,7 +181,7 @@
 
                 {* Wishlist *}
                 <button class="btn-wishlist" id="btn-wishlist" type="button"
-                        data-url="{$base_url}/wishlist/aggiungi/{$prodotto.id}"
+                        data-url="{$base_url}/wishlist/aggiungi/{$idProdotto}"
                         aria-label="Aggiungi alla wishlist">
                     <i class="ti ti-heart" id="wishlist-icon"></i> Wishlist
                 </button>
@@ -237,15 +196,15 @@
             <div class="prodotto-descrizione">
                 <h2 class="prodotto-section-title">Descrizione</h2>
                 <div class="prodotto-descrizione-testo">
-                    {$prodotto.descrizione|default:'Descrizione non disponibile.'|nl2br}
+                    {$descrizioneProdotto|default:'Descrizione non disponibile.'|nl2br}
                 </div>
             </div>
 
-            {if isset($prodotto.componenti) && $prodotto.componenti|@count > 0}
+            {if isset($componenti) && $componenti|@count > 0}
                 <div class="prodotto-componenti">
                     <h2 class="prodotto-section-title">Componenti</h2>
                     <ul class="componenti-list">
-                        {foreach $prodotto.componenti as $comp}
+                        {foreach $componenti as $comp}
                             <li class="componenti-item">
                                 <i class="ti ti-point"></i>
                                 {$comp|escape}
@@ -287,10 +246,7 @@
                                             {/foreach}
                                         </div>
                                         <div class="correlato-prezzo">
-                                            {if $correlato.sconto}
-                                                <span class="correlato-prezzo-scontato">€{$correlato.prezzo_scontato|number_format:2}</span>
-                                                <span class="correlato-prezzo-old">€{$correlato.prezzo|number_format:2}</span>
-                                            {elseif isset($correlato.prezzo)}
+                                            {if isset($correlato.prezzo)}
                                                 <span>€{$correlato.prezzo|number_format:2}</span>
                                             {else}
                                                 <span class="prezzo-nd">N/D</span>
@@ -327,7 +283,7 @@
                         </button>
 
                         <div class="recensione-form" id="recensione-form" style="display:none;">
-                            <form action="{$base_url}/recensione/aggiungi/{$prodotto.id}" method="post">
+                            <form action="{$base_url}/recensione/aggiungi/{$idProdotto}" method="post">
 
                                 <div class="form-group">
                                     <label class="form-label" for="rec-titolo">Titolo</label>
@@ -427,16 +383,14 @@
         <h3 class="minicart-success-title">Prodotto aggiunto al carrello!</h3>
 
         <div class="minicart-product">
-            <img src="{$base_url}/img/prodotti/{$prodotto.immagine|escape}"
-                 alt="{$prodotto.nome|escape}"
+            <img src="{$base_url}/img/prodotti/{$imgProdotto|escape}"
+                 alt="{$nomeProdotto|escape}"
                  class="minicart-img">
             <div class="minicart-info">
-                <p class="minicart-nome">{$prodotto.nome|escape}</p>
+                <p class="minicart-nome">{$nomeProdotto|escape}</p>
                 <p class="minicart-prezzo">
-                    {if $prodotto.sconto}
-                        €{$prodotto.prezzo_scontato|number_format:2}
-                    {elseif isset($prodotto.prezzo)}
-                        €{$prodotto.prezzo|number_format:2}
+                    {if isset($prezzo)}
+                        €{$prezzo|number_format:2}
                     {/if}
                 </p>
             </div>
@@ -463,7 +417,6 @@ var utenteLoggato = {if isset($utente)}true{else}false{/if};
 {literal}
 (function() {
 
-    // ── HELPER: APRI MODAL LOGIN (riusa quello globale del layout) ──
     function richiedeLogin() {
         var modal = document.getElementById('login-modal-nav');
         if (modal) {
@@ -473,30 +426,6 @@ var utenteLoggato = {if isset($utente)}true{else}false{/if};
             if (btn) btn.focus();
         }
     }
-
-    // ── GALLERIA IMMAGINI ──
-    var imgs   = document.querySelectorAll('.gallery-main-img');
-    var thumbs = document.querySelectorAll('.gallery-thumb');
-    var currentImg = 0;
-
-    function showImg(index) {
-        imgs.forEach(function(i) { i.classList.remove('is-active'); });
-        thumbs.forEach(function(t) { t.classList.remove('is-active'); });
-        currentImg = (index + imgs.length) % imgs.length;
-        if (imgs[currentImg])   imgs[currentImg].classList.add('is-active');
-        if (thumbs[currentImg]) thumbs[currentImg].classList.add('is-active');
-    }
-
-    var galleryPrev = document.getElementById('gallery-prev');
-    var galleryNext = document.getElementById('gallery-next');
-    if (galleryPrev) galleryPrev.addEventListener('click', function() { showImg(currentImg - 1); });
-    if (galleryNext) galleryNext.addEventListener('click', function() { showImg(currentImg + 1); });
-
-    thumbs.forEach(function(thumb) {
-        thumb.addEventListener('click', function() {
-            showImg(parseInt(this.dataset.index));
-        });
-    });
 
     // ── STEPPER QUANTITÀ + PREZZO TOTALE ──
     var qtyInput  = document.getElementById('qty-input');
@@ -551,7 +480,6 @@ var utenteLoggato = {if isset($utente)}true{else}false{/if};
         if (btnCart) btnCart.focus();
     }
 
-    // ── AJAX AGGIUNGI AL CARRELLO ──
     function aggiungiAlCarrello(idProdotto, quantita, callback) {
         fetch('/carrello/aggiungi', {
             method: 'POST',

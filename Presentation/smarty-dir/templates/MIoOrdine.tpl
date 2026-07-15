@@ -121,15 +121,6 @@
                                 </div>
                             </div>
 
-                            {* ── AZIONI ── *}
-                            {if isset($ordine.isAnnullabile) && $ordine.isAnnullabile}
-                                <div class="mieordini-actions">
-                                    <button type="button" class="mieordini-btn-annulla" data-id="{$ordine.id|escape}">
-                                        <i class="ti ti-x"></i> Annulla ordine
-                                    </button>
-                                </div>
-                            {/if}
-
                         </div>
 
                     </div>
@@ -148,19 +139,6 @@
                 </a>
             </div>
         {/if}
-
-        {* ── POPUP CONFERMA ANNULLAMENTO ── *}
-        <div class="mieordini-popup-overlay" id="mieordini-annulla-popup" hidden>
-            <div class="mieordini-popup-box">
-                <i class="ti ti-alert-triangle mieordini-popup-icon"></i>
-                <p class="mieordini-popup-message">Sei sicuro di voler annullare questo ordine?</p>
-
-                <div class="mieordini-popup-actions">
-                    <button type="button" class="mieordini-btn-secondary" id="mieordini-annulla-indietro">Indietro</button>
-                    <button type="button" class="mieordini-btn-primary" id="mieordini-annulla-conferma">Conferma</button>
-                </div>
-            </div>
-        </div>
 
         {* ── POPUP MESSAGGI (feedback errore) ── *}
         <div class="mieordini-popup-overlay" id="mieordini-popup" hidden>
@@ -186,10 +164,7 @@
     var popupMessage = document.getElementById('mieordini-popup-message');
     var popupClose    = document.getElementById('mieordini-popup-close');
 
-    var annullaPopup     = document.getElementById('mieordini-annulla-popup');
-    var annullaIndietro  = document.getElementById('mieordini-annulla-indietro');
-    var annullaConferma  = document.getElementById('mieordini-annulla-conferma');
-    var idDaAnnullare      = null;
+    
 
     function mostraPopup(messaggio) {
         popupMessage.textContent = messaggio;
@@ -221,56 +196,10 @@
                 return;
             }
 
-            // ── APERTURA POPUP CONFERMA ANNULLAMENTO ──
-            var annullaBtn = e.target.closest('.mieordini-btn-annulla');
-            if (annullaBtn) {
-                idDaAnnullare = annullaBtn.getAttribute('data-id');
-                annullaPopup.removeAttribute('hidden');
-            }
         });
     }
 
-    if (annullaIndietro) {
-        annullaIndietro.addEventListener('click', function() {
-            idDaAnnullare = null;
-            annullaPopup.setAttribute('hidden', '');
-        });
-    }
-
-    // ── CONFERMA ANNULLAMENTO (AJAX) ──
-    if (annullaConferma) {
-        annullaConferma.addEventListener('click', function() {
-            if (!idDaAnnullare) return;
-
-            var id = idDaAnnullare;
-
-            fetch('{/literal}{$base_url}{literal}/account/ordini/annulla', {
-                method: 'POST',
-                headers: { 'Content-Type': 'application/json' },
-                credentials: 'same-origin',
-                body: JSON.stringify({ id: id })
-            })
-            .then(function(response) { return response.json(); })
-            .then(function(data) {
-                annullaPopup.setAttribute('hidden', '');
-                idDaAnnullare = null;
-
-                if (data.status === 'ok') {
-                    window.location.reload();
-                } else if (data.reason === 'non_annullabile') {
-                    mostraPopup('Questo ordine non può più essere annullato.');
-                } else {
-                    mostraPopup('Non è stato possibile annullare l\'ordine, riprova più tardi.');
-                }
-            })
-            .catch(function() {
-                annullaPopup.setAttribute('hidden', '');
-                idDaAnnullare = null;
-                mostraPopup('Si è verificato un errore di connessione, riprova più tardi.');
-            });
-        });
-    }
-
+    
 })();
 {/literal}
 </script>
