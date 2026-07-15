@@ -24,13 +24,13 @@ class CNavigazione extends BaseController {
     public function mostraHome(): void {
         //Recuperiamo i prodotti in offerta e i nuovi arrivi tramite il pm
         //Il pm gestisce già gli errori internamente e restituisce [] in caso di fallimento
-        $offerte = FPersistentManager::PMfindProdottiInOfferta(5, 0); //DA CREARE
+        $offerte = FPersistentManager::PMfindProdottiInOfferta(5, 0); 
         $nuoviArrivi = FPersistentManager::PMgetObjListOrdered(EProdotto::class, 'dataPubblicazione', 'DESC', 5);
 
 
         //Impacchettiamo i dati specifici richiesti da home.tpl
         $datiPagina = [
-            'offerte' => $this->prodottiToArray($offerte),
+            'offerte' => $this->prodottiToArray($offerte['risultati'] ?? []),
             'nuovi_arrivi' => $this->prodottiToArray($nuoviArrivi),
         ];
 
@@ -45,6 +45,12 @@ class CNavigazione extends BaseController {
          */
         ViewHome::mostraHome($datiLayout);
 
+    }
+
+    protected function getBreadcrumbs(string $currentPage = ''): array {
+        return [
+            ['label' => 'Home', 'url' => '/'],
+        ];
     }
 
 

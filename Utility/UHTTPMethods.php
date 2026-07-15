@@ -127,4 +127,47 @@ class UHTTPMethods {
         return $value;
     }
 
+    /**
+     * Recupera e valida un valore booleano da una richiesta POST.
+     * Gestisce stringhe come 'true', '1', 'on' e 'yes' come TRUE.
+     * Se la chiave non esiste, restituisce il valore di default indicato.
+     */
+    public static function postBool(string $key, bool $default = false): bool {
+        if (!isset($_POST[$key])) {
+            return $default;
+        }
+
+        $value = $_POST[$key];
+
+        //Se è già un booleano per qualche motivo nativo o manipolazione precedente
+        if (is_bool($value)) {
+            return $value;
+        }
+
+        //Filtra e converte stringhe comuni in booleani reali.
+        //'true', '1', 'on' e 'yes' restituiscono true; tutto il resto false
+        return filter_var($value, FILTER_VALIDATE_BOOLEAN);
+    }
+
+    /**
+     * Verifica se la richiesta corrente è una chiamata AJAX (asincrona).
+     * Controlla la presenza dell'header HTTP 'X-Requested-With'.
+     */
+    public static function isAjax(): bool {
+        return isset($_SERVER['HTTP_X_REQUESTED_WITH']) && 
+            strtolower($_SERVER['HTTP_X_REQUESTED_WITH']) === 'xmlhttprequest';
+    }
+
+    /**
+     * Recupera l'URL della pagina precedente (HTTP_REFERER).
+     * Se non è presente o è vuoto, restituisce il valore di fallback indicato.
+     * $_SERVER['HTTP_REFERER'] è una variabile globale di PHP che viene riempita automaticamente
+     * dal browser e contiene l'URL della pagina web precedente
+     */
+    public static function getReferer(string $fallback = '/'): string {
+        return (isset($_SERVER['HTTP_X_REQUESTED_WITH']) === false && isset($_SERVER['HTTP_REFERER'])) 
+        ? $_SERVER['HTTP_REFERER'] 
+        : $fallback;
+    }
+
 }

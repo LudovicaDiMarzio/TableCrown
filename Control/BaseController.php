@@ -7,10 +7,20 @@ namespace TableCrown\Control;
 use TableCrown\Utility\USession;
 use TableCrown\Utility\UHTTPMethods;
 use TableCrown\Utility\UFlashMessage;
+use TableCrown\Utility\UCookie;
+use TableCrown\Entity\EUtente;
 use TableCrown\Entity\EProdotto;
 use TableCrown\Entity\Enumerativi\DisponibilitaProdotto;
 use TableCrown\Entity\ERecensione;
 use TableCrown\Foundation\FPersistentManager;
+use TableCrown\Entity\EEvento;
+use TableCrown\Entity\ESerata;
+use TableCrown\Entity\ETorneo;
+use TableCrown\Entity\EChallenge;
+use TableCrown\Entity\EGiocoDaTavolo;
+use TableCrown\Entity\EBustine;
+use TableCrown\Entity\EPortaDadi;
+
 
 
 abstract class BaseController {
@@ -43,11 +53,14 @@ abstract class BaseController {
      * Restituisce l'array completo di tutti i dati uniti.
      */
     public function preparaDatiLayout(string $currentPage, $data = []): array {
+        //Controllo automatico remember me prima di generare il layout
+        $this->controllaRememberMe();
+
         //Variabili globali sempre richieste dal layout
         $globalData = [
-            'base_url' => 'https://tablecrown.it', 
+            'base_url' => BASE_URL, 
             'current_page' => $currentPage, //Indica la pagina attiva (es. 'catalogo', 'eventi', ecc.)
-            'breadcrumbs' => $this->getBreadcrumbs(), //Il percorso di navigazione
+            'breadcrumbs' => $this->getBreadcrumbs($currentPage), //Il percorso di navigazione
             'utente' => $this->utenteToArray(),
         ];
 
@@ -83,7 +96,7 @@ abstract class BaseController {
      * Metodo di default per la gestione dei Breadcrumbs (le pagine interne faranno l'override per restituire il loro percorso specifico).
      * Restituisce un array vuoto perchè di default la homepage non mostra i breadcrumbs.
      */
-    protected function getBreadcrumbs(): array {
+    protected function getBreadcrumbs(string $currentPage = ''): array {
         return [];
     }
 
@@ -178,7 +191,7 @@ abstract class BaseController {
             return null;
         }
         return [
-            'name' => USession::getSessionElement('nickname'), //La sessione salva 'nickname' (PERCHè? COME LO SO?), esposto come 'name' verso Presentation
+            'name' => USession::getSessionElement('nickname'), //La sessione salva 'nickname', esposto come 'name' verso Presentation
         ];
     }
 
@@ -205,7 +218,7 @@ abstract class BaseController {
     }
 
     /**
-     * Converte una ERecensione in array associativo per Presentation.
+     * Converte una ERecensione in un array associativo per Presentation.
      */
     protected function recensioneToArray(ERecensione $recensione): array {
         return [
@@ -229,10 +242,71 @@ abstract class BaseController {
     }
 
     /**
+     * Converte un EEvento in un array associativo per Presentation.
+     * (considera solo i campi comuni a tutti i tipi di evento)
+     */
+    protected function eventoToArray(EEvento $evento): array {
+        return [
+            'idEvento'          => (int) $evento->getIdEvento(),
+            'nomeEvento'        => $evento->getNomeEvento(),
+            'imgEvento'         => $evento->getImgEvento(),
+            'dataInizio'        => $evento->getDataInizio()->format('Y-m-d H:i:s'),
+            'maxPartecipanti'   => $evento->getMaxPartecipanti(),
+            'statoEvento'       => $evento->getStatoEvento()->value, //valori non ancora "puliti", da rivedere se/quando serve esporli come identificatore tecnico altrove
+            'numeroPartecipanti'=> $evento->getNumeroPartecipanti(),
+            'richiedeQuota'     => $evento->richiedeQuota(),
+        ];
+    }
+
+    /**
+     * Converte un ESerata in un array associativo per Presentation.
+     */
+    protected function serataToArray(ESerata $serata): array {
+        return array_merge($this->eventoToArray($serata), [
+            'tipoSerata' => $serata->getTipoSerata(),
+        ]);
+    }
+
+    /**
+     * Converte un ETorneo in un array associativo per Presentation.
+     */
+    protected function torneoToArray(ETorneo $torneo): array {
+        $challenge = $torneo->getChallenge();
+        return array_merge($this->eventoToArray($torneo), [
+            'quotaIscrizione' => $torneo->getQuotaIscrizione()->getValore(),
+            'premio' => $torneo->getPremio()->getNomeProdotto(),
+            'gioco' => $torneo->getGioco()->getNomeProdotto(),
+            'challenge' => $challenge !== null ? $this->eventoLinkMinimo($challenge): null,
+        ]);
+    }
+
+    /**
+     * Converte un EChallenge in un array associativo per Presentation.
+     */
+    protected function challengeToArray(EChallenge $challenge): array {
+        return array_merge($this->eventoToArray($challenge), [
+            'quotaIscrizione' => $challenge->getQuotaIscrizione()->getValore(),
+            'premio' => $challenge->getPremio()->getNomeProdotto(),
+            'tornei' => array_map(fn($t) => $this->eventoLinkMinimo($t), $challenge->getTornei()->toArray()),
+        ]);
+    }
+
+    /**
+     * Rappresentazione minimale di un EEvento, per link cliccabili.
+     */
+    protected function eventoLinkMinimo(EEvento $evento): array {
+        return [
+            'idEvento'          => (int) $evento->getIdEvento(),
+            'nomeEvento'        => $evento->getNomeEvento(),
+        ];
+    }
+
+    /**
      * Restituisce prodotti "correlati" con CRITERIO PROVVISORIO: TUTTI I PRODOTTI
      * DISPONIBILI NEL CATALOGO, ESCLUSI QUELLI IN $idEsclusi, LIMITATI A $limit.
      * DA SOSTITUIRE QUANDO DISPONIBILE IL METODO NEL PM.
      */
+    //DA MODIFICAREEEEE!!!!!!
     protected function prodottiCorrelati(array $idsEsclusi, int $limit = 8): array {
         $tuttiProdotti = FPersistentManager::PMgetAll(EProdotto::class);
 
@@ -244,6 +318,77 @@ abstract class BaseController {
         $correlati = array_slice(array_values($correlati), 0, $limit);
 
         return $this->prodottiToArray($correlati);
+    }
+
+    /**
+     * Formatta un importo come stringa con 2 decimali fissi, usando il 
+     * punto come separatore. Necessario perché alcuni .tpl in Presentation
+     * non applicano number_format(), quindi il dato deve arrivare già pronto
+     * per la stampa duretta.
+     */
+    protected function formattaImporto(float $importo): string {
+        return number_format($importo, 2, '.', '');
+    }
+
+    /**
+     * Recupera l'utente correntemente loggato nel DB, verificando che abbia il 
+     * ruolo 'utente'.
+     */
+    protected function utenteCorrente(): EUtente {
+        $this->requireRole('utente');
+        $idUtente = USession::getSessionElement('id_persona');
+        return FPersistentManager::PMgetObjOnAttribute(EUtente::class, 'idPersona', $idUtente);
+    }
+
+    /**
+     * Determina l'URL del catalogo specifico in base alla classe 
+     * dell'oggetto prodotto.
+     */
+    protected function urlCatalogo(EProdotto $prodotto): string {
+        if ($prodotto instanceof EGiocoDaTavolo) {
+            return '/catalogo/giochi-da-tavolo';
+        } 
+
+        if ($prodotto instanceof EBustine) {
+            return '/catalogo/bustine';
+        }
+
+        if ($prodotto instanceof EPortaDadi) {
+            return '/catalogo/porta-dadi';
+        }
+
+        //Fallback generico di sicurezza
+        return '/';
+    }
+
+
+    /**
+     * Verifica la presenza del cookie Remember Me e, se valido,
+     * ripristina la sessione dell'utente in modo trasparente.
+     */
+    private function controllaRememberMe(): void {
+        //Se l'utente è già loggaro in sessione, non dobbiamo fare nulla
+        if ($this->isLoggedIn()) {
+            return;
+        }
+
+        //Cerchiamo se il browser ha il cookie del "Remember Me"
+        $token = UCookie::getCookie('remember_me');
+
+        if ($token) {
+            //Chiediamo al DB se esiste un utente con questo token preciso
+            $utente = FPersistentManager::PMgetObjOnAttribute(EUtente::class, 'rememberToken', $token);
+
+            if ($utente) {
+                //Se il token coincide, ripristiniamo la sessione
+                USession::setSessionElement('id_persona', $utente->getIdPersona());
+                USession::setSessionElement('ruolo', 'utente');
+                USession::setSessionElement('nickname', $utente->getNomePersona());
+            } else {
+                //Se il cookie sul PC è alterato o scaduto sul DB, lo cancelliamo per sicurezza
+                UCookie::deleteCookie('remember_me');
+            }
+        }
     }
 
 }

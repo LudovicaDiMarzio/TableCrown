@@ -4,10 +4,13 @@ namespace TableCrown\Control;
 use TableCrown\Utility\USession;
 use TableCrown\Utility\UHTTPMethods;
 use TableCrown\Utility\UFlashMessage;
+use TableCrown\Utility\UCookie;
 use TableCrown\Entity\EUtente;
 use TableCrown\Entity\EAmministratore;
 use TableCrown\Entity\EGestore;
 use TableCrown\Foundation\FPersistentManager;
+use TableCrown\Presentation\Views\ViewAutenticazione;
+use InvalidArgumentException;
 
 /**
  * Controller deputato alla gestione del ciclo di vita dell'autenticazione.
@@ -20,10 +23,43 @@ class CAutenticazione extends BaseController {
     }
 
     /**
-     * Mostra la pagina con il form di login / registrazione (Richesta GET).
-     * URL: /accedi
+     * Mostra il form di login (Richesta GET).
+     * URL: GET /accedi
      */
-    public function mostraForm(): void {
+    public function mostraFormLogin(): void {
+        //Se l'utente è già loggato, lo reindirizziamo alla home.
+        if ($this->isLoggedIn()) {
+            header('Location: /');
+            exit();
+        }
+
+        //Recupero del parametro redirect_to per mantenere la destinazione originale
+        $redirectTo = UHTTPMethods::get('redirect_to');
+
+        //Recupero dei valori vecchi salvati in sessione dopo un errore (Pattern PRG)
+        $emailValue = USession::getSessionElement('old_email');
+        $ricordami = USession::getSessionElement('old_ricordami');
+
+        //Consumiamo i dati della sessione subito dopo la lettura per non lasciarli appesi al refresh successivo
+        USession::unsetSessionElement('old_email');
+        USession::unsetSessionElement('old_ricordami');
+
+        //Prepariamo i dati del layout (in questo caso non servono dati specifici dal DB).
+        $datiLayout = $this->preparaDatiLayout('accedi', [
+            'redirect_to' => $redirectTo,
+            'email_value' => $emailValue,
+            'ricordami' => (bool)$ricordami,
+        ]);
+
+        //Chiamata alla View
+        ViewAutenticazione::mostraFormLogin($datiLayout);
+    }
+
+    /**
+     * Mostra il form di registrazione (Richesta GET).
+     * URL: GET /registrati
+     */
+    public function mostraFormRegistrazione(): void {
         //Se l'utente è già loggato, lo reindirizziamo alla home.
         if ($this->isLoggedIn()) {
             header('Location: /');
@@ -31,43 +67,88 @@ class CAutenticazione extends BaseController {
         }
 
         //Prepariamo i dati del layout (in questo caso non servono dati specifici dal DB).
-        $data = $this->preparaDatiLayout('autenticazione');
+        $datiLayout = $this->preparaDatiLayout('registrati');
 
-        //TODO:
-        //VAutenticazione::mostraForm($data);
-        echo "Ecco il form di Login e Registrazione!"; //TEST PROVVISORIO (DA CANCELLARE)
+        //Chiamata alla View
+        ViewAutenticazione::mostraFormRegistrazione($datiLayout);
     }
 
     /**
      * Gestisce l'invio dei dati del form di Login (Richiesta POST).
-     * URL: /login
+     * URL: POST /login
      */
-    public function login(): void {
-        //Recuperiamo i dati inseriti dall'utente nel form tramite l'utility HTTP
-        $email = UHTTPMethods::post('email');
-        $password = UHTTPMethods::post('password');
-
+    public function login(): void { 
+        try {
+            //Recuperiamo i dati inseriti dall'utente nel form tramite l'utility HTTP
+            $email = UHTTPMethods::post('email');
+            $password = UHTTPMethods::post('password');
+            $redirectTo = UHTTPMethods::postString('redirect_to'); //legge il campo hidden del form
+            $ricordamiBox = UHTTPMethods::post('ricordami'); //può essere null se non spuntato
+        } catch (\InvalidArgumentException $e) {
+            UFlashMessage::addMessage('danger', $e->getMessage());
+            header('Location: /accedi');
+            exit();
+        }
+       
         //Controllo di validità dei campi obbligatori
         if (!$email || !$password) {
             //Se manca uno dei due, impostiamo un messaggio di errore rapido
             UFlashMessage::addMessage('danger', 'Tutti i campi sono obbligatori.');
-            //Pattern PRG: ricarichiamo la pagina del form per mostrare l'errore in sicurezza
-            header('Location: /accedi');
+
+            //UX: Salviamo l'email in sessione per ripopolare il form nel form successivo
+            USession::setSessionElement('old_email', $email);
+            USession::setSessionElement('old_ricordami', $ricordamiBox !== null);
+
+            //Costruiamo la query string per non perdere il redirect_to originale durante il PRG
+            $urlRedirect = '/accedi' . ($redirectTo ? '?redirect_to=' . urlencode($redirectTo) : '');
+            header('Location: ' . $urlRedirect);
             exit();
         }
 
         //Verifichiamo le credenziali sul DB reale:
-        //Chiediamo a Foundation di cercare la persona nel DB tramite la mail inserita
-        $persona = FPersistentManager::PMgetObjOnAttribute(EUtente::class, 'emailpersona', $email);
+        //EPersona è una MappedSuperclass (non esiste una tabella comune da interrogare).
+        //Dobbiamo provare le tre tabelle in sequenza, finché una non risponde.
+        $persona = FPersistentManager::PMgetObjOnAttribute(EUtente::class, 'emailpersona', $email)
+            ?? FPersistentManager::PMgetObjOnAttribute(EAmministratore::class, 'emailpersona', $email)
+            ?? FPersistentManager::PMgetObjOnAttribute(EGestore::class, 'emailpersona', $email);
 
         if(!$persona || !$persona->verificaPassword($password)) {
             UFlashMessage::addMessage('danger', 'Email o password errate. Riprova.');
-            header('Location: /accedi');
+
+            //UX: Salviamo i vecchi calori prima del redirect PRG
+            USession::setSessionElement('old_email', $email);
+            USession::setSessionElement('old_ricordami', $ricordamiBox !== null);
+
+            $urlRedirect = '/accedi' . ($redirectTo ? '?redirect_to=' . urlencode($redirectTo) : '');
+            header('Location: ' . $urlRedirect);
             exit();
         }
 
         //Salviamo l'ID della persona in sessione
         USession::setSessionElement('id_persona', $persona->getIdPersona());
+        USession::setSessionElement('nickname', $persona->getNomePersona());
+
+        //Gestione "Ricordami" (REMEMBER ME) tramite cookie
+        if ($ricordamiBox !== null) {
+            //Generiamo un token sicuro, unico e casuale
+            $remeberToken = bin2hex(random_bytes(32));
+
+            //Salviamo il token nel database sull'oggetto persona loggato
+            //Nota: l'entity EUtente deve avere il setter impostaRememberToken() DA AGGIUNGERE
+            $persona->impostaRememberToken($remeberToken);
+            FPersistentManager::PMsaveObj($persona); //Aggiorna l'utente sul DB
+
+            //Inviamo il cookie al browser dell'utente (scadenza 30 giorni)
+            UCookie::setCookie('remember_me', $remeberToken, 30);
+        } else {
+            //Se l'utente fa il login senza spuntare "ricordami", puliamo vecchi cookie residui
+            if (UCookie::getCookie('remember_me')) {
+                UCookie::deleteCookie('remember_me');
+                $persona->impostaRememberToken(null);
+                FPersistentManager::PMsaveObj($persona);
+            }
+
+        }
 
         //Controlliamo quale sottoclasse ha restituito Doctrine e mappiamo il ruolo testuale in sessione, così il BaseController può fare i controlli.
         if ($persona instanceof EAmministratore) {
@@ -78,14 +159,10 @@ class CAutenticazione extends BaseController {
             USession::setSessionElement('ruolo', 'gestore');
             UFlashMessage::addMessage('success', 'Bentornato Gestore!');
             header("Location: /gestore/dashboard"); //reindirizza alla dashboard gestore
-        } elseif ($persona instanceof EUtente) {
+        } else { //in questo caso è un EUtente
             USession::setSessionElement('ruolo', 'utente');
             UFlashMessage::addMessage('success', 'Login effettuato con successo!');
             header("Location: /"); //reindirizza alla home
-        } else {
-            //Se le credenziali sono errate (mail non trovata o password sbagliata), impostiamo un messaggio di errore rapido
-            UFlashMessage::addMessage('danger', 'Ruolo utente non riconosciuto. Riprova.');
-            header('Location: /accedi');
         }
 
         exit();
@@ -93,21 +170,27 @@ class CAutenticazione extends BaseController {
 
     /**
      * Gestisce la registrazione di un nuovo utente normale (Richiesta POST)
-     * URL: /registrazione
+     * URL: POST /registrazione
      */
-    public function registrazione(): void {
+    public function registrazione(): void { 
         //Recuperiamo i campi della registrazione
-        $nome = UHTTPMethods::post('nome');
-        $email = UHTTPMethods::post('email');
-        $password = UHTTPMethods::post('password');
-        $eta = UHTTPMethods::post('eta'); //OBBLIGATORIA?????????
-
+        try {
+            $nome = UHTTPMethods::postString('nome');
+            $email = UHTTPMethods::postString('email');
+            $password = UHTTPMethods::postString('password');
+            $eta = (int) UHTTPMethods::postInt('eta');
+        } catch (\InvalidArgumentException $e) {
+            UFlashMessage::addMessage('danger', $e->getMessage());
+            header('Location: /registrati');
+            exit();
+        }
+         
         //Controllo di validità dei campi obbligatori
-        if (!$nome || !$email || !$password) {
+        if (!$nome || !$email || !$password || !$eta) { 
             //Se manca uno dei tre, impostiamo un messaggio di errore rapido
             UFlashMessage::addMessage('danger', 'Tutti i campi sono obbligatori.');
             //Pattern PRG: ricarichiamo la pagina del form per mostrare l'errore in sicurezza
-            header('Location: /accedi');
+            header('Location: /registrati');
             exit();
         }
 
@@ -116,13 +199,21 @@ class CAutenticazione extends BaseController {
 
         if ($esiste) {
             UFlashMessage::addMessage('danger', 'Questa email è già registrata.');
-            header('Location: /accedi');
+            header('Location: /registrati');
             exit();
         }
 
-        $passwordCriptata = password_hash($password, PASSWORD_BCRYPT);
-
-        $nuovoUtente = new EUtente($nome, $email, $passwordCriptata, $eta); //MANCA IL PLAYERLEVEL (DA SISTEMAE NELL'ENTITY)
+        try {
+            //Il costruttore di EUtente valida internamente nome, email, password e età e
+            //lancia InvalidArgumentException se qualcosa non va; qui la intercettiamo
+            //per mostrare un messaggio leggibile invece di un errore fatale.
+            $nuovoUtente = new EUtente($nome, $email, $password, $eta); //la password viene criptata nell'entity
+        } catch (InvalidArgumentException $e) {
+            //Se l'utente non ha completato i campi obbligatori, mostriamo un messaggio di errore
+            UFlashMessage::addMessage('danger', $e->getMessage());
+            header('Location: /registrati');
+            exit();
+        }
 
         $salvato = FPersistentManager::PMsaveObj($nuovoUtente);
 
@@ -132,7 +223,7 @@ class CAutenticazione extends BaseController {
             exit();
         } else {
             UFlashMessage::addMessage('danger', 'Si è verificato un errore durante la registrazione. Riprova.');
-            header("Location: /accedi");
+            header("Location: /registrati");
         }
 
         exit();
@@ -140,10 +231,25 @@ class CAutenticazione extends BaseController {
 
     /**
      * Gestisce il logout dell'utente (Richiesta GET o POST).
-     * URL: /logout
+     * URL: GET /logout
      */
     public function logout(): void {
-        //Distruggiamo la sessione corrente, svuotando i token di autenticazione
+        //Prima di distruggere la sessione, recuperiamo l'utente per pulire il DB
+        $idPersona = USession::getSessionElement('id_persona');
+        $ruolo = USession::getSessionElement('ruolo');
+
+        if ($idPersona && $ruolo === 'utente') {
+            $utente = FPersistentManager::PMgetObjOnAttribute(EUtente::class, 'idPersona', $idPersona);
+            if ($utente) {
+                $utente->impostaRememberToken(null);
+                FPersistentManager::PMsaveObj($utente);
+            }
+        }
+
+        //Cancelliamo fisicamente il cookie dal browser dell'utente
+        UCookie::deleteCookie('remember_me');
+
+        //Distruggiamo la sessione corrente
         USession::destroySession();
 
         //Messaggio di conferma di avvenuto logout
@@ -155,12 +261,19 @@ class CAutenticazione extends BaseController {
     }
 
     /**
-     * Sovrascrive il metodo del BaseController per definire il percorso del Login.
+     * Sovrascrive il metodo del BaseController.
+     * Breadcrumb differenziato in pase alla pagina corrente (login vs registrazione).
      */
-    protected function getBreadcrumbs(): array {
-        return [
-            ['label' => 'Home', 'url' => '/'],
-            ['label' => 'Login', 'url' => '/accedi']
-        ];
+    protected function getBreadcrumbs(string $currentPage = ''): array {
+        return match ($currentPage) {
+            'registrati' => [
+                ['label' => 'Home', 'url' => '/'],
+                ['label' => 'Registrati', 'url' => '/registrati']
+            ],
+            default => [
+                ['label' => 'Home', 'url' => '/'],
+                ['label' => 'Login', 'url' => '/accedi']
+            ],
+        };
     }
 }

@@ -2,6 +2,8 @@
 // Presentation/Views/ViewBustine.php
 namespace TableCrown\Presentation\Views;
 
+use SmartyConfiguration;
+
 class ViewBustine extends BaseViewCatalogo {
     private const TEMPLATE = 'catalogo/bustine.tpl';
 

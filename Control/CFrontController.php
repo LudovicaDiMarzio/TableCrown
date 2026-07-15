@@ -108,13 +108,13 @@ class CFrontController {
             case 'accedi':
                 //Corrisponde a: GET /accedi
                 $controller = new CAutenticazione();
-                $controller->mostraForm();
+                $controller->mostraFormLogin();
                 break;
 
             case 'registrati':
                 //Corrisponde a: GET /registrati
                 $controller = new CAutenticazione();
-                $controller->mostraForm();
+                $controller->mostraFormRegistrazione();
                 break;
 
             case 'logout':
@@ -123,13 +123,16 @@ class CFrontController {
                 $controller->logout();
                 break;
 
-            case 'wishlist':
-                $controller = new CWishlist();
-                if ($sottoRoute === 'aggiungi' && $metodoHTTP === 'POST') {
-                    $controller->aggiungiAllaWishlist();
-                } else {
-                    $controller->mostraWishlist();
-                }
+            case 'login':
+                //Corrisponde a: POST /login
+                $controller = new CAutenticazione();
+                $controller->login();
+                break;
+
+            case 'registrazione':
+                //Corrisponde a: POST /registrazione
+                $controller = new CAutenticazione();
+                $controller->registrazione();
                 break;
 
             case 'carrello':
@@ -146,7 +149,17 @@ class CFrontController {
                     $controller->mostraCarrello();
                 }
                 break;
-
+/* 
+            case 'wishlist': //DA RIVEDERE
+                $controller = new CWishlist();
+                if ($sottoRoute === 'aggiungi' && $metodoHTTP === 'POST') {
+                    $controller->aggiungiAllaWishlist();
+                } else {
+                    $controller->mostraWishlist();
+                }
+                break;
+ */
+/* 
             case 'profilo':
                 $controller = new CProfilo();
                 //Gestione delle sotto-rotte dell'area riservata
@@ -161,6 +174,24 @@ class CFrontController {
                     $controller->mostraProfiloGenerale();
                 }
                 break;
+                 */
+
+            case 'profilo':
+                $controller = new CProfilo();
+                if ($sottoRoute === 'modifica' && $metodoHTTP === 'GET') {
+                    $controller->mostraAccount();
+                } elseif ($sottoRoute === 'modifica' && $metodoHTTP === 'POST') {
+                    if ($sottoRoute2 === 'password') {
+                        $controller->cambiaPassword();
+                    } elseif ($sottoRoute2 === 'elimina') {
+                        $controller->eliminaAccount();
+                    } else {
+                        $controller->aggiornaAccount();
+                    }
+                } else {//DA CAMBIARE
+                    $controller->mostraHub();
+                } 
+
 
             case 'chi-siamo':
                 $controller = new CPagineStatiche();

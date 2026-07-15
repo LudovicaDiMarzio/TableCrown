@@ -49,7 +49,7 @@ class CProdotto extends BaseController {
         $dati = array_merge($this->prodottoToArray($prodotto),[
             'descrizioneProdotto' => $prodotto->getDescrizioneProdotto(),
             'quantita' => $prodotto->getQuantita(),
-            'dataPubblicazione' => $prodotto->getDataPubblicazione(),
+            'dataPubblicazione' => $prodotto->getDataPubblicazione()->format('Y-m-d H:i:s'),
             'recensioni' => $this->recensioniToArray($prodotto->getRecensioni()),
             'correlati' => $this->prodottiCorrelati([$prodotto->getIdProdotto()]),
             'userHasPurchased' => $this->haAcquistatoProdotto($prodotto->getIdProdotto()),
@@ -91,7 +91,38 @@ class CProdotto extends BaseController {
         if (!$this->isLoggedIn()) {
             return false;
         }
-        //TODO: FPersistentManager::PMuserHasPurchased($idUtente, $idProdotto);
+        //TODO: 
+        //$idUtente = USession::getSessionElement('id_persona');
+        //if (!$idUtente) {
+        //    return false;
+        //}
+        //FPersistentManager::PMuserHasPurchased($idUtente, $idProdotto);
         return false; //DA TOGLIERE QUANDO DISPONIBILE IL METODO DEL PM
+    }
+
+    protected function getBreadcrumbs(string $currentPage = ''): array {
+        $breadcrumbs = [
+            ['label' => 'Home', 'url' => '/'],
+        ];
+
+        //Recuperiamo l'id del prodotto corrente dalla route o dal GET
+        $idProdotto = UHTTPMethods::get('id') ?? 0;
+        $prodotto = FPersistentManager::PMgetObjOnAttribute(EProdotto::class, 'idProdotto', $idProdotto);
+
+        if ($prodotto) {
+            if ($prodotto instanceof EGiocoDaTavolo) {
+                $breadcrumbs[] = ['label' => 'Giochi da tavolo', 'url' => '/catalogo/giochi-da-tavolo'];
+            } elseif ($prodotto instanceof EBustine) {
+                $breadcrumbs[] = ['label' => 'Bustine', 'url' => '/catalogo/bustine'];
+            } elseif ($prodotto instanceof EPortaDadi) {
+                $breadcrumbs[] = ['label' => 'Porta dadi', 'url' => '/catalogo/porta-dadi'];
+            }
+
+            $breadcrumbs[] = ['label' => $prodotto->getNomeProdotto(), 'url' => '#']; //'#' per dire che quel link non punta ad una nuova pagina, ma mantiene l'utente sulla pagina in cui si trova già.
+        } else {
+            $breadcrumbs[] = ['label' => 'Prodotti', 'url' => '#'];
+        }
+
+        return $breadcrumbs;
     }
 }

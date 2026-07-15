@@ -2,6 +2,8 @@
 // Presentation/Views/ViewGiochiDaTavolo.php
 namespace TableCrown\Presentation\Views;
 
+use SmartyConfiguration;
+
 class ViewGiochiDaTavolo extends BaseViewCatalogo {
     private const TEMPLATE = 'catalogo/GiochiDaTavolo.tpl';
 

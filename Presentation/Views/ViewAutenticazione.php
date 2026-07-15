@@ -1,7 +1,8 @@
 <?php
+
 namespace TableCrown\Presentation\Views;
 
-use TableCrown\Foundation\SmartyConfiguration;
+use SmartyConfiguration;
 
 /**
  * Classe deputata alla presentazione delle interfacce di autenticazione (login e registrazione).

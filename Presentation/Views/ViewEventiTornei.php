@@ -2,6 +2,8 @@
 // Presentation/Views/ViewEventiTornei.php
 namespace TableCrown\Presentation\Views;
 
+use SmartyConfiguration;
+
 class ViewEventiTornei extends BaseViewEventi {
     private const TEMPLATE = 'eventi/catalogo_tornei.tpl';
 

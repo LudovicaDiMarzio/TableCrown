@@ -1,7 +1,8 @@
 <?php
 // Presentation/Views/ViewModificaAccount.php
+namespace TableCrown\Presentation\Views;
 
-require_once __DIR__ . '/SmartyConfiguration.php';
+use SmartyConfiguration;
 
 class ViewModificaAccount {
 
