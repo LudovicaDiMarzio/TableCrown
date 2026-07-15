@@ -2,6 +2,8 @@
 // Presentation/Views/ViewEventiHome.php
 namespace TableCrown\Presentation\Views;
 
+use SmartyConfiguration;
+
 class ViewEventiHome extends BaseViewEventi {
     private const TEMPLATE = 'eventi/eventi.tpl';
 
