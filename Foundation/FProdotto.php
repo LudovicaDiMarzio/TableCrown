@@ -34,7 +34,7 @@ class FProdotto{
             */
             //la clonatura della query viene fatta prima della suddivisione dei risultati per le pagine, perchè altrimenti il count sarebbe falzato e basato sui risultati "limitati" della query
             $qbCount = clone $qb;
-            $qbCount->select('count(g.id)');
+            $qbCount->select('count(p.idProdotto)');
             //poichè count restituisce un numero scalare non possiamo usare il getResult(), ma usiamo il getSingleScalarResult() che restituisce un numero scalare
             $totale = $qbCount->getQuery()->getSingleScalarResult();
 
