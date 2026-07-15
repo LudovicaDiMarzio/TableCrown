@@ -12,6 +12,7 @@ use TableCrown\Entity\EChallenge;
 use TableCrown\Entity\EPrezzo;
 use TableCrown\Entity\EProdotto;
 use TableCrown\Foundation\FPersistentManager;
+use TableCrown\Presentation\Views\ViewEventi;
 use DateTime;
 
 /**
