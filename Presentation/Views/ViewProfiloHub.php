@@ -5,22 +5,12 @@ namespace TableCrown\Presentation\Views;
 
 use SmartyConfiguration;
 
-class ViewProfiloHub {
+class ViewProfiloHub extends ViewProfiloBase {
 
     public static function mostraProfiloHub(array $dati): void {
         $smarty = SmartyConfiguration::getSmarty();
 
-        // --- Dati globali di layout ---
-        $smarty->assign('base_url',     $dati['base_url'] ?? '');
-        $smarty->assign('current_page', $dati['current_page'] ?? 'profilo-hub');
-        $smarty->assign('breadcrumbs',  $dati['breadcrumbs'] ?? []);
-        $smarty->assign('utente',       $dati['utente'] ?? null);
-        $smarty->assign('cart_count',   $dati['cart_count'] ?? 0);
-
-        if (isset($dati['flash_message'])) {
-            $smarty->assign('flash_message', $dati['flash_message']);
-            $smarty->assign('flash_type', $dati['flash_type']);
-        }
+        self::assegnaGlobali($smarty, $dati, 'profilo-hub');
 
         // --- Dati specifici della pagina hub ---
         $smarty->assign('nomeUtente', $dati['nomeUtente']);
