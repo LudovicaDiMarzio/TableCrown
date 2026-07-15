@@ -1,18 +1,18 @@
 <?php
-/* Smarty version 5.8.0, created on 2026-07-13 17:55:54
+/* Smarty version 5.8.0, created on 2026-07-15 12:43:13
   from 'file:dettagliSerata.tpl' */
 
 /* @var \Smarty\Template $_smarty_tpl */
 if ($_smarty_tpl->getCompiled()->isFresh($_smarty_tpl, array (
   'version' => '5.8.0',
-  'unifunc' => 'content_6a550a8a31bc52_06765305',
+  'unifunc' => 'content_6a576441e035a3_51137221',
   'has_nocache_code' => false,
   'file_dependency' => 
   array (
     '2e242b2041184fd4a5af5585378b157b229b3099' => 
     array (
       0 => 'dettagliSerata.tpl',
-      1 => 1783958151,
+      1 => 1784112089,
       2 => 'file',
     ),
   ),
@@ -20,7 +20,7 @@ if ($_smarty_tpl->getCompiled()->isFresh($_smarty_tpl, array (
   array (
   ),
 ))) {
-function content_6a550a8a31bc52_06765305 (\Smarty\Template $_smarty_tpl) {
+function content_6a576441e035a3_51137221 (\Smarty\Template $_smarty_tpl) {
 $_smarty_current_dir = 'C:\\xampp\\htdocs\\TableCrown\\Presentation\\smarty-dir\\templates';
 $_smarty_tpl->getInheritance()->init($_smarty_tpl, true);
 ?>
@@ -28,11 +28,11 @@ $_smarty_tpl->getInheritance()->init($_smarty_tpl, true);
 
 
 <?php 
-$_smarty_tpl->getInheritance()->instanceBlock($_smarty_tpl, 'Block_16820491576a550a8a304952_53383523', "content");
+$_smarty_tpl->getInheritance()->instanceBlock($_smarty_tpl, 'Block_5951375456a576441de8e75_43047181', "content");
 $_smarty_tpl->getInheritance()->endChild($_smarty_tpl, "common/layout.tpl", $_smarty_current_dir);
 }
 /* {block "content"} */
-class Block_16820491576a550a8a304952_53383523 extends \Smarty\Runtime\Block
+class Block_5951375456a576441de8e75_43047181 extends \Smarty\Runtime\Block
 {
 public function callBlock(\Smarty\Template $_smarty_tpl) {
 $_smarty_current_dir = 'C:\\xampp\\htdocs\\TableCrown\\Presentation\\smarty-dir\\templates';
