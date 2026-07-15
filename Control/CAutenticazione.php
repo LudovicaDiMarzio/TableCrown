@@ -178,6 +178,7 @@ class CAutenticazione extends BaseController {
             $nome = UHTTPMethods::postString('nome');
             $email = UHTTPMethods::postString('email');
             $password = UHTTPMethods::postString('password');
+            $confermaPassword = UHTTPMethods::postString('conferma_password');
             $eta = (int) UHTTPMethods::postInt('eta');
         } catch (\InvalidArgumentException $e) {
             UFlashMessage::addMessage('danger', $e->getMessage());
@@ -186,10 +187,17 @@ class CAutenticazione extends BaseController {
         }
          
         //Controllo di validità dei campi obbligatori
-        if (!$nome || !$email || !$password || !$eta) { 
+        if (!$nome || !$email || !$password || !$confermaPassword || !$eta) { 
             //Se manca uno dei tre, impostiamo un messaggio di errore rapido
             UFlashMessage::addMessage('danger', 'Tutti i campi sono obbligatori.');
             //Pattern PRG: ricarichiamo la pagina del form per mostrare l'errore in sicurezza
+            header('Location: /registrati');
+            exit();
+        }
+
+        //Verifichiamo che password e confermaPassword coincidano
+        if ($password !== $confermaPassword) {
+            UFlashMessage::addMessage('danger', 'Le password non coincidono.');
             header('Location: /registrati');
             exit();
         }
