@@ -10,6 +10,7 @@ use TableCrown\Entity\EOrdine;
 use TableCrown\Entity\EOrdineItem;
 use TableCrown\Entity\EWishlist;
 use TableCrown\Entity\EIndirizzo;
+use TableCrown\Entity\ECartaDiCredito;
 use TableCrown\Entity\Enumerativi\PlayerLevel;
 use TableCrown\Entity\Enumerativi\StatoOrdine;
 use TableCrown\Foundation\FPersistentManager;
@@ -401,10 +402,7 @@ class CProfilo extends BaseController {
     public function mostraIndirizzi(): void {
         $utente = $this->utenteCorrente();
 
-        $indirizziArray = [];
-        foreach ($utente->getIndirizzi() as $indirizzo) {
-            $indirizziArray[] = $this->indirizzoToArray($indirizzo);
-        }
+        $indirizziArray = $this->indirizziToArray($utente->getIndirizzi()->toArray());
         
         $datiPagina = [
             'vista' => 'profilo_indirizzi',
@@ -414,24 +412,6 @@ class CProfilo extends BaseController {
         $datiLayout = $this->preparaDatiLayout('profilo_indirizzi', $datiPagina);
         ViewProfiloFactory::render($datiLayout);
     }
-
-    /**
-     * Privato: usato solo qui, converte EIndirizzo nella struttura utile a Presentation
-     */
-    private function indirizzoToArray(EIndirizzo $indirizzo): array { //SPOSTARE IN BASE CONTROLLER SE SERVE DA ALTRE PARTI
-        return [
-            'id' => $indirizzo->getIdIndirizzo(),
-            'nome' => $indirizzo->getNome(),
-            'via' => $indirizzo->getVia(),
-            'citta' => $indirizzo->getCitta(),
-            'cap' => $indirizzo->getCap(),
-            'provincia' => $indirizzo->getProvincia(),
-            'nazione' => $indirizzo->getNazione(),
-            'nomeCitofono' => $indirizzo->getNomeCitofono(),
-            'predefinito' => $indirizzo->isPredefinito(),
-        ];
-    }
-
 
     //==========================================================================
     // RECENSIONI
@@ -451,6 +431,33 @@ class CProfilo extends BaseController {
         ];
 
         $datiLayout = $this->preparaDatiLayout('profilo_recensioni', $datiPagina);
+        ViewProfiloFactory::render($datiLayout);
+    }
+
+    //==========================================================================
+    // METODI DI PAGAMENTO
+    //==========================================================================
+
+    /**
+     * Mostra la sezione del profilo con i metodi di pagamento salvati.
+     * In questo caso vengono gestiste solo carte di credito, ma ci riferiamo
+     * a metodi di pagamento generici per scalabilità.
+     * URL: GET /profilo/pagamenti
+     */
+    public function mostraMetodiPagamento(): void {
+        $utente = $this->utenteCorrente();
+
+        $idUtente = USession::getSessionElement('id_persona');
+
+        //Recuperiamo le carte dal DB tramite il pm
+        $metodiSalvati = FPersistentManager::PMgetObjListOnAttribute(ECartaDiCredito::class, 'utente', $idUtente);
+
+        $datiPagina = [
+            'vista' => 'profilo_pagamenti',
+            'metodi' => $this->carteToArray($metodiSalvati),
+        ];
+
+        $datiLayout = $this->preparaDatiLayout('profilo_pagamenti', $datiPagina);
         ViewProfiloFactory::render($datiLayout);
     }
 }

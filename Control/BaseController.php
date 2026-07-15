@@ -20,6 +20,8 @@ use TableCrown\Entity\EChallenge;
 use TableCrown\Entity\EGiocoDaTavolo;
 use TableCrown\Entity\EBustine;
 use TableCrown\Entity\EPortaDadi;
+use TableCrown\Entity\ECartaDiCredito;
+use TableCrown\Entity\EIndirizzo;
 
 
 
@@ -400,6 +402,146 @@ abstract class BaseController {
             'nomeEvento'        => $evento->getNomeEvento(),
         ];
     }
+
+    // INDIRIZZI 
+    /**
+     * Converte un EIndirizzo in array associativo per Presentation.
+     */
+    protected function indirizzoToArray(EIndirizzo $indirizzo): array {
+        return [
+            'id'            => $indirizzo->getIdIndirizzo(),
+            'nome'          => $indirizzo->getNome(),
+            'via'           => $indirizzo->getVia(),
+            'citta'         => $indirizzo->getCitta(),
+            'cap'           => $indirizzo->getCap(),
+            'provincia'     => $indirizzo->getProvincia(),
+            'nazione'       => $indirizzo->getNazione(),
+            'nome_citofono' => $indirizzo->getNomeCitofono(),
+            'predefinito'   => $indirizzo->isPredefinito(),
+        ];
+    }
+
+    /**
+     * Converte un array di EIndirizzo in array associativo per Presentation.
+     */
+    protected function indirizziToArray(array $indirizzi): array {
+        $risultato = [];
+        foreach ($indirizzi as $indirizzo) {
+            $risultato[] = $this->indirizzoToArray($indirizzo);
+        }
+        return $risultato;
+    }
+
+    // METODI DI PAGAMENTO
+
+    /**
+     * Converte un ECartaDiCredito in array associativo per Presentation.
+     */
+    protected function cartaToArray(ECartaDiCredito $carta): array {
+        return [
+            'id' => $carta->getIdCartaDiCredito(),
+            'titolare' => $carta->getNomeTitolare(),
+            'ultimeQuattroCifre' => $carta->getNumeroMascherato(),
+            'scadenza' => $carta->getScadenzaFormattata(),
+        ];
+    }
+
+    /**
+     * Converte un array di ECartaDiCredito in array associativo per Presentation.
+     */
+    protected function carteToArray(array $carte): array {
+        $risultato = [];
+        foreach ($carte as $carta) {
+            $risultato[] = $this->cartaToArray($carta);
+        }
+        return $risultato;
+    }
+
+
+    // CARRELLO (metodi utili sia per CCarrello che per CCheckout)
+
+    /**
+     * Costruisce l'array di righe del carrello, ciascuna con i dati reali del prodotto
+     * (tramite prodottoToArray, stessa convenzione usata in home/catalogo/prodotto),
+     * più i campi specifici della riga carrello (quantità, subtotale, url azioni).
+     */
+    protected function buildCarrelloItems(array &$carrello): array { //con & prima di $carrello la funzione riceve un riferimento diretto alla variabile originale (per aggiornare la quantità)
+        if (empty($carrello)) {
+            return [];
+        }
+ 
+        $carrelloItems = [];
+        $idsDaRimuovere = [];
+        $idsProdotto = array_keys($carrello);
+
+        $prodottiCaricati = FPersistentManager::PMgetObjListOnAttribute(EProdotto::class, 'idProdotto', $idsProdotto);
+
+        //Indicizzazione per evitare query nel ciclo
+        $prodottiIndicizzati = [];
+        foreach ($prodottiCaricati as $prodotto) {
+            $prodottiIndicizzati[$prodotto->getIdProdotto()] = $prodotto;
+        }
+ 
+        //Scorriamo il carrello prendendo la chiave (id prodotto) e il valore (quantità)
+        foreach ($carrello as $idProdotto => $quantita) {
+            //Chiediamo a Foundation di caricarci l'oggetto Entity del prodotto dal DB
+            $prodotto = $prodottiIndicizzati[$idProdotto] ?? null;
+ 
+            if (!$prodotto) {
+                $idsDaRimuovere[] = $idProdotto; //così verrà rimosso e non verrà contato in aggiornaQuantita()
+                continue; //salta il prodotto e passa al prossimo
+            }
+ 
+            $prodottoArray = $this->prodottoToArray($prodotto);
+            //Prezzo effettivo da usare per i calcoli: scontato se presente, altrimenti pieno
+            $prodottoArray['prezzo_unitario'] = $prodottoArray['prezzo_scontato'] ?? $prodottoArray['prezzo'];
+
+            //Costruiamo la struttura esatta richiesta dalla View
+            $carrelloItems[] = [
+                'quantita' => $quantita,
+                'subtotale' => $prodottoArray['prezzo_unitario'] * $quantita,
+                'prodotto' => $prodottoArray,
+            ];
+        }
+
+        //Pulizia: rimuove dalla sessione i prodotti non più trovati nel DB,
+        //così n_articoli e il carrello restanp coearenti con ciò che l'utente vede.
+        if (!empty($idsDaRimuovere)) {
+            foreach ($idsDaRimuovere as $idProdotto) {
+                unset($carrello[$idProdotto]);
+            }
+            USession::setSessionElement('carrello', $carrello);
+        }
+ 
+        return $carrelloItems;
+    }
+
+    /**
+     * Calcola i totali del carrello a partire dalle righe già costruite da buildCarrelloItems,
+     * evitando di ricalcolare prezzi o ricontattare il DB.
+     */
+    protected function buildCarrelloSummary(array $carrelloItems, array $carrello): array {
+        $totale = 0.00;
+        $totaleSconto = 0.00;
+ 
+        foreach ($carrelloItems as $item) {
+            $totale += $item['subtotale'];
+ 
+            if ($item['prodotto']['sconto']) {
+                $risparmioUnitario = $item['prodotto']['prezzo'] - $item['prodotto']['prezzo_unitario'];
+                $totaleSconto += $risparmioUnitario * $item['quantita'];
+            }
+        }
+ 
+        return [
+            'n_articoli' => array_sum($carrello), //somma tutte le quantità nel carrello (0 se carrello vuoto)
+            'sconto' => $totaleSconto,
+            'totale' => $totale,
+        ];
+    }
+
+
+    // ORDINI ??
 
     // GENERICI 
 
