@@ -118,36 +118,56 @@ class CFrontController {
 
             case 'accedi':
                 //Corrisponde a: GET /accedi
-                $controller = new CAutenticazione();
-                $controller->mostraFormLogin();
+                if ($metodoHTTP === 'GET') {
+                    $controller = new CAutenticazione();
+                    $controller->mostraFormLogin();
+                } else {
+                    $this->mostra404();
+                }
                 break;
 
 
             case 'registrati':
                 //Corrisponde a: GET /registrati
-                $controller = new CAutenticazione();
-                $controller->mostraFormRegistrazione();
+                if ($metodoHTTP === 'GET') {
+                    $controller = new CAutenticazione();
+                    $controller->mostraFormRegistrazione();
+                } else {
+                    $this->mostra404();
+                }
                 break;
 
 
             case 'logout':
                 //Corrisponde a: GET /logout
-                $controller = new CAutenticazione();
-                $controller->logout();
+                if ($metodoHTTP === 'GET') {
+                    $controller = new CAutenticazione();
+                    $controller->logout();
+                } else {
+                    $this->mostra404();
+                }
                 break;
 
 
             case 'login':
                 //Corrisponde a: POST /login
-                $controller = new CAutenticazione();
-                $controller->login();
+                if ($metodoHTTP === 'POST') {
+                    $controller = new CAutenticazione();
+                    $controller->login();
+                } else {
+                    $this->mostra404();
+                }
                 break;
 
 
             case 'registrazione':
                 //Corrisponde a: POST /registrazione
-                $controller = new CAutenticazione();
-                $controller->registrazione();
+                if ($metodoHTTP === 'POST') {
+                    $controller = new CAutenticazione();
+                    $controller->registrazione();
+                } else {
+                    $this->mostra404();
+                }
                 break;
 
 
@@ -155,9 +175,9 @@ class CFrontController {
                 $controller = new CCarrello();
                 if ($sottoRoute === 'aggiungi' && $metodoHTTP === 'POST') {
                     $controller->aggiungiAlCarrello();
-                } elseif ($sottoRoute === 'rimuovi' && $metodoHTTP === 'POST') { //DOVREBBE ESSERE POST
+                } elseif ($sottoRoute === 'rimuovi' && $metodoHTTP === 'POST') { 
                     $controller->rimuoviDalCarrello();
-                } elseif ($sottoRoute === 'aggiorna' && $metodoHTTP === 'POST'){ //DOVREBBE ESSERE POST
+                } elseif ($sottoRoute === 'aggiorna' && $metodoHTTP === 'POST'){ 
                     $controller->aggiornaQuantita();
                 } elseif ($sottoRoute === null && $metodoHTTP === 'GET') {
                     $controller->mostraCarrello();
