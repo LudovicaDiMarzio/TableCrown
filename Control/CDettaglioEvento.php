@@ -11,18 +11,24 @@ use TableCrown\Entity\EChallenge;
 use TableCrown\Entity\EPartecipazione;
 use TableCrown\Entity\EUtente;
 use TableCrown\Foundation\FPersistentManager;
+use TableCrown\Foundation\BancaMockService;
 use TableCrown\Presentation\Views\ViewDettaglioEvento;
 
 class CDettaglioEvento extends BaseController {
+
+    private ?int $idEventoCorrente = null; 
+
     public function __construct() {
         parent::__construct();
     }
 
     /**
      * Mostra la pagina di dettaglio di un evento specifico.
-     * URL: /eventi/dettaglio?id=X (Accesso libero)
+     * URL: GET /eventi/dettaglio?id=X (Accesso libero)
      */
     public function mostraDettaglioEvento(int $idEvento): void {
+        $this->idEventoCorrente = $idEvento;
+
         $evento = FPersistentManager::PMgetObjOnAttribute(EEvento::class, 'idEvento', $idEvento);
 
         if (!$evento) {
@@ -37,6 +43,91 @@ class CDettaglioEvento extends BaseController {
         //Chiamata alla View
         ViewDettaglioEvento::mostraDettaglioEvento($datiLayout);
     }
+    
+    /**
+     * Gestisce la prenotazione a un evento.
+     * URL: POST /eventi/partecipa
+     */
+    public function partecipaEvento(): void {
+        $this->requireRole('utente');
+
+        $idEvento = UHTTPMethods::postInt('id_evento');
+        if (!$idEvento) {
+            UFlashMessage::addMessage('danger', 'Evento non specificato.');
+            header('Location: /eventi');
+            exit();
+        }
+
+        $evento = FPersistentManager::PMgetObjOnAttribute(EEvento::class, 'idEvento', $idEvento);
+        if (!$evento) {
+            UFlashMessage::addMessage('danger', 'L\'evento selezionato non esiste.');
+            header('Location: /eventi');
+            exit();
+        }
+
+        $idUtente = USession::getSessionElement('id_persona');
+        $utente = FPersistentManager::PMgetObjOnAttribute(EUtente::class, 'idPersona', $idUtente);
+
+        if ($this->utenteIscritto($evento)) {
+            UFlashMessage::addMessage('danger', 'Sei già iscritto a questo evento.');
+            header('Location: /eventi/dettaglio/' . $idEvento);
+            exit();
+        }
+
+        try {
+            $nuovaPartecipazione = new EPartecipazione($utente, $evento);
+        } catch (\InvalidArgumentException $e) {
+            UFlashMessage::addMessage('danger', $e->getMessage());
+            header('Location: /eventi/dettaglio/' . $idEvento);
+            exit();
+        }
+
+        //Gestione del pagamento (DA RIVEDERE!!!!)
+        if ($evento->richiedeQuota()) {
+            try {
+                //Recuperiamo i dati della carta inviati dal form
+                $numeroCarta = UHTTPMethods::postInt('numero_carta');
+                $cvv = UHTTPMethods::postInt('cvv');
+                $titoloCarta = UHTTPMethods::postString('titolo_carta');
+                $dataScadenza = UHTTPMethods::postString('data_scadenza');
+
+                if (empty($numeroCarta) || empty($cvv) || empty($titoloCarta) || empty($dataScadenza)) {
+                    throw new \InvalidArgumentException("Tutti i campi di pagamento sono obbligatori.");
+                }
+
+                $quota = $evento->getQuotaIscrizione(); //DA RIVEDERE (non è un metodo di EEvento, bensì di ETorneo e di EChallenge)
+                //Chiamata all'helper privato per processare la transazione
+                $pagamentoAvvenuto = $this->processaPagamento($numeroCarta, $cvv, $dataScadenza, $quota);
+
+                if ($pagamentoAvvenuto) {
+                    //Aggiorniamo lo stato della partecipazione prima del salvataggio
+                    $nuovaPartecipazione->aggiornaPagamento(); //DA RIVEDERE: aggiornaPagamento() rifà internamente il controllo richiedeQuota
+                    //dovrei salvare la quota pagata nella partecipazione? Non ha l'attributo relativo
+                }
+            } catch (\Exception $e) {
+                //Se il pagamento fallisce, interrompiamo tutto e mostriamo l'errore della banca
+                UFlashMessage::addMessage('danger', 'Pagamento rigiutato: ' . $e->getMessage());
+                header('Location: /eventi/dettaglio/' . $idEvento);
+                exit();
+            }
+        }
+
+        //Salvataggio finale solo se gratuito o se il pagamento è andato a buon fine
+        $salvato = FPersistentManager::PMsaveObj($nuovaPartecipazione);
+
+        if ($salvato) {
+            UFlashMessage::addMessage('success', 'Partecipazione effettuata con successo!');
+        } else {
+            UFlashMessage::addMessage('danger', 'Si è verificato un errore durante la prenotazione. Riprova.');
+        }
+
+        header('Location: /eventi/dettaglio/' . $idEvento);
+        exit();
+    }
+
+    //==========================================================================
+    // HELPER PRIVATI 
+    //==========================================================================
 
     /**
      * Costruisce i dati di dettaglio partendo dagli helper già esistenti
@@ -103,65 +194,25 @@ class CDettaglioEvento extends BaseController {
     }
 
     /**
-     * Gestisce la prenotazione a un evento.
-     * URL: /eventi/partecipa
+     * Helper privato per dialogare con la classe BancaMockService in Foundation.
      */
-    public function partecipaEvento(): void {
-        $this->requireRole('utente');
+    private function processaPagamento(string $numeroCarta, string $cvv, string $dataScadenza, EPrezzo $quota): bool {
+        $bancaService = new BancaMockService();
 
-        $idEvento = UHTTPMethods::postInt('id_evento');
-        if (!$idEvento) {
-            UFlashMessage::addMessage('danger', 'Evento non specificato.');
-            header('Location: /eventi');
-            exit();
-        }
+        //Genera il token monouso
+        $datiToken = $bancaService->generaToken($numeroCarta, $cvv);
+        $token = $datiToken['token'];
 
-        $evento = FPersistentManager::PMgetObjOnAttribute(EEvento::class, 'idEvento', $idEvento);
-        if (!$evento) {
-            UFlashMessage::addMessage('danger', 'L\'evento selezionato non esiste.');
-            header('Location: /eventi');
-            exit();
-        }
-
-        $idUtente = USession::getSessionElement('id_persona');
-        $utente = FPersistentManager::PMgetObjOnAttribute(EUtente::class, 'idPersona', $idUtente);
-
-        if ($this->utenteIscritto($evento)) {
-            UFlashMessage::addMessage('danger', 'Sei già iscritto a questo evento.');
-            header('Location: /eventi/dettaglio?id=' . $idEvento);
-            exit();
-        }
-
-        try {
-            $nuovaPartecipazione = new EPartecipazione($utente, $evento);
-        } catch (\InvalidArgumentException $e) {
-            UFlashMessage::addMessage('danger', $e->getMessage());
-            header('Location: /eventi/dettaglio?id=' . $idEvento);
-            exit();
-        }
-
-        //TODO: se $evento->richiedeQuota() è true (caso di torneo o challenge), qui manca
-        //ancora il flusso di pagamento della quota (la partecipazione viene creata con quotaPagata = false di dafault)
-        //Da definire come/quando gestire il pagamento
-
-        $salvato = FPersistentManager::PMsaveObj($nuovaPartecipazione);
-
-        if ($salvato) {
-            UFlashMessage::addMessage('success', 'Partecipazione effettuata con successo!');
-        } else {
-            UFlashMessage::addMessage('danger', 'Si è verificato un errore durante la prenotazione. Riprova.');
-        }
-
-        header('Location: /eventi/dettaglio?id=' . $idEvento);
-        exit();
+        //Addebita l'importo
+        return $bancaService->effettuaPagamento($token, $quota);
     }
 
     protected function getBreadcrumbs(string $currentPage = ''): array {
-        $idEvento = UHTTPMethods::get('id');
         return [
             ['label' => 'Home', 'url' => '/'],
             ['label' => 'Eventi', 'url' => '/eventi'],
-            ['label' => 'Dettaglio evento', 'url' => '/eventi/dettaglio?id=' . $idEvento],
+            ['label' => 'Dettaglio evento', 'url' => '/eventi/dettaglio/' . $this->idEventoCorrente],
         ];
     }
+
 }

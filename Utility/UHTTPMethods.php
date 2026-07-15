@@ -151,11 +151,28 @@ class UHTTPMethods {
 
     /**
      * Verifica se la richiesta corrente è una chiamata AJAX (asincrona).
-     * Controlla la presenza dell'header HTTP 'X-Requested-With'.
+     * Controlla la presenza dell'header HTTP 'X-Requested-With', oppure il
+     * Content-Type/Accept di tipo JSON (usato dalle fetch() della Presentation
+     * che non impostano X-Requested-With esplicitamente).
      */
     public static function isAjax(): bool {
-        return isset($_SERVER['HTTP_X_REQUESTED_WITH']) && 
-            strtolower($_SERVER['HTTP_X_REQUESTED_WITH']) === 'xmlhttprequest';
+        if (isset($_SERVER['HTTP_X_REQUESTED_WITH']) && 
+            strtolower($_SERVER['HTTP_X_REQUESTED_WITH']) === 'xmlhttprequest') {
+                return true;
+        }
+
+        if (isset($_SERVER['HTTP_ACCEPT']) &&
+            str_contains(strtolower($_SERVER['HTTP_ACCEPT']), 'application/json')) {
+                return true;
+        }
+
+        if (isset($_SERVER['CONTENT_TYPE']) &&
+            str_contains(strtolower($_SERVER['CONTENT_TYPE']), 'application/json')) {
+                return true;
+        }
+
+        return false;
+
     }
 
     /**

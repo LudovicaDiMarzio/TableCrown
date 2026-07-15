@@ -1,8 +1,12 @@
 <IfModule mod_rewrite.c>
 RewriteEngine On
-RewriteBase /
+RewriteBase /Tablecrown/
 
-#Se la richiesta è un file o una cartella vera (es. i CSS, le immagini di Presentation, ecc.), servila direttamente
+# Reindirizza le richieste di asset statici verso la cartella public/
+RewriteCond %{REQUEST_URI} ^/Tablecrown/(css|js|img|plugins)/ [NC]
+RewriteRule ^(css|js|img|plugins)/(.*)$ public/$1/$2 [L]
+
+#Se la richiesta è un file o una cartella vera, servila direttamente
 RewriteCond %{REQUEST_FILENAME} -f [OR]
 RewriteCond %{REQUEST_FILENAME} -d
 RewriteRule ^ - [L]

@@ -108,7 +108,7 @@ class CProfilo extends BaseController {
     //==========================================================================
 
     /**
-     * URL: GET /profilo/modifica
+     * URL: GET /profilo/modifica 
      */
     public function mostraAccount(): void {
         $utente = $this->utenteCorrente();
@@ -330,7 +330,7 @@ class CProfilo extends BaseController {
 
 
     //==========================================================================
-    //WISHLIST
+    // WISHLIST
     //==========================================================================
 
     /**

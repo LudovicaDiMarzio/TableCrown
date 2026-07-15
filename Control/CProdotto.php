@@ -38,6 +38,10 @@ class CProdotto extends BaseController {
 
     }
 
+    //==========================================================================
+    // HELPER PRIVATI
+    //==========================================================================
+
     /**
      * Costruisce l'array di dati da passare alla View 
      * per il rendering del dettaglio del prodotto.
