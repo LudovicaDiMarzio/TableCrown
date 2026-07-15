@@ -15,10 +15,6 @@ use TableCrown\Presentation\Views\ViewCarrello;
 
 class CCarrello extends BaseController {
 
-    //URL base del sito, usato per costruire URL assoluti nelle risposte JSON
-    //(il JS ha bisogno di URL completi per costruire il DOM senza passare da Smarty).
-    private const BASE_URL = 'https://tablecrown.it'; //FORSE DA CAMBIARE, ANDREBBE DEFINITA IN UN FILE PIù GENERALE TIPO DI config
-
     public function __construct() {
         parent::__construct();
     }
@@ -45,6 +41,8 @@ class CCarrello extends BaseController {
             'carrello_items' => $carrelloItems,
             'carrello_summary' => $carrelloSummary,
             'correlati' => $correlati,
+            'update_url' => '/carrello/aggiorna',
+            'remove_url' => '/carrello/rimuovi',
         ];
  
         //Uniamo i dati specifici della pagina con i dati globali del layout
@@ -97,8 +95,6 @@ class CCarrello extends BaseController {
             $carrelloItems[] = [
                 'quantita' => $quantita,
                 'subtotale' => $prodottoArray['prezzo_unitario'] * $quantita,
-                'update_url' => '/carrello/aggiorna/' . $idProdotto,
-                'remove_url' => '/carrello/rimuovi/' . $idProdotto,
                 'prodotto' => $prodottoArray,
             ];
         }
@@ -231,16 +227,16 @@ class CCarrello extends BaseController {
         echo json_encode([
             'id' => $prodottoArray['id'],
             'nome' => $prodottoArray['nome'],
-            'immagine_url' => self::BASE_URL . '/img/prodotti/' . $prodottoArray['immagine'], //DA VERIFICARE
-            'product_url' => self::BASE_URL . '/prodotto/' . $prodottoArray['id'],
+            'immagine_url' => BASE_URL . '/img/prodotti/' . $prodottoArray['immagine'], //DA VERIFICARE
+            'product_url' => BASE_URL . '/prodotto/' . $prodottoArray['id'],
             'prezzo_unitario' => $prezzoUnitario,
             'sconto' => $prodottoArray['sconto'],
             'prezzo_originale' => $prodottoArray['prezzo'],
             'percentuale_sconto' => $prodottoArray['percentuale_sconto'],
             'quantita' => $quantitaAggiornata,
             'subtotale' => $prezzoUnitario * $quantitaAggiornata,
-            'update_url' => self::BASE_URL . '/carrello/aggiorna/' . $idProdotto,
-            'remove_url' => self::BASE_URL . '/carrello/rimuovi/' . $idProdotto,
+            'update_url' => BASE_URL . '/carrello/aggiorna/',
+            'remove_url' => BASE_URL . '/carrello/rimuovi/',
             'cart_count' => array_sum($carrello), //per aggiornare il badge navbar
         ]);
         exit();
@@ -252,7 +248,7 @@ class CCarrello extends BaseController {
      * URL: GET /carrello/aggiorna{id_item}?qty={quantita}
      * Risponde in JSON.
      */
-    public function aggiornaQuantita(int $idItem): void {
+    public function aggiornaQuantita(): void {
         header('Content-Type: application/json');
 
         if (!$this->isLoggedIn() || USession::getSessionElement('ruolo') !== 'utente') {
@@ -261,8 +257,8 @@ class CCarrello extends BaseController {
             exit(); //interrompe immediatamente l'esecuzione dello script
         }
 
-        //La nuova quantità arriva come paramtro GET nella query string (?qty=N)
-        $nuovaQuantita = (int) UHTTPMethods::get('qty', 1);
+        $idItem = UHTTPMethods::postInt('id_prodotto');
+        $nuovaQuantita = (int) UHTTPMethods::postInt('quantita', 1);
 
         //La quantità deve essere almeno 1 (il template ha min = 1, ma validiamo anche server-side)
         if ($nuovaQuantita < 1) {
@@ -315,11 +311,11 @@ class CCarrello extends BaseController {
 
     /**
      * Rimuove o decrementa un prodotto dal carrello (chiamata AJAX).
-     * URL: GET /carrello/rimuovi/{id_item} (DOVREBBE ESSERE POST!!!!!!!!!!)
+     * URL: POST /carrello/rimuovi
      * Risponde in JSON. Se dopo la rimozione il carrello è vuoto,
      * il JS ricarica la pagina automaticamente
      */
-    public function rimuoviDalCarrello(int $idItem): void {
+    public function rimuoviDalCarrello(): void {
         header('Content-Type: application/json');
 
         //Controllo sicurezza: impedisce l'azione se l'utente non è autenticato
@@ -329,6 +325,7 @@ class CCarrello extends BaseController {
             exit();
         }
 
+        $idItem = UHTTPMethods::postInt('id_prodotto');
         $carrello = USession::getSessionElement('carrello') ?? [];
 
         //unset() rimuove completamente la chiave dall'array corrispondente al prodotto

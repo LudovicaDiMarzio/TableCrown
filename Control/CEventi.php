@@ -31,6 +31,9 @@ class CEventi extends BaseController {
 
     /**
      * Mostra l'hub degli eventi.
+     * Corrisponde alla pagina con le tre card ("Serate", "Tornei", "Challenge"),
+     * che portano rispettivamente al catalogo delle serate, al catalogo dei tornei
+     * e al catalogo delle challenge.
      */
     public function mostraHubEventi(): void {
         $datiPagina = ['vista' => 'eventi_home'];
@@ -46,14 +49,10 @@ class CEventi extends BaseController {
      */
     public function mostraListaSerate(): void {
         $filtroData = $this->estraiFiltroData();
-        $ricerca = $this->estraiRicerca();
 
-        //TODO: da implementare in FPersistentManager;
-        //bisogna filtrare internamente su statoEvento = Programmato, oltre a data/ricerca
-        //Non vengono quindi mostrati eventi con altri stati diversi da Programmato.
-        $serate = FPersistentManager::PMfindSerate($filtroData, $ricerca);
+        $serate = FPersistentManager::PMfindSerate($filtroData); 
 
-        $this->renderListaEventi('eventi_serate', $serate, [$this, 'serataToArray'], $filtroData, $ricerca);
+        $this->renderListaEventi('eventi_serate', $serate, $filtroData); 
         
     }
 
@@ -63,12 +62,10 @@ class CEventi extends BaseController {
      */
     public function mostraListaTornei(): void {
         $filtroData = $this->estraiFiltroData();
-        $ricerca = $this->estraiRicerca();
 
-        //TODO: da implementare in FPersistentManager;
-        $tornei = FPersistentManager::PMfindTornei($filtroData, $ricerca);
+        $tornei = FPersistentManager::PMfindTornei($filtroData);
 
-        $this->renderListaEventi('eventi_tornei', $tornei, [$this, 'torneoToArray'], $filtroData, $ricerca);
+        $this->renderListaEventi('eventi_tornei', $tornei, $filtroData); 
     }
 
     /**
@@ -77,12 +74,31 @@ class CEventi extends BaseController {
      */
     public function mostraListaChallenge(): void {
         $filtroData = $this->estraiFiltroData();
-        $ricerca = $this->estraiRicerca();
 
-        //TODO: da implementare in FPersistentManager;
-        $challenge = FPersistentManager::PMfindChallenge($filtroData, $ricerca);
+        $challenge = FPersistentManager::PMfindChallenge($filtroData);
 
-        $this->renderListaEventi('eventi_challenge', $challenge, [$this, 'challengeToArray'], $filtroData, $ricerca);
+        $this->renderListaEventi('eventi_challenge', $challenge, $filtroData); 
+    }
+
+    /**
+     * Mostra i risultati della ricerca per gli eventi.
+     * La barra di ricerca dedicata agli eventi invierà una richiesta GET qui
+     * URL: GET /eventi/ricerca
+     */
+    public function mostraRisultatiRicercaEventi(): void {
+        $query = UHTTPMethods::get('q');
+
+        if ($query === null || trim($query) === '') {
+            //Se non c'è nessun termine di ricerca, reindirizziamo al catalogo principale dei giochi (DA DECIDERE!!!!!!!)
+            header("Location: /eventi");
+            exit();
+        }
+
+        $query = trim($query);
+
+        $eventiTrovati = FPersistentManager::PMricercaEventi($query);
+
+        $this->renderListaEventi('ricerca', $eventiTrovati, null, $query); 
     }
 
 
@@ -93,17 +109,13 @@ class CEventi extends BaseController {
     /**
      * Costruisce i dati comuni a tutte le pagine lista eventi e delega il render.
      */
-    private function renderListaEventi(string $vista, iterable $eventiEntities, callable $toArrayFn, ?DateTime $filtroData, ?string $ricerca): void {
-        $eventiArray = [];
-        foreach ($eventiEntities as $evento) {
-            $eventiArray[] = $toArrayFn($evento);
-        }
+    private function renderListaEventi(string $vista, array $risultatoGrezzo, ?string $filtroData = null, ?string $ricerca = null): void { 
 
         $datiPagina = [
             'vista'  => $vista,
-            'eventi' => $eventiArray,
+            'eventi' => $this->eventiToArray($risultatoGrezzo),
             'filtri' => [
-                'filtro_data' => $filtroData?->format('Y-m-d'),
+                'filtro_data' => $filtroData,
                 'ricerca' => $ricerca,
             ],
         ];
@@ -116,24 +128,14 @@ class CEventi extends BaseController {
      * Legge il filtro data dalla request (formato atteso: YYYY-MM-DD) e lo converte
      * in DateTime per l'uso interno nella query; ritorna null se assente/non valido.
      */
-    private function estraiFiltroData(): ?DateTime {
-        $raw = UHTTPMethods::get('filtro_data');
-        if (!$raw) {
+    private function estraiFiltroData(): ?string {
+        $dataRaw = UHTTPMethods::get('filtro_data');
+        if ($dataRaw === null || trim($dataRaw) === '') {
             return null;
         }
-        try {
-            return new DateTime($raw);
-        } catch (\Exception $e) {
-            return null; //valore non parsabile: ignorato silenziosamente, coerente con la gestione degli altri filtri non validi
-        }
-    }
-
-    /**
-     * Estrae la ricerca da parte dell'utente (barra di ricerca degli eventi).
-     */
-    private function estraiRicerca(): ?string {
-        $query = UHTTPMethods::get('ricerca');
-        return ($query !== null && trim($query) !== '') ? trim($query) : null;
+        //Validazione: verifichiamo che sia una data valida
+        $d = DateTime::createFromFormat('Y-m-d', $dataRaw);
+        return ($d && $d->format('Y-m-d') === $dataRaw) ? $dataRaw : null;
     }
 
     protected function getBreadcrumbs(string $currentPage = ''): array {
