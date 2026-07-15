@@ -1,18 +1,18 @@
 <?php
-/* Smarty version 5.8.0, created on 2026-07-15 10:52:18
+/* Smarty version 5.8.0, created on 2026-07-15 16:56:52
   from 'file:catalogo/GiochiDaTavolo.tpl' */
 
 /* @var \Smarty\Template $_smarty_tpl */
 if ($_smarty_tpl->getCompiled()->isFresh($_smarty_tpl, array (
   'version' => '5.8.0',
-  'unifunc' => 'content_6a574a42634aa1_38528093',
+  'unifunc' => 'content_6a579fb467cf80_21426329',
   'has_nocache_code' => false,
   'file_dependency' => 
   array (
     '8c4c72c5a1451f42626e98a8d390d32c654ab998' => 
     array (
       0 => 'catalogo/GiochiDaTavolo.tpl',
-      1 => 1784103659,
+      1 => 1784127408,
       2 => 'file',
     ),
   ),
@@ -20,30 +20,28 @@ if ($_smarty_tpl->getCompiled()->isFresh($_smarty_tpl, array (
   array (
   ),
 ))) {
-function content_6a574a42634aa1_38528093 (\Smarty\Template $_smarty_tpl) {
+function content_6a579fb467cf80_21426329 (\Smarty\Template $_smarty_tpl) {
 $_smarty_current_dir = 'C:\\xampp\\htdocs\\TableCrown\\Presentation\\smarty-dir\\templates\\catalogo';
 $_smarty_tpl->getInheritance()->init($_smarty_tpl, true);
 ?>
 
 
 <?php 
-$_smarty_tpl->getInheritance()->instanceBlock($_smarty_tpl, 'Block_15049148536a574a421cf534_95261102', "extra_css");
+$_smarty_tpl->getInheritance()->instanceBlock($_smarty_tpl, 'Block_17979879066a579fb46154f0_94597627', "extra_css");
 ?>
 
 
 <?php 
-$_smarty_tpl->getInheritance()->instanceBlock($_smarty_tpl, 'Block_18096172076a574a4226e695_32580260', "content");
+$_smarty_tpl->getInheritance()->instanceBlock($_smarty_tpl, 'Block_9258906996a579fb4619e31_36453747', "content");
 ?>
 
 
 <?php 
-$_smarty_tpl->getInheritance()->instanceBlock($_smarty_tpl, 'Block_19146347676a574a42633673_11356255', "extra_js");
-?>
-
-<?php $_smarty_tpl->getInheritance()->endChild($_smarty_tpl, "common/layout.tpl", $_smarty_current_dir);
+$_smarty_tpl->getInheritance()->instanceBlock($_smarty_tpl, 'Block_14436593336a579fb467c389_68641417', "extra_js");
+$_smarty_tpl->getInheritance()->endChild($_smarty_tpl, "common/layout.tpl", $_smarty_current_dir);
 }
 /* {block "extra_css"} */
-class Block_15049148536a574a421cf534_95261102 extends \Smarty\Runtime\Block
+class Block_17979879066a579fb46154f0_94597627 extends \Smarty\Runtime\Block
 {
 public function callBlock(\Smarty\Template $_smarty_tpl) {
 $_smarty_current_dir = 'C:\\xampp\\htdocs\\TableCrown\\Presentation\\smarty-dir\\templates\\catalogo';
@@ -56,7 +54,7 @@ $_smarty_current_dir = 'C:\\xampp\\htdocs\\TableCrown\\Presentation\\smarty-dir\
 }
 /* {/block "extra_css"} */
 /* {block "content"} */
-class Block_18096172076a574a4226e695_32580260 extends \Smarty\Runtime\Block
+class Block_9258906996a579fb4619e31_36453747 extends \Smarty\Runtime\Block
 {
 public function callBlock(\Smarty\Template $_smarty_tpl) {
 $_smarty_current_dir = 'C:\\xampp\\htdocs\\TableCrown\\Presentation\\smarty-dir\\templates\\catalogo';
@@ -252,14 +250,14 @@ $_smarty_current_dir = 'C:\\xampp\\htdocs\\TableCrown\\Presentation\\smarty-dir\
                         </h4>
                         <div class="checkbox-group" data-exclusive="categoria">
                             <?php
-$_from = $_smarty_tpl->getSmarty()->getRuntime('Foreach')->init($_smarty_tpl, $_smarty_tpl->getValue('categorie_enum'), 'cat');
+$_from = $_smarty_tpl->getSmarty()->getRuntime('Foreach')->init($_smarty_tpl, $_smarty_tpl->getValue('filtri')['categorie_enum'], 'cat');
 $foreach0DoElse = true;
 foreach ($_from ?? [] as $_smarty_tpl->getVariable('cat')->value) {
 $foreach0DoElse = false;
 ?>
                                 <label class="checkbox-label">
                                     <input type="checkbox"
-                                           name="categoria[]"
+                                           name="categoria_selected[]"
                                            value="<?php echo htmlspecialchars((string)$_smarty_tpl->getValue('cat')['value'], ENT_QUOTES, 'UTF-8', true);?>
 "
                                            <?php if ((true && (true && null !== ($_smarty_tpl->getValue('filtri')['categoria_selected'] ?? null))) && $_smarty_tpl->getSmarty()->getModifierCallback('in_array')($_smarty_tpl->getValue('cat')['value'],$_smarty_tpl->getValue('filtri')['categoria_selected'])) {?> checked<?php }?>>
@@ -376,14 +374,14 @@ $_smarty_tpl->getSmarty()->getRuntime('Foreach')->restore($_smarty_tpl, 1);?>
                         </h4>
                         <div class="checkbox-group" data-exclusive="lingua">
                             <?php
-$_from = $_smarty_tpl->getSmarty()->getRuntime('Foreach')->init($_smarty_tpl, $_smarty_tpl->getValue('lingue_enum'), 'lang');
+$_from = $_smarty_tpl->getSmarty()->getRuntime('Foreach')->init($_smarty_tpl, $_smarty_tpl->getValue('filtri')['lingue_enum'], 'lang');
 $foreach2DoElse = true;
 foreach ($_from ?? [] as $_smarty_tpl->getVariable('lang')->value) {
 $foreach2DoElse = false;
 ?>
                                 <label class="checkbox-label">
                                     <input type="checkbox"
-                                           name="lingua[]"
+                                           name="lingua_selected[]"
                                            value="<?php echo htmlspecialchars((string)$_smarty_tpl->getValue('lang')['value'], ENT_QUOTES, 'UTF-8', true);?>
 "
                                            <?php if ((true && (true && null !== ($_smarty_tpl->getValue('filtri')['lingua_selected'] ?? null))) && $_smarty_tpl->getSmarty()->getModifierCallback('in_array')($_smarty_tpl->getValue('lang')['value'],$_smarty_tpl->getValue('filtri')['lingua_selected'])) {?> checked<?php }?>>
@@ -402,14 +400,14 @@ $_smarty_tpl->getSmarty()->getRuntime('Foreach')->restore($_smarty_tpl, 1);?>
                         </h4>
                         <div class="checkbox-group" data-exclusive="danno">
                             <?php
-$_from = $_smarty_tpl->getSmarty()->getRuntime('Foreach')->init($_smarty_tpl, $_smarty_tpl->getValue('danno_enum'), 'liv');
+$_from = $_smarty_tpl->getSmarty()->getRuntime('Foreach')->init($_smarty_tpl, $_smarty_tpl->getValue('filtri')['danno_enum'], 'liv');
 $foreach3DoElse = true;
 foreach ($_from ?? [] as $_smarty_tpl->getVariable('liv')->value) {
 $foreach3DoElse = false;
 ?>
                                 <label class="checkbox-label">
                                     <input type="checkbox"
-                                           name="danno[]"
+                                           name="danno_selected[]"
                                            value="<?php echo htmlspecialchars((string)$_smarty_tpl->getValue('liv')['value'], ENT_QUOTES, 'UTF-8', true);?>
 "
                                            <?php if ((true && (true && null !== ($_smarty_tpl->getValue('filtri')['danno_selected'] ?? null))) && $_smarty_tpl->getSmarty()->getModifierCallback('in_array')($_smarty_tpl->getValue('liv')['value'],$_smarty_tpl->getValue('filtri')['danno_selected'])) {?> checked<?php }?>>
@@ -505,14 +503,14 @@ $_smarty_tpl->getSmarty()->getRuntime('Foreach')->restore($_smarty_tpl, 1);?>
                                         </div>
 
                                         <div class="product-price-wrapper">
-                                            <?php if ((true && (true && null !== ($_smarty_tpl->getValue('prodotto')['prezzo_unitario'] ?? null)))) {?>
+                                            <?php if ((true && (true && null !== ($_smarty_tpl->getValue('prodotto')['prezzo'] ?? null)))) {?>
                                                 <?php if ($_smarty_tpl->getValue('prodotto')['sconto']) {?>
-                                                    <span class="product-price">€<?php echo $_smarty_tpl->getSmarty()->getModifierCallback('number_format')($_smarty_tpl->getValue('prodotto')['prezzo_unitario'],2);?>
+                                                    <span class="product-price">€<?php echo $_smarty_tpl->getSmarty()->getModifierCallback('number_format')($_smarty_tpl->getValue('prodotto')['prezzo_scontato'],2);?>
 </span>
-                                                    <span class="product-price-old">€<?php echo $_smarty_tpl->getSmarty()->getModifierCallback('number_format')($_smarty_tpl->getValue('prodotto')['prezzo_originale'],2);?>
+                                                    <span class="product-price-old">€<?php echo $_smarty_tpl->getSmarty()->getModifierCallback('number_format')($_smarty_tpl->getValue('prodotto')['prezzo'],2);?>
 </span>
                                                 <?php } else { ?>
-                                                    <span class="product-price">€<?php echo $_smarty_tpl->getSmarty()->getModifierCallback('number_format')($_smarty_tpl->getValue('prodotto')['prezzo_unitario'],2);?>
+                                                    <span class="product-price">€<?php echo $_smarty_tpl->getSmarty()->getModifierCallback('number_format')($_smarty_tpl->getValue('prodotto')['prezzo'],2);?>
 </span>
                                                 <?php }?>
                                             <?php } else { ?>
@@ -532,8 +530,11 @@ $_smarty_tpl->getSmarty()->getRuntime('Foreach')->restore($_smarty_tpl, 1);?>
                                             data-img="<?php echo $_smarty_tpl->getValue('base_url');?>
 /img/prodotti/<?php echo $_smarty_tpl->getValue('prodotto')['immagine'];?>
 "
-                                            data-prezzo="<?php echo $_smarty_tpl->getValue('prodotto')['prezzo_unitario'];?>
-"
+                                            data-prezzo="<?php if ($_smarty_tpl->getValue('prodotto')['sconto']) {
+echo $_smarty_tpl->getValue('prodotto')['prezzo_scontato'];
+} else {
+echo $_smarty_tpl->getValue('prodotto')['prezzo'];
+}?>"
                                             aria-label="Aggiungi a carrello">
                                         <i class="ti ti-shopping-cart"></i> Aggiungi
                                     </button>
@@ -673,7 +674,7 @@ if ((true && (true && null !== ($_smarty_tpl->getValue('filtri')['q'] ?? null)))
 }
 /* {/block "content"} */
 /* {block "extra_js"} */
-class Block_19146347676a574a42633673_11356255 extends \Smarty\Runtime\Block
+class Block_14436593336a579fb467c389_68641417 extends \Smarty\Runtime\Block
 {
 public function callBlock(\Smarty\Template $_smarty_tpl) {
 $_smarty_current_dir = 'C:\\xampp\\htdocs\\TableCrown\\Presentation\\smarty-dir\\templates\\catalogo';
