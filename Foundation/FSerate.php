@@ -9,12 +9,11 @@ use Exception;
 class FSerate{
 
     /**
-     * @param DateTime $filtroData data di inizio del filtro
-     * @param string $ricerca stringa da ricercare nella colonna nomeEvento
+     * @param string $filtroData data di inizio del filtro
      * @return array di oggetti
      * @throws Exception
      */
-    public static function findSerate(?DateTime $filtroData, ?string $ricerca): array{
+    public static function findSerate(?string $filtroData): array{
         try{
             $qb=FEntityManager::getInstance()->getEntityManager()->createQueryBuilder();
             $qb->select('s')
@@ -23,13 +22,9 @@ class FSerate{
                 ->setParameter('statoEvento', StatoEvento::Programmato);
             
             if ($filtroData !== null) {
+                $dataObj = new DateTime($filtroData);
                 $qb->andWhere('s.dataInizio >= :dataEvento')
-                    ->setParameter('dataEvento', $filtroData);
-            }
-
-            if ($ricerca !== null) {
-                $qb->andWhere('s.nomeEvento LIKE :ricerca')
-                    ->setParameter('ricerca', '%' . $ricerca . '%');
+                    ->setParameter('dataEvento', $dataObj);
             }
 
             $qb->orderBy('s.dataInizio', 'ASC');
