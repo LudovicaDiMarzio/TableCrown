@@ -251,5 +251,13 @@ class FPersistentManager
         return FChallenge::findChallenge($filtroData);
     }
 
+    /**
+     * @param string $ricerca stringa da ricercare nella colonna nomeEvento
+     * @return array di oggetti
+     * @throws Exception
+     */
+    public static function PMricercaEventi(?string $ricerca): array {
+        return FEventi::ricercaEventi($ricerca);
+    }
 
 }
