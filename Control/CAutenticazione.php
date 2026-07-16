@@ -212,10 +212,16 @@ class CAutenticazione extends BaseController {
         }
 
         try {
+            try {
+                $dataObj = new \DateTime($dataNascita);
+            } catch (\Exception $e) {
+                throw new InvalidArgumentException("La data di nascita non è valida.");
+            }
+
             //Il costruttore di EUtente valida internamente nome, email, password e data di nascita e
             //lancia InvalidArgumentException se qualcosa non va; qui la intercettiamo
             //per mostrare un messaggio leggibile invece di un errore fatale.
-            $nuovoUtente = new EUtente($nome, $email, $password, $dataNascita); //la password viene criptata nell'entity
+            $nuovoUtente = new EUtente($nome, $email, $password, $dataObj); //la password viene criptata nell'entity
         } catch (InvalidArgumentException $e) {
             //Se l'utente non ha completato i campi obbligatori, mostriamo un messaggio di errore
             UFlashMessage::addMessage('danger', $e->getMessage());
