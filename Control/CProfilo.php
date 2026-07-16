@@ -119,7 +119,7 @@ class CProfilo extends BaseController {
             'nomeUtente' => $utente->getNomePersona(),
             'emailUtente' => $utente->getEmailPersona(),
             'immagineUtente' => $utente->getImgPersona(),
-            'etaUtente' => $utente->getEta(),
+            'dataNascitaUtente' => $utente->getDataNascita()->format('Y-m-d'),
         ];
 
         $datiLayout = $this->preparaDatiLayout('profilo_account', $datiPagina);
@@ -232,8 +232,13 @@ class CProfilo extends BaseController {
         header('Content-Type: application/json');
         $utente = $this->utenteCorrente();
 
-        $password = UHTTPMethods::post('password'); //DA CONTROLLARE IL METODO post
-
+        try {
+            $password = UHTTPMethods::postString('password');
+        } catch (\InvalidArgumentException $e) {
+            echo json_encode(['status' => 'error', 'reason' => 'parametri_non_validi']);
+            exit();
+        }
+         
         if (!$utente->verificaPassword($password)) {
             echo json_encode(['status' => 'error', 'reason' => 'password_errata']);
             exit();
