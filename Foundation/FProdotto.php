@@ -79,7 +79,7 @@ class FProdotto{
             0<1 quindi i prodotti senza scadenzaOfferta (null) verranno messi in fondo alla lista, mentre quelli con scadenzaOfferta (non null) verranno messi in cima alla lista
             AS HIDDEN crea una colonna virtuale, con un alias, che viene usata internamente nella query ma non esiste realmente
             */
-            $qb->addSelect('(CASE WHEN prezzo.scadenzaOfferta IS NULL THEN 1 ELSE 0 END) AS HIDDEN prodottiSenzaScadenza');
+            $qb->addSelect('(CASE WHEN pr.scadenzaOfferta IS NULL THEN 1 ELSE 0 END) AS HIDDEN prodottiSenzaScadenza');
 
             //mettiamo prima tutti i prodotti con scadenza offerta e poi quelli senza 
             $qb->orderBy('prodottiSenzaScadenza', 'ASC');
@@ -91,7 +91,8 @@ class FProdotto{
             */
             //la clonatura della query viene fatta prima della suddivisione dei risultati per le pagine, perchè altrimenti il count sarebbe falzato e basato sui risultati "limitati" della query
             $qbCount = clone $qb;
-            $qbCount->select('count(g.id)');
+            $qbCount->select('count(p.idProdotto)');
+            $qbCount->resetDQLPart('orderBy');//questa query ereditava l'order by, ma su una count questo potrebbe portare ad errori quindi l'order by va rimosso
             //poichè count restituisce un numero scalare non possiamo usare il getResult(), ma usiamo il getSingleScalarResult() che restituisce un numero scalare
             $totale = $qbCount->getQuery()->getSingleScalarResult();
 

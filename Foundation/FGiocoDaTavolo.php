@@ -29,8 +29,8 @@ class FGiocoDaTavolo
             //gestione dei filtri dinamica
 
             if (!empty($filtri['difficolta'])){
-                $qb->andWhere('g.difficolta = :difficolta')
-                   ->setParameter('difficolta', $filtri['difficolta']);
+                $qb->andWhere($qb->expr()->in('g.difficolta',':difficolta'))
+                    ->setParameter('difficolta',$filtri['difficolta']);
             }
 
             if (!empty($filtri['categoria_selected'])) {
@@ -93,8 +93,8 @@ class FGiocoDaTavolo
             }
 
             if (!empty($filtri['disponibilita'])) {
-                $qb->andWhere('g.disponibilitaProdotto = :disponibilita')
-                    ->setParameter('disponibilita', $filtri['disponibilita']);
+                $qb->andWhere($qb->expr()->in('g.disponibilitaProdotto',':disponibilita'))
+                    ->setParameter('disponibilita',$filtri['disponibilita']);
             }
 
             //filtro per l'ordinamento dei risultati
