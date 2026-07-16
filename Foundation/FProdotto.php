@@ -2,6 +2,7 @@
 namespace TableCrown\Foundation;
 
 use TableCrown\Entity\EProdotto;
+use TableCrown\Entity\EGiocoDaTavolo;
 use Exception;
 
 class FProdotto{
@@ -24,9 +25,9 @@ class FProdotto{
             }
 
             $qb=FEntityManager::getInstance()->getEntityManager()->createQueryBuilder();
-            $qb->select('p')
-                ->from(EProdotto::class, 'p');
-            $qb->where('p.nomeProdotto LIKE :ricerca OR p.descrizioneProdotto LIKE :ricerca')
+            $qb->select('g')
+                ->from(EGiocoDaTavolo::class, 'g');
+            $qb->where('g.nomeProdotto LIKE :ricerca OR g.descrizioneProdotto LIKE :ricerca')
                ->setParameter('ricerca', '%' . $testoPulito . '%');
 
             /*clono la query appena creata per poterla modificare ed effettuare un count su tutti i prodotti filtrati e 
@@ -34,7 +35,7 @@ class FProdotto{
             */
             //la clonatura della query viene fatta prima della suddivisione dei risultati per le pagine, perchè altrimenti il count sarebbe falzato e basato sui risultati "limitati" della query
             $qbCount = clone $qb;
-            $qbCount->select('count(p.idProdotto)');
+            $qbCount->select('count(g.idProdotto)');
             //poichè count restituisce un numero scalare non possiamo usare il getResult(), ma usiamo il getSingleScalarResult() che restituisce un numero scalare
             $totale = $qbCount->getQuery()->getSingleScalarResult();
 
