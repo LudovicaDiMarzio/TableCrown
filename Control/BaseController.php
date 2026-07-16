@@ -22,7 +22,7 @@ use TableCrown\Entity\EBustine;
 use TableCrown\Entity\EPortaDadi;
 use TableCrown\Entity\ECartaDiCredito;
 use TableCrown\Entity\EIndirizzo;
-
+use TableCrown\Entity\EMotivazione;
 
 
 abstract class BaseController {
@@ -288,6 +288,7 @@ abstract class BaseController {
             'valutazione' => $recensione->getValutazione(),
             'testo'       => $recensione->getTesto(),
             'data'        => $recensione->getData(),
+            'id_utente'   => (int) $recensione->getUtente()->getIdPersona(),
             'utente'      => $recensione->getUtente()->getNomePersona(),
         ];
     }
@@ -301,6 +302,30 @@ abstract class BaseController {
             $result[] = $this->recensioneToArray($recensione);
         }
         return $result;
+    }
+
+    // MOTIVAZIONI SEGNALAZIONE
+
+    /**
+     * Converte una EMotivazione in array associativo per Presentation.
+     */
+    protected function motivazioneToArray(EMotivazione $motivazione): array {
+        return [
+            'id' => $motivazione->getIdMotivazione(),
+            'label' => $motivazione->getNomeMotivazione(),
+            'gravita' => $motivazione->getGravitaMotivazione()->value,
+        ];
+    }
+
+    /**
+     * Converte un array di EMotivazione in array associativo per Presentation.
+     */
+    protected function motivazioniToArray(array $motivazioni): array {
+        $risultato = [];
+        foreach ($motivazioni as $motivazione) {
+            $risultato[] = $this->motivazioneToArray($motivazione);
+        }
+        return $risultato;
     }
 
     // EVENTI
