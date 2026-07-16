@@ -111,7 +111,7 @@ class CDettaglioEvento extends BaseController {
 
                 if ($pagamentoAvvenuto) {
                     //Aggiorniamo lo stato della partecipazione prima del salvataggio
-                    $nuovaPartecipazione->aggiornaPagamento();
+                    $nuovaPartecipazione->aggiornaPagamento(); //aggiornaPagamento() rifà internamente il controllo richiedeQuota, ma è una ridondanza innocua
                 }
             } catch (\Exception $e) {
                 //Se il pagamento fallisce, interrompiamo tutto e mostriamo l'errore della banca
