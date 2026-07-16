@@ -10,7 +10,7 @@
 
         {* ── TOPBAR: TORNA ALL'AREA PERSONALE ── *}
         <div class="mierecensioni-topbar">
-            <a href="{$base_url}/account" class="mierecensioni-back-link">
+            <a href="{$base_url}/profilo" class="mierecensioni-back-link">
                 <i class="ti ti-arrow-left"></i> Torna all'Area Personale
             </a>
         </div>
@@ -98,7 +98,7 @@
                 </div>
                 <h2 class="mierecensioni-empty-titolo">Non hai ancora scritto recensioni</h2>
                 <p class="mierecensioni-empty-testo">Le recensioni che lasci sui prodotti acquistati compariranno qui.</p>
-                <a href="{$base_url}/account/ordini" class="mierecensioni-empty-btn">
+                <a href="{$base_url}/profilo/ordini" class="mierecensioni-empty-btn">
                     <i class="ti ti-package"></i> Vai ai tuoi ordini
                 </a>
             </div>
@@ -195,11 +195,11 @@
             var id = idDaEliminare;
             var card = document.getElementById('mierecensioni-card-' + id);
 
-            fetch('{/literal}{$base_url}{literal}/account/recensioni/elimina', {
+            fetch('{/literal}{$base_url}{literal}/recensioni/elimina', {
                 method: 'POST',
                 headers: { 'Content-Type': 'application/json' },
                 credentials: 'same-origin',
-                body: JSON.stringify({ id: id })
+                body: JSON.stringify({ id_recensione: id })
             })
             .then(function(response) { return response.json(); })
             .then(function(data) {
@@ -215,7 +215,7 @@
                         }, { once: true });
                     }
                 } else {
-                    mostraPopup('Non è stato possibile eliminare la recensione, riprova più tardi.');
+                    mostraPopup(data.message || 'Non è stato possibile eliminare la recensione, riprova più tardi.');
                 }
             })
             .catch(function() {

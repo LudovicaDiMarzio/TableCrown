@@ -15,13 +15,13 @@
                     <i class="ti ti-logout"></i> Log-out
                 </a>
 
-                <a href="{$base_url}/account/elimina" class="modifica-account-elimina" id="modifica-account-elimina-link">
+                <a href="{$base_url}/profilo/modifica/elimina" class="modifica-account-elimina" id="modifica-account-elimina-link">
                     <i class="ti ti-trash"></i> Elimina account
                 </a>
             </div>
         </div>
 
-        <form action="{$base_url}/account/modifica" method="post" class="modifica-account-form" enctype="multipart/form-data" id="modifica-account-form">
+        <form action="{$base_url}/profilo/modifica" method="post" class="modifica-account-form" enctype="multipart/form-data" id="modifica-account-form">
 
             
             {* ── AVATAR ── *}
@@ -49,7 +49,7 @@
 
                 <input type="file"
                        id="modifica-account-avatar-input"
-                       name="avatar"
+                       name="img_profilo"
                        accept="image/*"
                        class="modifica-account-avatar-input">
 
@@ -61,12 +61,12 @@
                 <div class="modifica-account-fields">
 
                     <div class="modifica-account-field">
-                        <label for="nickname" class="modifica-account-label">
+                        <label for="nome" class="modifica-account-label">
                             <i class="ti ti-user"></i> Nickname
                         </label>
                         <input type="text"
-                               id="nickname"
-                               name="nickname"
+                               id="nome"
+                               name="nome"
                                class="modifica-account-input"
                                value="{$nomeUtente|default:''|escape}">
                     </div>
@@ -120,7 +120,7 @@
                 <i class="ti ti-shield-lock"></i> Cambia Password
             </h3>
 
-            <form action="{$base_url}/account/password" method="post" class="modifica-account-password-form" id="modifica-account-password-form">
+            <form action="{$base_url}/profilo/modifica/password" method="post" class="modifica-account-password-form" id="modifica-account-password-form">
 
                 <div class="modifica-account-field">
                     <label for="psw_vecchia" class="modifica-account-label">Psw Vecchia</label>
@@ -278,8 +278,9 @@
                 headers: { 'Content-Type': 'application/json' },
                 credentials: 'same-origin',
                 body: JSON.stringify({
-                    psw_vecchia: pswVecchia,
-                    psw_nuova: pswNuova
+                    vecchia_password: pswVecchia,
+                    nuova_password: pswNuova,
+                    conferma_password: pswConferma
                 })
             })
             .then(function(response) {
@@ -287,7 +288,7 @@
             })
             .then(function(data) {
                 if (data.status === 'ok') {
-                    window.location.href = '{/literal}{$base_url}{literal}/account';
+                    window.location.href = '{/literal}{$base_url}{literal}/profilo/modifica';
                 } else if (data.reason === 'nuova_non_valida') {
                     mostraPopup('La nuova password non va bene, provane un\'altra.');
                 } else if (data.reason === 'vecchia_errata') {
@@ -344,7 +345,7 @@
                 return;
             }
 
-            fetch('{/literal}{$base_url}{literal}/account/elimina', {
+            fetch('{/literal}{$base_url}{literal}/profilo/modifica/elimina', {
                 method: 'POST',
                 headers: { 'Content-Type': 'application/json' },
                 credentials: 'same-origin',

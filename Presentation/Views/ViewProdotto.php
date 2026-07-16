@@ -9,13 +9,12 @@ class ViewProdotto {
 
     /**
      * Esegue gli assign per la pagina di dettaglio prodotto e il display del template.
-     * $dati è l'array prodotto da CProdotto::mostraDettaglioProdotto() dopo preparaDatiLayout()
-     * (preparaDatiLayout NON viene ancora chiamato nel controller attuale: va aggiunto).
+     * $dati è l'array prodotto da CProdotto::mostraDettaglioProdotto() dopo preparaDatiLayout().
      */
     public static function mostraDettaglioProdotto(array $dati): void {
         $smarty = SmartyConfiguration::getSmarty();
 
-        // --- Dati globali di layout (richiedono che il controller chiami preparaDatiLayout) ---
+        // --- Dati globali di layout ---
         $smarty->assign('base_url',     $dati['base_url'] ?? '');
         $smarty->assign('current_page', $dati['current_page'] ?? 'prodotto');
         $smarty->assign('breadcrumbs',  $dati['breadcrumbs'] ?? []);
@@ -27,38 +26,40 @@ class ViewProdotto {
             $smarty->assign('flash_type', $dati['flash_type']);
         }
 
-        // --- Dati specifici del prodotto ---
-        // NOTA: qui assegno i campi così come oggi li produce costruisciDatiVista()
-        // (piatti, non annidati sotto 'prodotto'). Se preferite annidarli sotto
-        // $prodotto.* nel tpl, va cambiato il controller per fare
-        // $dati['prodotto'] = [...] invece di un array piatto.
-        $smarty->assign('idProdotto',           $dati['idProdotto'] ?? null);
-        $smarty->assign('nomeProdotto',         $dati['nomeProdotto'] ?? '');
-        $smarty->assign('imgProdotto',          $dati['imgProdotto'] ?? null);
-        $smarty->assign('descrizioneProdotto',  $dati['descrizioneProdotto'] ?? '');
-        $smarty->assign('disponibilitaProdotto',$dati['disponibilitaProdotto'] ?? null);
-        $smarty->assign('quantita',             $dati['quantita'] ?? 0);
-        $smarty->assign('dataPubblicazione',    $dati['dataPubblicazione'] ?? null);
-        $smarty->assign('prezzo',               $dati['prezzo'] ?? null);
-        $smarty->assign('valutazioneMedia',     $dati['valutazioneMedia'] ?? 0.0);
-        $smarty->assign('recensioni',           $dati['recensioni'] ?? []);
+        // --- Dati comuni del prodotto (chiavi di prodottoToArray(), NON rinominate) ---
+        $smarty->assign('id',                 $dati['id'] ?? null);
+        $smarty->assign('nome',               $dati['nome'] ?? '');
+        $smarty->assign('immagine',           $dati['immagine'] ?? null);
+        $smarty->assign('valutazione_media',  $dati['valutazione_media'] ?? 0.0);
+        $smarty->assign('prezzo',             $dati['prezzo'] ?? null);
+        $smarty->assign('sconto',             $dati['sconto'] ?? false);
+        $smarty->assign('prezzo_scontato',    $dati['prezzo_scontato'] ?? null);
+        $smarty->assign('percentuale_sconto', $dati['percentuale_sconto'] ?? null);
+        $smarty->assign('disponibilita',      $dati['disponibilita'] ?? null);
+        $smarty->assign('isAcquistabile',     $dati['isAcquistabile'] ?? false);
+
+        // --- Campi esclusivi della pagina di dettaglio ---
+        $smarty->assign('descrizioneProdotto', $dati['descrizioneProdotto'] ?? '');
+        $smarty->assign('quantita',            $dati['quantita'] ?? 0);
+        $smarty->assign('dataPubblicazione',   $dati['dataPubblicazione'] ?? null);
+        $smarty->assign('recensioni',          $dati['recensioni'] ?? []);
+        $smarty->assign('correlati',           $dati['correlati'] ?? []);
+        $smarty->assign('userHasPurchased',    $dati['userHasPurchased'] ?? false);
+        $smarty->assign('isInWishlist',        $dati['isInWishlist'] ?? false);
+        $smarty->assign('motivazioni',         $dati['motivazioni'] ?? []);
 
         // --- Campi specifici solo per EGiocoDaTavolo (assenti per EBustine/EPortaDadi) ---
-        $smarty->assign('categoria',           $dati['categoria'] ?? null);
-        $smarty->assign('componenti',          $dati['componenti'] ?? null);
-        $smarty->assign('giocoBase',           $dati['giocoBase'] ?? null);
-        $smarty->assign('numeroGiocatoriMin',  $dati['numeroGiocatoriMin'] ?? null);
-        $smarty->assign('numeroGiocatoriMax',  $dati['numeroGiocatoriMax'] ?? null);
-        $smarty->assign('etaMinima',           $dati['etaMinima'] ?? null);
-        $smarty->assign('durataMedia',         $dati['durataMedia'] ?? null);
-        $smarty->assign('danno',               $dati['danno'] ?? null);
-        $smarty->assign('descrizioneDanno',    $dati['descrizioneDanno'] ?? null);
-        $smarty->assign('lingua',              $dati['lingua'] ?? null);
-        $smarty->assign('difficolta',          $dati['difficolta'] ?? null);
-
-        // --- Altri dati pagina ---
-        $smarty->assign('correlati',        $dati['correlati'] ?? []);
-        $smarty->assign('userHasPurchased', $dati['userHasPurchased'] ?? false);
+        $smarty->assign('categoria',          $dati['categoria'] ?? null);
+        $smarty->assign('componenti',         $dati['componenti'] ?? null);
+        $smarty->assign('giocoBase',          $dati['giocoBase'] ?? null);
+        $smarty->assign('numeroGiocatoriMin', $dati['numeroGiocatoriMin'] ?? null);
+        $smarty->assign('numeroGiocatoriMax', $dati['numeroGiocatoriMax'] ?? null);
+        $smarty->assign('etaMinima',          $dati['etaMinima'] ?? null);
+        $smarty->assign('durataMedia',        $dati['durataMedia'] ?? null);
+        $smarty->assign('danno',              $dati['danno'] ?? null);
+        $smarty->assign('descrizioneDanno',   $dati['descrizioneDanno'] ?? null);
+        $smarty->assign('lingua',             $dati['lingua'] ?? null);
+        $smarty->assign('difficolta',         $dati['difficolta'] ?? null);
 
         $smarty->display('prodotto.tpl');
     }

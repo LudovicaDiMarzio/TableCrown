@@ -56,6 +56,17 @@
                             </a>
                         {/if}
                     {/foreach}
+
+                    {* ── METODI DI PAGAMENTO ── *}
+                    <a href="{$base_url}/profilo/pagamento" class="account-card">
+                        <span class="account-card-icon">
+                            <i class="ti ti-credit-card"></i>
+                        </span>
+                        <span class="account-card-label">Metodi di Pagamento</span>
+                        <span class="account-card-arrow">
+                            <i class="ti ti-arrow-right"></i>
+                        </span>
+                    </a>
                 </div>
 
             </div>
