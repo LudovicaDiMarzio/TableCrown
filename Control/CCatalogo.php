@@ -102,33 +102,29 @@ class CCatalogo extends BaseController {
         $this->renderCatalogo('ricerca', $risultatoGrezzo, $pagina, ['q' => $query], $query);
     }
 
+    //==========================================================================
+    // CATALOGO OFFERTE
+    //==========================================================================
+
+    /**
+     * Mostra il catalogo unico delle offerte: prodotti di qualsiasi tipo
+     * (giochi da tavolo, bustine, porta dadi, ecc.), purché in sconto attivo.
+     * URL: GET /offerte
+     */
+    public function mostraOfferte(): void {
+        $pagina = $this->estraiPaginaRichiesta();
+
+        //TODO: il metodo già creato PMfindProdottiInOfferta non va bene qui,
+        //perché non gestisce la paginazione. Ne serve uno tipo PMfindProdottiInOfferta(limit, offset), nome da cambiare
+        //$risultatoGrezzo = FPersistentManager::PMfind...;
+        
+        $this->renderCatalogo('offerte', $risultatoGrezzo, $pagina, []);
+    }
+
 
     //==========================================================================
     // METODI PRIVATI CONDIVISI
     //==========================================================================
-
-    /**
-     * Costruisce un array $datiPagina e delega il render a ViewCatalogo.
-     * Tramite questo metodo centralizziamo la logica comune alle 4 pagine
-     * pubbliche, per evitare di ripetere la stessa struttura di array in ognuna.
-     */
-    private function renderCatalogo(string $vista, array $risultatoGrezzo, int $pagina, array $filtri, ?string $searchQuery = null): void {
-        $totaleRisultati = $risultatoGrezzo['totale'] ?? 0;
-        $totalePagine = $this->calcolaTotalePagine($totaleRisultati);
-        $pagina = $this->clampPagina($pagina, $totalePagine);
-
-        $datiPagina = [
-            'vista'          => $vista,
-            'prodotti'       => $this->prodottiToArray($risultatoGrezzo['risultati'] ?? []),
-            'total_results'  => $totaleRisultati,
-            'pagination'     => ['current_page' => $pagina, 'total_pages' => $totalePagine],
-            'search_query'   => $searchQuery,
-            'filtri'         => $filtri,
-        ];
-
-        $datiLayout = $this->preparaDatiLayout($vista, $datiPagina);
-        ViewCatalogo::render($datiLayout);
-    }
 
     /**
      * Valida il numero di pagina richiesto.
@@ -162,6 +158,29 @@ class CCatalogo extends BaseController {
      */
     private function calcolaTotalePagine(int $totaleRisultati): int {
         return (int) ceil($totaleRisultati / self::RISULTATI_PER_PAGINA); //ceil per evitare errori di arrotondamento
+    }
+
+    /**
+     * Costruisce un array $datiPagina e delega il render a ViewCatalogo.
+     * Tramite questo metodo centralizziamo la logica comune alle 4 pagine
+     * pubbliche, per evitare di ripetere la stessa struttura di array in ognuna.
+     */
+    private function renderCatalogo(string $vista, array $risultatoGrezzo, int $pagina, array $filtri, ?string $searchQuery = null): void {
+        $totaleRisultati = $risultatoGrezzo['totale'] ?? 0;
+        $totalePagine = $this->calcolaTotalePagine($totaleRisultati);
+        $pagina = $this->clampPagina($pagina, $totalePagine);
+
+        $datiPagina = [
+            'vista'          => $vista,
+            'prodotti'       => $this->prodottiToArray($risultatoGrezzo['risultati'] ?? []),
+            'total_results'  => $totaleRisultati,
+            'pagination'     => ['current_page' => $pagina, 'total_pages' => $totalePagine],
+            'search_query'   => $searchQuery,
+            'filtri'         => $filtri,
+        ];
+
+        $datiLayout = $this->preparaDatiLayout($vista, $datiPagina);
+        ViewCatalogo::render($datiLayout);
     }
 
     /**
@@ -237,7 +256,29 @@ class CCatalogo extends BaseController {
         return $filtri;
     }
 
-    //MANCA IL METODO GETBREADCRUMBS!!!!!!!
+    protected function getBreadcrumbs(string $currentPage = ''): array {
+        $breadcrumbs = [['label' => 'Home', 'url' => '/']];
+
+        switch ($currentPage) {
+            case 'catalogo_giochi':
+                $breadcrumbs[] = ['label' => 'Giochi da tavolo', 'url' => '/catalogo/giochi-da-tavolo'];
+                break;
+            case 'catalogo_bustine':
+                $breadcrumbs[] = ['label' => 'Bustine', 'url' => '/catalogo/bustine'];
+                break;
+            case 'catalogo_portadadi':
+                $breadcrumbs[] = ['label' => 'Porta Dadi', 'url' => '/catalogo/porta-dadi'];
+                break;
+            case 'ricerca':
+                $breadcrumbs[] = ['label' => 'Risultati ricerca', 'url' => '/ricerca'];
+                break;
+            case 'offerte':
+                $breadcrumbs[] = ['label' => 'Offerte', 'url' => '/offerte'];
+                break;
+        }
+
+        return $breadcrumbs;
+    }
 
 
 }

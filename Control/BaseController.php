@@ -253,6 +253,20 @@ abstract class BaseController {
         return FPersistentManager::PMgetObjOnAttribute(EUtente::class, 'idPersona', $idUtente);
     }
 
+    /**
+     * Simile a utenteCorrente(), ma utile in contesti in cui il login è facoltativo
+     * (es. pagine pubbliche che mostrano contenuto diverso se l'utente è loggato).
+     * Non forza mai un redirect: restituisce null se non loggato o senza ruolo 'utente',
+     * lasciando decidere al chiamante cosa fare in quel caso.
+     */
+    protected function utenteCorrenteOpzionale(): ?EUtente {
+        if (!$this->isLoggedIn() || USession::getSessionElement('ruolo') !== 'utente') {
+            return null;
+        }
+        $idUtente = USession::getSessionElement('id_persona');
+        return FPersistentManager::PMgetObjOnAttribute(EUtente::class, 'idPersona', $idUtente);
+    }
+
     // ENUM
 
     /**
@@ -583,9 +597,6 @@ abstract class BaseController {
             'totale' => $totale,
         ];
     }
-
-
-    // ORDINI ??
 
     // GENERICI 
 

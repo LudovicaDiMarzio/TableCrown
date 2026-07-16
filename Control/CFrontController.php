@@ -295,13 +295,23 @@ class CFrontController {
                 }
                 break;
 
+            
+            case 'offerte':
+                if ($metodoHTTP === 'GET') {
+                    $controller = new CCatalogo();
+                    $controller->mostraOfferte(); //GET /offerte
+                } else {
+                    $this->mostra404();
+                }
+                break;
+
 /* 
             case 'chi-siamo':
                 $controller = new CPagineStatiche();
                 $controller->chiSiamo();
                 break;
 
-                
+
             case 'contatti':
                 $controller = new CPagineStatiche();
                 $controller->contatti();
@@ -313,12 +323,6 @@ class CFrontController {
                 $controller->doveSiamo();
                 break;
 
-
-            case 'offerte':
-                //Corrisponde a: GET /offerte
-                $controller = new COfferte();
-                $controller->mostraOfferte();
-                break;
 */
 
             default:

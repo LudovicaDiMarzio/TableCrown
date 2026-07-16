@@ -51,7 +51,7 @@ class CDettaglioEvento extends BaseController {
      * URL: POST /eventi/partecipa
      */
     public function partecipaEvento(): void {
-        $this->requireRole('utente');
+        $utente = $this->utenteCorrente();
 
         $idEvento = UHTTPMethods::postInt('id_evento');
         if (!$idEvento) {
@@ -66,10 +66,7 @@ class CDettaglioEvento extends BaseController {
             header('Location: /eventi');
             exit();
         }
-
-        $idUtente = USession::getSessionElement('id_persona');
-        $utente = FPersistentManager::PMgetObjOnAttribute(EUtente::class, 'idPersona', $idUtente);
-
+        
         if ($this->utenteIscritto($evento)) {
             UFlashMessage::addMessage('danger', 'Sei già iscritto a questo evento.');
             header('Location: /eventi/dettaglio/' . $idEvento);
