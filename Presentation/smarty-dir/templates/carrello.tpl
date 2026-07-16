@@ -26,9 +26,7 @@
                             <div class="carrello-item"
                                  data-item-id="{$p.id}"
                                  data-prezzo-unitario="{$p.prezzo_unitario}"
-                                 data-risparmio-unitario="{if $p.sconto}{$p.prezzo_originale-$p.prezzo_unitario}{else}0{/if}"
-                                 data-update-url="{$base_url}{$item.update_url|escape}"
-                                 data-remove-url="{$base_url}{$item.remove_url|escape}">
+                                 data-risparmio-unitario="{if $p.sconto}{$p.prezzo-$p.prezzo_unitario}{else}0{/if}">
 
                                 <a href="{$base_url}/prodotto/{$p.id}" class="carrello-item-img-link">
                                     <img src="{$base_url}/img/prodotti/{$p.immagine|escape}"
@@ -45,7 +43,7 @@
                                     <div class="carrello-item-prezzo-wrapper">
                                         {if $p.sconto}
                                             <span class="carrello-item-prezzo">€{$p.prezzo_unitario|number_format:2}</span>
-                                            <span class="carrello-item-prezzo-old">€{$p.prezzo_originale|number_format:2}</span>
+                                            <span class="carrello-item-prezzo-old">€{$p.prezzo|number_format:2}</span>
                                         {elseif isset($p.prezzo_unitario)}
                                             <span class="carrello-item-prezzo">€{$p.prezzo_unitario|number_format:2}</span>
                                         {else}
@@ -84,7 +82,6 @@
 
                                     <button class="carrello-item-rimuovi"
                                             type="button"
-                                            data-url="{$base_url}{$item.remove_url|escape}"
                                             aria-label="Rimuovi {$p.nome|escape} dal carrello">
                                         <i class="ti ti-trash"></i> Rimuovi
                                     </button>
@@ -100,9 +97,7 @@
                         <div class="carrello-item"
                              data-item-id=""
                              data-prezzo-unitario=""
-                             data-risparmio-unitario="0"
-                             data-update-url=""
-                             data-remove-url="">
+                             data-risparmio-unitario="0">
 
                             <a href="" class="carrello-item-img-link">
                                 <img src=""
@@ -147,7 +142,6 @@
 
                                 <button class="carrello-item-rimuovi"
                                         type="button"
-                                        data-url=""
                                         aria-label="Rimuovi dal carrello">
                                     <i class="ti ti-trash"></i> Rimuovi
                                 </button>
@@ -270,6 +264,13 @@
 {/block}
 
 {block name="extra_js"}
+{* Endpoint globali del carrello: iniettati qui (fuori da {literal}) perché Smarty
+   non valuta le variabili dentro un blocco {literal}. Sono gli stessi per tutte le righe,
+   la riga specifica viene identificata via data-item-id nel body della richiesta. *}
+<script>
+    var CARRELLO_UPDATE_URL = "{$base_url}{$update_url|default:'/carrello/aggiorna'}";
+    var CARRELLO_REMOVE_URL = "{$base_url}{$remove_url|default:'/carrello/rimuovi'}";
+</script>
 <script>
 {literal}
 (function() {
@@ -322,6 +323,13 @@
         if (risparmioRow) risparmioRow.style.display = risparmioTotale > 0 ? '' : 'none';
     }
 
+    // ── GESTIONE 401 (utente non più autenticato lato server) ──
+    function gestisciNonAutenticato() {
+        // Nessun modal login condiviso agganciato qui: da verificare con t1/t3
+        // se esiste già un handler globale per il 401 altrove nel layout.
+        mostraToast('Sessione scaduta, effettua di nuovo l\'accesso.', 'errore');
+    }
+
     // ── BINDING RIGA CARRELLO (stepper qty + rimozione) ──
     // Estratto in funzione riutilizzabile: viene chiamato sia sulle righe
     // renderizzate da Smarty al caricamento, sia sulle righe create
@@ -332,7 +340,6 @@
         var btnPlus     = riga.querySelector('.carrello-qty-plus');
         var subtotaleEl = riga.querySelector('.carrello-item-subtotale-value');
         var unit        = parseFloat(riga.dataset.prezzoUnitario) || 0;
-        var updateUrl   = riga.dataset.updateUrl;
 
         if (input) input.dataset.valPrecedente = input.value;
 
@@ -343,19 +350,30 @@
         }
 
         function inviaAggiornamento(valPrecedente) {
-            if (!updateUrl) return;
             var qty = parseInt(input.value) || 1;
+            var idProdotto = riga.dataset.itemId;
             var controller = new AbortController();
             var timeout = setTimeout(function() { controller.abort(); }, 5000);
 
-            // GET, come richiesto dalla rotta /carrello/aggiorna/{id}?qty=N nel FrontController
-            fetch(updateUrl + '?qty=' + qty, { signal: controller.signal })
+            // POST /carrello/aggiorna con id_prodotto e quantita nel body,
+            // come richiesto da CCarrello::aggiornaQuantita()
+            fetch(CARRELLO_UPDATE_URL, {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
+                body: 'id_prodotto=' + encodeURIComponent(idProdotto) + '&quantita=' + encodeURIComponent(qty),
+                signal: controller.signal
+            })
                 .then(function(response) {
                     clearTimeout(timeout);
+                    if (response.status === 401) {
+                        gestisciNonAutenticato();
+                        throw new Error('auth');
+                    }
                     if (!response.ok) throw new Error('server');
                 })
                 .catch(function(err) {
                     clearTimeout(timeout);
+                    if (err.message === 'auth') return; // già gestito sopra
                     input.value = valPrecedente;
                     input.dataset.valPrecedente = valPrecedente;
                     aggiornaRigaUI();
@@ -404,7 +422,7 @@
         var btnRimuovi = riga.querySelector('.carrello-item-rimuovi');
         if (btnRimuovi) {
             btnRimuovi.addEventListener('click', function() {
-                var url         = this.dataset.url;
+                var idProdotto  = riga.dataset.itemId;
                 var parent      = riga.parentNode;
                 var nextSibling = riga.nextSibling;
 
@@ -415,17 +433,23 @@
                     ricalcolaRiepilogo();
                 }
 
-                if (!url) return;
-
                 var controller = new AbortController();
                 var timeout = setTimeout(function() { controller.abort(); }, 5000);
 
-                // GET, come richiesto dalla rotta attuale /carrello/rimuovi/{id} nel FrontController.
-                // NB: dal punto di vista REST una rimozione dovrebbe essere POST/DELETE,
-                // è un punto da rivedere con t1 sul routing.
-                fetch(url, { signal: controller.signal })
+                // POST /carrello/rimuovi con id_prodotto nel body,
+                // come richiesto da CCarrello::rimuoviDalCarrello()
+                fetch(CARRELLO_REMOVE_URL, {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
+                    body: 'id_prodotto=' + encodeURIComponent(idProdotto),
+                    signal: controller.signal
+                })
                     .then(function(response) {
                         clearTimeout(timeout);
+                        if (response.status === 401) {
+                            gestisciNonAutenticato();
+                            throw new Error('auth');
+                        }
                         if (!response.ok) throw new Error('server');
                         if (document.querySelectorAll('.carrello-item').length === 0) {
                             window.location.reload();
@@ -433,6 +457,7 @@
                     })
                     .catch(function(err) {
                         clearTimeout(timeout);
+                        if (err.message === 'auth') return; // già gestito sopra
                         if (nextSibling) {
                             parent.insertBefore(riga, nextSibling);
                         } else {
@@ -465,7 +490,6 @@
         riga.dataset.risparmioUnitario = data.sconto
             ? (data.prezzo_originale - data.prezzo_unitario)
             : 0;
-        riga.dataset.updateUrl = data.update_url;
 
         var linkImg = riga.querySelector('.carrello-item-img-link');
         if (linkImg) linkImg.href = data.product_url;
@@ -524,7 +548,6 @@
 
         var btnRimuovi = riga.querySelector('.carrello-item-rimuovi');
         if (btnRimuovi) {
-            btnRimuovi.dataset.url = data.remove_url;
             btnRimuovi.setAttribute('aria-label', 'Rimuovi ' + data.nome + ' dal carrello');
         }
 
@@ -577,10 +600,15 @@
             })
                 .then(function(response) {
                     clearTimeout(timeout);
+                    if (response.status === 401) {
+                        gestisciNonAutenticato();
+                        throw new Error('auth');
+                    }
                     if (!response.ok) throw new Error('server');
                     return response.json();
                 })
                 .then(function(data) {
+                    if (!data) return; // caso 401 già gestito sopra
                     if (data.success === false) {
                         mostraToast(data.message || 'Errore nell\'aggiunta del prodotto.', 'errore');
                         return;
@@ -601,6 +629,7 @@
                 })
                 .catch(function(err) {
                     clearTimeout(timeout);
+                    if (err.message === 'auth') return; // già gestito sopra
                     var msg = err.name === 'AbortError'
                         ? 'Connessione lenta, prodotto non aggiunto.'
                         : 'Errore nell\'aggiunta del prodotto.';

@@ -191,10 +191,10 @@
                             <i class="ti ti-list"></i> Categoria
                         </h4>
                         <div class="checkbox-group" data-exclusive="categoria">
-                            {foreach $categorie_enum as $cat}
+                            {foreach $filtri.categorie_enum as $cat}
                                 <label class="checkbox-label">
                                     <input type="checkbox"
-                                           name="categoria[]"
+                                           name="categoria_selected[]"
                                            value="{$cat.value|escape}"
                                            {if isset($filtri.categoria_selected) && in_array($cat.value, $filtri.categoria_selected)} checked{/if}>
                                     <span class="checkbox-text">{$cat.label|escape}</span>
@@ -309,10 +309,10 @@
                             <i class="ti ti-language"></i> Lingua
                         </h4>
                         <div class="checkbox-group" data-exclusive="lingua">
-                            {foreach $lingue_enum as $lang}
+                            {foreach $filtri.lingue_enum as $lang}
                                 <label class="checkbox-label">
                                     <input type="checkbox"
-                                           name="lingua[]"
+                                           name="lingua_selected[]"
                                            value="{$lang.value|escape}"
                                            {if isset($filtri.lingua_selected) && in_array($lang.value, $filtri.lingua_selected)} checked{/if}>
                                     <span class="checkbox-text">{$lang.label|escape}</span>
@@ -327,10 +327,10 @@
                             <i class="ti ti-alert-triangle"></i> Stato / Danno
                         </h4>
                         <div class="checkbox-group" data-exclusive="danno">
-                            {foreach $danno_enum as $liv}
+                            {foreach $filtri.danno_enum as $liv}
                                 <label class="checkbox-label">
                                     <input type="checkbox"
-                                           name="danno[]"
+                                           name="danno_selected[]"
                                            value="{$liv.value|escape}"
                                            {if isset($filtri.danno_selected) && in_array($liv.value, $filtri.danno_selected)} checked{/if}>
                                     <span class="checkbox-text">{$liv.label|escape}</span>
@@ -404,12 +404,12 @@
                                         </div>
 
                                         <div class="product-price-wrapper">
-                                            {if isset($prodotto.prezzo_unitario)}
+                                            {if isset($prodotto.prezzo)}
                                                 {if $prodotto.sconto}
-                                                    <span class="product-price">€{$prodotto.prezzo_unitario|number_format:2}</span>
-                                                    <span class="product-price-old">€{$prodotto.prezzo_originale|number_format:2}</span>
+                                                    <span class="product-price">€{$prodotto.prezzo_scontato|number_format:2}</span>
+                                                    <span class="product-price-old">€{$prodotto.prezzo|number_format:2}</span>
                                                 {else}
-                                                    <span class="product-price">€{$prodotto.prezzo_unitario|number_format:2}</span>
+                                                    <span class="product-price">€{$prodotto.prezzo|number_format:2}</span>
                                                 {/if}
                                             {else}
                                                 <span class="product-price-unavailable">Prezzo N/D</span>
@@ -425,7 +425,7 @@
                                             data-id="{$prodotto.id}"
                                             data-nome="{$prodotto.nome|escape}"
                                             data-img="{$base_url}/img/prodotti/{$prodotto.immagine}"
-                                            data-prezzo="{$prodotto.prezzo_unitario}"
+                                            data-prezzo="{if $prodotto.sconto}{$prodotto.prezzo_scontato}{else}{$prodotto.prezzo}{/if}"
                                             aria-label="Aggiungi a carrello">
                                         <i class="ti ti-shopping-cart"></i> Aggiungi
                                     </button>
