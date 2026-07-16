@@ -46,13 +46,17 @@ class ESegnalazione{
     #[ORM\JoinColumn(name: "recensione_id", referencedColumnName: "idRecensione", nullable: false)]
     private ERecensione $recensione; //la recensione che ha subito la segnalazione
 
-    public function __construct(  EMotivazione $motivazione,ERecensione $recensione) 
-    {
+    #[ORM\ManyToOne(targetEntity: EUtente::class, inversedBy: "segnalazioni")]
+    #[ORM\JoinColumn(name: "utente_segnalante_id", referencedColumnName: "idpersona", nullable: false)]
+    private EUtente $utenteSegnalante; //l'utente che ha segnalato (serve per tracciabilità e per prevenire spam di segnalazioni da parte di malintenzionati)
+
+    public function __construct(EMotivazione $motivazione, ERecensione $recensione, EUtente $utenteSegnalante) {
         $this->datasegnalazione = new DateTime();  //la segnalazione avviene nel momento in cui viene creata la sua istanza
         $this->statosegnalazione = StatoSegnalazione::IN_ATTESA; // inizialmente sempre InAttesa
         $this->motivazione = $motivazione;
         $this->recensione = $recensione;
         $this->utente = $recensione->getUtente();
+        $this->utenteSegnalante = $utenteSegnalante;
         //manteniamo la coerenza nella relazione bidirezionale, aggiungendo la segnalazione alla collection segnalazione di EUtente, altrimenti la collection sarebbe aggiornata solo dopo il flush
         //il this come parametro sta a rappresentare che stiamo passando esattamente questa istanza della segnalazione
         $recensione->riceviSegnalazione($this);
@@ -67,7 +71,6 @@ class ESegnalazione{
         $this->statosegnalazione = StatoSegnalazione::RISOLTA;
     }
        
-
 
     //GET methods
     public function getIdSegnalazione(): ?int {
@@ -92,5 +95,9 @@ class ESegnalazione{
 
     public function getUtente(): EUtente {
         return $this->utente;
+    }
+
+    public function getUtenteSegnalante(): EUtente {
+        return $this->utenteSegnalante;
     }
 }
