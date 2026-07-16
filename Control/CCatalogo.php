@@ -78,6 +78,7 @@ class CCatalogo extends BaseController {
      * La barra di ricerca è un componente del layout globale,
      * ma una ricerca eseguita in questo modo (effettuata in una qualunque
      * delle pagine del sito), viene sempre gestita dal controller del catalogo
+     * i risultati di ricerca sono limitati a prodotti di tipo gioco da tavolo
      * URL: GET /ricerca
      */
     public function mostraRisultatiRicercaProdotti(): void {
@@ -92,7 +93,7 @@ class CCatalogo extends BaseController {
 
         $query = trim($query);
 
-        //Cerca su tutti e 3 i tipi di prodotto
+        //Cerca solo giochi da tavolo
         $risultatoGrezzo = FPersistentManager::PMricercaProdotto(
             StringaDiRicerca:$query,
             limit: self::RISULTATI_PER_PAGINA,

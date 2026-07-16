@@ -193,7 +193,7 @@ abstract class BaseController {
      * DISPONIBILI NEL CATALOGO, ESCLUSI QUELLI IN $idEsclusi, LIMITATI A $limit.
      * DA SOSTITUIRE QUANDO DISPONIBILE IL METODO NEL PM.
      */
-    //DA MODIFICAREEEEE!!!!!!
+    //TODO: DA MODIFICAREEEEE!!!!!!
     protected function prodottiCorrelati(array $idsEsclusi, int $limit = 8): array {
         $tuttiProdotti = FPersistentManager::PMgetAll(EProdotto::class);
 
@@ -304,6 +304,11 @@ abstract class BaseController {
             'data'        => $recensione->getData(),
             'id_utente'   => (int) $recensione->getUtente()->getIdPersona(),
             'utente'      => $recensione->getUtente()->getNomePersona(),
+            'prodotto'    => [
+                'id'          => (int) $recensione->getProdotto()->getIdProdotto(),
+                'nome'        => $recensione->getProdotto()->getNomeProdotto(),
+                'immagine'    => $recensione->getProdotto()->getImgProdotto(),
+            ]
         ];
     }
 

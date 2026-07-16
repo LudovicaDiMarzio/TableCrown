@@ -188,10 +188,14 @@ class CProfilo extends BaseController {
         header('Content-Type: application/json');
         $utente = $this->utenteCorrente();
 
-        //DA CONTROLLARE IL METODO post (CAMBIARE CON postString)
-        $vecchiaPassword = UHTTPMethods::post('vecchia_password');
-        $nuovaPassword = UHTTPMethods::post('nuova_password');
-        $confermaPassword = UHTTPMethods::post('conferma_password');
+        try {
+            $vecchiaPassword = UHTTPMethods::postString('vecchia_password');
+            $nuovaPassword = UHTTPMethods::postString('nuova_password');
+            $confermaPassword = UHTTPMethods::postString('conferma_password');
+        } catch (\InvalidArgumentException $e) {
+            echo json_encode(['status' => 'error', 'reason' => 'parametri_non_validi']);
+            exit();
+        }
 
         if (!$utente->verificaPassword($vecchiaPassword)) {
             echo json_encode(['status' => 'error', 'reason' => 'vecchia_errata']);
