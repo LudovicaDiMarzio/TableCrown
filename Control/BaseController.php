@@ -461,56 +461,75 @@ abstract class BaseController {
     // CARRELLO (metodi utili sia per CCarrello che per CCheckout)
 
     /**
-     * Costruisce l'array di righe del carrello, ciascuna con i dati reali del prodotto
-     * (tramite prodottoToArray, stessa convenzione usata in home/catalogo/prodotto),
-     * più i campi specifici della riga carrello (quantità, subtotale, url azioni).
+     * Costruisce le righe del carrello con le entity reali dei prodotti (non array),
+     * più la quantità di ciascuna riga. Pensato per manipolare i prodotti
+     * (es. creare un ordine), non solo per visualizzarli.
      */
-    protected function buildCarrelloItems(array &$carrello): array { //con & prima di $carrello la funzione riceve un riferimento diretto alla variabile originale (per aggiornare la quantità)
+    protected function buildCarrelloEntities(array &$carrello): array {
         if (empty($carrello)) {
             return [];
         }
- 
-        $carrelloItems = [];
-        $idsDaRimuovere = [];
-        $idsProdotto = array_keys($carrello);
 
+        $idsProdotto = array_keys($carrello);
         $prodottiCaricati = FPersistentManager::PMgetObjListOnAttribute(EProdotto::class, 'idProdotto', $idsProdotto);
 
-        //Indicizzazione per evitare query nel ciclo
         $prodottiIndicizzati = [];
         foreach ($prodottiCaricati as $prodotto) {
             $prodottiIndicizzati[$prodotto->getIdProdotto()] = $prodotto;
         }
- 
-        //Scorriamo il carrello prendendo la chiave (id prodotto) e il valore (quantità)
+
+        $righeCarrello = [];
+        $idsDaRimuovere = [];
+
         foreach ($carrello as $idProdotto => $quantita) {
-            //Chiediamo a Foundation di caricarci l'oggetto Entity del prodotto dal DB
             $prodotto = $prodottiIndicizzati[$idProdotto] ?? null;
- 
+
             if (!$prodotto) {
                 $idsDaRimuovere[] = $idProdotto; //così verrà rimosso e non verrà contato in aggiornaQuantita()
                 continue; //salta il prodotto e passa al prossimo
             }
- 
-            $prodottoArray = $this->prodottoToArray($prodotto);
-            //Prezzo effettivo da usare per i calcoli: scontato se presente, altrimenti pieno
-            $prodottoArray['prezzo_unitario'] = $prodottoArray['prezzo_scontato'] ?? $prodottoArray['prezzo'];
 
-            //Costruiamo la struttura esatta richiesta dalla View
-            $carrelloItems[] = [
+            $righeCarrello[] = [
+                'prodotto' => $prodotto, //qui c'è l'entity vera, non l'array
                 'quantita' => $quantita,
-                'subtotale' => $prodottoArray['prezzo_unitario'] * $quantita,
-                'prodotto' => $prodottoArray,
             ];
         }
 
         //Pulizia: rimuove dalla sessione i prodotti non più trovati nel DB,
-        //così n_articoli e il carrello restanp coearenti con ciò che l'utente vede.
+        //così n_articoli e il carrello restano coearenti con ciò che l'utente vede.
         if (!empty($idsDaRimuovere)) {
             foreach ($idsDaRimuovere as $idProdotto) {
                 unset($carrello[$idProdotto]);
             }
             USession::setSessionElement('carrello', $carrello);
+        }
+
+        return $righeCarrello;
+
+    }
+
+
+    /**
+     * Costruisce l'array di righe del carrello, ciascuna con i dati reali del prodotto
+     * (tramite prodottoToArray, stessa convenzione usata in home/catalogo/prodotto),
+     * più i campi specifici della riga carrello (quantità, subtotale, url azioni).
+     * E' un wrapper "di presentazione" sul metodo buildCarrelloEntities. Ci limitiamo qui
+     * a convertire le entity in array per la View.
+     */
+    protected function buildCarrelloItems(array &$carrello): array { //con & prima di $carrello la funzione riceve un riferimento diretto alla variabile originale (per aggiornare la quantità)
+        $righeCarrello = $this->buildCarrelloEntities($carrello);
+ 
+        $carrelloItems = [];
+        foreach ($righeCarrello as $riga) {
+            $prodottoArray = $this->prodottoToArray($riga['prodotto']);
+            //Prezzo effettivo da usare per i calcoli: scontato se presente, altrimenti pieno
+            $prodottoArray['prezzo_unitario'] = $prodottoArray['prezzo_scontato'] ?? $prodottoArray['prezzo'];
+
+            $carrelloItems[] = [
+                'quantita' => $riga['quantita'],
+                'subtotale' => $prodottoArray['prezzo_unitario'] * $riga['quantita'],
+                'prodotto' => $prodottoArray,
+            ];
         }
  
         return $carrelloItems;
