@@ -228,30 +228,27 @@ class FPersistentManager
     }
 
     /**
-     * @param DateTime $filtroData data di inizio del filtro
-     * @param string $ricerca stringa da ricercare nella colonna nomeEvento
+     * @param string $filtroData data di inizio del filtro
      * @return array di oggetti
      */
-    public static function PMfindSerate(?DateTime $filtroData, ?string $ricerca): array {
-        return FSerate::findSerate($filtroData, $ricerca);
+    public static function PMfindSerate(?string $filtroData): array {
+        return FSerate::findSerate($filtroData);
     }
 
     /**
-     * @param DateTime $filtroData data di inizio del filtro
-     * @param string $ricerca stringa da ricercare nella colonna nomeEvento
+     * @param string $filtroData data di inizio del filtro
      * @return array di oggetti
      */
-    public static function PMfindTornei(?DateTime $filtroData, ?string $ricerca): array {
-        return FTornei::findTornei($filtroData, $ricerca);
+    public static function PMfindTornei(?string $filtroData): array {
+        return FTornei::findTornei($filtroData);
     }
 
     /**
-     * @param DateTime $filtroData data di inizio del filtro
-     * @param string $ricerca stringa da ricercare nella colonna nomeEvento
+     * @param string $filtroData data di inizio del filtro
      * @return array di oggetti
      */
-    public static function PMfindChallenge(?DateTime $filtroData, ?string $ricerca): array {
-        return FChallenge::findChallenge($filtroData, $ricerca);
+    public static function PMfindChallenge(?string $filtroData): array {
+        return FChallenge::findChallenge($filtroData);
     }
 
 

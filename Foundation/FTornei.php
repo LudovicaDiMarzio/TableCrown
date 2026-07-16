@@ -8,12 +8,11 @@ use Exception;
 
 class FTornei{
     /**
-     * @param DateTime $filtroData data di inizio del filtro
-     * @param string $ricerca stringa da ricercare nella colonna nomeEvento
+     * @param string $filtroData data di inizio del filtro
      * @return array di oggetti
      * @throws Exception     
      */
-    public static function findTornei(?DateTime $filtroData, ?string $ricerca): array
+    public static function findTornei(?string $filtroData): array
     {
         try{
             $qb=FEntityManager::getInstance()->getEntityManager()->createQueryBuilder();
@@ -22,13 +21,11 @@ class FTornei{
                 ->where('t.statoEvento=:statoEvento')
                   ->setParameter('statoEvento', StatoEvento::Programmato);
             if($filtroData!==null){
+                $dataObj = new DateTime($filtroData);
                 $qb->andWhere('t.dataInizio>=:dataEvento')
-                    ->setParameter('dataEvento', $filtroData);
+                    ->setParameter('dataEvento', $dataObj);
             }
-            if ($ricerca !== null) {
-                $qb->andWhere('t.nomeEvento LIKE :ricerca')
-                    ->setParameter('ricerca', '%' . $ricerca . '%');
-            }
+    
             $qb->orderBy('t.dataInizio', 'ASC');
             $risultati = $qb->getQuery()->getResult();
             return $risultati;
