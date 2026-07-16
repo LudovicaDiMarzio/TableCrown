@@ -19,8 +19,8 @@ use Doctrine\Common\Collections\Collection;
 
 class EUtente extends EPersona {
 
-    #[ORM\Column(type: "integer")]
-    private int $eta;
+    #[ORM\Column(type: "datetime")]
+    private DateTime $dataNascita;
 
     #[ORM\Column(type: "string", enumType: StatoUtente::class)] //enumType: StatoUtente::class restituisce "TableCrown\Entity\Enumerativi\StatoUtente" per sapere quale enum usare per la conversione automatica
     private StatoUtente $stato;
@@ -54,12 +54,12 @@ class EUtente extends EPersona {
         
    
 
-    public function __construct(string $nomeuser, string $emailuser, string $passworduser, int $eta, PlayerLevel $PlayerLevel= PlayerLevel::PRINCIPIANTE, mixed $imgprofilouser=null) {
+    public function __construct(string $nomeuser, string $emailuser, string $passworduser, DateTime $dataNascita, int $eta, PlayerLevel $PlayerLevel= PlayerLevel::PRINCIPIANTE, mixed $imgprofilouser=null) {
         //invoca il costruttore della classe padre (EPersona) per inizializzare le proprietà comuni a tutte le persone, e poi inizializziamo le proprietà specifiche dell'utente (EUtente).
         parent::__construct($nomeuser, $emailuser, $passworduser, $imgprofilouser);
        
         //Gestiamo i dati specifici dell'utente
-        $this->impostaEta($eta); 
+        $this->impostaDataNascita($dataNascita); 
         $this->stato = StatoUtente::ATTIVO; //un utente appena creato è attivo di default 
         $this->dataFineSospensione = null;
         $this->PlayerLevel = $PlayerLevel;
@@ -108,22 +108,30 @@ class EUtente extends EPersona {
         $this->PlayerLevel = $nuovoLivello;
     }
 
-    // per modificare un'età già impostata
-    public function aggiornaEta(int $nuovaEta): void
+    public function aggiornaDataNascita(DateTime $nuovaDataNascita): void
     {
-        $this->impostaEta($nuovaEta);
+        $this->impostaDataNascita($nuovaDataNascita);
     }
 
-    // per validare l'età quando viene impostata o aggiornata, non èuò essere negativa
-    private function impostaEta(int $eta): void
+    // per validare l'età quando viene impostata o aggiornata
+    private function impostaDataNascita(DateTime $dataNascita): void
     {
-        if ($eta < 0) {
-            throw new \InvalidArgumentException("L'età non può essere negativa.");
+        if ($dataNascita > new DateTime()) {
+            throw new \InvalidArgumentException("La data di nascita non può essere nel futuro.");
         }
+
+        $eta = $this->calcolaEta($dataNascita);
+
         if ($eta < 18) {
             throw new \InvalidArgumentException("Devi avere almeno 18 anni per registrarti.");
         }
-        $this->eta = $eta;
+
+        $this->dataNascita = $dataNascita;
+    }
+
+    private function calcolaEta(DateTime $dataNascita): int {
+        $oggi = new DateTime();
+        return $oggi->diff($dataNascita)->y;
     }
    
 
@@ -176,7 +184,11 @@ class EUtente extends EPersona {
  
 
     public function getEta(): int {
-        return $this->eta; 
+        return $this->calcolaEta($this->dataNascita);
+    }
+
+    public function getDataNascita(): DateTime {
+        return $this->dataNascita;
     }
 
     public function getStato(): StatoUtente {
