@@ -7,6 +7,7 @@ use TableCrown\Entity\EProdotto;
 use TableCrown\Entity\EGiocoDaTavolo;
 use TableCrown\Entity\EBustine;
 use TableCrown\Entity\EPortaDadi;
+use TableCrown\Entity\EMotivazione;
 use TableCrown\Foundation\FPersistentManager;
 use TableCrown\Presentation\Views\ViewProdotto;
 
@@ -57,6 +58,8 @@ class CProdotto extends BaseController {
             'recensioni' => $this->recensioniToArray($prodotto->getRecensioni()),
             'correlati' => $this->prodottiCorrelati([$prodotto->getIdProdotto()]),
             'userHasPurchased' => $this->haAcquistatoProdotto($prodotto->getIdProdotto()),
+            'isInWishlist' => $this->isProdottoInWishlist($prodotto->getIdProdotto()),
+            'motivazioni' => $this->motivazioniToArray(FPersistentManager::PMgetAll(EMotivazione::class)),
         ]);
        
         //Attributi specifici dei giochi da tavolo
@@ -101,6 +104,20 @@ class CProdotto extends BaseController {
         //    return false;
         //}
         //FPersistentManager::PMuserHasPurchased($idUtente, $idProdotto);
+        return false; //DA TOGLIERE QUANDO DISPONIBILE IL METODO DEL PM
+    }
+
+    /**
+     * Verifica se il prodotto è già presente nella wishlist dell'utente loggato.
+     */
+    private function isProdottoInWishlist(int $idProdotto): bool {
+        if (!$this->isLoggedIn()) {
+            return false;
+        }
+
+        //TODO:
+        //$idUtente = USession::getSessionElement('id_persona');
+        //return FPersistentManager::PM...($idUtente, $idProdotto);
         return false; //DA TOGLIERE QUANDO DISPONIBILE IL METODO DEL PM
     }
 
