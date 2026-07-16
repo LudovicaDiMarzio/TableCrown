@@ -10,7 +10,7 @@
 
         {* ── TOPBAR ── *}
         <div class="indirizzi-topbar">
-            <a href="{$base_url}/account" class="indirizzi-back-link">
+            <a href="{$base_url}/profilo" class="indirizzi-back-link">
                 <i class="ti ti-arrow-left"></i> Torna all'Area Personale
             </a>
         </div>
@@ -66,28 +66,16 @@
                                 <i class="ti ti-flag"></i>
                                 <span class="indirizzi-info-value">{$indirizzo.nazione|escape}</span>
                             </div>
-                            {if isset($indirizzo.nomeCitofono) && $indirizzo.nomeCitofono}
+                            {* -- corretto: la chiave passata da Control è 'nome_citofono' -- *}
+                            {if isset($indirizzo.nome_citofono) && $indirizzo.nome_citofono}
                                 <div class="indirizzi-info-row">
                                     <i class="ti ti-bell"></i>
-                                    <span class="indirizzi-info-value">{$indirizzo.nomeCitofono|escape}</span>
+                                    <span class="indirizzi-info-value">{$indirizzo.nome_citofono|escape}</span>
                                 </div>
                             {/if}
                         </div>
 
                         <div class="indirizzi-actions">
-                            <button type="button"
-                                    class="indirizzi-btn-secondary indirizzi-btn-modifica"
-                                    data-id="{$indirizzo.id|escape}"
-                                    data-nome="{$indirizzo.nome|escape}"
-                                    data-via="{$indirizzo.via|escape}"
-                                    data-citta="{$indirizzo.citta|escape}"
-                                    data-cap="{$indirizzo.cap|escape}"
-                                    data-provincia="{$indirizzo.provincia|escape}"
-                                    data-nazione="{$indirizzo.nazione|escape}"
-                                    data-nomecitofono="{$indirizzo.nomeCitofono|escape}">
-                                <i class="ti ti-edit"></i> Modifica
-                            </button>
-
                             {if !$indirizzo.predefinito}
                                 <button type="button" class="indirizzi-btn-predefinito" data-id="{$indirizzo.id|escape}">
                                     <i class="ti ti-star"></i> Imposta come predefinito
@@ -116,14 +104,12 @@
             </div>
         {/if}
 
-        {* ── POPUP FORM (aggiungi / modifica) ── *}
+        {* ── POPUP FORM (solo aggiungi) ── *}
         <div class="indirizzi-popup-overlay" id="indirizzi-form-popup" hidden>
             <div class="indirizzi-popup-box">
-                <h2 class="indirizzi-form-titolo" id="indirizzi-form-titolo">Aggiungi indirizzo</h2>
+                <h2 class="indirizzi-form-titolo">Aggiungi indirizzo</h2>
 
                 <form id="indirizzi-form">
-                    <input type="hidden" id="indirizzi-form-id" value="">
-
                     <div class="indirizzi-form-grid">
                         <div class="indirizzi-form-field indirizzi-form-field-full">
                             <label class="indirizzi-form-label" for="indirizzi-form-nome">Nome indirizzo</label>
@@ -202,7 +188,6 @@
 {literal}
 (function() {
 
-    // ── ELEMENTI POPUP MESSAGGI ──
     var popup        = document.getElementById('indirizzi-popup');
     var popupMessage = document.getElementById('indirizzi-popup-message');
     var popupClose    = document.getElementById('indirizzi-popup-close');
@@ -218,14 +203,11 @@
         });
     }
 
-    // ── ELEMENTI FORM (AGGIUNGI / MODIFICA) ──
     var formPopup   = document.getElementById('indirizzi-form-popup');
-    var formTitolo  = document.getElementById('indirizzi-form-titolo');
     var form        = document.getElementById('indirizzi-form');
     var formError   = document.getElementById('indirizzi-form-error');
     var formAnnulla = document.getElementById('indirizzi-form-annulla');
 
-    var campoId         = document.getElementById('indirizzi-form-id');
     var campoNome       = document.getElementById('indirizzi-form-nome');
     var campoVia        = document.getElementById('indirizzi-form-via');
     var campoCitta      = document.getElementById('indirizzi-form-citta');
@@ -235,7 +217,6 @@
     var campoCitofono   = document.getElementById('indirizzi-form-citofono');
 
     function resetForm() {
-        campoId.value = '';
         campoNome.value = '';
         campoVia.value = '';
         campoCitta.value = '';
@@ -248,21 +229,6 @@
 
     function apriFormAggiungi() {
         resetForm();
-        formTitolo.textContent = 'Aggiungi indirizzo';
-        formPopup.removeAttribute('hidden');
-    }
-
-    function apriFormModifica(btn) {
-        resetForm();
-        formTitolo.textContent = 'Modifica indirizzo';
-        campoId.value = btn.getAttribute('data-id');
-        campoNome.value = btn.getAttribute('data-nome');
-        campoVia.value = btn.getAttribute('data-via');
-        campoCitta.value = btn.getAttribute('data-citta');
-        campoProvincia.value = btn.getAttribute('data-provincia');
-        campoCap.value = btn.getAttribute('data-cap');
-        campoNazione.value = btn.getAttribute('data-nazione');
-        campoCitofono.value = btn.getAttribute('data-nomecitofono');
         formPopup.removeAttribute('hidden');
     }
 
@@ -283,23 +249,14 @@
     }
 
     var list = document.getElementById('indirizzi-list');
-    if (list) {
-        list.addEventListener('click', function(e) {
-            var modificaBtn = e.target.closest('.indirizzi-btn-modifica');
-            if (modificaBtn) {
-                apriFormModifica(modificaBtn);
-            }
-        });
-    }
 
-    // ── SALVATAGGIO FORM (AJAX) ──
+    // ── SALVATAGGIO FORM (AJAX): solo aggiunta ──
     if (form) {
         form.addEventListener('submit', function(e) {
             e.preventDefault();
             formError.textContent = '';
 
             var payload = {
-                id: campoId.value || null,
                 nome: campoNome.value.trim(),
                 via: campoVia.value.trim(),
                 citta: campoCitta.value.trim(),
@@ -309,12 +266,12 @@
                 nomeCitofono: campoCitofono.value.trim()
             };
 
-            if (!payload.nome || !payload.via || !payload.citta || !payload.provincia || !payload.cap || !payload.nazione) {
+            if (!payload.nome || !payload.via || !payload.citta || !payload.provincia || !payload.cap || !payload.nazione || !payload.nomeCitofono) {
                 formError.textContent = 'Compila tutti i campi obbligatori.';
                 return;
             }
 
-            fetch('{/literal}{$base_url}{literal}/account/indirizzi/salva', {
+            fetch('{/literal}{$base_url}{literal}/profilo/indirizzi/aggiungi', {
                 method: 'POST',
                 headers: { 'Content-Type': 'application/json' },
                 credentials: 'same-origin',
@@ -325,7 +282,7 @@
                 if (data.status === 'ok') {
                     window.location.reload();
                 } else {
-                    formError.textContent = data.messaggio || 'Non è stato possibile salvare l\'indirizzo, riprova.';
+                    formError.textContent = data.message || 'Non è stato possibile salvare l\'indirizzo, riprova.';
                 }
             })
             .catch(function() {
@@ -363,11 +320,11 @@
 
             var id = idDaEliminare;
 
-            fetch('{/literal}{$base_url}{literal}/account/indirizzi/elimina', {
+            fetch('{/literal}{$base_url}{literal}/profilo/indirizzi/elimina', {
                 method: 'POST',
                 headers: { 'Content-Type': 'application/json' },
                 credentials: 'same-origin',
-                body: JSON.stringify({ id: id })
+                body: JSON.stringify({ id_indirizzo: id })
             })
             .then(function(response) { return response.json(); })
             .then(function(data) {
@@ -377,7 +334,7 @@
                 if (data.status === 'ok') {
                     window.location.reload();
                 } else {
-                    mostraPopup(data.messaggio || 'Non è stato possibile eliminare l\'indirizzo, riprova.');
+                    mostraPopup(data.message || 'Non è stato possibile eliminare l\'indirizzo, riprova.');
                 }
             })
             .catch(function() {
@@ -396,18 +353,18 @@
 
             var id = predefinitoBtn.getAttribute('data-id');
 
-            fetch('{/literal}{$base_url}{literal}/account/indirizzi/predefinito', {
+            fetch('{/literal}{$base_url}{literal}/profilo/indirizzi/predefinito', {
                 method: 'POST',
                 headers: { 'Content-Type': 'application/json' },
                 credentials: 'same-origin',
-                body: JSON.stringify({ id: id })
+                body: JSON.stringify({ id_indirizzo: id })
             })
             .then(function(response) { return response.json(); })
             .then(function(data) {
                 if (data.status === 'ok') {
                     window.location.reload();
                 } else {
-                    mostraPopup(data.messaggio || 'Non è stato possibile impostare l\'indirizzo come predefinito.');
+                    mostraPopup(data.message || 'Non è stato possibile impostare l\'indirizzo come predefinito.');
                 }
             })
             .catch(function() {
