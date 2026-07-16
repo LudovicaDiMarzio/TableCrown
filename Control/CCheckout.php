@@ -9,6 +9,7 @@ use TableCrown\Entity\EOrdine;
 use TableCrown\Entity\ECartaDiCredito;
 use TableCrown\Entity\EProdotto;
 use TableCrown\Entity\EIndirizzo;
+use TableCrown\Entity\EUtente;
 use TableCrown\Foundation\FPersistentManager;
 use TableCrown\Presentation\Views\ViewCheckout;
 use Exception;
@@ -96,74 +97,18 @@ class CCheckout extends BaseController {
     }
 
     /**
+     * La risoluzione di indirizzo e carta è stata estratta in due metodi privati dedicati.
+     * Qui restano solo l'orchestrazione dell'ordine e la gestione degli esiti.
      * URL: POST /checkout/acquista
      */
-    public function elaboraAcquisto(): void { //DA RIVEDERE, C'è DUPLICAZIONE DEL CODICE (SI PUò OTTIMIZZARE!!!)
+    public function elaboraAcquisto(): void {
         $utente = $this->utenteCorrente();
-
-        //Recuperiamo i dati inviati dal form tramite POST
-        $idIndirizzo = UHTTPMethods::postInt('id_indirizzo');
-        $sceltaCarta = UHTTPMethods::postString('scelta_carta');
-        $idCartaSalvata = UHTTPMethods::postInt('id_carta_salvata');
-
-        if (!$idIndirizzo) {
-            UFlashMessage::addMessage('danger', 'È necessario selezionare un indirizzo di spedizione.');
-            header('Location: /checkout');
-            exit();
-        }
-
-        $indirizzo = FPersistentManager::PMgetObjOnAttribute(EIndirizzo::class, 'idIndirizzo', $idIndirizzo);
-        if (!$indirizzo || $indirizzo->getUtente()->getIdPersona() !== $utente->getIdPersona()) {
-            UFlashMessage::addMessage('danger', 'L\'indirizzo selezionato non è valido.');
-            header('Location: /checkout');
-            exit();
-        }
-
-        //Recupero o creazione della carta di credito per la transazione
-        $cartaDaUsare = null;
         $bancaService = new BancaMockService();
 
         try {
-            if ($sceltaCarta === 'salvata') {
-                if (!$idCartaSalvata) {
-                    throw new \InvalidArgumentException("Seleziona una delle tue carte salvate.");
-                }
-                $cartaDaUsare = FPersistentManager::PMgetObjOnAttribute(ECartaDiCredito::class, 'idCartaDiCredito', $idCartaSalvata);
+            $indirizzo = $this->risolviIndirizzo(UHTTPMethods::postInt('id_indirizzo'), $utente);
 
-                if (!$cartaDaUsare || $cartaDaUsare->getUtente()->getIdPersona() !== $utente->getIdPersona()) {
-                    throw new \InvalidArgumentException("La carta selezionata non è valida.");
-                }
-            } elseif ($sceltaCarta === 'nuova') {
-                //Recuperiamo i dati della nuova carta inseriti al momento
-                $numeroCarta = UHTTPMethods::postString('numero_carta');
-                $cvv = UHTTPMethods::postString('cvv');
-                $titolare = UHTTPMethods::postString('titolare_carta');
-                $scadenza = UHTTPMethods::postString('scadenza_carta');
-                $salvaCarta = UHTTPMethods::postBool('salva_carta_profilo');
-
-                if (empty($numeroCarta) || empty($cvv) || empty($titolare) || empty($scadenza)) {
-                    throw new \InvalidArgumentException("Tutti i campi di pagamento sono obbligatori.");
-                }
-
-                //Generiamo il token bancario fittizio
-                $risultatoToken = $bancaService->generaToken($numeroCarta, $cvv);
-                $token = $risultatoToken['token'];
-                $ultimeQuattroCifre = $risultatoToken['ultimeQuattroCifre'];
-
-                //Istanziamo la carta
-                $cartaDaUsare = new ECartaDiCredito($utente, $titolare, $scadenza, $ultimeQuattroCifre, $token);
-
-                //Se richiesto, la salviamo sul DB
-                if ($salvaCarta) {
-                    FPersistentManager::PMsaveObj($cartaDaUsare);
-                }
-            } else {
-                throw new \InvalidArgumentException("Seleziona un metodo di pagamento valido.");
-            }
-
-            if ($cartaDaUsare->isScaduta()) {
-                throw new \InvalidArgumentException("La carta di credito utilizzata è scaduta.");
-            }
+            $carta = $this->risolviCartaPagamento(UHTTPMethods::postString('scelta_carta'), UHTTPMethods::postInt('id_carta_salvata'), $utente, $bancaService);
 
             //Recupero dei prodotti dal carrello in sessione
             $carrello = USession::getSessionElement('carrello') ?? [];
@@ -171,29 +116,24 @@ class CCheckout extends BaseController {
                 throw new \InvalidArgumentException("Il carrello è vuoto. Impossibile completare l'ordine.");
             }
 
-            $carrelloItems = $this->buildCarrelloItems($carrello);
+            $righeCarrello = $this->buildCarrelloEntities($carrello);
 
-            //Creazione dell'istanza dell'oggetto ordine
-            $ordine = new EOrdine($utente, $indirizzo, $cartaDaUsare);
-
-            //Associazione dei prodotti all'ordine recuperando l'entità dal DB tramite ID
-            foreach ($carrelloItems as $item) {
-                $idProdotto = $item['prodotto']['id']; //ID dell'array "piatto
-                //Recuperiamo l'oggetto reale dal DB
-                $prodottoEntity = FPersistentManager::PMgetObjOnAttribute(EProdotto::class, 'idProdotto', $idProdotto);
-
-                if ($prodottoEntity) {
-                    $ordine->aggiungiProdotto($prodottoEntity, $item['quantita']);
-                } else {
-                    throw new Exception("Il prodotto '{$item['prodotto']['nome']}' non è disponibile nel catalogo.");
-                }
+            if (empty($righeCarrello)) {
+                //Difensivo: può succedere se tutti i prodotti nel carrello sono stati rimossi
+                //dal catalogo nel frattempo (buildCarrelloEntities li ha già ripuliti dalla sessione)
+                throw new \InvalidArgumentException("Nessuno dei prodotti nel carrello è più disponibile.");
             }
 
-            //Calcoliamo il totale effettivo (calcolato direttamente dall'entity EOrdine)
-            $totaleOrdine = $ordine->calcolaTotale();
+            //Creazione e popolamento dell'ordine
+            $ordine = new EOrdine($utente, $indirizzo, $carta);
+
+            //Associazione dei prodotti all'ordine
+            foreach ($righeCarrello as $riga) {
+                $ordine->aggiungiProdotto($riga['prodotto'], $riga['quantita']);
+            }
             
             //Addebito effettivo tramite il mock della banca
-            $pagamentoAvvenuto = $bancaService->effettuaPagamento($cartaDaUsare->getToken(), $totaleOrdine);
+            $pagamentoAvvenuto = $bancaService->effettuaPagamento($carta->getToken(), $ordine->calcolaTotale());
 
             if (!$pagamentoAvvenuto) {
                 throw new \RuntimeException("Si è verificato un errore durante la transazione.");
@@ -222,6 +162,77 @@ class CCheckout extends BaseController {
             header('Location: /checkout');
             exit();
         }
+    }
+
+    //==========================================================================
+    // HELPER PRIVATI
+    //==========================================================================
+
+    /**
+     * Recupera l'indirizzo di spedizione indicato dall'utente e ne verifica la proprietà.
+     * Lancia InvalidArgumentException se l'id manca, non esiste, o non appartiene all'utente.
+     */
+    private function risolviIndirizzo(?int $idIndirizzo, EUtente $utente): EIndirizzo {
+        if (!$idIndirizzo) {
+            throw new InvalidArgumentException("È necessario selezionare un indirizzo di spedizione.");
+        }
+
+        $indirizzo = FPersistentManager::PMgetObjOnAttribute(EIndirizzo::class, 'idIndirizzo', $idIndirizzo);
+
+        if (!$indirizzo || $indirizzo->getUtente()->getIdPersona() !== $utente->getIdPersona()) {
+            throw new InvalidArgumentException("L'indirizzo selezionato non è valido.");
+        }
+
+        return $indirizzo;
+    }
+
+    /**
+     * Recupera (se 'salvata') o crea ed eventualmente persiste (se 'nuova') la carta di
+     * credito da usare per il pagamento. Centralizza qui anche il controllo di scadenza,
+     * che vale per entrambi i casi (per le carte nuove è ridondante col controllo già
+     * fatto nel costruttore di ECartaDiCredito, ma lo teniamo per sicurezza e uniformità).
+     */
+    private function risolviCartaPagamento(string $sceltaCarta, ?int $idCartaSalvata, EUtente $utente, BancaMockService $bancaService): ECartaDiCredito {
+        if ($sceltaCarta === 'salvata') {
+            if (!$idCartaSalvata) {
+                throw new InvalidArgumentException("Seleziona una delle tue carte salvate.");
+            }
+
+            $carta = FPersistentManager::PMgetObjOnAttribute(ECartaDiCredito::class, 'idCartaDiCredito', $idCartaSalvata);
+
+            if (!$carta || $carta->getUtente()->getIdPersona() !== $utente->getIdPersona()) {
+                throw new InvalidArgumentException("La carta selezionata non è valida.");
+            }
+        } elseif ($sceltaCarta === 'nuova') {
+            //Recuperiamo i dati della nuova carta inseriti al momento
+            $numeroCarta = UHTTPMethods::postString('numero_carta');
+            $cvv = UHTTPMethods::postString('cvv');
+            $titolare = UHTTPMethods::postString('titolare_carta');
+            $scadenza = UHTTPMethods::postString('scadenza_carta');
+            $salvaCarta = UHTTPMethods::postBool('salva_carta_profilo');
+
+            if (empty($numeroCarta) || empty($cvv) || empty($titolare) || empty($scadenza)) {
+                throw new InvalidArgumentException("Tutti i campi di pagamento sono obbligatori.");
+            }
+
+            //Generazione del token
+            $risultatoToken = $bancaService->generaToken($numeroCarta, $cvv);
+
+            $carta = new ECartaDiCredito($utente, $titolare, $scadenza, $risultatoToken['ultimeQuattroCifre'], $risultatoToken['token']);
+
+            //Salvataggio della carta nel DB
+            if ($salvaCarta) {
+                FPersistentManager::PMsaveObj($carta);
+            }
+        } else {
+            throw new InvalidArgumentException("Seleziona un metodo di pagamento valido.");
+        }
+
+        if ($carta->isScaduta()) {
+            throw new InvalidArgumentException("La carta di credito utilizzata è scaduta.");
+        }
+
+        return $carta;
     }
 
 }
