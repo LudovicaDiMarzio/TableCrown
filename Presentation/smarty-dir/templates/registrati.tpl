@@ -88,13 +88,13 @@
                     </div>
 
                     <div class="auth-field">
-                        <label for="password_conferma" class="auth-label">Conferma Password</label>
+                        <label for="conferma_password" class="auth-label">Conferma Password</label>
                         <div class="auth-input-wrapper">
                             <i class="ti ti-lock-check"></i>
                             <input class="input auth-input"
                                    type="password"
-                                   name="password_conferma"
-                                   id="password_conferma"
+                                   name="conferma_password"
+                                   id="conferma_password"
                                    placeholder="Ripeti password"
                                    required
                                    minlength="8"

@@ -10,7 +10,7 @@
 
         {* ── TOPBAR ── *}
         <div class="mieeventi-topbar">
-            <a href="{$base_url}/account" class="mieeventi-back-link">
+            <a href="{$base_url}/profilo" class="mieeventi-back-link">
                 <i class="ti ti-arrow-left"></i> Torna all'Area Personale
             </a>
         </div>
@@ -34,15 +34,15 @@
 
         {* ── TAB ORDINAMENTO ── *}
         <div class="mieeventi-tabs">
-            <a href="{$base_url}/account/eventi?ordinamento=futuri"
+            <a href="{$base_url}/profilo/eventi?ordinamento=futuri"
                class="mieeventi-tab {if !isset($ordinamento) || $ordinamento == 'futuri'}mieeventi-tab-active{/if}">
                 <i class="ti ti-calendar-due"></i> Futuri
             </a>
-            <a href="{$base_url}/account/eventi?ordinamento=passati_anno_corrente"
+            <a href="{$base_url}/profilo/eventi?ordinamento=passati_anno_corrente"
                class="mieeventi-tab {if isset($ordinamento) && $ordinamento == 'passati_anno_corrente'}mieeventi-tab-active{/if}">
                 <i class="ti ti-calendar-check"></i> Passati quest'anno
             </a>
-            <a href="{$base_url}/account/eventi?ordinamento=ultimi_5_anni"
+            <a href="{$base_url}/profilo/eventi?ordinamento=ultimi_5_anni"
                class="mieeventi-tab {if isset($ordinamento) && $ordinamento == 'ultimi_5_anni'}mieeventi-tab-active{/if}">
                 <i class="ti ti-history"></i> Ultimi 5 anni
             </a>
@@ -54,7 +54,7 @@
                 {foreach $eventi as $evento}
                     <div class="mieeventi-card" id="mieeventi-card-{$evento.idEvento|escape}">
 
-                        <a href="{$base_url}/{$evento.tipoEvento|escape}/{$evento.idEvento|escape}" class="mieeventi-card-media">
+                        <a href="{$base_url}/{$evento.tipoEvento|default:''|escape}/{$evento.idEvento|escape}" class="mieeventi-card-media">
                             <div class="mieeventi-card-img-placeholder">
                                 <i class="ti ti-photo"></i>
                             </div>
@@ -65,19 +65,21 @@
                                      class="mieeventi-card-img">
                             {/if}
 
-                            <span class="mieeventi-tipo-badge mieeventi-tipo-{$evento.tipoEvento|escape}">
-                                {if $evento.tipoEvento == 'serata'}<i class="ti ti-moon-stars"></i> Serata
-                                {elseif $evento.tipoEvento == 'torneo'}<i class="ti ti-trophy"></i> Torneo
-                                {elseif $evento.tipoEvento == 'challenge'}<i class="ti ti-swords"></i> Challenge
-                                {else}{$evento.tipoEvento|escape}
-                                {/if}
-                            </span>
+                            {if isset($evento.tipoEvento)}
+                                <span class="mieeventi-tipo-badge mieeventi-tipo-{$evento.tipoEvento|escape}">
+                                    {if $evento.tipoEvento == 'serata'}<i class="ti ti-moon-stars"></i> Serata
+                                    {elseif $evento.tipoEvento == 'torneo'}<i class="ti ti-trophy"></i> Torneo
+                                    {elseif $evento.tipoEvento == 'challenge'}<i class="ti ti-swords"></i> Challenge
+                                    {else}{$evento.tipoEvento|escape}
+                                    {/if}
+                                </span>
+                            {/if}
                         </a>
 
                         <div class="mieeventi-card-body">
 
                             <div class="mieeventi-card-top">
-                                <a href="{$base_url}/{$evento.tipoEvento|escape}/{$evento.idEvento|escape}" class="mieeventi-nome">
+                                <a href="{$base_url}/{$evento.tipoEvento|default:''|escape}/{$evento.idEvento|escape}" class="mieeventi-nome">
                                     {$evento.nomeEvento|escape}
                                 </a>
                             </div>
@@ -85,7 +87,7 @@
                             {* ── LISTA INFO VERTICALE ── *}
                             <div class="mieeventi-info-list">
 
-                                {* -- stato (passato interamente da Control: 'in programma' | 'concluso') -- *}
+                                {* -- stato -- *}
                                 <div class="mieeventi-info-row {if $evento.statoEvento == 'in programma'}mieeventi-stato-riga-in-programma{else}mieeventi-stato-riga-concluso{/if}">
                                     <i class="ti ti-flag"></i>
                                     <span class="mieeventi-info-label">Stato:</span>
@@ -105,31 +107,40 @@
                                     <span class="mieeventi-info-value">{$evento.numeroPartecipanti|escape}/{$evento.maxPartecipanti|escape}</span>
                                 </div>
 
-                                <div class="mieeventi-info-row">
-                                    <i class="ti ti-user-check"></i>
-                                    <span class="mieeventi-info-label">Iscritto il:</span>
-                                    <span class="mieeventi-info-value">{$evento.dataIscrizione|escape}</span>
-                                </div>
+                                {* -- corretto: la chiave passata da Control è 'dataiscrizione' minuscolo -- *}
+                                {if isset($evento.dataiscrizione)}
+                                    <div class="mieeventi-info-row">
+                                        <i class="ti ti-user-check"></i>
+                                        <span class="mieeventi-info-label">Iscritto il:</span>
+                                        <span class="mieeventi-info-value">{$evento.dataiscrizione|escape}</span>
+                                    </div>
+                                {/if}
 
-                                {* -- campi specifici per tipo -- *}
-                                {if $evento.tipoEvento == 'serata'}
-                                    <div class="mieeventi-info-row">
-                                        <i class="ti ti-category"></i>
-                                        <span class="mieeventi-info-label">Tipologia:</span>
-                                        <span class="mieeventi-info-value">{$evento.tipoSerata|escape}</span>
-                                    </div>
+                                {* -- campi specifici per tipo (richiedono che Control usi mappaEvento(), vedi nota) -- *}
+                                {if isset($evento.tipoEvento) && $evento.tipoEvento == 'serata'}
+                                    {if isset($evento.tipoSerata)}
+                                        <div class="mieeventi-info-row">
+                                            <i class="ti ti-category"></i>
+                                            <span class="mieeventi-info-label">Tipologia:</span>
+                                            <span class="mieeventi-info-value">{$evento.tipoSerata|escape}</span>
+                                        </div>
+                                    {/if}
 
-                                {elseif $evento.tipoEvento == 'torneo'}
-                                    <div class="mieeventi-info-row">
-                                        <i class="ti ti-dice"></i>
-                                        <span class="mieeventi-info-label">Gioco:</span>
-                                        <span class="mieeventi-info-value">{$evento.gioco|escape}</span>
-                                    </div>
-                                    <div class="mieeventi-info-row">
-                                        <i class="ti ti-award"></i>
-                                        <span class="mieeventi-info-label">Premio:</span>
-                                        <span class="mieeventi-info-value">{$evento.premio|escape}</span>
-                                    </div>
+                                {elseif isset($evento.tipoEvento) && $evento.tipoEvento == 'torneo'}
+                                    {if isset($evento.gioco)}
+                                        <div class="mieeventi-info-row">
+                                            <i class="ti ti-dice"></i>
+                                            <span class="mieeventi-info-label">Gioco:</span>
+                                            <span class="mieeventi-info-value">{$evento.gioco|escape}</span>
+                                        </div>
+                                    {/if}
+                                    {if isset($evento.premio)}
+                                        <div class="mieeventi-info-row">
+                                            <i class="ti ti-award"></i>
+                                            <span class="mieeventi-info-label">Premio:</span>
+                                            <span class="mieeventi-info-value">{$evento.premio|escape}</span>
+                                        </div>
+                                    {/if}
                                     {if isset($evento.challenge)}
                                         <a href="{$base_url}/challenge/{$evento.challenge.idEvento|escape}" class="mieeventi-info-row mieeventi-info-row-link">
                                             <i class="ti ti-swords"></i>
@@ -138,12 +149,14 @@
                                         </a>
                                     {/if}
 
-                                {elseif $evento.tipoEvento == 'challenge'}
-                                    <div class="mieeventi-info-row">
-                                        <i class="ti ti-award"></i>
-                                        <span class="mieeventi-info-label">Premio:</span>
-                                        <span class="mieeventi-info-value">{$evento.premio|escape}</span>
-                                    </div>
+                                {elseif isset($evento.tipoEvento) && $evento.tipoEvento == 'challenge'}
+                                    {if isset($evento.premio)}
+                                        <div class="mieeventi-info-row">
+                                            <i class="ti ti-award"></i>
+                                            <span class="mieeventi-info-label">Premio:</span>
+                                            <span class="mieeventi-info-value">{$evento.premio|escape}</span>
+                                        </div>
+                                    {/if}
                                     {if isset($evento.tornei) && $evento.tornei|@count > 0}
                                         <div class="mieeventi-info-row">
                                             <i class="ti ti-trophy"></i>
@@ -159,7 +172,6 @@
                                     {/if}
                                 {/if}
 
-                                {* -- quotaIscrizione: presente per torneo/challenge -- *}
                                 {if isset($evento.quotaIscrizione)}
                                     <div class="mieeventi-info-row">
                                         <i class="ti ti-coin"></i>
@@ -168,18 +180,19 @@
                                     </div>
                                 {/if}
 
-                                {if $evento.quotaPagata}
+                                {if isset($evento.quotaPagata) && $evento.quotaPagata}
                                     <div class="mieeventi-info-row mieeventi-quota-pagata">
                                         <i class="ti ti-circle-check"></i>
                                         <span class="mieeventi-info-value">Quota pagata</span>
                                     </div>
                                 {/if}
 
-                                {if $evento.posizioneInClassifica !== null}
+                                {* -- corretto: la chiave passata da Control è 'posizioneClassifica' -- *}
+                                {if isset($evento.posizioneClassifica) && $evento.posizioneClassifica !== null}
                                     <div class="mieeventi-info-row mieeventi-classifica-row">
                                         <i class="ti ti-medal"></i>
                                         <span class="mieeventi-info-label">Classifica:</span>
-                                        <span class="mieeventi-info-value">{$evento.posizioneInClassifica|escape}&deg; posto</span>
+                                        <span class="mieeventi-info-value">{$evento.posizioneClassifica|escape}&deg; posto</span>
                                     </div>
                                 {/if}
 
@@ -187,22 +200,19 @@
 
                             {* ── AZIONI ── *}
                             <div class="mieeventi-actions">
-                                {if $evento.tipoEvento == 'serata'}
+                                {if isset($evento.tipoEvento) && $evento.tipoEvento == 'serata'}
 
                                     <a href="{$base_url}/{$evento.tipoEvento|escape}/{$evento.idEvento|escape}" class="mieeventi-btn-secondary">
                                         <i class="ti ti-info-circle"></i> Maggiori info
                                     </a>
 
-                                    {* -- solo le serate sono disdicibili -- *}
-                                    {* isDisdicibile è opzionale: se assente, il bottone compare comunque (default true) *}
-                                    {if $evento.statoEvento == 'in programma' && (!isset($evento.isDisdicibile) || $evento.isDisdicibile)}
+                                    {if $evento.statoEvento == 'in programma'}
                                         <button type="button" class="mieeventi-btn-disdici" data-id="{$evento.idEvento|escape}">
                                             <i class="ti ti-x"></i> Disdici partecipazione
                                         </button>
                                     {/if}
 
-                                {else}
-                                    {* -- torneo/challenge: non disdicibili, solo link informativo -- *}
+                                {elseif isset($evento.tipoEvento)}
                                     {if $evento.statoEvento == 'in programma'}
                                         <a href="{$base_url}/{$evento.tipoEvento|escape}/{$evento.idEvento|escape}" class="mieeventi-btn-secondary">
                                             <i class="ti ti-info-circle"></i> Maggiori info
@@ -284,7 +294,6 @@
         });
     }
 
-    // ── APERTURA POPUP CONFERMA DISDETTA ──
     var list = document.getElementById('mieeventi-list');
     if (list) {
         list.addEventListener('click', function(e) {
@@ -303,14 +312,13 @@
         });
     }
 
-    // ── CONFERMA DISDETTA (AJAX) ──
     if (disdiciConferma) {
         disdiciConferma.addEventListener('click', function() {
             if (!idDaDisdire) return;
 
             var id = idDaDisdire;
 
-            fetch('{/literal}{$base_url}{literal}/account/eventi/disdici', {
+            fetch('{/literal}{$base_url}{literal}/profilo/eventi/disdici', {
                 method: 'POST',
                 headers: { 'Content-Type': 'application/json' },
                 credentials: 'same-origin',

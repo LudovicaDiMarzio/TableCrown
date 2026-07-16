@@ -214,7 +214,7 @@ class FPersistentManager
      */
     public static function PMricercaProdotto(string $StringaDiRicerca, int $limit, int $offset): array
     {
-        return FProdotto::ricercaProdotto($StringaDiRicerca, $limit, $offset);
+        return FGiocoDaTavolo::ricercaGiochi($StringaDiRicerca, $limit, $offset);
     }
 
     /**
@@ -228,31 +228,36 @@ class FPersistentManager
     }
 
     /**
-     * @param DateTime $filtroData data di inizio del filtro
-     * @param string $ricerca stringa da ricercare nella colonna nomeEvento
+     * @param string $filtroData data di inizio del filtro
      * @return array di oggetti
      */
-    public static function PMfindSerate(?DateTime $filtroData, ?string $ricerca): array {
-        return FSerate::findSerate($filtroData, $ricerca);
+    public static function PMfindSerate(?string $filtroData): array {
+        return FSerate::findSerate($filtroData);
     }
 
     /**
-     * @param DateTime $filtroData data di inizio del filtro
-     * @param string $ricerca stringa da ricercare nella colonna nomeEvento
+     * @param string $filtroData data di inizio del filtro
      * @return array di oggetti
      */
-    public static function PMfindTornei(?DateTime $filtroData, ?string $ricerca): array {
-        return FTornei::findTornei($filtroData, $ricerca);
+    public static function PMfindTornei(?string $filtroData): array {
+        return FTornei::findTornei($filtroData);
     }
 
     /**
-     * @param DateTime $filtroData data di inizio del filtro
-     * @param string $ricerca stringa da ricercare nella colonna nomeEvento
+     * @param string $filtroData data di inizio del filtro
      * @return array di oggetti
      */
-    public static function PMfindChallenge(?DateTime $filtroData, ?string $ricerca): array {
-        return FChallenge::findChallenge($filtroData, $ricerca);
+    public static function PMfindChallenge(?string $filtroData): array {
+        return FChallenge::findChallenge($filtroData);
     }
 
+    /**
+     * @param string $ricerca stringa da ricercare nella colonna nomeEvento
+     * @return array di oggetti
+     * @throws Exception
+     */
+    public static function PMricercaEventi(?string $ricerca): array {
+        return FEventi::ricercaEventi($ricerca);
+    }
 
 }

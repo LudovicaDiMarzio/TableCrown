@@ -16,6 +16,6 @@ class ViewProfiloRecensioni extends ViewProfiloBase {
         // 'recensioni' con: id, valutazione, testo, data, prodotto{id,nome,immagine}, isSegnalata
         $smarty->assign('recensioni', $dati['recensioni'] ?? []);
 
-        $smarty->display('ProfiloRecensioni.tpl');
+        $smarty->display('MieRecensioni.tpl');
     }
 }

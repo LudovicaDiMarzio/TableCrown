@@ -38,6 +38,13 @@ class ViewCarrello {
         ]);
         $smarty->assign('correlati', $dati['correlati'] ?? []);
 
+        // BUG FIX: mancavano questi due assign. Senza di essi, update_url e remove_url
+        // risultavano undefined in carrello.tpl, e CARRELLO_UPDATE_URL / CARRELLO_REMOVE_URL
+        // in JS diventavano semplicemente "{$base_url}" (senza path), rompendo
+        // silenziosamente le fetch di aggiornamento quantità e rimozione articolo.
+        $smarty->assign('update_url', $dati['update_url'] ?? '/carrello/aggiorna');
+        $smarty->assign('remove_url', $dati['remove_url'] ?? '/carrello/rimuovi');
+
         $smarty->display('carrello.tpl');
     }
 }

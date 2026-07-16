@@ -29,8 +29,8 @@ class FGiocoDaTavolo
             //gestione dei filtri dinamica
 
             if (!empty($filtri['difficolta'])){
-                $qb->andWhere('g.difficolta = :difficolta')
-                   ->setParameter('difficolta', $filtri['difficolta']);
+                $qb->andWhere($qb->expr()->in('g.difficolta',':difficolta'))
+                    ->setParameter('difficolta',$filtri['difficolta']);
             }
 
             if (!empty($filtri['categoria_selected'])) {
@@ -93,8 +93,8 @@ class FGiocoDaTavolo
             }
 
             if (!empty($filtri['disponibilita'])) {
-                $qb->andWhere('g.disponibilitaProdotto = :disponibilita')
-                    ->setParameter('disponibilita', $filtri['disponibilita']);
+                $qb->andWhere($qb->expr()->in('g.disponibilitaProdotto',':disponibilita'))
+                    ->setParameter('disponibilita',$filtri['disponibilita']);
             }
 
             //filtro per l'ordinamento dei risultati
@@ -168,5 +168,58 @@ class FGiocoDaTavolo
             error_log("Errore in findGiochi: " . $e->getMessage());
             return ['risultati' => [], 'totale' => 0];
         }
+    }
+
+    /** 
+     * @param string $StringaDiRicerca stringa da ricercare nella colonna nomeProdotto o descrizioneProdotto 
+     * @param int $limit numero massimo di prodotti da restituire
+     * @param int $offset numero di prodotti da saltare dall'inizio della lista
+     * @return array di oggetti
+     * @throws Exception
+    */
+    public static function ricercaGiochi(string $StringaDiRicerca, int $limit, int $offset): array{
+
+        try{
+
+            $testoPulito = trim($StringaDiRicerca);
+            //Se dopo aver tolto gli spazi, la stringa è vuota, non effettuo la ricerca
+            if (empty($testoPulito)) {
+                return []; // Restituiamo un array vuoto immediato
+            }
+
+            $qb=FEntityManager::getInstance()->getEntityManager()->createQueryBuilder();
+            $qb->select('g')
+                ->from(EGiocoDaTavolo::class, 'g');
+            $qb->where('g.nomeProdotto LIKE :ricerca OR g.descrizioneProdotto LIKE :ricerca')
+               ->setParameter('ricerca', '%' . $testoPulito . '%');
+
+            /*clono la query appena creata per poterla modificare ed effettuare un count su tutti i prodotti filtrati e 
+              sapere quanti prodotti sono usciti in tutto dalla query fatta 
+            */
+            //la clonatura della query viene fatta prima della suddivisione dei risultati per le pagine, perchè altrimenti il count sarebbe falzato e basato sui risultati "limitati" della query
+            $qbCount = clone $qb;
+            $qbCount->select('count(g.idProdotto)');
+            //poichè count restituisce un numero scalare non possiamo usare il getResult(), ma usiamo il getSingleScalarResult() che restituisce un numero scalare
+            $totale = $qbCount->getQuery()->getSingleScalarResult();
+
+            //sulla query effettuata inizialmete applichiamo il limit e l'offset per la paginazione (per dividere i risultati in pagine)
+            
+            $qb->setFirstResult($offset)
+               ->setMaxResults($limit);
+            $risultati = $qb->getQuery()->getResult();
+            
+            return [
+                'risultati' => $risultati,
+                'totale' => $totale
+            ];
+        }
+        catch(Exception $e){
+            error_log("Errore nella ricerca del prodotto: " . $e->getMessage());
+            return [
+                'risultati' => [],
+                'totale' => 0
+            ];
+        }
+        
     }
 }
