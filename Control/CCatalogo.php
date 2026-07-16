@@ -114,9 +114,10 @@ class CCatalogo extends BaseController {
     public function mostraOfferte(): void {
         $pagina = $this->estraiPaginaRichiesta();
 
-        //TODO: il metodo già creato PMfindProdottiInOfferta non va bene qui,
-        //perché non gestisce la paginazione. Ne serve uno tipo PMfindProdottiInOfferta(limit, offset), nome da cambiare
-        //$risultatoGrezzo = FPersistentManager::PMfind...;
+        $risultatoGrezzo = FPersistentManager::PMfindProdottiInOfferta(
+            limit: self::RISULTATI_PER_PAGINA,
+            offset: ($pagina - 1) * self::RISULTATI_PER_PAGINA
+        );
         
         $this->renderCatalogo('offerte', $risultatoGrezzo, $pagina, []);
     }

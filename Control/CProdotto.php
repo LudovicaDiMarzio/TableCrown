@@ -8,6 +8,7 @@ use TableCrown\Entity\EGiocoDaTavolo;
 use TableCrown\Entity\EBustine;
 use TableCrown\Entity\EPortaDadi;
 use TableCrown\Entity\EMotivazione;
+use TableCrown\Entity\EWishlist;
 use TableCrown\Foundation\FPersistentManager;
 use TableCrown\Presentation\Views\ViewProdotto;
 
@@ -99,7 +100,7 @@ class CProdotto extends BaseController {
         if (!$utente) {
             return false;
         }
-        
+
         //TODO: 
         //$idUtente = USession::getSessionElement('id_persona');
         //if (!$idUtente) {
