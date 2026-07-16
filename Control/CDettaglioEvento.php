@@ -10,6 +10,8 @@ use TableCrown\Entity\ETorneo;
 use TableCrown\Entity\EChallenge;
 use TableCrown\Entity\EPartecipazione;
 use TableCrown\Entity\EUtente;
+use TableCrown\Entity\ECartaDiCredito;
+use TableCrown\Entity\EPrezzo;
 use TableCrown\Foundation\FPersistentManager;
 use TableCrown\Foundation\BancaMockService;
 use TableCrown\Presentation\Views\ViewDettaglioEvento;
@@ -82,31 +84,38 @@ class CDettaglioEvento extends BaseController {
             exit();
         }
 
-        //Gestione del pagamento (DA RIVEDERE!!!!)
+        //Gestione del pagamento 
         if ($evento->richiedeQuota()) {
             try {
                 //Recuperiamo i dati della carta inviati dal form
-                $numeroCarta = UHTTPMethods::postInt('numero_carta');
-                $cvv = UHTTPMethods::postInt('cvv');
-                $titoloCarta = UHTTPMethods::postString('titolo_carta');
-                $dataScadenza = UHTTPMethods::postString('data_scadenza');
+                $numeroCarta = UHTTPMethods::postString('numero_carta');
+                $cvv = UHTTPMethods::postString('cvv');
+                $titoloCarta = UHTTPMethods::postString('titolare_carta');
+                $scadenzaCarta = UHTTPMethods::postString('scadenza_carta');
 
                 if (empty($numeroCarta) || empty($cvv) || empty($titoloCarta) || empty($dataScadenza)) {
                     throw new \InvalidArgumentException("Tutti i campi di pagamento sono obbligatori.");
                 }
 
-                $quota = $evento->getQuotaIscrizione(); //DA RIVEDERE (non è un metodo di EEvento, bensì di ETorneo e di EChallenge)
+                $quota = null;
+                if ($evento instanceof ETorneo || $evento instanceof EChallenge) {
+                    $quota = $evento->getQuotaIscrizione();
+                }
+
+                if ($quota === null) {
+                    throw new \InvalidArgumentException("Impossibile determinare la quota per questo evento.");
+                }
+
                 //Chiamata all'helper privato per processare la transazione
-                $pagamentoAvvenuto = $this->processaPagamento($numeroCarta, $cvv, $dataScadenza, $quota);
+                $pagamentoAvvenuto = $this->processaPagamento($utente, $numeroCarta, $cvv, $titoloCarta, $scadenzaCarta, $quota);
 
                 if ($pagamentoAvvenuto) {
                     //Aggiorniamo lo stato della partecipazione prima del salvataggio
-                    $nuovaPartecipazione->aggiornaPagamento(); //DA RIVEDERE: aggiornaPagamento() rifà internamente il controllo richiedeQuota
-                    //dovrei salvare la quota pagata nella partecipazione? Non ha l'attributo relativo
+                    $nuovaPartecipazione->aggiornaPagamento();
                 }
             } catch (\Exception $e) {
                 //Se il pagamento fallisce, interrompiamo tutto e mostriamo l'errore della banca
-                UFlashMessage::addMessage('danger', 'Pagamento rigiutato: ' . $e->getMessage());
+                UFlashMessage::addMessage('danger', 'Pagamento rifiutato: ' . $e->getMessage());
                 header('Location: /eventi/dettaglio/' . $idEvento);
                 exit();
             }
@@ -196,15 +205,19 @@ class CDettaglioEvento extends BaseController {
     /**
      * Helper privato per dialogare con la classe BancaMockService in Foundation.
      */
-    private function processaPagamento(string $numeroCarta, string $cvv, string $dataScadenza, EPrezzo $quota): bool {
+    private function processaPagamento(EUtente $utente, string $numeroCarta, string $cvv, string $titolare, string $scadenza, EPrezzo $quota): bool {
         $bancaService = new BancaMockService();
 
         //Genera il token monouso
         $datiToken = $bancaService->generaToken($numeroCarta, $cvv);
-        $token = $datiToken['token'];
+
+        //Costruzione "usa e getta", non salviamo la carta
+        $cartaTemporanea = new ECartaDiCredito ($utente, $titolare, $scadenza, substr(trim($numeroCarta), -4), $datiToken['token']);
+
+        //Se la carta è scaduta o i dati non validi, il costruttore lancia InvalidArgumentException, che viene catturata dal chiamante
 
         //Addebita l'importo
-        return $bancaService->effettuaPagamento($token, $quota);
+        return $bancaService->effettuaPagamento($cartaTemporanea->getToken(), $quota->getValore());
     }
 
     protected function getBreadcrumbs(string $currentPage = ''): array {
