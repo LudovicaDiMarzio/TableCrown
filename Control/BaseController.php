@@ -22,7 +22,7 @@ use TableCrown\Entity\EBustine;
 use TableCrown\Entity\EPortaDadi;
 use TableCrown\Entity\ECartaDiCredito;
 use TableCrown\Entity\EIndirizzo;
-
+use TableCrown\Entity\EMotivazione;
 
 
 abstract class BaseController {
@@ -193,7 +193,7 @@ abstract class BaseController {
      * DISPONIBILI NEL CATALOGO, ESCLUSI QUELLI IN $idEsclusi, LIMITATI A $limit.
      * DA SOSTITUIRE QUANDO DISPONIBILE IL METODO NEL PM.
      */
-    //DA MODIFICAREEEEE!!!!!!
+    //TODO: DA MODIFICAREEEEE!!!!!!
     protected function prodottiCorrelati(array $idsEsclusi, int $limit = 8): array {
         $tuttiProdotti = FPersistentManager::PMgetAll(EProdotto::class);
 
@@ -253,6 +253,20 @@ abstract class BaseController {
         return FPersistentManager::PMgetObjOnAttribute(EUtente::class, 'idPersona', $idUtente);
     }
 
+    /**
+     * Simile a utenteCorrente(), ma utile in contesti in cui il login è facoltativo
+     * (es. pagine pubbliche che mostrano contenuto diverso se l'utente è loggato).
+     * Non forza mai un redirect: restituisce null se non loggato o senza ruolo 'utente',
+     * lasciando decidere al chiamante cosa fare in quel caso.
+     */
+    protected function utenteCorrenteOpzionale(): ?EUtente {
+        if (!$this->isLoggedIn() || USession::getSessionElement('ruolo') !== 'utente') {
+            return null;
+        }
+        $idUtente = USession::getSessionElement('id_persona');
+        return FPersistentManager::PMgetObjOnAttribute(EUtente::class, 'idPersona', $idUtente);
+    }
+
     // ENUM
 
     /**
@@ -288,7 +302,13 @@ abstract class BaseController {
             'valutazione' => $recensione->getValutazione(),
             'testo'       => $recensione->getTesto(),
             'data'        => $recensione->getData(),
+            'id_utente'   => (int) $recensione->getUtente()->getIdPersona(),
             'utente'      => $recensione->getUtente()->getNomePersona(),
+            'prodotto'    => [
+                'id'          => (int) $recensione->getProdotto()->getIdProdotto(),
+                'nome'        => $recensione->getProdotto()->getNomeProdotto(),
+                'immagine'    => $recensione->getProdotto()->getImgProdotto(),
+            ]
         ];
     }
 
@@ -301,6 +321,30 @@ abstract class BaseController {
             $result[] = $this->recensioneToArray($recensione);
         }
         return $result;
+    }
+
+    // MOTIVAZIONI SEGNALAZIONE
+
+    /**
+     * Converte una EMotivazione in array associativo per Presentation.
+     */
+    protected function motivazioneToArray(EMotivazione $motivazione): array {
+        return [
+            'id' => $motivazione->getIdMotivazione(),
+            'label' => $motivazione->getNomeMotivazione(),
+            'gravita' => $motivazione->getGravitaMotivazione()->value,
+        ];
+    }
+
+    /**
+     * Converte un array di EMotivazione in array associativo per Presentation.
+     */
+    protected function motivazioniToArray(array $motivazioni): array {
+        $risultato = [];
+        foreach ($motivazioni as $motivazione) {
+            $risultato[] = $this->motivazioneToArray($motivazione);
+        }
+        return $risultato;
     }
 
     // EVENTI
@@ -558,9 +602,6 @@ abstract class BaseController {
             'totale' => $totale,
         ];
     }
-
-
-    // ORDINI ??
 
     // GENERICI 
 

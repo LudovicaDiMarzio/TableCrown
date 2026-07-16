@@ -239,6 +239,8 @@ class CFrontController {
                         $controller->mostraRecensioni();
                     } elseif ($sottoRoute === 'wishlist') {
                         $controller->mostraWishlist();
+                    } elseif ($sottoRoute === 'pagamenti') {
+                        $controller->mostraMetodiPagamento();
                     } else {
                         $this->mostra404();
                     }
@@ -264,10 +266,40 @@ class CFrontController {
                         } else {
                             $this->mostra404();
                         }
-                    } //TODO: elseif ($sottoRoute === 'ordini' &&)
-                    else {
+                    } elseif ($sottoRoute === 'pagamenti') {
+                        $controllerPagamento = new CMetodiPagamento();
+                        if ($sottoRoute2 === 'aggiungi') {
+                            $controllerPagamento->aggiungiCarta();
+                        } elseif ($sottoRoute2 === 'elimina') {
+                            $controllerPagamento->eliminaCarta();
+                        } else {
+                            $this->mostra404();
+                        }
+                    } else {
                         $this->mostra404();
                     }
+                } else {
+                    $this->mostra404();
+                }
+                break;
+
+
+            case 'checkout':
+                $controller = new CCheckout();
+                if ($sottoRoute === null && $metodoHTTP === 'GET') {
+                    $controller->mostraCheckout(); //GET /checkout
+                } elseif ($sottoRoute === 'acquista' && $metodoHTTP === 'POST') {
+                    $controller->elaboraAcquisto(); //POST /checkout/acquista
+                } else {
+                    $this->mostra404();
+                }
+                break;
+
+            
+            case 'offerte':
+                if ($metodoHTTP === 'GET') {
+                    $controller = new CCatalogo();
+                    $controller->mostraOfferte(); //GET /offerte
                 } else {
                     $this->mostra404();
                 }
@@ -279,40 +311,18 @@ class CFrontController {
                 $controller->chiSiamo();
                 break;
 
+
             case 'contatti':
                 $controller = new CPagineStatiche();
                 $controller->contatti();
                 break;
+
 
             case 'dove-siamo':
                 $controller = new CPagineStatiche();
                 $controller->doveSiamo();
                 break;
 
-
-            case 'checkout':
-                $controller = new COrdine();
-                $controller->mostraCheckout();
-                break;
-
-
-            case 'ordini':
-                $controller = new COrdine();
-                if ($sottoRoute !== null && is_numeric($sottoRoute)) {
-                    //Corrisponde a: GET /ordini/{id} (es. /ordini/45) - dettaglio singolo ordine
-                    $controller->mostraDettaglioOrdine((int)$sottoRoute);
-                } else {
-                    //Corrisponde a: GET /ordini - storico ordini (redirect a /profilo/ordini)
-                    $controller->mostraStoricoOrdini();
-                }
-                break;
-
-
-            case 'offerte':
-                //Corrisponde a: GET /offerte
-                $controller = new COfferte();
-                $controller->mostraOfferte();
-                break;
 */
 
             default:
