@@ -12,7 +12,7 @@ define('ENVIRONMENT', 'development');
 
 // ── BASE URL ─────────────────────────────────────────────────
 if (ENVIRONMENT === 'development') {
-    define('BASE_URL', 'http://localhost/TableCrown');
+    define('BASE_URL', 'http://localhost:8000');
 } else {
     define('BASE_URL', 'https://www.tablecrown.it');
 }

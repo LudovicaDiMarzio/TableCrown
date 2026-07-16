@@ -778,4 +778,4 @@ if ($categoria === 'challenge') {
 // Home eventi (le 3 card)
 $smarty->assign('filtri', $filtri);
 $smarty->assign('breadcrumbs', breadcrumbsEventi(BASE_URL));
-$smarty->display('dettagliSerata.tpl');
+$smarty->display('ProfiloPagamenti.tpl');
