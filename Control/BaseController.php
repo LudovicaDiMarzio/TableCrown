@@ -20,6 +20,8 @@ use TableCrown\Entity\EChallenge;
 use TableCrown\Entity\EGiocoDaTavolo;
 use TableCrown\Entity\EBustine;
 use TableCrown\Entity\EPortaDadi;
+use TableCrown\Entity\ECartaDiCredito;
+use TableCrown\Entity\EIndirizzo;
 
 
 
@@ -67,6 +69,7 @@ abstract class BaseController {
         //cart_count solo per gli utenti loggati con ruolo 'utente'
         if ($this->isLoggedIn() && USession::getSessionElement('ruolo') === 'utente') {
             $carrello = USession::getSessionElement('carrello') ?? [];
+            //SISTEMARE BUG DI $cartCount: INCOERENZA CON LA STRUTTURA DEL CARRELLO (confronta con CCarrello)
             $cartCount = array_sum(array_column($carrello, 'quantita')); //array_column estrae la colonna 'quantita' da ogni riga del carrello
             if ($cartCount > 0) {
                 $globalData['cart_count'] = $cartCount; //Il badge appare solo se gli articoli sono > 0
@@ -150,6 +153,8 @@ abstract class BaseController {
     // METODI UTILI PER PASSAGGIO DATI A PRESENTATION
     //==========================================================================
 
+    // PRODOTTI
+
     /**
      * Converte un'entity EProdotto (e sottoclasse) in un array
      * per tutte le liste di prodotti (home, catalogo, carrello, etc.).
@@ -184,6 +189,49 @@ abstract class BaseController {
     }
 
     /**
+     * Restituisce prodotti "correlati" con CRITERIO PROVVISORIO: TUTTI I PRODOTTI
+     * DISPONIBILI NEL CATALOGO, ESCLUSI QUELLI IN $idEsclusi, LIMITATI A $limit.
+     * DA SOSTITUIRE QUANDO DISPONIBILE IL METODO NEL PM.
+     */
+    //DA MODIFICAREEEEE!!!!!!
+    protected function prodottiCorrelati(array $idsEsclusi, int $limit = 8): array {
+        $tuttiProdotti = FPersistentManager::PMgetAll(EProdotto::class);
+
+        $correlati = array_filter(
+            $tuttiProdotti,
+            fn($p) => !in_array($p->getIdProdotto(), $idsEsclusi) 
+        );
+
+        $correlati = array_slice(array_values($correlati), 0, $limit);
+
+        return $this->prodottiToArray($correlati);
+    }
+
+    /**
+     * Determina l'URL del catalogo specifico in base alla classe 
+     * dell'oggetto prodotto.
+     */
+    protected function urlCatalogo(EProdotto $prodotto): string {
+        if ($prodotto instanceof EGiocoDaTavolo) {
+            return '/catalogo/giochi-da-tavolo';
+        } 
+
+        if ($prodotto instanceof EBustine) {
+            return '/catalogo/bustine';
+        }
+
+        if ($prodotto instanceof EPortaDadi) {
+            return '/catalogo/porta-dadi';
+        }
+
+        //Fallback generico di sicurezza
+        return '/';
+    }
+
+
+    // UTENTE
+
+    /**
      * Converte l'utente loggato (se presente) nella forma minimale richiesta dal layout
      */
     protected function utenteToArray(): ?array {
@@ -194,6 +242,18 @@ abstract class BaseController {
             'name' => USession::getSessionElement('nickname'), //La sessione salva 'nickname', esposto come 'name' verso Presentation
         ];
     }
+
+    /**
+     * Recupera l'utente correntemente loggato nel DB, verificando che abbia il 
+     * ruolo 'utente'.
+     */
+    protected function utenteCorrente(): EUtente {
+        $this->requireRole('utente');
+        $idUtente = USession::getSessionElement('id_persona');
+        return FPersistentManager::PMgetObjOnAttribute(EUtente::class, 'idPersona', $idUtente);
+    }
+
+    // ENUM
 
     /**
      * Converte i case di un enum PHP nativo in coppie {value, label} per i dropdown.
@@ -216,6 +276,8 @@ abstract class BaseController {
         $validi = array_column($enumClass::cases(), 'value');
         return array_values(array_intersect($valori, $validi));
     }
+
+    // RECENSIONI
 
     /**
      * Converte una ERecensione in un array associativo per Presentation.
@@ -240,6 +302,8 @@ abstract class BaseController {
         }
         return $result;
     }
+
+    // EVENTI
 
     /**
      * Converte un EEvento in un array associativo per Presentation.
@@ -292,6 +356,44 @@ abstract class BaseController {
     }
 
     /**
+     * Riconosce il tipo effettivo di EEvento e chiama il corretto metodo di mapping
+     * ereditato dal BaseController.
+     */
+    protected function mappaEvento(EEvento $evento): array {
+        if ($evento instanceof ESerata) {
+            return $this->serataToArray($evento);
+        }
+        
+        if ($evento instanceof ETorneo) {
+            return $this->torneoToArray($evento);
+        }
+
+        if ($evento instanceof EChallenge) {
+            return $this->challengeToArray($evento);
+        }
+
+        //Difensivo: non dovrebbe mai accadere dato il DiscriminatorMap di EEvento, ma lo aggiungiamo per sicurezza
+        return $this->eventoToArray($evento);
+    }
+
+    /**
+     * Trasforma un array di EEvento in un array di array per Presentation,
+     * preservando i dettagli polimorfici di ciascun tipo di evento.
+     */
+    protected function eventiToArray(array $eventi): array {
+        $risultato = [];
+        foreach ($eventi as $evento) {
+            if ($evento instanceof EEvento) {
+                $risultato[] = $this->mappaEvento($evento);
+            }
+        }
+        
+        // Se non ci sono eventi, restituisce un array vuoto
+        return $risultato;
+    }
+
+
+    /**
      * Rappresentazione minimale di un EEvento, per link cliccabili.
      */
     protected function eventoLinkMinimo(EEvento $evento): array {
@@ -301,24 +403,166 @@ abstract class BaseController {
         ];
     }
 
+    // INDIRIZZI 
     /**
-     * Restituisce prodotti "correlati" con CRITERIO PROVVISORIO: TUTTI I PRODOTTI
-     * DISPONIBILI NEL CATALOGO, ESCLUSI QUELLI IN $idEsclusi, LIMITATI A $limit.
-     * DA SOSTITUIRE QUANDO DISPONIBILE IL METODO NEL PM.
+     * Converte un EIndirizzo in array associativo per Presentation.
      */
-    //DA MODIFICAREEEEE!!!!!!
-    protected function prodottiCorrelati(array $idsEsclusi, int $limit = 8): array {
-        $tuttiProdotti = FPersistentManager::PMgetAll(EProdotto::class);
-
-        $correlati = array_filter(
-            $tuttiProdotti,
-            fn($p) => !in_array($p->getIdProdotto(), $idsEsclusi) 
-        );
-
-        $correlati = array_slice(array_values($correlati), 0, $limit);
-
-        return $this->prodottiToArray($correlati);
+    protected function indirizzoToArray(EIndirizzo $indirizzo): array {
+        return [
+            'id'            => $indirizzo->getIdIndirizzo(),
+            'nome'          => $indirizzo->getNome(),
+            'via'           => $indirizzo->getVia(),
+            'citta'         => $indirizzo->getCitta(),
+            'cap'           => $indirizzo->getCap(),
+            'provincia'     => $indirizzo->getProvincia(),
+            'nazione'       => $indirizzo->getNazione(),
+            'nome_citofono' => $indirizzo->getNomeCitofono(),
+            'predefinito'   => $indirizzo->isPredefinito(),
+        ];
     }
+
+    /**
+     * Converte un array di EIndirizzo in array associativo per Presentation.
+     */
+    protected function indirizziToArray(array $indirizzi): array {
+        $risultato = [];
+        foreach ($indirizzi as $indirizzo) {
+            $risultato[] = $this->indirizzoToArray($indirizzo);
+        }
+        return $risultato;
+    }
+
+    // METODI DI PAGAMENTO
+
+    /**
+     * Converte un ECartaDiCredito in array associativo per Presentation.
+     */
+    protected function cartaToArray(ECartaDiCredito $carta): array {
+        return [
+            'id' => $carta->getIdCartaDiCredito(),
+            'titolare' => $carta->getNomeTitolare(),
+            'ultimeQuattroCifre' => $carta->getNumeroMascherato(),
+            'scadenza' => $carta->getScadenzaFormattata(),
+        ];
+    }
+
+    /**
+     * Converte un array di ECartaDiCredito in array associativo per Presentation.
+     */
+    protected function carteToArray(array $carte): array {
+        $risultato = [];
+        foreach ($carte as $carta) {
+            $risultato[] = $this->cartaToArray($carta);
+        }
+        return $risultato;
+    }
+
+
+    // CARRELLO (metodi utili sia per CCarrello che per CCheckout)
+
+    /**
+     * Costruisce le righe del carrello con le entity reali dei prodotti (non array),
+     * più la quantità di ciascuna riga. Pensato per manipolare i prodotti
+     * (es. creare un ordine), non solo per visualizzarli.
+     */
+    protected function buildCarrelloEntities(array &$carrello): array {
+        if (empty($carrello)) {
+            return [];
+        }
+
+        $idsProdotto = array_keys($carrello);
+        $prodottiCaricati = FPersistentManager::PMgetObjListOnAttribute(EProdotto::class, 'idProdotto', $idsProdotto);
+
+        $prodottiIndicizzati = [];
+        foreach ($prodottiCaricati as $prodotto) {
+            $prodottiIndicizzati[$prodotto->getIdProdotto()] = $prodotto;
+        }
+
+        $righeCarrello = [];
+        $idsDaRimuovere = [];
+
+        foreach ($carrello as $idProdotto => $quantita) {
+            $prodotto = $prodottiIndicizzati[$idProdotto] ?? null;
+
+            if (!$prodotto) {
+                $idsDaRimuovere[] = $idProdotto; //così verrà rimosso e non verrà contato in aggiornaQuantita()
+                continue; //salta il prodotto e passa al prossimo
+            }
+
+            $righeCarrello[] = [
+                'prodotto' => $prodotto, //qui c'è l'entity vera, non l'array
+                'quantita' => $quantita,
+            ];
+        }
+
+        //Pulizia: rimuove dalla sessione i prodotti non più trovati nel DB,
+        //così n_articoli e il carrello restano coearenti con ciò che l'utente vede.
+        if (!empty($idsDaRimuovere)) {
+            foreach ($idsDaRimuovere as $idProdotto) {
+                unset($carrello[$idProdotto]);
+            }
+            USession::setSessionElement('carrello', $carrello);
+        }
+
+        return $righeCarrello;
+
+    }
+
+
+    /**
+     * Costruisce l'array di righe del carrello, ciascuna con i dati reali del prodotto
+     * (tramite prodottoToArray, stessa convenzione usata in home/catalogo/prodotto),
+     * più i campi specifici della riga carrello (quantità, subtotale, url azioni).
+     * E' un wrapper "di presentazione" sul metodo buildCarrelloEntities. Ci limitiamo qui
+     * a convertire le entity in array per la View.
+     */
+    protected function buildCarrelloItems(array &$carrello): array { //con & prima di $carrello la funzione riceve un riferimento diretto alla variabile originale (per aggiornare la quantità)
+        $righeCarrello = $this->buildCarrelloEntities($carrello);
+ 
+        $carrelloItems = [];
+        foreach ($righeCarrello as $riga) {
+            $prodottoArray = $this->prodottoToArray($riga['prodotto']);
+            //Prezzo effettivo da usare per i calcoli: scontato se presente, altrimenti pieno
+            $prodottoArray['prezzo_unitario'] = $prodottoArray['prezzo_scontato'] ?? $prodottoArray['prezzo'];
+
+            $carrelloItems[] = [
+                'quantita' => $riga['quantita'],
+                'subtotale' => $prodottoArray['prezzo_unitario'] * $riga['quantita'],
+                'prodotto' => $prodottoArray,
+            ];
+        }
+ 
+        return $carrelloItems;
+    }
+
+    /**
+     * Calcola i totali del carrello a partire dalle righe già costruite da buildCarrelloItems,
+     * evitando di ricalcolare prezzi o ricontattare il DB.
+     */
+    protected function buildCarrelloSummary(array $carrelloItems, array $carrello): array {
+        $totale = 0.00;
+        $totaleSconto = 0.00;
+ 
+        foreach ($carrelloItems as $item) {
+            $totale += $item['subtotale'];
+ 
+            if ($item['prodotto']['sconto']) {
+                $risparmioUnitario = $item['prodotto']['prezzo'] - $item['prodotto']['prezzo_unitario'];
+                $totaleSconto += $risparmioUnitario * $item['quantita'];
+            }
+        }
+ 
+        return [
+            'n_articoli' => array_sum($carrello), //somma tutte le quantità nel carrello (0 se carrello vuoto)
+            'sconto' => $totaleSconto,
+            'totale' => $totale,
+        ];
+    }
+
+
+    // ORDINI ??
+
+    // GENERICI 
 
     /**
      * Formatta un importo come stringa con 2 decimali fissi, usando il 
@@ -330,37 +574,9 @@ abstract class BaseController {
         return number_format($importo, 2, '.', '');
     }
 
-    /**
-     * Recupera l'utente correntemente loggato nel DB, verificando che abbia il 
-     * ruolo 'utente'.
-     */
-    protected function utenteCorrente(): EUtente {
-        $this->requireRole('utente');
-        $idUtente = USession::getSessionElement('id_persona');
-        return FPersistentManager::PMgetObjOnAttribute(EUtente::class, 'idPersona', $idUtente);
-    }
-
-    /**
-     * Determina l'URL del catalogo specifico in base alla classe 
-     * dell'oggetto prodotto.
-     */
-    protected function urlCatalogo(EProdotto $prodotto): string {
-        if ($prodotto instanceof EGiocoDaTavolo) {
-            return '/catalogo/giochi-da-tavolo';
-        } 
-
-        if ($prodotto instanceof EBustine) {
-            return '/catalogo/bustine';
-        }
-
-        if ($prodotto instanceof EPortaDadi) {
-            return '/catalogo/porta-dadi';
-        }
-
-        //Fallback generico di sicurezza
-        return '/';
-    }
-
+    //==========================================================================
+    // HELPER PRIVATI
+    //==========================================================================
 
     /**
      * Verifica la presenza del cookie Remember Me e, se valido,

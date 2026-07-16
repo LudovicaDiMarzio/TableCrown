@@ -41,6 +41,9 @@ class CCatalogo extends BaseController {
         $this->renderCatalogo('catalogo_giochi', $risultatoGrezzo, $pagina, $filtri);
     }
 
+    /**
+     * URL: GET /catalogo/bustine
+     */
     public function mostraCatalogoBustine(): void { 
         $pagina = $this->estraiPaginaRichiesta();
         $filtri = $this->estraiFiltriPrezzo(); 
@@ -54,6 +57,9 @@ class CCatalogo extends BaseController {
         $this->renderCatalogo('catalogo_bustine', $risultatoGrezzo, $pagina, $filtri);
     }
 
+    /**
+     * URL: GET /catalogo/porta-dadi
+     */
     public function mostraCatalogoPortaDadi(): void { 
         $pagina = $this->estraiPaginaRichiesta();
         $filtri = $this->estraiFiltriPrezzo(); 
@@ -72,14 +78,15 @@ class CCatalogo extends BaseController {
      * La barra di ricerca è un componente del layout globale,
      * ma una ricerca eseguita in questo modo (effettuata in una qualunque
      * delle pagine del sito), viene sempre gestita dal controller del catalogo
+     * URL: GET /ricerca
      */
-    public function mostraRisultatiRicerca(): void {
+    public function mostraRisultatiRicercaProdotti(): void {
         $query = UHTTPMethods::get('q');
         $pagina = $this->estraiPaginaRichiesta();
 
         if ($query === null || trim($query) === '') {
-            //Se non c'è nessun termine di ricerca, reindirizziamo al catalogo principale dei giochi (DA DECIDERE!!!!!!!)
-            header("Location: /catalogo/giochi-da-tavolo");
+            //Se non c'è nessun termine di ricerca, reindirizziamo alla pagina precedente. Fallback: la home
+            header("Location: " . UHTTPMethods::getReferer('/'));
             exit();
         }
 

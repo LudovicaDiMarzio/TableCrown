@@ -39,9 +39,9 @@ class CIndirizzo extends BaseController {
 
     /**
      * Aggiunge un nuovo indirizzo al profilo utente.
-     * URL: POST /indirizzi/aggiungi
+     * URL: POST profilo/indirizzi/aggiungi
      */
-    public function aggiungi(): void {
+    public function aggiungiIndirizzo(): void {
         $utente = $this->utenteCorrente();
         $isAjax = UHTTPMethods::isAjax();
 
@@ -100,7 +100,7 @@ class CIndirizzo extends BaseController {
 
     /**
      * Imposta un indirizzo esistente come predefinito.
-     * URL: POST /indirizzi/predefinito
+     * URL: POST profilo/indirizzi/predefinito
      */
     public function impostaPredefinito(): void {
         $utente = $this->utenteCorrente();
@@ -159,9 +159,9 @@ class CIndirizzo extends BaseController {
 
     /**
      * Elimina un indirizzo.
-     * URL: POST /indirizzi/elimina
+     * URL: POST profilo/indirizzi/elimina
      */
-    public function elimina(): void {
+    public function eliminaIndirizzo(): void {
         $utente = $this->utenteCorrente();
         $isAjax = UHTTPMethods::isAjax();
 

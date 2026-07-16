@@ -38,66 +38,76 @@ class CFrontController {
                 $controller->mostraHome();
                 break;
 
+
             case 'ricerca':
                 //Corrisponde a: GET /ricerca
-                $controller = new CCatalogo();
-
                 if ($metodoHTTP === 'GET') {
-                    $controller->mostraRisultatiRicerca();
-                }
-                break;
-
-            case 'catalogo':
-                $controller = new CCatalogo();
-
-                if ($sottoRoute === 'giochi-da-tavolo' && $metodoHTTP === 'GET') {
-                    $controller->mostraCatalogoGiochi(); //GET /catalogo/giochi-da-tavolo
-                } elseif ($sottoRoute === 'bustine' && $metodoHTTP === 'GET') {
-                    $controller->mostraCatalogoBustine(); //GET /catalogo/bustine
-                } elseif ($sottoRoute === 'porta-dadi' && $metodoHTTP === 'GET') {
-                    $controller->mostraCatalogoPortaDadi(); //GET /catalogo/porta-dadi
-                }
-                break;
-
-            case 'eventi':
-                /* //Corrisponde a: GET /eventi
-                $controller = new CEventi();
-                if ($sottoRoute === null) { //Corrisponde a: GET /eventi (Lista completa degli eventi)
-                    $controller->mostraEventi();
-                }
-                
-                elseif (is_numeric($sottoRoute)) { //Corrisponde a: GET /eventi/{id} (es. /eventi/45)
-                    $controller->mostraDettaglioEvento();
-                }
-
-                //ROTTE DEDICATE AL GESTORE:
-                elseif ($sottoRoute === 'nuovo' && $metodoHTTP === 'GET') { //Corrisponde a: GET /eventi/nuovo (Creazione di un nuovo evento)
-                    $controller->mostraFormCreaEvento();
-                }
-
-                elseif ($sottoRoute === 'crea' && $metodoHTTP === 'POST') { //Corrisponde a: POST /eventi/crea (Creazione di un nuovo evento)
-                    $controller->creaEvento();
-                }
-
-                elseif ($sottoRoute === 'modifica' && $metodoHTTP === 'GET') { //Corrisponde a: GET /eventi/modifica (Modifica di un evento esistente)
-                    $controller->mostraFormModificaEvento();
-                }
-
-                else {
-                    //Se l'URL non corrisponde a nessuna rotta definita nel sistema, intercettiamo l'errore.
+                    $controller = new CCatalogo();
+                    $controller->mostraRisultatiRicercaProdotti();
+                } else {
                     $this->mostra404();
                 }
                 break;
- */
-            case 'offerte':
-                //Corrisponde a: GET /offerte
-                $controller = new COfferte();
-                $controller->mostraOfferte();
+
+
+            case 'catalogo':
+                if ($metodoHTTP !== 'GET') {
+                    $this->mostra404();
+                    break;
+                }
+                $controller = new CCatalogo();
+                if ($sottoRoute === 'giochi-da-tavolo') {
+                    $controller->mostraCatalogoGiochi(); //GET /catalogo/giochi-da-tavolo
+                } elseif ($sottoRoute === 'bustine') {
+                    $controller->mostraCatalogoBustine(); //GET /catalogo/bustine
+                } elseif ($sottoRoute === 'porta-dadi') {
+                    $controller->mostraCatalogoPortaDadi(); //GET /catalogo/porta-dadi
+                } else {
+                    $this->mostra404();
+                }
                 break;
+
+
+            case 'eventi':
+                if ($metodoHTTP === 'GET') {
+                    if ($sottoRoute === null) {
+                        $controller = new CEventi();
+                        $controller->mostraHubEventi();
+                    } elseif ($sottoRoute === 'serate') {
+                        $controller = new CEventi();
+                        $controller->mostraListaSerate(); //GET /catalogo/serate
+                    } elseif ($sottoRoute === 'tornei') {
+                        $controller = new CEventi();
+                        $controller->mostraListaTornei(); //GET /catalogo/tornei
+                    } elseif ($sottoRoute === 'challenge') {
+                        $controller = new CEventi();
+                        $controller->mostraListaChallenge(); //GET /catalogo/challenge
+                    } elseif ($sottoRoute === 'dettaglio') {
+                        if ($sottoRoute2 === null || !is_numeric($sottoRoute2)) {
+                            $this->mostra404();
+                            break;
+                        }
+                        $controller = new CDettaglioEvento();
+                        $controller->mostraDettaglioEvento((int)$sottoRoute2);
+                    } elseif ($sottoRoute === 'risultati') {
+                        //TODO: implementare il metodo mostraRisultatiRicerca() in CEventi()
+                        $this->mostra404(); //DA TOGLIERE POI
+                    } else {
+                        $this->mostra404();
+                    }
+                } elseif ($metodoHTTP === 'POST' && $sottoRoute === 'partecipa') {
+                    //POST /eventi/partecipa - unico endpoint per serate/tornei/challenge (la differenza di comportamento è gestita internamente nel metodo)
+                    $controller = new CDettaglioEvento();
+                    $controller->partecipaEvento();
+                } else {
+                    $this->mostra404();
+                }
+                break;
+
 
             case 'prodotto':
                 //Corrisponde a: GET /prodotto/{id} (es. /prodotto/45)
-                if ($sottoRoute !== null && is_numeric($sottoRoute)) {
+                if ($metodoHTTP === 'GET' &&$sottoRoute !== null && is_numeric($sottoRoute)) {
                     $controller = new CProdotto();
                     $controller->mostraDettaglioProdotto((int)$sottoRoute);
                 } else {
@@ -105,94 +115,165 @@ class CFrontController {
                 }
                 break;
 
+
             case 'accedi':
                 //Corrisponde a: GET /accedi
-                $controller = new CAutenticazione();
-                $controller->mostraFormLogin();
+                if ($metodoHTTP === 'GET') {
+                    $controller = new CAutenticazione();
+                    $controller->mostraFormLogin();
+                } else {
+                    $this->mostra404();
+                }
                 break;
+
 
             case 'registrati':
                 //Corrisponde a: GET /registrati
-                $controller = new CAutenticazione();
-                $controller->mostraFormRegistrazione();
+                if ($metodoHTTP === 'GET') {
+                    $controller = new CAutenticazione();
+                    $controller->mostraFormRegistrazione();
+                } else {
+                    $this->mostra404();
+                }
                 break;
+
 
             case 'logout':
                 //Corrisponde a: GET /logout
-                $controller = new CAutenticazione();
-                $controller->logout();
+                if ($metodoHTTP === 'GET') {
+                    $controller = new CAutenticazione();
+                    $controller->logout();
+                } else {
+                    $this->mostra404();
+                }
                 break;
+
 
             case 'login':
                 //Corrisponde a: POST /login
-                $controller = new CAutenticazione();
-                $controller->login();
+                if ($metodoHTTP === 'POST') {
+                    $controller = new CAutenticazione();
+                    $controller->login();
+                } else {
+                    $this->mostra404();
+                }
                 break;
+
 
             case 'registrazione':
                 //Corrisponde a: POST /registrazione
-                $controller = new CAutenticazione();
-                $controller->registrazione();
+                if ($metodoHTTP === 'POST') {
+                    $controller = new CAutenticazione();
+                    $controller->registrazione();
+                } else {
+                    $this->mostra404();
+                }
                 break;
+
 
             case 'carrello':
                 $controller = new CCarrello();
-                //Verifico il metodo HTTP: se l'utente ha cliccato su "Aggiungi" nella Home, invierà una richiesta POST a /carrello/aggiungi
                 if ($sottoRoute === 'aggiungi' && $metodoHTTP === 'POST') {
                     $controller->aggiungiAlCarrello();
-                } elseif ($sottoRoute === 'rimuovi' && $metodoHTTP === 'GET') {
-                    $controller->rimuoviDalCarrello((int)$sottoRoute2);
-                } elseif ($sottoRoute === 'aggiorna' && $metodoHTTP === 'GET'){
-                    $controller->aggiornaQuantita((int)$sottoRoute2);
-                } else {
-                    //Altrimenti, di default con una normale GET, mostra la pagina del carrello
+                } elseif ($sottoRoute === 'rimuovi' && $metodoHTTP === 'POST') { 
+                    $controller->rimuoviDalCarrello();
+                } elseif ($sottoRoute === 'aggiorna' && $metodoHTTP === 'POST'){ 
+                    $controller->aggiornaQuantita();
+                } elseif ($sottoRoute === null && $metodoHTTP === 'GET') {
                     $controller->mostraCarrello();
+                } else {
+                    $this->mostra404();
                 }
                 break;
-/* 
-            case 'wishlist': //DA RIVEDERE
+
+
+            case 'wishlist': //Solo azioni di mutazione; la visualizzazione passa da profilo/wishlist
+                if ($metodoHTTP !== 'POST') {
+                    $this->mostra404();
+                    break;
+                }
                 $controller = new CWishlist();
-                if ($sottoRoute === 'aggiungi' && $metodoHTTP === 'POST') {
+                if ($sottoRoute === 'aggiungi') {
                     $controller->aggiungiAllaWishlist();
+                } elseif ($sottoRoute === 'rimuovi') {
+                    $controller->rimuoviDallaWishlist();
                 } else {
-                    $controller->mostraWishlist();
+                    $this->mostra404();
                 }
                 break;
- */
-/* 
-            case 'profilo':
-                $controller = new CProfilo();
-                //Gestione delle sotto-rotte dell'area riservata
-                if ($sottoRoute === 'ordini') {
-                    //Corrisponde a: GET /profilo/ordini
-                    $controller->mostraOrdini();
-                } elseif ($sottoRoute === 'eventi') {
-                    //Corrisponde a: GET /profilo/eventi
-                    $controller->mostraEventiUtente();
+
+            
+            case 'recensioni':
+                if ($metodoHTTP !== 'POST') {
+                    $this->mostra404();
+                    break;
+                }
+                $controller = new CRecensioni();
+                if ($sottoRoute === 'aggiungi') {
+                    $controller->aggiungiRecensione();
+                } elseif ($sottoRoute === 'elimina') {
+                    $controller->eliminaRecensione();
+                } elseif ($sottoRoute === 'segnala') {
+                    $controller->segnalaRecensione();
                 } else {
-                    //Corrisponde a: GET /profilo (Dati generali)
-                    $controller->mostraProfiloGenerale();
+                    $this->mostra404();
                 }
                 break;
-                 */
+
 
             case 'profilo':
                 $controller = new CProfilo();
-                if ($sottoRoute === 'modifica' && $metodoHTTP === 'GET') {
-                    $controller->mostraAccount();
-                } elseif ($sottoRoute === 'modifica' && $metodoHTTP === 'POST') {
-                    if ($sottoRoute2 === 'password') {
-                        $controller->cambiaPassword();
-                    } elseif ($sottoRoute2 === 'elimina') {
-                        $controller->eliminaAccount();
+                
+                if ($metodoHTTP === 'GET') {
+                    if ($sottoRoute === null) {
+                        $controller->mostraHub();
+                    } elseif ($sottoRoute === 'modifica') {
+                        $controller->mostraAccount();
+                    } elseif ($sottoRoute === 'ordini') {
+                        $controller->mostraOrdini();
+                    } elseif ($sottoRoute === 'eventi') {
+                        $controller->mostraEventi();
+                    } elseif ($sottoRoute === 'indirizzi') {
+                        $controller->mostraIndirizzi();
+                    } elseif ($sottoRoute === 'recensioni') {
+                        $controller->mostraRecensioni();
+                    } elseif ($sottoRoute === 'wishlist') {
+                        $controller->mostraWishlist();
                     } else {
-                        $controller->aggiornaAccount();
+                        $this->mostra404();
                     }
-                } else {//DA CAMBIARE
-                    $controller->mostraHub();
-                } 
+                } elseif ($metodoHTTP === 'POST') {
+                    if ($sottoRoute === 'modifica') {
+                        if ($sottoRoute2 === 'password') {
+                            $controller->cambiaPassword();
+                        } elseif ($sottoRoute2 === 'elimina') {
+                            $controller->eliminaAccount();
+                        } elseif ($sottoRoute2 === null) {
+                            $controller->aggiornaAccount();
+                        } else {
+                            $this->mostra404();
+                        }
+                    } elseif ($sottoRoute === 'indirizzi') {
+                        $controllerIndirizzo = new CIndirizzo();
+                        if ($sottoRoute2 === 'aggiungi') {
+                            $controllerIndirizzo->aggiungiIndirizzo();
+                        } elseif ($sottoRoute2 === 'elimina') {
+                            $controllerIndirizzo->eliminaIndirizzo();
+                        } elseif ($sottoRoute2 === 'predefinito') {
+                            $controllerIndirizzo->impostaPredefinito();
+                        } else {
+                            $this->mostra404();
+                        }
+                    } //TODO: elseif ($sottoRoute === 'ordini' &&)
+                    else {
+                        $this->mostra404();
+                    }
+                } else {
+                    $this->mostra404();
+                }
+                break;
 
-
+/* 
             case 'chi-siamo':
                 $controller = new CPagineStatiche();
                 $controller->chiSiamo();
@@ -208,24 +289,12 @@ class CFrontController {
                 $controller->doveSiamo();
                 break;
 
-            case 'recensione':
-                if ($sottoRoute === 'aggiungi' && $metodoHTTP === 'POST') {
-                    $idProdotto = $sottoRoute2 !== null ? (int)$sottoRoute2 : null;
-                    if ($idProdotto) {
-                        $controller = new CRecensioni();
-                        $controller->aggiungiRecensione($idProdotto);
-                    } else {
-                        $this->mostra404();
-                    }
-                } else {
-                    $this->mostra404(); //Se l'URL non corrisponde a nessuna rotta definita nel sistema, intercettiamo l'errore.
-                }
-                break;
 
             case 'checkout':
                 $controller = new COrdine();
                 $controller->mostraCheckout();
                 break;
+
 
             case 'ordini':
                 $controller = new COrdine();
@@ -237,6 +306,14 @@ class CFrontController {
                     $controller->mostraStoricoOrdini();
                 }
                 break;
+
+
+            case 'offerte':
+                //Corrisponde a: GET /offerte
+                $controller = new COfferte();
+                $controller->mostraOfferte();
+                break;
+*/
 
             default:
                 //Se l'URL non corrisponde a nessuna rotta definita nel sistema, intercettiamo l'errore.

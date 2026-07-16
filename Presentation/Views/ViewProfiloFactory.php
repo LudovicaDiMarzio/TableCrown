@@ -1,6 +1,7 @@
 <?php
 // Presentation/Views/ViewProfiloFactory.php
 
+require_once __DIR__ . '/ViewProfiloBase.php';
 require_once __DIR__ . '/ViewProfiloHub.php';
 require_once __DIR__ . '/ViewModificaAccount.php';
 require_once __DIR__ . '/ViewProfiloOrdini.php';

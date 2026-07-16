@@ -28,7 +28,7 @@ class CRecensioni extends BaseController {
      * Crea e memorizza una nuova recensione per un prodotto.
      * URL: POST /recensioni/aggiungi
      */
-    public function aggiungi(): void {
+    public function aggiungiRecensione(): void {
         $utente = $this->utenteCorrente();
         $isAjax = UHTTPMethods::isAjax();
 
@@ -78,9 +78,9 @@ class CRecensioni extends BaseController {
 
     /**
      * Rimuove una recensione esistente.
-     * URL: POST /recensioni/rimuovi
+     * URL: POST /recensioni/elimina
      */
-    public function elimina(): void {
+    public function eliminaRecensione(): void {
         $utente = $this->utenteCorrente();
         $isAjax = UHTTPMethods::isAjax();
 
@@ -136,7 +136,7 @@ class CRecensioni extends BaseController {
      * Segnala una recensione.
      * URL: POST /recensioni/segnala
      */
-    public function segnala(): void {
+    public function segnalaRecensione(): void {
         $this->utenteCorrente(); //controllo di sicurezza
         $isAjax = UHTTPMethods::isAjax();
 

@@ -20,25 +20,6 @@ class CWishlist extends BaseController {
     }
 
     //==========================================================================
-    // HELPER PRIVATI
-    //==========================================================================
-
-    /**
-     * Recupera o crea da zero la wishlist dell'utente.
-     * Garantisce che l'utente abbia sempre una wishlist attiva su cui operare.
-     */
-    private function recuperaWishlist(EUtente $utente): EWishlist {
-        $wishlist = FPersistentManager::PMgetObjOnAttribute(EWishlist::class, 'utente', $utente);
-
-        if ($wishlist === null) {
-            $wishlist = new EWishlist($utente);
-            FPersistentManager::PMsaveObj($wishlist);
-        }
-
-        return $wishlist;
-    }
-
-    //==========================================================================
     // AZIONI OPERATIVE (CRUD / MUTAMENTO)
     //==========================================================================
 
@@ -47,7 +28,7 @@ class CWishlist extends BaseController {
      * Accetta chiamate POST standard o AJAX.
      * URL: POST /wishlist/aggiungi
      */
-    public function aggiungi(): void {
+    public function aggiungiAllaWishlist(): void {
         $utente = $this->utenteCorrente();
 
         //Determiniamo se la richiesta è AJAX
@@ -100,7 +81,7 @@ class CWishlist extends BaseController {
      * Gestisce la richiesta standard o asincrona.
      * URL: POST /wishlist/rimuovi
      */
-    public function rimuovi(): void {
+    public function rimuoviDallaWishlist(): void {
         $utente = $this->utenteCorrente();
         $isAjax = UHTTPMethods::isAjax();
 
@@ -143,6 +124,25 @@ class CWishlist extends BaseController {
             header('Location: ' . UHTTPMethods::getReferer('profilo/wishlist'));
             exit();
         }
+    }
+
+    //==========================================================================
+    // HELPER PRIVATI
+    //==========================================================================
+
+    /**
+     * Recupera o crea da zero la wishlist dell'utente.
+     * Garantisce che l'utente abbia sempre una wishlist attiva su cui operare.
+     */
+    private function recuperaWishlist(EUtente $utente): EWishlist {
+        $wishlist = FPersistentManager::PMgetObjOnAttribute(EWishlist::class, 'utente', $utente);
+
+        if ($wishlist === null) {
+            $wishlist = new EWishlist($utente);
+            FPersistentManager::PMsaveObj($wishlist);
+        }
+
+        return $wishlist;
     }
 
     /**

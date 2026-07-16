@@ -15,10 +15,6 @@ use TableCrown\Presentation\Views\ViewCarrello;
 
 class CCarrello extends BaseController {
 
-    //URL base del sito, usato per costruire URL assoluti nelle risposte JSON
-    //(il JS ha bisogno di URL completi per costruire il DOM senza passare da Smarty).
-    private const BASE_URL = 'https://tablecrown.it'; //FORSE DA CAMBIARE, ANDREBBE DEFINITA IN UN FILE PIù GENERALE TIPO DI config
-
     public function __construct() {
         parent::__construct();
     }
@@ -45,6 +41,8 @@ class CCarrello extends BaseController {
             'carrello_items' => $carrelloItems,
             'carrello_summary' => $carrelloSummary,
             'correlati' => $correlati,
+            'update_url' => '/carrello/aggiorna',
+            'remove_url' => '/carrello/rimuovi',
         ];
  
         //Uniamo i dati specifici della pagina con i dati globali del layout
@@ -52,91 +50,6 @@ class CCarrello extends BaseController {
  
         //Chiamata alla View per renderizzare il template di Smarty passando i dati
         ViewCarrello::mostraCarrello($datiLayout); 
-    }
-
-    //==========================================================================
-    // METODI PRIVATI - per costruire i dati richiesti dalla view del carrello
-    //==========================================================================
-    /**
-     * Costruisce l'array di righe del carrello, ciascuna con i dati reali del prodotto
-     * (tramite prodottoToArray, stessa convenzione usata in home/catalogo/prodotto),
-     * più i campi specifici della riga carrello (quantità, subtotale, url azioni).
-     */
-    private function buildCarrelloItems(array &$carrello): array { //con & prima di $carrello la funzione riceve un riferimento diretto alla variabile originale (per aggiornare la quantità)
-        if (empty($carrello)) {
-            return [];
-        }
- 
-        $carrelloItems = [];
-        $idsDaRimuovere = [];
-        $idsProdotto = array_keys($carrello);
-
-        $prodottiCaricati = FPersistentManager::PMgetObjListOnAttribute(EProdotto::class, 'idProdotto', $idsProdotto);
-
-        //Indicizzazione per evitare query nel ciclo
-        $prodottiIndicizzati = [];
-        foreach ($prodottiCaricati as $prodotto) {
-            $prodottiIndicizzati[$prodotto->getIdProdotto()] = $prodotto;
-        }
- 
-        //Scorriamo il carrello prendendo la chiave (id prodotto) e il valore (quantità)
-        foreach ($carrello as $idProdotto => $quantita) {
-            //Chiediamo a Foundation di caricarci l'oggetto Entity del prodotto dal DB
-            $prodotto = $prodottiIndicizzati[$idProdotto] ?? null;
- 
-            if (!$prodotto) {
-                $idsDaRimuovere[] = $idProdotto; //così verrà rimosso e non verrà contato in aggiornaQuantita()
-                continue; //salta il prodotto e passa al prossimo
-            }
- 
-            $prodottoArray = $this->prodottoToArray($prodotto);
-            //Prezzo effettivo da usare per i calcoli: scontato se presente, altrimenti pieno
-            $prodottoArray['prezzo_unitario'] = $prodottoArray['prezzo_scontato'] ?? $prodottoArray['prezzo'];
-
-            //Costruiamo la struttura esatta richiesta dalla View
-            $carrelloItems[] = [
-                'quantita' => $quantita,
-                'subtotale' => $prodottoArray['prezzo_unitario'] * $quantita,
-                'update_url' => '/carrello/aggiorna/' . $idProdotto,
-                'remove_url' => '/carrello/rimuovi/' . $idProdotto,
-                'prodotto' => $prodottoArray,
-            ];
-        }
-
-        //Pulizia: rimuove dalla sessione i prodotti non più trovati nel DB,
-        //così n_articoli e il carrello restanp coearenti con ciò che l'utente vede.
-        if (!empty($idsDaRimuovere)) {
-            foreach ($idsDaRimuovere as $idProdotto) {
-                unset($carrello[$idProdotto]);
-            }
-            USession::setSessionElement('carrello', $carrello);
-        }
- 
-        return $carrelloItems;
-    }
-
-    /**
-     * Calcola i totali del carrello a partire dalle righe già costruite da buildCarrelloItems,
-     * evitando di ricalcolare prezzi o ricontattare il DB.
-     */
-    private function buildCarrelloSummary(array $carrelloItems, array $carrello): array {
-        $totale = 0.00;
-        $totaleSconto = 0.00;
- 
-        foreach ($carrelloItems as $item) {
-            $totale += $item['subtotale'];
- 
-            if ($item['prodotto']['sconto']) {
-                $risparmioUnitario = $item['prodotto']['prezzo'] - $item['prodotto']['prezzo_unitario'];
-                $totaleSconto += $risparmioUnitario * $item['quantita'];
-            }
-        }
- 
-        return [
-            'n_articoli' => array_sum($carrello), //somma tutte le quantità nel carrello (0 se carrello vuoto)
-            'sconto' => $totaleSconto,
-            'totale' => $totale,
-        ];
     }
 
     //==========================================================================
@@ -231,16 +144,16 @@ class CCarrello extends BaseController {
         echo json_encode([
             'id' => $prodottoArray['id'],
             'nome' => $prodottoArray['nome'],
-            'immagine_url' => self::BASE_URL . '/img/prodotti/' . $prodottoArray['immagine'], //DA VERIFICARE
-            'product_url' => self::BASE_URL . '/prodotto/' . $prodottoArray['id'],
+            'immagine_url' => BASE_URL . '/img/prodotti/' . $prodottoArray['immagine'], //DA VERIFICARE
+            'product_url' => BASE_URL . '/prodotto/' . $prodottoArray['id'],
             'prezzo_unitario' => $prezzoUnitario,
             'sconto' => $prodottoArray['sconto'],
             'prezzo_originale' => $prodottoArray['prezzo'],
             'percentuale_sconto' => $prodottoArray['percentuale_sconto'],
             'quantita' => $quantitaAggiornata,
             'subtotale' => $prezzoUnitario * $quantitaAggiornata,
-            'update_url' => self::BASE_URL . '/carrello/aggiorna/' . $idProdotto,
-            'remove_url' => self::BASE_URL . '/carrello/rimuovi/' . $idProdotto,
+            'update_url' => BASE_URL . '/carrello/aggiorna/',
+            'remove_url' => BASE_URL . '/carrello/rimuovi/',
             'cart_count' => array_sum($carrello), //per aggiornare il badge navbar
         ]);
         exit();
@@ -252,7 +165,7 @@ class CCarrello extends BaseController {
      * URL: GET /carrello/aggiorna{id_item}?qty={quantita}
      * Risponde in JSON.
      */
-    public function aggiornaQuantita(int $idItem): void {
+    public function aggiornaQuantita(): void {
         header('Content-Type: application/json');
 
         if (!$this->isLoggedIn() || USession::getSessionElement('ruolo') !== 'utente') {
@@ -261,8 +174,8 @@ class CCarrello extends BaseController {
             exit(); //interrompe immediatamente l'esecuzione dello script
         }
 
-        //La nuova quantità arriva come paramtro GET nella query string (?qty=N)
-        $nuovaQuantita = (int) UHTTPMethods::get('qty', 1);
+        $idItem = UHTTPMethods::postInt('id_prodotto');
+        $nuovaQuantita = (int) UHTTPMethods::postInt('quantita', 1);
 
         //La quantità deve essere almeno 1 (il template ha min = 1, ma validiamo anche server-side)
         if ($nuovaQuantita < 1) {
@@ -315,11 +228,11 @@ class CCarrello extends BaseController {
 
     /**
      * Rimuove o decrementa un prodotto dal carrello (chiamata AJAX).
-     * URL: GET /carrello/rimuovi/{id_item} (DOVREBBE ESSERE POST!!!!!!!!!!)
+     * URL: POST /carrello/rimuovi
      * Risponde in JSON. Se dopo la rimozione il carrello è vuoto,
      * il JS ricarica la pagina automaticamente
      */
-    public function rimuoviDalCarrello(int $idItem): void {
+    public function rimuoviDalCarrello(): void {
         header('Content-Type: application/json');
 
         //Controllo sicurezza: impedisce l'azione se l'utente non è autenticato
@@ -329,6 +242,7 @@ class CCarrello extends BaseController {
             exit();
         }
 
+        $idItem = UHTTPMethods::postInt('id_prodotto');
         $carrello = USession::getSessionElement('carrello') ?? [];
 
         //unset() rimuove completamente la chiave dall'array corrispondente al prodotto
