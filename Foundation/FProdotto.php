@@ -116,23 +116,4 @@ class FProdotto{
             return [];
         }
     }
-
-    public static function getRangePrezzo(): array{
-        try{
-            $qb=FEntityManager::getInstance()->getEntityManager()->createQueryBuilder();
-            $qb->select('MIN(pr.valore) as min, MAX(pr.valore) as max')
-                ->from(EProdotto::class, 'p')
-                ->join('p.prezzo', 'pr');
-            $risultati = $qb->getQuery()->getSingleResult();
-            return $risultati=[
-                'min' => (int) $risultati['min'],
-                'max' => (int) $risultati['max']
-            ];
-        }
-        catch(Exception $e){
-            error_log("Errore in getRangePrezzo: " . $e->getMessage());
-            return ['min' => 0, 'max' => 200];
-
-        }
-    }
 }

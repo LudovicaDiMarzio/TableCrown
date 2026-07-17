@@ -150,6 +150,19 @@ class FGiocoDaTavolo
             $qbCount->resetDQLPart('orderBy');//cancelliamo l'ordinamento della query clonata, perchè non serve per il count e potrebbe rallentare la query o generare errori
             //poichè count restituisce un numero scalare non possiamo usare il getResult(), ma usiamo il getSingleScalarResult() che restituisce un numero scalare
             $totale = $qbCount->getQuery()->getSingleScalarResult();
+            
+
+            // Clono di nuovo la query per trovare il prezzo min e max dei prodotti filtrati
+            $qbEstremi = clone $qb;
+            $qbEstremi->select('MIN(pr.valore) AS min_price', 'MAX(pr.valore) AS max_price');
+            $qbEstremi->resetDQLPart('orderBy'); // Togliamo l'ordinamento anche qui per performance
+            $estremi = $qbEstremi->getQuery()->getSingleResult();
+
+
+            //operatore ternario, facciamo un controllo sulla condizione e scriviamo cosa fare se risulta true o false
+            //ciò che si trova prima dei : è cosa fare se la condizione è true, dopo i : cosa fare se è false
+            $prezzoMinimo = $estremi['min_price'] !== null ? (float) $estremi['min_price'] : 0.0; 
+            $prezzoMassimo = $estremi['max_price'] !== null ? (float) $estremi['max_price'] : 200.0;
 
             //sulla query effettuata inizialmete applichiamo il limit e l'offset per la paginazione (per dividere i risultati in pagine)
             
@@ -159,7 +172,9 @@ class FGiocoDaTavolo
 
             return [
                 'risultati' => $risultati,
-                'totale' => $totale
+                'totale' => $totale,
+                'rangemin' => $prezzoMinimo,
+                'rangemax' => $prezzoMassimo
             ];
 
         }
