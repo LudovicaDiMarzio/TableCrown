@@ -93,8 +93,27 @@ class FGiocoDaTavolo
             }
 
             if (!empty($filtri['disponibilita'])) {
-                $qb->andWhere($qb->expr()->in('g.disponibilitaProdotto',':disponibilita'))
-                    ->setParameter('disponibilita',$filtri['disponibilita']);
+                $enumDisponibilita = [];
+    
+                foreach ($filtri['disponibilita'] as $valoreScelto) {
+                    // Se il Control ci sta già passando l'Enum, lo teniamo
+                    if ($valoreScelto instanceof DisponibilitaProdotto) {
+                        $enumDisponibilita[] = $valoreScelto;
+                    } else {
+                        // Altrimenti, convertiamo la stringa proveniente dall'HTML nell'Enum ufficiale
+                        $enumObj = DisponibilitaProdotto::tryFrom($valoreScelto);
+                        if ($enumObj !== null) {
+                            $enumDisponibilita[] = $enumObj;
+                        }
+                    }
+                    $qb->andWhere($qb->expr()->in('g.disponibilitaProdotto',':disponibilita'))
+                        ->setParameter('disponibilita',$filtri['disponibilita']);
+                }
+
+                if (!empty($enumDisponibilita)) {
+                    $qb->andWhere($qb->expr()->in('g.disponibilitaProdotto', ':disponibilita'))
+                        ->setParameter('disponibilita', $enumDisponibilita);
+                }
             }
 
             //filtro per l'ordinamento dei risultati

@@ -24,7 +24,9 @@ class FProdotto{
             $qb->select('p', 'pr') 
             ->from(EProdotto::class, 'p')
             ->innerJoin('p.prezzo', 'pr')
-            ->where('pr.sconto > 0');
+            ->where('pr.sconto > 0')
+            ->andWhere("p.disponibilitaProdotto = 'DISPONIBILE'")
+            ->andWhere('p.quantita > 0');
             /*mettiamo un altro parametro di seleizone nella query fatta prima, con CASE WHEN restituiamo 1 se è null e 0 se non è null, per ogni prodotto
             0<1 quindi i prodotti senza scadenzaOfferta (null) verranno messi in fondo alla lista, mentre quelli con scadenzaOfferta (non null) verranno messi in cima alla lista
             AS HIDDEN crea una colonna virtuale, con un alias, che viene usata internamente nella query ma non esiste realmente
@@ -96,8 +98,9 @@ class FProdotto{
             $qb=FEntityManager::getInstance()->getEntityManager()->createQueryBuilder();
             $qb->select(' p')
                 ->from(EProdotto::class, 'p')
-                //suggeriamo solo i prodotti non esauriti in magazzino
+                //suggeriamo solo i prodotti non esauriti in magazzino e disponibili
                 ->andWhere('p.quantita > 0')
+                ->andWhere("p.disponibilitaProdotto = 'DISPONIBILE'")
                 ->setParameter('esclusi', $prodottiesclusi)
                 ->orderBy('p.numeroVendite', 'DESC')
                 ->setMaxResults($limit);
