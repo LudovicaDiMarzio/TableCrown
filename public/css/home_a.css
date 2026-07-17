@@ -1,0 +1,277 @@
+.dash__heading h1 {
+  margin: 0 0 4px;
+  font-size: 22px;
+  font-weight: 700;
+}
+
+.dash__heading p {
+  margin: 0 0 24px;
+  color: var(--admin-muted, #6b6f85);
+  font-size: 13px;
+}
+
+/* Stat cards */
+.dash__stats {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+  gap: 16px;
+  margin-bottom: 24px;
+}
+
+.stat-card {
+  background: #fff;
+  border: 1px solid var(--admin-border, #e6e7ee);
+  border-radius: var(--admin-radius, 12px);
+  padding: 18px;
+  display: flex;
+  gap: 14px;
+  align-items: flex-start;
+}
+
+.stat-card__icon {
+  width: 40px;
+  height: 40px;
+  border-radius: 10px;
+  flex-shrink: 0;
+}
+
+.stat-card--segnalazioni_attesa .stat-card__icon { background: #fde3e9; }
+.stat-card--utenti_totali .stat-card__icon { background: #e7e2fd; }
+.stat-card--utenti_sospesi .stat-card__icon { background: #fdead3; }
+
+.stat-card__body {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+}
+
+.stat-card__label {
+  font-size: 12px;
+  font-weight: 600;
+  color: var(--admin-muted, #6b6f85);
+}
+
+.stat-card__value {
+  font-size: 24px;
+  font-weight: 700;
+}
+
+.stat-card__sub {
+  font-size: 12px;
+  color: var(--admin-muted, #6b6f85);
+}
+
+.stat-card__trend {
+  font-size: 12px;
+  font-weight: 600;
+  margin-top: 4px;
+}
+
+.stat-card__trend--su { color: #1fa971; }
+.stat-card__trend--giu { color: #e0355b; }
+
+/* Panels grid */
+.dash__grid {
+  display: grid;
+  grid-template-columns: 1.4fr 1fr;
+  gap: 20px;
+}
+
+.panel {
+  background: #fff;
+  border: 1px solid var(--admin-border, #e6e7ee);
+  border-radius: var(--admin-radius, 12px);
+  padding: 20px;
+}
+
+.panel__header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 12px;
+}
+
+.panel__header h2 {
+  margin: 0;
+  font-size: 15px;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.panel__badge {
+  background: #e0355b;
+  color: #fff;
+  font-size: 11px;
+  font-weight: 700;
+  padding: 2px 8px;
+  border-radius: 999px;
+}
+
+.panel__link {
+  font-size: 12px;
+  font-weight: 600;
+  color: #6c4bf4;
+  text-decoration: none;
+}
+
+/* Segnalazioni list */
+.segnalazioni-list,
+.rischio-list {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+
+.segnalazione-item,
+.rischio-item {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  padding: 10px 0;
+  border-bottom: 1px solid var(--admin-border, #e6e7ee);
+}
+
+.segnalazione-item:last-child,
+.rischio-item:last-child {
+  border-bottom: none;
+}
+
+.segnalazione-item__icon {
+  width: 30px;
+  height: 30px;
+  border-radius: 8px;
+  background: #fde3e9;
+  flex-shrink: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  align-self: center;
+}
+
+.segnalazione-item__body,
+.rischio-item__body {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+  flex: 1;
+  min-width: 0;
+}
+
+.segnalazione-item__tipo,
+.rischio-item__username {
+  font-size: 13px;
+  font-weight: 600;
+}
+
+.segnalazione-item__meta,
+.segnalazione-item__tempo,
+.rischio-item__count {
+  font-size: 13px;
+  font-weight: 500;
+  color: #3a3d4d;
+}
+
+/* Gravità badges */
+.badge {
+  font-size: 13px;
+  font-weight: 700;
+  padding: 5px 14px;
+  border-radius: 999px;
+  text-transform: capitalize;
+  flex-shrink: 0;
+}
+
+.badge--alta {
+  background: #fde3e9;
+  color: #e0355b;
+}
+
+.badge--media {
+  background: #fdead3;
+  color: #c98a1f;
+}
+
+.badge--bassa {
+  background: #e2f6ea;
+  color: #1fa971;
+}
+
+/* Buttons */
+.btn {
+  font-size: 13px;
+  font-weight: 600;
+  padding: 8px 18px;
+  border-radius: 8px;
+  text-decoration: none;
+  flex-shrink: 0;
+}
+
+.btn--outline {
+  border: 1px solid #6c4bf4;
+  color: #6c4bf4;
+  background: #fff;
+}
+
+.btn--outline:hover {
+  background: #6c4bf4;
+  color: #fff;
+}
+
+/* Utenti a rischio */
+.rischio-item__avatar {
+  width: 34px;
+  height: 34px;
+  border-radius: 50%;
+  background: #d9dbe8 center/cover no-repeat;
+  flex-shrink: 0;
+}
+
+.rischio-item__bar {
+  width: 100%;
+  height: 5px;
+  background: #eef0f6;
+  border-radius: 999px;
+  overflow: hidden;
+  margin-top: 2px;
+}
+
+.rischio-item__bar-fill {
+  height: 100%;
+  background: linear-gradient(90deg, #e0355b, #c98a1f);
+  border-radius: 999px;
+}
+
+.list-empty {
+  font-size: 13px;
+  color: var(--admin-muted, #6b6f85);
+  padding: 12px 0;
+  text-align: center;
+}
+
+.stat-card__icon--danger  { background: #d64545; color: #fff; }
+.stat-card__icon--primary { background: #5b4fdb; color: #fff; }
+.stat-card__icon--warning { background: #e08b2f; color: #fff; }
+
+.stat-card__icon {
+    width: 48px;
+    height: 48px;
+    border-radius: 12px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 1.4rem;
+}
+
+.dash__grid--single {
+    grid-template-columns: 1fr;
+}
+
+@media (max-width: 960px) {
+  .dash__grid {
+    grid-template-columns: 1fr;
+  }
+}
