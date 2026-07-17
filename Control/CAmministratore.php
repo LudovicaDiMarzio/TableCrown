@@ -318,5 +318,27 @@ class CAmministratore extends BaseController {
         ];
     }
 
-    //MANCANO I BREADCRUMBS!!!!!!!
+    public function getBreadcrumbs(string $currentPage = ''): array { //DA RIVEDERE: A COSA SERVE currentPage? FORSE PER PAGINE DELL'ADMIN NON DOVREI METTERE 'Home' MA DIRETTAMENTE 'Dashboard Admin'?
+        $breadcrumbs = [
+            ['label' => 'Home', 'url' => BASE_URL . '/'],
+            ['label' => 'Dashboard Admin', 'url' => BASE_URL . '/admin/dashboard'],
+        ];
+        return match ($currentPage) {
+            'dashboard' => [
+                ['label' => 'Home', 'url' => BASE_URL . '/'],
+                ['label' => 'Dashboard Admin', 'url' => BASE_URL . '/admin/dashboard'],
+            ],
+            'lista_utenti' => array_merge($breadcrumbs, [
+                ['label' => 'Utenti Segnalati', 'url' => BASE_URL . '/admin/utenti'],
+            ]),
+            'lista_recensioni' => array_merge($breadcrumbs, [
+                ['label' => 'Recensioni Segnalate', 'url' => BASE_URL . '/admin/recensioni'],
+            ]),
+            default => array_merge($breadcrumbs, [
+                ['label' => 'Utenti Segnalati', 'url' => BASE_URL . '/admin/utenti'],
+                ['label' => 'Profilo: ' . $currentPage, 'url' => '#']
+            ]),
+        };
+    }
+
 }

@@ -68,6 +68,13 @@ class CDettaglioEvento extends BaseController {
             exit();
         }
 
+        //Regole di business:
+        if ($evento instanceof ETorneo && $evento->getChallenge() !== null) {
+            UFlashMessage::addMessage('danger', 'Non puoi iscriverti a questo torneo singolarmente, perché fa parte di una Challenge. Iscriviti alla Challenge associata.');
+            header('Location: ' . BASE_URL . '/eventi/dettaglio/' . $evento->getChallenge()->getIdEvento());
+            exit();
+        }
+
         //Recuperiamo le carte salvate dell'utente dal DB tramite il pm
         $carteUtente = FPersistentManager::PMgetObjListOnAttribute(ECartaDiCredito::class, 'utente', $utente);
 
@@ -89,7 +96,7 @@ class CDettaglioEvento extends BaseController {
      * Gestisce la prenotazione a un evento.
      * URL: POST /eventi/partecipa
      */
-    public function partecipaEvento(): void {
+    public function partecipaEvento(): void { //TODO: DA RIVEDERE!!! SI PUò OTTIMIZZARE
         $utente = $this->utenteCorrente();
 
         $idEvento = UHTTPMethods::postInt('id_evento');
@@ -112,11 +119,10 @@ class CDettaglioEvento extends BaseController {
             exit();
         }
 
-        try {
-            $nuovaPartecipazione = new EPartecipazione($utente, $evento);
-        } catch (\InvalidArgumentException $e) {
-            UFlashMessage::addMessage('danger', $e->getMessage());
-            header('Location: ' . BASE_URL . '/eventi/dettaglio/' . $idEvento);
+        //Regole di business: se l'utente prova ad iscriversi ad un torneo che fa parte di una challenge, lo blocchiamo
+        if ($evento instanceof ETorneo && $evento->getChallenge() !== null) {
+            UFlashMessage::addMessage('danger', 'Questo torneo fa parte di una Challenge. Iscriviti direttamente alla Challenge associata per partecipare.');
+            header('Location: ' . BASE_URL . '/eventi/dettaglio/' . $evento->getChallenge()->getIdEvento());
             exit();
         }
 
@@ -144,19 +150,56 @@ class CDettaglioEvento extends BaseController {
                 //Addebito effettivo
                 $pagamentoAvvenuto = $bancaService->effettuaPagamento($carta->getToken(), $quota->getValore());
 
-                if ($pagamentoAvvenuto) {
-                    //Aggiorniamo lo stato della partecipazione prima del salvataggio
-                    $nuovaPartecipazione->aggiornaPagamento(); //aggiornaPagamento() rifà internamente il controllo richiedeQuota, ma è una ridondanza innocua
-                } else {
+                if (!$pagamentoAvvenuto) {
                     throw new \RuntimeException("Si è verificato un errore durante il pagamento.");
-                }
+                } 
 
             } catch (\Exception $e) {
                 //Se il pagamento fallisce, interrompiamo tutto e mostriamo l'errore della banca
                 UFlashMessage::addMessage('danger', 'Pagamento rifiutato: ' . $e->getMessage());
-                header('Location: ' . UHTTPMethods::getReferer(BASE_URL . $this->urlCatalogo($evento)));
+                header('Location: ' . UHTTPMethods::getReferer(BASE_URL . $this->urlCatalogo($evento))); //oppure 'Location: ' . BASE_URL . '/eventi/checkout/' . $idEvento ?
                 exit();
             }
+        }
+
+        //Regole di business: creazione delle partecipazioni
+        try {
+            //Prepariamo la lista di partecipazioni da salvare
+            $partecipazioniDaSalvare = [];
+
+            //Partecipazione all'evento principale richiesto (Serata, Torneo Singolo o Challenge)
+            $pPrincipale = new EPartecipazione($utente, $evento);
+            if ($evento->richiedeQuota()) { //FORSE SI PUò TOGLIERE QUESTO CONTROLLO
+                $pPrincipale->aggiornaPagamento(); //aggiornaPagamento() rifà internamente il controllo richiedeQuota, ma è una ridondanza innocua
+            }
+            $partecipazioniDaSalvare[] = $pPrincipale;
+
+            //Se l'evento è una challenge, iscriviamo automaticamente l'utente a tutti i tornei inclusi
+            if ($evento instanceof EChallenge) {
+                foreach ($evento->getTornei() as $torneo) {
+                    if (!$this->utenteIscritto($torneo)) {
+                        $pTorneo = new EPartecipazione($utente, $torneo);
+                        if ($torneo->richiedeQuota()) {//FORSE SI PUÒ TOGLIERE QUESTO CONTROLLO
+                            $pTorneo->aggiornaPagamento();
+                        }
+                        $partecipazioniDaSalvare[] = $pTorneo;
+                    }
+                }
+            } 
+
+            //Salviamo tutto in blocco nel db tramite il pm
+            foreach ($partecipazioniDaSalvare as $partecipazione) {
+                FPersistentManager::PMsaveObj($partecipazione);
+            }
+
+            UFlashMessage::addMessage('success', 'Iscrizione effettuata con successo!');
+            header('Location: ' . BASE_URL . '/eventi/dettaglio/' . $idEvento);
+            exit();
+
+        } catch (\Exception $e) {
+            UFlashMessage::addMessage('danger', 'Errore durante l\iscrizione: ' . $e->getMessage());
+            header('Location: ' . BASE_URL . '/eventi/dettaglio/' . $idEvento);
+            exit();
         }
     }
 
