@@ -13,6 +13,11 @@ use DateTime;
 class CAmministratore extends BaseController {
 
     private const DURATA_SOSPENSIONE = '+3 months';
+    private const PESI_GRAVITA = [
+        'bassa' => 1,
+        'media' => 2,
+        'alta' => 3,
+    ];
 
     public function __construct() {
         parent::__construct(); 
@@ -103,7 +108,7 @@ class CAmministratore extends BaseController {
         $recensioniSegnalate = FPersistentManager::PMgetObjListOnAttribute(ERecensione::class, 'idPersona', $idUtente); 
 
         $datiLayout = $this->preparaDatiLayout('admin_profilo_utente', [
-            'utente' => $utente,
+            'utente' => $utente->utenteAdminToArray(),
             'recensioniSegnalate' => $this->recensioniToArray($recensioniSegnalate),
         ]);
 
@@ -273,11 +278,34 @@ class CAmministratore extends BaseController {
 
     /**
      * Converte un ERecensione in un array associativo per la card admin, con conteggio segnalazioni.
+     * TODO: NON MI PIACEEEE, DA OTTIMIZZARE/MODIFICARE
      */
     private function recensioneAdminToArray(ERecensione $recensione, int $numeroSegnalazioni): array {
+        $segnalazioni = $recensione->getSegnalazioni();
+
+        $gravitaMax = 'bassa';
+        $idPuntaSegnalazione = null;
+        $puntaggioMax = 0;
+        foreach ($segnalazioni as $segnalazione) {
+            //Estraggo il valore stringa dell'enum ('bassa'|'media'|'alta')
+            $stringaGravita = $segnalazione->getMotivazione()->getGravitaMotivazione()->value;
+
+            //Recupero il peso numerico dalla costante del controller
+            $pesoCorrente = self::PESI_GRAVITA[$stringaGravita] ?? 0;
+
+            if ($pesoCorrente > $puntaggioMax) {
+                $punteggioMax = $pesoCorrente;
+                $gravitaMax = $stringaGravita;
+                $idPuntaSegnalazione = $segnalazione->getIdSegnalazione();
+            }
+        }
+
         return [
             'id' => $recensione->getIdRecensione(),
             'testo' => $recensione->getTesto(),
+            'data' => $recensione->getData()->format('Y-m-d H:i:s'),
+            'gravita' => $gravitaMax, //stringa 'bassa'|'media'|'alta'
+            'idSegnalazioneDaRisolvere' => $idPuntaSegnalazione, //per POST /admin/recensioni/rigetta
             'autore' => [
                 'id' => $recensione->getUtente()->getIdPersona(),
                 'nome' => $recensione->getUtente()->getNomePersona(),
@@ -290,5 +318,27 @@ class CAmministratore extends BaseController {
         ];
     }
 
-    //MANCANO I BREADCRUMBS!!!!!!!
+    public function getBreadcrumbs(string $currentPage = ''): array { //DA RIVEDERE: A COSA SERVE currentPage? FORSE PER PAGINE DELL'ADMIN NON DOVREI METTERE 'Home' MA DIRETTAMENTE 'Dashboard Admin'?
+        $breadcrumbs = [
+            ['label' => 'Home', 'url' => BASE_URL . '/'],
+            ['label' => 'Dashboard Admin', 'url' => BASE_URL . '/admin/dashboard'],
+        ];
+        return match ($currentPage) {
+            'dashboard' => [
+                ['label' => 'Home', 'url' => BASE_URL . '/'],
+                ['label' => 'Dashboard Admin', 'url' => BASE_URL . '/admin/dashboard'],
+            ],
+            'lista_utenti' => array_merge($breadcrumbs, [
+                ['label' => 'Utenti Segnalati', 'url' => BASE_URL . '/admin/utenti'],
+            ]),
+            'lista_recensioni' => array_merge($breadcrumbs, [
+                ['label' => 'Recensioni Segnalate', 'url' => BASE_URL . '/admin/recensioni'],
+            ]),
+            default => array_merge($breadcrumbs, [
+                ['label' => 'Utenti Segnalati', 'url' => BASE_URL . '/admin/utenti'],
+                ['label' => 'Profilo: ' . $currentPage, 'url' => '#']
+            ]),
+        };
+    }
+
 }

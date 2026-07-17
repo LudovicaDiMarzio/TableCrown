@@ -203,11 +203,16 @@ class CRecensioni extends BaseController {
     public function eliminaRecensioneAdmin(): void {
         //Verifichiamo che sia l'admin a fare l'azione
         $this->requireRole('amministratore');
+        $isAjax = UHTTPMethods::isAjax();
 
         try {
             $idRecensione = UHTTPMethods::postInt('id_recensione');
-            $idSegnalazione = UHTTPMethods::postInt('id_segnalazione');
         } catch (\InvalidArgumentException $e) {
+            if ($isAjax) {
+                header('Content-Type: application/json');
+                echo json_encode(['status' => 'error', 'message' => $e->getMessage()]);
+                exit();
+            }
             UFlashMessage::addMessage('danger', 'Parametri non validi: ' . $e->getMessage());
             header('Location: ' . BASE_URL . '/admin/dashboard');
             exit();
@@ -217,21 +222,33 @@ class CRecensioni extends BaseController {
         $recensione = FPersistentManager::PMgetObjOnAttribute(ERecensione::class, 'idRecensione', $idRecensione);
 
         if (!$recensione) {
+            if ($isAjax) {
+                header('Content-Type: application/json');
+                echo json_encode(['status' => 'error', 'message' => 'La recensione non esiste o è già stata rimossa.']);
+                exit();
+            }
             UFlashMessage::addMessage('danger', 'La recensione non esiste o è già stata rimossa.');
             header('Location: ' . BASE_URL . '/admin/dashboard');
             exit();
         }
 
-        //Recuperiamo la segnalazione per chiuderla
-        $segnalazione = FPersistentManager::PMgetObjOnAttribute(ESegnalazione::class, 'idSegnalazione', $idSegnalazione);
-       
-        if ($segnalazione) {
+        //Risolviamo logicamente tutte le segnalazioni collegate a questa recensione prima di eliminarla
+        foreach ($recensione->getSegnalazioni() as $segnalazione) {
             $segnalazione->risolvi();
             FPersistentManager::PMsaveObj($segnalazione);
         }
 
         //Eliminiamo fisicamente la recensione dal DB
         $successo = FPersistentManager::PMdeleteObj($recensione); 
+
+        if ($isAjax) {
+            header('Content-Type: application/json');
+            echo json_encode([
+                'status' => $successo ? 'ok' : 'error',
+                'message' => $successo ? 'La recensione è stata rimossa dal sito.' : 'Si è verificato un errore durante la rimozione della recensione.'
+            ]);
+            exit();
+        }
 
         if ($successo) {
             UFlashMessage::addMessage('success', 'La recensione è stata rimossa dal sito.');
@@ -274,7 +291,7 @@ class CRecensioni extends BaseController {
             UFlashMessage::addMessage('danger', 'Impossibile rigettare la segnalazione: ' . $e->getMessage());
         }
 
-        header('Location: ' . BASE_URL . '/admin/dashboard');
+        header('Location: ' . BASE_URL . '/admin/recensioni');
         exit();
     }
 

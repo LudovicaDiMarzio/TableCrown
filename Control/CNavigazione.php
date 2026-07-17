@@ -25,7 +25,7 @@ class CNavigazione extends BaseController {
         //Recuperiamo i prodotti in offerta e i nuovi arrivi tramite il pm
         //Il pm gestisce già gli errori internamente e restituisce [] in caso di fallimento
         $offerte = FPersistentManager::PMfindProdottiInOfferta(5, 0); 
-        $nuoviArrivi = FPersistentManager::PMgetObjListOrdered(EProdotto::class, 'dataPubblicazione', 'DESC', 5);
+        $nuoviArrivi = FPersistentManager::PMgetObjListOrdered(EProdotto::class, 'dataPubblicazione', 'DESC', 10);
 
 
         //Impacchettiamo i dati specifici richiesti da home.tpl

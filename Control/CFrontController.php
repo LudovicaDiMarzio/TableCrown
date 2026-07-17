@@ -82,13 +82,17 @@ class CFrontController {
                     } elseif ($sottoRoute === 'challenge') {
                         $controller = new CEventi();
                         $controller->mostraListaChallenge(); //GET /catalogo/challenge
-                    } elseif ($sottoRoute === 'dettaglio') {
+                    } elseif (in_array($sottoRoute, ['dettaglio', 'checkout'])) {
                         if ($sottoRoute2 === null || !is_numeric($sottoRoute2)) {
                             $this->mostra404();
                             break;
                         }
                         $controller = new CDettaglioEvento();
-                        $controller->mostraDettaglioEvento((int)$sottoRoute2);
+                        if ($sottoRoute === 'dettaglio') {
+                            $controller->mostraDettaglioEvento((int)$sottoRoute2);
+                        } else {
+                            $controller->mostraCheckoutEvento((int)$sottoRoute2);
+                        }
                     } elseif ($sottoRoute === 'risultati') {
                         //TODO: implementare il metodo mostraRisultatiRicerca() in CEventi()
                         $this->mostra404(); //DA TOGLIERE POI
