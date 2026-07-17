@@ -305,6 +305,43 @@ class CFrontController {
                 }
                 break;
 
+
+            case 'admin':
+                if ($metodoHTTP === 'GET') {
+                    $controller = new CAmministratore();
+                    if ($sottoRoute === 'dashboard') { //GET /admin/dashboard
+                        $controller->mostraDashboardAdmin();
+                    } elseif ($sottoRoute === 'utenti') { //GET /admin/utenti
+                        $controller->mostraListaUtentiAdmin();
+                    } elseif ($sottoRoute === 'recensioni') { //GET /admin/recensioni
+                        $controller->mostraListaRecensioniAdmin();
+                    } elseif ($sottoRoute === 'utente' && $sottoRoute2 === 'profilo') { //GET /admin/utente/profilo?id=XX
+                        $controller->mostraProfiloUtenteAdmin();
+                    } else {
+                        $this->mostra404();
+                    }
+                } elseif ($metodoHTTP === 'POST') {
+                    if ($sottoRoute === 'utente' && $sottoRoute2 === 'sospendi') { //POST /admin/utente/sospendi
+                        $controller = new CAmministratore();
+                        $controller->sospendiUtenteAdmin();
+                    } elseif ($sottoRoute === 'utente' && $sottoRoute2 === 'banna') { //POST /admin/utente/banna
+                        $controller = new CAmministratore();
+                        $controller->bannaUtenteAdmin();
+                    } elseif ($sottoRoute === 'recensioni' && $sottoRoute2 === 'elimina') { //POST /admin/recensioni/elimina
+                        $controller = new CRecensioni();
+                        $controller->eliminaRecensioneAdmin();
+                    } elseif ($sottoRoute === 'recensioni' && $sottoRoute2 === 'rigetta') { //POST /admin/recensioni/rigetta
+                        $controller = new CRecensioni();
+                        $controller->rigettaSegnalazioneAdmin();
+                    } else {
+                        $this->mostra404();
+                    }
+                } else {
+                    $this->mostra404();
+                }
+                break;
+
+
 /* 
             case 'chi-siamo':
                 $controller = new CPagineStatiche();

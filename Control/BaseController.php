@@ -120,7 +120,7 @@ abstract class BaseController {
             UFlashMessage::addMessage('warning', "È necessario effettuare l'accesso per visualizzare questa pagina.");
 
             //Eseguiamo il redirect alla rotta più pulita gestita dal FrontController
-            header("Location: /accedi");
+            header("Location: " . BASE_URL . "/accedi");
             exit();
         }
     }

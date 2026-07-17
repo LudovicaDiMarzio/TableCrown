@@ -24,6 +24,10 @@ class CRecensioni extends BaseController {
     // AZIONI OPERATIVE (POST)
     //==========================================================================
 
+    //==========================================================================
+    // UTENTI
+    //==========================================================================
+
     /**
      * Crea e memorizza una nuova recensione per un prodotto.
      * URL: POST /recensioni/aggiungi
@@ -60,7 +64,7 @@ class CRecensioni extends BaseController {
             }
 
             UFlashMessage::addMessage('success', 'Recensione pubblicata con successo!');
-            header('Location: ' . UHTTPMethods::getReferer($this->urlCatalogo($prodotto)));
+            header('Location: ' . UHTTPMethods::getReferer(BASE_URL . $this->urlCatalogo($prodotto)));
             exit();
 
         } catch (\Exception $e) {
@@ -71,7 +75,7 @@ class CRecensioni extends BaseController {
             }
 
             UFlashMessage::addMessage('danger', $e->getMessage());
-            header('Location: ' . UHTTPMethods::getReferer('/'));
+            header('Location: ' . UHTTPMethods::getReferer(BASE_URL . '/'));
             exit();
         }
     }
@@ -116,7 +120,7 @@ class CRecensioni extends BaseController {
             }
 
             UFlashMessage::addMessage('success', 'Recensione eliminata con successo!');
-            header('Location: ' . UHTTPMethods::getReferer($this->urlCatalogo($prodotto)));
+            header('Location: ' . UHTTPMethods::getReferer(BASE_URL . $this->urlCatalogo($prodotto)));
             exit();
 
         } catch (\Exception $e) {
@@ -127,7 +131,7 @@ class CRecensioni extends BaseController {
             }
 
             UFlashMessage::addMessage('danger', $e->getMessage());
-            header('Location: ' . UHTTPMethods::getReferer('/'));
+            header('Location: ' . UHTTPMethods::getReferer(BASE_URL . '/'));
             exit();
         }
     }
@@ -172,7 +176,7 @@ class CRecensioni extends BaseController {
             }
 
             UFlashMessage::addMessage('success', 'Grazie per la segnalazione. Sarà presa in carico dallo staff.');
-            header('Location: ' . UHTTPMethods::getReferer($this->urlCatalogo($recensione->getProdotto())));
+            header('Location: ' . UHTTPMethods::getReferer(BASE_URL . $this->urlCatalogo($recensione->getProdotto())));
             exit();
 
         } catch (\Exception $e) {
@@ -183,9 +187,95 @@ class CRecensioni extends BaseController {
             }
 
             UFlashMessage::addMessage('danger', $e->getMessage());
-            header('Location: ' . UHTTPMethods::getReferer('/'));
+            header('Location: ' . UHTTPMethods::getReferer(BASE_URL . '/'));
             exit();
         }
+    }
+
+    //==========================================================================
+    // ADMIN
+    //==========================================================================
+
+    /**
+     * Elimina una recensione. (Accesso Riservato Amministratore)
+     * URL: POST admin/recensioni/elimina 
+     */
+    public function eliminaRecensioneAdmin(): void {
+        //Verifichiamo che sia l'admin a fare l'azione
+        $this->requireRole('amministratore');
+
+        try {
+            $idRecensione = UHTTPMethods::postInt('id_recensione');
+            $idSegnalazione = UHTTPMethods::postInt('id_segnalazione');
+        } catch (\InvalidArgumentException $e) {
+            UFlashMessage::addMessage('danger', 'Parametri non validi: ' . $e->getMessage());
+            header('Location: ' . BASE_URL . '/admin/dashboard');
+            exit();
+        }
+
+        //Recuperiamo la recensione per eliminarla
+        $recensione = FPersistentManager::PMgetObjOnAttribute(ERecensione::class, 'idRecensione', $idRecensione);
+
+        if (!$recensione) {
+            UFlashMessage::addMessage('danger', 'La recensione non esiste o è già stata rimossa.');
+            header('Location: ' . BASE_URL . '/admin/dashboard');
+            exit();
+        }
+
+        //Recuperiamo la segnalazione per chiuderla
+        $segnalazione = FPersistentManager::PMgetObjOnAttribute(ESegnalazione::class, 'idSegnalazione', $idSegnalazione);
+       
+        if ($segnalazione) {
+            $segnalazione->risolvi();
+            FPersistentManager::PMsaveObj($segnalazione);
+        }
+
+        //Eliminiamo fisicamente la recensione dal DB
+        $successo = FPersistentManager::PMdeleteObj($recensione); 
+
+        if ($successo) {
+            UFlashMessage::addMessage('success', 'La recensione è stata rimossa dal sito.');
+        } else {
+            UFlashMessage::addMessage('danger', 'Si è verificato un errore durante la rimozione della recensione.');
+        }
+
+        header('Location: ' . BASE_URL . '/admin/dashboard');
+        exit();
+    }
+
+    /**
+     * Rigetta una segnalazione ritenuta infondata, senza eliminare la recensione.
+     * URL: POST /admin/recensioni/rigetta
+     */
+    public function rigettaSegnalazioneAdmin(): void {
+        $this->requireRole('amministratore');
+
+        try {
+            $idSegnalazione = UHTTPMethods::postInt('id_segnalazione');
+        } catch (\InvalidArgumentException $e) {
+            UFlashMessage::addMessage('danger', 'Parametri non validi: ' . $e->getMessage());
+            header('Location: ' . BASE_URL . '/admin/dashboard');
+            exit();
+        }
+
+        $segnalazione = FPersistentManager::PMgetObjOnAttribute(ESegnalazione::class, 'idSegnalazione', $idSegnalazione);
+
+        if (!$segnalazione) {
+            UFlashMessage::addMessage('danger', 'La segnalazione non esiste o è già stata gestita.');
+            header('Location: ' . BASE_URL . '/admin/dashboard');
+            exit();
+        }
+
+        try {
+            $segnalazione->risolvi();
+            FPersistentManager::PMsaveObj($segnalazione);
+            UFlashMessage::addMessage('success', 'La segnalazione è stata rigettata; la recensione resta pubblicata.');
+        } catch (\DomainException | \InvalidArgumentException $e) {
+            UFlashMessage::addMessage('danger', 'Impossibile rigettare la segnalazione: ' . $e->getMessage());
+        }
+
+        header('Location: ' . BASE_URL . '/admin/dashboard');
+        exit();
     }
 
     /**
