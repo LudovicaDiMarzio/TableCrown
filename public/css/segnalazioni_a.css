@@ -1,0 +1,188 @@
+.segn__heading {
+  display: flex;
+  align-items: flex-end;
+  justify-content: space-between;
+  margin-bottom: 24px;
+  gap: 16px;
+  flex-wrap: wrap;
+}
+
+.segn__heading h1 {
+  margin: 0 0 4px;
+  font-size: 22px;
+  font-weight: 700;
+}
+
+.segn__heading p {
+  margin: 0;
+  color: var(--admin-muted, #6b6f85);
+  font-size: 13px;
+}
+
+.segn__filtro {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.segn__filtro-label {
+  font-size: 13px;
+  font-weight: 600;
+  color: var(--admin-muted, #6b6f85);
+}
+
+.segn__filtro-select {
+  font-size: 13px;
+  font-weight: 600;
+  padding: 8px 12px;
+  border-radius: 8px;
+  border: 1px solid var(--admin-border, #e6e7ee);
+  background: #fff;
+  color: var(--admin-text, #1c1d2b);
+  cursor: pointer;
+}
+
+.recensioni-list {
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+}
+
+.recensione-card {
+  background: #fff;
+  border: 1px solid var(--admin-border, #e6e7ee);
+  border-radius: var(--admin-radius, 12px);
+  padding: 20px;
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+
+.recensione-card__header {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  gap: 12px;
+  flex-wrap: wrap;
+}
+
+.recensione-card__info {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+  min-width: 0;
+}
+
+.recensione-card__prodotto {
+  font-size: 14px;
+  font-weight: 700;
+}
+
+.recensione-card__meta {
+  font-size: 13px;
+  font-weight: 500;
+  color: #3a3d4d;
+}
+
+.recensione-card__badges {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  flex-shrink: 0;
+}
+
+.count-badge {
+  background: #eef0f6;
+  color: var(--admin-text, #1c1d2b);
+  font-size: 12px;
+  font-weight: 700;
+  padding: 4px 12px;
+  border-radius: 999px;
+  white-space: nowrap;
+}
+
+.recensione-card__testo {
+  margin: 0;
+  font-size: 14px;
+  line-height: 1.5;
+  color: var(--admin-text, #1c1d2b);
+}
+
+.recensione-card__footer {
+  display: flex;
+  justify-content: flex-end;
+  align-items: center;
+  gap: 10px;
+  border-top: 1px solid var(--admin-border, #e6e7ee);
+  padding-top: 12px;
+}
+
+.recensione-card__form-elimina {
+  margin: 0;
+}
+
+/* Badge gravità (coerenti con home_a.css) */
+.badge {
+  font-size: 13px;
+  font-weight: 700;
+  padding: 5px 14px;
+  border-radius: 999px;
+  text-transform: capitalize;
+  flex-shrink: 0;
+}
+
+.badge--alta {
+  background: #fde3e9;
+  color: #e0355b;
+}
+
+.badge--media {
+  background: #fdead3;
+  color: #c98a1f;
+}
+
+.badge--bassa {
+  background: #e2f6ea;
+  color: #1fa971;
+}
+
+/* Buttons (coerenti con home_a.css) */
+.btn {
+  font-size: 13px;
+  font-weight: 600;
+  padding: 8px 18px;
+  border-radius: 8px;
+  border: none;
+  text-decoration: none;
+  flex-shrink: 0;
+  cursor: pointer;
+}
+
+.btn--outline {
+  border: 1px solid #6c4bf4;
+  color: #6c4bf4;
+  background: #fff;
+}
+
+.btn--outline:hover {
+  background: #6c4bf4;
+  color: #fff;
+}
+
+.btn--danger {
+  border: 1px solid #e0355b;
+  color: #fff;
+  background: #e0355b;
+}
+
+.btn--danger:hover {
+  background: #c22a4a;
+  border-color: #c22a4a;
+}
+
+.list-empty {
+  font-size: 13px;
+  color: var(--admin-muted, #6b6f85);
+  padding: 24px 0;
+  text-align: center;
+}

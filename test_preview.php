@@ -15,7 +15,107 @@ $smarty->setCacheDir(SMARTY_DIR    . 'cache/');
 $smarty->setConfigDir(SMARTY_DIR   . 'configs/');
 
 
+//administratore
+$smarty->assign('annoCorrente', date('Y'));
 
+// ── DATI ADMIN ──
+$smarty->assign('admin', [
+    'nome'      => 'Admin User',
+    'ruolo'     => 'Amministratore',
+    'avatarUrl' => null,
+]);
+$smarty->assign('notificheNonLette', 3);
+$smarty->assign('segnalazioniInAttesaCount', 2);
+$smarty->assign('activeNav', 'dashboard');
+$smarty->assign('pageTitle', 'Dashboard');
+
+// ── DATI DASHBOARD (mock, struttura conforme a CAmministratore::mostraDashboardAdmin) ──
+$smarty->assign('segnalazioniInSospeso', 12);
+$smarty->assign('utentiTotali', 1245);
+$smarty->assign('utentiNuoviOggi', 18);
+$smarty->assign('utentiSospesiTotali', 8);
+$smarty->assign('utentiSospesiOggi', 0);
+
+$segnalazioniUrgenti = [
+    [
+        'id' => 1,
+        'data' => '2026-07-17 09:15:00',
+        'stato' => 'in_sospeso',
+        'motivazione' => ['id' => 1, 'nome' => 'Contenuto offensivo', 'gravita' => 'alta'],
+        'utenteSegnalante' => ['id' => 5, 'nome' => 'Marco92'],
+        'autoreRecensione' => ['id' => 9, 'nome' => 'XxGamerxX'],
+        'prodotto' => ['id' => 101, 'nome' => 'Catan'],
+    ],
+    [
+        'id' => 2,
+        'data' => '2026-07-16 18:40:00',
+        'stato' => 'in_sospeso',
+        'motivazione' => ['id' => 2, 'nome' => 'Spam', 'gravita' => 'media'],
+        'utenteSegnalante' => ['id' => 6, 'nome' => 'GiulyGamer'],
+        'autoreRecensione' => ['id' => 22, 'nome' => 'ProPlayer99'],
+        'prodotto' => ['id' => 202, 'nome' => 'Azul'],
+    ],
+];
+  
+
+
+$recensioniMock = [
+    [
+        'id' => 101,
+        'testo' => 'Prodotto arrivato rotto, pessima qualità del materiale e servizio clienti inesistente.',
+        'data' => '2026-07-16 18:42:00',
+        'gravita' => 'alta',
+        'idSegnalazioneDaRisolvere' => 501,
+        'autore' => ['id' => 12, 'nome' => 'XxGamerxX'],
+        'prodotto' => ['id' => 33, 'nome' => 'Catan'],
+        'numeroSegnalazioni' => 4,
+    ],
+    [
+        'id' => 102,
+        'testo' => 'Recensione con linguaggio scorretto verso altri utenti nei commenti.',
+        'data' => '2026-07-17 09:15:00',
+        'gravita' => 'media',
+        'idSegnalazioneDaRisolvere' => 502,
+        'autore' => ['id' => 27, 'nome' => 'Marco92'],
+        'prodotto' => ['id' => 41, 'nome' => 'Carcassonne'],
+        'numeroSegnalazioni' => 2,
+    ],
+    [
+        'id' => 103,
+        'testo' => 'Recensione poco pertinente, sembra più uno spam pubblicitario che un giudizio sul prodotto.',
+        'data' => '2026-07-14 12:03:00',
+        'gravita' => 'bassa',
+        'idSegnalazioneDaRisolvere' => 503,
+        'autore' => ['id' => 8, 'nome' => 'BoardFan99'],
+        'prodotto' => ['id' => 19, 'nome' => 'Ticket to Ride'],
+        'numeroSegnalazioni' => 1,
+    ],
+];
+
+// Dati globali richiesti dal layout_admin.tpl (vedi commento in cima al file)
+$smarty->assign('base_url', '');
+$smarty->assign('current_page', 'admin_lista_recensioni');
+$smarty->assign('breadcrumbs', []);
+$smarty->assign('utente', null);
+$smarty->assign('admin', [
+    'nome' => 'Admin Test',
+    'ruolo' => 'Amministratore',
+    'avatarUrl' => null,
+]);
+$smarty->assign('activeNav', 'segnalazioni');
+$smarty->assign('segnalazioniInAttesaCount', count($recensioniMock));
+$smarty->assign('annoCorrente', date('Y'));
+
+// Dati specifici della pagina
+$smarty->assign('recensioni', $recensioniMock);
+$smarty->assign('ordinamento', 'recenti');
+
+$smarty->assign('segnalazioniUrgenti', $segnalazioniUrgenti);
+
+$smarty->display('segnalazioni_a.tpl');
+
+
+/*
 
 
 $offerte = [
@@ -740,7 +840,7 @@ $smarty->assign('nuovi_arrivi', $nuovi_arrivi);
 
 
 
-/*sta rona non so sicuro*/
+
 
 
 
@@ -778,4 +878,7 @@ if ($categoria === 'challenge') {
 // Home eventi (le 3 card)
 $smarty->assign('filtri', $filtri);
 $smarty->assign('breadcrumbs', breadcrumbsEventi(BASE_URL));
-$smarty->display('checkout.tpl');
+
+*/
+
+

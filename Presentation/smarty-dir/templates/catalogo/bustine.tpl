@@ -51,7 +51,7 @@
                         <option value="prezzo-asc"  {if isset($filtri.ordinamento) && $filtri.ordinamento == 'prezzo-asc'}  selected{/if}>Prezzo: crescente</option>
                         <option value="prezzo-desc" {if isset($filtri.ordinamento) && $filtri.ordinamento == 'prezzo-desc'} selected{/if}>Prezzo: decrescente</option>
                         <option value="popolarita"  {if isset($filtri.ordinamento) && $filtri.ordinamento == 'popolarita'}  selected{/if}>Più venduti</option>
-                        <option value="rating"      {if isset($filtri.ordinamento) && $filtri.ordinamento == 'rating'}      selected{/if}>Valutazione</option>
+                        <option value="rating_min"      {if isset($filtri.ordinamento) && $filtri.ordinamento == 'rating_min'}      selected{/if}>Valutazione</option>
                     </select>
                 </div>
             </div>
