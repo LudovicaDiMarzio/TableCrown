@@ -181,7 +181,11 @@ class FGiocoDaTavolo
         //eccezione di tutto il metodo
         catch(Exception $e){
             error_log("Errore in findGiochi: " . $e->getMessage());
-            return ['risultati' => [], 'totale' => 0];
+            return ['risultati' => [], 
+                    'totale' => 0,
+                    'rangemin' => 0.0,
+                    'rangemax' => 200.0
+            ];
         }
     }
 
