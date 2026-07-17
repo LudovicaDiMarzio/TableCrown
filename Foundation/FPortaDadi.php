@@ -36,8 +36,22 @@ class FPortaDadi{
 
            
             if (!empty($filtri['disponibilita'])) {
-                $qb->andWhere('p.disponibilitaProdotto = :disponibilita')
-                    ->setParameter('disponibilita', $filtri['disponibilita']);
+                 $enumDisponibilita = [];
+                foreach ($filtri['disponibilita'] as $valoreScelto) {
+                    if ($valoreScelto instanceof DisponibilitaProdotto) {
+                        $enumDisponibilita[] = $valoreScelto;
+                    } else {
+                        $enumObj = DisponibilitaProdotto::tryFrom($valoreScelto);
+                        if ($enumObj !== null) {
+                            $enumDisponibilita[] = $enumObj;
+                        }
+                    }
+                }
+
+                if (!empty($enumDisponibilita)) {
+                    $qb->andWhere($qb->expr()->in('b.disponibilitaProdotto', ':disponibilita'))
+                    ->setParameter('disponibilita', $enumDisponibilita);
+                }
             }
 
             //filtro per l'ordinamento dei risultati

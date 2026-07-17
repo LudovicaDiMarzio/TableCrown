@@ -21,13 +21,14 @@ class FGiocoDaTavolo
     public static function findGiochi(array $filtri, int $limit, int $offset): array
     {
         try {
+            
             $qb=FEntityManager::getInstance()->getEntityManager()->createQueryBuilder();
             $qb->select('g', 'pr')
                 ->from(EGiocoDaTavolo::class, 'g')
                 ->innerJoin('g.prezzo', 'pr');
 
             //gestione dei filtri dinamica
-
+        
             if (!empty($filtri['difficolta'])){
                 $qb->andWhere($qb->expr()->in('g.difficolta',':difficolta'))
                     ->setParameter('difficolta',$filtri['difficolta']);
@@ -35,9 +36,14 @@ class FGiocoDaTavolo
 
             if (!empty($filtri['categoria_selected'])) {
                 // Se l'utente ha spuntato [Fantasy, Fantascienza]
-                // Doctrine traduce in: WHERE categoria IN ('Fantasy', 'Fantascienza')
-                $qb->andWhere($qb->expr()->in('g.categoria', ':categorie'))
-                ->setParameter('categorie', $filtri['categoria_selected']);
+                // Dcerco tramit eil like
+                            $orX = $qb->expr()->orX();
+                foreach ($filtri['categoria_selected'] as $i => $cat) {
+                    $param = 'cat' . $i;
+                    $orX->add($qb->expr()->like('g.categoria', ':' . $param));
+                    $qb->setParameter($param, '%"' . $cat . '"%');
+                }
+                $qb->andWhere($orX);
             }
 
             if (!empty($filtri['lingua_selected'])) {
@@ -86,7 +92,7 @@ class FGiocoDaTavolo
 
            //usiamo !empty e non isset perchè se il filtro è settato ma è un array vuoto, non vogliamo filtrare nulla
             if (!empty($filtri['danno_selected'])) {
-               $qb->innerJoin('g.danno', 'ld')
+               $qb->join('g.danno', 'ld')
                 //controllo se il livello di danno del gioco è uno di quello passato nellarray filtro
                     ->andWhere($qb->expr()->in('ld.livelloDanno', ':danni')) 
                     ->setParameter('danni', $filtri['danno_selected']);
@@ -130,7 +136,8 @@ class FGiocoDaTavolo
                         $qb->orderBy('g.numeroVendite', 'DESC'); // dal più venduto al meno venduto
                         break;
                     case 'rating':
-                        $qb->orderBy('g.valutazioneMedia', 'DESC'); // Dalla media voto più alta alla più bassa
+                        // Stiamo dicendo a Doctrine di usare la proprietà della classe EProdotto
+                        $qb->orderBy('g.valutazioneMedia', 'DESC'); 
                         break;
                 }
             }
@@ -215,7 +222,7 @@ class FGiocoDaTavolo
      * @return array di oggetti
      * @throws Exception
     */
-    public static function ricercaGiochi(string $StringaDiRicerca, int $limit, int $offset): array{
+    public static function ricercaProdotto(string $StringaDiRicerca, int $limit, int $offset): array{
 
         try{
 
@@ -227,9 +234,10 @@ class FGiocoDaTavolo
 
             $qb=FEntityManager::getInstance()->getEntityManager()->createQueryBuilder();
             $qb->select('g')
-                ->from(EGiocoDaTavolo::class, 'g');
-            $qb->where('g.nomeProdotto LIKE :ricerca OR g.descrizioneProdotto LIKE :ricerca')
-               ->setParameter('ricerca', '%' . $testoPulito . '%');
+                ->from(EGiocoDaTavolo::class, 'g')
+                ->innerJoin('g.idProdotto', 'p')
+                ->where('p.nomeProdotto LIKE :ricerca')
+                ->setParameter('ricerca', '%' . $testoPulito . '%');
 
             /*clono la query appena creata per poterla modificare ed effettuare un count su tutti i prodotti filtrati e 
               sapere quanti prodotti sono usciti in tutto dalla query fatta 
@@ -240,10 +248,13 @@ class FGiocoDaTavolo
             //poichè count restituisce un numero scalare non possiamo usare il getResult(), ma usiamo il getSingleScalarResult() che restituisce un numero scalare
             $totale = $qbCount->getQuery()->getSingleScalarResult();
 
+          
+
             //sulla query effettuata inizialmete applichiamo il limit e l'offset per la paginazione (per dividere i risultati in pagine)
             
             $qb->setFirstResult($offset)
                ->setMaxResults($limit);
+            error_log("SQL Eseguito: " . $qb->getQuery()->getSQL());
             $risultati = $qb->getQuery()->getResult();
             
             return [

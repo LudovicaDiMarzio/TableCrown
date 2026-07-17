@@ -214,7 +214,7 @@ class FPersistentManager
      */
     public static function PMricercaProdotto(string $StringaDiRicerca, int $limit, int $offset): array
     {
-        return FGiocoDaTavolo::ricercaGiochi($StringaDiRicerca, $limit, $offset);
+        return FGiocoDaTavolo::ricercaProdotto($StringaDiRicerca, $limit, $offset);
     }
 
     /**
