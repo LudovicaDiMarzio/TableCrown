@@ -56,9 +56,6 @@ $executor->execute($loader->getFixtures());
 // 1. Diciamo al DB di ignorare temporaneamente i vincoli di integrità
 $em->getConnection()->executeStatement('SET FOREIGN_KEY_CHECKS=0');
 
-// 2. La tua riga originale che esegue lo svuotamento e il caricamento
-$executor->execute($loader->getFixtures()); // Potresti avere parametri extra tra parentesi, lasciali intatti!
-
 // 3. Riattiviamo immediatamente i controlli per la sicurezza del DB
 $em->getConnection()->executeStatement('SET FOREIGN_KEY_CHECKS=1');
 
