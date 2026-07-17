@@ -29,14 +29,28 @@ class FBustine{
                    ->setParameter('price_min', $filtri['price_min']);
             }
 
-            if (isset($filtiri['price_max'])){
+            if (isset($filtri['price_max'])){
                 $qb->andwhere('pr.valore <= :price_max')
                    ->setParameter('price_max', $filtri['price_max']);
             }
 
             if (!empty($filtri['disponibilita'])) {
-                $qb->andWhere('b.disponibilitaProdotto = :disponibilita')
-                    ->setParameter('disponibilita', $filtri['disponibilita']);
+                 $enumDisponibilita = [];
+                foreach ($filtri['disponibilita'] as $valoreScelto) {
+                    if ($valoreScelto instanceof DisponibilitaProdotto) {
+                        $enumDisponibilita[] = $valoreScelto;
+                    } else {
+                        $enumObj = DisponibilitaProdotto::tryFrom($valoreScelto);
+                        if ($enumObj !== null) {
+                            $enumDisponibilita[] = $enumObj;
+                        }
+                    }
+                }
+
+                if (!empty($enumDisponibilita)) {
+                    $qb->andWhere($qb->expr()->in('b.disponibilitaProdotto', ':disponibilita'))
+                    ->setParameter('disponibilita', $enumDisponibilita);
+                }
             }
 
                //filtro per l'ordinamento dei risultati
@@ -85,7 +99,7 @@ class FBustine{
             
             //cloniamo la query per poterla modificare ed effettuarci un count
             $qbCount = clone $qb;
-            $qbCount->select('count(b.id)');
+            $qbCount->select('count(b.idProdotto)');
             $qbCount->resetDQLPart('orderBy');
             $totale = $qbCount->getQuery()->getSingleScalarResult();
                     
