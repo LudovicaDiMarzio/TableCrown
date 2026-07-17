@@ -276,4 +276,11 @@ class FPersistentManager
     public static function PMfindCorrelati(array $prodottiesclusi, int $limit): array {
         return FProdotto::findCorrelati($prodottiesclusi, $limit);
     }
+
+    /**
+     * @return array con i valori minimo e massimo del prezzo di tutti i prodotti
+     */
+    public static function PMgetRangePrezzo(): array {
+        return FProdotto::getRangePrezzo();
+    }
 }

@@ -19,9 +19,7 @@ class FProdotto{
      */
     public static function findProdottiInOfferta(int $limit, int $offset): array {
     try {
-            $em = FEntityManager::getInstance()->getEntityManager();
-            $qb = $em->createQueryBuilder();
-
+            $qb=FEntityManager::getInstance()->getEntityManager()->createQueryBuilder();
             //seleziona i prodotti con uno sconto applicato e il corrispondente prezzo
             $qb->select('p', 'pr') 
             ->from(EProdotto::class, 'p')
@@ -72,8 +70,7 @@ class FProdotto{
 
     public static function utenteHasProdotto(int $iduser, int $idprodotto): bool {
         try {
-            $em = FEntityManager::getInstance()->getEntityManager();
-            $qb = $em->createQueryBuilder();
+            $qb=FEntityManager::getInstance()->getEntityManager()->createQueryBuilder();
             $qb->select('COUNT(o.idOrdine)')
                 ->from(EOrdine::class, 'o')
                 ->join('o.ordineItems', 'oi')
@@ -96,8 +93,7 @@ class FProdotto{
 
     public static function findCorrelati(array $prodottiesclusi, int $limit): array {
         try {
-            $em = FEntityManager::getInstance()->getEntityManager();
-            $qb = $em->createQueryBuilder();
+            $qb=FEntityManager::getInstance()->getEntityManager()->createQueryBuilder();
             $qb->select(' p')
                 ->from(EProdotto::class, 'p')
                 //suggeriamo solo i prodotti non esauriti in magazzino
@@ -119,6 +115,24 @@ class FProdotto{
             error_log("Errore in findCorrelati: " . $e->getMessage());
             return [];
         }
+    }
 
+    public static function getRangePrezzo(): array{
+        try{
+            $qb=FEntityManager::getInstance()->getEntityManager()->createQueryBuilder();
+            $qb->select('MIN(pr.valore) as min, MAX(pr.valore) as max')
+                ->from(EProdotto::class, 'p')
+                ->join('p.prezzo', 'pr');
+            $risultati = $qb->getQuery()->getSingleResult();
+            return $risultati=[
+                'min' => (int) $risultati['min'],
+                'max' => (int) $risultati['max']
+            ];
+        }
+        catch(Exception $e){
+            error_log("Errore in getRangePrezzo: " . $e->getMessage());
+            return ['min' => 0, 'max' => 200];
+
+        }
     }
 }
