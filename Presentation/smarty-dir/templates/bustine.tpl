@@ -13,13 +13,13 @@
         <div class="container">
 
             <div class="catalogo-search-wrapper">
-                <form class="catalogo-search-form" action="{$base_url}/catalogo" method="get" id="search-form">
+                <form class="catalogo-search-form" action="{$base_url}/catalogo/bustine" method="get" id="search-form">
                     <input class="input catalogo-search-input"
                            type="search"
                            name="q"
                            placeholder="Cerca nel catalogo..."
                            value="{$filtri.q|default:''|escape}"
-                           aria-label="Cerca nel catalogo">
+                           aria-label="Cerca bustine">
                     <button class="button catalogo-search-btn" type="submit" aria-label="Cerca">
                         <i class="ti ti-search"></i>
                     </button>
@@ -51,7 +51,7 @@
                         <option value="prezzo-asc"  {if isset($filtri.ordinamento) && $filtri.ordinamento == 'prezzo-asc'}  selected{/if}>Prezzo: crescente</option>
                         <option value="prezzo-desc" {if isset($filtri.ordinamento) && $filtri.ordinamento == 'prezzo-desc'} selected{/if}>Prezzo: decrescente</option>
                         <option value="popolarita"  {if isset($filtri.ordinamento) && $filtri.ordinamento == 'popolarita'}  selected{/if}>Più venduti</option>
-                        <option value="rating_min"      {if isset($filtri.ordinamento) && $filtri.ordinamento == 'rating_min'}      selected{/if}>Valutazione</option>
+                        <option value="rating"      {if isset($filtri.ordinamento) && $filtri.ordinamento == 'rating'}      selected{/if}>Valutazione</option>
                     </select>
                 </div>
             </div>
@@ -63,7 +63,7 @@
     <div class="container">
         <div class="catalogo-layout">
 
-            {* ── SIDEBAR FILTRI (solo prezzo) ── *}
+            {* ── SIDEBAR FILTRI ── *}
             <aside class="catalogo-sidebar" id="catalogo-filters">
 
                 <div class="filter-header">
@@ -75,13 +75,13 @@
                     </div>
                 </div>
 
-                <form class="filters-form" id="filters-form" method="get" action="{$base_url}/catalogo">
+                <form class="filters-form" id="filters-form" method="get" action="{$base_url}/catalogo/bustine">
 
                     {if isset($filtri.q) && $filtri.q}
                         <input type="hidden" name="q" value="{$filtri.q|escape}">
                     {/if}
 
-                    {* ── FILTRO: PREZZO (unico filtro previsto) ── *}
+                    {* ── FILTRO: PREZZO ── *}
                     <div class="filter-group">
                         <h4 class="filter-group-title">
                             <i class="ti ti-currency-euro"></i> Prezzo
@@ -89,9 +89,9 @@
                         <div class="price-range-wrapper">
 
                             <div class="price-values-display">
-                                <span id="price-value-min">€{$filtri.price_min|default:$filtri.price_range_min|default:0}</span>
+                                <span id="price-value-min">€{$filtri.price_min|default:$price_range_min|default:0}</span>
                                 <span class="price-values-separator">—</span>
-                                <span id="price-value-max">€{$filtri.price_max|default:$filtri.price_range_max|default:200}</span>
+                                <span id="price-value-max">€{$filtri.price_max|default:$price_range_max|default:200}</span>
                             </div>
 
                             <div class="price-slider-container">
@@ -101,28 +101,116 @@
                                        class="price-range-input price-range-min"
                                        name="price_min"
                                        id="price-range-min"
-                                       min="{$filtri.price_range_min|default:0}"
-                                       max="{$filtri.price_range_max|default:200}"
+                                       min="{$price_range_min|default:0}"
+                                       max="{$price_range_max|default:200}"
                                        step="1"
-                                       value="{$filtri.price_min|default:$filtri.price_range_min|default:0}"
+                                       value="{$filtri.price_min|default:$price_range_min|default:0}"
                                        aria-label="Prezzo minimo">
                                 <input type="range"
                                        class="price-range-input price-range-max"
                                        name="price_max"
                                        id="price-range-max"
-                                       min="{$filtri.price_range_min|default:0}"
-                                       max="{$filtri.price_range_max|default:200}"
+                                       min="{$price_range_min|default:0}"
+                                       max="{$price_range_max|default:200}"
                                        step="1"
-                                       value="{$filtri.price_max|default:$filtri.price_range_max|default:200}"
+                                       value="{$filtri.price_max|default:$price_range_max|default:200}"
                                        aria-label="Prezzo massimo">
                             </div>
 
                         </div>
                     </div>
 
+                    {* ── FILTRO: DISPONIBILITA' ── (aggiunto 4° valore: non_disponibile) *}
+                    <div class="filter-group">
+                        <h4 class="filter-group-title">
+                            <i class="ti ti-package"></i> Disponibilità
+                        </h4>
+                        <div class="checkbox-group" data-exclusive="disponibilita">
+                            <label class="checkbox-label">
+                                <input type="checkbox"
+                                       name="disponibilita[]"
+                                       value="disponibile"
+                                       {if isset($filtri.disponibilita) && in_array('disponibile', $filtri.disponibilita)} checked{/if}>
+                                <span class="checkbox-text">Disponibile Subito</span>
+                            </label>
+                            <label class="checkbox-label">
+                                <input type="checkbox"
+                                       name="disponibilita[]"
+                                       value="in_arrivo"
+                                       {if isset($filtri.disponibilita) && in_array('in_arrivo', $filtri.disponibilita)} checked{/if}>
+                                <span class="checkbox-text">In Arrivo</span>
+                            </label>
+                            <label class="checkbox-label">
+                                <input type="checkbox"
+                                       name="disponibilita[]"
+                                       value="esaurito"
+                                       {if isset($filtri.disponibilita) && in_array('esaurito', $filtri.disponibilita)} checked{/if}>
+                                <span class="checkbox-text">Esaurito</span>
+                            </label>
+                            <label class="checkbox-label">
+                                <input type="checkbox"
+                                       name="disponibilita[]"
+                                       value="non_disponibile"
+                                       {if isset($filtri.disponibilita) && in_array('non_disponibile', $filtri.disponibilita)} checked{/if}>
+                                <span class="checkbox-text">Non Disponibile</span>
+                            </label>
+                        </div>
+                    </div>
+
+                    {* ── FILTRO: IN EVIDENZA ── *}
+                    <div class="filter-group">
+                        <h4 class="filter-group-title">
+                            <i class="ti ti-tag"></i> In Evidenza
+                        </h4>
+                        <div class="checkbox-group" data-exclusive="in_evidenza">
+                            <label class="checkbox-label">
+                                <input type="checkbox"
+                                       name="in_evidenza[]"
+                                       value="sconti"
+                                       {if isset($filtri.in_evidenza) && in_array('sconti', $filtri.in_evidenza)} checked{/if}>
+                                <span class="checkbox-text">Sconti Attivi</span>
+                            </label>
+                            <label class="checkbox-label">
+                                <input type="checkbox"
+                                       name="in_evidenza[]"
+                                       value="novita"
+                                       {if isset($filtri.in_evidenza) && in_array('novita', $filtri.in_evidenza)} checked{/if}>
+                                <span class="checkbox-text">Novità</span>
+                            </label>
+                            <label class="checkbox-label">
+                                <input type="checkbox"
+                                       name="in_evidenza[]"
+                                       value="venduti"
+                                       {if isset($filtri.in_evidenza) && in_array('venduti', $filtri.in_evidenza)} checked{/if}>
+                                <span class="checkbox-text">I più venduti</span>
+                            </label>
+                        </div>
+                    </div>
+
+                    {* ── FILTRO: VALUTAZIONE ── *}
+                    <div class="filter-group">
+                        <h4 class="filter-group-title">
+                            <i class="ti ti-star"></i> Valutazione
+                        </h4>
+                        <div class="rating-range-wrapper">
+                            <input type="range"
+                                   class="range rating-slider"
+                                   name="rating_min"
+                                   min="0"
+                                   max="5"
+                                   step="0.5"
+                                   value="{$filtri.rating_min|default:'0'|escape}"
+                                   aria-label="Valutazione minima">
+                            <div class="rating-display">
+                                <span id="rating-value">{$filtri.rating_min|default:'0'|escape}</span>
+                                <span class="rating-max">/ 5</span>
+                            </div>
+                        </div>
+                    </div>
+
                     {* ── BOTTONE RESET FILTRI ── *}
                     <div class="filter-actions">
-                        <a href="{$base_url}/catalogo" class="button btn-reset-filters">
+                        <a href="{$base_url}/catalogo/bustine" class="button btn-reset-filters">
                             <i class="ti ti-refresh"></i> Ripristina
                         </a>
                     </div>
@@ -132,7 +220,7 @@
             </aside>
 
 
-            {* ── GRID PRINCIPALE PRODOTTI (tutti i tipi) ── *}
+            {* ── GRID PRINCIPALE PRODOTTI ── *}
             <main class="catalogo-main">
 
                 <div class="catalogo-mobile-toggle">
@@ -151,13 +239,6 @@
                                         <img src="{$base_url}/img/prodotti/{$prodotto.immagine|escape}"
                                              alt="{$prodotto.nome|escape}"
                                              class="product-image">
-
-                                        {* Badge tipo prodotto: 'tipo' non ancora restituito da prodottoToArray().
-                                           Da aggiungere lato Control per distinguere gioco/bustina/porta dadi
-                                           in una griglia mista. Gestito qui in modo difensivo. *}
-                                        {if isset($prodotto.tipo)}
-                                            <span class="product-badge product-badge-tipo">{$prodotto.tipo|escape}</span>
-                                        {/if}
 
                                         {if $prodotto.disponibilita == 'esaurito'}
                                             <span class="product-badge product-badge-esaurito">Esaurito</span>
@@ -191,12 +272,12 @@
                                         </div>
 
                                         <div class="product-price-wrapper">
-                                            {if isset($prodotto.prezzo)}
+                                            {if isset($prodotto.prezzo_unitario)}
                                                 {if $prodotto.sconto}
-                                                    <span class="product-price">€{$prodotto.prezzo_scontato|number_format:2}</span>
-                                                    <span class="product-price-old">€{$prodotto.prezzo|number_format:2}</span>
+                                                    <span class="product-price">€{$prodotto.prezzo_unitario|number_format:2}</span>
+                                                    <span class="product-price-old">€{$prodotto.prezzo_originale|number_format:2}</span>
                                                 {else}
-                                                    <span class="product-price">€{$prodotto.prezzo|number_format:2}</span>
+                                                    <span class="product-price">€{$prodotto.prezzo_unitario|number_format:2}</span>
                                                 {/if}
                                             {else}
                                                 <span class="product-price-unavailable">Prezzo N/D</span>
@@ -210,8 +291,8 @@
                                     <button class="button btn-add-cart"
                                             data-id="{$prodotto.id}"
                                             data-nome="{$prodotto.nome|escape}"
-                                            data-img="{$base_url}/img/prodotti/{$prodotto.immagine|escape}"
-                                            data-prezzo="{if $prodotto.sconto}{$prodotto.prezzo_scontato}{else}{$prodotto.prezzo}{/if}"
+                                            data-img="{$base_url}/img/prodotti/{$prodotto.immagine}"
+                                            data-prezzo="{$prodotto.prezzo_unitario}"
                                             aria-label="Aggiungi a carrello">
                                         <i class="ti ti-shopping-cart"></i> Aggiungi
                                     </button>
@@ -228,7 +309,7 @@
                     <div class="pagination-wrapper">
                         <nav class="pagination" aria-label="Paginazione">
                             {if $pagination.current_page > 1}
-                                <a class="pagination-previous" href="{$base_url}/catalogo?page={$pagination.current_page - 1}{if isset($filtri.q)}&q={$filtri.q|escape}{/if}{if isset($filtri.price_min)}&price_min={$filtri.price_min|escape}{/if}{if isset($filtri.price_max)}&price_max={$filtri.price_max|escape}{/if}{if isset($filtri.ordinamento)}&ordinamento={$filtri.ordinamento|escape}{/if}">
+                                <a class="pagination-previous" href="{$base_url}/catalogo/bustine?page={$pagination.current_page - 1}{if isset($filtri.q)}&q={$filtri.q|escape}{/if}">
                                     <i class="ti ti-chevron-left"></i> Precedente
                                 </a>
                             {/if}
@@ -239,14 +320,14 @@
                                         {if $i == $pagination.current_page}
                                             <span class="pagination-link is-current" aria-label="Pagina {$i}" aria-current="page">{$i}</span>
                                         {else}
-                                            <a class="pagination-link" aria-label="Vai a pagina {$i}" href="{$base_url}/catalogo?page={$i}{if isset($filtri.q)}&q={$filtri.q|escape}{/if}{if isset($filtri.price_min)}&price_min={$filtri.price_min|escape}{/if}{if isset($filtri.price_max)}&price_max={$filtri.price_max|escape}{/if}{if isset($filtri.ordinamento)}&ordinamento={$filtri.ordinamento|escape}{/if}">{$i}</a>
+                                            <a class="pagination-link" aria-label="Vai a pagina {$i}" href="{$base_url}/catalogo/bustine?page={$i}{if isset($filtri.q)}&q={$filtri.q|escape}{/if}">{$i}</a>
                                         {/if}
                                     </li>
                                 {/for}
                             </ul>
 
                             {if $pagination.current_page < $pagination.total_pages}
-                                <a class="pagination-next" href="{$base_url}/catalogo?page={$pagination.current_page + 1}{if isset($filtri.q)}&q={$filtri.q|escape}{/if}{if isset($filtri.price_min)}&price_min={$filtri.price_min|escape}{/if}{if isset($filtri.price_max)}&price_max={$filtri.price_max|escape}{/if}{if isset($filtri.ordinamento)}&ordinamento={$filtri.ordinamento|escape}{/if}">
+                                <a class="pagination-next" href="{$base_url}/catalogo/bustine?page={$pagination.current_page + 1}{if isset($filtri.q)}&q={$filtri.q|escape}{/if}">
                                     Successiva <i class="ti ti-chevron-right"></i>
                                 </a>
                             {/if}
@@ -261,9 +342,9 @@
                         </div>
                         <h3 class="empty-state-title">Nessun prodotto trovato</h3>
                         <p class="empty-state-message">
-                            Prova a modificare i filtri o la ricerca per trovare altri prodotti.
+                            Prova a modificare i filtri o la ricerca per trovare altre bustine.
                         </p>
-                        <a href="{$base_url}/catalogo" class="button btn-reset">
+                        <a href="{$base_url}/catalogo/bustine" class="button btn-reset">
                             <i class="ti ti-refresh"></i> Vedi Catalogo Completo
                         </a>
                     </div>
@@ -288,7 +369,7 @@
                 </div>
             </div>
             <div class="minicart-actions">
-                <a href="{$base_url}/catalogo" class="button btn-minicart-continua">
+                <a href="{$base_url}/catalogo/bustine" class="button btn-minicart-continua">
                     <i class="ti ti-arrow-left"></i> Continua Shopping
                 </a>
                 <a href="{$base_url}/carrello" class="button btn-minicart-ordine">
@@ -332,7 +413,20 @@ document.addEventListener('DOMContentLoaded', function() {
 
     var filtersForm = document.getElementById('filters-form');
 
-    // ── TOGGLE FILTRI MOBILE ──
+    var exclusiveGroups = document.querySelectorAll('[data-exclusive]');
+    exclusiveGroups.forEach(function(group) {
+        var checkboxes = group.querySelectorAll('input[type="checkbox"]');
+        checkboxes.forEach(function(checkbox) {
+            checkbox.addEventListener('change', function() {
+                if (this.checked) {
+                    checkboxes.forEach(function(cb) {
+                        if (cb !== checkbox) cb.checked = false;
+                    });
+                }
+            });
+        });
+    });
+
     var toggleBtn = document.getElementById('btn-toggle-filters');
     var sidebar   = document.getElementById('catalogo-filters');
     var closeBtn  = document.getElementById('filter-close-btn');
@@ -358,7 +452,13 @@ document.addEventListener('DOMContentLoaded', function() {
         }
     });
 
-    // ── DUAL PRICE SLIDER (display live) ──
+    var ratingSlider = document.querySelector('.rating-slider');
+    if (ratingSlider) {
+        ratingSlider.addEventListener('input', function() {
+            document.getElementById('rating-value').textContent = this.value;
+        });
+    }
+
     var priceMinSlider = document.getElementById('price-range-min');
     var priceMaxSlider = document.getElementById('price-range-max');
     var priceValueMin  = document.getElementById('price-value-min');
@@ -406,27 +506,33 @@ document.addEventListener('DOMContentLoaded', function() {
         updatePriceRangeFill();
     }
 
-    // ══════════════════════════════════════════════════════════
-    //  AUTO-SUBMIT DEI FILTRI (nessun bottone "Applica")
-    // ══════════════════════════════════════════════════════════
+    function debounce(fn, delay) {
+        var timer = null;
+        return function() {
+            clearTimeout(timer);
+            timer = setTimeout(fn, delay);
+        };
+    }
 
     function submitFilters() {
         filtersForm.submit();
     }
 
-    // Range prezzo: submit solo al rilascio dello slider (evento "change")
+    var submitDebounced = debounce(submitFilters, 600);
+
+    filtersForm.querySelectorAll('input[type="checkbox"]').forEach(function(el) {
+        el.addEventListener('change', submitFilters);
+    });
+
     filtersForm.querySelectorAll('input[type="range"]').forEach(function(el) {
         el.addEventListener('change', submitFilters);
     });
 
-    // Select ordinamento: sta fuori dal DOM del form ma è collegata
-    // tramite l'attributo form="filters-form" → submit immediato al cambio
     var sortSelect = document.getElementById('sort-select');
     if (sortSelect) {
         sortSelect.addEventListener('change', submitFilters);
     }
 
-    // ── MODAL: MINICART ──
     var minicartModal  = document.getElementById('minicart-modal');
     var minicartImg    = document.getElementById('minicart-img');
     var minicartNome   = document.getElementById('minicart-nome');
@@ -465,7 +571,6 @@ document.addEventListener('DOMContentLoaded', function() {
         });
     }
 
-    // ── MODAL: LOGIN ──
     var loginModal = document.getElementById('login-modal');
 
     function apriLoginModal() {
@@ -497,7 +602,6 @@ document.addEventListener('DOMContentLoaded', function() {
         });
     }
 
-    // ── AJAX CARRELLO ──
     function aggiungiAlCarrello(idProdotto, quantita, dati) {
         fetch('/carrello/aggiungi', {
             method: 'POST',
@@ -539,7 +643,6 @@ document.addEventListener('DOMContentLoaded', function() {
         });
     }
 
-    // ── CLICK BOTTONI AGGIUNGI (esclude i disabilitati) ──
     document.querySelectorAll('.btn-add-cart:not(.is-disabled)').forEach(function(btn) {
         btn.addEventListener('click', function(e) {
             e.preventDefault();
