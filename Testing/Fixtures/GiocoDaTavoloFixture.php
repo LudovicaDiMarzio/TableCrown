@@ -73,18 +73,26 @@ class GiocoDaTavoloFixture extends AbstractFixture implements DependentFixtureIn
             // 2. Peschiamo un valore a caso dall'Enum della disponibilità
             $disponibilita = $faker->randomElement(DisponibilitaProdotto::cases());
 
+            if ($disponibilita === DisponibilitaProdotto::Esaurito || $disponibilita === DisponibilitaProdotto::NonDisponibile || $disponibilita === DisponibilitaProdotto::InArrivo) {
+                $quantitaCorerente = 0;
+            } else {
+                $quantitaCorerente = $faker->numberBetween(10, 100);
+            }
+
             //chiamo il costruttore di EBustine con i dati random
             $gioco= new EGiocoDaTavolo(
                 $faker->words(3, true),           // nomeProdotto
                 $faker->paragraph(),              // descrizioneProdotto
                 $disponibilita,                   // disponibilitaProdotto
-                $faker->numberBetween(10, 100),   // quantita
+                $quantitaCorerente,   // quantita
                 categoria: $categorieTesto, //categoria
                 componenti: $componenti, //componenti
                 prezzo: $prezzo,                     // prezzo
                 lingua: $faker->randomElement(LinguaGioco::cases()),
                 difficolta: $faker->randomElement(DifficoltaGioco::cases()),
                 );
+
+                
 
                 
                 // per gli ultimi 2 giochi aggiungi un danno
