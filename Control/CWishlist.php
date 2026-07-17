@@ -57,10 +57,8 @@ class CWishlist extends BaseController {
                 exit();
             }
 
-            $urlCatalogo = $this->urlCatalogo($prodotto);
-
             UFlashMessage::addMessage('success', 'Prodotto aggiunto alla wishlist!');
-            header('Location: ' . UHTTPMethods::getReferer($urlCatalogo));
+            header('Location: ' . UHTTPMethods::getReferer(BASE_URL . $this->urlCatalogo($prodotto)));
             exit();
 
         } catch (\Exception $e) {
@@ -71,7 +69,7 @@ class CWishlist extends BaseController {
             }
 
             UFlashMessage::addMessage('danger', $e->getMessage());
-            header('Location: ' . UHTTPMethods::getReferer('/'));
+            header('Location: ' . UHTTPMethods::getReferer(BASE_URL . '/'));
             exit();
         }
     }
@@ -110,7 +108,7 @@ class CWishlist extends BaseController {
             }
 
             UFlashMessage::addMessage('success', 'Prodotto rimosso dalla wishlist!');
-            header('Location: ' . UHTTPMethods::getReferer('profilo/wishlist'));
+            header('Location: ' . UHTTPMethods::getReferer(BASE_URL . '/profilo/wishlist'));
             exit();
 
         } catch (\Exception $e) {
@@ -121,7 +119,7 @@ class CWishlist extends BaseController {
             }
 
             UFlashMessage::addMessage('danger', $e->getMessage());
-            header('Location: ' . UHTTPMethods::getReferer('profilo/wishlist'));
+            header('Location: ' . UHTTPMethods::getReferer(BASE_URL . '/profilo/wishlist'));
             exit();
         }
     }

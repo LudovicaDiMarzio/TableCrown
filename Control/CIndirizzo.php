@@ -82,7 +82,7 @@ class CIndirizzo extends BaseController {
             }
 
             UFlashMessage::addMessage('success', 'Nuovo indirizzo salvato!');
-            header('Location: /profilo/indirizzi');
+            header('Location: ' . BASE_URL . '/profilo/indirizzi');
             exit();
 
         } catch (\Exception $e) {
@@ -93,7 +93,7 @@ class CIndirizzo extends BaseController {
             }
 
             UFlashMessage::addMessage('danger', $e->getMessage());
-            header('Location: ' . UHTTPMethods::getReferer('/profilo/indirizzi'));
+            header('Location: ' . UHTTPMethods::getReferer(BASE_URL . '/profilo/indirizzi'));
             exit();
         }
     }
@@ -140,7 +140,7 @@ class CIndirizzo extends BaseController {
             }
 
             UFlashMessage::addMessage('success', 'Indirizzo predefinito aggiornato con successo!');
-            header('Location: /profilo/indirizzi');
+            header('Location: ' . BASE_URL . '/profilo/indirizzi');
             exit();
 
         } catch (\Exception $e) {
@@ -151,7 +151,7 @@ class CIndirizzo extends BaseController {
             }
 
             UFlashMessage::addMessage('danger', $e->getMessage());
-            header('Location: /profilo/indirizzi');
+            header('Location: ' . BASE_URL . '/profilo/indirizzi');
             exit();
         }
             
@@ -205,7 +205,7 @@ class CIndirizzo extends BaseController {
             }
 
             UFlashMessage::addMessage('success', 'Indirizzo eliminato con successo!');
-            header('Location: /profilo/indirizzi');
+            header('Location: ' . BASE_URL . '/profilo/indirizzi');
             exit();
 
         } catch (\Exception $e) {
@@ -216,7 +216,7 @@ class CIndirizzo extends BaseController {
             }
 
             UFlashMessage::addMessage('danger', $e->getMessage());
-            header('Location: /profilo/indirizzi');
+            header('Location: ' . BASE_URL . '/profilo/indirizzi');
             exit();
         }
     }

@@ -35,7 +35,7 @@ class CDettaglioEvento extends BaseController {
 
         if (!$evento) {
             UFlashMessage::addMessage('danger', 'L\'evento richiesto non esiste o non è più disponibile.');
-            header('Location: /eventi');
+            header('Location: ' . BASE_URL . '/eventi');
             exit();
         }
 
@@ -56,20 +56,20 @@ class CDettaglioEvento extends BaseController {
         $idEvento = UHTTPMethods::postInt('id_evento');
         if (!$idEvento) {
             UFlashMessage::addMessage('danger', 'Evento non specificato.');
-            header('Location: /eventi');
+            header('Location: ' . BASE_URL . '/eventi');
             exit();
         }
 
         $evento = FPersistentManager::PMgetObjOnAttribute(EEvento::class, 'idEvento', $idEvento);
         if (!$evento) {
             UFlashMessage::addMessage('danger', 'L\'evento selezionato non esiste.');
-            header('Location: /eventi');
+            header('Location: ' . BASE_URL . '/eventi');
             exit();
         }
         
         if ($this->utenteIscritto($evento)) {
             UFlashMessage::addMessage('danger', 'Sei già iscritto a questo evento.');
-            header('Location: /eventi/dettaglio/' . $idEvento);
+            header('Location: ' . BASE_URL . '/eventi/dettaglio/' . $idEvento);
             exit();
         }
 
@@ -77,7 +77,7 @@ class CDettaglioEvento extends BaseController {
             $nuovaPartecipazione = new EPartecipazione($utente, $evento);
         } catch (\InvalidArgumentException $e) {
             UFlashMessage::addMessage('danger', $e->getMessage());
-            header('Location: /eventi/dettaglio/' . $idEvento);
+            header('Location: ' . BASE_URL . '/eventi/dettaglio/' . $idEvento);
             exit();
         }
 
@@ -113,7 +113,7 @@ class CDettaglioEvento extends BaseController {
             } catch (\Exception $e) {
                 //Se il pagamento fallisce, interrompiamo tutto e mostriamo l'errore della banca
                 UFlashMessage::addMessage('danger', 'Pagamento rifiutato: ' . $e->getMessage());
-                header('Location: /eventi/dettaglio/' . $idEvento);
+                header('Location: ' . BASE_URL . '/eventi/dettaglio/' . $idEvento);
                 exit();
             }
         }
@@ -127,7 +127,7 @@ class CDettaglioEvento extends BaseController {
             UFlashMessage::addMessage('danger', 'Si è verificato un errore durante la prenotazione. Riprova.');
         }
 
-        header('Location: /eventi/dettaglio/' . $idEvento);
+        header('Location: ' . BASE_URL . '/eventi/dettaglio/' . $idEvento);
         exit();
     }
 

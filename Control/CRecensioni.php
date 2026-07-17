@@ -60,7 +60,7 @@ class CRecensioni extends BaseController {
             }
 
             UFlashMessage::addMessage('success', 'Recensione pubblicata con successo!');
-            header('Location: ' . UHTTPMethods::getReferer($this->urlCatalogo($prodotto)));
+            header('Location: ' . UHTTPMethods::getReferer(BASE_URL . $this->urlCatalogo($prodotto)));
             exit();
 
         } catch (\Exception $e) {
@@ -71,7 +71,7 @@ class CRecensioni extends BaseController {
             }
 
             UFlashMessage::addMessage('danger', $e->getMessage());
-            header('Location: ' . UHTTPMethods::getReferer('/'));
+            header('Location: ' . UHTTPMethods::getReferer(BASE_URL . '/'));
             exit();
         }
     }
@@ -116,7 +116,7 @@ class CRecensioni extends BaseController {
             }
 
             UFlashMessage::addMessage('success', 'Recensione eliminata con successo!');
-            header('Location: ' . UHTTPMethods::getReferer($this->urlCatalogo($prodotto)));
+            header('Location: ' . UHTTPMethods::getReferer(BASE_URL . $this->urlCatalogo($prodotto)));
             exit();
 
         } catch (\Exception $e) {
@@ -127,7 +127,7 @@ class CRecensioni extends BaseController {
             }
 
             UFlashMessage::addMessage('danger', $e->getMessage());
-            header('Location: ' . UHTTPMethods::getReferer('/'));
+            header('Location: ' . UHTTPMethods::getReferer(BASE_URL . '/'));
             exit();
         }
     }
@@ -172,7 +172,7 @@ class CRecensioni extends BaseController {
             }
 
             UFlashMessage::addMessage('success', 'Grazie per la segnalazione. Sarà presa in carico dallo staff.');
-            header('Location: ' . UHTTPMethods::getReferer($this->urlCatalogo($recensione->getProdotto())));
+            header('Location: ' . UHTTPMethods::getReferer(BASE_URL . $this->urlCatalogo($recensione->getProdotto())));
             exit();
 
         } catch (\Exception $e) {
@@ -183,7 +183,7 @@ class CRecensioni extends BaseController {
             }
 
             UFlashMessage::addMessage('danger', $e->getMessage());
-            header('Location: ' . UHTTPMethods::getReferer('/'));
+            header('Location: ' . UHTTPMethods::getReferer(BASE_URL . '/'));
             exit();
         }
     }

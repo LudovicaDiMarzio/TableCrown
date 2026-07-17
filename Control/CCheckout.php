@@ -38,7 +38,7 @@ class CCheckout extends BaseController {
         $carrello = USession::getSessionElement('carrello') ?? [];
         if (empty($carrello)) {
             UFlashMessage::addMessage('danger', 'Il tuo carrello è vuoto. Aggiungi dei prodotto prima di procedere.');
-            header('Location: /catalogo/giochi-da-tavolo');
+            header('Location: ' . BASE_URL . '/catalogo/giochi-da-tavolo');
             exit();
         }
 
@@ -150,16 +150,16 @@ class CCheckout extends BaseController {
             USession::unsetSessionElement('carrello');
 
             UFlashMessage::addMessage('success', 'Acquisto completato con successo!');
-            header('Location: /profilo/ordini');
+            header('Location: ' . BASE_URL . '/profilo/ordini');
             exit();
 
         } catch (InvalidArgumentException $e) {
             UFlashMessage::addMessage('danger', 'Errore nei dati: ' . $e->getMessage());
-            header('Location: /checkout');
+            header('Location: ' . BASE_URL . '/checkout');
             exit();
         } catch (Exception $e) {
             UFlashMessage::addMessage('danger', 'Si è verificato un errore durante l\'acquisto: ' . $e->getMessage());
-            header('Location: /checkout');
+            header('Location: ' . BASE_URL . '/checkout');
             exit();
         }
     }

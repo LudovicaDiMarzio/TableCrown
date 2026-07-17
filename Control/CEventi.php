@@ -91,7 +91,7 @@ class CEventi extends BaseController {
 
         if ($query === null || trim($query) === '') {
             //Se non c'è nessun termine di ricerca, reindirizziamo al catalogo principale dei giochi (DA DECIDERE!!!!!!!)
-            header("Location: /eventi");
+            header("Location: " . BASE_URL . "/eventi");
             exit();
         }
 
@@ -213,7 +213,7 @@ class CEventi extends BaseController {
             //Se manca uno di questi campi, impostiamo un messaggio di errore rapido
             UFlashMessage::addMessage('danger', 'Tutti i campi sono obbligatori.');
             //Pattern PRG: ricarichiamo la pagina del form per mostrare l'errore in sicurezza
-            header('Location: /gestore/eventi/nuovo');
+            header('Location: ' . BASE_URL . '/gestore/eventi/nuovo');
             exit();
         }
 
@@ -317,7 +317,7 @@ class CEventi extends BaseController {
         $idEvento = UHTTPMethods::get('id');
         if (!$idEvento) {
             UFlashMessage::addMessage('danger', 'ID evento non valido o mancante.');
-            header('Location: /gestore/eventi');
+            header('Location: ' . BASE_URL . '/gestore/eventi');
             exit();
         }
 
@@ -329,7 +329,7 @@ class CEventi extends BaseController {
         //Controllo di sicurezza (evento esistente)
         if (!$evento) {
             UFlashMessage::addMessage('danger', 'L\'evento selezionato non esiste.');
-            header('Location: /gestore/eventi');
+            header('Location: ' . BASE_URL . '/gestore/eventi');
             exit();
         }
 

@@ -27,7 +27,7 @@ class CProdotto extends BaseController {
 
         if (!$prodotto) {
             UFlashMessage::addMessage('danger', 'Il prodotto non esiste o non è più disponibile.');
-            header('Location: /catalogo/giochi-da-tavolo');
+            header('Location: ' . BASE_URL . '/catalogo/giochi-da-tavolo');
             exit();
         }
 

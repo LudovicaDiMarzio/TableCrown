@@ -87,7 +87,7 @@ class CCatalogo extends BaseController {
 
         if ($query === null || trim($query) === '') {
             //Se non c'è nessun termine di ricerca, reindirizziamo alla pagina precedente. Fallback: la home
-            header("Location: " . UHTTPMethods::getReferer('/'));
+            header("Location: " . UHTTPMethods::getReferer(BASE_URL . '/'));
             exit();
         }
 
