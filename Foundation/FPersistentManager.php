@@ -254,10 +254,26 @@ class FPersistentManager
     /**
      * @param string $ricerca stringa da ricercare nella colonna nomeEvento
      * @return array di oggetti
-     * @throws Exception
      */
     public static function PMricercaEventi(?string $ricerca): array {
         return FEventi::ricercaEventi($ricerca);
     }
 
+    /**
+     * @param int $iduser id dell'utente da controllare
+     * @param int $idprodotto id del prodotto da controllare
+     * @return bool 
+    */
+    public static function PMutenteHasProdotto(int $iduser, int $idprodotto): bool {
+        return FProdotto::utenteHasProdotto($iduser, $idprodotto);
+    }
+
+    /**
+     * @param array $prodottiesclusi array di id prodotti da escludere dalla ricerca
+     * @param int $limit numero massimo di prodotti da restituire
+     * @return array di oggetti
+     */
+    public static function PMfindCorrelati(array $prodottiesclusi, int $limit): array {
+        return FProdotto::findCorrelati($prodottiesclusi, $limit);
+    }
 }
