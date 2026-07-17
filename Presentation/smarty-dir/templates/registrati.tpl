@@ -1,7 +1,7 @@
 {extends file="common/layout.tpl"}
 
 {block name="extra_css"}
-    <link rel="stylesheet" href="{$base_url}/css/auth.css">
+    <link rel="stylesheet" href="{$base_url}/public/css/auth.css">
 {/block}
 
 {block name="content"}
@@ -18,7 +18,7 @@
                 <p class="auth-subtitle">Unisciti alla community TableCrown</p>
             </div>
 
-            <form class="auth-form" action="{$base_url}/registrati" method="post" id="register-form">
+            <form class="auth-form" action="{$base_url}/registrazione" method="post" id="register-form">
 
                 <div class="auth-field">
                     <label for="nickname" class="auth-label">Nickname</label>
@@ -54,19 +54,17 @@
                     </div>
 
                     <div class="auth-field">
-                        <label for="eta" class="auth-label">Età</label>
+                        <label for="data_nascita" class="auth-label">Data di nascita</label>
                         <div class="auth-input-wrapper">
-                            <i class="ti ti-baby-carriage"></i>
+                            <i class="ti ti-calendar"></i>
                             <input class="input auth-input"
-                                   type="number"
-                                   name="eta"
-                                   id="eta"
-                                   placeholder="18"
-                                   value="{$eta_value|default:''|escape}"
+                                   type="date"
+                                   name="data_nascita"
+                                   id="data_nascita"
+                                   value="{$data_nascita_value|default:''|escape}"
                                    required
-                                   min="18"
-                                   max="120"
-                                   autocomplete="off">
+                                   max="{$eta_minima_data|default:''|escape}"
+                                   autocomplete="bday">
                         </div>
                     </div>
                 </div>

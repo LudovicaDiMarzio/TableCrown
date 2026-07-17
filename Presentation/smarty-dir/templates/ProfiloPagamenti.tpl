@@ -25,10 +25,10 @@
             </div>
 
             <div class="pagamenti-header-actions">
-                {if isset($carte) && $carte|@count > 0}
+                {if isset($metodi) && $metodi|@count > 0}
                     <div class="pagamenti-count-badge">
-                        <span class="pagamenti-count-num">{$carte|@count}</span>
-                        <span class="pagamenti-count-label">{if $carte|@count == 1}carta{else}carte{/if}</span>
+                        <span class="pagamenti-count-num">{$metodi|@count}</span>
+                        <span class="pagamenti-count-label">{if $metodi|@count == 1}carta{else}carte{/if}</span>
                     </div>
                 {/if}
 
@@ -39,9 +39,9 @@
         </div>
 
         {* ── LISTA CARTE ── *}
-        {if isset($carte) && $carte|@count > 0}
+        {if isset($metodi) && $metodi|@count > 0}
             <div class="pagamenti-list" id="pagamenti-list">
-                {foreach $carte as $carta}
+                {foreach $metodi as $carta}
                     {* -- 'predefinito' non ancora restituito da cartaToArray(): in attesa di implementazione lato Control -- *}
                     <div class="pagamenti-card {if isset($carta.predefinito) && $carta.predefinito}pagamenti-card-predefinito{/if}" id="pagamenti-card-{$carta.id|escape}">
 

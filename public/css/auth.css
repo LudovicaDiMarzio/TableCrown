@@ -25,7 +25,7 @@
     display: flex;
     flex-direction: column;
     gap: 1.5rem;
-    box-shadow: 0 8px 24px rgba(0, 0, 0, 0.25);
+    box-shadow: 0 8px 32px rgba(0, 0, 0, 0.35), 0 0 0 1px rgba(255, 255, 255, 0.03);
 }
 
 .auth-card-wide {
@@ -47,12 +47,13 @@
     width: 56px;
     height: 56px;
     border-radius: 50%;
-    background-color: rgba(255, 255, 255, 0.06);
+    background: linear-gradient(135deg, rgba(var(--color-primary-rgb, 99, 102, 241), 0.18), rgba(var(--color-primary-rgb, 99, 102, 241), 0.05));
+    border: 1px solid rgba(var(--color-primary-rgb, 99, 102, 241), 0.25);
     color: var(--color-primary);
     display: flex;
     align-items: center;
     justify-content: center;
-    font-size: 1.5rem;
+    font-size: 1.6rem;
     margin-bottom: 0.5rem;
 }
 
@@ -143,12 +144,17 @@
     border-radius: var(--radius-sm) !important;
     color: var(--color-text-light) !important;
     font-size: var(--font-size-md) !important;
-    transition: border-color var(--transition);
+    transition: border-color var(--transition), box-shadow var(--transition), background-color var(--transition);
+}
+
+.auth-input:hover {
+    border-color: rgba(255, 255, 255, 0.18) !important;
 }
 
 .auth-input:focus {
     outline: none;
     border-color: var(--color-primary) !important;
+    box-shadow: 0 0 0 3px rgba(var(--color-primary-rgb, 99, 102, 241), 0.15);
 }
 
 .auth-toggle-password {
@@ -165,6 +171,47 @@
 }
 
 .auth-toggle-password:hover {
+    color: var(--color-text-light);
+}
+/* ── INPUT DATA DI NASCITA ────────────────────────────────── */
+
+.auth-input[type="date"] {
+    color-scheme: dark;
+    cursor: pointer;
+    letter-spacing: 0.03em;
+}
+
+/* Icona calendario nativa: invisibile di default su sfondo scuro, la rendiamo visibile */
+.auth-input[type="date"]::-webkit-calendar-picker-indicator {
+    filter: invert(1) brightness(1.3);
+    opacity: 0.75;
+    cursor: pointer;
+    padding: 5px;
+    margin-right: -4px;
+    border-radius: 4px;
+    transition: opacity var(--transition), background-color var(--transition);
+}
+
+.auth-input[type="date"]::-webkit-calendar-picker-indicator:hover {
+    opacity: 1;
+    background-color: rgba(255, 255, 255, 0.08);
+}
+
+/* Quando il campo è vuoto (required + nessuna data scelta), testo gg/mm/aaaa smorzato come gli altri placeholder */
+.auth-input[type="date"]:invalid::-webkit-datetime-edit-fields-wrapper,
+.auth-input[type="date"]:invalid::-webkit-datetime-edit-text,
+.auth-input[type="date"]:invalid::-webkit-datetime-edit-month-field,
+.auth-input[type="date"]:invalid::-webkit-datetime-edit-day-field,
+.auth-input[type="date"]:invalid::-webkit-datetime-edit-year-field {
+    color: var(--color-text-muted);
+}
+
+/* Quando l'utente ha scelto una data valida, il testo diventa leggibile/chiaro */
+.auth-input[type="date"]:valid::-webkit-datetime-edit-fields-wrapper,
+.auth-input[type="date"]:valid::-webkit-datetime-edit-text,
+.auth-input[type="date"]:valid::-webkit-datetime-edit-month-field,
+.auth-input[type="date"]:valid::-webkit-datetime-edit-day-field,
+.auth-input[type="date"]:valid::-webkit-datetime-edit-year-field {
     color: var(--color-text-light);
 }
 
@@ -222,12 +269,18 @@
     align-items: center;
     justify-content: center;
     gap: 8px;
-    transition: background-color var(--transition);
+    transition: background-color var(--transition), transform var(--transition), box-shadow var(--transition);
     box-shadow: 0 4px 12px rgba(0, 0, 0, 0.2);
 }
 
 .auth-submit-btn:hover {
     background-color: var(--color-primary-dark) !important;
+    transform: translateY(-2px);
+    box-shadow: 0 6px 18px rgba(0, 0, 0, 0.3);
+}
+
+.auth-submit-btn:active {
+    transform: translateY(0);
 }
 
 

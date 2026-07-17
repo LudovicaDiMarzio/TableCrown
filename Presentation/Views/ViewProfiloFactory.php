@@ -9,6 +9,7 @@ require_once __DIR__ . '/ViewProfiloRecensioni.php';
 require_once __DIR__ . '/ViewProfiloWishlist.php';
 require_once __DIR__ . '/ViewProfiloEventi.php';
 require_once __DIR__ . '/ViewProfiloIndirizzi.php';
+require_once __DIR__ . '/ViewProfiloPagamenti.php';
 
 class ViewProfiloFactory {
 
@@ -20,6 +21,7 @@ class ViewProfiloFactory {
         'profilo_wishlist',
         'profilo_eventi',
         'profilo_indirizzi',
+        'profilo_pagamenti',
     ];
 
     /**
@@ -41,6 +43,7 @@ class ViewProfiloFactory {
             'profilo_wishlist'   => ViewProfiloWishlist::mostraProfiloWishlist($dati),
             'profilo_eventi'     => ViewProfiloEventi::mostraProfiloEventi($dati),
             'profilo_indirizzi'  => ViewProfiloIndirizzi::mostraProfiloIndirizzi($dati),
+            'profilo_pagamenti' => ViewProfiloPagamenti::mostraProfiloPagamenti($dati),
         };
     }
 }
