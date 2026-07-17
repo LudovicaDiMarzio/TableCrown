@@ -86,7 +86,17 @@ class FBustine{
             //cloniamo la query per poterla modificare ed effettuarci un count
             $qbCount = clone $qb;
             $qbCount->select('count(b.id)');
+            $qbCount->resetDQLPart('orderBy');
             $totale = $qbCount->getQuery()->getSingleScalarResult();
+                    
+            $qbEstremi = clone $qb;
+            $qbEstremi->select('MIN(pr.valore) AS min_price', 'MAX(pr.valore) AS max_price');
+            $qbEstremi->resetDQLPart('orderBy');
+            $estremi = $qbEstremi->getQuery()->getSingleResult();
+
+            $prezzoMinimo = $estremi['min_price'] !== null ? (float) $estremi['min_price'] : 0.0;
+            $prezzoMassimo = $estremi['max_price'] !== null ? (float) $estremi['max_price'] : 50.0;
+
 
             //sulla query iniziale applico le limitazioni per la paginazione
             $qb->setFirstResult($offset)
@@ -96,7 +106,9 @@ class FBustine{
             return [
                 //un array con i prodotti filtrati
                 'risultati' => $risultati,
-                'totale' => $totale
+                'totale' => $totale,
+                'rangemin' => $prezzoMinimo,
+                'rangemax' => $prezzoMassimo
             ];
 
             //ci sono filtri sulla disponibilità?
@@ -104,7 +116,11 @@ class FBustine{
         }
         catch(Exception $e){
             error_log("Errore in findBustine: " . $e->getMessage());
-            return ['risultati' => [], 'totale' => 0];
+            return ['risultati' => [], 
+            'totale' => 0,
+            'rangemin' => 0.0,
+            'rangemax' => 50.0
+            ];
         }
     }
 }
