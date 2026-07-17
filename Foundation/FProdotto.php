@@ -98,8 +98,9 @@ class FProdotto{
             $qb=FEntityManager::getInstance()->getEntityManager()->createQueryBuilder();
             $qb->select(' p')
                 ->from(EProdotto::class, 'p')
-                //suggeriamo solo i prodotti non esauriti in magazzino
+                //suggeriamo solo i prodotti non esauriti in magazzino e disponibili
                 ->andWhere('p.quantita > 0')
+                ->andWhere("p.disponibilitaProdotto = 'DISPONIBILE'")
                 ->setParameter('esclusi', $prodottiesclusi)
                 ->orderBy('p.numeroVendite', 'DESC')
                 ->setMaxResults($limit);
