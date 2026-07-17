@@ -23,6 +23,8 @@ use TableCrown\Entity\EPortaDadi;
 use TableCrown\Entity\ECartaDiCredito;
 use TableCrown\Entity\EIndirizzo;
 use TableCrown\Entity\EMotivazione;
+use TableCrown\Foundation\BancaMockService;
+use InvalidArgumentException;
 
 
 abstract class BaseController {
@@ -499,6 +501,55 @@ abstract class BaseController {
             $risultato[] = $this->cartaToArray($carta);
         }
         return $risultato;
+    }
+
+    /**
+     * Recupera (se 'salvata') o crea ed eventualmente persiste (se 'nuova') la carta di
+     * credito da usare per il pagamento. Centralizza qui anche il controllo di scadenza,
+     * che vale per entrambi i casi (per le carte nuove è ridondante col controllo già
+     * fatto nel costruttore di ECartaDiCredito, ma lo teniamo per sicurezza e uniformità).
+     */
+    protected function risolviCartaPagamento(string $sceltaCarta, ?int $idCartaSalvata, EUtente $utente, BancaMockService $bancaService): ECartaDiCredito {
+        if ($sceltaCarta === 'salvata') {
+            if (!$idCartaSalvata) {
+                throw new InvalidArgumentException("Seleziona una delle tue carte salvate.");
+            }
+
+            $carta = FPersistentManager::PMgetObjOnAttribute(ECartaDiCredito::class, 'idCartaDiCredito', $idCartaSalvata);
+
+            if (!$carta || $carta->getUtente()->getIdPersona() !== $utente->getIdPersona()) {
+                throw new InvalidArgumentException("La carta selezionata non è valida.");
+            }
+        } elseif ($sceltaCarta === 'nuova') {
+            //Recuperiamo i dati della nuova carta inseriti al momento
+            $numeroCarta = UHTTPMethods::postString('numero_carta');
+            $cvv = UHTTPMethods::postString('cvv');
+            $titolare = UHTTPMethods::postString('titolare_carta');
+            $scadenza = UHTTPMethods::postString('scadenza_carta');
+            $salvaCarta = UHTTPMethods::postBool('salva_carta_profilo');
+
+            if (empty($numeroCarta) || empty($cvv) || empty($titolare) || empty($scadenza)) {
+                throw new InvalidArgumentException("Tutti i campi di pagamento sono obbligatori.");
+            }
+
+            //Generazione del token
+            $risultatoToken = $bancaService->generaToken($numeroCarta, $cvv);
+
+            $carta = new ECartaDiCredito($utente, $titolare, $scadenza, $risultatoToken['ultimeQuattroCifre'], $risultatoToken['token']);
+
+            //Salvataggio della carta nel DB
+            if ($salvaCarta) {
+                FPersistentManager::PMsaveObj($carta);
+            }
+        } else {
+            throw new InvalidArgumentException("Seleziona un metodo di pagamento valido.");
+        }
+
+        if ($carta->isScaduta()) {
+            throw new InvalidArgumentException("La carta di credito utilizzata è scaduta.");
+        }
+
+        return $carta;
     }
 
 

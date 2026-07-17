@@ -206,7 +206,6 @@ class CRecensioni extends BaseController {
 
         try {
             $idRecensione = UHTTPMethods::postInt('id_recensione');
-            $idSegnalazione = UHTTPMethods::postInt('id_segnalazione');
         } catch (\InvalidArgumentException $e) {
             UFlashMessage::addMessage('danger', 'Parametri non validi: ' . $e->getMessage());
             header('Location: ' . BASE_URL . '/admin/dashboard');
@@ -222,10 +221,8 @@ class CRecensioni extends BaseController {
             exit();
         }
 
-        //Recuperiamo la segnalazione per chiuderla
-        $segnalazione = FPersistentManager::PMgetObjOnAttribute(ESegnalazione::class, 'idSegnalazione', $idSegnalazione);
-       
-        if ($segnalazione) {
+        //Risolviamo logicamente tutte le segnalazioni collegate a questa recensione prima di eliminarla
+        foreach ($recensione->getSegnalazioni() as $segnalazione) {
             $segnalazione->risolvi();
             FPersistentManager::PMsaveObj($segnalazione);
         }
@@ -274,7 +271,7 @@ class CRecensioni extends BaseController {
             UFlashMessage::addMessage('danger', 'Impossibile rigettare la segnalazione: ' . $e->getMessage());
         }
 
-        header('Location: ' . BASE_URL . '/admin/dashboard');
+        header('Location: ' . BASE_URL . '/admin/recensioni');
         exit();
     }
 

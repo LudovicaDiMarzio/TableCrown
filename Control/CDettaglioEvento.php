@@ -15,6 +15,7 @@ use TableCrown\Entity\EPrezzo;
 use TableCrown\Foundation\FPersistentManager;
 use TableCrown\Foundation\BancaMockService;
 use TableCrown\Presentation\Views\ViewDettaglioEvento;
+use TableCrown\Presentation\Views\ViewCheckout;
 
 class CDettaglioEvento extends BaseController {
 
@@ -44,6 +45,44 @@ class CDettaglioEvento extends BaseController {
 
         //Chiamata alla View
         ViewDettaglioEvento::mostraDettaglioEvento($datiLayout);
+    }
+
+    /**
+     * Mostra la pagina di checkout specifica per il pagamento della quota di iscrizione di un evento
+     * URL: GET /eventi/checkout?id=X
+     */
+    public function mostraCheckoutEvento(int $idEvento): void {
+        $utente = $this->utenteCorrente();
+
+        $evento = FPersistentManager::PMgetObjOnAttribute(EEvento::class, 'idEvento', $idEvento);
+
+        if (!$evento) {
+            UFlashMessage::addMessage('danger', 'L\'evento richiesto non esiste o non è più disponibile.');
+            header('Location: ' . BASE_URL . '/eventi');
+            exit();
+        }
+
+        if (!$evento->richiedeQuota()) {
+            //Se levento è gratuito, non serve il checkout
+            header('Location: ' . BASE_URL . '/eventi/dettaglio/' . $idEvento);
+            exit();
+        }
+
+        //Recuperiamo le carte salvate dell'utente dal DB tramite il pm
+        $carteUtente = FPersistentManager::PMgetObjListOnAttribute(ECartaDiCredito::class, 'utente', $utente);
+
+        //Prepariamo i dati unendo il mapping dell'evento e le informazioni per il checkout
+        $datiPagina = [
+            'vista' => 'checkout',
+            'tipo_checkout' => 'evento',
+            'azione_checkout' => BASE_URL . '/eventi/partecipa',
+            'evento' => $this->mappaEvento($evento),
+            'quota' => $evento instanceof ETorneo || $evento instanceof EChallenge ? $evento->getQuotaIscrizione()->getValore(): 0.0,
+            'carte' => $this->carteToArray($carteUtente),
+        ];
+
+        $datiLayout = $this->preparaDatiLayout('checkout_evento', $datiPagina);
+        ViewCheckout::mostraCheckout($datiLayout);
     }
     
     /**
@@ -84,16 +123,6 @@ class CDettaglioEvento extends BaseController {
         //Gestione del pagamento 
         if ($evento->richiedeQuota()) {
             try {
-                //Recuperiamo i dati della carta inviati dal form
-                $numeroCarta = UHTTPMethods::postString('numero_carta');
-                $cvv = UHTTPMethods::postString('cvv');
-                $titoloCarta = UHTTPMethods::postString('titolare_carta');
-                $scadenzaCarta = UHTTPMethods::postString('scadenza_carta');
-
-                if (empty($numeroCarta) || empty($cvv) || empty($titoloCarta) || empty($dataScadenza)) {
-                    throw new \InvalidArgumentException("Tutti i campi di pagamento sono obbligatori.");
-                }
-
                 $quota = null;
                 if ($evento instanceof ETorneo || $evento instanceof EChallenge) {
                     $quota = $evento->getQuotaIscrizione();
@@ -103,32 +132,32 @@ class CDettaglioEvento extends BaseController {
                     throw new \InvalidArgumentException("Impossibile determinare la quota per questo evento.");
                 }
 
-                //Chiamata all'helper privato per processare la transazione
-                $pagamentoAvvenuto = $this->processaPagamento($utente, $numeroCarta, $cvv, $titoloCarta, $scadenzaCarta, $quota);
+                $bancaService = new BancaMockService();
+
+                //Se arriva solo una nuova carta, 'scelta_carta' sarà forzato a 'nuova' nel form POST
+                $sceltaCarta = UHTTPMethods::postString('scelta_carta') ?? 'nuova';
+                $idCartaSalvata = UHTTPMethods::postInt('id_carta_salvata');
+
+                //Risoluzione centralizzata della carta
+                $carta = $this->risolviCartaPagamento($sceltaCarta, $idCartaSalvata, $utente, $bancaService);
+
+                //Addebito effettivo
+                $pagamentoAvvenuto = $bancaService->effettuaPagamento($carta->getToken(), $quota->getValore());
 
                 if ($pagamentoAvvenuto) {
                     //Aggiorniamo lo stato della partecipazione prima del salvataggio
                     $nuovaPartecipazione->aggiornaPagamento(); //aggiornaPagamento() rifà internamente il controllo richiedeQuota, ma è una ridondanza innocua
+                } else {
+                    throw new \RuntimeException("Si è verificato un errore durante il pagamento.");
                 }
+
             } catch (\Exception $e) {
                 //Se il pagamento fallisce, interrompiamo tutto e mostriamo l'errore della banca
                 UFlashMessage::addMessage('danger', 'Pagamento rifiutato: ' . $e->getMessage());
-                header('Location: ' . BASE_URL . '/eventi/dettaglio/' . $idEvento);
+                header('Location: ' . UHTTPMethods::getReferer(BASE_URL . $this->urlCatalogo($evento)));
                 exit();
             }
         }
-
-        //Salvataggio finale solo se gratuito o se il pagamento è andato a buon fine
-        $salvato = FPersistentManager::PMsaveObj($nuovaPartecipazione);
-
-        if ($salvato) {
-            UFlashMessage::addMessage('success', 'Partecipazione effettuata con successo!');
-        } else {
-            UFlashMessage::addMessage('danger', 'Si è verificato un errore durante la prenotazione. Riprova.');
-        }
-
-        header('Location: ' . BASE_URL . '/eventi/dettaglio/' . $idEvento);
-        exit();
     }
 
     //==========================================================================
@@ -197,24 +226,6 @@ class CDettaglioEvento extends BaseController {
         }
 
         return false;
-    }
-
-    /**
-     * Helper privato per dialogare con la classe BancaMockService in Foundation.
-     */
-    private function processaPagamento(EUtente $utente, string $numeroCarta, string $cvv, string $titolare, string $scadenza, EPrezzo $quota): bool {
-        $bancaService = new BancaMockService();
-
-        //Genera il token monouso
-        $datiToken = $bancaService->generaToken($numeroCarta, $cvv);
-
-        //Costruzione "usa e getta", non salviamo la carta
-        $cartaTemporanea = new ECartaDiCredito ($utente, $titolare, $scadenza, substr(trim($numeroCarta), -4), $datiToken['token']);
-
-        //Se la carta è scaduta o i dati non validi, il costruttore lancia InvalidArgumentException, che viene catturata dal chiamante
-
-        //Addebita l'importo
-        return $bancaService->effettuaPagamento($cartaTemporanea->getToken(), $quota->getValore());
     }
 
     protected function getBreadcrumbs(string $currentPage = ''): array {
