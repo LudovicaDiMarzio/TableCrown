@@ -78,7 +78,8 @@ class RecensioneFixture extends AbstractFixture implements DependentFixtureInter
             if ($faker->boolean(15)) {
                 //Peschiamo una motivazione casuale tra le motivazioni motivazione_0 ... motivazione_3
                 $motivazione= $this->getReference('motivazione_' . $faker->numberBetween(0, 3), EMotivazione::class);
-                $recensione->riceviSegnalazione(new ESegnalazione($motivazione, $recensione));
+                $utenteSegnalante = $this->getReference('utente_' . $faker->numberBetween(0, 19), EUtente::class);
+                $recensione->riceviSegnalazione(new ESegnalazione($motivazione, $recensione, $utenteSegnalante));
             }
 
             // salva riferimento per usarlo in altre fixture

@@ -51,6 +51,8 @@ class EUtente extends EPersona {
     #[ORM\OneToMany(targetEntity: EIndirizzo::class, mappedBy: "utente")]
     private Collection $indirizzi; //elenco di tutti gli indirizzi associati all'utente
 
+    #[ORM\Column(type:"string",length:64,nullable:true)]
+    private?string$rememberToken=null;
         
    
 
@@ -180,6 +182,12 @@ class EUtente extends EPersona {
         }
     }
 
+    public function impostaRememberToken(?string$token):void{
+        $this->rememberToken=$token;
+    }
+
+
+
     //GET methods
  
 
@@ -227,5 +235,9 @@ class EUtente extends EPersona {
 
     public function getIndirizzi(): Collection {
         return $this->indirizzi;
+    }
+
+    public function getRememberToken():?string{
+        return$this->rememberToken;
     }
 }

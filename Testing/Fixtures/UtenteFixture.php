@@ -32,7 +32,7 @@ class UtenteFixture extends AbstractFixture
                 $faker->unique()->safeEmail(),
                 'Password123!',
                 //faker per immagine profilo
-                $faker->numberBetween(18, 90),
+                $faker->dateTimeBetween('-90 years','-18 years'),
                 $faker->randomElement(PlayerLevel::cases()) //PlayerLevel::cases() recupera un array contenente tutti i valori possibili definiti nell'enumerativo PlayerLevel
                 
             );
