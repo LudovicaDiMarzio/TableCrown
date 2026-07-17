@@ -469,4 +469,6 @@ class CProfilo extends BaseController {
         $datiLayout = $this->preparaDatiLayout('profilo_pagamenti', $datiPagina);
         ViewProfiloFactory::render($datiLayout);
     }
+
+    //MANCANO I BREADCRUMBS!!!!!!!
 }
