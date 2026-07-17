@@ -18,11 +18,11 @@
                 <p class="auth-subtitle">Accedi al tuo account TableCrown</p>
             </div>
 
-            <form class="auth-form" action="{$base_url}/accedi" method="post" id="login-form">
+            <form class="auth-form" action="{$base_url}/login" method="post" id="login-form">
 
-                {if isset($redirect_to)}
-                    <input type="hidden" name="redirect_to" value="{$redirect_to|escape}">
-                {/if}
+               
+                <input type="hidden" name="redirect_to" value="{$redirect_to|default:''|escape}">
+                
 
                 <div class="auth-field">
                     <label for="email" class="auth-label">Email</label>

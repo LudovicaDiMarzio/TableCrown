@@ -137,7 +137,7 @@ class CRecensioni extends BaseController {
      * URL: POST /recensioni/segnala
      */
     public function segnalaRecensione(): void {
-        $this->utenteCorrente(); //controllo di sicurezza
+        $utenteSegnalante = $this->utenteCorrente(); //controllo di sicurezza
         $isAjax = UHTTPMethods::isAjax();
 
         try {
@@ -157,7 +157,7 @@ class CRecensioni extends BaseController {
             }
 
             //Istanziamo la segnalazione
-            $segnalazione = new ESegnalazione($motivazione, $recensione);//PROBLEMA: BISGONA AGGIUNGERE L'ATTRIBUTO UTENTE ALL'ENTITY SEGNALAZIONE PER POTER RISALIRE ALL'UTENTE CHE L'HA INVIATA (EVITA SPAMMING DI MALINTENZIONATI)
+            $segnalazione = new ESegnalazione($motivazione, $recensione, $utenteSegnalante);
 
             $salvato = FPersistentManager::PMsaveObj($segnalazione);
 

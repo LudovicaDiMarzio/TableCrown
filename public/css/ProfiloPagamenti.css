@@ -1,0 +1,494 @@
+/* ============================================
+   PROFILO PAGAMENTI — I Miei Metodi di Pagamento
+   ============================================ */
+
+.pagamenti-container {
+    padding: 2.5rem 0 4rem;
+    min-height: 60vh;
+}
+
+/* ── TOPBAR ── */
+.pagamenti-topbar {
+    margin-bottom: 1.25rem;
+}
+
+.pagamenti-back-link {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.4rem;
+    color: var(--color-text-muted);
+    font-size: var(--font-size-md);
+    font-weight: 500;
+    text-decoration: none;
+    transition: color var(--transition);
+}
+
+.pagamenti-back-link:hover {
+    color: var(--color-primary);
+}
+
+/* ── HEADER ── */
+.pagamenti-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    flex-wrap: wrap;
+    gap: 1rem;
+    margin-bottom: 2rem;
+}
+
+.pagamenti-header-text {
+    display: flex;
+    flex-direction: column;
+}
+
+.pagamenti-eyebrow {
+    display: block;
+    font-size: var(--font-size-sm);
+    font-weight: 600;
+    text-transform: uppercase;
+    letter-spacing: 0.06em;
+    color: var(--color-primary);
+    margin-bottom: 0.25rem;
+}
+
+.pagamenti-titolo {
+    display: flex;
+    align-items: center;
+    gap: 0.6rem;
+    font-size: 1.9rem;
+    font-weight: 700;
+    color: #1f2937;
+    margin: 0;
+}
+
+.pagamenti-header-actions {
+    display: flex;
+    align-items: center;
+    gap: 1rem;
+}
+
+.pagamenti-count-badge {
+    display: flex;
+    align-items: baseline;
+    gap: 0.4rem;
+    background: #faf6ef;
+    border: 1px solid var(--color-border-light);
+    border-radius: var(--radius-md);
+    padding: 0.5rem 1rem;
+}
+
+.pagamenti-count-num {
+    font-size: 1.3rem;
+    font-weight: 700;
+    color: var(--color-primary);
+}
+
+.pagamenti-count-label {
+    font-size: var(--font-size-sm);
+    color: var(--color-text-muted);
+}
+
+/* ── BOTTONE CIRCOLARE AGGIUNGI ── */
+.pagamenti-add-btn {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    flex-shrink: 0;
+    width: 3rem;
+    height: 3rem;
+    border-radius: 50%;
+    background: var(--color-primary);
+    color: #fff;
+    border: none;
+    cursor: pointer;
+    font-size: 1.4rem;
+    box-shadow: 0 3px 10px rgba(232, 160, 32, 0.35);
+    transition: background var(--transition), transform var(--transition);
+}
+
+.pagamenti-add-btn:hover {
+    background: var(--color-primary-dark);
+    transform: scale(1.06);
+}
+
+.pagamenti-add-btn i {
+    line-height: 1;
+}
+
+/* ── LISTA CARTE ── */
+.pagamenti-list {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+    align-items: stretch;
+    gap: 1.25rem;
+}
+
+.pagamenti-card {
+    display: flex;
+    flex-direction: column;
+    height: 100%;
+    background: var(--color-bg-dark);
+    border: 1px solid var(--color-border-light);
+    border-radius: var(--radius-md);
+    overflow: hidden;
+    padding: 1.2rem 1.25rem 1.3rem;
+    gap: 0.9rem;
+    transition: box-shadow var(--transition), transform var(--transition), border-color var(--transition);
+}
+
+.pagamenti-card:hover {
+    box-shadow: 0 4px 16px rgba(232, 160, 32, 0.12);
+    border-color: #e8d4ab;
+    transform: translateY(-2px);
+}
+
+.pagamenti-card-predefinito {
+    border-color: var(--color-primary);
+}
+
+/* ── TOP CARD (icona + badge predefinito) ── */
+.pagamenti-card-top {
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-start;
+    gap: 0.5rem;
+    flex-shrink: 0;
+}
+
+.pagamenti-card-icon {
+    font-size: 1.4rem;
+    color: var(--color-primary);
+    line-height: 1;
+}
+
+.pagamenti-predefinito-badge {
+    flex-shrink: 0;
+    display: inline-flex;
+    align-items: center;
+    gap: 0.3rem;
+    padding: 0.25rem 0.6rem;
+    border-radius: var(--radius-sm);
+    font-size: 0.72rem;
+    font-weight: 700;
+    background: rgba(232, 160, 32, 0.16);
+    color: var(--color-primary);
+    white-space: nowrap;
+}
+
+/* ── NUMERO MASCHERATO (stile carta) ── */
+.pagamenti-numero-mascherato {
+    font-family: 'Courier New', Courier, monospace;
+    font-size: 1.15rem;
+    font-weight: 700;
+    letter-spacing: 0.08em;
+    color: #fff;
+}
+
+/* ── LISTA INFO VERTICALE ── */
+.pagamenti-info-list {
+    display: flex;
+    flex-direction: column;
+    gap: 0.5rem;
+    padding-top: 0.7rem;
+    border-top: 1px solid rgba(255, 255, 255, 0.1);
+    flex: 1 1 auto;
+    min-height: 0;
+}
+
+.pagamenti-info-row {
+    display: flex;
+    align-items: flex-start;
+    gap: 0.55rem;
+    font-size: var(--font-size-sm);
+    color: var(--color-text-muted);
+    line-height: 1.35;
+}
+
+.pagamenti-info-row i {
+    flex-shrink: 0;
+    width: 1.1rem;
+    text-align: center;
+    color: var(--color-primary);
+    font-size: 1rem;
+    margin-top: 0.1rem;
+}
+
+.pagamenti-info-value {
+    color: #fff;
+    font-weight: 600;
+}
+
+/* ── AZIONI (sempre ancorate in fondo) ── */
+.pagamenti-actions {
+    display: flex;
+    flex-direction: column;
+    gap: 0.5rem;
+    flex-shrink: 0;
+    margin-top: auto;
+    padding-top: 0.5rem;
+}
+
+.pagamenti-btn-secondary,
+.pagamenti-btn-predefinito,
+.pagamenti-btn-elimina {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    gap: 0.35rem;
+    width: 100%;
+    padding: 0.55rem 0.9rem;
+    border-radius: var(--radius-sm);
+    font-size: var(--font-size-md);
+    font-weight: 600;
+    border: 1px solid var(--color-border-light);
+    cursor: pointer;
+    text-decoration: none;
+    background: transparent;
+    transition: background var(--transition), color var(--transition), border-color var(--transition);
+}
+
+.pagamenti-btn-secondary {
+    color: #fff;
+    border-color: rgba(255, 255, 255, 0.25);
+}
+
+.pagamenti-btn-secondary:hover {
+    border-color: var(--color-primary);
+    color: var(--color-primary);
+}
+
+.pagamenti-btn-predefinito {
+    color: var(--color-primary);
+    border-color: rgba(232, 160, 32, 0.4);
+}
+
+.pagamenti-btn-predefinito:hover {
+    background: var(--color-primary);
+    color: #fff;
+}
+
+.pagamenti-btn-elimina {
+    color: #dc2626;
+    border-color: rgba(220, 38, 38, 0.35);
+}
+
+.pagamenti-btn-elimina:hover {
+    background: #dc2626;
+    color: #fff;
+    border-color: #dc2626;
+}
+
+/* ── STATO VUOTO ── */
+.pagamenti-empty {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    text-align: center;
+    padding: 4rem 1.5rem;
+    background: #faf6ef;
+    border: 1px dashed var(--color-border-light);
+    border-radius: var(--radius-md);
+}
+
+.pagamenti-empty-icon {
+    font-size: 2.5rem;
+    color: var(--color-text-muted);
+    margin-bottom: 1rem;
+}
+
+.pagamenti-empty-titolo {
+    font-size: 1.25rem;
+    font-weight: 700;
+    color: #1f2937;
+    margin: 0 0 0.4rem;
+}
+
+.pagamenti-empty-testo {
+    font-size: var(--font-size-md);
+    color: var(--color-text-muted);
+    max-width: 380px;
+    margin: 0 0 1.5rem;
+}
+
+.pagamenti-empty-btn {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.4rem;
+    padding: 0.65rem 1.2rem;
+    border-radius: var(--radius-sm);
+    background: var(--color-primary);
+    color: #fff;
+    font-weight: 600;
+    border: none;
+    cursor: pointer;
+    transition: background var(--transition);
+}
+
+.pagamenti-empty-btn:hover {
+    background: var(--color-primary-dark);
+}
+
+/* ── POPUP GENERICO (overlay condiviso) ── */
+.pagamenti-popup-overlay {
+    position: fixed;
+    inset: 0;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background: rgba(0, 0, 0, 0.55);
+    z-index: 1000;
+    padding: 1rem;
+}
+
+.pagamenti-popup-overlay[hidden] {
+    display: none;
+}
+
+.pagamenti-popup-box {
+    display: flex;
+    flex-direction: column;
+    background: #fff;
+    border: 1px solid var(--color-border-light);
+    border-radius: var(--radius-md);
+    padding: 1.75rem;
+    max-width: 460px;
+    width: 100%;
+    max-height: 90vh;
+    overflow-y: auto;
+}
+
+/* ── POPUP CONFERMA (eliminazione) ── */
+.pagamenti-popup-box-confirm {
+    align-items: center;
+    text-align: center;
+    max-width: 360px;
+}
+
+.pagamenti-popup-icon {
+    font-size: 2rem;
+    color: #d97706;
+    margin-bottom: 0.75rem;
+}
+
+.pagamenti-popup-message {
+    font-size: var(--font-size-lg);
+    color: #1f2937;
+    margin: 0 0 1.5rem;
+}
+
+.pagamenti-popup-actions {
+    display: flex;
+    gap: 0.75rem;
+    width: 100%;
+}
+
+.pagamenti-popup-actions .pagamenti-form-btn-secondary,
+.pagamenti-popup-actions .pagamenti-form-btn-primary {
+    flex: 1;
+}
+
+/* ── POPUP FORM (aggiungi) ── */
+.pagamenti-form-titolo {
+    font-size: 1.2rem;
+    font-weight: 700;
+    color: #1f2937;
+    margin: 0 0 1.25rem;
+}
+
+.pagamenti-form-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 1rem;
+    margin-bottom: 1.5rem;
+}
+
+.pagamenti-form-field {
+    display: flex;
+    flex-direction: column;
+    gap: 0.35rem;
+}
+
+.pagamenti-form-field-full {
+    grid-column: 1 / -1;
+}
+
+.pagamenti-form-label {
+    font-size: var(--font-size-sm);
+    font-weight: 600;
+    color: #1f2937;
+}
+
+.pagamenti-form-input {
+    padding: 0.6rem 0.75rem;
+    border: 1px solid var(--color-border-light);
+    border-radius: var(--radius-sm);
+    font-size: var(--font-size-md);
+    font-family: inherit;
+    color: #1f2937;
+    background: #fff;
+    transition: border-color var(--transition);
+}
+
+.pagamenti-form-input:focus {
+    outline: none;
+    border-color: var(--color-primary);
+}
+
+.pagamenti-form-error {
+    font-size: 0.78rem;
+    color: #dc2626;
+    min-height: 1rem;
+}
+
+.pagamenti-form-actions {
+    display: flex;
+    gap: 0.75rem;
+}
+
+.pagamenti-form-btn-secondary,
+.pagamenti-form-btn-primary {
+    flex: 1;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    gap: 0.35rem;
+    padding: 0.65rem 1rem;
+    border-radius: var(--radius-sm);
+    font-size: var(--font-size-md);
+    font-weight: 600;
+    cursor: pointer;
+    border: 1px solid var(--color-border-light);
+    background: transparent;
+    color: #1f2937;
+    transition: background var(--transition), color var(--transition), border-color var(--transition);
+}
+
+.pagamenti-form-btn-secondary:hover {
+    border-color: var(--color-text-muted);
+}
+
+.pagamenti-form-btn-primary {
+    background: var(--color-primary);
+    color: #fff;
+    border-color: var(--color-primary);
+}
+
+.pagamenti-form-btn-primary:hover {
+    background: var(--color-primary-dark);
+}
+
+/* ── RESPONSIVE ── */
+@media (max-width: 640px) {
+    .pagamenti-titolo {
+        font-size: 1.5rem;
+    }
+
+    .pagamenti-list {
+        grid-template-columns: 1fr;
+    }
+
+    .pagamenti-form-grid {
+        grid-template-columns: 1fr;
+    }
+}

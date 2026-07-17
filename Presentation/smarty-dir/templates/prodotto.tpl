@@ -9,14 +9,7 @@
 <div class="prodotto-container">
     <div class="container">
 
-        {* ── BREADCRUMB ── *}
-        <nav class="prodotto-breadcrumb" aria-label="Breadcrumb">
-            <ul class="breadcrumb-list">
-                <li><a href="{$base_url}/">Home</a></li>
-                <li><a href="{$base_url}/catalogo">Catalogo</a></li>
-                <li class="is-active"><span>{$nomeProdotto|escape}</span></li>
-            </ul>
-        </nav>
+    
 
         {* ── SEZIONE PRINCIPALE: GALLERY + INFO + ACQUISTO ── *}
         <div class="prodotto-top">
@@ -25,8 +18,8 @@
             <div class="prodotto-gallery">
                 <div class="gallery-main-wrapper">
                     <div class="gallery-main" id="gallery-main">
-                        <img src="{$base_url}/img/prodotti/{$imgProdotto|escape}"
-                             alt="{$nomeProdotto|escape}"
+                        <img src="{$base_url}/img/prodotti/{$immagine|escape}"
+                             alt="{$nome|escape}"
                              class="gallery-main-img is-active"
                              data-index="0">
                     </div>
@@ -37,32 +30,32 @@
             <div class="prodotto-info">
 
                 {* Badge disponibilità *}
-                {if $disponibilitaProdotto == 'esaurito'}
+                {if $disponibilita == 'esaurito'}
                     <span class="prodotto-badge prodotto-badge-esaurito">Esaurito</span>
-                {elseif $disponibilitaProdotto == 'annunciato'}
+                {elseif $disponibilita == 'annunciato'}
                     <span class="prodotto-badge prodotto-badge-annunciato">Annunciato</span>
-                {elseif $disponibilitaProdotto == 'non disponibile'}
+                {elseif $disponibilita == 'non disponibile'}
                     <span class="prodotto-badge prodotto-badge-non-disponibile">Non disponibile</span>
-                {elseif $disponibilitaProdotto == 'in arrivo'}
+                {elseif $disponibilita == 'in arrivo'}
                     <span class="prodotto-badge prodotto-badge-in-arrivo">In arrivo</span>
                 {else}
                     <span class="prodotto-badge prodotto-badge-disponibile">Disponibile</span>
                 {/if}
 
-                <h1 class="prodotto-nome">{$nomeProdotto|escape}</h1>
+                <h1 class="prodotto-nome">{$nome|escape}</h1>
 
                 {* Rating *}
                 <div class="prodotto-rating">
                     {foreach [1,2,3,4,5] as $s}
-                        {if $s <= $valutazioneMedia}
+                        {if $s <= $valutazione_media}
                             <i class="ti ti-star-filled"></i>
-                        {elseif ($s - $valutazioneMedia) < 1}
+                        {elseif ($s - $valutazione_media) < 1}
                             <i class="ti ti-star-half-filled"></i>
                         {else}
                             <i class="ti ti-star"></i>
                         {/if}
                     {/foreach}
-                    <span class="prodotto-rating-value">({$valutazioneMedia|number_format:1})</span>
+                    <span class="prodotto-rating-value">({$valutazione_media|number_format:1})</span>
                     <a href="#recensioni" class="prodotto-rating-link">Leggi Recensioni</a>
                 </div>
 
@@ -102,7 +95,11 @@
 
                 {* Prezzo *}
                 <div class="prodotto-prezzo-wrapper">
-                    {if isset($prezzo)}
+                    {if $sconto}
+                        <span class="prodotto-prezzo">€{$prezzo_scontato|number_format:2}</span>
+                        <span class="prodotto-prezzo-old">€{$prezzo|number_format:2}</span>
+                        <span class="prodotto-sconto-badge">-{$percentuale_sconto|string_format:"%.0f"}%</span>
+                    {elseif isset($prezzo)}
                         <span class="prodotto-prezzo">€{$prezzo|number_format:2}</span>
                     {else}
                         <span class="prodotto-prezzo-nd">Prezzo N/D</span>
@@ -116,16 +113,16 @@
 
                 {* Disponibilità visiva *}
                 <div class="acquisto-disponibilita">
-                    {if $disponibilitaProdotto == 'disponibile'}
+                    {if $disponibilita == 'disponibile'}
                         <i class="ti ti-circle-check"></i>
                         <span>Disponibile</span>
-                    {elseif $disponibilitaProdotto == 'esaurito'}
+                    {elseif $disponibilita == 'esaurito'}
                         <i class="ti ti-circle-x"></i>
                         <span>Esaurito</span>
-                    {elseif $disponibilitaProdotto == 'non disponibile'}
+                    {elseif $disponibilita == 'non disponibile'}
                         <i class="ti ti-circle-x"></i>
                         <span>Non disponibile</span>
-                    {elseif $disponibilitaProdotto == 'in arrivo'}
+                    {elseif $disponibilita == 'in arrivo'}
                         <i class="ti ti-clock"></i>
                         <span>In arrivo</span>
                     {else}
@@ -158,18 +155,18 @@
                 {if isset($prezzo)}
                     <div class="acquisto-prezzo-tot">
                         <span class="prezzo-tot-label">Totale:</span>
-                        <span class="prezzo-tot-value" id="prezzo-tot" data-unit="{$prezzo}">
-                            €{$prezzo|number_format:2}
+                        <span class="prezzo-tot-value" id="prezzo-tot" data-unit="{if $sconto}{$prezzo_scontato}{else}{$prezzo}{/if}">
+                            €{if $sconto}{$prezzo_scontato|number_format:2}{else}{$prezzo|number_format:2}{/if}
                         </span>
                     </div>
                 {/if}
 
                 {* Bottone Aggiungi al Carrello *}
-                {if $disponibilitaProdotto == 'disponibile'}
-                    <a href="{$base_url}/carrello/aggiungi/{$idProdotto}"
+                {if $disponibilita == 'disponibile'}
+                    <a href="{$base_url}/carrello/aggiungi/{$id}"
                        class="button btn-add-cart-prodotto"
                        id="btn-add-cart"
-                       data-id="{$idProdotto}"
+                       data-id="{$id}"
                        aria-label="Aggiungi al carrello">
                         <i class="ti ti-shopping-cart"></i> Aggiungi al Carrello
                     </a>
@@ -180,10 +177,10 @@
                 {/if}
 
                 {* Wishlist *}
-                <button class="btn-wishlist" id="btn-wishlist" type="button"
-                        data-url="{$base_url}/wishlist/aggiungi/{$idProdotto}"
+                <button class="btn-wishlist{if isset($isInWishlist) && $isInWishlist} is-active{/if}" id="btn-wishlist" type="button"
+                        data-id="{$id}"
                         aria-label="Aggiungi alla wishlist">
-                    <i class="ti ti-heart" id="wishlist-icon"></i> Wishlist
+                    <i class="ti {if isset($isInWishlist) && $isInWishlist}ti-heart-filled{else}ti-heart{/if}" id="wishlist-icon"></i> Wishlist
                 </button>
 
             </div>
@@ -283,26 +280,21 @@
                         </button>
 
                         <div class="recensione-form" id="recensione-form" style="display:none;">
-                            <form action="{$base_url}/recensione/aggiungi/{$idProdotto}" method="post">
-
-                                <div class="form-group">
-                                    <label class="form-label" for="rec-titolo">Titolo</label>
-                                    <input type="text"
-                                           id="rec-titolo"
-                                           name="titolo"
-                                           class="input"
-                                           placeholder="Titolo della recensione"
-                                           required>
-                                </div>
+                            {* Rotta corretta secondo il FrontController: /recensioni/aggiungi (plurale) *}
+                            <form action="{$base_url}/recensioni/aggiungi" method="post">
+                                <input type="hidden" name="id_prodotto" value="{$id}">
 
                                 <div class="form-group">
                                     <label class="form-label">Valutazione</label>
                                     <div class="star-picker" id="star-picker" role="group" aria-label="Scegli valutazione">
                                         {foreach [1,2,3,4,5] as $s}
-                                            <i class="ti ti-star star-pick" data-value="{$s}" aria-label="{$s} stelle"></i>
+                                            <i class="ti ti-star star-pick{if $s == 1} is-selected{/if}" data-value="{$s}" aria-label="{$s} stelle"></i>
                                         {/foreach}
                                     </div>
-                                    <input type="hidden" name="voto" id="rec-voto" value="0">
+                                    <button type="button" class="button-link btn-reset-voto" id="btn-reset-voto">
+                                        Voto minimo (1 stella)
+                                    </button>
+                                    <input type="hidden" name="valutazione" id="rec-voto" value="1">
                                 </div>
 
                                 <div class="form-group">
@@ -346,10 +338,10 @@
                             <div class="recensione-header">
                                 <span class="recensione-nickname">
                                     <i class="ti ti-user"></i>
-                                    {$rec.nickname|escape}
+                                    {$rec.utente|escape}
                                 </span>
                                 <div class="recensione-stars">
-                                    {assign var="voto" value=$rec.voto}
+                                    {assign var="voto" value=$rec.valutazione}
                                     {foreach [1,2,3,4,5] as $s}
                                         {if $s <= $voto}
                                             <i class="ti ti-star-filled"></i>
@@ -359,8 +351,56 @@
                                     {/foreach}
                                 </div>
                             </div>
-                            <p class="recensione-titolo">{$rec.titolo|escape}</p>
                             <p class="recensione-testo">{$rec.testo|escape|nl2br}</p>
+
+                            {if isset($utente) && $utente}
+                                <div class="recensione-azioni">
+                                    {if $rec.utente == $utente.name}
+                                        {* Confronto per nickname: recensioneToArray() non espone l'id autore.
+                                           Da irrobustire con t1 se i nickname non sono garantiti univoci. *}
+                                        <form action="{$base_url}/recensioni/elimina"
+                                              method="post"
+                                              class="form-elimina-recensione"
+                                              data-confirm="Eliminare questa recensione?">
+                                            <input type="hidden" name="id_recensione" value="{$rec.id}">
+                                            <button type="submit" class="button-link btn-elimina-recensione">
+                                                <i class="ti ti-trash"></i> Elimina
+                                            </button>
+                                        </form>
+                                    {elseif isset($motivazioni) && $motivazioni|@count > 0}
+                                        <button type="button"
+                                                class="button-link btn-segnala-recensione"
+                                                data-target="segnala-form-{$rec.id}">
+                                            <i class="ti ti-flag"></i> Segnala
+                                        </button>
+
+                                        <div class="segnala-form" id="segnala-form-{$rec.id}" style="display:none;">
+                                            <form action="{$base_url}/recensioni/segnala" method="post">
+                                                <input type="hidden" name="id_recensione" value="{$rec.id}">
+                                                <div class="form-group">
+                                                    <label class="form-label" for="motivazione-{$rec.id}">Motivo della segnalazione</label>
+                                                    <select id="motivazione-{$rec.id}" name="id_motivazione" class="input" required>
+                                                        <option value="" disabled selected>Seleziona un motivo</option>
+                                                        {foreach $motivazioni as $motivo}
+                                                            <option value="{$motivo.id}">{$motivo.label|escape}</option>
+                                                        {/foreach}
+                                                    </select>
+                                                </div>
+                                                <div class="form-actions">
+                                                    <button type="submit" class="button btn-invia-segnalazione">
+                                                        <i class="ti ti-send"></i> Invia segnalazione
+                                                    </button>
+                                                    <button type="button"
+                                                            class="button btn-annulla-segnalazione"
+                                                            data-target="segnala-form-{$rec.id}">
+                                                        Annulla
+                                                    </button>
+                                                </div>
+                                            </form>
+                                        </div>
+                                    {/if}
+                                </div>
+                            {/if}
                         </div>
                     {/foreach}
                 </div>
@@ -383,13 +423,15 @@
         <h3 class="minicart-success-title">Prodotto aggiunto al carrello!</h3>
 
         <div class="minicart-product">
-            <img src="{$base_url}/img/prodotti/{$imgProdotto|escape}"
-                 alt="{$nomeProdotto|escape}"
+            <img src="{$base_url}/img/prodotti/{$immagine|escape}"
+                 alt="{$nome|escape}"
                  class="minicart-img">
             <div class="minicart-info">
-                <p class="minicart-nome">{$nomeProdotto|escape}</p>
+                <p class="minicart-nome">{$nome|escape}</p>
                 <p class="minicart-prezzo">
-                    {if isset($prezzo)}
+                    {if $sconto}
+                        €{$prezzo_scontato|number_format:2}
+                    {elseif isset($prezzo)}
                         €{$prezzo|number_format:2}
                     {/if}
                 </p>
@@ -410,8 +452,14 @@
 {/block}
 
 {block name="extra_js"}
+{* Variabili ed endpoint globali: iniettati fuori da {literal} perché Smarty
+   non valuta variabili al suo interno. *}
 <script>
 var utenteLoggato = {if isset($utente)}true{else}false{/if};
+var wishlistInizialmenteAttiva = {if isset($isInWishlist) && $isInWishlist}true{else}false{/if};
+var CARRELLO_AGGIUNGI_URL = "{$base_url}/carrello/aggiungi";
+var WISHLIST_AGGIUNGI_URL = "{$base_url}/wishlist/aggiungi";
+var WISHLIST_RIMUOVI_URL = "{$base_url}/wishlist/rimuovi";
 </script>
 <script>
 {literal}
@@ -425,6 +473,21 @@ var utenteLoggato = {if isset($utente)}true{else}false{/if};
             var btn = document.getElementById('close-login-modal-nav');
             if (btn) btn.focus();
         }
+    }
+
+    // ── TOAST NOTIFICHE ──
+    function mostraToast(messaggio, tipo) {
+        var toast = document.createElement('div');
+        toast.textContent = messaggio;
+        toast.style.cssText = [
+            'position:fixed', 'bottom:1.5rem', 'right:1.5rem',
+            'padding:.75rem 1.25rem', 'border-radius:6px',
+            'color:#fff', 'font-size:.9rem', 'z-index:9999',
+            'box-shadow:0 2px 8px rgba(0,0,0,.25)',
+            'background:' + (tipo === 'errore' ? '#c0392b' : '#27ae60')
+        ].join(';');
+        document.body.appendChild(toast);
+        setTimeout(function() { toast.remove(); }, 4000);
     }
 
     // ── STEPPER QUANTITÀ + PREZZO TOTALE ──
@@ -481,33 +544,47 @@ var utenteLoggato = {if isset($utente)}true{else}false{/if};
     }
 
     function aggiungiAlCarrello(idProdotto, quantita, callback) {
-        fetch('/carrello/aggiungi', {
+        var controller = new AbortController();
+        var timeout = setTimeout(function() { controller.abort(); }, 5000);
+
+        fetch(CARRELLO_AGGIUNGI_URL, {
             method: 'POST',
             headers: {
                 'Content-Type': 'application/x-www-form-urlencoded',
                 'X-Requested-With': 'XMLHttpRequest'
             },
-            body: 'id_prodotto=' + idProdotto + '&quantita=' + quantita
+            body: 'id_prodotto=' + encodeURIComponent(idProdotto) + '&quantita=' + encodeURIComponent(quantita),
+            signal: controller.signal
         })
         .then(function(res) {
-            if (!res.ok) throw new Error('Errore HTTP: ' + res.status);
+            clearTimeout(timeout);
+            if (res.status === 401) {
+                richiedeLogin();
+                throw new Error('auth');
+            }
+            if (!res.ok) throw new Error('server');
             return res.json();
         })
         .then(function(data) {
-            if (data.success) {
-                apriMinicart();
-                var cartBadge = document.getElementById('cart-count');
-                if (cartBadge && data.cart_count !== undefined) {
-                    cartBadge.textContent = data.cart_count;
-                    cartBadge.style.display = data.cart_count > 0 ? 'inline' : 'none';
-                }
-                if (callback) callback(data);
-            } else {
-                console.error('Errore carrello:', data.messaggio);
+            if (data.success === false) {
+                mostraToast(data.message || 'Errore nell\'aggiunta del prodotto.', 'errore');
+                return;
             }
+            apriMinicart();
+            var cartBadge = document.getElementById('cart-count');
+            if (cartBadge && data.cart_count !== undefined) {
+                cartBadge.textContent = data.cart_count;
+                cartBadge.style.display = data.cart_count > 0 ? 'inline' : 'none';
+            }
+            if (callback) callback(data);
         })
         .catch(function(err) {
-            console.error('Fetch carrello fallita:', err);
+            clearTimeout(timeout);
+            if (err.message === 'auth') return; // già gestito sopra
+            var msg = err.name === 'AbortError'
+                ? 'Connessione lenta, prodotto non aggiunto.'
+                : 'Errore nell\'aggiunta del prodotto.';
+            mostraToast(msg, 'errore');
         });
     }
 
@@ -606,14 +683,50 @@ var utenteLoggato = {if isset($utente)}true{else}false{/if};
     var starPicker = document.getElementById('star-picker');
     if (starPicker) {
         starPicker.addEventListener('mouseleave', function() {
-            aggiornaStelle(parseInt(votoInput ? votoInput.value : 0) || 0);
+            aggiornaStelle(parseInt(votoInput ? votoInput.value : 1) || 1);
         });
     }
+
+    var btnResetVoto = document.getElementById('btn-reset-voto');
+    if (btnResetVoto) {
+        btnResetVoto.addEventListener('click', function(e) {
+            e.preventDefault();
+            if (votoInput) votoInput.value = 1;
+            aggiornaStelle(1);
+        });
+    }
+
+    // ── TOGGLE FORM SEGNALAZIONE (delegato, ce n'è uno per recensione) ──
+    document.querySelectorAll('.btn-segnala-recensione, .btn-annulla-segnalazione').forEach(function(btn) {
+        btn.addEventListener('click', function(e) {
+            e.preventDefault();
+            var target = document.getElementById(this.dataset.target);
+            if (!target) return;
+            target.style.display = target.style.display === 'block' ? 'none' : 'block';
+        });
+    });
+
+    // ── CONFERMA ELIMINAZIONE RECENSIONE ──
+    document.querySelectorAll('.form-elimina-recensione').forEach(function(form) {
+        form.addEventListener('submit', function(e) {
+            var msg = this.dataset.confirm || 'Confermi l\'eliminazione?';
+            if (!window.confirm(msg)) {
+                e.preventDefault();
+            }
+        });
+    });
 
     // ── WISHLIST ──
     var btnWishlist  = document.getElementById('btn-wishlist');
     var wishlistIcon = document.getElementById('wishlist-icon');
-    var inWishlist   = false;
+    var idProdottoWishlist = btnWishlist ? btnWishlist.dataset.id : null;
+    var inWishlist = wishlistInizialmenteAttiva;
+
+    function impostaIconaWishlist(stato) {
+        wishlistIcon.classList.toggle('ti-heart',        !stato);
+        wishlistIcon.classList.toggle('ti-heart-filled',  stato);
+        btnWishlist.classList.toggle('is-active',          stato);
+    }
 
     if (btnWishlist) {
         btnWishlist.addEventListener('click', function() {
@@ -622,33 +735,50 @@ var utenteLoggato = {if isset($utente)}true{else}false{/if};
                 return;
             }
 
-            inWishlist = !inWishlist;
-            wishlistIcon.classList.toggle('ti-heart',        !inWishlist);
-            wishlistIcon.classList.toggle('ti-heart-filled',  inWishlist);
-            btnWishlist.classList.toggle('is-active',          inWishlist);
+            var statoPrecedente = inWishlist;
+            var url = inWishlist ? WISHLIST_RIMUOVI_URL : WISHLIST_AGGIUNGI_URL;
 
-            fetch('/wishlist/aggiungi', {
+            inWishlist = !inWishlist;
+            impostaIconaWishlist(inWishlist);
+
+            var controller = new AbortController();
+            var timeout = setTimeout(function() { controller.abort(); }, 5000);
+
+            fetch(url, {
                 method: 'POST',
                 headers: {
                     'Content-Type': 'application/x-www-form-urlencoded',
                     'X-Requested-With': 'XMLHttpRequest'
                 },
-                body: 'id_prodotto=' + idProdotto
+                body: 'id_prodotto=' + encodeURIComponent(idProdottoWishlist),
+                signal: controller.signal
             })
             .then(function(res) {
-                if (!res.ok) throw new Error('Errore HTTP: ' + res.status);
+                clearTimeout(timeout);
+                if (res.status === 401) {
+                    richiedeLogin();
+                    throw new Error('auth');
+                }
+                if (!res.ok) throw new Error('server');
                 return res.json();
             })
             .then(function(data) {
                 if (!data.success) {
-                    inWishlist = !inWishlist;
-                    wishlistIcon.classList.toggle('ti-heart',        !inWishlist);
-                    wishlistIcon.classList.toggle('ti-heart-filled',  inWishlist);
-                    btnWishlist.classList.toggle('is-active',          inWishlist);
-                    console.error('Errore wishlist:', data.messaggio);
+                    inWishlist = statoPrecedente;
+                    impostaIconaWishlist(inWishlist);
+                    mostraToast(data.message || 'Errore nella wishlist.', 'errore');
                 }
             })
-            .catch(function(err) { console.error('Fetch wishlist fallita:', err); });
+            .catch(function(err) {
+                clearTimeout(timeout);
+                inWishlist = statoPrecedente;
+                impostaIconaWishlist(inWishlist);
+                if (err.message === 'auth') return; // già gestito sopra
+                var msg = err.name === 'AbortError'
+                    ? 'Connessione lenta, wishlist non aggiornata.'
+                    : 'Errore nella wishlist.';
+                mostraToast(msg, 'errore');
+            });
         });
     }
 

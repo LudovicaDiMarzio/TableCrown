@@ -97,6 +97,7 @@ class CEventi extends BaseController {
 
         $query = trim($query);
 
+        //TODO: serve il metodo nel pm
         $eventiTrovati = FPersistentManager::PMricercaEventi($query);
 
         $this->renderListaEventi('ricerca', $eventiTrovati, null, $query); 
@@ -161,30 +162,6 @@ class CEventi extends BaseController {
 
 
 //DA CANCELLARE TUTTO QUELLO CHE SEGUE
-    
-    /**
-     * URL: /eventi/dettaglio?id=X (Accesso libero)
-     */
-    public function mostraDettaglioEvento(): void {
-        //Recuperiamo l'ID dell'evento da visualizzare
-        $idEvento = UHTTPMethods::get('id');
-        if (!$idEvento) {
-            header('Location: /eventi');
-            exit();
-        }
-
-        $evento = null;
-        //QUANDO SARÀ PRONTO FOUNDATION:
-        //$evento = FPersistentManager::visualizza(EEvento::class, 'idEvento', $idEvento);
-
-        $datiLayout = $this->preparaDatiLayout('eventi', ['evento' => $evento]);
-        //QUANDO SARÀ PRONTO PRESENTATION:
-        //VEventi::mostraDettaglioEvento($datiLayout);
-        echo "Pagina pubblica: Dettaglio evento" . $idEvento;
-    }
-
-    
-
     
     //==========================================================================
     // AREA GESTORE

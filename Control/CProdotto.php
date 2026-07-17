@@ -7,6 +7,8 @@ use TableCrown\Entity\EProdotto;
 use TableCrown\Entity\EGiocoDaTavolo;
 use TableCrown\Entity\EBustine;
 use TableCrown\Entity\EPortaDadi;
+use TableCrown\Entity\EMotivazione;
+use TableCrown\Entity\EWishlist;
 use TableCrown\Foundation\FPersistentManager;
 use TableCrown\Presentation\Views\ViewProdotto;
 
@@ -57,6 +59,8 @@ class CProdotto extends BaseController {
             'recensioni' => $this->recensioniToArray($prodotto->getRecensioni()),
             'correlati' => $this->prodottiCorrelati([$prodotto->getIdProdotto()]),
             'userHasPurchased' => $this->haAcquistatoProdotto($prodotto->getIdProdotto()),
+            'isInWishlist' => $this->isProdottoInWishlist($prodotto->getIdProdotto()),
+            'motivazioni' => $this->motivazioniToArray(FPersistentManager::PMgetAll(EMotivazione::class)),
         ]);
        
         //Attributi specifici dei giochi da tavolo
@@ -92,9 +96,11 @@ class CProdotto extends BaseController {
      * Verifica se l'utente loggato ha gia acquistato questo prodotto.
      */
     private function haAcquistatoProdotto(int $idProdotto): bool {
-        if (!$this->isLoggedIn()) {
+        $utente = $this->utenteCorrenteOpzionale();
+        if (!$utente) {
             return false;
         }
+
         //TODO: 
         //$idUtente = USession::getSessionElement('id_persona');
         //if (!$idUtente) {
@@ -102,6 +108,30 @@ class CProdotto extends BaseController {
         //}
         //FPersistentManager::PMuserHasPurchased($idUtente, $idProdotto);
         return false; //DA TOGLIERE QUANDO DISPONIBILE IL METODO DEL PM
+    }
+
+    /**
+     * Verifica se il prodotto è già presente nella wishlist dell'utente loggato.
+     */
+    private function isProdottoInWishlist(int $idProdotto): bool {
+        $utente = $this->utenteCorrenteOpzionale();
+        if (!$utente) {
+            return false;
+        }
+
+        $wishlist = FPersistentManager::PMgetObjOnAttribute(EWishlist::class, 'utente', $utente);
+
+        if (!$wishlist) {
+            return false;
+        }
+
+        foreach ($wishlist->getProdotti() as $prodotto) {
+            if ($prodotto->getIdProdotto() === $idProdotto) {
+                return true;
+            }
+        }
+
+        return false;
     }
 
     protected function getBreadcrumbs(string $currentPage = ''): array {

@@ -24,14 +24,7 @@ class ViewProfiloHub extends ViewProfiloBase {
         // 'menuVoci' è statico lato Presentation: non dipende dal Control.
         // Se preferite generarlo lato Control (es. per permessi dinamici),
         // sostituite questa riga con: $smarty->assign('menuVoci', $dati['menuVoci']);
-        $smarty->assign('menuVoci', [
-            ['label' => 'Modifica Account', 'url' => '/account/modifica'],
-            ['label' => 'I Miei Ordini',     'url' => '/account/ordini'],
-            ['label' => 'Le Mie Recensioni', 'url' => '/account/recensioni'],
-            ['label' => 'Wishlist',          'url' => '/account/wishlist'],
-            ['label' => 'Eventi',            'url' => '/account/eventi'],
-            ['label' => 'I Miei Indirizzi',  'url' => '/account/indirizzi'],
-        ]);
+        $smarty->assign('menuVoci', $dati['menuVoci'] ?? []);
 
         $smarty->display('ProfiloHub.tpl');
     }

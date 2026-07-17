@@ -179,7 +179,7 @@ class CAutenticazione extends BaseController {
             $email = UHTTPMethods::postString('email');
             $password = UHTTPMethods::postString('password');
             $confermaPassword = UHTTPMethods::postString('conferma_password');
-            $eta = (int) UHTTPMethods::postInt('eta');
+            $dataNascita = UHTTPMethods::postString('data_nascita');
         } catch (\InvalidArgumentException $e) {
             UFlashMessage::addMessage('danger', $e->getMessage());
             header('Location: /registrati');
@@ -187,7 +187,7 @@ class CAutenticazione extends BaseController {
         }
          
         //Controllo di validità dei campi obbligatori
-        if (!$nome || !$email || !$password || !$confermaPassword || !$eta) { 
+        if (!$nome || !$email || !$password || !$confermaPassword || !$dataNascita) {
             //Se manca uno dei tre, impostiamo un messaggio di errore rapido
             UFlashMessage::addMessage('danger', 'Tutti i campi sono obbligatori.');
             //Pattern PRG: ricarichiamo la pagina del form per mostrare l'errore in sicurezza
@@ -212,10 +212,16 @@ class CAutenticazione extends BaseController {
         }
 
         try {
-            //Il costruttore di EUtente valida internamente nome, email, password e età e
+            try {
+                $dataObj = new \DateTime($dataNascita);
+            } catch (\Exception $e) {
+                throw new InvalidArgumentException("La data di nascita non è valida.");
+            }
+
+            //Il costruttore di EUtente valida internamente nome, email, password e data di nascita e
             //lancia InvalidArgumentException se qualcosa non va; qui la intercettiamo
             //per mostrare un messaggio leggibile invece di un errore fatale.
-            $nuovoUtente = new EUtente($nome, $email, $password, $eta); //la password viene criptata nell'entity
+            $nuovoUtente = new EUtente($nome, $email, $password, $dataObj); //la password viene criptata nell'entity
         } catch (InvalidArgumentException $e) {
             //Se l'utente non ha completato i campi obbligatori, mostriamo un messaggio di errore
             UFlashMessage::addMessage('danger', $e->getMessage());
