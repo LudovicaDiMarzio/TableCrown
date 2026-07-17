@@ -19,29 +19,6 @@
   font-size: 13px;
 }
 
-.segn__filtro {
-  display: flex;
-  align-items: center;
-  gap: 8px;
-}
-
-.segn__filtro-label {
-  font-size: 13px;
-  font-weight: 600;
-  color: var(--admin-muted, #6b6f85);
-}
-
-.segn__filtro-select {
-  font-size: 13px;
-  font-weight: 600;
-  padding: 8px 12px;
-  border-radius: 8px;
-  border: 1px solid var(--admin-border, #e6e7ee);
-  background: #fff;
-  color: var(--admin-text, #1c1d2b);
-  cursor: pointer;
-}
-
 .recensioni-list {
   display: flex;
   flex-direction: column;
@@ -82,6 +59,7 @@
   font-size: 13px;
   font-weight: 500;
   color: #3a3d4d;
+  text-transform: capitalize;
 }
 
 .recensione-card__badges {
@@ -101,13 +79,6 @@
   white-space: nowrap;
 }
 
-.recensione-card__testo {
-  margin: 0;
-  font-size: 14px;
-  line-height: 1.5;
-  color: var(--admin-text, #1c1d2b);
-}
-
 .recensione-card__footer {
   display: flex;
   justify-content: flex-end;
@@ -115,38 +86,14 @@
   gap: 10px;
   border-top: 1px solid var(--admin-border, #e6e7ee);
   padding-top: 12px;
+  flex-wrap: wrap;
 }
 
 .recensione-card__form-elimina {
   margin: 0;
 }
 
-/* Badge gravità (coerenti con home_a.css) */
-.badge {
-  font-size: 13px;
-  font-weight: 700;
-  padding: 5px 14px;
-  border-radius: 999px;
-  text-transform: capitalize;
-  flex-shrink: 0;
-}
-
-.badge--alta {
-  background: #fde3e9;
-  color: #e0355b;
-}
-
-.badge--media {
-  background: #fdead3;
-  color: #c98a1f;
-}
-
-.badge--bassa {
-  background: #e2f6ea;
-  color: #1fa971;
-}
-
-/* Buttons (coerenti con home_a.css) */
+/* Buttons (coerenti con segnalazioni_a.css) */
 .btn {
   font-size: 13px;
   font-weight: 600;
@@ -164,33 +111,21 @@
   background: #fff;
 }
 
-.btn--neutral {
-  border: 1px solid var(--admin-border, #ffb700);
-  color: var(--admin-muted, #ffb700);
-  background: #fff;
-}
-
-.btn--neutral:hover {
-  background: #ffb700;
-  color: var(--admin-text, #ffb700);
-}
-
 .btn--outline:hover {
   background: #6c4bf4;
   color: #fff;
 }
 
-.btn--neutral {
-  border: 1px solid var(--admin-border, #e6e7ee);
-  color: var(--admin-muted, #6b6f85);
-  background: #fff;
+.btn--warning {
+  border: 1px solid #c98a1f;
+  color: #fff;
+  background: #e2a13a;
 }
 
-.btn--neutral:hover {
-  background: #eef0f6;
-  color: var(--admin-text, #1c1d2b);
+.btn--warning:hover {
+  background: #c98a1f;
+  border-color: #c98a1f;
 }
-
 
 .btn--danger {
   border: 1px solid #e0355b;

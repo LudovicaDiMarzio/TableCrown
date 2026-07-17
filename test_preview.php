@@ -92,16 +92,92 @@ $recensioniMock = [
     ],
 ];
 
-// Dati globali richiesti dal layout_admin.tpl (vedi commento in cima al file)
-$smarty->assign('base_url', '');
-$smarty->assign('current_page', 'admin_lista_recensioni');
-$smarty->assign('breadcrumbs', []);
-$smarty->assign('utente', null);
-$smarty->assign('admin', [
-    'nome' => 'Admin Test',
-    'ruolo' => 'Amministratore',
-    'avatarUrl' => null,
-]);
+
+$utentiMock = [
+    [
+        'id' => 12,
+        'nome' => 'Luca Verdi',
+        'stato' => 'attivo',
+        'numeroSegnalazioni' => 4,
+    ],
+    [
+        'id' => 15,
+        'nome' => 'Anna Neri',
+        'stato' => 'sospeso',
+        'numeroSegnalazioni' => 2,
+    ],
+    [
+        'id' => 9,
+        'nome' => 'Giulia Rossi',
+        'stato' => 'attivo',
+        'numeroSegnalazioni' => 1,
+    ],
+    [
+        'id' => 33,
+        'nome' => 'Paolo Blu',
+        'stato' => 'bannato',
+        'numeroSegnalazioni' => 6,
+    ],
+];
+
+// ── base_url mancante prima della display ──
+$smarty->assign('base_url', BASE_URL);
+
+// ── MOCK UTENTE SINGOLO (per dettagli_utente_admin.tpl) ──
+// Simula l'entity EUtente: il tpl chiama getIdPersona(), getNomePersona(), getStato()->value
+class MockUtenteAdmin {
+    public function __construct(
+        private int $id,
+        private string $nome,
+        private object $stato
+    ) {}
+    public function getIdPersona(): int { return $this->id; }
+    public function getNomePersona(): string { return $this->nome; }
+    public function getStato(): object { return $this->stato; }
+}
+
+$statoMock = new class('attivo') {
+    public function __construct(public string $value) {}
+};
+
+$utenteDettaglio = new MockUtenteAdmin(12, 'Luca Verdi', $statoMock);
+$smarty->assign('utente', $utenteDettaglio);
+
+// ── MOCK RECENSIONI DELL'UTENTE (struttura conforme a BaseController::recensioniToArray) ──
+$recensioniUtenteDettaglio = [
+    [
+        'id' => 101,
+        'valutazione' => 2,
+        'testo' => 'Prodotto arrivato rotto, pessima qualità del materiale e servizio clienti inesistente.',
+        'data' => '16/07/2026',
+        'id_utente' => 12,
+        'utente' => 'Luca Verdi',
+        'id_segnalazione' => 501, // vedi nota sotto
+        'prodotto' => [
+            'id' => 33,
+            'nome' => 'Catan',
+            'immagine' => 'placeholder.jpg',
+        ],
+    ],
+    [
+        'id' => 104,
+        'valutazione' => 3,
+        'testo' => "Recensione nella media, niente di che.",
+        'data' => '02/07/2026',
+        'id_utente' => 12,
+        'utente' => 'Luca Verdi',
+        'id_segnalazione' => 507,
+        'prodotto' => [
+            'id' => 41,
+            'nome' => 'Carcassonne',
+            'immagine' => 'placeholder.jpg',
+        ],
+    ],
+];
+$smarty->assign('recensioniSegnalate', $recensioniUtenteDettaglio);
+
+$smarty->assign('utenti', $utentiMock);
+
 $smarty->assign('activeNav', 'segnalazioni');
 $smarty->assign('segnalazioniInAttesaCount', count($recensioniMock));
 $smarty->assign('annoCorrente', date('Y'));
@@ -112,7 +188,7 @@ $smarty->assign('ordinamento', 'recenti');
 
 $smarty->assign('segnalazioniUrgenti', $segnalazioniUrgenti);
 
-$smarty->display('segnalazioni_a.tpl');
+$smarty->display('dettagli_utente_admin.tpl');
 
 
 /*

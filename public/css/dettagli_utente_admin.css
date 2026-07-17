@@ -1,0 +1,260 @@
+/* ==========================================================================
+   Pagina: Dettaglio utente (admin)
+   Dipende dalle variabili --admin-* definite in admin.css
+   ========================================================================== */
+
+.profile-page {
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+}
+
+.profile-page__top {
+  margin-bottom: 4px;
+}
+
+.profile-page__back {
+  font-size: 13px;
+  font-weight: 600;
+  color: var(--admin-muted);
+  text-decoration: none;
+}
+
+.profile-page__back:hover {
+  color: var(--admin-text);
+}
+
+/* Header profilo */
+.profile-header {
+  background: #fff;
+  border: 1px solid var(--admin-border);
+  border-radius: var(--admin-radius);
+  padding: 22px 24px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 16px;
+  flex-wrap: wrap;
+}
+
+.profile-header__identity {
+  display: flex;
+  align-items: center;
+  gap: 16px;
+}
+
+.profile-avatar {
+  width: 64px;
+  height: 64px;
+  border-radius: 50%;
+  background: var(--admin-sidebar-active);
+  background-size: cover;
+  background-position: center;
+  flex-shrink: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.profile-avatar span {
+  color: #fff;
+  font-size: 22px;
+  font-weight: 700;
+}
+
+.profile-header__info h1 {
+  margin: 0 0 6px;
+  font-size: 19px;
+  font-weight: 700;
+}
+
+.profile-header__meta {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+.profile-header__id {
+  font-size: 12px;
+  color: var(--admin-muted);
+  font-weight: 600;
+}
+
+.profile-header__actions {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+/* Bottoni specifici usati in questa pagina (oltre a .btn--outline già in admin.css) */
+button.btn {
+  font-family: inherit;
+  cursor: pointer;
+  appearance: none;
+  -webkit-appearance: none;
+  transition: background-color 0.15s ease, color 0.15s ease, border-color 0.15s ease, transform 0.05s ease;
+}
+
+button.btn:active {
+  transform: scale(0.97);
+}
+
+.btn--danger {
+  background: var(--admin-danger);
+  color: #fff;
+  border: 1px solid var(--admin-danger);
+  border-radius: 8px;
+}
+
+.btn--danger:hover {
+  background: #c22a4a;
+  border-color: #c22a4a;
+}
+
+.btn--danger-outline {
+  background: #fff;
+  color: var(--admin-danger);
+  border: 1.5px solid var(--admin-danger);
+  border-radius: 8px;
+}
+
+.btn--danger-outline:hover {
+  background: var(--admin-danger);
+  color: #fff;
+}
+
+.btn--warning {
+  background: #fff;
+  color: #d68a10;
+  border: 1.5px solid #d68a10;
+  border-radius: 8px;
+}
+
+.btn--warning:hover {
+  background: #d68a10;
+  color: #fff;
+}
+
+.btn--small {
+  padding: 6px 14px;
+  font-size: 12px;
+}
+
+/* Sospendi/Banna più grandi dei "Rimuovi" nelle recensioni */
+.profile-header__actions .btn {
+  padding: 8px 18px;
+  font-size: 13px;
+}
+
+/* Stato utente: estende .badge già definito per le gravità */
+.badge--attivo {
+  background: #e2f6ea;
+  color: #1fa971;
+}
+
+.badge--sospeso {
+  background: #fdead3;
+  color: #c98a1f;
+}
+
+.badge--bannato {
+  background: #fde3e9;
+  color: #e0355b;
+}
+
+/* Lista recensioni */
+.recensione-list {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 14px;
+}
+
+.recensione-card {
+  display: flex;
+  align-items: flex-start;
+  gap: 14px;
+  padding: 16px 0;
+  border-bottom: 1px solid var(--admin-border);
+}
+
+.recensione-card:last-child {
+  border-bottom: none;
+  padding-bottom: 0;
+}
+
+.recensione-card__avatar {
+  width: 40px;
+  height: 40px;
+  border-radius: 10px;
+  background: #eef0f6 center/cover no-repeat;
+  flex-shrink: 0;
+}
+
+.recensione-card__body {
+  flex: 1;
+  min-width: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+}
+
+.recensione-card__head {
+  display: flex;
+  align-items: baseline;
+  gap: 8px;
+  flex-wrap: wrap;
+}
+
+.recensione-card__utente {
+  font-size: 14px;
+  font-weight: 700;
+}
+
+.recensione-card__data {
+  font-size: 12px;
+  color: var(--admin-muted);
+}
+
+.recensione-card__prodotto {
+  margin: 0;
+  font-size: 12px;
+  color: var(--admin-muted);
+}
+
+.recensione-card__prodotto a {
+  color: var(--admin-sidebar-active);
+  font-weight: 600;
+  text-decoration: none;
+}
+
+.recensione-card__testo {
+  margin: 4px 0 0;
+  font-size: 13px;
+  color: var(--admin-text);
+  line-height: 1.5;
+  word-break: break-word;
+}
+
+.recensione-card__form {
+  flex-shrink: 0;
+  align-self: center;
+}
+
+@media (max-width: 640px) {
+  .profile-header {
+    flex-direction: column;
+    align-items: flex-start;
+  }
+
+  .profile-header__actions {
+    width: 100%;
+  }
+
+  .profile-header__actions .btn {
+    flex: 1;
+    text-align: center;
+  }
+}

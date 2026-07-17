@@ -5,7 +5,6 @@
 
    Variabili attese dal layer Control:
      $admin                      => ['nome' => string, 'ruolo' => string, 'avatarUrl' => string|null]
-     $notificheNonLette          => int
      $segnalazioniInAttesaCount  => int
      $activeNav                  => string ('dashboard'|'utenti'|'segnalazioni'|'impostazioni')
      $pageTitle                  => string (facoltativo, per il tag <title>)
@@ -33,22 +32,22 @@
         </div>
 
         <nav class="admin-sidebar__nav">
-            <a href="/admin/dashboard" class="admin-nav__item {if $activeNav === 'dashboard'}is-active{/if}">
+            <a href="/admin/dashboard" class="admin-nav__item">
                 <span class="admin-nav__icon admin-nav__icon--dashboard"></span>
                 Dashboard
             </a>
-            <a href="/admin/utenti" class="admin-nav__item {if $activeNav === 'utenti'}is-active{/if}">
+            <a href="/admin/utenti" class="admin-nav__item">
                 <span class="admin-nav__icon admin-nav__icon--utenti"></span>
                 Utenti
             </a>
-            <a href="/admin/segnalazioni" class="admin-nav__item {if $activeNav === 'segnalazioni'}is-active{/if}">
+            <a href="/admin/segnalazioni" class="admin-nav__item">
                 <span class="admin-nav__icon admin-nav__icon--segnalazioni"></span>
                 Segnalazioni
                 {if $segnalazioniInAttesaCount > 0}
                     <span class="admin-nav__badge">{$segnalazioniInAttesaCount}</span>
                 {/if}
             </a>
-            <a href="/admin/impostazioni" class="admin-nav__item {if $activeNav === 'impostazioni'}is-active{/if}">
+            <a href="/admin/impostazioni" class="admin-nav__item">
                 <span class="admin-nav__icon admin-nav__icon--impostazioni"></span>
                 Impostazioni
             </a>
@@ -86,6 +85,19 @@
             <span>&copy; {$annoCorrente} TableCrown</span>
         </footer>
     </div>
+
+    <!-- Modal di conferma, condiviso da tutte le pagine admin -->
+    <div class="admin-modal-overlay" id="adminConfirmOverlay">
+        <div class="admin-modal">
+            <div class="admin-modal__icon"><span class="ti ti-alert-triangle"></span></div>
+            <p class="admin-modal__text" id="adminConfirmText"></p>
+            <div class="admin-modal__actions">
+                <button type="button" class="admin-modal__btn admin-modal__btn--cancel" id="adminConfirmCancel">Annulla</button>
+                <button type="button" class="admin-modal__btn admin-modal__btn--confirm" id="adminConfirmOk">Conferma</button>
+            </div>
+        </div>
+    </div>
+
 </div>
 
 <script>
@@ -101,6 +113,42 @@ document.addEventListener('DOMContentLoaded', function () {
             dropdown.classList.remove('is-open');
         });
     }
+
+    // Modal di conferma per i form con data-confirm-message
+    const overlay = document.getElementById('adminConfirmOverlay');
+    const text = document.getElementById('adminConfirmText');
+    const btnOk = document.getElementById('adminConfirmOk');
+    const btnCancel = document.getElementById('adminConfirmCancel');
+    let pendingForm = null;
+
+    document.querySelectorAll('form[data-confirm-message]').forEach(function (form) {
+        form.addEventListener('submit', function (e) {
+            e.preventDefault();
+            pendingForm = form;
+            text.textContent = form.dataset.confirmMessage;
+            overlay.classList.add('is-open');
+        });
+    });
+
+    btnOk.addEventListener('click', function () {
+        overlay.classList.remove('is-open');
+        if (pendingForm) {
+            pendingForm.submit();
+            pendingForm = null;
+        }
+    });
+
+    btnCancel.addEventListener('click', function () {
+        overlay.classList.remove('is-open');
+        pendingForm = null;
+    });
+
+    overlay.addEventListener('click', function (e) {
+        if (e.target === overlay) {
+            overlay.classList.remove('is-open');
+            pendingForm = null;
+        }
+    });
 });
 </script>
 </body>
