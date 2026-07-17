@@ -26,6 +26,8 @@ $em = getEntityManagerBoot();
 //cerca i file che estendono AbstractFixture li organizza nell'ordine corretto 
 $loader = new Loader();
 
+
+
 // aggiungi le fixture nell'ordine corretto
 $loader->addFixture(new UtenteFixture());
 $loader->addFixture(new MotivazioneFixture());
@@ -50,5 +52,14 @@ $executor = new ORMExecutor($em, $purger);
 
 //avvia concretamente il processo di svuotamento e inserimento dei dati, con il loader che recupera le classi fixture e le dispone in un array pronto per l'esecuzione
 $executor->execute($loader->getFixtures());
+
+// 1. Diciamo al DB di ignorare temporaneamente i vincoli di integrità
+$em->getConnection()->executeStatement('SET FOREIGN_KEY_CHECKS=0');
+
+// 2. La tua riga originale che esegue lo svuotamento e il caricamento
+$executor->execute($loader->getFixtures()); // Potresti avere parametri extra tra parentesi, lasciali intatti!
+
+// 3. Riattiviamo immediatamente i controlli per la sicurezza del DB
+$em->getConnection()->executeStatement('SET FOREIGN_KEY_CHECKS=1');
 
 echo "Fixture caricate con successo!\n";
