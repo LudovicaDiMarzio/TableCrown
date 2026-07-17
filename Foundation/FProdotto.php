@@ -2,6 +2,9 @@
 namespace TableCrown\Foundation;
 
 use TableCrown\Entity\EProdotto;
+use TableCrown\Entity\EOrdine;
+use TableCrown\Entity\EOrdineItem;
+use TableCrown\Entity\Enumerativi\StatoOrdine;
 use Exception;
 
 class FProdotto{
@@ -66,4 +69,56 @@ class FProdotto{
             ];
         }
     }
-} 
+
+    public static function utenteHasProdotto(int $iduser, int $idprodotto): bool {
+        try {
+            $em = FEntityManager::getInstance()->getEntityManager();
+            $qb = $em->createQueryBuilder();
+            $qb->select('COUNT(o.idOrdine)')
+                ->from(EOrdine::class, 'o')
+                ->join('o.ordineItems', 'oi')
+                ->join('oi.prodotto', 'p')
+                ->where('o.utente = :idUtente')
+                ->andWhere('p.idProdotto = :idProdotto') 
+                ->andWhere("o.stato = :statoCompletato")
+                ->setParameter('idUtente', $iduser)
+                ->setParameter('idProdotto', $idprodotto)
+                ->setParameter('statoCompletato', StatoOrdine::CONSEGNATO);
+
+            $risultato = (int) $qb->getQuery()->getSingleScalarResult();
+            return $risultato > 0;
+        }
+        catch (Exception $e) {
+            error_log("Errore in utenteHasProdotto: " . $e->getMessage());
+            return false;
+        }
+    } 
+
+    public static function findCorrelati(array $prodottiesclusi, int $limit): array {
+        try {
+            $em = FEntityManager::getInstance()->getEntityManager();
+            $qb = $em->createQueryBuilder();
+            $qb->select(' p')
+                ->from(EProdotto::class, 'p')
+                //suggeriamo solo i prodotti non esauriti in magazzino
+                ->andWhere('p.quantita > 0')
+                ->setParameter('esclusi', $prodottiesclusi)
+                ->orderBy('p.numeroVendite', 'DESC')
+                ->setMaxResults($limit);
+            //selezioniamo solo i prodotti che non sono presenti nel carrello dell'utente
+            if (!empty($prodottiesclusi)) {
+                $qb->andWhere($qb->expr()->notIn('p.idProdotto', ':esclusi'))
+                ->setParameter('esclusi', $prodottiesclusi);
+            }
+
+                
+            $risultati = $qb->getQuery()->getResult();
+            return $risultati;
+        }
+        catch (Exception $e) {
+            error_log("Errore in findCorrelati: " . $e->getMessage());
+            return [];
+        }
+
+    }
+}
