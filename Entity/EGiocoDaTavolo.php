@@ -22,7 +22,7 @@ class EGiocoDaTavolo extends EProdotto {
 
     #[ORM\ManyToOne(targetEntity: EGiocoDaTavolo::class)]
 
-    #[ORM\JoinColumn(name : "gioco_base_id", referencedColumnName: "idProdotto", nullable: true)]
+    #[ORM\JoinColumn(name : "gioco_base_id", referencedColumnName: "idProdotto", nullable: true, onDelete: 'CASCADE')]
     private ?EGiocoDaTavolo $giocoBase=null; //riferimento a un eventuale gioco da tavolo di cui è espansione
 
     #[ORM\Column(type: "integer")]
