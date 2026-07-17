@@ -9,6 +9,7 @@ use Faker\Factory;
 use TableCrown\Entity\ESegnalazione;
 use TableCrown\Entity\ERecensione;       
 use TableCrown\Entity\EMotivazione;
+use TableCrown\Entity\EUtente;
 use TableCrown\Entity\Enumerativi\StatoSegnalazione;
 
 // Aggiungiamo 'implements DependentFixtureInterface' per gestire l'ordine di esecuzione
@@ -42,10 +43,16 @@ class SegnalazioneFixture extends AbstractFixture implements DependentFixtureInt
                 EMotivazione::class
             );
 
+             $utenteSegnalante = $this->getReference(
+                'utente_' . $faker->numberBetween(0, 19), 
+                EUtente::class
+            );
+
             //  Creiamo la segnalazione passandogli gli oggetti appena recuperati motivazione e recensione
             $segnalazione = new ESegnalazione(
                 $motivazioneCasuale, 
-                $recensione
+                $recensione,
+                $utenteSegnalante
             );
 
             // il costruttore imposta le segnalazioni "IN_ATTESA", 
