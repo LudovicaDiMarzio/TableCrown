@@ -87,13 +87,14 @@ class CAmministratore extends BaseController {
      * URL: GET /admin/utente/profilo?id=XX
      */
     public function mostraProfiloUtenteAdmin(): void {
-        try {
-            $idUtente = UHTTPMethods::get('id');
-        } catch (\InvalidArgumentException $e) {
+        $idUtenteRaw = UHTTPMethods::get('id');
+        if ($idUtenteRaw === null || !is_numeric($idUtenteRaw)) {
             UFlashMessage::addMessage('danger', 'ID utente non valido.' . $e->getMessage());
             header('Location: ' . BASE_URL . '/admin/dashboard');
             exit();
         }
+        
+        $idUtente = (int) $idUtenteRaw;
 
         //Recuperiamo l'utente specifico
         $utente = FPersistentManager::PMgetObjOnAttribute(EUtente::class, 'idPersona', $idUtente);
@@ -105,10 +106,10 @@ class CAmministratore extends BaseController {
         }
 
         //Recuperiamo lo storico delle recensioni di questo utente che hanno ricevuto almeno una segnalazione
-        $recensioniSegnalate = FPersistentManager::PMgetObjListOnAttribute(ERecensione::class, 'idPersona', $idUtente); 
+        $recensioniSegnalate = FPersistentManager::PMgetObjListOnAttribute(ERecensione::class, 'utente', $utente);//TODO: NON VA BENE, QUESTO RESTITUIREBBE TUTTE LE RECENSIONI, SERVE UN METODO APPOSTA CHE RESTITUISCE SOLO QUELLE SEGNALATE 
 
         $datiLayout = $this->preparaDatiLayout('admin_profilo_utente', [
-            'utente' => $utente->utenteAdminToArray(),
+            'utente' => $this->utenteAdminToArray($utente), //MANCA IL NUMERO DI SEGNALAZIONI TOTALI CHE VANNO RECUPERATE
             'recensioniSegnalate' => $this->recensioniToArray($recensioniSegnalate),
         ]);
 
@@ -294,7 +295,7 @@ class CAmministratore extends BaseController {
             $pesoCorrente = self::PESI_GRAVITA[$stringaGravita] ?? 0;
 
             if ($pesoCorrente > $puntaggioMax) {
-                $punteggioMax = $pesoCorrente;
+                $puntaggioMax = $pesoCorrente;
                 $gravitaMax = $stringaGravita;
                 $idPuntaSegnalazione = $segnalazione->getIdSegnalazione();
             }
