@@ -23,6 +23,8 @@ use TableCrown\Entity\EPortaDadi;
 use TableCrown\Entity\ECartaDiCredito;
 use TableCrown\Entity\EIndirizzo;
 use TableCrown\Entity\EMotivazione;
+use TableCrown\Entity\Enumerativi\Categoria;
+use TableCrown\Entity\Enumerativi\LivelloDannoGiochi;
 use TableCrown\Foundation\BancaMockService;
 use InvalidArgumentException;
 
@@ -38,7 +40,11 @@ abstract class BaseController {
         'bustine' => 'Bustine',
         'porta-dadi' => 'Porta Dadi',
     ];
-    
+
+    protected const ORDINAMENTO_VALIDI = ['prezzo-asc', 'prezzo-desc', 'popolarita', 'rating'];
+    protected const IN_EVIDENZA_VALIDI = ['sconti', 'novita'];
+    protected const RISULTATI_PER_PAGINA = 20; //valore di default
+
 
     public function __construct() {
 
@@ -231,6 +237,141 @@ abstract class BaseController {
     }
 
 
+    // CATALOGO
+    // MODIFICA: prima erano solo in CCatalogo, ma li spostiamo qui per riusarli in CGestore
+
+    /**
+     * Valida il numero di pagina richiesto.
+     * Ritorna sempre un numero intero >= 1: se valido, ritorna il numero letto, altrimenti 1 (pagina 1)
+     */
+    protected function estraiPaginaRichiesta(): int {
+        $pagina = UHTTPMethods::get('pagina');
+        if ($pagina === null || !is_numeric($pagina) || $pagina < 1) {
+            return 1; //se la pagina non è valida per qualche motivo, reindirizziamo l'utente alla pagina 1 del catalogo
+        }
+
+        return (int) $pagina;
+    }
+
+    /**
+     * Riporta $pagina entro il range valido [1, $totalePagine].
+     * Utile per il caso limite in cui l'utente richieda una pagina 
+     * oltre l'ultima disponibile 
+     * (es. dopo che i filtri hanno ridotto i risultati, o modificando manualmente l'url).
+     */
+    protected function clampPagina(int $pagina, int $totalePagine): int {
+        if ($totalePagine === 0) {
+            return 1;
+        }
+        return max(1, min($pagina, $totalePagine));
+    }
+
+    /**
+     * Calcola il numero totale di pagine disponibili, 
+     * dato il numero totale di risultati e il numero di risultati per pagina (fisso a RISULTATI_PER_PAGINA).
+     */
+    protected function calcolaTotalePagine(int $totaleRisultati): int {
+        return (int) ceil($totaleRisultati / self::RISULTATI_PER_PAGINA); //ceil per evitare errori di arrotondamento
+    }
+
+    /**
+     * Costruisce un array $datiPagina e delega il render a ViewCatalogo.
+     * Tramite questo metodo centralizziamo la logica comune alle 4 pagine
+     * pubbliche, per evitare di ripetere la stessa struttura di array in ognuna.
+     */
+    protected function renderCatalogo(string $vista, array $risultatoGrezzo, int $pagina, array $filtri, ?string $searchQuery = null, string $modalita = 'utente'): void {
+        $totaleRisultati = $risultatoGrezzo['totale'] ?? 0;
+        $totalePagine = $this->calcolaTotalePagine($totaleRisultati);
+        $pagina = $this->clampPagina($pagina, $totalePagine);
+
+        $datiPagina = [
+            'vista'          => $vista,
+            'modalita'       => $modalita,
+            'prodotti'       => $this->prodottiToArray($risultatoGrezzo['risultati'] ?? []),
+            'total_results'  => $totaleRisultati,
+            'pagination'     => ['current_page' => $pagina, 'total_pages' => $totalePagine],
+            'search_query'   => $searchQuery,
+            'filtri'         => $filtri,
+        ];
+
+        $datiLayout = $this->preparaDatiLayout($vista, $datiPagina);
+        ViewCatalogo::render($datiLayout);
+    }
+
+    /**
+     * Legge un parametro GET che può arrivare come valore singolo,
+     * array, o essere assente, normalizzandolo sempre in array.
+     */
+    protected function estraiArrayDaRequest(string $chiave): array {
+        $valore = UHTTPMethods::get($chiave);
+        if ($valore === null) {
+            return [];
+        }
+        return is_array($valore) ? $valore : [$valore];
+    }
+
+    /**
+     * Filtro prezzo + disponibilità + in_evidenza + rating + ordinamento,
+     * condiviso da tutte le pagine del catalogo (giochi, bustine, porta dadi).
+     */
+    protected function estraiFiltriPrezzo(): array {
+        //TODO: price_range_min e price_range_max andranno calcolati da FPersistentManager
+        //in base ai prodotti realmente presenti nel catalogo/risultato filtrato.
+        //Per ora metto dei dafault fissi 
+        $priceRangeMin = 0.0; //DA CAMBIARE!!!!!!!
+        $priceRangeMax = 200.0; //DA CAMBIARE!!!!!!!
+
+        //Valori selezionati dall'utente sullo slider
+        $priceMinRaw = UHTTPMethods::get('price_min');  
+        $priceMaxRaw = UHTTPMethods::get('price_max');
+
+        $ratingMinRaw = UHTTPMethods::get('rating_min');
+        $ordinamentoRaw = UHTTPMethods::get('ordinamento');
+
+        return [
+            'price_min'          => is_numeric($priceMinRaw) ? (float) $priceMinRaw : $priceRangeMin,
+            'price_max'          => is_numeric($priceMaxRaw) ? (float) $priceMaxRaw : $priceRangeMax,
+            'price_range_min'    => $priceRangeMin,
+            'price_range_max'    => $priceRangeMax,
+            'disponibilita'      => $this->validaValoriEnum($this->estraiArrayDaRequest('disponibilita'), DisponibilitaProdotto::class),
+            'in_evidenza_filtro' => array_values(array_intersect($this->estraiArrayDaRequest('in_evidenza_filtro'), self::IN_EVIDENZA_VALIDI)),
+            'rating_min'         => is_numeric($ratingMinRaw) ? (float) $ratingMinRaw : 0.0,
+            'ordinamento'        => in_array($ordinamentoRaw, self::ORDINAMENTO_VALIDI, true) ? $ordinamentoRaw : null,
+        ];
+    }
+
+    /**
+     * Estende i filtri comuni con quelli specifici dei giochi da tavolo.
+     */
+    protected function estraiFiltriGiochi(): array {
+        $filtri = $this->estraiFiltriPrezzo();
+
+        $ageMinRaw = UHTTPMethods::get('age_min');
+        $playersMinRaw = UHTTPMethods::get('players_min');
+
+        $filtri['categorie_enum'] = $this->enumToOptions(Categoria::cases(), ['gdr' => 'GDR']); 
+        $filtri['categoria_selected'] = $this->validaValoriEnum($this->estraiArrayDaRequest('categoria_selected'), Categoria::class);
+
+        //Nota: per le espansioni introduciamo un singolo filtro.
+        //Se true, mostra giochi base + espansioni, se false solo giochi base.
+        //Di default è true (checkbox checkata) per non nascondere contenuti a chi non applica filtri.
+        $filtri['mostra_espansioni'] = UHTTPMethods::get('mostra_espansioni') !== '0';
+
+        $filtri['age_min'] = is_numeric($ageMinRaw) ? (int) $ageMinRaw : null;
+        $filtri['difficolta'] = $this->validaValoriEnum($this->estraiArrayDaRequest('difficolta'), DifficoltaGioco::class);
+        $filtri['players_min'] = is_numeric($playersMinRaw) ? (int) $playersMinRaw : null;
+
+        //per lingue_enum non uso enumToOptions perché il nome dei cases non è derivabile automaticamente dal value corrispondente che è un codice (es. 'EN', 'IT', ecc.)
+        $filtri['lingue_enum'] = array_map(fn($c) => ['value' => $c->value, 'label' => $c->name], LinguaGioco::cases());
+        $filtri['lingua_selected'] = $this->validaValoriEnum($this->estraiArrayDaRequest('lingua_selected'), LinguaGioco::class);
+
+        $filtri['danno_enum'] = $this->enumToOptions(LivelloDannoGiochi::cases());
+        $filtri['danno_selected'] = $this->validaValoriEnum($this->estraiArrayDaRequest('danno_selected'), LivelloDannoGiochi::class);
+
+        return $filtri;
+    }
+
+
     // UTENTE
 
     /**
@@ -365,6 +506,7 @@ abstract class BaseController {
             'statoEvento'       => $evento->getStatoEvento()->value, //valori non ancora "puliti", da rivedere se/quando serve esporli come identificatore tecnico altrove
             'numeroPartecipanti'=> $evento->getNumeroPartecipanti(),
             'richiedeQuota'     => $evento->richiedeQuota(),
+            'postiDisponibili'  => $evento->getMaxPartecipanti() - $evento->getNumeroPartecipanti(),
         ];
     }
 
@@ -373,6 +515,7 @@ abstract class BaseController {
      */
     protected function serataToArray(ESerata $serata): array {
         return array_merge($this->eventoToArray($serata), [
+            'tipo'       => 'serata',
             'tipoSerata' => $serata->getTipoSerata(),
         ]);
     }
@@ -383,6 +526,7 @@ abstract class BaseController {
     protected function torneoToArray(ETorneo $torneo): array {
         $challenge = $torneo->getChallenge();
         return array_merge($this->eventoToArray($torneo), [
+            'tipo'            => 'torneo',
             'quotaIscrizione' => $torneo->getQuotaIscrizione()->getValore(),
             'premio' => $torneo->getPremio()->getNomeProdotto(),
             'gioco' => $torneo->getGioco()->getNomeProdotto(),
@@ -395,6 +539,7 @@ abstract class BaseController {
      */
     protected function challengeToArray(EChallenge $challenge): array {
         return array_merge($this->eventoToArray($challenge), [
+            'tipo'            => 'challenge',
             'quotaIscrizione' => $challenge->getQuotaIscrizione()->getValore(),
             'premio' => $challenge->getPremio()->getNomeProdotto(),
             'tornei' => array_map(fn($t) => $this->eventoLinkMinimo($t), $challenge->getTornei()->toArray()),
@@ -664,6 +809,21 @@ abstract class BaseController {
      */
     protected function formattaImporto(float $importo): string {
         return number_format($importo, 2, '.', '');
+    }
+
+    /**
+     * Estrae il contenuto binario dell'immagine caricata, se presente.
+     * L'immagine è opzionale: se non viene caricata, restituisce null
+     * senza sollevare errori. Se invece è stato tentato un upload ma è fallito
+     * per un motivo reale (file troppo grande, tipo non valido, ecc.),
+     * lasciamo che postFile() lanci l'eccezione, che verrà gestita dal chiamante.
+     */
+    protected function estraiImmagineProdotto(): ?string { //TODO: ESTENDERE QUESTO METODO PER GESTIRE ANCHE ALTRE IMMAGINI (ES. UTENTE) O FARE UN ALTRO METODO
+        if (!isset($_FILES['imgProdotto']) || $_FILES['imgProdotto']['error'] !== UPLOAD_ERR_NO_FILE) {
+            return null;
+        }
+        $file = UHTTPMethods::postFile('imgProdotto');
+        return file_get_contents($file['tmp_name']);
     }
 
     //==========================================================================

@@ -17,6 +17,7 @@ class CFrontController {
         $routePrincipale = strtolower($urlParts[0]);
         $sottoRoute = isset($urlParts[1]) ? strtolower($urlParts[1]) : null;
         $sottoRoute2 = isset($urlParts[2]) ? strtolower($urlParts[2]) : null;
+        $sottoRoute3 = isset($urlParts[3]) ? strtolower($urlParts[3]) : null;
 
         $metodoHTTP = UHTTPMethods::method();
 
@@ -345,6 +346,43 @@ class CFrontController {
                 }
                 break;
 
+
+                case 'gestore':
+                    $controller = new CGestore();
+                    if ($metodoHTTP === 'GET') {
+                        if ($sottoRoute === 'dashboard') { //GET /gestore/dashboard
+                            $controller->mostraDashboardGestore();
+                        } elseif ($sottoRoute === 'catalogo' && $sottoRoute2 === 'giochi-da-tavolo') { //GET /gestore/catalogo/giochi-da-tavolo
+                            $controller->mostraCatalogoGiochiGestore();
+                        } elseif ($sottoRoute === 'catalogo' && $sottoRoute2 === 'bustine') { //GET /gestore/catalogo/bustine
+                            $controller->mostraCatalogoBustineGestore();
+                        } elseif ($sottoRoute === 'catalogo' && $sottoRoute2 === 'porta-dadi') { //GET /gestore/catalogo/porta-dadi
+                            $controller->mostraCatalogoPortaDadiGestore();
+                        } elseif ($sottoRoute === 'ricerca') { //GET /gestore/ricerca
+                            $controller->mostraRisultatiRicercaProdottiGestore();
+                        } else {
+                            $this->mostra404();
+                        }
+                    } elseif ($metodoHTTP === 'POST') {
+                        if ($sottoRoute === 'catalogo' && $sottoRoute2 === 'giochi-da-tavolo' && $sottoRoute3 === 'nuovo') { //POST /gestore/catalogo/giochi-da-tavolo/nuovo
+                            $controller->creaGiocoDaTavolo();
+                        } elseif ($sottoRoute === 'catalogo' && $sottoRoute2 === 'bustine' && $sottoRoute3 === 'nuovo') { //POST /gestore/catalogo/bustine/nuovo
+                            $controller->creaBustine();
+                        } elseif ($sottoRoute === 'catalogo' && $sottoRoute2 === 'porta-dadi' && $sottoRoute3 === 'nuovo') { //POST /gestore/catalogo/porta-dadi/nuovo
+                            $controller->creaPortaDadi();
+                        } elseif ($sottoRoute === 'catalogo' && $sottoRoute2 === 'prodotto' && $sottoRoute3 === 'elimina') { //POST /gestore/catalogo/prodotto/elimina
+                            $controller->eliminaProdottoGestore();
+                        } elseif ($sottoRoute === 'prodotti' && $sottoRoute2 === 'quantita') { //POST /gestore/prodotti/quantita
+                            $controller->aggiornaQuantitaProdottoGestore();
+                        } elseif ($sottoRoute === 'prodotti' && $sottoRoute2 === 'modifica') { //POST /gestore/prodotti/modifica
+                            $controller->modificaProdottoGestore();
+                        } else {
+                            $this->mostra404();
+                        }
+                    } else {
+                        $this->mostra404();
+                    }
+                    break;
 
 /* 
             case 'chi-siamo':
