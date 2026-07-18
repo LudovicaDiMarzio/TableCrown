@@ -1,24 +1,80 @@
-{extends file="common/layout.tpl"}
+<?php
+/* Smarty version 5.8.0, created on 2026-07-18 16:54:38
+  from 'file:catalogo/bustine.tpl' */
 
-{block name="extra_css"}
-    <link rel="stylesheet" href="{$base_url}/css/catalogo.css">
-{/block}
+/* @var \Smarty\Template $_smarty_tpl */
+if ($_smarty_tpl->getCompiled()->isFresh($_smarty_tpl, array (
+  'version' => '5.8.0',
+  'unifunc' => 'content_6a5b93ae639984_18554135',
+  'has_nocache_code' => false,
+  'file_dependency' => 
+  array (
+    '4b67e2445a994fb3977a85161eff81b7040e78cf' => 
+    array (
+      0 => 'catalogo/bustine.tpl',
+      1 => 1784386474,
+      2 => 'file',
+    ),
+  ),
+  'includes' => 
+  array (
+  ),
+))) {
+function content_6a5b93ae639984_18554135 (\Smarty\Template $_smarty_tpl) {
+$_smarty_current_dir = 'C:\\xampp\\htdocs\\TableCrown\\Presentation\\smarty-dir\\templates\\catalogo';
+$_smarty_tpl->getInheritance()->init($_smarty_tpl, true);
+?>
 
-{block name="content"}
+
+<?php 
+$_smarty_tpl->getInheritance()->instanceBlock($_smarty_tpl, 'Block_16875054856a5b93ae5e5801_18745858', "extra_css");
+?>
+
+
+<?php 
+$_smarty_tpl->getInheritance()->instanceBlock($_smarty_tpl, 'Block_11651393756a5b93ae5eacd3_81809126', "content");
+?>
+
+
+<?php 
+$_smarty_tpl->getInheritance()->instanceBlock($_smarty_tpl, 'Block_5681934406a5b93ae638d37_67809900', "extra_js");
+$_smarty_tpl->getInheritance()->endChild($_smarty_tpl, "common/layout.tpl", $_smarty_current_dir);
+}
+/* {block "extra_css"} */
+class Block_16875054856a5b93ae5e5801_18745858 extends \Smarty\Runtime\Block
+{
+public function callBlock(\Smarty\Template $_smarty_tpl) {
+$_smarty_current_dir = 'C:\\xampp\\htdocs\\TableCrown\\Presentation\\smarty-dir\\templates\\catalogo';
+?>
+
+    <link rel="stylesheet" href="<?php echo $_smarty_tpl->getValue('base_url');?>
+/css/catalogo.css">
+<?php
+}
+}
+/* {/block "extra_css"} */
+/* {block "content"} */
+class Block_11651393756a5b93ae5eacd3_81809126 extends \Smarty\Runtime\Block
+{
+public function callBlock(\Smarty\Template $_smarty_tpl) {
+$_smarty_current_dir = 'C:\\xampp\\htdocs\\TableCrown\\Presentation\\smarty-dir\\templates\\catalogo';
+?>
+
 
 <div class="catalogo-container">
 
-    {* ── SEARCH BAR E HEADER CATALOGO ── *}
-    <section class="catalogo-header">
+        <section class="catalogo-header">
         <div class="container">
 
             <div class="catalogo-search-wrapper">
-                <form class="catalogo-search-form" action="{$base_url}/catalogo/bustine" method="get" id="search-form">
+                <form class="catalogo-search-form" action="<?php echo $_smarty_tpl->getValue('base_url');?>
+/catalogo/bustine" method="get" id="search-form">
                     <input class="input catalogo-search-input"
                            type="search"
                            name="q"
                            placeholder="Cerca nel catalogo..."
-                           value="{$filtri.q|default:''|escape}"
+                           value="<?php echo htmlspecialchars((string)(($tmp = $_smarty_tpl->getValue('filtri')['q'] ?? null)===null||$tmp==='' ? '' ?? null : $tmp), ENT_QUOTES, 'UTF-8', true);?>
+"
                            aria-label="Cerca bustine">
                     <button class="button catalogo-search-btn" type="submit" aria-label="Cerca">
                         <i class="ti ti-search"></i>
@@ -29,29 +85,31 @@
             <div class="catalogo-results-header">
                 <div class="results-info">
                     <h2 class="results-title">
-                        {if isset($filtri.q) && $filtri.q}
-                            Risultati per "<strong>{$filtri.q|escape}</strong>"
-                        {else}
+                        <?php if ((true && (true && null !== ($_smarty_tpl->getValue('filtri')['q'] ?? null))) && $_smarty_tpl->getValue('filtri')['q']) {?>
+                            Risultati per "<strong><?php echo htmlspecialchars((string)$_smarty_tpl->getValue('filtri')['q'], ENT_QUOTES, 'UTF-8', true);?>
+</strong>"
+                        <?php } else { ?>
                             Catalogo Completo
-                        {/if}
+                        <?php }?>
                     </h2>
                     <p class="results-count">
-                        {assign var="total" value=$total_results|default:0}
-                        {if $total == 1}
+                        <?php $_smarty_tpl->assign('total', (($tmp = $_smarty_tpl->getValue('total_results') ?? null)===null||$tmp==='' ? 0 ?? null : $tmp), false, NULL);?>
+                        <?php if ($_smarty_tpl->getValue('total') == 1) {?>
                             1 risultato
-                        {else}
-                            {$total} risultati
-                        {/if}
+                        <?php } else { ?>
+                            <?php echo $_smarty_tpl->getValue('total');?>
+ risultati
+                        <?php }?>
                     </p>
                 </div>
 
                 <div class="sort-wrapper">
                     <label for="sort-select" class="sort-label">Ordina per:</label>
                     <select id="sort-select" class="select catalogo-sort-select" name="ordinamento" form="filters-form">
-                        <option value="prezzo-asc"  {if isset($filtri.ordinamento) && $filtri.ordinamento == 'prezzo-asc'}  selected{/if}>Prezzo: crescente</option>
-                        <option value="prezzo-desc" {if isset($filtri.ordinamento) && $filtri.ordinamento == 'prezzo-desc'} selected{/if}>Prezzo: decrescente</option>
-                        <option value="popolarita"  {if isset($filtri.ordinamento) && $filtri.ordinamento == 'popolarita'}  selected{/if}>Più venduti</option>
-                        <option value="rating_min"      {if isset($filtri.ordinamento) && $filtri.ordinamento == 'rating_min'}      selected{/if}>Valutazione</option>
+                        <option value="prezzo-asc"  <?php if ((true && (true && null !== ($_smarty_tpl->getValue('filtri')['ordinamento'] ?? null))) && $_smarty_tpl->getValue('filtri')['ordinamento'] == 'prezzo-asc') {?>  selected<?php }?>>Prezzo: crescente</option>
+                        <option value="prezzo-desc" <?php if ((true && (true && null !== ($_smarty_tpl->getValue('filtri')['ordinamento'] ?? null))) && $_smarty_tpl->getValue('filtri')['ordinamento'] == 'prezzo-desc') {?> selected<?php }?>>Prezzo: decrescente</option>
+                        <option value="popolarita"  <?php if ((true && (true && null !== ($_smarty_tpl->getValue('filtri')['ordinamento'] ?? null))) && $_smarty_tpl->getValue('filtri')['ordinamento'] == 'popolarita') {?>  selected<?php }?>>Più venduti</option>
+                        <option value="rating_min"      <?php if ((true && (true && null !== ($_smarty_tpl->getValue('filtri')['ordinamento'] ?? null))) && $_smarty_tpl->getValue('filtri')['ordinamento'] == 'rating_min') {?>      selected<?php }?>>Valutazione</option>
                     </select>
                 </div>
             </div>
@@ -59,12 +117,10 @@
         </div>
     </section>
 
-    {* ── LAYOUT PRINCIPALE: SIDEBAR + GRID ── *}
-    <div class="container">
+        <div class="container">
         <div class="catalogo-layout">
 
-            {* ── SIDEBAR FILTRI ── *}
-            <aside class="catalogo-sidebar" id="catalogo-filters">
+                        <aside class="catalogo-sidebar" id="catalogo-filters">
 
                 <div class="filter-header">
                     <h3 class="filter-title">Filtri</h3>
@@ -75,23 +131,26 @@
                     </div>
                 </div>
 
-                <form class="filters-form" id="filters-form" method="get" action="{$base_url}/catalogo/bustine">
+                <form class="filters-form" id="filters-form" method="get" action="<?php echo $_smarty_tpl->getValue('base_url');?>
+/catalogo/bustine">
 
-                    {if isset($filtri.q) && $filtri.q}
-                        <input type="hidden" name="q" value="{$filtri.q|escape}">
-                    {/if}
+                    <?php if ((true && (true && null !== ($_smarty_tpl->getValue('filtri')['q'] ?? null))) && $_smarty_tpl->getValue('filtri')['q']) {?>
+                        <input type="hidden" name="q" value="<?php echo htmlspecialchars((string)$_smarty_tpl->getValue('filtri')['q'], ENT_QUOTES, 'UTF-8', true);?>
+">
+                    <?php }?>
 
-                    {* ── FILTRO: PREZZO ── *}
-                    <div class="filter-group">
+                                        <div class="filter-group">
                         <h4 class="filter-group-title">
                             <i class="ti ti-currency-euro"></i> Prezzo
                         </h4>
                         <div class="price-range-wrapper">
 
                             <div class="price-values-display">
-                                <span id="price-value-min">€{$filtri.price_min|default:$price_range_min|default:0}</span>
+                                <span id="price-value-min">€<?php echo (($tmp = (($tmp = $_smarty_tpl->getValue('filtri')['price_min'] ?? null)===null||$tmp==='' ? $_smarty_tpl->getValue('price_range_min') ?? null : $tmp) ?? null)===null||$tmp==='' ? 0 ?? null : $tmp);?>
+</span>
                                 <span class="price-values-separator">—</span>
-                                <span id="price-value-max">€{$filtri.price_max|default:$price_range_max|default:200}</span>
+                                <span id="price-value-max">€<?php echo (($tmp = (($tmp = $_smarty_tpl->getValue('filtri')['price_max'] ?? null)===null||$tmp==='' ? $_smarty_tpl->getValue('price_range_max') ?? null : $tmp) ?? null)===null||$tmp==='' ? 200 ?? null : $tmp);?>
+</span>
                             </div>
 
                             <div class="price-slider-container">
@@ -101,27 +160,32 @@
                                        class="price-range-input price-range-min"
                                        name="price_min"
                                        id="price-range-min"
-                                       min="{$price_range_min|default:0}"
-                                       max="{$price_range_max|default:200}"
+                                       min="<?php echo (($tmp = $_smarty_tpl->getValue('price_range_min') ?? null)===null||$tmp==='' ? 0 ?? null : $tmp);?>
+"
+                                       max="<?php echo (($tmp = $_smarty_tpl->getValue('price_range_max') ?? null)===null||$tmp==='' ? 200 ?? null : $tmp);?>
+"
                                        step="1"
-                                       value="{$filtri.price_min|default:$price_range_min|default:0}"
+                                       value="<?php echo (($tmp = (($tmp = $_smarty_tpl->getValue('filtri')['price_min'] ?? null)===null||$tmp==='' ? $_smarty_tpl->getValue('price_range_min') ?? null : $tmp) ?? null)===null||$tmp==='' ? 0 ?? null : $tmp);?>
+"
                                        aria-label="Prezzo minimo">
                                 <input type="range"
                                        class="price-range-input price-range-max"
                                        name="price_max"
                                        id="price-range-max"
-                                       min="{$price_range_min|default:0}"
-                                       max="{$price_range_max|default:200}"
+                                       min="<?php echo (($tmp = $_smarty_tpl->getValue('price_range_min') ?? null)===null||$tmp==='' ? 0 ?? null : $tmp);?>
+"
+                                       max="<?php echo (($tmp = $_smarty_tpl->getValue('price_range_max') ?? null)===null||$tmp==='' ? 200 ?? null : $tmp);?>
+"
                                        step="1"
-                                       value="{$filtri.price_max|default:$price_range_max|default:200}"
+                                       value="<?php echo (($tmp = (($tmp = $_smarty_tpl->getValue('filtri')['price_max'] ?? null)===null||$tmp==='' ? $_smarty_tpl->getValue('price_range_max') ?? null : $tmp) ?? null)===null||$tmp==='' ? 200 ?? null : $tmp);?>
+"
                                        aria-label="Prezzo massimo">
                             </div>
 
                         </div>
                     </div>
 
-                    {* ── FILTRO: DISPONIBILITA' ── (aggiunto 4° valore: non_disponibile) *}
-                    <div class="filter-group">
+                                        <div class="filter-group">
                         <h4 class="filter-group-title">
                             <i class="ti ti-package"></i> Disponibilità
                         </h4>
@@ -130,35 +194,34 @@
                                 <input type="checkbox"
                                        name="disponibilita[]"
                                        value="disponibile"
-                                       {if isset($filtri.disponibilita) && in_array('disponibile', $filtri.disponibilita)} checked{/if}>
+                                       <?php if ((true && (true && null !== ($_smarty_tpl->getValue('filtri')['disponibilita'] ?? null))) && $_smarty_tpl->getSmarty()->getModifierCallback('in_array')('disponibile',$_smarty_tpl->getValue('filtri')['disponibilita'])) {?> checked<?php }?>>
                                 <span class="checkbox-text">Disponibile Subito</span>
                             </label>
                             <label class="checkbox-label">
                                 <input type="checkbox"
                                        name="disponibilita[]"
                                        value="in_arrivo"
-                                       {if isset($filtri.disponibilita) && in_array('in_arrivo', $filtri.disponibilita)} checked{/if}>
+                                       <?php if ((true && (true && null !== ($_smarty_tpl->getValue('filtri')['disponibilita'] ?? null))) && $_smarty_tpl->getSmarty()->getModifierCallback('in_array')('in_arrivo',$_smarty_tpl->getValue('filtri')['disponibilita'])) {?> checked<?php }?>>
                                 <span class="checkbox-text">In Arrivo</span>
                             </label>
                             <label class="checkbox-label">
                                 <input type="checkbox"
                                        name="disponibilita[]"
                                        value="esaurito"
-                                       {if isset($filtri.disponibilita) && in_array('esaurito', $filtri.disponibilita)} checked{/if}>
+                                       <?php if ((true && (true && null !== ($_smarty_tpl->getValue('filtri')['disponibilita'] ?? null))) && $_smarty_tpl->getSmarty()->getModifierCallback('in_array')('esaurito',$_smarty_tpl->getValue('filtri')['disponibilita'])) {?> checked<?php }?>>
                                 <span class="checkbox-text">Esaurito</span>
                             </label>
                             <label class="checkbox-label">
                                 <input type="checkbox"
                                        name="disponibilita[]"
                                        value="non_disponibile"
-                                       {if isset($filtri.disponibilita) && in_array('non_disponibile', $filtri.disponibilita)} checked{/if}>
+                                       <?php if ((true && (true && null !== ($_smarty_tpl->getValue('filtri')['disponibilita'] ?? null))) && $_smarty_tpl->getSmarty()->getModifierCallback('in_array')('non_disponibile',$_smarty_tpl->getValue('filtri')['disponibilita'])) {?> checked<?php }?>>
                                 <span class="checkbox-text">Non Disponibile</span>
                             </label>
                         </div>
                     </div>
 
-                    {* ── FILTRO: IN EVIDENZA ── *}
-                    <div class="filter-group">
+                                        <div class="filter-group">
                         <h4 class="filter-group-title">
                             <i class="ti ti-tag"></i> In Evidenza
                         </h4>
@@ -167,21 +230,20 @@
                                 <input type="checkbox"
                                        name="in_evidenza_filtro[]"
                                        value="sconti"
-                                       {if isset($filtri.in_evidenza_filtro) && in_array('sconti', $filtri.in_evidenza_filtro)} checked{/if}>
+                                       <?php if ((true && (true && null !== ($_smarty_tpl->getValue('filtri')['in_evidenza_filtro'] ?? null))) && $_smarty_tpl->getSmarty()->getModifierCallback('in_array')('sconti',$_smarty_tpl->getValue('filtri')['in_evidenza_filtro'])) {?> checked<?php }?>>
                                 <span class="checkbox-text">Sconti Attivi</span>
                             </label>
                             <label class="checkbox-label">
                                 <input type="checkbox"
                                        name="in_evidenza_filtro[]"
                                        value="novita"
-                                       {if isset($filtri.in_evidenza_filtro) && in_array('novita', $filtri.in_evidenza_filtro)} checked{/if}>
+                                       <?php if ((true && (true && null !== ($_smarty_tpl->getValue('filtri')['in_evidenza_filtro'] ?? null))) && $_smarty_tpl->getSmarty()->getModifierCallback('in_array')('novita',$_smarty_tpl->getValue('filtri')['in_evidenza_filtro'])) {?> checked<?php }?>>
                                 <span class="checkbox-text">Novità</span>
                             </label>
                         </div>
                     </div>
 
-                    {* ── FILTRO: VALUTAZIONE ── *}
-                    <div class="filter-group">
+                                        <div class="filter-group">
                         <h4 class="filter-group-title">
                             <i class="ti ti-star"></i> Valutazione
                         </h4>
@@ -192,18 +254,20 @@
                                    min="0"
                                    max="5"
                                    step="0.5"
-                                   value="{$filtri.rating_min|default:'0'|escape}"
+                                   value="<?php echo htmlspecialchars((string)(($tmp = $_smarty_tpl->getValue('filtri')['rating_min'] ?? null)===null||$tmp==='' ? '0' ?? null : $tmp), ENT_QUOTES, 'UTF-8', true);?>
+"
                                    aria-label="Valutazione minima">
                             <div class="rating-display">
-                                <span id="rating-value">{$filtri.rating_min|default:'0'|escape}</span>
+                                <span id="rating-value"><?php echo htmlspecialchars((string)(($tmp = $_smarty_tpl->getValue('filtri')['rating_min'] ?? null)===null||$tmp==='' ? '0' ?? null : $tmp), ENT_QUOTES, 'UTF-8', true);?>
+</span>
                                 <span class="rating-max">/ 5</span>
                             </div>
                         </div>
                     </div>
 
-                    {* ── BOTTONE RESET FILTRI ── *}
-                    <div class="filter-actions">
-                        <a href="{$base_url}/catalogo/bustine" class="button btn-reset-filters">
+                                        <div class="filter-actions">
+                        <a href="<?php echo $_smarty_tpl->getValue('base_url');?>
+/catalogo/bustine" class="button btn-reset-filters">
                             <i class="ti ti-refresh"></i> Ripristina
                         </a>
                     </div>
@@ -213,8 +277,7 @@
             </aside>
 
 
-            {* ── GRID PRINCIPALE PRODOTTI ── *}
-            <main class="catalogo-main">
+                        <main class="catalogo-main">
 
                 <div class="catalogo-mobile-toggle">
                     <button class="button btn-toggle-filters" id="btn-toggle-filters">
@@ -222,113 +285,165 @@
                     </button>
                 </div>
 
-                {if isset($prodotti) && $prodotti|@count > 0}
+                <?php if ((true && ($_smarty_tpl->hasVariable('prodotti') && null !== ($_smarty_tpl->getValue('prodotti') ?? null))) && $_smarty_tpl->getSmarty()->getModifierCallback('count')($_smarty_tpl->getValue('prodotti')) > 0) {?>
                     <div class="products-grid">
-                        {foreach $prodotti as $prodotto}
+                        <?php
+$_from = $_smarty_tpl->getSmarty()->getRuntime('Foreach')->init($_smarty_tpl, $_smarty_tpl->getValue('prodotti'), 'prodotto');
+$foreach0DoElse = true;
+foreach ($_from ?? [] as $_smarty_tpl->getVariable('prodotto')->value) {
+$foreach0DoElse = false;
+?>
                             <div class="product-card">
-                                <a href="{$base_url}/prodotto/{$prodotto.id}" class="product-card-link">
+                                <a href="<?php echo $_smarty_tpl->getValue('base_url');?>
+/prodotto/<?php echo $_smarty_tpl->getValue('prodotto')['id'];?>
+" class="product-card-link">
 
                                     <div class="product-image-wrapper">
-                                        <img src="{$base_url}/img/prodotti/{$prodotto.immagine|escape}"
-                                             alt="{$prodotto.nome|escape}"
+                                        <img src="<?php echo $_smarty_tpl->getValue('base_url');?>
+/img/prodotti/<?php echo htmlspecialchars((string)$_smarty_tpl->getValue('prodotto')['immagine'], ENT_QUOTES, 'UTF-8', true);?>
+"
+                                             alt="<?php echo htmlspecialchars((string)$_smarty_tpl->getValue('prodotto')['nome'], ENT_QUOTES, 'UTF-8', true);?>
+"
                                              class="product-image">
 
-                                        {if $prodotto.disponibilita == 'esaurito'}
+                                        <?php if ($_smarty_tpl->getValue('prodotto')['disponibilita'] == 'esaurito') {?>
                                             <span class="product-badge product-badge-esaurito">Esaurito</span>
-                                        {elseif $prodotto.disponibilita == 'in_arrivo'}
+                                        <?php } elseif ($_smarty_tpl->getValue('prodotto')['disponibilita'] == 'in_arrivo') {?>
                                             <span class="product-badge product-badge-in-arrivo">In Arrivo</span>
-                                        {elseif $prodotto.disponibilita == 'non_disponibile'}
+                                        <?php } elseif ($_smarty_tpl->getValue('prodotto')['disponibilita'] == 'non_disponibile') {?>
                                             <span class="product-badge product-badge-non-disponibile">Non Disponibile</span>
-                                        {/if}
+                                        <?php }?>
 
-                                        {if $prodotto.sconto}
-                                            <span class="product-badge product-badge-discount">-{$prodotto.percentuale_sconto}%</span>
-                                        {/if}
+                                        <?php if ($_smarty_tpl->getValue('prodotto')['sconto']) {?>
+                                            <span class="product-badge product-badge-discount">-<?php echo $_smarty_tpl->getValue('prodotto')['percentuale_sconto'];?>
+%</span>
+                                        <?php }?>
                                     </div>
 
                                     <div class="product-info">
-                                        <h3 class="product-name">{$prodotto.nome|escape}</h3>
+                                        <h3 class="product-name"><?php echo htmlspecialchars((string)$_smarty_tpl->getValue('prodotto')['nome'], ENT_QUOTES, 'UTF-8', true);?>
+</h3>
 
                                         <div class="product-rating">
-                                            {assign var="media" value=$prodotto.valutazione_media}
-                                            {assign var="stelle" value=[1,2,3,4,5]}
-                                            {foreach $stelle as $s}
-                                                {if $s <= $media}
+                                            <?php $_smarty_tpl->assign('media', $_smarty_tpl->getValue('prodotto')['valutazione_media'], false, NULL);?>
+                                            <?php $_smarty_tpl->assign('stelle', array(1,2,3,4,5), false, NULL);?>
+                                            <?php
+$_from = $_smarty_tpl->getSmarty()->getRuntime('Foreach')->init($_smarty_tpl, $_smarty_tpl->getValue('stelle'), 's');
+$foreach1DoElse = true;
+foreach ($_from ?? [] as $_smarty_tpl->getVariable('s')->value) {
+$foreach1DoElse = false;
+?>
+                                                <?php if ($_smarty_tpl->getValue('s') <= $_smarty_tpl->getValue('media')) {?>
                                                     <i class="ti ti-star-filled"></i>
-                                                {elseif ($s - $media) < 1}
+                                                <?php } elseif (($_smarty_tpl->getValue('s')-$_smarty_tpl->getValue('media')) < 1) {?>
                                                     <i class="ti ti-star-half-filled"></i>
-                                                {else}
+                                                <?php } else { ?>
                                                     <i class="ti ti-star"></i>
-                                                {/if}
-                                            {/foreach}
-                                            <span class="rating-value">({$media|number_format:1})</span>
+                                                <?php }?>
+                                            <?php
+}
+$_smarty_tpl->getSmarty()->getRuntime('Foreach')->restore($_smarty_tpl, 1);?>
+                                            <span class="rating-value">(<?php echo $_smarty_tpl->getSmarty()->getModifierCallback('number_format')($_smarty_tpl->getValue('media'),1);?>
+)</span>
                                         </div>
 
                                         <div class="product-price-wrapper">
-                                            {if isset($prodotto.prezzo)}
-                                                {if $prodotto.sconto}
-                                                    <span class="product-price">€{$prodotto.prezzo_scontato|number_format:2}</span>
-                                                    <span class="product-price-old">€{$prodotto.prezzo|number_format:2}</span>
-                                                {else}
-                                                    <span class="product-price">€{$prodotto.prezzo|number_format:2}</span>
-                                                {/if}
-                                            {else}
+                                            <?php if ((true && (true && null !== ($_smarty_tpl->getValue('prodotto')['prezzo'] ?? null)))) {?>
+                                                <?php if ($_smarty_tpl->getValue('prodotto')['sconto']) {?>
+                                                    <span class="product-price">€<?php echo $_smarty_tpl->getSmarty()->getModifierCallback('number_format')($_smarty_tpl->getValue('prodotto')['prezzo_scontato'],2);?>
+</span>
+                                                    <span class="product-price-old">€<?php echo $_smarty_tpl->getSmarty()->getModifierCallback('number_format')($_smarty_tpl->getValue('prodotto')['prezzo'],2);?>
+</span>
+                                                <?php } else { ?>
+                                                    <span class="product-price">€<?php echo $_smarty_tpl->getSmarty()->getModifierCallback('number_format')($_smarty_tpl->getValue('prodotto')['prezzo'],2);?>
+</span>
+                                                <?php }?>
+                                            <?php } else { ?>
                                                 <span class="product-price-unavailable">Prezzo N/D</span>
-                                            {/if}
+                                            <?php }?>
                                         </div>
                                     </div>
 
                                 </a>
 
-                                {if $prodotto.isAcquistabile}
+                                <?php if ($_smarty_tpl->getValue('prodotto')['isAcquistabile']) {?>
                                     <button class="button btn-add-cart"
-                                            data-id="{$prodotto.id}"
-                                            data-nome="{$prodotto.nome|escape}"
-                                            data-img="{$base_url}/img/prodotti/{$prodotto.immagine}"
-                                            data-prezzo="{if $prodotto.sconto}{$prodotto.prezzo_scontato}{else}{$prodotto.prezzo}{/if}"
+                                            data-id="<?php echo $_smarty_tpl->getValue('prodotto')['id'];?>
+"
+                                            data-nome="<?php echo htmlspecialchars((string)$_smarty_tpl->getValue('prodotto')['nome'], ENT_QUOTES, 'UTF-8', true);?>
+"
+                                            data-img="<?php echo $_smarty_tpl->getValue('base_url');?>
+/img/prodotti/<?php echo $_smarty_tpl->getValue('prodotto')['immagine'];?>
+"
+                                            data-prezzo="<?php if ($_smarty_tpl->getValue('prodotto')['sconto']) {
+echo $_smarty_tpl->getValue('prodotto')['prezzo_scontato'];
+} else {
+echo $_smarty_tpl->getValue('prodotto')['prezzo'];
+}?>"
                                             aria-label="Aggiungi a carrello">
                                         <i class="ti ti-shopping-cart"></i> Aggiungi
                                     </button>
-                                {else}
+                                <?php } else { ?>
                                     <button class="button btn-add-cart is-disabled" type="button" disabled aria-label="Prodotto non acquistabile">
                                         <i class="ti ti-ban"></i> Non disponibile
                                     </button>
-                                {/if}
+                                <?php }?>
                             </div>
-                        {/foreach}
+                        <?php
+}
+$_smarty_tpl->getSmarty()->getRuntime('Foreach')->restore($_smarty_tpl, 1);?>
                     </div>
 
-                    {if isset($pagination) && $pagination.total_pages > 1}
+                    <?php if ((true && ($_smarty_tpl->hasVariable('pagination') && null !== ($_smarty_tpl->getValue('pagination') ?? null))) && $_smarty_tpl->getValue('pagination')['total_pages'] > 1) {?>
                     <div class="pagination-wrapper">
                         <nav class="pagination" aria-label="Paginazione">
-                            {if $pagination.current_page > 1}
-                                <a class="pagination-previous" href="{$base_url}/catalogo/bustine?page={$pagination.current_page - 1}{if isset($filtri.q)}&q={$filtri.q|escape}{/if}">
+                            <?php if ($_smarty_tpl->getValue('pagination')['current_page'] > 1) {?>
+                                <a class="pagination-previous" href="<?php echo $_smarty_tpl->getValue('base_url');?>
+/catalogo/bustine?page=<?php echo $_smarty_tpl->getValue('pagination')['current_page']-1;
+if ((true && (true && null !== ($_smarty_tpl->getValue('filtri')['q'] ?? null)))) {?>&q=<?php echo htmlspecialchars((string)$_smarty_tpl->getValue('filtri')['q'], ENT_QUOTES, 'UTF-8', true);
+}?>">
                                     <i class="ti ti-chevron-left"></i> Precedente
                                 </a>
-                            {/if}
+                            <?php }?>
 
                             <ul class="pagination-list">
-                                {for $i=1 to $pagination.total_pages}
+                                <?php
+$_smarty_tpl->assign('i', null);$_smarty_tpl->tpl_vars['i']->step = 1;$_smarty_tpl->tpl_vars['i']->total = (int) ceil(($_smarty_tpl->tpl_vars['i']->step > 0 ? $_smarty_tpl->getValue('pagination')['total_pages']+1 - (1) : 1-($_smarty_tpl->getValue('pagination')['total_pages'])+1)/abs($_smarty_tpl->tpl_vars['i']->step));
+if ($_smarty_tpl->tpl_vars['i']->total > 0) {
+for ($_smarty_tpl->tpl_vars['i']->value = 1, $_smarty_tpl->tpl_vars['i']->iteration = 1;$_smarty_tpl->tpl_vars['i']->iteration <= $_smarty_tpl->tpl_vars['i']->total;$_smarty_tpl->tpl_vars['i']->value += $_smarty_tpl->tpl_vars['i']->step, $_smarty_tpl->tpl_vars['i']->iteration++) {
+$_smarty_tpl->tpl_vars['i']->first = $_smarty_tpl->tpl_vars['i']->iteration === 1;$_smarty_tpl->tpl_vars['i']->last = $_smarty_tpl->tpl_vars['i']->iteration === $_smarty_tpl->tpl_vars['i']->total;?>
                                     <li>
-                                        {if $i == $pagination.current_page}
-                                            <span class="pagination-link is-current" aria-label="Pagina {$i}" aria-current="page">{$i}</span>
-                                        {else}
-                                            <a class="pagination-link" aria-label="Vai a pagina {$i}" href="{$base_url}/catalogo/bustine?page={$i}{if isset($filtri.q)}&q={$filtri.q|escape}{/if}">{$i}</a>
-                                        {/if}
+                                        <?php if ($_smarty_tpl->getValue('i') == $_smarty_tpl->getValue('pagination')['current_page']) {?>
+                                            <span class="pagination-link is-current" aria-label="Pagina <?php echo $_smarty_tpl->getValue('i');?>
+" aria-current="page"><?php echo $_smarty_tpl->getValue('i');?>
+</span>
+                                        <?php } else { ?>
+                                            <a class="pagination-link" aria-label="Vai a pagina <?php echo $_smarty_tpl->getValue('i');?>
+" href="<?php echo $_smarty_tpl->getValue('base_url');?>
+/catalogo/bustine?page=<?php echo $_smarty_tpl->getValue('i');
+if ((true && (true && null !== ($_smarty_tpl->getValue('filtri')['q'] ?? null)))) {?>&q=<?php echo htmlspecialchars((string)$_smarty_tpl->getValue('filtri')['q'], ENT_QUOTES, 'UTF-8', true);
+}?>"><?php echo $_smarty_tpl->getValue('i');?>
+</a>
+                                        <?php }?>
                                     </li>
-                                {/for}
+                                <?php }
+}
+?>
                             </ul>
 
-                            {if $pagination.current_page < $pagination.total_pages}
-                                <a class="pagination-next" href="{$base_url}/catalogo/bustine?page={$pagination.current_page + 1}{if isset($filtri.q)}&q={$filtri.q|escape}{/if}">
+                            <?php if ($_smarty_tpl->getValue('pagination')['current_page'] < $_smarty_tpl->getValue('pagination')['total_pages']) {?>
+                                <a class="pagination-next" href="<?php echo $_smarty_tpl->getValue('base_url');?>
+/catalogo/bustine?page=<?php echo $_smarty_tpl->getValue('pagination')['current_page']+1;
+if ((true && (true && null !== ($_smarty_tpl->getValue('filtri')['q'] ?? null)))) {?>&q=<?php echo htmlspecialchars((string)$_smarty_tpl->getValue('filtri')['q'], ENT_QUOTES, 'UTF-8', true);
+}?>">
                                     Successiva <i class="ti ti-chevron-right"></i>
                                 </a>
-                            {/if}
+                            <?php }?>
                         </nav>
                     </div>
-                    {/if}
+                    <?php }?>
 
-                {else}
+                <?php } else { ?>
                     <div class="empty-state">
                         <div class="empty-state-icon">
                             <i class="ti ti-box-off"></i>
@@ -337,19 +452,19 @@
                         <p class="empty-state-message">
                             Prova a modificare i filtri o la ricerca per trovare altre bustine.
                         </p>
-                        <a href="{$base_url}/catalogo/bustine" class="button btn-reset">
+                        <a href="<?php echo $_smarty_tpl->getValue('base_url');?>
+/catalogo/bustine" class="button btn-reset">
                             <i class="ti ti-refresh"></i> Vedi Catalogo Completo
                         </a>
                     </div>
-                {/if}
+                <?php }?>
 
             </main>
 
         </div>
     </div>
 
-    {* ════ MODAL 1: PRODOTTO AGGIUNTO AL CARRELLO ════ *}
-    <div class="minicart-modal" id="minicart-modal" aria-hidden="true">
+        <div class="minicart-modal" id="minicart-modal" aria-hidden="true">
         <div class="modal-background"></div>
         <div class="minicart-content">
             <button id="close-minicart" class="modal-close-btn" type="button" aria-label="Chiudi pop-up">&times;</button>
@@ -362,18 +477,19 @@
                 </div>
             </div>
             <div class="minicart-actions">
-                <a href="{$base_url}/catalogo/bustine" class="button btn-minicart-continua">
+                <a href="<?php echo $_smarty_tpl->getValue('base_url');?>
+/catalogo/bustine" class="button btn-minicart-continua">
                     <i class="ti ti-arrow-left"></i> Continua Shopping
                 </a>
-                <a href="{$base_url}/carrello" class="button btn-minicart-ordine">
+                <a href="<?php echo $_smarty_tpl->getValue('base_url');?>
+/carrello" class="button btn-minicart-ordine">
                     <i class="ti ti-shopping-cart"></i> Completa Ordine
                 </a>
             </div>
         </div>
     </div>
 
-    {* ════ MODAL 2: ACCESSO RICHIESTO ════ *}
-    <div class="login-modal" id="login-modal" aria-hidden="true">
+        <div class="login-modal" id="login-modal" aria-hidden="true">
         <div class="modal-background"></div>
         <div class="login-modal-content">
             <button id="close-login-modal" class="modal-close-btn" type="button" aria-label="Chiudi pop-up">&times;</button>
@@ -385,23 +501,33 @@
                 Devi avere un account per aggiungere prodotti al carrello e procedere all'acquisto.
             </p>
             <div class="login-modal-actions">
-                <a href="{$base_url}/accedi" class="button btn-login-modal-accedi">
+                <a href="<?php echo $_smarty_tpl->getValue('base_url');?>
+/accedi" class="button btn-login-modal-accedi">
                     <i class="ti ti-login"></i> Accedi
                 </a>
-                <a href="{$base_url}/registrati" class="button btn-login-modal-registrati">
+                <a href="<?php echo $_smarty_tpl->getValue('base_url');?>
+/registrati" class="button btn-login-modal-registrati">
                     Crea un account
                 </a>
             </div>
         </div>
     </div>
 
-</div>{* fine catalogo-container *}
+</div>
+<?php
+}
+}
+/* {/block "content"} */
+/* {block "extra_js"} */
+class Block_5681934406a5b93ae638d37_67809900 extends \Smarty\Runtime\Block
+{
+public function callBlock(\Smarty\Template $_smarty_tpl) {
+$_smarty_current_dir = 'C:\\xampp\\htdocs\\TableCrown\\Presentation\\smarty-dir\\templates\\catalogo';
+?>
 
-{/block}
+<?php echo '<script'; ?>
+>
 
-{block name="extra_js"}
-<script>
-{literal}
 document.addEventListener('DOMContentLoaded', function() {
 
     var filtersForm = document.getElementById('filters-form');
@@ -651,6 +777,11 @@ document.addEventListener('DOMContentLoaded', function() {
     });
 
 });
-{/literal}
-</script>
-{/block}
+
+<?php echo '</script'; ?>
+>
+<?php
+}
+}
+/* {/block "extra_js"} */
+}

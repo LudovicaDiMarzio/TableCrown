@@ -1,11 +1,11 @@
 <?php
-// Presentation/Views/ViewEventiTornei.php
+// Presentation/Views/ViewOfferte.php
 namespace TableCrown\Presentation\Views;
 
 use SmartyConfiguration;
 
-class ViewEventiTornei extends BaseViewEventi {
-    private const TEMPLATE = 'catalogo_tornei.tpl';
+class ViewOfferte extends BaseViewCatalogo {
+    private const TEMPLATE = 'catalogo/CatalogoOfferte.tpl';
 
     public function render(array $dati): void {
         $smarty = SmartyConfiguration::getSmarty();

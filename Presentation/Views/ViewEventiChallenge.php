@@ -6,7 +6,7 @@ use SmartyConfiguration;
 
 
 class ViewEventiChallenge extends BaseViewEventi {
-    private const TEMPLATE = 'eventi/catalogo_challenge.tpl';
+    private const TEMPLATE = 'catalogo_challenge.tpl';
 
     public function render(array $dati): void {
         $smarty = SmartyConfiguration::getSmarty();

@@ -1,142 +1,207 @@
-{extends file="common/layout.tpl"}
+<?php
+/* Smarty version 5.8.0, created on 2026-07-18 10:43:08
+  from 'file:prodotto.tpl' */
 
-{block name="extra_css"}
-    <link rel="stylesheet" href="{$base_url}/css/prodotto.css">
-{/block}
+/* @var \Smarty\Template $_smarty_tpl */
+if ($_smarty_tpl->getCompiled()->isFresh($_smarty_tpl, array (
+  'version' => '5.8.0',
+  'unifunc' => 'content_6a5b3c9c5ef8a2_80506328',
+  'has_nocache_code' => false,
+  'file_dependency' => 
+  array (
+    '61e5509dd7b9a25684d0dc74abf9df1db1b26eb8' => 
+    array (
+      0 => 'prodotto.tpl',
+      1 => 1784364185,
+      2 => 'file',
+    ),
+  ),
+  'includes' => 
+  array (
+  ),
+))) {
+function content_6a5b3c9c5ef8a2_80506328 (\Smarty\Template $_smarty_tpl) {
+$_smarty_current_dir = 'C:\\xampp\\htdocs\\TableCrown\\Presentation\\smarty-dir\\templates';
+$_smarty_tpl->getInheritance()->init($_smarty_tpl, true);
+?>
 
-{block name="content"}
+
+<?php 
+$_smarty_tpl->getInheritance()->instanceBlock($_smarty_tpl, 'Block_11233842066a5b3c9c59b5e6_14361756', "extra_css");
+?>
+
+
+<?php 
+$_smarty_tpl->getInheritance()->instanceBlock($_smarty_tpl, 'Block_5744900016a5b3c9c59fcf0_52816285', "content");
+?>
+
+
+<?php 
+$_smarty_tpl->getInheritance()->instanceBlock($_smarty_tpl, 'Block_20944370266a5b3c9c5ed131_97720803', "extra_js");
+$_smarty_tpl->getInheritance()->endChild($_smarty_tpl, "common/layout.tpl", $_smarty_current_dir);
+}
+/* {block "extra_css"} */
+class Block_11233842066a5b3c9c59b5e6_14361756 extends \Smarty\Runtime\Block
+{
+public function callBlock(\Smarty\Template $_smarty_tpl) {
+$_smarty_current_dir = 'C:\\xampp\\htdocs\\TableCrown\\Presentation\\smarty-dir\\templates';
+?>
+
+    <link rel="stylesheet" href="<?php echo $_smarty_tpl->getValue('base_url');?>
+/css/prodotto.css">
+<?php
+}
+}
+/* {/block "extra_css"} */
+/* {block "content"} */
+class Block_5744900016a5b3c9c59fcf0_52816285 extends \Smarty\Runtime\Block
+{
+public function callBlock(\Smarty\Template $_smarty_tpl) {
+$_smarty_current_dir = 'C:\\xampp\\htdocs\\TableCrown\\Presentation\\smarty-dir\\templates';
+?>
+
 
 <div class="prodotto-container">
     <div class="container">
 
     
 
-        {* ── SEZIONE PRINCIPALE: GALLERY + INFO + ACQUISTO ── *}
-        <div class="prodotto-top">
+                <div class="prodotto-top">
 
-            {* ── COLONNA SINISTRA: GALLERIA IMMAGINI ── *}
-            <div class="prodotto-gallery">
+                        <div class="prodotto-gallery">
                 <div class="gallery-main-wrapper">
                     <div class="gallery-main" id="gallery-main">
-                        <img src="{$base_url}/img/prodotti/{$immagine|escape}"
-                             alt="{$nome|escape}"
+                        <img src="<?php echo $_smarty_tpl->getValue('base_url');?>
+/img/prodotti/<?php echo htmlspecialchars((string)$_smarty_tpl->getValue('immagine'), ENT_QUOTES, 'UTF-8', true);?>
+"
+                             alt="<?php echo htmlspecialchars((string)$_smarty_tpl->getValue('nome'), ENT_QUOTES, 'UTF-8', true);?>
+"
                              class="gallery-main-img is-active"
                              data-index="0">
                     </div>
                 </div>
             </div>
 
-            {* ── COLONNA CENTRO: INFO PRODOTTO ── *}
-            <div class="prodotto-info">
+                        <div class="prodotto-info">
 
-            {* Badge disponibilità *}
-            {if $disponibilita == 'esaurito'}
+                        <?php if ($_smarty_tpl->getValue('disponibilita') == 'esaurito') {?>
                 <span class="prodotto-badge prodotto-badge-esaurito">Esaurito</span>
-            {elseif $disponibilita == 'non_disponibile'}
+            <?php } elseif ($_smarty_tpl->getValue('disponibilita') == 'non_disponibile') {?>
                 <span class="prodotto-badge prodotto-badge-non-disponibile">Non disponibile</span>
-            {elseif $disponibilita == 'in_arrivo'}
+            <?php } elseif ($_smarty_tpl->getValue('disponibilita') == 'in_arrivo') {?>
                 <span class="prodotto-badge prodotto-badge-in-arrivo">In arrivo</span>
-            {elseif $disponibilita == 'disponibile'}
+            <?php } elseif ($_smarty_tpl->getValue('disponibilita') == 'disponibile') {?>
                 <span class="prodotto-badge prodotto-badge-disponibile">Disponibile</span>
-            {else}
+            <?php } else { ?>
                 <span class="prodotto-badge prodotto-badge-sconosciuto">Stato sconosciuto</span>
-            {/if}
+            <?php }?>
 
-                <h1 class="prodotto-nome">{$nome|escape}</h1>
+                <h1 class="prodotto-nome"><?php echo htmlspecialchars((string)$_smarty_tpl->getValue('nome'), ENT_QUOTES, 'UTF-8', true);?>
+</h1>
 
-                {* Rating *}
-                <div class="prodotto-rating">
-                    {foreach [1,2,3,4,5] as $s}
-                        {if $s <= $valutazione_media}
+                                <div class="prodotto-rating">
+                    <?php
+$_from = $_smarty_tpl->getSmarty()->getRuntime('Foreach')->init($_smarty_tpl, array(1,2,3,4,5), 's');
+$foreach0DoElse = true;
+foreach ($_from ?? [] as $_smarty_tpl->getVariable('s')->value) {
+$foreach0DoElse = false;
+?>
+                        <?php if ($_smarty_tpl->getValue('s') <= $_smarty_tpl->getValue('valutazione_media')) {?>
                             <i class="ti ti-star-filled"></i>
-                        {elseif ($s - $valutazione_media) < 1}
+                        <?php } elseif (($_smarty_tpl->getValue('s')-$_smarty_tpl->getValue('valutazione_media')) < 1) {?>
                             <i class="ti ti-star-half-filled"></i>
-                        {else}
+                        <?php } else { ?>
                             <i class="ti ti-star"></i>
-                        {/if}
-                    {/foreach}
-                    <span class="prodotto-rating-value">({$valutazione_media|number_format:1})</span>
+                        <?php }?>
+                    <?php
+}
+$_smarty_tpl->getSmarty()->getRuntime('Foreach')->restore($_smarty_tpl, 1);?>
+                    <span class="prodotto-rating-value">(<?php echo $_smarty_tpl->getSmarty()->getModifierCallback('number_format')($_smarty_tpl->getValue('valutazione_media'),1);?>
+)</span>
                     <a href="#recensioni" class="prodotto-rating-link">Leggi Recensioni</a>
                 </div>
 
-                {* Meta info prodotto *}
-                <div class="prodotto-meta">
-                    {if isset($numeroGiocatoriMin) && isset($numeroGiocatoriMax)}
+                                <div class="prodotto-meta">
+                    <?php if ((true && ($_smarty_tpl->hasVariable('numeroGiocatoriMin') && null !== ($_smarty_tpl->getValue('numeroGiocatoriMin') ?? null))) && (true && ($_smarty_tpl->hasVariable('numeroGiocatoriMax') && null !== ($_smarty_tpl->getValue('numeroGiocatoriMax') ?? null)))) {?>
                         <span class="prodotto-meta-item">
                             <i class="ti ti-users"></i>
-                            {$numeroGiocatoriMin}–{$numeroGiocatoriMax} giocatori
+                            <?php echo $_smarty_tpl->getValue('numeroGiocatoriMin');?>
+–<?php echo $_smarty_tpl->getValue('numeroGiocatoriMax');?>
+ giocatori
                         </span>
-                    {/if}
-                    {if isset($etaMinima)}
+                    <?php }?>
+                    <?php if ((true && ($_smarty_tpl->hasVariable('etaMinima') && null !== ($_smarty_tpl->getValue('etaMinima') ?? null)))) {?>
                         <span class="prodotto-meta-item">
                             <i class="ti ti-baby-carriage"></i>
-                            {$etaMinima}+ anni
+                            <?php echo $_smarty_tpl->getValue('etaMinima');?>
++ anni
                         </span>
-                    {/if}
-                    {if isset($durataMedia)}
+                    <?php }?>
+                    <?php if ((true && ($_smarty_tpl->hasVariable('durataMedia') && null !== ($_smarty_tpl->getValue('durataMedia') ?? null)))) {?>
                         <span class="prodotto-meta-item">
                             <i class="ti ti-clock"></i>
-                            {$durataMedia} min
+                            <?php echo $_smarty_tpl->getValue('durataMedia');?>
+ min
                         </span>
-                    {/if}
-                    {if isset($difficolta)}
+                    <?php }?>
+                    <?php if ((true && ($_smarty_tpl->hasVariable('difficolta') && null !== ($_smarty_tpl->getValue('difficolta') ?? null)))) {?>
                         <span class="prodotto-meta-item">
                             <i class="ti ti-flame"></i>
-                            {$difficolta|escape}
+                            <?php echo htmlspecialchars((string)$_smarty_tpl->getValue('difficolta'), ENT_QUOTES, 'UTF-8', true);?>
+
                         </span>
-                    {/if}
-                    {if isset($lingua)}
+                    <?php }?>
+                    <?php if ((true && ($_smarty_tpl->hasVariable('lingua') && null !== ($_smarty_tpl->getValue('lingua') ?? null)))) {?>
                         <span class="prodotto-meta-item">
                             <i class="ti ti-language"></i>
-                            {$lingua|escape}
+                            <?php echo htmlspecialchars((string)$_smarty_tpl->getValue('lingua'), ENT_QUOTES, 'UTF-8', true);?>
+
                         </span>
-                    {/if}
+                    <?php }?>
                 </div>
 
-                {* Prezzo *}
-                <div class="prodotto-prezzo-wrapper">
-                    {if $sconto}
-                        <span class="prodotto-prezzo">€{$prezzo_scontato|number_format:2}</span>
-                        <span class="prodotto-prezzo-old">€{$prezzo|number_format:2}</span>
-                        <span class="prodotto-sconto-badge">-{$percentuale_sconto|string_format:"%.0f"}%</span>
-                    {elseif isset($prezzo)}
-                        <span class="prodotto-prezzo">€{$prezzo|number_format:2}</span>
-                    {else}
+                                <div class="prodotto-prezzo-wrapper">
+                    <?php if ($_smarty_tpl->getValue('sconto')) {?>
+                        <span class="prodotto-prezzo">€<?php echo $_smarty_tpl->getSmarty()->getModifierCallback('number_format')($_smarty_tpl->getValue('prezzo_scontato'),2);?>
+</span>
+                        <span class="prodotto-prezzo-old">€<?php echo $_smarty_tpl->getSmarty()->getModifierCallback('number_format')($_smarty_tpl->getValue('prezzo'),2);?>
+</span>
+                        <span class="prodotto-sconto-badge">-<?php echo sprintf("%.0f",$_smarty_tpl->getValue('percentuale_sconto'));?>
+%</span>
+                    <?php } elseif ((true && ($_smarty_tpl->hasVariable('prezzo') && null !== ($_smarty_tpl->getValue('prezzo') ?? null)))) {?>
+                        <span class="prodotto-prezzo">€<?php echo $_smarty_tpl->getSmarty()->getModifierCallback('number_format')($_smarty_tpl->getValue('prezzo'),2);?>
+</span>
+                    <?php } else { ?>
                         <span class="prodotto-prezzo-nd">Prezzo N/D</span>
-                    {/if}
+                    <?php }?>
                 </div>
 
             </div>
 
-            {* ── COLONNA DESTRA: BOX ACQUISTO ── *}
-            <div class="prodotto-acquisto-box">
+                        <div class="prodotto-acquisto-box">
 
-                {* Disponibilità visiva *}
-                <div class="acquisto-disponibilita">
-                    {if $disponibilita == 'disponibile'}
+                                <div class="acquisto-disponibilita">
+                    <?php if ($_smarty_tpl->getValue('disponibilita') == 'disponibile') {?>
                         <i class="ti ti-circle-check"></i>
                         <span>Disponibile</span>
-                    {elseif $disponibilita == 'esaurito'}
+                    <?php } elseif ($_smarty_tpl->getValue('disponibilita') == 'esaurito') {?>
                         <i class="ti ti-circle-x"></i>
                         <span>Esaurito</span>
-                    {elseif $disponibilita == 'non disponibile'}
+                    <?php } elseif ($_smarty_tpl->getValue('disponibilita') == 'non disponibile') {?>
                         <i class="ti ti-circle-x"></i>
                         <span>Non disponibile</span>
-                    {elseif $disponibilita == 'in arrivo'}
+                    <?php } elseif ($_smarty_tpl->getValue('disponibilita') == 'in arrivo') {?>
                         <i class="ti ti-clock"></i>
                         <span>In arrivo</span>
-                    {else}
+                    <?php } else { ?>
                         <i class="ti ti-clock"></i>
                         <span>Annunciato</span>
-                    {/if}
+                    <?php }?>
                 </div>
 
-                {* Selettore quantità + prezzo totale: mostrati SOLO se il prodotto è acquistabile.
-                   Prima erano fuori da questo if e comparivano anche per prodotti annunciati/esauriti/in arrivo. *}
-                {if $disponibilita == 'disponibile'}
+                                <?php if ($_smarty_tpl->getValue('disponibilita') == 'disponibile') {?>
 
-                    {* Selettore quantità *}
-                    <div class="acquisto-quantita">
+                                        <div class="acquisto-quantita">
                         <label class="acquisto-quantita-label" for="qty-input">Quantità:</label>
                         <div class="quantita-stepper">
                             <button class="button quantita-btn" id="qty-minus" type="button" aria-label="Diminuisci quantità">
@@ -155,115 +220,155 @@
                         </div>
                     </div>
 
-                    {* Prezzo totale *}
-                    {if isset($prezzo)}
+                                        <?php if ((true && ($_smarty_tpl->hasVariable('prezzo') && null !== ($_smarty_tpl->getValue('prezzo') ?? null)))) {?>
                         <div class="acquisto-prezzo-tot">
                             <span class="prezzo-tot-label">Totale:</span>
-                            <span class="prezzo-tot-value" id="prezzo-tot" data-unit="{if $sconto}{$prezzo_scontato}{else}{$prezzo}{/if}">
-                                €{if $sconto}{$prezzo_scontato|number_format:2}{else}{$prezzo|number_format:2}{/if}
+                            <span class="prezzo-tot-value" id="prezzo-tot" data-unit="<?php if ($_smarty_tpl->getValue('sconto')) {
+echo $_smarty_tpl->getValue('prezzo_scontato');
+} else {
+echo $_smarty_tpl->getValue('prezzo');
+}?>">
+                                €<?php if ($_smarty_tpl->getValue('sconto')) {
+echo $_smarty_tpl->getSmarty()->getModifierCallback('number_format')($_smarty_tpl->getValue('prezzo_scontato'),2);
+} else {
+echo $_smarty_tpl->getSmarty()->getModifierCallback('number_format')($_smarty_tpl->getValue('prezzo'),2);
+}?>
                             </span>
                         </div>
-                    {/if}
+                    <?php }?>
 
-                {/if}
+                <?php }?>
 
-                {* Bottone Aggiungi al Carrello *}
-                {if $disponibilita == 'disponibile'}
-                    <a href="{$base_url}/carrello/aggiungi/{$id}"
+                                <?php if ($_smarty_tpl->getValue('disponibilita') == 'disponibile') {?>
+                    <a href="<?php echo $_smarty_tpl->getValue('base_url');?>
+/carrello/aggiungi/<?php echo $_smarty_tpl->getValue('id');?>
+"
                        class="button btn-add-cart-prodotto"
                        id="btn-add-cart"
-                       data-id="{$id}"
+                       data-id="<?php echo $_smarty_tpl->getValue('id');?>
+"
                        aria-label="Aggiungi al carrello">
                         <i class="ti ti-shopping-cart"></i> Aggiungi al Carrello
                     </a>
-                {else}
+                <?php } else { ?>
                     <button class="button btn-add-cart-prodotto is-disabled" disabled type="button">
                         <i class="ti ti-shopping-cart-off"></i> Non disponibile
                     </button>
-                {/if}
+                <?php }?>
 
-                {* Wishlist *}
-                <button class="btn-wishlist{if isset($isInWishlist) && $isInWishlist} is-active{/if}" id="btn-wishlist" type="button"
-                        data-id="{$id}"
+                                <button class="btn-wishlist<?php if ((true && ($_smarty_tpl->hasVariable('isInWishlist') && null !== ($_smarty_tpl->getValue('isInWishlist') ?? null))) && $_smarty_tpl->getValue('isInWishlist')) {?> is-active<?php }?>" id="btn-wishlist" type="button"
+                        data-id="<?php echo $_smarty_tpl->getValue('id');?>
+"
                         aria-label="Aggiungi alla wishlist">
-                    <i class="ti {if isset($isInWishlist) && $isInWishlist}ti-heart-filled{else}ti-heart{/if}" id="wishlist-icon"></i> Wishlist
+                    <i class="ti <?php if ((true && ($_smarty_tpl->hasVariable('isInWishlist') && null !== ($_smarty_tpl->getValue('isInWishlist') ?? null))) && $_smarty_tpl->getValue('isInWishlist')) {?>ti-heart-filled<?php } else { ?>ti-heart<?php }?>" id="wishlist-icon"></i> Wishlist
                 </button>
 
             </div>
 
         </div>
 
-        {* ── SEZIONE DESCRIZIONE + COMPONENTI ── *}
-        <div class="prodotto-details">
+                <div class="prodotto-details">
 
             <div class="prodotto-descrizione">
                 <h2 class="prodotto-section-title">Descrizione</h2>
                 <div class="prodotto-descrizione-testo">
-                    {$descrizioneProdotto|default:'Descrizione non disponibile.'|nl2br}
+                    <?php echo nl2br((string) (($tmp = $_smarty_tpl->getValue('descrizioneProdotto') ?? null)===null||$tmp==='' ? 'Descrizione non disponibile.' ?? null : $tmp), (bool) 1);?>
+
                 </div>
             </div>
 
-            {if isset($componenti) && $componenti|@count > 0}
+            <?php if ((true && ($_smarty_tpl->hasVariable('componenti') && null !== ($_smarty_tpl->getValue('componenti') ?? null))) && $_smarty_tpl->getSmarty()->getModifierCallback('count')($_smarty_tpl->getValue('componenti')) > 0) {?>
                 <div class="prodotto-componenti">
                     <h2 class="prodotto-section-title">Componenti</h2>
                     <ul class="componenti-list">
-                        {foreach $componenti as $comp}
+                        <?php
+$_from = $_smarty_tpl->getSmarty()->getRuntime('Foreach')->init($_smarty_tpl, $_smarty_tpl->getValue('componenti'), 'comp');
+$foreach1DoElse = true;
+foreach ($_from ?? [] as $_smarty_tpl->getVariable('comp')->value) {
+$foreach1DoElse = false;
+?>
                             <li class="componenti-item">
                                 <i class="ti ti-point"></i>
-                                {$comp|escape}
+                                <?php echo htmlspecialchars((string)$_smarty_tpl->getValue('comp'), ENT_QUOTES, 'UTF-8', true);?>
+
                             </li>
-                        {/foreach}
+                        <?php
+}
+$_smarty_tpl->getSmarty()->getRuntime('Foreach')->restore($_smarty_tpl, 1);?>
                     </ul>
                 </div>
-            {/if}
+            <?php }?>
 
         </div>
 
-        {* ── SEZIONE: FORSE TI PUO' INTERESSARE ── *}
-        {if isset($correlati) && $correlati|@count > 0}
+                <?php if ((true && ($_smarty_tpl->hasVariable('correlati') && null !== ($_smarty_tpl->getValue('correlati') ?? null))) && $_smarty_tpl->getSmarty()->getModifierCallback('count')($_smarty_tpl->getValue('correlati')) > 0) {?>
             <section class="prodotto-correlati">
                 <h2 class="prodotto-section-title">Forse ti può interessare...</h2>
 
                 <div class="correlati-wrapper">
                     <div class="correlati-grid" id="correlati-grid">
-                        {foreach $correlati as $correlato}
+                        <?php
+$_from = $_smarty_tpl->getSmarty()->getRuntime('Foreach')->init($_smarty_tpl, $_smarty_tpl->getValue('correlati'), 'correlato');
+$foreach2DoElse = true;
+foreach ($_from ?? [] as $_smarty_tpl->getVariable('correlato')->value) {
+$foreach2DoElse = false;
+?>
                             <div class="correlato-card">
-                                <a href="{$base_url}/prodotto/{$correlato.id}" class="correlato-card-link">
+                                <a href="<?php echo $_smarty_tpl->getValue('base_url');?>
+/prodotto/<?php echo $_smarty_tpl->getValue('correlato')['id'];?>
+" class="correlato-card-link">
                                     <div class="correlato-image-wrapper">
-                                        <img src="{$base_url}/img/prodotti/{$correlato.immagine|escape}"
-                                             alt="{$correlato.nome|escape}"
+                                        <img src="<?php echo $_smarty_tpl->getValue('base_url');?>
+/img/prodotti/<?php echo htmlspecialchars((string)$_smarty_tpl->getValue('correlato')['immagine'], ENT_QUOTES, 'UTF-8', true);?>
+"
+                                             alt="<?php echo htmlspecialchars((string)$_smarty_tpl->getValue('correlato')['nome'], ENT_QUOTES, 'UTF-8', true);?>
+"
                                              class="correlato-image">
                                     </div>
                                     <div class="correlato-info">
-                                        <h3 class="correlato-nome">{$correlato.nome|escape}</h3>
+                                        <h3 class="correlato-nome"><?php echo htmlspecialchars((string)$_smarty_tpl->getValue('correlato')['nome'], ENT_QUOTES, 'UTF-8', true);?>
+</h3>
                                         <div class="correlato-rating">
-                                            {assign var="cMedia" value=$correlato.valutazione_media}
-                                            {foreach [1,2,3,4,5] as $s}
-                                                {if $s <= $cMedia}
+                                            <?php $_smarty_tpl->assign('cMedia', $_smarty_tpl->getValue('correlato')['valutazione_media'], false, NULL);?>
+                                            <?php
+$_from = $_smarty_tpl->getSmarty()->getRuntime('Foreach')->init($_smarty_tpl, array(1,2,3,4,5), 's');
+$foreach3DoElse = true;
+foreach ($_from ?? [] as $_smarty_tpl->getVariable('s')->value) {
+$foreach3DoElse = false;
+?>
+                                                <?php if ($_smarty_tpl->getValue('s') <= $_smarty_tpl->getValue('cMedia')) {?>
                                                     <i class="ti ti-star-filled"></i>
-                                                {elseif ($s - $cMedia) < 1}
+                                                <?php } elseif (($_smarty_tpl->getValue('s')-$_smarty_tpl->getValue('cMedia')) < 1) {?>
                                                     <i class="ti ti-star-half-filled"></i>
-                                                {else}
+                                                <?php } else { ?>
                                                     <i class="ti ti-star"></i>
-                                                {/if}
-                                            {/foreach}
+                                                <?php }?>
+                                            <?php
+}
+$_smarty_tpl->getSmarty()->getRuntime('Foreach')->restore($_smarty_tpl, 1);?>
                                         </div>
                                         <div class="correlato-prezzo">
-                                            {if isset($correlato.prezzo)}
-                                                <span>€{$correlato.prezzo|number_format:2}</span>
-                                            {else}
+                                            <?php if ((true && (true && null !== ($_smarty_tpl->getValue('correlato')['prezzo'] ?? null)))) {?>
+                                                <span>€<?php echo $_smarty_tpl->getSmarty()->getModifierCallback('number_format')($_smarty_tpl->getValue('correlato')['prezzo'],2);?>
+</span>
+                                            <?php } else { ?>
                                                 <span class="prezzo-nd">N/D</span>
-                                            {/if}
+                                            <?php }?>
                                         </div>
                                     </div>
                                 </a>
-                                <a href="{$base_url}/carrello/aggiungi/{$correlato.id}"
+                                <a href="<?php echo $_smarty_tpl->getValue('base_url');?>
+/carrello/aggiungi/<?php echo $_smarty_tpl->getValue('correlato')['id'];?>
+"
                                    class="button btn-correlato-cart"
-                                   aria-label="Aggiungi {$correlato.nome|escape} al carrello">
+                                   aria-label="Aggiungi <?php echo htmlspecialchars((string)$_smarty_tpl->getValue('correlato')['nome'], ENT_QUOTES, 'UTF-8', true);?>
+ al carrello">
                                     <i class="ti ti-shopping-cart"></i> Carrello
                                 </a>
                             </div>
-                        {/foreach}
+                        <?php
+}
+$_smarty_tpl->getSmarty()->getRuntime('Foreach')->restore($_smarty_tpl, 1);?>
                     </div>
 
                     <button class="correlati-nav correlati-next" id="correlati-next" type="button" aria-label="Vedi altri prodotti correlati">
@@ -272,30 +377,39 @@
                 </div>
 
             </section>
-        {/if}
+        <?php }?>
 
-        {* ── SEZIONE RECENSIONI ── *}
-        <section class="prodotto-recensioni" id="recensioni">
+                <section class="prodotto-recensioni" id="recensioni">
             <h2 class="prodotto-section-title">Recensioni</h2>
 
-            {if isset($utente) && $utente}
-                {if isset($userHasPurchased) && $userHasPurchased}
+            <?php if ((true && ($_smarty_tpl->hasVariable('utente') && null !== ($_smarty_tpl->getValue('utente') ?? null))) && $_smarty_tpl->getValue('utente')) {?>
+                <?php if ((true && ($_smarty_tpl->hasVariable('userHasPurchased') && null !== ($_smarty_tpl->getValue('userHasPurchased') ?? null))) && $_smarty_tpl->getValue('userHasPurchased')) {?>
                     <div class="recensione-form-wrapper">
                         <button class="button btn-scrivi-recensione" id="btn-scrivi-recensione" type="button">
                             <i class="ti ti-pencil"></i> Scrivi la tua recensione
                         </button>
 
                         <div class="recensione-form" id="recensione-form" style="display:none;">
-                            {* Rotta corretta secondo il FrontController: /recensioni/aggiungi (plurale) *}
-                            <form action="{$base_url}/recensioni/aggiungi" method="post">
-                                <input type="hidden" name="id_prodotto" value="{$id}">
+                                                        <form action="<?php echo $_smarty_tpl->getValue('base_url');?>
+/recensioni/aggiungi" method="post">
+                                <input type="hidden" name="id_prodotto" value="<?php echo $_smarty_tpl->getValue('id');?>
+">
 
                                 <div class="form-group">
                                     <label class="form-label">Valutazione</label>
                                     <div class="star-picker" id="star-picker" role="group" aria-label="Scegli valutazione">
-                                        {foreach [1,2,3,4,5] as $s}
-                                            <i class="ti ti-star star-pick{if $s == 1} is-selected{/if}" data-value="{$s}" aria-label="{$s} stelle"></i>
-                                        {/foreach}
+                                        <?php
+$_from = $_smarty_tpl->getSmarty()->getRuntime('Foreach')->init($_smarty_tpl, array(1,2,3,4,5), 's');
+$foreach4DoElse = true;
+foreach ($_from ?? [] as $_smarty_tpl->getVariable('s')->value) {
+$foreach4DoElse = false;
+?>
+                                            <i class="ti ti-star star-pick<?php if ($_smarty_tpl->getValue('s') == 1) {?> is-selected<?php }?>" data-value="<?php echo $_smarty_tpl->getValue('s');?>
+" aria-label="<?php echo $_smarty_tpl->getValue('s');?>
+ stelle"></i>
+                                        <?php
+}
+$_smarty_tpl->getSmarty()->getRuntime('Foreach')->restore($_smarty_tpl, 1);?>
                                     </div>
                                     <button type="button" class="button-link btn-reset-voto" id="btn-reset-voto">
                                         Voto minimo (1 stella)
@@ -325,71 +439,100 @@
                             </form>
                         </div>
                     </div>
-                {else}
+                <?php } else { ?>
                     <p class="recensione-login-hint">
                         <i class="ti ti-alert-circle"></i> Puoi lasciare una recensione solo dopo aver acquistato questo prodotto.
                     </p>
-                {/if}
-            {else}
+                <?php }?>
+            <?php } else { ?>
                 <p class="recensione-login-hint">
-                    <a href="{$base_url}/accedi">Accedi</a> per lasciare una recensione.
+                    <a href="<?php echo $_smarty_tpl->getValue('base_url');?>
+/accedi">Accedi</a> per lasciare una recensione.
                 </p>
-            {/if}
+            <?php }?>
 
-            {* Lista recensioni *}
-            {if isset($recensioni) && $recensioni|@count > 0}
+                        <?php if ((true && ($_smarty_tpl->hasVariable('recensioni') && null !== ($_smarty_tpl->getValue('recensioni') ?? null))) && $_smarty_tpl->getSmarty()->getModifierCallback('count')($_smarty_tpl->getValue('recensioni')) > 0) {?>
                 <div class="recensioni-list">
-                    {foreach $recensioni as $rec}
+                    <?php
+$_from = $_smarty_tpl->getSmarty()->getRuntime('Foreach')->init($_smarty_tpl, $_smarty_tpl->getValue('recensioni'), 'rec');
+$foreach5DoElse = true;
+foreach ($_from ?? [] as $_smarty_tpl->getVariable('rec')->value) {
+$foreach5DoElse = false;
+?>
                         <div class="recensione-card">
                             <div class="recensione-header">
                                 <span class="recensione-nickname">
                                     <i class="ti ti-user"></i>
-                                    {$rec.utente|escape}
+                                    <?php echo htmlspecialchars((string)$_smarty_tpl->getValue('rec')['utente'], ENT_QUOTES, 'UTF-8', true);?>
+
                                 </span>
                                 <div class="recensione-stars">
-                                    {assign var="voto" value=$rec.valutazione}
-                                    {foreach [1,2,3,4,5] as $s}
-                                        {if $s <= $voto}
+                                    <?php $_smarty_tpl->assign('voto', $_smarty_tpl->getValue('rec')['valutazione'], false, NULL);?>
+                                    <?php
+$_from = $_smarty_tpl->getSmarty()->getRuntime('Foreach')->init($_smarty_tpl, array(1,2,3,4,5), 's');
+$foreach6DoElse = true;
+foreach ($_from ?? [] as $_smarty_tpl->getVariable('s')->value) {
+$foreach6DoElse = false;
+?>
+                                        <?php if ($_smarty_tpl->getValue('s') <= $_smarty_tpl->getValue('voto')) {?>
                                             <i class="ti ti-star-filled"></i>
-                                        {else}
+                                        <?php } else { ?>
                                             <i class="ti ti-star"></i>
-                                        {/if}
-                                    {/foreach}
+                                        <?php }?>
+                                    <?php
+}
+$_smarty_tpl->getSmarty()->getRuntime('Foreach')->restore($_smarty_tpl, 1);?>
                                 </div>
                             </div>
-                            <p class="recensione-testo">{$rec.testo|escape|nl2br}</p>
+                            <p class="recensione-testo"><?php echo nl2br((string) htmlspecialchars((string)$_smarty_tpl->getValue('rec')['testo'], ENT_QUOTES, 'UTF-8', true), (bool) 1);?>
+</p>
 
-                            {if isset($utente) && $utente}
+                            <?php if ((true && ($_smarty_tpl->hasVariable('utente') && null !== ($_smarty_tpl->getValue('utente') ?? null))) && $_smarty_tpl->getValue('utente')) {?>
                                 <div class="recensione-azioni">
-                                    {if $rec.utente == $utente.name}
-                                        {* Confronto per nickname: recensioneToArray() non espone l'id autore.
-                                           Da irrobustire con t1 se i nickname non sono garantiti univoci. *}
-                                        <form action="{$base_url}/recensioni/elimina"
+                                    <?php if ($_smarty_tpl->getValue('rec')['utente'] == $_smarty_tpl->getValue('utente')['name']) {?>
+                                                                                <form action="<?php echo $_smarty_tpl->getValue('base_url');?>
+/recensioni/elimina"
                                               method="post"
                                               class="form-elimina-recensione"
                                               data-confirm="Eliminare questa recensione?">
-                                            <input type="hidden" name="id_recensione" value="{$rec.id}">
+                                            <input type="hidden" name="id_recensione" value="<?php echo $_smarty_tpl->getValue('rec')['id'];?>
+">
                                             <button type="submit" class="button-link btn-elimina-recensione">
                                                 <i class="ti ti-trash"></i> Elimina
                                             </button>
                                         </form>
-                                    {elseif isset($motivazioni) && $motivazioni|@count > 0}
+                                    <?php } elseif ((true && ($_smarty_tpl->hasVariable('motivazioni') && null !== ($_smarty_tpl->getValue('motivazioni') ?? null))) && $_smarty_tpl->getSmarty()->getModifierCallback('count')($_smarty_tpl->getValue('motivazioni')) > 0) {?>
                                         <button type="button"
                                                 class="button-link btn-segnala-recensione"
-                                                data-target="segnala-form-{$rec.id}">
+                                                data-target="segnala-form-<?php echo $_smarty_tpl->getValue('rec')['id'];?>
+">
                                             <i class="ti ti-flag"></i> Segnala
                                         </button>
 
-                                        <div class="segnala-form" id="segnala-form-{$rec.id}" style="display:none;">
-                                            <form action="{$base_url}/recensioni/segnala" method="post">
-                                                <input type="hidden" name="id_recensione" value="{$rec.id}">
+                                        <div class="segnala-form" id="segnala-form-<?php echo $_smarty_tpl->getValue('rec')['id'];?>
+" style="display:none;">
+                                            <form action="<?php echo $_smarty_tpl->getValue('base_url');?>
+/recensioni/segnala" method="post">
+                                                <input type="hidden" name="id_recensione" value="<?php echo $_smarty_tpl->getValue('rec')['id'];?>
+">
                                                 <div class="form-group">
-                                                    <label class="form-label" for="motivazione-{$rec.id}">Motivo della segnalazione</label>
-                                                    <select id="motivazione-{$rec.id}" name="id_motivazione" class="input" required>
+                                                    <label class="form-label" for="motivazione-<?php echo $_smarty_tpl->getValue('rec')['id'];?>
+">Motivo della segnalazione</label>
+                                                    <select id="motivazione-<?php echo $_smarty_tpl->getValue('rec')['id'];?>
+" name="id_motivazione" class="input" required>
                                                         <option value="" disabled selected>Seleziona un motivo</option>
-                                                        {foreach $motivazioni as $motivo}
-                                                            <option value="{$motivo.id}">{$motivo.label|escape}</option>
-                                                        {/foreach}
+                                                        <?php
+$_from = $_smarty_tpl->getSmarty()->getRuntime('Foreach')->init($_smarty_tpl, $_smarty_tpl->getValue('motivazioni'), 'motivo');
+$foreach7DoElse = true;
+foreach ($_from ?? [] as $_smarty_tpl->getVariable('motivo')->value) {
+$foreach7DoElse = false;
+?>
+                                                            <option value="<?php echo $_smarty_tpl->getValue('motivo')['id'];?>
+"><?php echo htmlspecialchars((string)$_smarty_tpl->getValue('motivo')['label'], ENT_QUOTES, 'UTF-8', true);?>
+</option>
+                                                        <?php
+}
+$_smarty_tpl->getSmarty()->getRuntime('Foreach')->restore($_smarty_tpl, 1);?>
                                                     </select>
                                                 </div>
                                                 <div class="form-actions">
@@ -398,28 +541,30 @@
                                                     </button>
                                                     <button type="button"
                                                             class="button btn-annulla-segnalazione"
-                                                            data-target="segnala-form-{$rec.id}">
+                                                            data-target="segnala-form-<?php echo $_smarty_tpl->getValue('rec')['id'];?>
+">
                                                         Annulla
                                                     </button>
                                                 </div>
                                             </form>
                                         </div>
-                                    {/if}
+                                    <?php }?>
                                 </div>
-                            {/if}
+                            <?php }?>
                         </div>
-                    {/foreach}
+                    <?php
+}
+$_smarty_tpl->getSmarty()->getRuntime('Foreach')->restore($_smarty_tpl, 1);?>
                 </div>
-            {else}
+            <?php } else { ?>
                 <p class="recensioni-empty">Nessuna recensione ancora. Sii il primo!</p>
-            {/if}
+            <?php }?>
 
         </section>
 
     </div>
 </div>
 
-{* ── MODAL MINI-CART ── *}
 <div class="minicart-modal" id="minicart-modal" aria-hidden="true">
     <div class="modal-background"></div>
 
@@ -429,46 +574,66 @@
         <h3 class="minicart-success-title">Prodotto aggiunto al carrello!</h3>
 
         <div class="minicart-product">
-            <img src="{$base_url}/img/prodotti/{$immagine|escape}"
-                 alt="{$nome|escape}"
+            <img src="<?php echo $_smarty_tpl->getValue('base_url');?>
+/img/prodotti/<?php echo htmlspecialchars((string)$_smarty_tpl->getValue('immagine'), ENT_QUOTES, 'UTF-8', true);?>
+"
+                 alt="<?php echo htmlspecialchars((string)$_smarty_tpl->getValue('nome'), ENT_QUOTES, 'UTF-8', true);?>
+"
                  class="minicart-img">
             <div class="minicart-info">
-                <p class="minicart-nome">{$nome|escape}</p>
+                <p class="minicart-nome"><?php echo htmlspecialchars((string)$_smarty_tpl->getValue('nome'), ENT_QUOTES, 'UTF-8', true);?>
+</p>
                 <p class="minicart-prezzo">
-                    {if $sconto}
-                        €{$prezzo_scontato|number_format:2}
-                    {elseif isset($prezzo)}
-                        €{$prezzo|number_format:2}
-                    {/if}
+                    <?php if ($_smarty_tpl->getValue('sconto')) {?>
+                        €<?php echo $_smarty_tpl->getSmarty()->getModifierCallback('number_format')($_smarty_tpl->getValue('prezzo_scontato'),2);?>
+
+                    <?php } elseif ((true && ($_smarty_tpl->hasVariable('prezzo') && null !== ($_smarty_tpl->getValue('prezzo') ?? null)))) {?>
+                        €<?php echo $_smarty_tpl->getSmarty()->getModifierCallback('number_format')($_smarty_tpl->getValue('prezzo'),2);?>
+
+                    <?php }?>
                 </p>
             </div>
         </div>
 
         <div class="minicart-actions">
-            <a href="{$base_url}/catalogo" class="button btn-minicart-continua">
+            <a href="<?php echo $_smarty_tpl->getValue('base_url');?>
+/catalogo" class="button btn-minicart-continua">
                 <i class="ti ti-arrow-left"></i> Continua Shopping
             </a>
-            <a href="{$base_url}/carrello" class="button btn-minicart-ordine">
+            <a href="<?php echo $_smarty_tpl->getValue('base_url');?>
+/carrello" class="button btn-minicart-ordine">
                 <i class="ti ti-shopping-cart"></i> Completa Ordine
             </a>
         </div>
     </div>
 </div>
 
-{/block}
+<?php
+}
+}
+/* {/block "content"} */
+/* {block "extra_js"} */
+class Block_20944370266a5b3c9c5ed131_97720803 extends \Smarty\Runtime\Block
+{
+public function callBlock(\Smarty\Template $_smarty_tpl) {
+$_smarty_current_dir = 'C:\\xampp\\htdocs\\TableCrown\\Presentation\\smarty-dir\\templates';
+?>
 
-{block name="extra_js"}
-{* Variabili ed endpoint globali: iniettati fuori da {literal} perché Smarty
-   non valuta variabili al suo interno. *}
-<script>
-var utenteLoggato = {if isset($utente)}true{else}false{/if};
-var wishlistInizialmenteAttiva = {if isset($isInWishlist) && $isInWishlist}true{else}false{/if};
-var CARRELLO_AGGIUNGI_URL = "{$base_url}/carrello/aggiungi";
-var WISHLIST_AGGIUNGI_URL = "{$base_url}/wishlist/aggiungi";
-var WISHLIST_RIMUOVI_URL = "{$base_url}/wishlist/rimuovi";
-</script>
-<script>
-{literal}
+<?php echo '<script'; ?>
+>
+var utenteLoggato = <?php if ((true && ($_smarty_tpl->hasVariable('utente') && null !== ($_smarty_tpl->getValue('utente') ?? null)))) {?>true<?php } else { ?>false<?php }?>;
+var wishlistInizialmenteAttiva = <?php if ((true && ($_smarty_tpl->hasVariable('isInWishlist') && null !== ($_smarty_tpl->getValue('isInWishlist') ?? null))) && $_smarty_tpl->getValue('isInWishlist')) {?>true<?php } else { ?>false<?php }?>;
+var CARRELLO_AGGIUNGI_URL = "<?php echo $_smarty_tpl->getValue('base_url');?>
+/carrello/aggiungi";
+var WISHLIST_AGGIUNGI_URL = "<?php echo $_smarty_tpl->getValue('base_url');?>
+/wishlist/aggiungi";
+var WISHLIST_RIMUOVI_URL = "<?php echo $_smarty_tpl->getValue('base_url');?>
+/wishlist/rimuovi";
+<?php echo '</script'; ?>
+>
+<?php echo '<script'; ?>
+>
+
 (function() {
 
     function richiedeLogin() {
@@ -789,8 +954,13 @@ var WISHLIST_RIMUOVI_URL = "{$base_url}/wishlist/rimuovi";
     }
 
 })();
-{/literal}
 
-</script>
 
-{/block}
+<?php echo '</script'; ?>
+>
+
+<?php
+}
+}
+/* {/block "extra_js"} */
+}
