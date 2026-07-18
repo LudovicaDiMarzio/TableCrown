@@ -235,8 +235,7 @@ class FGiocoDaTavolo
             $qb=FEntityManager::getInstance()->getEntityManager()->createQueryBuilder();
             $qb->select('g')
                 ->from(EGiocoDaTavolo::class, 'g')
-                ->innerJoin('g.idProdotto', 'p')
-                ->where('p.nomeProdotto LIKE :ricerca')
+                ->where('g.nomeProdotto LIKE :ricerca OR g.descrizioneProdotto LIKE :ricerca')
                 ->setParameter('ricerca', '%' . $testoPulito . '%');
 
             /*clono la query appena creata per poterla modificare ed effettuare un count su tutti i prodotti filtrati e 
@@ -254,7 +253,7 @@ class FGiocoDaTavolo
             
             $qb->setFirstResult($offset)
                ->setMaxResults($limit);
-            error_log("SQL Eseguito: " . $qb->getQuery()->getSQL());
+            //error_log("SQL Eseguito: " . $qb->getQuery()->getSQL());
             $risultati = $qb->getQuery()->getResult();
             
             return [
