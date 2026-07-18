@@ -5,7 +5,7 @@ namespace TableCrown\Presentation\Views;
 use SmartyConfiguration;
 
 class ViewEventiHome extends BaseViewEventi {
-    private const TEMPLATE = 'eventi/eventi.tpl';
+    private const TEMPLATE = 'eventi.tpl';
 
     public function render(array $dati): void {
         $smarty = SmartyConfiguration::getSmarty();

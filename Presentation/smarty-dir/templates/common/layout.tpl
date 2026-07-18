@@ -89,7 +89,7 @@
 
                         {* Wishlist *}
                         {if isset($utente)}
-                            <a class="header-top-link" href="{$base_url}/wishlist" title="La mia wishlist">
+                            <a class="header-top-link" href="{$base_url}/profilo/wishlist" title="La mia wishlist">
                                 <i class="ti ti-heart navbar-icon"></i>
                                 <span class="header-top-label">Wishlist</span>
                             </a>

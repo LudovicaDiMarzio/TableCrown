@@ -9,6 +9,7 @@ class ViewCatalogo {
         'catalogo_bustine'   => ViewBustine::class,
         'catalogo_portadadi' => ViewPortaDadi::class,
         'ricerca'            => ViewGiochiDaTavolo::class, // da confermare col team
+        'offerte'            => ViewOfferte::class,        // NUOVA: prodotti misti in sconto
     ];
 
     public static function render(array $dati): void {

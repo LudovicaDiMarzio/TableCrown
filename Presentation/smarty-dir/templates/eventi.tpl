@@ -8,7 +8,7 @@
 
         <div class="eventi-grid">
 
-            <a href="{$base_url}/catalogo/serate" class="evento-card-link">
+            <a href="{$base_url}/eventi/serate" class="evento-card-link">
                 <article class="evento-card">
                     <h2 class="evento-title">Serate</h2>
                     <div class="evento-image-wrapper">
@@ -19,7 +19,7 @@
                 </article>
             </a>
 
-            <a href="{$base_url}/catalogo/tornei" class="evento-card-link">
+            <a href="{$base_url}/eventi/tornei" class="evento-card-link">
                 <article class="evento-card">
                     <h2 class="evento-title">Tornei</h2>
                     <div class="evento-image-wrapper">
@@ -30,7 +30,7 @@
                 </article>
             </a>
 
-            <a href="{$base_url}/catalogo/challenge" class="evento-card-link">
+            <a href="{$base_url}/eventi/challenge" class="evento-card-link">
                 <article class="evento-card">
                     <h2 class="evento-title">Challenge</h2>
                     <div class="evento-image-wrapper">

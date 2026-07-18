@@ -29,18 +29,18 @@
             {* ── COLONNA CENTRO: INFO PRODOTTO ── *}
             <div class="prodotto-info">
 
-                {* Badge disponibilità *}
-                {if $disponibilita == 'esaurito'}
-                    <span class="prodotto-badge prodotto-badge-esaurito">Esaurito</span>
-                {elseif $disponibilita == 'annunciato'}
-                    <span class="prodotto-badge prodotto-badge-annunciato">Annunciato</span>
-                {elseif $disponibilita == 'non disponibile'}
-                    <span class="prodotto-badge prodotto-badge-non-disponibile">Non disponibile</span>
-                {elseif $disponibilita == 'in arrivo'}
-                    <span class="prodotto-badge prodotto-badge-in-arrivo">In arrivo</span>
-                {else}
-                    <span class="prodotto-badge prodotto-badge-disponibile">Disponibile</span>
-                {/if}
+            {* Badge disponibilità *}
+            {if $disponibilita == 'esaurito'}
+                <span class="prodotto-badge prodotto-badge-esaurito">Esaurito</span>
+            {elseif $disponibilita == 'non_disponibile'}
+                <span class="prodotto-badge prodotto-badge-non-disponibile">Non disponibile</span>
+            {elseif $disponibilita == 'in_arrivo'}
+                <span class="prodotto-badge prodotto-badge-in-arrivo">In arrivo</span>
+            {elseif $disponibilita == 'disponibile'}
+                <span class="prodotto-badge prodotto-badge-disponibile">Disponibile</span>
+            {else}
+                <span class="prodotto-badge prodotto-badge-sconosciuto">Stato sconosciuto</span>
+            {/if}
 
                 <h1 class="prodotto-nome">{$nome|escape}</h1>
 
@@ -131,34 +131,40 @@
                     {/if}
                 </div>
 
-                {* Selettore quantità *}
-                <div class="acquisto-quantita">
-                    <label class="acquisto-quantita-label" for="qty-input">Quantità:</label>
-                    <div class="quantita-stepper">
-                        <button class="button quantita-btn" id="qty-minus" type="button" aria-label="Diminuisci quantità">
-                            <i class="ti ti-minus"></i>
-                        </button>
-                        <input type="number"
-                               id="qty-input"
-                               class="input quantita-input"
-                               value="1"
-                               min="1"
-                               max="99"
-                               aria-label="Quantità">
-                        <button class="button quantita-btn" id="qty-plus" type="button" aria-label="Aumenta quantità">
-                            <i class="ti ti-plus"></i>
-                        </button>
-                    </div>
-                </div>
+                {* Selettore quantità + prezzo totale: mostrati SOLO se il prodotto è acquistabile.
+                   Prima erano fuori da questo if e comparivano anche per prodotti annunciati/esauriti/in arrivo. *}
+                {if $disponibilita == 'disponibile'}
 
-                {* Prezzo totale *}
-                {if isset($prezzo)}
-                    <div class="acquisto-prezzo-tot">
-                        <span class="prezzo-tot-label">Totale:</span>
-                        <span class="prezzo-tot-value" id="prezzo-tot" data-unit="{if $sconto}{$prezzo_scontato}{else}{$prezzo}{/if}">
-                            €{if $sconto}{$prezzo_scontato|number_format:2}{else}{$prezzo|number_format:2}{/if}
-                        </span>
+                    {* Selettore quantità *}
+                    <div class="acquisto-quantita">
+                        <label class="acquisto-quantita-label" for="qty-input">Quantità:</label>
+                        <div class="quantita-stepper">
+                            <button class="button quantita-btn" id="qty-minus" type="button" aria-label="Diminuisci quantità">
+                                <i class="ti ti-minus"></i>
+                            </button>
+                            <input type="number"
+                                   id="qty-input"
+                                   class="input quantita-input"
+                                   value="1"
+                                   min="1"
+                                   max="99"
+                                   aria-label="Quantità">
+                            <button class="button quantita-btn" id="qty-plus" type="button" aria-label="Aumenta quantità">
+                                <i class="ti ti-plus"></i>
+                            </button>
+                        </div>
                     </div>
+
+                    {* Prezzo totale *}
+                    {if isset($prezzo)}
+                        <div class="acquisto-prezzo-tot">
+                            <span class="prezzo-tot-label">Totale:</span>
+                            <span class="prezzo-tot-value" id="prezzo-tot" data-unit="{if $sconto}{$prezzo_scontato}{else}{$prezzo}{/if}">
+                                €{if $sconto}{$prezzo_scontato|number_format:2}{else}{$prezzo|number_format:2}{/if}
+                            </span>
+                        </div>
+                    {/if}
+
                 {/if}
 
                 {* Bottone Aggiungi al Carrello *}
