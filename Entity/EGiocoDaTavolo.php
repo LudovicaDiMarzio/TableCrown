@@ -184,6 +184,9 @@ class EGiocoDaTavolo extends EProdotto {
         }
         $this->danno = $danno;
         $this->descrizioneDanno = trim($descrizioneDanno);
+        if ($this->getPrezzo() !== null) {
+            $this->getPrezzo()->aggiornaSconto($danno->getScontoDanno());
+        }
     }
 
     /**
@@ -268,5 +271,7 @@ class EGiocoDaTavolo extends EProdotto {
             throw new InvalidArgumentException("Il gioco da tavolo deve avere almeno un componente.");
         }
     }
+
+  
     
 }
