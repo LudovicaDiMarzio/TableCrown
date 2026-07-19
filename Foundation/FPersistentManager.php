@@ -341,7 +341,7 @@ class FPersistentManager
      * @param string $ordinamento ordiniamo in base al numero di segnalazioni ricevute
      * @return array di oggetti
      */
-    public static function PMfindRecensioniConSegnalazione(string $ordinamento): array {
+    public static function PMfindRecensioniConSegnalazioni(string $ordinamento): array {
         return FSegnalazione::findRecensioniConSegnalazione($ordinamento);
     }
     
