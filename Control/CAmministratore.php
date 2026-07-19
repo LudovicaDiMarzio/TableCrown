@@ -109,7 +109,7 @@ class CAmministratore extends BaseController {
         $recensioniSegnalate = FPersistentManager::PMgetObjListOnAttribute(ERecensione::class, 'utente', $utente);//TODO: NON VA BENE, QUESTO RESTITUIREBBE TUTTE LE RECENSIONI, SERVE UN METODO APPOSTA CHE RESTITUISCE SOLO QUELLE SEGNALATE 
 
         $datiLayout = $this->preparaDatiLayout('admin_profilo_utente', [
-            'utente' => $this->utenteAdminToArray($utente), //MANCA IL NUMERO DI SEGNALAZIONI TOTALI CHE VANNO RECUPERATE
+            'utente' => $this->utenteAdminToArray($utente), //TODO: MANCA IL NUMERO DI SEGNALAZIONI TOTALI CHE VANNO RECUPERATE
             'recensioniSegnalate' => $this->recensioniToArray($recensioniSegnalate),
         ]);
 
@@ -319,7 +319,7 @@ class CAmministratore extends BaseController {
         ];
     }
 
-    public function getBreadcrumbs(string $currentPage = ''): array { //DA RIVEDERE: A COSA SERVE currentPage? FORSE PER PAGINE DELL'ADMIN NON DOVREI METTERE 'Home' MA DIRETTAMENTE 'Dashboard Admin'?
+    public function getBreadcrumbs(string $currentPage = ''): array {
         $breadcrumbs = [
             ['label' => 'Home', 'url' => BASE_URL . '/'],
             ['label' => 'Dashboard Admin', 'url' => BASE_URL . '/admin/dashboard'],

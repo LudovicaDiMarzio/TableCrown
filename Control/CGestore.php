@@ -21,6 +21,7 @@ use TableCrown\Entity\ETorneo;
 use TableCrown\Entity\EChallenge;
 use TableCrown\Foundation\FPersistentManager;
 use TableCrown\Presentation\Views\ViewGestore;
+use TableCrown\Presentation\Views\ViewEventi;
 use InvalidArgumentException;
 use RuntimeException;
 
@@ -52,7 +53,7 @@ class CGestore extends BaseController {
         $ordiniTotali = FPersistentManager::PMcontaOrdiniTotali(); //TODO: metodo da implementare
         $venditeTotali = FPersistentManager::PMcontaVenditeTotali(); //TODO: metodo da implementare
 
-        $prossiEventiGrezzi = FPersistentManager::PMgetProssiEventi(5); //TODO: metodo da implementare
+        $prossiEventiGrezzi = FPersistentManager::PMgetProssimiEventi(5); //TODO: metodo da implementare
         $prossimiEventi = $this->eventiToArray($prossiEventiGrezzi);
 
         $datiPagina = [
@@ -926,7 +927,7 @@ class CGestore extends BaseController {
             $idSecondoRaw = UHTTPMethods::post('id_secondo');
             $idTerzoRaw = UHTTPMethods::post('id_terzo');
 
-            $mappaPosizioni = [$idPrimo => 1];
+            $mappaPosizioni = [$idPrimoRaw => 1];
             if ($idSecondoRaw !== null && $idSecondoRaw !== '') {
                 $mappaPosizioni[(int) $idSecondoRaw] = 2;
             }

@@ -270,8 +270,8 @@ class CCarrello extends BaseController {
      */
     protected function getBreadcrumbs(string $currentPage = ''): array {
         return [
-            ['label' => 'Home', 'url' => '/'],
-            ['label' => 'Carrello', 'url' => '/carrello']
+            ['label' => 'Home', 'url' => BASE_URL . '/'],
+            ['label' => 'Carrello', 'url' => BASE_URL . '/carrello']
         ];
     }
 

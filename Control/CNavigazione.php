@@ -49,7 +49,7 @@ class CNavigazione extends BaseController {
 
     protected function getBreadcrumbs(string $currentPage = ''): array {
         return [
-            ['label' => 'Home', 'url' => '/'],
+            ['label' => 'Home', 'url' => BASE_URL . '/'],
         ];
     }
 

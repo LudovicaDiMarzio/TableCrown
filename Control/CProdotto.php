@@ -136,20 +136,19 @@ class CProdotto extends BaseController {
 
     protected function getBreadcrumbs(string $currentPage = ''): array {
         $breadcrumbs = [
-            ['label' => 'Home', 'url' => '/'],
+            ['label' => 'Home', 'url' => BASE_URL . '/'],
         ];
 
-        //Recuperiamo l'id del prodotto corrente dalla route o dal GET
         $idProdotto = UHTTPMethods::get('id') ?? 0;
         $prodotto = FPersistentManager::PMgetObjOnAttribute(EProdotto::class, 'idProdotto', $idProdotto);
 
         if ($prodotto) {
             if ($prodotto instanceof EGiocoDaTavolo) {
-                $breadcrumbs[] = ['label' => 'Giochi da tavolo', 'url' => '/catalogo/giochi-da-tavolo'];
+                $breadcrumbs[] = ['label' => 'Giochi da tavolo', 'url' => BASE_URL . '/catalogo/giochi-da-tavolo'];
             } elseif ($prodotto instanceof EBustine) {
-                $breadcrumbs[] = ['label' => 'Bustine', 'url' => '/catalogo/bustine'];
+                $breadcrumbs[] = ['label' => 'Bustine', 'url' => BASE_URL . '/catalogo/bustine'];
             } elseif ($prodotto instanceof EPortaDadi) {
-                $breadcrumbs[] = ['label' => 'Porta dadi', 'url' => '/catalogo/porta-dadi'];
+                $breadcrumbs[] = ['label' => 'Porta dadi', 'url' => BASE_URL . '/catalogo/porta-dadi'];
             }
 
             $breadcrumbs[] = ['label' => $prodotto->getNomeProdotto(), 'url' => '#']; //'#' per dire che quel link non punta ad una nuova pagina, ma mantiene l'utente sulla pagina in cui si trova già.

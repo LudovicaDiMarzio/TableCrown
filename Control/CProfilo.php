@@ -9,10 +9,8 @@ use TableCrown\Entity\ETorneo;
 use TableCrown\Entity\EOrdine;
 use TableCrown\Entity\EOrdineItem;
 use TableCrown\Entity\EWishlist;
-use TableCrown\Entity\EIndirizzo;
 use TableCrown\Entity\ECartaDiCredito;
 use TableCrown\Entity\Enumerativi\PlayerLevel;
-use TableCrown\Entity\Enumerativi\StatoOrdine;
 use TableCrown\Foundation\FPersistentManager;
 use TableCrown\Presentation\Views\ViewProfiloFactory;
 
@@ -257,20 +255,6 @@ class CProfilo extends BaseController {
         exit();
     }
 
-    protected function getBreadcrumbs(string $currentPage = ''): array {
-        return match ($currentPage) {
-            'profilo_hub' => [
-                ['label' => 'Home', 'url' => '/'],
-                ['label' => 'Area personale', 'url' => '/profilo'],
-            ],
-            default => [
-                ['label' => 'Home', 'url' => '/'],
-                ['label' => 'Area personale', 'url' => '/profilo'],
-                ['label' => 'Dettaglio', 'url' => '#'],
-            ],
-        };
-    }
-
     //==========================================================================
     // ORDINI
     //==========================================================================
@@ -470,4 +454,26 @@ class CProfilo extends BaseController {
         ViewProfiloFactory::render($datiLayout);
     }
 
+    protected function getBreadcrumbs(string $currentPage = ''): array {
+        $breadcrumbs = [
+            ['label' => 'Home', 'url' => BASE_URL . '/'],
+            ['label' => 'Area personale', 'url' => BASE_URL . '/profilo'],
+        ];
+
+        //Determiniamo l'ultimo step in base alla pagina corrente
+        return match ($currentPage) {
+            'profilo_hub' => [
+                ['label' => 'Home', 'url' => BASE_URL . '/'],
+                ['label' => 'Area personale', 'url' => BASE_URL . '#'],
+            ],
+            'profilo_account' => array_merge($breadcrumbs, [['label' => 'Modifica Account', 'url' => '#']]),
+            'profilo_ordini' => array_merge($breadcrumbs, [['label' => 'I Miei Ordini', 'url' => '#']]),
+            'profilo_recensioni' => array_merge($breadcrumbs, [['label' => 'Le Mie Recensioni', 'url' => '#']]),
+            'profilo_wishlist' => array_merge($breadcrumbs, [['label' => 'Wishlist', 'url' => '#']]),
+            'profilo_eventi' => array_merge($breadcrumbs, [['label' => 'I Miei Eventi', 'url' => '#']]),
+            'profilo_indirizzi' => array_merge($breadcrumbs, [['label' => 'I Miei Indirizzi', 'url' => '#']]),
+            'profilo_pagamenti' => array_merge($breadcrumbs, [['label' => 'Metodi di Pagamento', 'url' => '#']]),
+            default => $breadcrumbs,
+        };
+    }
 }
