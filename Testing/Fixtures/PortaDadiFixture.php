@@ -26,6 +26,11 @@ class PortaDadiFixture extends AbstractFixture
     public function load(ObjectManager $manager): void
     {
         $faker = Factory::create('it_IT'); //creazione istanza di faker per la lingua italiana
+        $percorsoImg = __DIR__ . '/../../public/img/default_game.jpg'; 
+        if (!file_exists($percorsoImg)) {
+            throw new \Exception("\n\nERRORE GRAVE: Non riesco a trovare l'immagine per i PortaDadi!\nPercorso calcolato: " . $percorsoImg . "\n\n");
+        }
+        $immaginePredefinita = file_get_contents($percorsoImg);
 
         for ($i = 0; $i < self::NUM_PORTADADI; $i++) { //self::NUM_BUSTINE serve per leggere la costante
             
@@ -40,7 +45,8 @@ class PortaDadiFixture extends AbstractFixture
                 $faker->words(3, true),           // nomeProdotto
                 $faker->paragraph(),              // descrizioneProdotto
                 $disponibilita,                   // disponibilitaProdotto
-                $faker->numberBetween(10, 100),   // quantita
+                $faker->numberBetween(10, 100),
+                imgProdotto: $immaginePredefinita,   // quantita
                 prezzo: $prezzo,                     // prezzo
                 );
 

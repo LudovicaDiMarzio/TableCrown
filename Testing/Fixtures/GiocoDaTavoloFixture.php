@@ -53,6 +53,16 @@ class GiocoDaTavoloFixture extends AbstractFixture implements DependentFixtureIn
     public function load(ObjectManager $manager): void
     {
         $faker = Factory::create('it_IT');
+        $percorsoImg = __DIR__ . 'C:\xampp\htdocs\TableCrown\public\img';
+
+        $immaginePredefinita = null;
+        if (file_exists($percorsoImg)) {
+            $immaginePredefinita = file_get_contents($percorsoImg);
+        } else {
+            // Fallback: se dimentichi di mettere l'immagine nella cartella, 
+            // mette almeno un link generico per non farti crashare il sito.
+            $immaginePredefinita = "https://via.placeholder.com/640x480.png?text=Immagine+Gioco";
+        }
 
         $componentiDisponibili = [
             'Tabellone', 'Carte', 'Pedine', 'Dadi',
@@ -61,7 +71,7 @@ class GiocoDaTavoloFixture extends AbstractFixture implements DependentFixtureIn
 
         // helper per creare un gioco con parametri random, ma con la possibilità
         // di forzare (override) i valori necessari a coprire i filtri di FGiocoDaTavolo
-        $creaGioco = function (array $overrides = []) use ($faker, $componentiDisponibili): EGiocoDaTavolo {
+        $creaGioco = function (array $overrides = []) use ($faker, $componentiDisponibili, $immaginePredefinita): EGiocoDaTavolo {
 
             $categorieEnum = $faker->randomElements(Categoria::cases(), $faker->numberBetween(1, 3));
             $categorieTesto = array_map(fn($cat) => $cat->value, $categorieEnum);
@@ -96,6 +106,7 @@ class GiocoDaTavoloFixture extends AbstractFixture implements DependentFixtureIn
                 componenti: $componenti,
                 difficolta: $overrides['difficolta'] ?? $faker->randomElement(DifficoltaGioco::cases()),
                 lingua: $overrides['lingua'] ?? $faker->randomElement(LinguaGioco::cases()),
+                imgProdotto: $immaginePredefinita,
                 prezzo: $prezzo,
                 giocoBase: $overrides['giocoBase'] ?? null,
                 numeroGiocatoriMin: $giocatoriMin,
