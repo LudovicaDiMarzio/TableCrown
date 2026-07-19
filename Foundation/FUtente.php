@@ -5,7 +5,6 @@ use TableCrown\Entity\EUtente;
 use TableCrown\Entity\ESegnalazione;
 use TableCrown\Entity\Enumerativi\StatoSegnalazione;
 use TableCrown\Entity\Enumerativi\StatoUtente;
-use TableCrown\Entity\Enumerativi\PlayerLevel;
 use Exception;
 
 class FUtente{
