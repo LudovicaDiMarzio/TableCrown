@@ -29,14 +29,28 @@ class FBustine{
                    ->setParameter('price_min', $filtri['price_min']);
             }
 
-            if (isset($filtiri['price_max'])){
+            if (isset($filtri['price_max'])){
                 $qb->andwhere('pr.valore <= :price_max')
                    ->setParameter('price_max', $filtri['price_max']);
             }
 
             if (!empty($filtri['disponibilita'])) {
-                $qb->andWhere('b.disponibilitaProdotto = :disponibilita')
-                    ->setParameter('disponibilita', $filtri['disponibilita']);
+                 $enumDisponibilita = [];
+                foreach ($filtri['disponibilita'] as $valoreScelto) {
+                    if ($valoreScelto instanceof DisponibilitaProdotto) {
+                        $enumDisponibilita[] = $valoreScelto;
+                    } else {
+                        $enumObj = DisponibilitaProdotto::tryFrom($valoreScelto);
+                        if ($enumObj !== null) {
+                            $enumDisponibilita[] = $enumObj;
+                        }
+                    }
+                }
+
+                if (!empty($enumDisponibilita)) {
+                    $qb->andWhere($qb->expr()->in('b.disponibilitaProdotto', ':disponibilita'))
+                    ->setParameter('disponibilita', $enumDisponibilita);
+                }
             }
 
                //filtro per l'ordinamento dei risultati
@@ -85,8 +99,18 @@ class FBustine{
             
             //cloniamo la query per poterla modificare ed effettuarci un count
             $qbCount = clone $qb;
-            $qbCount->select('count(b.id)');
+            $qbCount->select('count(b.idProdotto)');
+            $qbCount->resetDQLPart('orderBy');
             $totale = $qbCount->getQuery()->getSingleScalarResult();
+                    
+            $qbEstremi = clone $qb;
+            $qbEstremi->select('MIN(pr.valore) AS min_price', 'MAX(pr.valore) AS max_price');
+            $qbEstremi->resetDQLPart('orderBy');
+            $estremi = $qbEstremi->getQuery()->getSingleResult();
+
+            $prezzoMinimo = $estremi['min_price'] !== null ? (float) $estremi['min_price'] : 0.0;
+            $prezzoMassimo = $estremi['max_price'] !== null ? (float) $estremi['max_price'] : 50.0;
+
 
             //sulla query iniziale applico le limitazioni per la paginazione
             $qb->setFirstResult($offset)
@@ -96,7 +120,9 @@ class FBustine{
             return [
                 //un array con i prodotti filtrati
                 'risultati' => $risultati,
-                'totale' => $totale
+                'totale' => $totale,
+                'rangemin' => $prezzoMinimo,
+                'rangemax' => $prezzoMassimo
             ];
 
             //ci sono filtri sulla disponibilità?
@@ -104,7 +130,11 @@ class FBustine{
         }
         catch(Exception $e){
             error_log("Errore in findBustine: " . $e->getMessage());
-            return ['risultati' => [], 'totale' => 0];
+            return ['risultati' => [], 
+            'totale' => 0,
+            'rangemin' => 0.0,
+            'rangemax' => 50.0
+            ];
         }
     }
 }

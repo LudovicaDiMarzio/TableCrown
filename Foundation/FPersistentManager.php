@@ -214,7 +214,7 @@ class FPersistentManager
      */
     public static function PMricercaProdotto(string $StringaDiRicerca, int $limit, int $offset): array
     {
-        return FProdotto::ricercaProdotto($StringaDiRicerca, $limit, $offset);
+        return FGiocoDaTavolo::ricercaProdotto($StringaDiRicerca, $limit, $offset);
     }
 
     /**
@@ -228,31 +228,123 @@ class FPersistentManager
     }
 
     /**
-     * @param DateTime $filtroData data di inizio del filtro
-     * @param string $ricerca stringa da ricercare nella colonna nomeEvento
+     * @param string $filtroData data di inizio del filtro
      * @return array di oggetti
      */
-    public static function PMfindSerate(?DateTime $filtroData, ?string $ricerca): array {
-        return FSerate::findSerate($filtroData, $ricerca);
+    public static function PMfindSerate(?string $filtroData): array {
+        return FSerate::findSerate($filtroData);
     }
 
     /**
-     * @param DateTime $filtroData data di inizio del filtro
-     * @param string $ricerca stringa da ricercare nella colonna nomeEvento
+     * @param string $filtroData data di inizio del filtro
      * @return array di oggetti
      */
-    public static function PMfindTornei(?DateTime $filtroData, ?string $ricerca): array {
-        return FTornei::findTornei($filtroData, $ricerca);
+    public static function PMfindTornei(?string $filtroData): array {
+        return FTornei::findTornei($filtroData);
     }
 
     /**
-     * @param DateTime $filtroData data di inizio del filtro
+     * @param string $filtroData data di inizio del filtro
+     * @return array di oggetti
+     */
+    public static function PMfindChallenge(?string $filtroData): array {
+        return FChallenge::findChallenge($filtroData);
+    }
+
+    /**
      * @param string $ricerca stringa da ricercare nella colonna nomeEvento
      * @return array di oggetti
      */
-    public static function PMfindChallenge(?DateTime $filtroData, ?string $ricerca): array {
-        return FChallenge::findChallenge($filtroData, $ricerca);
+    public static function PMricercaEventi(?string $ricerca): array {
+        return FEventi::ricercaEventi($ricerca);
     }
 
+    /**
+     * @param int $iduser id dell'utente da controllare
+     * @param int $idprodotto id del prodotto da controllare
+     * @return bool 
+    */
+    public static function PMutenteHasProdotto(int $iduser, int $idprodotto): bool {
+        return FProdotto::utenteHasProdotto($iduser, $idprodotto);
+    }
+
+    /**
+     * @param array $prodottiesclusi array di id prodotti da escludere dalla ricerca
+     * @param int $limit numero massimo di prodotti da restituire
+     * @return array di oggetti
+     */
+    public static function PMfindCorrelati(array $prodottiesclusi, int $limit): array {
+        return FProdotto::findCorrelati($prodottiesclusi, $limit);
+    }
+
+    /**
+     * @return int numero utenti totali
+     */
+    public static function PMcontaUtentiTotali(): int {
+        return FUtente::ContaUtentiTotali();
+    }
+
+    /**
+     * @return int numero di utenti nuovi oggi
+     */
+    public static function PMcontaUtentiNuoviOggi(): int {
+        return FUtente::contaUtentiNuoviOggi();
+    }
+
+    /**
+     * @return int numero di utenti con sospensione attiva
+     */
+    public static function PMcontaUtentiSospesiTotali(): int {
+        return FUtente::contaUtentiSospesiTotali();
+    }
+
+    /**
+     * @param string $ordinamento ordinamento degli utenti in base al numero di segnalazioni
+     * @return array array di utenti e numero segnalazione per utente 
+     */
+    public static function PMfindUtentiConRecensioniSegnalate(string $ordinamento): array {
+        return FUtente::findUtentiConRecensioniSegnalate($ordinamento);
+    }
+
+    /**
+     * @param int $idUtente id dell'utente
+     * @return array array di oggetti
+     */
+    public static function PMgetRecensioniSegnalateDiUtente(int $idUtente): array {
+        return FUtente::getRecensioniSegnalateDiUtente($idUtente);
+    }
+
+    /**
+     * @return int numero  utenti sospesi oggi
+    */
+    public static function PMcontaUtentiSospesiOggi(): int {
+        return FSegnalazione::contaUtentiSospesiOggi();
+    }
+
+    /**
+     * @param string $order 'ASC' = più urgenti prima (ALTA -> MEDIA -> BASSA), 'DESC' = inverso
+     * @param int $limit numero massimo di segnalazioni da restituire
+     * @return array di oggetti ESegnalazione
+     */
+    public static function PMgetSegnalazioniUrgenti(string $order, int $limit ): array {
+        return FSegnalazione::getSegnalazioniUrgenti($order, $limit);
+    }
+
+    /**
+     * @return int numero di segnalazioni in attesa
+     */
+    public static function PMcontaSegnalazioniInSospeso(): int {
+        return FSegnalazione::contaSegnalazioniInSospeso();
+    }
+
+    /**
+     * @param string $ordinamento ordiniamo in base al numero di segnalazioni ricevute
+     * @return array di oggetti
+     */
+    public static function PMfindRecensioniConSegnalazioni(string $ordinamento): array {
+        return FSegnalazione::findRecensioniConSegnalazione($ordinamento);
+    }
+    
+     
 
 }

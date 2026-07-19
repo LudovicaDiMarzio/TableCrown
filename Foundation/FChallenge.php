@@ -8,12 +8,11 @@ use Exception;
 
 class FChallenge{
     /**
-     * @param DateTime $filtroData data di inizio del filtro
-     * @param string $ricerca stringa da ricercare nella colonna nomeEvento
+     * @param string $filtroData data di inizio del filtro
      * @return array di oggetti
      * @throws Exception
      */
-    public static function findChallenge(?DateTime $filtroData, ?string $ricerca): array{
+    public static function findChallenge(?string $filtroData): array{
         try{
             $qb=FEntityManager::getInstance()->getEntityManager()->createQueryBuilder();
             $qb->select('c')
@@ -21,13 +20,11 @@ class FChallenge{
                 ->where('c.statoEvento=:statoEvento')
                 ->setParameter('statoEvento', StatoEvento::Programmato);
             if($filtroData!==null){
+                $dataObj = new \DateTime($filtroData);
                 $qb->andWhere('c.dataInizio>=:dataEvento')
-                    ->setParameter('dataEvento', $filtroData);
+                    ->setParameter('dataEvento', $dataObj);
             }
-            if ($ricerca !== null) {
-                $qb->andWhere('c.nomeEvento LIKE :ricerca')
-                    ->setParameter('ricerca', '%' . $ricerca . '%');
-            }
+        
             $qb->orderBy('c.dataInizio', 'ASC');
             $risultati = $qb->getQuery()->getResult();
             return $risultati;

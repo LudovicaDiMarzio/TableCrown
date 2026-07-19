@@ -36,8 +36,22 @@ class FPortaDadi{
 
            
             if (!empty($filtri['disponibilita'])) {
-                $qb->andWhere('p.disponibilitaProdotto = :disponibilita')
-                    ->setParameter('disponibilita', $filtri['disponibilita']);
+                 $enumDisponibilita = [];
+                foreach ($filtri['disponibilita'] as $valoreScelto) {
+                    if ($valoreScelto instanceof DisponibilitaProdotto) {
+                        $enumDisponibilita[] = $valoreScelto;
+                    } else {
+                        $enumObj = DisponibilitaProdotto::tryFrom($valoreScelto);
+                        if ($enumObj !== null) {
+                            $enumDisponibilita[] = $enumObj;
+                        }
+                    }
+                }
+
+                if (!empty($enumDisponibilita)) {
+                    $qb->andWhere($qb->expr()->in('b.disponibilitaProdotto', ':disponibilita'))
+                    ->setParameter('disponibilita', $enumDisponibilita);
+                }
             }
 
             //filtro per l'ordinamento dei risultati
@@ -87,7 +101,16 @@ class FPortaDadi{
             //cloniamo la query per poterla modificare ed effettuarci un count
             $qbCount = clone $qb;
             $qbCount->select('count(p.id)');
+            $qbCount->resetDQLPart('orderBy');
             $totale = $qbCount->getQuery()->getSingleScalarResult();
+
+            $qbEstremi = clone $qb;
+            $qbEstremi->select('MIN(pr.valore) AS min_price', 'MAX(pr.valore) AS max_price');
+            $qbEstremi->resetDQLPart('orderBy');
+            $estremi = $qbEstremi->getQuery()->getSingleResult();
+
+            $prezzoMinimo = $estremi['min_price'] !== null ? (float) $estremi['min_price'] : 0.0;
+            $prezzoMassimo = $estremi['max_price'] !== null ? (float) $estremi['max_price'] : 50.0;
 
             //sulla query iniziale applico le limitazioni per la paginazione
             $qb->setFirstResult($offset)
@@ -99,12 +122,18 @@ class FPortaDadi{
             return [
                 //un array con i prodotti filtrati
                 'risultati' => $risultati,
-                'totale' => $totale
+                'totale' => $totale,
+                'rangemin' => $prezzoMinimo,
+                'rangemax' => $prezzoMassimo
             ];
         }
         catch(Exception $e){
             error_log("Errore in findPortaDadi: " . $e->getMessage());
-            return ['risultati' => [], 'totale' => 0];
+            return ['risultati' => [], 
+                    'totale' => 0,
+                    'prezzo_min_slider' => 0.0, 
+                    'prezzo_max_slider' => 50.0
+            ];
         }
     }
 }
