@@ -123,23 +123,23 @@ class CCatalogo extends BaseController {
 
 
     protected function getBreadcrumbs(string $currentPage = ''): array {
-        $breadcrumbs = [['label' => 'Home', 'url' => '/']];
+        $breadcrumbs = [['label' => 'Home', 'url' => BASE_URL . '/']];
 
         switch ($currentPage) {
             case 'catalogo_giochi':
-                $breadcrumbs[] = ['label' => 'Giochi da tavolo', 'url' => '/catalogo/giochi-da-tavolo'];
+                $breadcrumbs[] = ['label' => 'Giochi da tavolo', 'url' => BASE_URL . '/catalogo/giochi-da-tavolo'];
                 break;
             case 'catalogo_bustine':
-                $breadcrumbs[] = ['label' => 'Bustine', 'url' => '/catalogo/bustine'];
+                $breadcrumbs[] = ['label' => 'Bustine', 'url' => BASE_URL . '/catalogo/bustine'];
                 break;
             case 'catalogo_portadadi':
-                $breadcrumbs[] = ['label' => 'Porta Dadi', 'url' => '/catalogo/porta-dadi'];
+                $breadcrumbs[] = ['label' => 'Porta Dadi', 'url' => BASE_URL . '/catalogo/porta-dadi'];
                 break;
             case 'ricerca':
-                $breadcrumbs[] = ['label' => 'Risultati ricerca', 'url' => '/ricerca'];
+                $breadcrumbs[] = ['label' => 'Risultati ricerca', 'url' => BASE_URL . '/ricerca'];
                 break;
             case 'offerte':
-                $breadcrumbs[] = ['label' => 'Offerte', 'url' => '/offerte'];
+                $breadcrumbs[] = ['label' => 'Offerte', 'url' => BASE_URL . '/offerte'];
                 break;
         }
 

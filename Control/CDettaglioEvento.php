@@ -205,9 +205,9 @@ class CDettaglioEvento extends BaseController {
 
     protected function getBreadcrumbs(string $currentPage = ''): array {
         return [
-            ['label' => 'Home', 'url' => '/'],
-            ['label' => 'Eventi', 'url' => '/eventi'],
-            ['label' => 'Dettaglio evento', 'url' => '/eventi/dettaglio/' . $this->idEventoCorrente],
+            ['label' => 'Home', 'url' => BASE_URL . '/'],
+            ['label' => 'Eventi', 'url' => BASE_URL . '/eventi'],
+            ['label' => 'Dettaglio evento', 'url' => BASE_URL . '/eventi/dettaglio/' . $this->idEventoCorrente],
         ];
     }
 

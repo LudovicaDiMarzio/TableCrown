@@ -89,7 +89,7 @@ class CAmministratore extends BaseController {
     public function mostraProfiloUtenteAdmin(): void {
         $idUtenteRaw = UHTTPMethods::get('id');
         if ($idUtenteRaw === null || !is_numeric($idUtenteRaw)) {
-            UFlashMessage::addMessage('danger', 'ID utente non valido.' . $e->getMessage());
+            UFlashMessage::addMessage('danger', 'ID utente non valido.');
             header('Location: ' . BASE_URL . '/admin/dashboard');
             exit();
         }
@@ -105,11 +105,22 @@ class CAmministratore extends BaseController {
             exit();
         }
 
-        //Recuperiamo lo storico delle recensioni di questo utente che hanno ricevuto almeno una segnalazione
-        $recensioniSegnalate = FPersistentManager::PMgetObjListOnAttribute(ERecensione::class, 'utente', $utente);//TODO: NON VA BENE, QUESTO RESTITUIREBBE TUTTE LE RECENSIONI, SERVE UN METODO APPOSTA CHE RESTITUISCE SOLO QUELLE SEGNALATE 
+        //Calcoliamo il numero totale di segnalazioni ricevute dall'utente
+        $conteggioSegnalazioni = 0;
+        $recensioniSegnalate = [];
+
+        foreach ($utente->getRecensioni() as $recensione) {
+            $segnalazioniDellaRecensione = $recensione->getSegnalazioni();
+            $numeroSegnalazioniRecensione = count($segnalazioniDellaRecensione);
+
+            if ($numeroSegnalazioniRecensione > 0) {
+                $conteggioSegnalazioni += $numeroSegnalazioniRecensione;
+                $recensioniSegnalate[] = $recensione; //teniamo solo quelle effettivamente segnalate
+            }
+        }
 
         $datiLayout = $this->preparaDatiLayout('admin_profilo_utente', [
-            'utente' => $this->utenteAdminToArray($utente), //MANCA IL NUMERO DI SEGNALAZIONI TOTALI CHE VANNO RECUPERATE
+            'utente' => $this->utenteAdminToArray($utente, $conteggioSegnalazioni), 
             'recensioniSegnalate' => $this->recensioniToArray($recensioniSegnalate),
         ]);
 
@@ -319,7 +330,7 @@ class CAmministratore extends BaseController {
         ];
     }
 
-    public function getBreadcrumbs(string $currentPage = ''): array { //DA RIVEDERE: A COSA SERVE currentPage? FORSE PER PAGINE DELL'ADMIN NON DOVREI METTERE 'Home' MA DIRETTAMENTE 'Dashboard Admin'?
+    public function getBreadcrumbs(string $currentPage = ''): array {
         $breadcrumbs = [
             ['label' => 'Home', 'url' => BASE_URL . '/'],
             ['label' => 'Dashboard Admin', 'url' => BASE_URL . '/admin/dashboard'],

@@ -281,12 +281,12 @@ class CAutenticazione extends BaseController {
     protected function getBreadcrumbs(string $currentPage = ''): array {
         return match ($currentPage) {
             'registrati' => [
-                ['label' => 'Home', 'url' => '/'],
-                ['label' => 'Registrati', 'url' => '/registrati']
+                ['label' => 'Home', 'url' => BASE_URL . '/'],
+                ['label' => 'Registrati', 'url' => BASE_URL . '/registrati']
             ],
             default => [
-                ['label' => 'Home', 'url' => '/'],
-                ['label' => 'Login', 'url' => '/accedi']
+                ['label' => 'Home', 'url' => BASE_URL . '/'],
+                ['label' => 'Login', 'url' => BASE_URL . '/accedi']
             ],
         };
     }

@@ -6,7 +6,6 @@ use TableCrown\Utility\UFlashMessage;
 use TableCrown\Entity\ECartaDiCredito;
 use TableCrown\Foundation\BancaMockService;
 use TableCrown\Foundation\FPersistentManager;
-use TableCrown\Presentation\Views\ViewProfiloFactory;
 use Exception;
 use InvalidArgumentException;
 

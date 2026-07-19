@@ -188,4 +188,12 @@ class CCheckout extends BaseController {
         return $indirizzo;
     }
 
+    protected function getBreadcrumbs(string $currentPage = ''): array {
+        return [
+            ['label' => 'Home', 'url' => BASE_URL . '/'],
+            ['label' => 'Carrello', 'url' => BASE_URL . '/carrello'],
+            ['label' => 'Checkout', 'url' => BASE_URL . '/checkout']
+        ];
+    }
+
 }
