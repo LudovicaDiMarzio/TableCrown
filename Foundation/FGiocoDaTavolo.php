@@ -153,7 +153,9 @@ class FGiocoDaTavolo
                     $datalimite = new \DateTime();
                     $datalimite->modify('-1 month');
                     $qb->andWhere('g.dataPubblicazione >= :datalimite')
-                        ->setParameter('datalimite', $datalimite);
+                       ->andWhere('g.disponibilitaProdotto=: disponibilita')  
+                        ->setParameter('datalimite', $datalimite)
+                        ->setParameter('disponibilita', DisponibilitaProdotto::Disponibile);
                 }   
                 
                 if (in_array('sconti', $filtri['in_evidenza_filtro'])) {

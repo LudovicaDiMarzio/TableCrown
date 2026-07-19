@@ -1,125 +1,123 @@
 <?php
-namespace Testing\Fixtures;
+namespace TableCrown\Fixture;
 
-use Doctrine\Common\DataFixtures\AbstractFixture;
-use Doctrine\Common\DataFixtures\DependentFixtureInterface;
-use Doctrine\Persistence\ObjectManager;
 use Faker\Factory;
-
-// Importiamo tutte le classi necessarie
 use TableCrown\Entity\ESerata;
 use TableCrown\Entity\ETorneo;
 use TableCrown\Entity\EChallenge;
 use TableCrown\Entity\EPrezzo;
 use TableCrown\Entity\EGiocoDaTavolo;
-use TableCrown\Entity\EPortaDadi;
-use TableCrown\Entity\EBustine;
-use TableCrown\Entity\Enumerativi\Valuta;
+use tablecrown\Entity\Enumerativi\Valuta;
+use TableCrown\Entity\EDanno;
+use TableCrown\Entity\Enumerativi\DisponibilitaProdotto;
+use TableCrown\Entity\Enumerativi\DifficoltaGioco;
+use TableCrown\Entity\Enumerativi\LinguaGioco;
 
-class EventoFixture extends AbstractFixture implements DependentFixtureInterface
+// use TableCrown\Foundation\FEntityManager;
+
+class EventiFixture
 {
-    public function load(ObjectManager $manager): void
+    public static function loadFixtures(): void
     {
         $faker = Factory::create('it_IT');
+        
+        // $em = FEntityManager::getInstance()->getEntityManager();
 
-        echo "Generazione dell'ecosistema Eventi in corso...\n";
+        // ---------------------------------------------------------
+        // 1. PREPARAZIONE DIPENDENZE (Premi, Giochi, Quote)
+        // ---------------------------------------------------------
+        
+        // Creiamo una quota da riutilizzare
+        $quotaStandard = new EPrezzo(15.00, Valuta::EUR);
+        // $em->persist($quotaStandard);
 
-        // ==========================================
-        // 1. GENERAZIONE SERATE (5 eventi)
-        // ==========================================
+        // Creiamo un EGiocoDaTavolo valido secondo il nuovo costruttore
+        // ATTENZIONE: i casi degli Enum (es. ::Facile, ::Italiano) devono esistere nei tuoi file!
+        $giocoPremio = new EGiocoDaTavolo(
+            "Gioco Faker " . $faker->word(),          // string $nomeProdotto
+            $faker->paragraph(),                      // string $descrizioneProdotto
+            DisponibilitaProdotto::Disponibile,       // DisponibilitaProdotto $disponibilitaProdotto
+            10,                                       // int $quantita
+            ['Avventura', 'Strategia'],               // array $categoria
+            ['Tabellone', 'Carte', 'Dadi'],           // array $componenti
+            DifficoltaGioco::Facile,                  // DifficoltaGioco $difficolta (sostituisci col tuo caso reale)
+            LinguaGioco::Italiano,                    // LinguaGioco $lingua (sostituisci col tuo caso reale)
+            $faker->imageUrl(640, 480, 'abstract'),   // ?string $imgProdotto
+            $quotaStandard,                           // ?EPrezzo $prezzo
+            null,                                     // ?EGiocoDaTavolo $giocoBase (null perché è un gioco base)
+            2,                                        // int $numeroGiocatoriMin
+            4,                                        // int $numeroGiocatoriMax
+            10,                                       // int $etaMinima
+            60,                                       // int $durataMedia
+            null,                                     // ?EDanno $danno
+            null                                      // ?string $descrizioneDanno
+        );
+        // $em->persist($giocoPremio);
+
+        // ---------------------------------------------------------
+        // 2. FIXTURE PER ESerata
+        // ---------------------------------------------------------
         for ($i = 0; $i < 5; $i++) {
-            // La data deve essere nel futuro (es. tra 1 settimana e 2 mesi da oggi)
-            $dataInizio = $faker->dateTimeBetween('+1 week', '+2 months');
-            
             $serata = new ESerata(
-                "Serata " . $faker->catchPhrase(),                            // nome
-                "assets/images/default_serata.png",                           // img
-                $faker->paragraph(),                                          // descrizione
-                $dataInizio,                                                  // data inizio
-                $faker->numberBetween(10, 40),                                // max partecipanti
-                $faker->randomElement(['Gioco Libero', 'Presentazione', 'A Tema']) // tipo serata
+                "Serata " . $faker->words(3, true), 
+                $faker->imageUrl(640, 480, 'nightlife'), 
+                $faker->paragraph(), 
+                $faker->dateTimeBetween('+1 days', '+2 weeks'), 
+                $faker->numberBetween(10, 40), 
+                $faker->randomElement(['Gioco libero', 'Presentazione', 'Torneo amatoriale']) 
             );
-
-            $this->addReference('serata_' . $i, $serata);
-            $manager->persist($serata);
+            
+            // $em->persist($serata);
         }
 
-        // ==========================================
-        // 2. GENERAZIONE TORNEI (5 eventi)
-        // ==========================================
-        for ($i = 0; $i < 5; $i++) {
-            $dataInizio = $faker->dateTimeBetween('+1 week', '+2 months');
+        // ---------------------------------------------------------
+        // 3. FIXTURE PER ETorneo e EChallenge
+        // ---------------------------------------------------------
+        for ($i = 0; $i < 3; $i++) {
             
-            // Il torneo ha una quota di iscrizione (creata al volo in cascade)
-            $quota = new EPrezzo($faker->randomFloat(2, 5, 20), Valuta::EUR, 0);
-            
-            // Il torneo si basa su un gioco specifico (peschiamo tra i 10 che abbiamo creato)
-            $giocoDelTorneo = $this->getReference('gioco_' . $faker->numberBetween(0, 9), EGiocoDaTavolo::class);
-            
-            // Il premio (facciamo finta che si vinca un altro gioco da tavolo)
-            $premio = $this->getReference('gioco_' . $faker->numberBetween(0, 9), EGiocoDaTavolo::class);
+            $torneiDellaChallenge = [];
+            // Genero un numero casuale di tornei valido per la challenge (tra 3 e 7)
+            $numeroTornei = $faker->numberBetween(3, 7); 
 
-            $torneo = new ETorneo(
-                "Torneo di " . $giocoDelTorneo->getNomeProdotto(),            // nome
-                "assets/images/default_torneo.png",                           // img
-                $faker->paragraph(),                                          // descrizione
-                $dataInizio,                                                  // data inizio
-                $faker->numberBetween(8, 16),                                 // max partecipanti
-                $quota,                                                       // quota iscrizione
-                $premio,                                                      // premio in palio
-                $giocoDelTorneo                                               // gioco di riferimento
-            );
+            for ($j = 0; $j < $numeroTornei; $j++) {
+                $torneo = new ETorneo(
+                    "Torneo " . $faker->words(2, true), 
+                    $faker->imageUrl(640, 480, 'sports'), 
+                    $faker->paragraph(), 
+                    $faker->dateTimeBetween('+1 month', '+3 months'), 
+                    $faker->numberBetween(16, 64), 
+                    $quotaStandard, // quotaIscrizione
+                    $giocoPremio,   // premio (supera verificaPremio perché l'abbiamo messo Disponibile)
+                    $giocoPremio    // gioco su cui si gioca
+                );
+                
+                $torneiDellaChallenge[] = $torneo;
+                // $em->persist($torneo);
+            }
 
-            $this->addReference('torneo_' . $i, $torneo);
-            $manager->persist($torneo);
-        }
+            // Calcolo punteggi per superare verificaPunteggi() in sicurezza (P1 > P2 > P3 > 0)
+            $punteggioTerzo = $faker->numberBetween(10, 50);
+            $punteggioSecondo = $faker->numberBetween($punteggioTerzo + 10, 100);
+            $punteggioPrimo = $faker->numberBetween($punteggioSecondo + 10, 200);
 
-        // ==========================================
-        // 3. GENERAZIONE CHALLENGE (5 eventi)
-        // ==========================================
-        for ($i = 0; $i < 5; $i++) {
-            $dataInizio = $faker->dateTimeBetween('+1 week', '+2 months');
-            
-            $quota = new EPrezzo($faker->randomFloat(2, 2, 10), Valuta::EUR, 0);
-            
-            // Per variare, la Challenge ha come premio un Porta Dadi
-            $premio = $this->getReference('portadadi_' . $faker->numberBetween(0, 4), EPortaDadi::class);
-
-            // LOGICA DEI PUNTEGGI: Devono essere rigorosamente 1° > 2° > 3° per superare le tue validazioni!
-            $punteggio1 = $faker->numberBetween(100, 150);
-            $punteggio2 = $faker->numberBetween(50, 99);
-            $punteggio3 = $faker->numberBetween(10, 49);
-
+            // Creo la Challenge passando l'array di tornei e i punteggi validi
             $challenge = new EChallenge(
-                "Challenge: " . $faker->word(),                               // nome
-                "assets/images/default_challenge.png",                        // img
-                $faker->paragraph(),                                          // descrizione
-                $dataInizio,                                                  // data inizio
-                $faker->numberBetween(20, 50),                                // max partecipanti
-                $quota,                                                       // quota iscrizione
-                $premio,                                                      // premio in palio
-                $punteggio1,                                                  // punti 1° classificato
-                $punteggio2,                                                  // punti 2° classificato
-                $punteggio3                                                   // punti 3° classificato
+                "Challenge " . $faker->words(2, true), 
+                $faker->imageUrl(640, 480, 'trophy'), 
+                $faker->paragraph(), 
+                $faker->dateTimeBetween('+4 months', '+6 months'), 
+                $faker->numberBetween(50, 150), 
+                $quotaStandard, 
+                $giocoPremio, 
+                $punteggioPrimo, 
+                $punteggioSecondo, 
+                $punteggioTerzo, 
+                $torneiDellaChallenge 
             );
 
-            $this->addReference('challenge_' . $i, $challenge);
-            $manager->persist($challenge);
+            // $em->persist($challenge);
         }
 
-        $manager->flush();
-        echo "Eventi (Serate, Tornei e Challenge) generati e salvati con successo!\n";
-    }
-
-    /**
-     * Visto che usiamo Giochi e Porta Dadi come premi e basi per i tornei,
-     * i Prodotti devono essere caricati prima degli Eventi!
-     */
-    public function getDependencies(): array
-    {
-        return [
-            GiocoDaTavoloFixture::class,
-            PortaDadiFixture::class,
-        ];
+        // $em->flush();
     }
 }

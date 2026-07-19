@@ -12,9 +12,9 @@ class DannoFixture extends AbstractFixture
 {
     public function load(ObjectManager $manager): void
     {
-        $dannolieve = new EDanno(LivelloDannoGiochi::L1, 10);
-        $dannomedio = new EDanno(LivelloDannoGiochi::L2, 20);
-        $dannoalto = new EDanno(LivelloDannoGiochi::L3, 30);
+        $dannolieve = new EDanno(LivelloDannoGiochi::L1);
+        $dannomedio = new EDanno(LivelloDannoGiochi::L2);
+        $dannoalto = new EDanno(LivelloDannoGiochi::L3);
 
         $this->addReference('danno_1', $dannolieve);
         $this->addReference('danno_2', $dannomedio);
