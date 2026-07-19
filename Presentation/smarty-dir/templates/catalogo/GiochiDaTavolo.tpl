@@ -6,6 +6,8 @@
 
 {block name="content"}
 
+
+
 <div class="catalogo-container">
 
     {* ── SEARCH BAR E HEADER CATALOGO ── *}
@@ -13,6 +15,9 @@
         <div class="container">
 
             <div class="catalogo-search-wrapper">
+                {* La search bar avvia SEMPRE una nuova ricerca testuale: deve puntare
+                   sempre a /ricerca, indipendentemente dal contesto in cui ci si trova
+                   (a differenza del filters-form sotto, che invece resta context-aware). *}
                 <form class="catalogo-search-form" action="{$base_url}/catalogo/giochi-da-tavolo" method="get" id="search-form">
                     <input class="input catalogo-search-input"
                            type="search"
@@ -166,22 +171,21 @@
                         <h4 class="filter-group-title">
                             <i class="ti ti-tag"></i> In Evidenza
                         </h4>
-                        <div class="checkbox-group" data-exclusive="in_evidenza">
+                        <div class="checkbox-group" data-exclusive="in_evidenza_filtro">
                             <label class="checkbox-label">
                                 <input type="checkbox"
-                                       name="in_evidenza[]"
+                                       name="in_evidenza_filtro[]"
                                        value="sconti"
-                                       {if isset($filtri.in_evidenza) && in_array('sconti', $filtri.in_evidenza)} checked{/if}>
+                                       {if isset($filtri.in_evidenza_filtro) && in_array('sconti', $filtri.in_evidenza_filtro)} checked{/if}>
                                 <span class="checkbox-text">Sconti Attivi</span>
                             </label>
                             <label class="checkbox-label">
                                 <input type="checkbox"
-                                       name="in_evidenza[]"
+                                       name="in_evidenza_filtro[]"
                                        value="novita"
-                                       {if isset($filtri.in_evidenza) && in_array('novita', $filtri.in_evidenza)} checked{/if}>
+                                       {if isset($filtri.in_evidenza_filtro) && in_array('novita', $filtri.in_evidenza_filtro)} checked{/if}>
                                 <span class="checkbox-text">Novità</span>
                             </label>
-                            
                         </div>
                     </div>
 
@@ -341,7 +345,7 @@
 
                     {* ── BOTTONE RESET FILTRI ── *}
                     <div class="filter-actions">
-                        <a href="{$base_url}/catalogo/giochi-da-tavolo" class="button btn-reset-filters">
+                        <a class="pagination-previous" href="{$baseAction}?page={$pagination.current_page - 1}{if isset($filtri.q)}&q={$filtri.q|escape}{/if}">
                             <i class="ti ti-refresh"></i> Ripristina
                         </a>
                     </div>

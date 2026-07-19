@@ -24,7 +24,7 @@
             <aside class="eventi-sidebar">
                 <h2 class="eventi-filtri-title">Filtri</h2>
 
-                <form id="form-filtri-eventi" class="eventi-filtri-form" method="get" action="{$base_url}/catalogo/tornei">
+                <form id="form-filtri-eventi" class="eventi-filtri-form" method="get" action="{$base_url}/eventi/tornei">
 
                     <div class="eventi-filter-group">
                         <h3 class="eventi-filter-group-title">Cerca</h3>

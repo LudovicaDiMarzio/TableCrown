@@ -53,6 +53,11 @@ class EUtente extends EPersona {
 
     #[ORM\Column(type:"string",length:64,nullable:true)]
     private?string$rememberToken=null;
+
+    #[ORM\Column(type: "datetime")]
+    private DateTime $dataRegistrazione;
+
+
         
    
 
@@ -65,6 +70,7 @@ class EUtente extends EPersona {
         $this->stato = StatoUtente::ATTIVO; //un utente appena creato è attivo di default 
         $this->dataFineSospensione = null;
         $this->PlayerLevel = $PlayerLevel;
+        $this->dataRegistrazione = new DateTime();
         $this->segnalazioni = new ArrayCollection(); //inizializziamo la collezione di segnalazioni come un ArrayCollection vuoto
         $this->provvedimenti = new ArrayCollection(); //inizializziamo la collezione di provvedimenti come un ArrayCollection vuoto
         $this->partecipazioni = new ArrayCollection(); //inizializziamo la collezione di partecipazioni come un ArrayCollection vuoto
@@ -239,5 +245,9 @@ class EUtente extends EPersona {
 
     public function getRememberToken():?string{
         return$this->rememberToken;
+    }
+
+    public function getDataRegistrazione(): DateTime {
+        return $this->dataRegistrazione;
     }
 }

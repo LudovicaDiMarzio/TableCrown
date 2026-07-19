@@ -2,8 +2,10 @@
 // Presentation/Views/ViewEventiSerate.php
 namespace TableCrown\Presentation\Views;
 
+use SmartyConfiguration;
+
 class ViewEventiSerate extends BaseViewEventi {
-    private const TEMPLATE = 'eventi/catalogo_serate.tpl';
+    private const TEMPLATE = 'catalogo_serate.tpl';
 
     public function render(array $dati): void {
         $smarty = SmartyConfiguration::getSmarty();

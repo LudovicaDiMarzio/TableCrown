@@ -13,7 +13,7 @@
         <div class="container">
 
             <div class="catalogo-search-wrapper">
-                <form class="catalogo-search-form" action="{$base_url}/catalogo" method="get" id="search-form">
+                <form class="catalogo-search-form" action="{$base_url}/offerte" method="get" id="search-form">
                     <input class="input catalogo-search-input"
                            type="search"
                            name="q"
@@ -75,7 +75,7 @@
                     </div>
                 </div>
 
-                <form class="filters-form" id="filters-form" method="get" action="{$base_url}/catalogo">
+                <form class="filters-form" id="filters-form" method="get" action="{$base_url}/offerte">
 
                     {if isset($filtri.q) && $filtri.q}
                         <input type="hidden" name="q" value="{$filtri.q|escape}">
@@ -122,7 +122,7 @@
 
                     {* ── BOTTONE RESET FILTRI ── *}
                     <div class="filter-actions">
-                        <a href="{$base_url}/catalogo" class="button btn-reset-filters">
+                        <a href="{$base_url}/offerte" class="button btn-reset-filters">
                             <i class="ti ti-refresh"></i> Ripristina
                         </a>
                     </div>
@@ -228,7 +228,7 @@
                     <div class="pagination-wrapper">
                         <nav class="pagination" aria-label="Paginazione">
                             {if $pagination.current_page > 1}
-                                <a class="pagination-previous" href="{$base_url}/catalogo?page={$pagination.current_page - 1}{if isset($filtri.q)}&q={$filtri.q|escape}{/if}{if isset($filtri.price_min)}&price_min={$filtri.price_min|escape}{/if}{if isset($filtri.price_max)}&price_max={$filtri.price_max|escape}{/if}{if isset($filtri.ordinamento)}&ordinamento={$filtri.ordinamento|escape}{/if}">
+                                <a class="pagination-previous" href="{$base_url}/offerte?page={$pagination.current_page - 1}{if isset($filtri.q)}&q={$filtri.q|escape}{/if}{if isset($filtri.price_min)}&price_min={$filtri.price_min|escape}{/if}{if isset($filtri.price_max)}&price_max={$filtri.price_max|escape}{/if}{if isset($filtri.ordinamento)}&ordinamento={$filtri.ordinamento|escape}{/if}">
                                     <i class="ti ti-chevron-left"></i> Precedente
                                 </a>
                             {/if}
@@ -239,14 +239,14 @@
                                         {if $i == $pagination.current_page}
                                             <span class="pagination-link is-current" aria-label="Pagina {$i}" aria-current="page">{$i}</span>
                                         {else}
-                                            <a class="pagination-link" aria-label="Vai a pagina {$i}" href="{$base_url}/catalogo?page={$i}{if isset($filtri.q)}&q={$filtri.q|escape}{/if}{if isset($filtri.price_min)}&price_min={$filtri.price_min|escape}{/if}{if isset($filtri.price_max)}&price_max={$filtri.price_max|escape}{/if}{if isset($filtri.ordinamento)}&ordinamento={$filtri.ordinamento|escape}{/if}">{$i}</a>
+                                            <a class="pagination-link" aria-label="Vai a pagina {$i}" href="{$base_url}/offerte?page={$i}{if isset($filtri.q)}&q={$filtri.q|escape}{/if}{if isset($filtri.price_min)}&price_min={$filtri.price_min|escape}{/if}{if isset($filtri.price_max)}&price_max={$filtri.price_max|escape}{/if}{if isset($filtri.ordinamento)}&ordinamento={$filtri.ordinamento|escape}{/if}">{$i}</a>
                                         {/if}
                                     </li>
                                 {/for}
                             </ul>
 
                             {if $pagination.current_page < $pagination.total_pages}
-                                <a class="pagination-next" href="{$base_url}/catalogo?page={$pagination.current_page + 1}{if isset($filtri.q)}&q={$filtri.q|escape}{/if}{if isset($filtri.price_min)}&price_min={$filtri.price_min|escape}{/if}{if isset($filtri.price_max)}&price_max={$filtri.price_max|escape}{/if}{if isset($filtri.ordinamento)}&ordinamento={$filtri.ordinamento|escape}{/if}">
+                                <a class="pagination-next" href="{$base_url}/offerte?page={$pagination.current_page + 1}{if isset($filtri.q)}&q={$filtri.q|escape}{/if}{if isset($filtri.price_min)}&price_min={$filtri.price_min|escape}{/if}{if isset($filtri.price_max)}&price_max={$filtri.price_max|escape}{/if}{if isset($filtri.ordinamento)}&ordinamento={$filtri.ordinamento|escape}{/if}">
                                     Successiva <i class="ti ti-chevron-right"></i>
                                 </a>
                             {/if}
@@ -263,7 +263,7 @@
                         <p class="empty-state-message">
                             Prova a modificare i filtri o la ricerca per trovare altri prodotti.
                         </p>
-                        <a href="{$base_url}/catalogo" class="button btn-reset">
+                        <a href="{$base_url}/offerte" class="button btn-reset">
                             <i class="ti ti-refresh"></i> Vedi Catalogo Completo
                         </a>
                     </div>
@@ -288,7 +288,7 @@
                 </div>
             </div>
             <div class="minicart-actions">
-                <a href="{$base_url}/catalogo" class="button btn-minicart-continua">
+                <a href="{$base_url}/offerte" class="button btn-minicart-continua">
                     <i class="ti ti-arrow-left"></i> Continua Shopping
                 </a>
                 <a href="{$base_url}/carrello" class="button btn-minicart-ordine">
