@@ -29,7 +29,7 @@ class CAutenticazione extends BaseController {
     public function mostraFormLogin(): void {
         //Se l'utente è già loggato, lo reindirizziamo alla home.
         if ($this->isLoggedIn()) {
-            header('Location: /');
+            header('Location: ' . BASE_URL . '/');
             exit();
         }
 
@@ -62,7 +62,7 @@ class CAutenticazione extends BaseController {
     public function mostraFormRegistrazione(): void {
         //Se l'utente è già loggato, lo reindirizziamo alla home.
         if ($this->isLoggedIn()) {
-            header('Location: /');
+            header('Location: ' . BASE_URL . '/');
             exit();
         }
 
@@ -80,13 +80,13 @@ class CAutenticazione extends BaseController {
     public function login(): void { 
         try {
             //Recuperiamo i dati inseriti dall'utente nel form tramite l'utility HTTP
-            $email = UHTTPMethods::post('email');
-            $password = UHTTPMethods::post('password');
-            $redirectTo = UHTTPMethods::postString('redirect_to'); //legge il campo hidden del form
+            $email = UHTTPMethods::postString('email');
+            $password = UHTTPMethods::postString('password');
+            $redirectTo = UHTTPMethods::post('redirect_to'); //legge il campo hidden del form
             $ricordamiBox = UHTTPMethods::post('ricordami'); //può essere null se non spuntato
         } catch (\InvalidArgumentException $e) {
             UFlashMessage::addMessage('danger', $e->getMessage());
-            header('Location: /accedi');
+            header('Location: ' . BASE_URL . '/accedi');
             exit();
         }
        
@@ -100,7 +100,7 @@ class CAutenticazione extends BaseController {
             USession::setSessionElement('old_ricordami', $ricordamiBox !== null);
 
             //Costruiamo la query string per non perdere il redirect_to originale durante il PRG
-            $urlRedirect = '/accedi' . ($redirectTo ? '?redirect_to=' . urlencode($redirectTo) : '');
+            $urlRedirect = BASE_URL . '/accedi' . ($redirectTo ? '?redirect_to=' . urlencode($redirectTo) : '');
             header('Location: ' . $urlRedirect);
             exit();
         }
@@ -119,7 +119,7 @@ class CAutenticazione extends BaseController {
             USession::setSessionElement('old_email', $email);
             USession::setSessionElement('old_ricordami', $ricordamiBox !== null);
 
-            $urlRedirect = '/accedi' . ($redirectTo ? '?redirect_to=' . urlencode($redirectTo) : '');
+            $urlRedirect = BASE_URL . '/accedi' . ($redirectTo ? '?redirect_to=' . urlencode($redirectTo) : '');
             header('Location: ' . $urlRedirect);
             exit();
         }
@@ -154,15 +154,15 @@ class CAutenticazione extends BaseController {
         if ($persona instanceof EAmministratore) {
             USession::setSessionElement('ruolo', 'amministratore');
             UFlashMessage::addMessage('success', 'Bentornato Amministratore!');
-            header("Location: /admin/dashboard"); //reindirizza alla dashboard admin
+            header("Location: " . BASE_URL . "/admin/dashboard"); //reindirizza alla dashboard admin
         } elseif ($persona instanceof EGestore) {
             USession::setSessionElement('ruolo', 'gestore');
             UFlashMessage::addMessage('success', 'Bentornato Gestore!');
-            header("Location: /gestore/dashboard"); //reindirizza alla dashboard gestore
+            header("Location: " . BASE_URL . "/gestore/dashboard"); //reindirizza alla dashboard gestore
         } else { //in questo caso è un EUtente
             USession::setSessionElement('ruolo', 'utente');
             UFlashMessage::addMessage('success', 'Login effettuato con successo!');
-            header("Location: /"); //reindirizza alla home
+            header("Location: " . BASE_URL . "/"); //reindirizza alla home
         }
 
         exit();
@@ -182,7 +182,7 @@ class CAutenticazione extends BaseController {
             $dataNascita = UHTTPMethods::postString('data_nascita');
         } catch (\InvalidArgumentException $e) {
             UFlashMessage::addMessage('danger', $e->getMessage());
-            header('Location: /registrati');
+            header('Location: ' . BASE_URL . '/registrati');
             exit();
         }
          
@@ -191,14 +191,14 @@ class CAutenticazione extends BaseController {
             //Se manca uno dei tre, impostiamo un messaggio di errore rapido
             UFlashMessage::addMessage('danger', 'Tutti i campi sono obbligatori.');
             //Pattern PRG: ricarichiamo la pagina del form per mostrare l'errore in sicurezza
-            header('Location: /registrati');
+            header('Location: ' . BASE_URL . '/registrati');
             exit();
         }
 
         //Verifichiamo che password e confermaPassword coincidano
         if ($password !== $confermaPassword) {
             UFlashMessage::addMessage('danger', 'Le password non coincidono.');
-            header('Location: /registrati');
+            header('Location: ' . BASE_URL . '/registrati');
             exit();
         }
 
@@ -207,7 +207,7 @@ class CAutenticazione extends BaseController {
 
         if ($esiste) {
             UFlashMessage::addMessage('danger', 'Questa email è già registrata.');
-            header('Location: /registrati');
+            header('Location: ' . BASE_URL . '/registrati');
             exit();
         }
 
@@ -225,7 +225,7 @@ class CAutenticazione extends BaseController {
         } catch (InvalidArgumentException $e) {
             //Se l'utente non ha completato i campi obbligatori, mostriamo un messaggio di errore
             UFlashMessage::addMessage('danger', $e->getMessage());
-            header('Location: /registrati');
+            header('Location: ' . BASE_URL . '/registrati');
             exit();
         }
 
@@ -233,11 +233,11 @@ class CAutenticazione extends BaseController {
 
         if ($salvato) {
             UFlashMessage::addMessage('success', 'Registrazione completata! Effettua il login.');
-            header("Location: /accedi");
+            header("Location: " . BASE_URL . "/accedi");
             exit();
         } else {
             UFlashMessage::addMessage('danger', 'Si è verificato un errore durante la registrazione. Riprova.');
-            header("Location: /registrati");
+            header("Location: " . BASE_URL . "/registrati");
         }
 
         exit();
@@ -270,7 +270,7 @@ class CAutenticazione extends BaseController {
         UFlashMessage::addMessage('success', 'Disconnessione effettuata. A presto!');
 
         //Reindirizziamo l'utente alla home
-        header('Location: /');
+        header('Location: ' . BASE_URL . '/');
         exit();
     }
 

@@ -17,6 +17,7 @@ class CFrontController {
         $routePrincipale = strtolower($urlParts[0]);
         $sottoRoute = isset($urlParts[1]) ? strtolower($urlParts[1]) : null;
         $sottoRoute2 = isset($urlParts[2]) ? strtolower($urlParts[2]) : null;
+        $sottoRoute3 = isset($urlParts[3]) ? strtolower($urlParts[3]) : null;
 
         $metodoHTTP = UHTTPMethods::method();
 
@@ -82,13 +83,17 @@ class CFrontController {
                     } elseif ($sottoRoute === 'challenge') {
                         $controller = new CEventi();
                         $controller->mostraListaChallenge(); //GET /catalogo/challenge
-                    } elseif ($sottoRoute === 'dettaglio') {
+                    } elseif (in_array($sottoRoute, ['dettaglio', 'checkout'])) {
                         if ($sottoRoute2 === null || !is_numeric($sottoRoute2)) {
                             $this->mostra404();
                             break;
                         }
                         $controller = new CDettaglioEvento();
-                        $controller->mostraDettaglioEvento((int)$sottoRoute2);
+                        if ($sottoRoute === 'dettaglio') {
+                            $controller->mostraDettaglioEvento((int)$sottoRoute2);
+                        } else {
+                            $controller->mostraCheckoutEvento((int)$sottoRoute2);
+                        }
                     } elseif ($sottoRoute === 'risultati') {
                         //TODO: implementare il metodo mostraRisultatiRicerca() in CEventi()
                         $this->mostra404(); //DA TOGLIERE POI
@@ -304,6 +309,131 @@ class CFrontController {
                     $this->mostra404();
                 }
                 break;
+
+
+            case 'admin':
+                if ($metodoHTTP === 'GET') {
+                    $controller = new CAmministratore();
+                    if ($sottoRoute === 'dashboard') { //GET /admin/dashboard
+                        $controller->mostraDashboardAdmin();
+                    } elseif ($sottoRoute === 'utenti') { //GET /admin/utenti
+                        $controller->mostraListaUtentiAdmin();
+                    } elseif ($sottoRoute === 'recensioni') { //GET /admin/recensioni
+                        $controller->mostraListaRecensioniAdmin();
+                    } elseif ($sottoRoute === 'utente' && $sottoRoute2 === 'profilo') { //GET /admin/utente/profilo?id=XX
+                        $controller->mostraProfiloUtenteAdmin();
+                    } else {
+                        $this->mostra404();
+                    }
+                } elseif ($metodoHTTP === 'POST') {
+                    if ($sottoRoute === 'utente' && $sottoRoute2 === 'sospendi') { //POST /admin/utente/sospendi
+                        $controller = new CAmministratore();
+                        $controller->sospendiUtenteAdmin();
+                    } elseif ($sottoRoute === 'utente' && $sottoRoute2 === 'banna') { //POST /admin/utente/banna
+                        $controller = new CAmministratore();
+                        $controller->bannaUtenteAdmin();
+                    } elseif ($sottoRoute === 'recensioni' && $sottoRoute2 === 'elimina') { //POST /admin/recensioni/elimina
+                        $controller = new CRecensioni();
+                        $controller->eliminaRecensioneAdmin();
+                    } elseif ($sottoRoute === 'recensioni' && $sottoRoute2 === 'rigetta') { //POST /admin/recensioni/rigetta
+                        $controller = new CRecensioni();
+                        $controller->rigettaSegnalazioneAdmin();
+                    } else {
+                        $this->mostra404();
+                    }
+                } else {
+                    $this->mostra404();
+                }
+                break;
+
+
+                case 'gestore':
+                    $controller = new CGestore();
+                    if ($metodoHTTP === 'GET') {
+                        if ($sottoRoute === 'dashboard') { //GET /gestore/dashboard
+                            $controller->mostraDashboardGestore();
+                        } elseif ($sottoRoute === 'catalogo') {
+                            if ($sottoRoute2 === 'giochi-da-tavolo') { //GET /gestore/catalogo/giochi-da-tavolo
+                                $controller->mostraCatalogoGiochiGestore();
+                            } elseif ($sottoRoute2 === 'bustine') { //GET /gestore/catalogo/bustine
+                                $controller->mostraCatalogoBustineGestore();
+                            } elseif ($sottoRoute2 === 'porta-dadi') { //GET /gestore/catalogo/porta-dadi
+                                $controller->mostraCatalogoPortaDadiGestore();
+                            } else {
+                                $this->mostra404();
+                            }
+                        } elseif ($sottoRoute === 'ricerca') { //GET /gestore/ricerca
+                            $controller->mostraRisultatiRicercaProdottiGestore();
+                        } elseif ($sottoRoute === 'eventi') {
+                            if ($sottoRoute2 === 'serate') { //GET /gestore/eventi/serate
+                                $controller->mostraListaSerateGestore();
+                            } elseif ($sottoRoute2 === 'tornei') { //GET /gestore/eventi/tornei
+                                $controller->mostraListaTorneiGestore();
+                            } elseif ($sottoRoute2 === 'challenge') { //GET /gestore/eventi/challenge
+                                $controller->mostraListaChallengeGestore();
+                            } else {
+                                $this->mostra404();
+                            }
+                        } else {
+                            $this->mostra404();
+                        }
+                    } elseif ($metodoHTTP === 'POST') {
+                        if ($sottoRoute === 'catalogo') {
+                            if ($sottoRoute3 === 'nuovo') {
+                                if ($sottoRoute2 === 'giochi-da-tavolo') { //POST /gestore/catalogo/giochi-da-tavolo/nuovo
+                                    $controller->creaGiocoDaTavolo();
+                                } elseif ($sottoRoute2 === 'bustine') { //POST /gestore/catalogo/bustine/nuovo
+                                    $controller->creaBustine();
+                                } elseif ($sottoRoute2 === 'porta-dadi') { //POST /gestore/catalogo/porta-dadi/nuovo
+                                    $controller->creaPortaDadi();
+                                } else {
+                                    $this->mostra404();
+                                }
+                            } elseif ($sottoRoute2 === 'prodotto' && $sottoRoute3 === 'elimina') { //POST /gestore/catalogo/prodotto/elimina
+                                $controller->eliminaProdottoGestore();
+                            } else {
+                                $this->mostra404();
+                            }
+                        } elseif ($sottoRoute === 'prodotti') {
+                            if ($sottoRoute2 === 'quantita') { //POST /gestore/prodotti/quantita
+                                $controller->aggiornaQuantitaProdottoGestore();
+                            } elseif ($sottoRoute2 === 'modifica') { //POST /gestore/prodotti/modifica
+                                $controller->modificaProdottoGestore();
+                            } else {
+                                $this->mostra404();
+                            }
+                        } elseif ($sottoRoute === 'eventi') {
+                            if ($sottoRoute3 === 'nuovo') {
+                                if ($sottoRoute2 === 'serate') { //POST /gestore/eventi/serate/nuovo
+                                    $controller->creaSerata();
+                                } elseif ($sottoRoute2 === 'tornei') { //POST /gestore/eventi/tornei/nuovo
+                                    $controller->creaTorneo();
+                                } elseif ($sottoRoute2 === 'challenge') { //POST /gestore/eventi/challenge/nuovo
+                                    $controller->creaChallenge();
+                                } else {
+                                    $this->mostra404();
+                                }
+                            } elseif ($sottoRoute2 === 'attiva') { //POST /gestore/eventi/attiva
+                                $controller->attivaEventoGestore();
+                            } elseif ($sottoRoute2 === 'concludi') { //POST /gestore/eventi/concludi
+                                $controller->concludiEventoGestore();
+                            } elseif ($sottoRoute2 === 'annulla') { //POST /gestore/eventi/annulla
+                                $controller->annullaEventoGestore();
+                            } elseif ($sottoRoute2 === 'riprogramma') { //POST /gestore/eventi/riprogramma
+                                $controller->riprogrammaEventoGestore();
+                            } elseif ($sottoRoute2 === 'modifica') { //POST /gestore/eventi/modifica
+                                $controller->modificaEventoGestore();
+                            } else {
+                                $this->mostra404();
+                            }
+                        } else {
+                            $this->mostra404();
+                        }
+                        
+                    } else {
+                        $this->mostra404();
+                    }
+                    break;
 
 /* 
             case 'chi-siamo':

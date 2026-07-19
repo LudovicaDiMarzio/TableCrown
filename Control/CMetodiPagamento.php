@@ -30,7 +30,7 @@ class CMetodiPagamento extends BaseController {
 
         if (!$utente) {
             UFlashMessage::addMessage('danger', 'L\'utente non è loggato.');
-            header('Location: /profilo/pagamenti');
+            header('Location: ' . BASE_URL . '/profilo/pagamenti');
             exit();
         }
 
@@ -43,7 +43,7 @@ class CMetodiPagamento extends BaseController {
         //Validazione base dei dati inviati
         if (empty($numeroCarta) || empty($cvv) || empty($titolare) || empty($scadenza)) {
             UFlashMessage::addMessage('danger', 'Tutti i campi sono obbligatori.');
-            header('Location: /profilo/pagamenti');
+            header('Location: ' . BASE_URL . '/profilo/pagamenti');
             exit();
         }
 
@@ -76,7 +76,7 @@ class CMetodiPagamento extends BaseController {
         }
 
         //Pattern PRG: reindirizziamo alla sezione visualizzazione nel profilo dell'utente
-        header('Location: /profilo/pagamenti');
+        header('Location: ' . BASE_URL . '/profilo/pagamenti');
         exit();
     }
 
@@ -91,7 +91,7 @@ class CMetodiPagamento extends BaseController {
 
         if (!$idCarta) {
             UFlashMessage::addMessage('danger', 'Metodo di pagamento non valido o non specificato..');
-            header('Location: /profilo/pagamenti');
+            header('Location: ' . BASE_URL . '/profilo/pagamenti');
             exit();
         }
 
@@ -102,14 +102,14 @@ class CMetodiPagamento extends BaseController {
             //Controlliamo se la carta esiste
             if (!$cartaDaEliminare) {
                 UFlashMessage::addMessage('danger', 'La carta di credito selezionata non esiste.');
-                header('Location: /profilo/pagamenti');
+                header('Location: ' . BASE_URL . '/profilo/pagamenti');
                 exit();
             }
 
             //Controllo di sicurezza: l'utente può eliminare solo una carta di sua proprietà
             if ($cartaDaEliminare->getUtente()->getIdPersona() !== $utente->getIdPersona()) {
                 UFlashMessage::addMessage('danger', 'Non sei autorizzato ad eliminare questa carta di credito.');
-                header('Location: /profilo/pagamenti');
+                header('Location: ' . BASE_URL . '/profilo/pagamenti');
                 exit();
             }
 
@@ -126,7 +126,7 @@ class CMetodiPagamento extends BaseController {
             UFlashMessage::addMessage('danger', 'Impossibile completare l\'operazione: ' . $e->getMessage());
         }
 
-        header('Location: /profilo/pagamenti');
+        header('Location: ' . BASE_URL . '/profilo/pagamenti');
         exit();
     }
 }

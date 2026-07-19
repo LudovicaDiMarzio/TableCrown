@@ -34,7 +34,7 @@ class CProfilo extends BaseController {
         ['label' => 'Modifica account', 'url' => '/profilo/modifica'],
         ['label' => 'I Miei Ordini', 'url' => '/profilo/ordini'],
         ['label' => 'Le Mie Recensioni', 'url' => '/profilo/recensioni'],
-        ['label' => 'Wishlist', 'url' => 'profilo/wishlist'], 
+        ['label' => 'Wishlist', 'url' => '/profilo/wishlist'], 
         ['label' => 'Eventi', 'url' => '/profilo/eventi'],
         ['label' => 'I Miei Indirizzi', 'url' => '/profilo/indirizzi'],
     ];
@@ -139,7 +139,7 @@ class CProfilo extends BaseController {
             $email = UHTTPMethods::postString('email');
         } catch (\InvalidArgumentException $e) {
             UFlashMessage::addMessage('danger', $e->getMessage());
-            header('Location: /profilo/modifica');
+            header('Location: ' . BASE_URL . '/profilo/modifica');
             exit();
         }
         
@@ -164,7 +164,7 @@ class CProfilo extends BaseController {
             }
         } catch (\InvalidArgumentException $e) {
             UFlashMessage::addMessage('danger', $e->getMessage());
-            header('Location: /profilo/modifica');
+            header('Location: ' . BASE_URL . '/profilo/modifica');
             exit();
         }
 
@@ -175,7 +175,7 @@ class CProfilo extends BaseController {
             $salvato ? 'Account modificato con successo!' : 'Si è verificato un errore durante la modifica del profilo. Riprova.'
         );
 
-        header('Location: /profilo/modifica');
+        header('Location: ' . BASE_URL . '/profilo/modifica');
         exit();
     }
 
@@ -469,4 +469,5 @@ class CProfilo extends BaseController {
         $datiLayout = $this->preparaDatiLayout('profilo_pagamenti', $datiPagina);
         ViewProfiloFactory::render($datiLayout);
     }
+
 }

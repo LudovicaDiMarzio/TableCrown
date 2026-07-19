@@ -27,7 +27,7 @@ class CProdotto extends BaseController {
 
         if (!$prodotto) {
             UFlashMessage::addMessage('danger', 'Il prodotto non esiste o non è più disponibile.');
-            header('Location: /catalogo/giochi-da-tavolo');
+            header('Location: ' . BASE_URL . '/catalogo/giochi-da-tavolo');
             exit();
         }
 
@@ -65,7 +65,7 @@ class CProdotto extends BaseController {
        
         //Attributi specifici dei giochi da tavolo
         if ($prodotto instanceof EGiocoDaTavolo) {
-            $dati['categoria'] = array_map(fn($c) => $c->value, $prodotto->getCategoria());
+            $dati['categoria'] = $prodotto->getCategoria(); //poiché l'array di categorie è ha il tipo json di Doctrine, l'array nativo PHP viene serializzato automaticamente in una stringa JSON nel DB e deserializzato in un array primitivo di PHP quando ricarica l'oggetto dal DB
             $dati['componenti'] = $prodotto->getComponenti();
 
             $giocoBase = $prodotto->getGiocoBase();
