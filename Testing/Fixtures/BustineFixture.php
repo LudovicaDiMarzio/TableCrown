@@ -28,6 +28,12 @@ class BustineFixture extends AbstractFixture
     {
         $faker = Factory::create('it_IT'); //creazione istanza di faker per la lingua italiana
 
+        $percorsoImg = __DIR__ . '/../../public/img/default_game.jpg'; 
+        if (!file_exists($percorsoImg)) {
+            throw new \Exception("\n\nERRORE GRAVE: Non riesco a trovare l'immagine per le Bustine!\nPercorso calcolato: " . $percorsoImg . "\n\n");
+        }
+        $immaginePredefinita = file_get_contents($percorsoImg);
+
         for ($i = 0; $i < self::NUM_BUSTINE; $i++) { //self::NUM_BUSTINE serve per leggere la costante
             
             // Creiamo un prezzo casuale (sfruttando il Cascade Persist di cui parlavamo!)
@@ -42,6 +48,7 @@ class BustineFixture extends AbstractFixture
                 $faker->paragraph(),              // descrizioneProdotto
                 $disponibilita,                   // disponibilitaProdotto
                 $faker->numberBetween(10, 100),   // quantita
+                imgProdotto: $immaginePredefinita,
                 prezzo: $prezzo,                     // prezzo
                 );
 

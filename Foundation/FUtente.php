@@ -5,7 +5,6 @@ use TableCrown\Entity\EUtente;
 use TableCrown\Entity\ESegnalazione;
 use TableCrown\Entity\Enumerativi\StatoSegnalazione;
 use TableCrown\Entity\Enumerativi\StatoUtente;
-use TableCrown\Entity\Enumerativi\PlayerLevel;
 use Exception;
 
 class FUtente{
@@ -37,7 +36,8 @@ class FUtente{
                 ->where('u.dataRegistrazione>=:dataRegistrazione')
                 ->setParameter('dataRegistrazione', new \DateTime('today'));
             $risultato= $qb->getQuery()->getSingleScalarResult();
-            return $risultato;
+            //facciamo cat del risultato per evitare errori
+            return (int) $risultato;
 
         }
         catch(Exception $e){
@@ -75,10 +75,10 @@ class FUtente{
     public static function findUtentiConRecensioniSegnalate(string $ordinamento): array{
         try{
             $qb=FEntityManager::getInstance()->getEntityManager()->createQueryBuilder();
-            $qb->select('u','COUNT(s.idSegnalazione) AS numeroSegnalazioni')
+            $qb->select('u','COUNT(s.idsegnalazione) AS numeroSegnalazioni')
                 ->from(ESegnalazione::class, 's')
                 ->join('s.utente', 'u')
-                ->where('s.StatoSegnalazione=:stato')
+                ->where('s.statosegnalazione=:stato')
                 ->setParameter('stato', StatoSegnalazione::IN_ATTESA)
                 ->groupBy('u.idPersona')
                 ->orderBy('numeroSegnalazioni', $ordinamento);
@@ -113,9 +113,9 @@ class FUtente{
             $qb=FEntityManager::getInstance()->getEntityManager()->createQueryBuilder();
             $qb->select('DISTINCT r')
                 ->from(ESegnalazione::class, 's')
-                ->join('s.recesnione', 'r')
+                ->join('s.recensione', 'r')
                 ->where('s.utente = :idUtente')
-                ->andWhere('s.statoSegnalazione = :stato')
+                ->andWhere('s.statosegnalazione = :stato')
                 ->setParameter('idUtente', $idUtente)
                 ->setParameter('stato', StatoSegnalazione::IN_ATTESA);
             

@@ -321,6 +321,29 @@ class FPersistentManager
         return FSegnalazione::contaUtentiSospesiOggi();
     }
 
+    /**
+     * @param string $order 'ASC' = più urgenti prima (ALTA -> MEDIA -> BASSA), 'DESC' = inverso
+     * @param int $limit numero massimo di segnalazioni da restituire
+     * @return array di oggetti ESegnalazione
+     */
+    public static function PMgetSegnalazioniUrgenti(string $order, int $limit ): array {
+        return FSegnalazione::getSegnalazioniUrgenti($order, $limit);
+    }
+
+    /**
+     * @return int numero di segnalazioni in attesa
+     */
+    public static function PMcontaSegnalazioniInSospeso(): int {
+        return FSegnalazione::contaSegnalazioniInSospeso();
+    }
+
+    /**
+     * @param string $ordinamento ordiniamo in base al numero di segnalazioni ricevute
+     * @return array di oggetti
+     */
+    public static function PMfindRecensioniConSegnalazioni(string $ordinamento): array {
+        return FSegnalazione::findRecensioniConSegnalazione($ordinamento);
+    }
     
      
 
