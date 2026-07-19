@@ -19,7 +19,7 @@ class FSegnalazione{
             $qb=FEntityManager::getInstance()->getEntityManager()->createQueryBuilder();
             $qb->select('COUNT(p.idProvvediemnto)')
                 ->from(EProvvedimento::class, 'p')
-                ->where('p.TipoProvvedimento=:tipo')
+                ->where('p.tipoprovvedimento=:tipo')
                 ->andWhere('p.dataemissione>=:data')
                 ->setParameter('tipo', TipoProvvedimento::SOSPENSIONE)
                 ->setParameter('data', new \DateTime('today'));
@@ -72,7 +72,7 @@ class FSegnalazione{
     public static function contaSegnalazioniInSospeso(): int {
         try{
             $qb=FEntityManager::getInstance()->getEntityManager()->createQueryBuilder();
-            $qb->select('COUNT(s.idSegnalazione)')
+            $qb->select('COUNT(s.idsegnalazione)')
                 ->from(ESegnalazione::class, 's')
                 ->where('s.statosegnalazione=:stato')
                 ->setParameter('stato', StatoSegnalazione::IN_ATTESA);
@@ -94,7 +94,7 @@ class FSegnalazione{
     public static function findRecensioniConSegnalazione(string $ordinamento): array {
         try{
             $qb=FEntityManager::getInstance()->getEntityManager()->createQueryBuilder();
-            $qb->select('r', 'COUNT(s.idSegnalazione) AS numerosegnalazioni')
+            $qb->select('r', 'COUNT(s.idsegnalazione) AS numerosegnalazioni')
                 ->from(ESegnalazione::class, 's')
                 ->join('s.recensione', 'r')
                 ->where('s.statosegnalazione=:stato')
@@ -105,8 +105,8 @@ class FSegnalazione{
 
             //creo array associativo con risultati e numerototale per utente
             $risultati= array_map(fn($riga)=>[
-                    'utente' => $riga[0],
-                    'numeroSegnalazioni' => (int )$riga['numeroSegnalazioni']], $risultatiGrezzi
+                    'recensione' => $riga[0],
+                    'numerosegnalazioni' => (int )$riga['numerosegnalazioni']], $risultatiGrezzi
             );
             return [
                 'risultati' => $risultati,
@@ -122,9 +122,4 @@ class FSegnalazione{
             ];
         }   
     }
-
-
-
-    
-
 }
