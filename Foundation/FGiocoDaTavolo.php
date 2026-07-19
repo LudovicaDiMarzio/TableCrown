@@ -56,11 +56,11 @@ class FGiocoDaTavolo
                    ->setParameter('price_min', $filtri['price_min']);
             }
 
-            /*non c'è come filtro, ma se va aggiunto già pronto
+            
             if (isset($filtri['price_max'])) {
                 $qb->andWhere('pr.valore <= :price_max')
                    ->setParameter('price_max', $filtri['price_max']);
-            }*/
+            }
 
             
             //se è settato questo filtro e il suo valore è flse mostriamo solo i giochi base (quelli che non hanno riferimento al giooo padre))
