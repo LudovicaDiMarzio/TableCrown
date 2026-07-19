@@ -277,4 +277,51 @@ class FPersistentManager
         return FProdotto::findCorrelati($prodottiesclusi, $limit);
     }
 
+    /**
+     * @return int numero utenti totali
+     */
+    public static function PMcontaUtentiTotali(): int {
+        return FUtente::ContaUtentiTotali();
+    }
+
+    /**
+     * @return int numero di utenti nuovi oggi
+     */
+    public static function PMcontaUtentiNuoviOggi(): int {
+        return FUtente::contaUtentiNuoviOggi();
+    }
+
+    /**
+     * @return int numero di utenti con sospensione attiva
+     */
+    public static function PMcontaUtentiSospesiTotali(): int {
+        return FUtente::contaUtentiSospesiTotali();
+    }
+
+    /**
+     * @param string $ordinamento ordinamento degli utenti in base al numero di segnalazioni
+     * @return array array di utenti e numero segnalazione per utente 
+     */
+    public static function PMfindUtentiConRecensioniSegnalate(string $ordinamento): array {
+        return FUtente::findUtentiConRecensioniSegnalate($ordinamento);
+    }
+
+    /**
+     * @param int $idUtente id dell'utente
+     * @return array array di oggetti
+     */
+    public static function PMgetRecensioniSegnalateDiUtente(int $idUtente): array {
+        return FUtente::getRecensioniSegnalateDiUtente($idUtente);
+    }
+
+    /**
+     * @return int numero  utenti sospesi oggi
+    */
+    public static function PMcontaUtentiSospesiOggi(): int {
+        return FSegnalazione::contaUtentiSospesiOggi();
+    }
+
+    
+     
+
 }
