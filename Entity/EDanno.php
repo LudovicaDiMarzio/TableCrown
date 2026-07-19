@@ -17,12 +17,15 @@ class EDanno {
     #[ORM\Column(type: "string", enumType: LivelloDannoGiochi::class)]
     private LivelloDannoGiochi $livelloDanno; //enum per indicare il livello di danno del gioco
     
-    #[ORM\Column(type: "float")]
-    private float $scontoDanno; //oggetto della classe EScontoDanno che contiene lo sconto per il livello di danno
+    
+    private const SCONTI_PER_LIVELLO=[
+        'danno_leggero' => 0.0,
+        'danno_moderato' => 10.0,
+        'danno_alto' => 15.0,    
+    ];
 
-    public function __construct(LivelloDannoGiochi $livelloDanno, float $scontoDanno) {
+    public function __construct(LivelloDannoGiochi $livelloDanno) {
         $this->livelloDanno = $livelloDanno;
-        $this->scontoDanno = $scontoDanno;
     }
 
     //GET methods
@@ -35,7 +38,7 @@ class EDanno {
     }
 
     public function getScontoDanno(): float {
-        return $this->scontoDanno;
+        return self::SCONTI_PER_LIVELLO[$this->livelloDanno->value];
     }
 
     //Metodi di dominio
@@ -47,15 +50,7 @@ class EDanno {
         $this->livelloDanno = $livelloDanno;
     }
 
-    /**
-     * Aggiorna sconto.
-     */
-    public function aggiornaScontoDanno(float $scontoDanno): void {
-        if ($scontoDanno < 0 || $scontoDanno > 100) {
-            throw new InvalidArgumentException("Lo sconto deve essere compreso tra 0 e 100.");
-        }
-        $this->scontoDanno = $scontoDanno;
-    }
+ 
 
     // /**
     //  * Verifica che lo sconto rispetti l'ordine danno leggero < danno moderato < danno grave.

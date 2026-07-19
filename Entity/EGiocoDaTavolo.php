@@ -22,7 +22,7 @@ class EGiocoDaTavolo extends EProdotto {
 
     #[ORM\ManyToOne(targetEntity: EGiocoDaTavolo::class)]
 
-    #[ORM\JoinColumn(name : "gioco_base_id", referencedColumnName: "idProdotto", nullable: true)]
+    #[ORM\JoinColumn(name : "gioco_base_id", referencedColumnName: "idProdotto", nullable: true, onDelete: 'CASCADE')]
     private ?EGiocoDaTavolo $giocoBase=null; //riferimento a un eventuale gioco da tavolo di cui è espansione
 
     #[ORM\Column(type: "integer")]
@@ -184,6 +184,9 @@ class EGiocoDaTavolo extends EProdotto {
         }
         $this->danno = $danno;
         $this->descrizioneDanno = trim($descrizioneDanno);
+        if ($this->getPrezzo() !== null) {
+            $this->getPrezzo()->aggiornaSconto($danno->getScontoDanno());
+        }
     }
 
     /**
@@ -268,5 +271,7 @@ class EGiocoDaTavolo extends EProdotto {
             throw new InvalidArgumentException("Il gioco da tavolo deve avere almeno un componente.");
         }
     }
+
+  
     
 }
