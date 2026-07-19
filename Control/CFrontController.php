@@ -352,33 +352,84 @@ class CFrontController {
                     if ($metodoHTTP === 'GET') {
                         if ($sottoRoute === 'dashboard') { //GET /gestore/dashboard
                             $controller->mostraDashboardGestore();
-                        } elseif ($sottoRoute === 'catalogo' && $sottoRoute2 === 'giochi-da-tavolo') { //GET /gestore/catalogo/giochi-da-tavolo
-                            $controller->mostraCatalogoGiochiGestore();
-                        } elseif ($sottoRoute === 'catalogo' && $sottoRoute2 === 'bustine') { //GET /gestore/catalogo/bustine
-                            $controller->mostraCatalogoBustineGestore();
-                        } elseif ($sottoRoute === 'catalogo' && $sottoRoute2 === 'porta-dadi') { //GET /gestore/catalogo/porta-dadi
-                            $controller->mostraCatalogoPortaDadiGestore();
+                        } elseif ($sottoRoute === 'catalogo') {
+                            if ($sottoRoute2 === 'giochi-da-tavolo') { //GET /gestore/catalogo/giochi-da-tavolo
+                                $controller->mostraCatalogoGiochiGestore();
+                            } elseif ($sottoRoute2 === 'bustine') { //GET /gestore/catalogo/bustine
+                                $controller->mostraCatalogoBustineGestore();
+                            } elseif ($sottoRoute2 === 'porta-dadi') { //GET /gestore/catalogo/porta-dadi
+                                $controller->mostraCatalogoPortaDadiGestore();
+                            } else {
+                                $this->mostra404();
+                            }
                         } elseif ($sottoRoute === 'ricerca') { //GET /gestore/ricerca
                             $controller->mostraRisultatiRicercaProdottiGestore();
+                        } elseif ($sottoRoute === 'eventi') {
+                            if ($sottoRoute2 === 'serate') { //GET /gestore/eventi/serate
+                                $controller->mostraListaSerateGestore();
+                            } elseif ($sottoRoute2 === 'tornei') { //GET /gestore/eventi/tornei
+                                $controller->mostraListaTorneiGestore();
+                            } elseif ($sottoRoute2 === 'challenge') { //GET /gestore/eventi/challenge
+                                $controller->mostraListaChallengeGestore();
+                            } else {
+                                $this->mostra404();
+                            }
                         } else {
                             $this->mostra404();
                         }
                     } elseif ($metodoHTTP === 'POST') {
-                        if ($sottoRoute === 'catalogo' && $sottoRoute2 === 'giochi-da-tavolo' && $sottoRoute3 === 'nuovo') { //POST /gestore/catalogo/giochi-da-tavolo/nuovo
-                            $controller->creaGiocoDaTavolo();
-                        } elseif ($sottoRoute === 'catalogo' && $sottoRoute2 === 'bustine' && $sottoRoute3 === 'nuovo') { //POST /gestore/catalogo/bustine/nuovo
-                            $controller->creaBustine();
-                        } elseif ($sottoRoute === 'catalogo' && $sottoRoute2 === 'porta-dadi' && $sottoRoute3 === 'nuovo') { //POST /gestore/catalogo/porta-dadi/nuovo
-                            $controller->creaPortaDadi();
-                        } elseif ($sottoRoute === 'catalogo' && $sottoRoute2 === 'prodotto' && $sottoRoute3 === 'elimina') { //POST /gestore/catalogo/prodotto/elimina
-                            $controller->eliminaProdottoGestore();
-                        } elseif ($sottoRoute === 'prodotti' && $sottoRoute2 === 'quantita') { //POST /gestore/prodotti/quantita
-                            $controller->aggiornaQuantitaProdottoGestore();
-                        } elseif ($sottoRoute === 'prodotti' && $sottoRoute2 === 'modifica') { //POST /gestore/prodotti/modifica
-                            $controller->modificaProdottoGestore();
+                        if ($sottoRoute === 'catalogo') {
+                            if ($sottoRoute3 === 'nuovo') {
+                                if ($sottoRoute2 === 'giochi-da-tavolo') { //POST /gestore/catalogo/giochi-da-tavolo/nuovo
+                                    $controller->creaGiocoDaTavolo();
+                                } elseif ($sottoRoute2 === 'bustine') { //POST /gestore/catalogo/bustine/nuovo
+                                    $controller->creaBustine();
+                                } elseif ($sottoRoute2 === 'porta-dadi') { //POST /gestore/catalogo/porta-dadi/nuovo
+                                    $controller->creaPortaDadi();
+                                } else {
+                                    $this->mostra404();
+                                }
+                            } elseif ($sottoRoute2 === 'prodotto' && $sottoRoute3 === 'elimina') { //POST /gestore/catalogo/prodotto/elimina
+                                $controller->eliminaProdottoGestore();
+                            } else {
+                                $this->mostra404();
+                            }
+                        } elseif ($sottoRoute === 'prodotti') {
+                            if ($sottoRoute2 === 'quantita') { //POST /gestore/prodotti/quantita
+                                $controller->aggiornaQuantitaProdottoGestore();
+                            } elseif ($sottoRoute2 === 'modifica') { //POST /gestore/prodotti/modifica
+                                $controller->modificaProdottoGestore();
+                            } else {
+                                $this->mostra404();
+                            }
+                        } elseif ($sottoRoute === 'eventi') {
+                            if ($sottoRoute3 === 'nuovo') {
+                                if ($sottoRoute2 === 'serate') { //POST /gestore/eventi/serate/nuovo
+                                    $controller->creaSerata();
+                                } elseif ($sottoRoute2 === 'tornei') { //POST /gestore/eventi/tornei/nuovo
+                                    $controller->creaTorneo();
+                                } elseif ($sottoRoute2 === 'challenge') { //POST /gestore/eventi/challenge/nuovo
+                                    $controller->creaChallenge();
+                                } else {
+                                    $this->mostra404();
+                                }
+                            } elseif ($sottoRoute2 === 'attiva') { //POST /gestore/eventi/attiva
+                                $controller->attivaEventoGestore();
+                            } elseif ($sottoRoute2 === 'concludi') { //POST /gestore/eventi/concludi
+                                $controller->concludiEventoGestore();
+                            } elseif ($sottoRoute2 === 'annulla') { //POST /gestore/eventi/annulla
+                                $controller->annullaEventoGestore();
+                            } elseif ($sottoRoute2 === 'riprogramma') { //POST /gestore/eventi/riprogramma
+                                $controller->riprogrammaEventoGestore();
+                            } elseif ($sottoRoute2 === 'modifica') { //POST /gestore/eventi/modifica
+                                $controller->modificaEventoGestore();
+                            } else {
+                                $this->mostra404();
+                            }
                         } else {
                             $this->mostra404();
                         }
+                        
                     } else {
                         $this->mostra404();
                     }

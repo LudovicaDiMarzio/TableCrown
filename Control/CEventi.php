@@ -104,42 +104,6 @@ class CEventi extends BaseController {
     }
 
 
-    //==========================================================================
-    // METODI PRIVATI CONDIVISI
-    //==========================================================================
-
-    /**
-     * Costruisce i dati comuni a tutte le pagine lista eventi e delega il render.
-     */
-    private function renderListaEventi(string $vista, array $risultatoGrezzo, ?string $filtroData = null, ?string $ricerca = null): void { 
-
-        $datiPagina = [
-            'vista'  => $vista,
-            'eventi' => $this->eventiToArray($risultatoGrezzo),
-            'filtri' => [
-                'filtro_data' => $filtroData,
-                'ricerca' => $ricerca,
-            ],
-        ];
-
-        $datiLayout = $this->preparaDatiLayout($vista, $datiPagina);
-        ViewEventi::mostraEventi($datiLayout);
-    }
-
-    /**
-     * Legge il filtro data dalla request (formato atteso: YYYY-MM-DD) e lo converte
-     * in DateTime per l'uso interno nella query; ritorna null se assente/non valido.
-     */
-    private function estraiFiltroData(): ?string {
-        $dataRaw = UHTTPMethods::get('filtro_data');
-        if ($dataRaw === null || trim($dataRaw) === '') {
-            return null;
-        }
-        //Validazione: verifichiamo che sia una data valida
-        $d = DateTime::createFromFormat('Y-m-d', $dataRaw);
-        return ($d && $d->format('Y-m-d') === $dataRaw) ? $dataRaw : null;
-    }
-
     protected function getBreadcrumbs(string $currentPage = ''): array {
         return [
             ['label' => 'Home', 'url' => '/'],

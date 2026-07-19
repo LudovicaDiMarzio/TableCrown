@@ -14,9 +14,14 @@ use TableCrown\Entity\EBustine;
 use TableCrown\Entity\EPortaDadi;
 use TableCrown\Entity\EPrezzo;
 use TableCrown\Entity\EProdotto;
+use TableCrown\Entity\EEvento;
+use TableCrown\Entity\ESerata;
+use TableCrown\Entity\ETorneo;
+use TableCrown\Entity\EChallenge;
 use TableCrown\Foundation\FPersistentManager;
 use TableCrown\Presentation\Views\ViewGestore;
 use InvalidArgumentException;
+use RuntimeException;
 
 class CGestore extends BaseController {
 
@@ -30,6 +35,8 @@ class CGestore extends BaseController {
     //==========================================================================
     // RICHIESTE GET - VISUALIZZAZIONE
     //==========================================================================
+
+    // PRODOTTI
 
     /**
      * Mostra la dashboard principale del gestore con le statistiche quantitative.
@@ -129,6 +136,51 @@ class CGestore extends BaseController {
         );
 
         $this->renderCatalogo('gestore_risultati_ricerca', $risultatoGrezzo, $pagina, ['q' => $query], $query, modalita: 'gestore');
+    }
+
+    // EVENTI
+
+    /**
+     * URL: GET /gestore/eventi/serate
+     */
+    public function mostraListaSerateGestore(): void {
+        $filtroData = $this->estraiFiltroData();
+        $serate = FPersistentManager::PMfindSerate($filtroData);
+        $this->renderListaEventi('gestore_eventi_serate', $serate, $filtroData, modalita: 'gestore');
+    }
+
+    /**
+     * URL: GET /gestore/eventi/tornei
+     */
+    public function mostraListaTorneiGestore(): void {
+        $filtroData = $this->estraiFiltroData();
+        $tornei = FPersistentManager::PMfindTornei($filtroData);
+        $this->renderListaEventi('gestore_eventi_tornei', $tornei, $filtroData, modalita: 'gestore');
+    }
+
+    /**
+     * URL: GET /gestore/eventi/challenge
+     */
+    public function mostraListaChallengeGestore(): void {
+        $filtroData = $this->estraiFiltroData();
+        $challenge = FPersistentManager::PMfindChallenge($filtroData);
+        $this->renderListaEventi('gestore_eventi_challenge', $challenge, $filtroData, modalita: 'gestore');
+    }
+
+    /**
+     * URL: GET /gestore/eventi/ricerca
+     */
+    public function mostraRisultatiRicercaEventiGestore(): void {
+        $query = UHTTPMethods::get('q');
+        if ($query === null || trim($query) === '') {
+            header("Location: " . UHTTPMethods::getReferer(BASE_URL . '/gestore/dashboard'));
+            exit();
+        }
+
+        $query = trim($query);
+        $eventiTrovati = FPersistentManager::PMricercaEventi($query);
+
+        $this->renderListaEventi('gestore_risultati_ricerca', $eventiTrovati, null, $query, modalita: 'gestore');
     }
 
 
@@ -456,6 +508,366 @@ class CGestore extends BaseController {
     }
 
     //==========================================================================
+    // AZIONI CRUD SU EVENTI
+    //==========================================================================
+
+    /**
+     * URL: POST /gestore/eventi/serate/nuovo
+     */
+    public function creaSerata(): void {
+        try {
+            $nomeEvento = UHTTPMethods::postString('nomeEvento', maxLength: 255);
+            $descrizioneEvento = UHTTPMethods::postString('descrizioneEvento');
+            $dataInizio = UHTTPMethods::postDate('dataInizio', 'Y-m-d H:i:s');
+            $maxPartecipanti = UHTTPMethods::postInt('maxPartecipanti', min: 1);
+            $tipoSerata = UHTTPMethods::postString('tipoSerata');
+
+            $fileImg = UHTTPMethods::postFile('imgEvento'); //qui è obbligatoria l'immagine
+            $imgEvento = file_get_contents($fileImg['tmp_name']);
+
+            $serata = new ESerata($nomeEvento, $imgEvento, $descrizioneEvento, $dataInizio, $maxPartecipanti, $tipoSerata);
+
+            $salvato = FPersistentManager::PMsaveObj($serata);
+
+            if (!$salvato) {
+                throw new \RuntimeException("Si è verificato un errore durante la creazione della serata.");
+            }
+
+            UFlashMessage::addMessage('success', 'Serata pubblicata con successo!');
+            header('Location: ' . BASE_URL . '/gestore/eventi/serate');
+            exit();
+
+        } catch (\Exception $e) {
+            UFlashMessage::addMessage('danger', $e->getMessage());
+            header('Location: ' . UHTTPMethods::getReferer(BASE_URL . '/gestore/eventi/serate'));
+            exit();
+        }
+    }
+
+    /**
+     * URL: POST /gestore/eventi/tornei/nuovo
+     */
+    public function creaTorneo(): void {
+        try {
+            $nomeEvento = UHTTPMethods::postString('nomeEvento', maxLength: 255);
+            $descrizioneEvento = UHTTPMethods::postString('descrizioneEvento');
+            $dataInizio = UHTTPMethods::postDate('dataInizio', 'Y-m-d H:i:s');
+            $maxPartecipanti = UHTTPMethods::postInt('maxPartecipanti', min: 1);
+
+            $fileImg = UHTTPMethods::postFile('imgEvento'); //qui è obbligatoria l'immagine
+            $imgEvento = file_get_contents($fileImg['tmp_name']);
+
+            $quotaIscrizione = $this->costruisciQuotaIscrizione();
+
+            $idPremio = UHTTPMethods::postInt('idPremio');
+            $premio = FPersistentManager::PMgetObjOnAttribute(EProdotto::class, 'idProdotto', $idPremio);
+            if ($premio === null) {
+                throw new InvalidArgumentException("Il premio selezionato non esiste.");
+            }
+
+            $idGioco = UHTTPMethods::postInt('idGioco');
+            $gioco = FPersistentManager::PMgetObjOnAttribute(EGiocoDaTavolo::class, 'idProdotto', $idGioco);
+            if ($gioco === null) {
+                throw new InvalidArgumentException("Il gioco selezionato non esiste.");
+            }
+            //il costruttore esegue già verificaPremio()
+            $torneo = new ETorneo($nomeEvento, $imgEvento, $descrizioneEvento, $dataInizio, $maxPartecipanti, $quotaIscrizione, $premio, $gioco);
+
+            $salvato = FPersistentManager::PMsaveObj($torneo);
+
+            if (!$salvato) {
+                throw new RuntimeException("Si è verificato un errore durante la creazione del torneo.");
+            }
+
+            UFlashMessage::addMessage('success', 'Torneo pubblicato con successo!');
+            header('Location: ' . BASE_URL . '/gestore/eventi/torneo');
+            exit();
+
+        } catch (\Exception $e) {
+            UFlashMessage::addMessage('danger', $e->getMessage());
+            header('Location: ' . UHTTPMethods::getReferer(BASE_URL . '/gestore/eventi/torneo'));
+            exit();
+        }
+
+    }
+
+    /**
+     * URL: POST /gestore/eventi/challenge/nuovo
+     */
+    public function creaChallenge(): void {
+        try {
+            $nomeEvento = UHTTPMethods::postString('nomeEvento', maxLength: 255);
+            $descrizioneEvento = UHTTPMethods::postString('descrizioneEvento');
+            $dataInizio = UHTTPMethods::postDate('dataInizio', 'Y-m-d H:i:s');
+            $maxPartecipanti = UHTTPMethods::postInt('maxPartecipanti', min: 1);
+
+            $fileImg = UHTTPMethods::postFile('imgEvento'); //qui è obbligatoria l'immagine
+            $imgEvento = file_get_contents($fileImg['tmp_name']);
+
+            $quotaIscrizione = $this->costruisciQuotaIscrizione();
+
+            $idPremio = UHTTPMethods::postInt('idPremio');
+            $premio = FPersistentManager::PMgetObjOnAttribute(EProdotto::class, 'idProdotto', $idPremio);
+            if ($premio === null) {
+                throw new InvalidArgumentException("Il premio selezionato non esiste.");
+            }
+
+            $punti1 = UHTTPMethods::postInt('punteggioPrimoClassificato');
+            $punti2 = UHTTPMethods::postInt('punteggioSecondoClassificato');
+            $punti3 = UHTTPMethods::postInt('punteggioTerzoClassificato');
+
+            $idTorneiSelezionati = UHTTPMethods::postArray('idTorneiSelezionati', required: true);
+            $tornei = [];
+            foreach ($idTorneiSelezionati as $idTorneo) {
+                $torneo = FPersistentManager::PMgetObjOnAttribute(ETorneo::class, 'idEvento', $idTorneo);
+                if ($torneo === null) {
+                    throw new InvalidArgumentException("Il torneo selezionato non esiste.");
+                }
+                //Controllo che il torneo non sia già assegnato ad un'altra challenge
+                if ($torneo->getChallenge() !== null) {
+                    throw new InvalidArgumentException("Il torneo '{$torneo->getNomeEvento()}' è già assegnato ad un'altra challenge.");
+                }
+                $tornei[] = $torneo;
+            }
+
+            //il costruttore esegue già verificaTornei() (3-7 tornei), verificaPremio(), verificaPunteggi() (ordine primo > secondo > terzo)
+            $challenge = new EChallenge($nomeEvento, $imgEvento, $descrizioneEvento, $dataInizio, $maxPartecipanti, $quotaIscrizione, $premio, $punti1, $punti2, $punti3, $tornei);
+
+            $salvato = FPersistentManager::PMsaveObj($challenge);
+
+            if (!$salvato) {
+                throw new RuntimeException("Si è verificato un errore durante la creazione della challenge.");
+            }
+
+            UFlashMessage::addMessage('success', 'Challenge pubblicata con successo!');
+            header('Location: ' . BASE_URL . '/gestore/eventi/challenge');
+            exit();
+
+        } catch (\Exception $e) {
+            UFlashMessage::addMessage('danger', $e->getMessage());
+            header('Location: ' . UHTTPMethods::getReferer(BASE_URL . '/gestore/eventi/challenge'));
+            exit();
+        }
+
+    }
+
+    // Transizioni di stato
+
+    /**
+     * URL: POST /gestore/eventi/attiva
+     */
+    public function attivaEventoGestore(): void {
+        $isAjax = UHTTPMethods::isAjax();
+        try {
+            $idEvento = UHTTPMethods::postInt('id_evento');
+            $evento = $this->recuperaEvento($idEvento);
+
+            $evento->avviaEvento(); //validazioni interne al metodo
+
+            $salvato = FPersistentManager::PMsaveObj($evento);
+
+            if (!$salvato) {
+                throw new RuntimeException("Si è verificato un errore durante l'avvio dell'evento.");
+            }
+
+            if ($isAjax) {
+                header('Content-Type: application/json');
+                echo json_encode(['status' => 'ok', 'statoEvento' => $evento->getStatoEvento()->value]);
+                exit();
+            }
+
+            UFlashMessage::addMessage('success', 'L\'evento è stato avviato con successo!');
+            header('Location: ' . UHTTPMethods::getReferer(BASE_URL . '/gestore/dashboard'));
+            exit();
+
+        } catch (\Exception $e) {
+            if ($isAjax) {
+                header('Content-Type: application/json');
+                echo json_encode(['status' => 'error', 'message' => $e->getMessage()]);
+                exit();
+            }
+            UFlashMessage::addMessage('danger', $e->getMessage());
+            header('Location: ' . UHTTPMethods::getReferer(BASE_URL . '/gestore/dashboard'));
+            exit();
+        }
+    }
+
+    /**
+     * URL: POST /gestore/eventi/concludi
+     */
+    public function concludiEventoGestore(): void {
+        $isAjax = UHTTPMethods::isAjax();
+        try {
+            $idEvento = UHTTPMethods::postInt('id_evento');
+            $evento = $this->recuperaEvento($idEvento);
+
+            $evento->terminaEvento(); //validazioni interne al metodo
+
+            $salvato = FPersistentManager::PMsaveObj($evento);
+
+            if (!$salvato) {
+                throw new RuntimeException("Si è verificato un errore durante la conclusione dell'evento.");
+            }
+
+            if ($isAjax) {
+                header('Content-Type: application/json');
+                echo json_encode(['status' => 'ok', 'statoEvento' => $evento->getStatoEvento()->value]);
+                exit();
+            }
+
+            UFlashMessage::addMessage('success', 'L\'evento è stato concluso con successo!');
+            header('Location: ' . UHTTPMethods::getReferer(BASE_URL . '/gestore/dashboard'));
+            exit();
+
+        } catch (\Exception $e) {
+            if ($isAjax) {
+                header('Content-Type: application/json');
+                echo json_encode(['status' => 'error', 'message' => $e->getMessage()]);
+                exit();
+            }
+            UFlashMessage::addMessage('danger', $e->getMessage());
+            header('Location: ' . UHTTPMethods::getReferer(BASE_URL . '/gestore/dashboard'));
+            exit();
+        }
+    }
+
+    /**
+     * URL: POST /gestore/eventi/annulla
+     */
+    public function annullaEventoGestore(): void {
+        $isAjax = UHTTPMethods::isAjax();
+        try {
+            $idEvento = UHTTPMethods::postInt('id_evento');
+            $evento = $this->recuperaEvento($idEvento);
+
+            $evento->annullaEvento(); //validazioni interne al metodo
+
+            $salvato = FPersistentManager::PMsaveObj($evento);
+
+            if (!$salvato) {
+                throw new RuntimeException("Si è verificato un errore durante l'annullamento dell'evento.");
+            }
+
+            if ($isAjax) {
+                header('Content-Type: application/json');
+                echo json_encode(['status' => 'ok', 'statoEvento' => $evento->getStatoEvento()->value]);
+                exit();
+            }
+
+            UFlashMessage::addMessage('success', 'L\'evento è stato annullato con successo!');
+            header('Location: ' . UHTTPMethods::getReferer(BASE_URL . '/gestore/dashboard'));
+            exit();
+
+        } catch (\Exception $e) {
+            if ($isAjax) {
+                header('Content-Type: application/json');
+                echo json_encode(['status' => 'error', 'message' => $e->getMessage()]);
+                exit();
+            }
+            UFlashMessage::addMessage('danger', $e->getMessage());
+            header('Location: ' . UHTTPMethods::getReferer(BASE_URL . '/gestore/dashboard'));
+            exit();
+        }
+    }
+
+    /**
+     * Riprogramma un evento annullato, riportandolo a "Programmato" con una nuova data. 
+     * URL: POST /gestore/eventi/riprogramma
+     */
+    public function riprogrammaEventoGestore(): void {
+        $isAjax = UHTTPMethods::isAjax();
+        try {
+            $idEvento = UHTTPMethods::postInt('id_evento');
+            $evento = $this->recuperaEvento($idEvento);
+
+            $nuovaData = UHTTPMethods::postDate('nuovaDataInizio', 'Y-m-d H:i:s');
+            $evento->riprogrammaEvento($nuovaData); //valida stato Annullato + data futura
+
+            $salvato = FPersistentManager::PMsaveObj($evento);
+            if (!$salvato) {
+                throw new RuntimeException("Si è verificato un errore durante la riprogrammazione dell'evento.");
+            }
+
+            if ($isAjax) {
+                header('Content-Type: application/json');
+                echo json_encode([
+                    'status' => 'ok',
+                    'statoEvento' => $evento->getStatoEvento()->value,
+                    'dataInizio' => $evento->getDataInizio()->format('Y-m-d H:i:s'),
+                ]);
+                exit();
+            }
+
+            UFlashMessage::addMessage('success', 'L\'evento è stato riprogrammato con successo!');
+            header('Location: ' . UHTTPMethods::getReferer(BASE_URL . '/gestore/dashboard'));
+            exit();
+
+        } catch (\Exception $e) {
+            if ($isAjax) {
+                header('Content-Type: application/json');
+                echo json_encode(['status' => 'error', 'message' => $e->getMessage()]);
+                exit();
+            }
+            UFlashMessage::addMessage('danger', $e->getMessage());
+            header('Location: ' . UHTTPMethods::getReferer(BASE_URL . '/gestore/dashboard'));
+            exit();
+        }
+    }
+
+    // Modifica dati generici
+
+    /**
+     * Modifica i soli campi anagrafici di un evento (nome, descrzione, capienza,
+     * immagine). Non tocca lo stato né la dat: quella passa da riprogrammaEventoGestore().
+     * URL: POST /gestore/eventi/modifica
+     */
+    public function modificaEventoGestore(): void {
+        $isAjax = UHTTPMethods::isAjax();
+        try {
+            $idEvento = UHTTPMethods::postInt('id_evento');
+            $evento = $this->recuperaEvento($idEvento);
+
+            $evento->rinominaEvento(UHTTPMethods::postString('nomeEvento', maxLength: 255));
+            $evento->aggiornaDescrizione(UHTTPMethods::postString('descrizioneEvento'));
+            $evento->aggiornaMaxPartecipanti(UHTTPMethods::postInt('maxPartecipanti', min: 1));
+
+            // Immagine opzionale in modifica (a differenza della creazione): la si tocca
+            // solo se il gestore ne carica effettivamente una nuova. 
+            if (isset($_FILES['imgEvento']) && $_FILES['imgEvento']['error'] === UPLOAD_ERR_NO_FILE) {
+                $fileImg = UHTTPMethods::postFile('imgEvento');
+                $evento->aggiornaImg(file_get_contents($fileImg['tmp_name']));
+            }
+
+            $salvato = FPersistentManager::PMsaveObj($evento);
+
+            if (!$salvato) {
+                throw new RuntimeException("Si è verificato un errore durante la modifica dell'evento.");
+            }
+
+            if ($isAjax) {
+                header('Content-Type: application/json');
+                echo json_encode(['status' => 'ok', 'message' => 'Evento aggiornato con successo!']);
+                exit();
+            }
+
+            UFlashMessage::addMessage('success', 'Evento aggiornato con successo!');
+            header('Location: ' . UHTTPMethods::getReferer(BASE_URL . '/gestore/dashboard'));
+            exit();
+
+        } catch (\Exception $e) {
+            if ($isAjax) {
+                header('Content-Type: application/json');
+                echo json_encode(['status' => 'error', 'message' => $e->getMessage()]);
+                exit();
+            }
+            UFlashMessage::addMessage('danger', $e->getMessage());
+            header('Location: ' . UHTTPMethods::getReferer(BASE_URL . '/gestore/dashboard'));
+            exit();
+        }
+    }
+
+
+    //==========================================================================
     // HELPER PRIVATI CONDIVISI
     //==========================================================================
 
@@ -523,35 +935,71 @@ class CGestore extends BaseController {
         return $case;
     }
 
+    /**
+     * Recupera un evento per id, sollevando un'eccezione coerente con il resto
+     * del controller se non esiste. Usato in tutte le azioni CRUD sugli eventi.
+     */
+    private function recuperaEvento(int $idEvento): EEvento {
+        $evento = FPersistentManager::PMgetObjOnAttribute(EEvento::class, 'idEvento', $idEvento);
+        if ($evento === null) {
+            throw new InvalidArgumentException("L'evento selezionato non esiste.");
+        }
+        return $evento;
+    }
 
     /**
- * Costruisce i breadcrumb per le pagine del pannello gestore.
- * Tutte le pagine condividono la stessa radice (Home > Dashboard Gestore);
- * $currentPage aggiunge l'eventuale terzo livello specifico della pagina.
- */
-protected function getBreadcrumbs(string $currentPage = ''): array {
-    $breadcrumbs = [
-        ['label' => 'Home', 'url' => BASE_URL . '/'],
-        ['label' => 'Dashboard Gestore', 'url' => BASE_URL . '/gestore/dashboard'],
-    ];
+     * Costruisce la quota di iscrizione per Torneo/Challenge.
+     * A differenza di costruisciPrezzo(), usato per i prodotti, qui non c'è
+     * un concetto di sconti promozionale: una quota di iscrizione è un valore fisso.
+     */
+    private function costruisciQuotaIscrizione(): EPrezzo {
+        $valore = UHTTPMethods::postFloat('valoreQuota', min: 0); //TODO. niente try/catch??
+        $valuta = $this->postEnum('valuta', Valuta::class);
+        return new EPrezzo($valore, $valuta);
+    }
 
-    return match ($currentPage) { //DECIDERE SE USARE match COME IN CAmministratore O switch COME IN CCatalogo
-        'gestore_dashboard' => $breadcrumbs,
-        'gestore_catalogo_giochi' => array_merge($breadcrumbs, [
-            ['label' => 'Giochi da tavolo', 'url' => BASE_URL . '/gestore/catalogo/giochi-da-tavolo'],
-        ]),
-        'gestore_catalogo_bustine' => array_merge($breadcrumbs, [
-            ['label' => 'Bustine', 'url' => BASE_URL . '/gestore/catalogo/bustine'],
-        ]),
-        'gestore_catalogo_portadadi' => array_merge($breadcrumbs, [
-            ['label' => 'Porta Dadi', 'url' => BASE_URL . '/gestore/catalogo/porta-dadi'],
-        ]),
-        'gestore_risultati_ricerca' => array_merge($breadcrumbs, [
-            ['label' => 'Risultati ricerca', 'url' => BASE_URL . '/gestore/ricerca'],
-        ]),
-        default => $breadcrumbs,
-    };
-}
+
+    /**
+     * Costruisce i breadcrumb per le pagine del pannello gestore.
+     * Tutte le pagine condividono la stessa radice (Home > Dashboard Gestore);
+     * $currentPage aggiunge l'eventuale terzo livello specifico della pagina.
+     */
+    protected function getBreadcrumbs(string $currentPage = ''): array {
+        $breadcrumbs = [
+            ['label' => 'Home', 'url' => BASE_URL . '/'],
+            ['label' => 'Dashboard Gestore', 'url' => BASE_URL . '/gestore/dashboard'],
+        ];
+
+        return match ($currentPage) { //DECIDERE SE USARE match COME IN CAmministratore O switch COME IN CCatalogo
+            'gestore_dashboard' => $breadcrumbs,
+            'gestore_catalogo_giochi' => array_merge($breadcrumbs, [
+                ['label' => 'Giochi da tavolo', 'url' => BASE_URL . '/gestore/catalogo/giochi-da-tavolo'],
+            ]),
+            'gestore_catalogo_bustine' => array_merge($breadcrumbs, [
+                ['label' => 'Bustine', 'url' => BASE_URL . '/gestore/catalogo/bustine'],
+            ]),
+            'gestore_catalogo_portadadi' => array_merge($breadcrumbs, [
+                ['label' => 'Porta Dadi', 'url' => BASE_URL . '/gestore/catalogo/porta-dadi'],
+            ]),
+            'gestore_risultati_ricerca' => array_merge($breadcrumbs, [
+                ['label' => 'Risultati ricerca', 'url' => BASE_URL . '/gestore/ricerca'],
+            ]),
+
+            'gestore_eventi_serate' => array_merge($breadcrumbs, [
+                ['label' => 'Serate', 'url' => BASE_URL . '/gestore/eventi/serate'],
+            ]),
+            'gestore_eventi_tornei' => array_merge($breadcrumbs, [
+                ['label' => 'Tornei', 'url' => BASE_URL . '/gestore/eventi/tornei'],
+            ]),
+            'gestore_eventi_challenge' => array_merge($breadcrumbs, [
+                ['label' => 'Challenge', 'url' => BASE_URL . '/gestore/eventi/challenge'],
+            ]),
+            'gestore_eventi_ricerca' => array_merge($breadcrumbs, [
+                ['label' => 'Ricerca', 'url' => BASE_URL . '/gestore/eventi/ricerca'],
+            ]),
+            default => $breadcrumbs,
+        };
+    }
 
 
 }
