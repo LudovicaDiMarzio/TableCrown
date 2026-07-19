@@ -91,6 +91,10 @@ class EChallenge extends EEvento {
             throw new InvalidArgumentException("Impossibile aggiungere il torneo. Una challenge non può avere più di 7 tornei.");
         }
 
+        if ($torneo->getChallenge() !== null && $torneo->getChallenge() !== $this) {
+            throw new InvalidArgumentException("Il torneo è già assegnato ad un'altra challenge. Rimuovilo dall'altra challenge prima di riassegnarlo");
+        }
+
         if (!$this->tornei->contains($torneo)) {
             $this->tornei->add($torneo);
             $torneo->assegnaChallenge($this);
