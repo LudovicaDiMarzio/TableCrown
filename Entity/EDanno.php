@@ -21,7 +21,7 @@ class EDanno {
     private const SCONTI_PER_LIVELLO=[
         'danno_leggero' => 0.0,
         'danno_moderato' => 10.0,
-        'danno_alto' => 15.0,    
+        'danno_grave' => 15.0,    
     ];
 
     public function __construct(LivelloDannoGiochi $livelloDanno) {
