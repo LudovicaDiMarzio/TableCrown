@@ -5,6 +5,7 @@ use Doctrine\ORM\Mapping as ORM;
 use DateTime;
 use TableCrown\Entity\Enumerativi\StatoEvento;
 use TableCrown\Entity\EPrezzo;
+use TableCrown\Entity\EGiocoDaTavolo;
 use TableCrown\Entity\EProdotto;
 use InvalidArgumentException;
 use Override;
@@ -23,14 +24,16 @@ class ETorneo extends EEvento {
 
     #[ORM\ManyToOne(targetEntity: EProdotto::class)]
     #[ORM\JoinColumn(name: "giocoTorneoid", referencedColumnName: "idProdotto", nullable: false)]
-    private EProdotto $gioco; //gioco da tavolo su cui si svolge il torneo
+    private EGiocoDaTavolo $gioco; //gioco da tavolo su cui si svolge il torneo
 
     #[ORM\ManyToOne(targetEntity: EChallenge::class, inversedBy: "tornei")]
     #[ORM\JoinColumn(name: "challenge_id", referencedColumnName: "idEvento", nullable: true)]
     private ?EChallenge $challenge = null; //challenge associata al torneo
     
 
-    public function __construct(string $nomeEvento, string $imgEvento, string $descrizioneEvento, DateTime $dataInizio, int $maxPartecipanti, EPrezzo $quotaIscrizione, EProdotto $premio, EProdotto $gioco, ?EChallenge $challenge = null) {
+    
+
+    public function __construct(string $nomeEvento, string $imgEvento, string $descrizioneEvento, DateTime $dataInizio, int $maxPartecipanti, EPrezzo $quotaIscrizione, EProdotto $premio, EGiocoDaTavolo $gioco, ?EChallenge $challenge = null) {
         parent::__construct($nomeEvento, $imgEvento, $descrizioneEvento, $dataInizio, $maxPartecipanti);
         $this->quotaIscrizione = $quotaIscrizione;
         $this->premio = $premio;
@@ -48,7 +51,7 @@ class ETorneo extends EEvento {
         return $this->premio;
     }
 
-    public function getGioco(): EProdotto {
+    public function getGioco(): EGiocoDaTavolo {
         return $this->gioco;
     }
 
