@@ -25,8 +25,14 @@ use TableCrown\Entity\EIndirizzo;
 use TableCrown\Entity\EMotivazione;
 use TableCrown\Entity\Enumerativi\Categoria;
 use TableCrown\Entity\Enumerativi\LivelloDannoGiochi;
+use TableCrown\Entity\Enumerativi\DifficoltaGioco;
+use TableCrown\Entity\Enumerativi\LinguaGioco;
+use TableCrown\Entity\Enumerativi\StatoEvento;
 use TableCrown\Foundation\BancaMockService;
+use TableCrown\Presentation\Views\ViewCatalogo;
+use TableCrown\Presentation\Views\ViewEventi;
 use InvalidArgumentException;
+use DateTime;
 
 
 abstract class BaseController {
@@ -626,6 +632,164 @@ abstract class BaseController {
         //Validazione: verifichiamo che sia una data valida
         $d = DateTime::createFromFormat('Y-m-d', $dataRaw);
         return ($d && $d->format('Y-m-d') === $dataRaw) ? $dataRaw : null;
+    }
+
+    /**
+     * Costruisce i dati di dettaglio partendo dagli helper già esistenti
+     * nel BaseController (serataToArray, torneoToArray, challengeToArray),
+     * aggiungendo i campi extra necessari solo alla pagina di dettaglio.
+     * Condiviso tra CDettaglioEvento (vista utente) e CGestore (vista gestore,
+     * che ne ha bisogno per rivedere podio/classifica prima di pubblicarli).
+     */
+    protected function costruisciDatiVistaEvento(EEvento $evento, string $modalita = 'utente'): array {
+        if ($evento instanceof ESerata) {
+            $dati = $this->serataToArray($evento);
+            $vista = $modalita === 'gestore' ? 'gestore_dettaglio_serata' : 'dettaglio_serata';
+        } elseif ($evento instanceof ETorneo) {
+            $dati = $this->torneoToArray($evento);
+            //Nel catalogo 'premio' è un link minimale (id, nome, immagine); qui invece
+            //per la view serve la card completa del prodotto, come nel catalogo dei prodotti.
+            $dati['premio'] = $this->prodottoToArray($evento->getPremio());
+            $vista = $modalita === 'gestore' ? 'gestore_dettaglio_torneo' : 'dettaglio_torneo';
+        } elseif ($evento instanceof EChallenge) {
+            $dati = $this->challengeToArray($evento);
+            $dati['premio'] = $this->prodottoToArray($evento->getPremio());
+            //'tornei' nel catalogo è un array di link minimali (id, nome); qui invece
+            //serve la card completa di ogni torneo, quindi sostituiamo con torneoToArray().
+            //Nota: con torneoToArray() ogni torneo avra a sua volta un link minimale alla 
+            //challenge, ma nella UI quel campo può semplicemente essere ignorato
+            $dati['tornei'] = array_map(
+                fn($t) => $this->torneoToArray($t),
+                $evento->getTornei()->toArray()
+            );
+            $dati['punteggi'] = [ //i punteggi non ci sono in challengeToArray() perché non servono nel catalogo, qui li aggiungiamo
+                'primo' => $evento->getPunteggioPrimoClassificato(),
+                'secondo' => $evento->getPunteggioSecondoClassificato(),
+                'terzo' => $evento->getPunteggioTerzoClassificato(),
+            ];
+            $vista = $modalita === 'gestore' ? 'gestore_dettaglio_challenge' : 'dettaglio_challenge';
+
+            if ($evento->getStatoEvento() === StatoEvento::Terminato) {
+                $dati['classificaGenerata'] = $this->isClassificaChallengeGenerata($evento);
+                if ($dati['classificaGenerata']) {
+                    $dati['classificaFinale'] = $this->estraiClassificaChallenge($evento);
+                } elseif ($modalita === 'gestore') {
+                    //utile solo al gestore, per capire cosa manca prima di poter generare la classifica
+                    $dati['torneiSenzaEsito'] = $this->torneiSenzaEsito($evento);
+                }
+            }
+        } else {
+            //Difensivo: non dovrebbe mai accadere dato il DiscriminatorMap di EEvento, ma lo aggiungiamo per sicurezza
+            throw new \LogicException('Tipo di evento non riconosciuto: ' . get_class($evento));
+        }
+
+        $dati['vista'] = $vista;
+        $dati['descrizioneEvento'] = $evento->getDescrizioneEvento();
+        $dati['postiRimanenti'] = $evento->getMaxPartecipanti() - $evento->getNumeroPartecipanti();
+        $dati['hasPostiDisponibili'] = $evento->hasPostiDisponibili();
+        $dati['userIscritto'] = $this->utenteIscritto($evento);
+
+        return $dati;
+    }
+
+    /**
+     * Verifica se l'utente attualmente loggato è già iscritto a questo evento.
+     */
+    protected function utenteIscritto(EEvento $evento): bool {
+        if (!$this->isLoggedIn() || USession::getSessionElement('ruolo') !== 'utente') {
+            return false;        
+        }
+        $idUtente = USession::getSessionElement('id_persona');
+
+        foreach ($evento->getPartecipazioni() as $partecipazione) {
+            if ($partecipazione->getUtente()->getIdPersona() === $idUtente) {
+                return true;
+            }
+        }
+
+        return false;
+    }
+
+    /**
+     * Estrae il podio (1°/2°/3°) di un torneo concluso. Restituisce solo le
+     * posizioni effettivamente assegnate.
+     */
+    protected function estraiPodioTorneo(ETorneo $torneo): array {
+        $podio = [];
+        foreach ($torneo->getPartecipazioni() as $partecipazione) {
+            $posizione = $partecipazione->getPosizioneInClassifica();
+            if ($posizione !== null && $posizione >= 1 && $posizione <= 3) {
+                $podio[$posizione] = [
+                    'posizione' => $posizione,
+                    'utente' => [
+                        'id' => $partecipazione->getUtente()->getIdPersona(),
+                        'nome' => $partecipazione->getUtente()->getNomePersona(),
+                    ],
+                ];
+            }
+        }
+        ksort($podio); //ksort() ordina un array in base alla chiave, in ordine crescente
+        return array_values($podio);
+    }
+
+    /**
+     * Verifica se la classifica finale di una challenge è già stata generata,
+     * controllando se almeno una partecipazione "di challenge" ha già una
+     * posizione asseganta (prima della generazione sono tutte null).
+     */
+    protected function isClassificaChallengeGenerata(EChallenge $challenge): bool {
+        foreach ($challenge->getPartecipazioni() as $partecipazione) {
+            if ($partecipazione->getPosizioneInClassifica() !== null) {
+                return true;
+            }
+        }
+        return false;
+    }
+
+    /**
+     * Estrae la classifica finale completa (non solo il podio) di una challenge
+     * già generata, ordinata per posizione crescente.
+     */
+    protected function estraiClassificaChallenge(EChallenge $challenge): array {
+        $classifica = [];
+        foreach ($challenge->getPartecipazioni() as $partecipazione) {
+            if ($partecipazione->getPosizioneInClassifica() !== null) {
+                $classifica[] = [
+                    'posizione' => $partecipazione->getPosizioneInClassifica(),
+                    'punteggioTotale' => $partecipazione->getPunteggioTotale(),
+                    'utente' => [
+                        'id' => $partecipazione->getUtente()->getIdPersona(),
+                        'nome' => $partecipazione->getUtente()->getNomePersona(),
+                    ],
+                ];
+            }
+        }
+        //usort() ordina un array in base ai valori, usando una funzione di confronto 
+        //(qui ksort() non funzionerebbe perché $classifica è un array).
+        usort($classifica, fn($a, $b) => $a['posizione'] <=> $b['posizione']); //<=> restituisce -1, 0, 1 se $a è minore, uguale o maggiore di $b
+        return $classifica;
+    }
+
+    /**
+     * Elenco dei tornei di una challenge senza podio ancora registrato:
+     * usato solo lato gestore, per sapere cosa manca prima di poter generare
+     * la classifica finale (stessa verifica fatta anche dentro generaClassificaChallenge()). 
+     */
+    protected function torneiSenzaEsito(EChallenge $challenge): array {
+        $mancanti = [];
+        foreach ($challenge->getTornei() as $torneo) {
+            $haPodio = false;
+            foreach ($torneo->getPartecipazioni() as $partecipazione) {
+                if ($partecipazione->getPosizioneInClassifica() === 1) {
+                    $haPodio = true;
+                    break;
+                }
+            }
+            if (!$haPodio) {
+                $mancanti = ['id' => $torneo->getIdEvento(), 'nome' => $torneo->getNomeEvento()];
+            }
+        }
+        return $mancanti;
     }
 
     // INDIRIZZI 
