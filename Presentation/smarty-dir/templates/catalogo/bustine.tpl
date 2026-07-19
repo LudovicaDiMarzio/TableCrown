@@ -162,27 +162,20 @@
                         <h4 class="filter-group-title">
                             <i class="ti ti-tag"></i> In Evidenza
                         </h4>
-                        <div class="checkbox-group" data-exclusive="in_evidenza">
+                        <div class="checkbox-group" data-exclusive="in_evidenza_filtro">
                             <label class="checkbox-label">
                                 <input type="checkbox"
-                                       name="in_evidenza[]"
+                                       name="in_evidenza_filtro[]"
                                        value="sconti"
-                                       {if isset($filtri.in_evidenza) && in_array('sconti', $filtri.in_evidenza)} checked{/if}>
+                                       {if isset($filtri.in_evidenza_filtro) && in_array('sconti', $filtri.in_evidenza_filtro)} checked{/if}>
                                 <span class="checkbox-text">Sconti Attivi</span>
                             </label>
                             <label class="checkbox-label">
                                 <input type="checkbox"
-                                       name="in_evidenza[]"
+                                       name="in_evidenza_filtro[]"
                                        value="novita"
-                                       {if isset($filtri.in_evidenza) && in_array('novita', $filtri.in_evidenza)} checked{/if}>
+                                       {if isset($filtri.in_evidenza_filtro) && in_array('novita', $filtri.in_evidenza_filtro)} checked{/if}>
                                 <span class="checkbox-text">Novità</span>
-                            </label>
-                            <label class="checkbox-label">
-                                <input type="checkbox"
-                                       name="in_evidenza[]"
-                                       value="venduti"
-                                       {if isset($filtri.in_evidenza) && in_array('venduti', $filtri.in_evidenza)} checked{/if}>
-                                <span class="checkbox-text">I più venduti</span>
                             </label>
                         </div>
                     </div>
@@ -272,12 +265,12 @@
                                         </div>
 
                                         <div class="product-price-wrapper">
-                                            {if isset($prodotto.prezzo_unitario)}
+                                            {if isset($prodotto.prezzo)}
                                                 {if $prodotto.sconto}
-                                                    <span class="product-price">€{$prodotto.prezzo_unitario|number_format:2}</span>
-                                                    <span class="product-price-old">€{$prodotto.prezzo_originale|number_format:2}</span>
+                                                    <span class="product-price">€{$prodotto.prezzo_scontato|number_format:2}</span>
+                                                    <span class="product-price-old">€{$prodotto.prezzo|number_format:2}</span>
                                                 {else}
-                                                    <span class="product-price">€{$prodotto.prezzo_unitario|number_format:2}</span>
+                                                    <span class="product-price">€{$prodotto.prezzo|number_format:2}</span>
                                                 {/if}
                                             {else}
                                                 <span class="product-price-unavailable">Prezzo N/D</span>
@@ -292,7 +285,7 @@
                                             data-id="{$prodotto.id}"
                                             data-nome="{$prodotto.nome|escape}"
                                             data-img="{$base_url}/img/prodotti/{$prodotto.immagine}"
-                                            data-prezzo="{$prodotto.prezzo_unitario}"
+                                            data-prezzo="{if $prodotto.sconto}{$prodotto.prezzo_scontato}{else}{$prodotto.prezzo}{/if}"
                                             aria-label="Aggiungi a carrello">
                                         <i class="ti ti-shopping-cart"></i> Aggiungi
                                     </button>

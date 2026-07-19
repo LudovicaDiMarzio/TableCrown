@@ -57,6 +57,8 @@ abstract class EProdotto {
     #[ORM\OneToMany(targetEntity: ERecensione::class, mappedBy: "prodotto", cascade: ["persist", "remove"])]
     private Collection $recensioni; //elenco delle recensioni del prodotto
 
+    private const GIORNI_NOVITA=30;
+    
     public function __construct(string $nomeProdotto,  string $descrizioneProdotto, DisponibilitaProdotto $disponibilitaProdotto, int $quantita, ?string $imgProdotto = null, ?EPrezzo $prezzo = null) {
         $this->rinominaProdotto($nomeProdotto); //utilizza il metodo di dominio per validare il nome del prodotto
         $this->aggiornaImg($imgProdotto); //utilizza il metodo di dominio per validare l'immagine del prodotto
@@ -263,5 +265,10 @@ abstract class EProdotto {
             throw new InvalidArgumentException("La quantità di vendite da aggiungere non può essere negativa.");
         }
         $this->numeroVendite += $quantitaAcquistata;
+    }
+
+    public function isNovita(): bool{
+        $scadenza=(clone $this->dataPubblicazione)->modify('+'.self::GIORNI_NOVITA);
+        return $scadenza > new DateTime();
     }
 }
