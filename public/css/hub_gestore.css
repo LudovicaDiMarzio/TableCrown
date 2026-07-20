@@ -1,0 +1,279 @@
+/* ==========================================================================
+   TableCrown - Area Gestore - Hub Gestore (Dashboard)
+   Usa le variabili definite in layout_gestore.css (:root)
+   ========================================================================== */
+
+.hub-header {
+    margin-bottom: 24px;
+}
+
+.hub-header__title {
+    margin: 0 0 4px;
+    font-size: 22px;
+    font-weight: 700;
+    color: var(--gestore-text);
+}
+
+.hub-header__subtitle {
+    margin: 0;
+    font-size: 14px;
+    color: var(--gestore-muted);
+}
+
+/* ---------- STAT CARDS ---------- */
+
+.hub-stats {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+    gap: 16px;
+    margin-bottom: 24px;
+}
+
+.hub-stat-card {
+    display: flex;
+    align-items: center;
+    gap: 14px;
+    background: var(--gestore-white);
+    border: 1px solid var(--gestore-border);
+    border-radius: var(--gestore-radius);
+    padding: 18px 20px;
+}
+
+.hub-stat-card__icon {
+    width: 42px;
+    height: 42px;
+    border-radius: 10px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 19px;
+    color: #fff;
+    flex-shrink: 0;
+}
+
+.hub-stat-card__icon--orders { background: var(--gestore-sidebar-active); }
+.hub-stat-card__icon--sales  { background: var(--gestore-success); }
+
+.hub-stat-card__body {
+    display: flex;
+    flex-direction: column;
+}
+
+.hub-stat-card__label {
+    font-size: 13px;
+    color: var(--gestore-muted);
+}
+
+.hub-stat-card__value {
+    font-size: 21px;
+    font-weight: 700;
+    color: var(--gestore-text);
+}
+
+/* ---------- LAYOUT PANNELLI ---------- */
+
+.hub-grid {
+    display: grid;
+    grid-template-columns: 2fr 1fr;
+    gap: 20px;
+    align-items: start;
+}
+
+.hub-panel {
+    background: var(--gestore-white);
+    border: 1px solid var(--gestore-border);
+    border-radius: var(--gestore-radius);
+    padding: 20px;
+}
+
+.hub-panel__header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    margin-bottom: 16px;
+}
+
+.hub-panel__title {
+    margin: 0;
+    font-size: 15px;
+    font-weight: 700;
+    color: var(--gestore-text);
+}
+
+.hub-panel__count {
+    background: var(--gestore-bg);
+    color: var(--gestore-muted);
+    font-size: 12px;
+    font-weight: 700;
+    padding: 3px 10px;
+    border-radius: 999px;
+}
+
+.hub-panel__more {
+    display: inline-block;
+    margin-top: 14px;
+    font-size: 13px;
+    font-weight: 600;
+    color: var(--gestore-sidebar-active);
+    text-decoration: none;
+}
+
+.hub-panel__more:hover {
+    text-decoration: underline;
+}
+
+.hub-empty {
+    font-size: 13px;
+    color: var(--gestore-muted);
+}
+
+/* ---------- LISTA EVENTI ---------- */
+
+.hub-event-list {
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+}
+
+.hub-event-card {
+    display: flex;
+    align-items: center;
+    gap: 14px;
+    padding: 12px;
+    border: 1px solid var(--gestore-border);
+    border-radius: 10px;
+}
+
+.hub-event-card__img {
+    width: 56px;
+    height: 56px;
+    border-radius: 8px;
+    object-fit: cover;
+    flex-shrink: 0;
+    background: var(--gestore-bg);
+}
+
+.hub-event-card__body {
+    display: flex;
+    flex-direction: column;
+    gap: 2px;
+    flex: 1;
+    min-width: 0;
+}
+
+.hub-event-card__type {
+    font-size: 11px;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 0.03em;
+    color: var(--gestore-sidebar-active);
+}
+
+.hub-event-card__name {
+    margin: 0;
+    font-size: 14px;
+    font-weight: 600;
+    color: var(--gestore-text);
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+}
+
+.hub-event-card__date,
+.hub-event-card__seats {
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    font-size: 12px;
+    color: var(--gestore-muted);
+}
+
+.hub-event-card__actions {
+    display: flex;
+    flex-direction: column;
+    align-items: flex-end;
+    gap: 8px;
+    flex-shrink: 0;
+}
+
+/* Badge di stato: coloriamo i casi noti, fallback neutro per gli altri.
+   NB: verificare i valori esatti dell'enum StatoEvento con T2/T3. */
+.hub-status-badge {
+    font-size: 11px;
+    font-weight: 700;
+    padding: 3px 10px;
+    border-radius: 999px;
+    background: var(--gestore-bg);
+    color: var(--gestore-muted);
+    white-space: nowrap;
+}
+
+.hub-status-badge--programmato,
+.hub-status-badge--aperto { background: #e5f7ec; color: var(--gestore-success); }
+.hub-status-badge--in_corso,
+.hub-status-badge--incorso { background: #fbeed9; color: #b5790a; }
+.hub-status-badge--terminato { background: #eceef4; color: var(--gestore-muted); }
+.hub-status-badge--annullato { background: #fde3e9; color: var(--gestore-danger); }
+
+.hub-btn {
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    padding: 6px 14px;
+    border-radius: 8px;
+    font-size: 12px;
+    font-weight: 600;
+    text-decoration: none;
+    white-space: nowrap;
+}
+
+.hub-btn--ghost {
+    background: var(--gestore-bg);
+    color: var(--gestore-sidebar-active);
+}
+
+.hub-btn--ghost:hover {
+    background: #e9e6fb;
+}
+
+/* ---------- AZIONI RAPIDE ---------- */
+
+.hub-quick-actions {
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+}
+
+.hub-quick-action {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    padding: 12px 14px;
+    border-radius: 10px;
+    background: var(--gestore-sidebar-bg);
+    color: #fff;
+    font-size: 13px;
+    font-weight: 600;
+    text-decoration: none;
+    transition: background 0.15s ease;
+}
+
+.hub-quick-action:hover {
+    background: #1e2044;
+}
+
+.hub-quick-action--gold {
+    background: var(--gestore-sidebar-active);
+}
+
+.hub-quick-action--gold:hover {
+    background: #5a3ce0;
+}
+
+/* ---------- RESPONSIVE ---------- */
+
+@media (max-width: 960px) {
+    .hub-grid {
+        grid-template-columns: 1fr;
+    }
+}

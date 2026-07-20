@@ -1,11 +1,8 @@
 <?php
+
 require_once __DIR__ . '/config.php';
 
-
-
 require_once __DIR__ . '/vendor/autoload.php';
-
-
 
 use Smarty\Smarty;
 $smarty = new Smarty();
@@ -14,6 +11,784 @@ $smarty->setCompileDir(SMARTY_DIR  . 'templates_c/');
 $smarty->setCacheDir(SMARTY_DIR    . 'cache/');
 $smarty->setConfigDir(SMARTY_DIR   . 'configs/');
 
+
+// ══════════════════════════════════════════════════════════════
+//  MOCK EVENTI (per le 3 pagine LISTA eventi)
+//  NB: DEVONO stare PRIMA di $mappaVisteListe, che li referenzia.
+// ══════════════════════════════════════════════════════════════
+
+// ── MOCK EVENTI: SERATE (struttura di serataToArray()) ──
+$eventi_serate = [
+    [
+        'idEvento'           => 401,
+        'nomeEvento'         => 'Serata Gioco Libero al Tablecrown Pub',
+        'imgEvento'          => BASE_URL . '/img/placeholder.jpg',
+        'dataInizio'         => '2026-07-10 20:00:00',
+        'maxPartecipanti'    => 30,
+        'statoEvento'        => 'Programmato',
+        'numeroPartecipanti' => 18,
+        'richiedeQuota'      => false,
+        'postiDisponibili'   => 12,
+        'tipo'               => 'serata',
+        'tipoSerata'         => 'Gioco Libero',
+    ],
+    [
+        'idEvento'           => 402,
+        'nomeEvento'         => 'Presentazione Brass Birmingham',
+        'imgEvento'          => BASE_URL . '/img/placeholder.jpg',
+        'dataInizio'         => '2026-07-22 19:00:00',
+        'maxPartecipanti'    => 20,
+        'statoEvento'        => 'Programmato',
+        'numeroPartecipanti' => 20,
+        'richiedeQuota'      => false,
+        'postiDisponibili'   => 0,
+        'tipo'               => 'serata',
+        'tipoSerata'         => 'Presentazione',
+    ],
+    [
+        'idEvento'           => 403,
+        'nomeEvento'         => 'Serata Azul - Edizione Autunnale',
+        'imgEvento'          => BASE_URL . '/img/placeholder.jpg',
+        'dataInizio'         => '2025-11-05 20:30:00',
+        'maxPartecipanti'    => 25,
+        'statoEvento'        => 'Terminato',
+        'numeroPartecipanti' => 25,
+        'richiedeQuota'      => false,
+        'postiDisponibili'   => 0,
+        'tipo'               => 'serata',
+        'tipoSerata'         => 'Gioco Libero',
+    ],
+];
+
+// ── MOCK EVENTI: TORNEI (struttura di torneoToArray()) ──
+$eventi_tornei = [
+    [
+        'idEvento'           => 301,
+        'nomeEvento'         => 'Torneo di Catan - Coppa Primavera',
+        'imgEvento'          => BASE_URL . '/img/placeholder.jpg',
+        'dataInizio'         => '2026-07-15 18:30:00',
+        'maxPartecipanti'    => 16,
+        'statoEvento'        => 'Programmato',
+        'numeroPartecipanti' => 10,
+        'richiedeQuota'      => true,
+        'postiDisponibili'   => 6,
+        'tipo'               => 'torneo',
+        'quotaIscrizione'    => 10.00,
+        'premio'             => 'Catan',
+        'gioco'              => 'Catan',
+        'challenge'          => [
+            'idEvento'   => 501,
+            'nomeEvento' => 'Challenge Wingspan - Stagione Migratoria',
+        ],
+    ],
+    [
+        'idEvento'           => 302,
+        'nomeEvento'         => 'Torneo 7 Wonders - Sfida Estiva',
+        'imgEvento'          => BASE_URL . '/img/placeholder.jpg',
+        'dataInizio'         => '2026-08-02 17:00:00',
+        'maxPartecipanti'    => 12,
+        'statoEvento'        => 'Programmato',
+        'numeroPartecipanti' => 12,
+        'richiedeQuota'      => true,
+        'postiDisponibili'   => 0,
+        'tipo'               => 'torneo',
+        'quotaIscrizione'    => 8.00,
+        'premio'             => '7 Wonders',
+        'gioco'              => '7 Wonders',
+        'challenge'          => null,
+    ],
+    [
+        'idEvento'           => 303,
+        'nomeEvento'         => 'Torneo Carcassonne - Edizione Invernale',
+        'imgEvento'          => BASE_URL . '/img/placeholder.jpg',
+        'dataInizio'         => '2026-01-20 18:00:00',
+        'maxPartecipanti'    => 16,
+        'statoEvento'        => 'Terminato',
+        'numeroPartecipanti' => 16,
+        'richiedeQuota'      => true,
+        'postiDisponibili'   => 0,
+        'tipo'               => 'torneo',
+        'quotaIscrizione'    => 10.00,
+        'premio'             => 'Carcassonne',
+        'gioco'              => 'Carcassonne',
+        'challenge'          => null,
+    ],
+];
+
+// ── MOCK EVENTI: CHALLENGE (struttura di challengeToArray()) ──
+$eventi_challenge = [
+    [
+        'idEvento'           => 501,
+        'nomeEvento'         => 'Challenge Wingspan - Stagione Migratoria',
+        'imgEvento'          => BASE_URL . '/img/placeholder.jpg',
+        'dataInizio'         => '2026-07-28 16:00:00',
+        'maxPartecipanti'    => 8,
+        'statoEvento'        => 'Programmato',
+        'numeroPartecipanti' => 3,
+        'richiedeQuota'      => true,
+        'postiDisponibili'   => 5,
+        'tipo'               => 'challenge',
+        'quotaIscrizione'    => 5.00,
+        'premio'             => 'Wingspan',
+        'tornei'             => [
+            ['idEvento' => 301, 'nomeEvento' => 'Torneo di Catan - Coppa Primavera'],
+        ],
+    ],
+    [
+        'idEvento'           => 502,
+        'nomeEvento'         => 'Challenge Catan - Resa dei Conti',
+        'imgEvento'          => BASE_URL . '/img/placeholder.jpg',
+        'dataInizio'         => '2026-02-14 18:00:00',
+        'maxPartecipanti'    => 8,
+        'statoEvento'        => 'Terminato',
+        'numeroPartecipanti' => 8,
+        'richiedeQuota'      => true,
+        'postiDisponibili'   => 0,
+        'tipo'               => 'challenge',
+        'quotaIscrizione'    => 5.00,
+        'premio'             => 'Catan',
+        'tornei'             => [],
+    ],
+];
+
+
+// ══════════════════════════════════════════════════════════════
+//  MOCK PRODOTTI (per gestore_prodotti.tpl)
+// ══════════════════════════════════════════════════════════════
+$prodotti_gestore = [
+    [
+        'id'                 => 101,
+        'nome'               => 'Catan',
+        'immagine'           => BASE_URL . '/img/placeholder.jpg',
+        'tipo'               => 'Gioco da Tavolo',
+        'tipoSlug'           => 'giochi-da-tavolo',
+        'quantita'           => 14,
+        'valutazione_media'  => 4.6,
+        'prezzo'             => 34.90,
+        'sconto'             => false,
+        'prezzo_scontato'    => null,
+        'percentuale_sconto' => null,
+        'disponibilita'      => 'Disponibile',
+        'isAcquistabile'     => true,
+        'danneggiato'        => false,
+        'livello_danno'      => null,
+    ],
+    [
+        'id'                 => 102,
+        'nome'               => '7 Wonders',
+        'immagine'           => BASE_URL . '/img/placeholder.jpg',
+        'tipo'               => 'Gioco da Tavolo',
+        'tipoSlug'           => 'giochi-da-tavolo',
+        'quantita'           => 0,
+        'valutazione_media'  => 4.4,
+        'prezzo'             => 39.90,
+        'sconto'             => true,
+        'prezzo_scontato'    => 29.90,
+        'percentuale_sconto' => 25,
+        'disponibilita'      => 'Esaurito',
+        'isAcquistabile'     => false,
+        'danneggiato'        => false,
+        'livello_danno'      => null,
+    ],
+    [
+        'id'                 => 103,
+        'nome'               => 'Carcassonne',
+        'immagine'           => BASE_URL . '/img/placeholder.jpg',
+        'tipo'               => 'Gioco da Tavolo',
+        'tipoSlug'           => 'giochi-da-tavolo',
+        'quantita'           => 22,
+        'valutazione_media'  => 4.5,
+        'prezzo'             => 27.50,
+        'sconto'             => false,
+        'prezzo_scontato'    => null,
+        'percentuale_sconto' => null,
+        'disponibilita'      => 'Disponibile',
+        'isAcquistabile'     => true,
+        // Prodotto di test per il caso "già danneggiato": apri il modale su questo
+        // gioco per vedere checkbox precaricata, livello e riepilogo stato attuale.
+        'danneggiato'        => true,
+        'livello_danno'      => 'moderato',
+    ],
+    [
+        'id'                 => 201,
+        'nome'               => 'Bustina Espansione Draghi',
+        'immagine'           => BASE_URL . '/img/placeholder.jpg',
+        'tipo'               => 'Bustine',
+        'tipoSlug'           => 'bustine',
+        'quantita'           => 50,
+        'valutazione_media'  => 4.1,
+        'prezzo'             => 4.50,
+        'sconto'             => false,
+        'prezzo_scontato'    => null,
+        'percentuale_sconto' => null,
+        'disponibilita'      => 'Disponibile',
+        'isAcquistabile'     => true,
+        // Le bustine non sono EGiocoDaTavolo: danneggiato resta sempre false/null
+        // (coerente con prodottoToArray(), che valorizza il danno solo per i giochi)
+        'danneggiato'        => false,
+        'livello_danno'      => null,
+    ],
+    [
+        'id'                 => 202,
+        'nome'               => 'Bustina Edizione Limitata',
+        'immagine'           => BASE_URL . '/img/placeholder.jpg',
+        'tipo'               => 'Bustine',
+        'tipoSlug'           => 'bustine',
+        'quantita'           => 3,
+        'valutazione_media'  => 4.8,
+        'prezzo'             => 6.90,
+        'sconto'             => true,
+        'prezzo_scontato'    => 5.90,
+        'percentuale_sconto' => 15,
+        'disponibilita'      => 'Disponibile',
+        'isAcquistabile'     => true,
+        'danneggiato'        => false,
+        'livello_danno'      => null,
+    ],
+    [
+        'id'                 => 301,
+        'nome'               => 'Porta Dadi in Legno - Quercia',
+        'immagine'           => BASE_URL . '/img/placeholder.jpg',
+        'tipo'               => 'Porta Dadi',
+        'tipoSlug'           => 'porta-dadi',
+        'quantita'           => 8,
+        'valutazione_media'  => 4.9,
+        'prezzo'             => 18.00,
+        'sconto'             => false,
+        'prezzo_scontato'    => null,
+        'percentuale_sconto' => null,
+        'disponibilita'      => 'Disponibile',
+        'isAcquistabile'     => true,
+        'danneggiato'        => false,
+        'livello_danno'      => null,
+    ],
+    [
+        'id'                 => 302,
+        'nome'               => 'Porta Dadi in Metallo - Nero Opaco',
+        'immagine'           => BASE_URL . '/img/placeholder.jpg',
+        'tipo'               => 'Porta Dadi',
+        'tipoSlug'           => 'porta-dadi',
+        'quantita'           => 0,
+        'valutazione_media'  => 4.2,
+        'prezzo'             => 22.00,
+        'sconto'             => false,
+        'prezzo_scontato'    => null,
+        'percentuale_sconto' => null,
+        'disponibilita'      => 'Non Disponibile',
+        'isAcquistabile'     => false,
+        'danneggiato'        => false,
+        'livello_danno'      => null,
+    ],
+];
+
+// ── Enum Disponibilità (placeholder, da confermare con l'entity reale via enumToOptions()) ──
+$disponibilita_enum = [
+    ['value' => 'Disponibile', 'label' => 'Disponibile'],
+    ['value' => 'Esaurito', 'label' => 'Esaurito'],
+    ['value' => 'Non Disponibile', 'label' => 'Non Disponibile'],
+];
+
+// ── Enum Livello Danno (placeholder, da confermare con l'entity reale) ──
+$livelloDanno_enum = [
+    ['value' => 'lieve', 'label' => 'Lieve'],
+    ['value' => 'moderato', 'label' => 'Moderato'],
+    ['value' => 'grave', 'label' => 'Grave'],
+];
+
+
+// ══════════════════════════════════════════════════════════════
+//  MOCK DETTAGLIO EVENTI (gestore)
+//  Struttura = quella prodotta da BaseController::costruisciDatiVistaEvento()
+//  con modalita: 'gestore'. Includo anche 'podio' e 'iscritti' (torneo) e
+//  il campo 'podio'/'iscritti' annidato in ogni torneo di una challenge:
+//  questi campi NON sono ancora popolati dal controller reale (vedi TODO
+//  segnalati a Control), ma servono qui per poter vedere/testare la UI.
+//
+//  Ogni blocco sotto è una VARIANTE pensata per un singolo statoEvento,
+//  così puoi cambiare $vistaCorrente per vedere tutti i casi della tabella
+//  pulsanti (sezione 2/3/4 del documento).
+// ══════════════════════════════════════════════════════════════
+
+// ── SERATA: una variante per stato ──
+$dettaglio_serata_base = [
+    'idEvento'           => 401,
+    'nomeEvento'         => 'Serata Gioco Libero al Tablecrown Pub',
+    'imgEvento'          => BASE_URL . '/img/placeholder.jpg',
+    'maxPartecipanti'    => 30,
+    'numeroPartecipanti' => 18,
+    'richiedeQuota'      => false,
+    'postiDisponibili'   => 12,
+    'tipo'               => 'serata',
+    'tipoSerata'         => 'Gioco Libero',
+    'descrizioneEvento'  => "Una serata di gioco libero aperta a tutti: porta il tuo gioco preferito o scegline uno dalla nostra ludoteca.\nBar e snack disponibili per tutta la durata dell'evento.",
+    'postiRimanenti'     => 12,
+    'hasPostiDisponibili'=> true,
+    'userIscritto'       => false,
+    'vista'              => 'gestore_dettaglio_serata',
+];
+
+$dettagli_serata = [
+    'programmato_futura' => array_merge($dettaglio_serata_base, [
+        'statoEvento' => 'Programmato',
+        'dataInizio'  => '2026-08-10 20:00:00', // futura -> "Attiva" nascosto
+    ]),
+    'programmato_passata' => array_merge($dettaglio_serata_base, [
+        'idEvento'    => 404,
+        'nomeEvento'  => 'Serata Gioco Libero (in attesa di avvio)',
+        'statoEvento' => 'Programmato',
+        'dataInizio'  => '2026-07-01 20:00:00', // già passata -> "Attiva" visibile
+    ]),
+    'in_corso' => array_merge($dettaglio_serata_base, [
+        'idEvento'    => 405,
+        'nomeEvento'  => 'Serata Gioco Libero (in corso adesso)',
+        'statoEvento' => 'In_corso',
+        'dataInizio'  => '2026-07-19 20:00:00',
+    ]),
+    'terminato' => array_merge($dettaglio_serata_base, [
+        'idEvento'           => 403,
+        'nomeEvento'         => 'Serata Azul - Edizione Autunnale',
+        'tipoSerata'         => 'Gioco Libero',
+        'statoEvento'        => 'Terminato',
+        'dataInizio'         => '2025-11-05 20:30:00',
+        'numeroPartecipanti' => 25,
+        'maxPartecipanti'    => 25,
+        'postiDisponibili'   => 0,
+        'postiRimanenti'     => 0,
+        'hasPostiDisponibili'=> false,
+    ]),
+    'annullato' => array_merge($dettaglio_serata_base, [
+        'idEvento'    => 406,
+        'nomeEvento'  => 'Serata Presentazione Brass Birmingham (annullata)',
+        'statoEvento' => 'Annullato',
+        'dataInizio'  => '2026-07-22 19:00:00',
+    ]),
+];
+
+// ── TORNEO: varianti per stato, + podio/iscritti per il caso 'terminato' ──
+$premio_catan = [
+    'id'                 => 101,
+    'nome'               => 'Catan',
+    'immagine'           => BASE_URL . '/img/placeholder.jpg',
+    'valutazione_media'  => 4.6,
+    'prezzo'             => 34.90,
+    'sconto'             => false,
+    'prezzo_scontato'    => null,
+    'percentuale_sconto' => null,
+    'disponibilita'      => 'Disponibile',
+    'isAcquistabile'     => true,
+];
+
+$iscritti_torneo_301 = [
+    ['id' => 1, 'nome' => 'Marco Bianchi'],
+    ['id' => 2, 'nome' => 'Giulia Verdi'],
+    ['id' => 3, 'nome' => 'Luca Neri'],
+    ['id' => 4, 'nome' => 'Sara Colombo'],
+];
+
+$dettaglio_torneo_base = [
+    'idEvento'           => 301,
+    'nomeEvento'         => 'Torneo di Catan - Coppa Primavera',
+    'imgEvento'          => BASE_URL . '/img/placeholder.jpg',
+    'maxPartecipanti'    => 16,
+    'numeroPartecipanti' => 10,
+    'richiedeQuota'      => true,
+    'postiDisponibili'   => 6,
+    'tipo'               => 'torneo',
+    'quotaIscrizione'    => 10.00,
+    'premio'             => $premio_catan,
+    'gioco'              => 'Catan',
+    'challenge'          => ['idEvento' => 501, 'nomeEvento' => 'Challenge Wingspan - Stagione Migratoria'],
+    'descrizioneEvento'  => "Torneo a eliminazione diretta su 3 turni. Iscrizione obbligatoria entro la data di inizio.\nIl vincitore accede automaticamente alla classifica generale della Challenge collegata.",
+    'postiRimanenti'     => 6,
+    'hasPostiDisponibili'=> true,
+    'userIscritto'       => false,
+    'vista'              => 'gestore_dettaglio_torneo',
+];
+
+$dettagli_torneo = [
+    'programmato_futura' => array_merge($dettaglio_torneo_base, [
+        'statoEvento' => 'Programmato',
+        'dataInizio'  => '2026-08-10 18:30:00',
+    ]),
+    'programmato_passata' => array_merge($dettaglio_torneo_base, [
+        'idEvento'    => 307,
+        'statoEvento' => 'Programmato',
+        'dataInizio'  => '2026-07-01 18:30:00',
+    ]),
+    'in_corso' => array_merge($dettaglio_torneo_base, [
+        'idEvento'    => 308,
+        'statoEvento' => 'In_corso',
+        'dataInizio'  => '2026-07-19 18:30:00',
+    ]),
+    'annullato' => array_merge($dettaglio_torneo_base, [
+        'idEvento'    => 309,
+        'statoEvento' => 'Annullato',
+        'dataInizio'  => '2026-07-22 18:30:00',
+    ]),
+    // Terminato SENZA podio ancora inserito -> mostra "Aggiungi esito"
+    'terminato_senza_podio' => array_merge($dettaglio_torneo_base, [
+        'idEvento'           => 303,
+        'nomeEvento'         => 'Torneo Carcassonne - Edizione Invernale',
+        'gioco'              => 'Carcassonne',
+        'premio'             => array_merge($premio_catan, ['id' => 103, 'nome' => 'Carcassonne']),
+        'challenge'          => null,
+        'statoEvento'        => 'Terminato',
+        'dataInizio'         => '2026-01-20 18:00:00',
+        'numeroPartecipanti' => 16,
+        'maxPartecipanti'    => 16,
+        'postiDisponibili'   => 0,
+        'postiRimanenti'     => 0,
+        'hasPostiDisponibili'=> false,
+        'iscritti'           => $iscritti_torneo_301,
+        // 'podio' assente volutamente: simula il caso "nessun esito ancora inserito"
+    ]),
+    // Terminato CON podio già inserito -> mostra "Modifica esito" + podio in sola lettura
+    'terminato_con_podio' => array_merge($dettaglio_torneo_base, [
+        'statoEvento'        => 'Terminato',
+        'dataInizio'         => '2026-06-10 18:30:00',
+        'numeroPartecipanti' => 10,
+        'postiDisponibili'   => 6,
+        'postiRimanenti'     => 6,
+        'hasPostiDisponibili'=> true,
+        'iscritti'           => $iscritti_torneo_301,
+        'podio' => [
+            ['posizione' => 1, 'utente' => ['id' => 2, 'nome' => 'Giulia Verdi']],
+            ['posizione' => 2, 'utente' => ['id' => 1, 'nome' => 'Marco Bianchi']],
+            ['posizione' => 3, 'utente' => ['id' => 4, 'nome' => 'Sara Colombo']],
+        ],
+    ]),
+];
+
+// ── CHALLENGE: varianti (classifica non generata con tornei mancanti / classifica generata) ──
+$premio_wingspan = array_merge($premio_catan, ['id' => 104, 'nome' => 'Wingspan']);
+
+// Tornei "figli" completi (torneoToArray() + podio/iscritti annidati, come servirebbe
+// nella sezione 4 del documento). Uno ha già podio, uno no.
+$torneo_figlio_con_podio = [
+    'idEvento'           => 301,
+    'nomeEvento'         => 'Torneo di Catan - Coppa Primavera',
+    'imgEvento'          => BASE_URL . '/img/placeholder.jpg',
+    'dataInizio'         => '2026-06-10 18:30:00',
+    'maxPartecipanti'    => 16,
+    'statoEvento'        => 'Terminato',
+    'numeroPartecipanti' => 10,
+    'richiedeQuota'      => true,
+    'postiDisponibili'   => 6,
+    'tipo'               => 'torneo',
+    'quotaIscrizione'    => 10.00,
+    'premio'             => 'Catan',
+    'gioco'              => 'Catan',
+    'challenge'          => ['idEvento' => 501, 'nomeEvento' => 'Challenge Wingspan - Stagione Migratoria'],
+    'iscritti'           => $iscritti_torneo_301,
+    'podio' => [
+        ['posizione' => 1, 'utente' => ['id' => 2, 'nome' => 'Giulia Verdi']],
+        ['posizione' => 2, 'utente' => ['id' => 1, 'nome' => 'Marco Bianchi']],
+        ['posizione' => 3, 'utente' => ['id' => 4, 'nome' => 'Sara Colombo']],
+    ],
+];
+
+$torneo_figlio_senza_podio = [
+    'idEvento'           => 306,
+    'nomeEvento'         => 'Torneo Wingspan - Volo Libero',
+    'imgEvento'          => BASE_URL . '/img/placeholder.jpg',
+    'dataInizio'         => '2026-06-15 18:00:00',
+    'maxPartecipanti'    => 12,
+    'statoEvento'        => 'Terminato',
+    'numeroPartecipanti' => 8,
+    'richiedeQuota'      => true,
+    'postiDisponibili'   => 4,
+    'tipo'               => 'torneo',
+    'quotaIscrizione'    => 6.00,
+    'premio'             => 'Wingspan',
+    'gioco'              => 'Wingspan',
+    'challenge'          => ['idEvento' => 501, 'nomeEvento' => 'Challenge Wingspan - Stagione Migratoria'],
+    'iscritti'           => [
+        ['id' => 5, 'nome' => 'Elena Ferrari'],
+        ['id' => 6, 'nome' => 'Davide Romano'],
+        ['id' => 7, 'nome' => 'Chiara Greco'],
+    ],
+    // 'podio' assente: questo torneo manca ancora l'esito
+];
+
+$dettaglio_challenge_base = [
+    'idEvento'           => 501,
+    'nomeEvento'         => 'Challenge Wingspan - Stagione Migratoria',
+    'imgEvento'          => BASE_URL . '/img/placeholder.jpg',
+    'maxPartecipanti'    => 8,
+    'richiedeQuota'      => true,
+    'quotaIscrizione'    => 5.00,
+    'premio'             => $premio_wingspan,
+    'tipo'               => 'challenge',
+    'descrizioneEvento'  => "Challenge stagionale su 2 tornei collegati. La classifica finale somma i punti ottenuti in ciascun torneo.\nIl premio finale va al primo classificato della classifica generale.",
+    'punteggi'           => ['primo' => 10, 'secondo' => 6, 'terzo' => 3],
+    'userIscritto'       => false,
+    'vista'              => 'gestore_dettaglio_challenge',
+];
+
+$dettagli_challenge = [
+    'programmato_futura' => array_merge($dettaglio_challenge_base, [
+        'statoEvento'        => 'Programmato',
+        'dataInizio'         => '2026-08-28 16:00:00',
+        'numeroPartecipanti' => 3,
+        'postiDisponibili'   => 5,
+        'postiRimanenti'     => 5,
+        'hasPostiDisponibili'=> true,
+        'tornei'             => [$torneo_figlio_senza_podio],
+    ]),
+    'in_corso' => array_merge($dettaglio_challenge_base, [
+        'idEvento'           => 503,
+        'statoEvento'        => 'In_corso',
+        'dataInizio'         => '2026-07-19 16:00:00',
+        'numeroPartecipanti' => 6,
+        'postiDisponibili'   => 2,
+        'postiRimanenti'     => 2,
+        'hasPostiDisponibili'=> true,
+        'tornei'             => [$torneo_figlio_con_podio, $torneo_figlio_senza_podio],
+    ]),
+    'annullato' => array_merge($dettaglio_challenge_base, [
+        'idEvento'           => 504,
+        'statoEvento'        => 'Annullato',
+        'dataInizio'         => '2026-07-22 16:00:00',
+        'numeroPartecipanti' => 3,
+        'postiDisponibili'   => 5,
+        'postiRimanenti'     => 5,
+        'hasPostiDisponibili'=> true,
+        'tornei'             => [$torneo_figlio_senza_podio],
+    ]),
+    // Terminata, classifica NON ancora generata: un torneo ha podio, uno no -> avviso + pulsante disabilitato
+    'terminato_non_generata' => array_merge($dettaglio_challenge_base, [
+        'statoEvento'        => 'Terminato',
+        'dataInizio'         => '2026-06-01 16:00:00',
+        'numeroPartecipanti' => 8,
+        'postiDisponibili'   => 0,
+        'postiRimanenti'     => 0,
+        'hasPostiDisponibili'=> false,
+        'tornei'             => [$torneo_figlio_con_podio, $torneo_figlio_senza_podio],
+        'classificaGenerata' => false,
+        'torneiSenzaEsito'   => [
+            ['id' => 306, 'nome' => 'Torneo Wingspan - Volo Libero'],
+        ],
+    ]),
+    // Terminata, con TUTTI i tornei con podio -> pulsante "Genera classifica" attivo
+    'terminato_pronta' => array_merge($dettaglio_challenge_base, [
+        'idEvento'           => 505,
+        'statoEvento'        => 'Terminato',
+        'dataInizio'         => '2026-05-01 16:00:00',
+        'numeroPartecipanti' => 8,
+        'postiDisponibili'   => 0,
+        'postiRimanenti'     => 0,
+        'hasPostiDisponibili'=> false,
+        'tornei'             => [$torneo_figlio_con_podio, array_merge($torneo_figlio_senza_podio, [
+            'idEvento' => 307,
+            'podio' => [
+                ['posizione' => 1, 'utente' => ['id' => 5, 'nome' => 'Elena Ferrari']],
+                ['posizione' => 2, 'utente' => ['id' => 6, 'nome' => 'Davide Romano']],
+            ],
+        ])],
+        'classificaGenerata' => false,
+        'torneiSenzaEsito'   => [],
+    ]),
+    // Terminata, classifica GIA' generata -> sola lettura
+    'terminato_generata' => array_merge($dettaglio_challenge_base, [
+        'idEvento'           => 502,
+        'nomeEvento'         => 'Challenge Catan - Resa dei Conti',
+        'statoEvento'        => 'Terminato',
+        'dataInizio'         => '2026-02-14 18:00:00',
+        'numeroPartecipanti' => 8,
+        'postiDisponibili'   => 0,
+        'postiRimanenti'     => 0,
+        'hasPostiDisponibili'=> false,
+        'tornei'             => [$torneo_figlio_con_podio],
+        'classificaGenerata' => true,
+        'classificaFinale' => [
+            ['posizione' => 1, 'punteggioTotale' => 16, 'utente' => ['id' => 2, 'nome' => 'Giulia Verdi']],
+            ['posizione' => 2, 'punteggioTotale' => 12, 'utente' => ['id' => 5, 'nome' => 'Elena Ferrari']],
+            ['posizione' => 3, 'punteggioTotale' => 9,  'utente' => ['id' => 1, 'nome' => 'Marco Bianchi']],
+            ['posizione' => 4, 'punteggioTotale' => 3,  'utente' => ['id' => 4, 'nome' => 'Sara Colombo']],
+        ],
+    ]),
+];
+
+
+// ══════════════════════════════════════════════════════════════
+//  CAMBIA QUESTA RIGA PER TESTARE LE PAGINE:
+//  LISTE:      'serate' | 'tornei' | 'challenge' | 'prodotti'
+//  CREAZIONE:  'crea_serata' | 'crea_torneo' | 'crea_challenge'
+//              | 'crea_gioco' | 'crea_bustine' | 'crea_portadadi'
+//  DETTAGLIO SERATA:    'dett_serata:programmato_futura' | 'dett_serata:programmato_passata'
+//                      | 'dett_serata:in_corso' | 'dett_serata:terminato' | 'dett_serata:annullato'
+//  DETTAGLIO TORNEO:    'dett_torneo:programmato_futura' | 'dett_torneo:programmato_passata'
+//                      | 'dett_torneo:in_corso' | 'dett_torneo:annullato'
+//                      | 'dett_torneo:terminato_senza_podio' | 'dett_torneo:terminato_con_podio'
+//  DETTAGLIO CHALLENGE: 'dett_challenge:programmato_futura' | 'dett_challenge:in_corso'
+//                      | 'dett_challenge:annullato' | 'dett_challenge:terminato_non_generata'
+//                      | 'dett_challenge:terminato_pronta' | 'dett_challenge:terminato_generata'
+// ══════════════════════════════════════════════════════════════
+
+$mappaVisteListe = [
+    'serate'    => ['eventi' => $eventi_serate,    'template' => 'gestore_eventi_serate.tpl',    'page' => 'gestore_eventi_serate'],
+    'tornei'    => ['eventi' => $eventi_tornei,    'template' => 'gestore_eventi_tornei.tpl',    'page' => 'gestore_eventi_tornei'],
+    'challenge' => ['eventi' => $eventi_challenge, 'template' => 'gestore_eventi_challenge.tpl', 'page' => 'gestore_eventi_challenge'],
+    'catalogo_gioco'     => ['prodotti' => array_values(array_filter($prodotti_gestore, fn($p) => $p['tipoSlug'] === 'giochi-da-tavolo')), 'template' => 'gestore_catalogo_gioco.tpl',     'page' => 'gestore_catalogo_gioco'],
+    'catalogo_bustine'   => ['prodotti' => array_values(array_filter($prodotti_gestore, fn($p) => $p['tipoSlug'] === 'bustine')),          'template' => 'gestore_catalogo_bustine.tpl',   'page' => 'gestore_catalogo_bustine'],
+    'catalogo_portadadi' => ['prodotti' => array_values(array_filter($prodotti_gestore, fn($p) => $p['tipoSlug'] === 'porta-dadi')),       'template' => 'gestore_catalogo_portadadi.tpl', 'page' => 'gestore_catalogo_portadadi'],
+];
+
+// ── Mappa delle pagine di DETTAGLIO evento (gestore) ──
+$mappaVisteDettaglio = [
+    'dett_serata'    => ['varianti' => $dettagli_serata,    'template' => 'gestore_dettaglio_serata.tpl',    'page' => 'gestore_dettaglio_serata'],
+    'dett_torneo'    => ['varianti' => $dettagli_torneo,    'template' => 'gestore_dettaglio_torneo.tpl',    'page' => 'gestore_dettaglio_torneo'],
+    'dett_challenge' => ['varianti' => $dettagli_challenge, 'template' => 'gestore_dettaglio_challenge.tpl', 'page' => 'gestore_dettaglio_challenge'],
+];
+
+$vistaCorrente = 'catalogo_gioco';// <-- CAMBIA QUI PER TESTARE LE PAGINE);
+
+// ── DATI GLOBALI DI LAYOUT (richiesti da layout_gestore.tpl) ──
+$smarty->assign('base_url', BASE_URL);
+$smarty->assign('utente', ['name' => 'Marco Rossi']);
+
+// Il breadcrumb qui è statico e generico: per le pagine di dettaglio, in produzione
+// arriva da CGestore::getBreadcrumbs() (che usa $nomeEventoCorrente). Nel mock lo
+// teniamo semplice, dato che serve solo a testare il resto della UI.
+[$vistaBase] = explode(':', $vistaCorrente, 2);
+$smarty->assign('breadcrumbs', [
+    ['label' => 'Home', 'url' => BASE_URL . '/'],
+    ['label' => 'Dashboard Gestore', 'url' => BASE_URL . '/gestore/dashboard'],
+    ['label' => ucfirst($vistaBase), 'url' => BASE_URL . '/gestore/eventi/' . $vistaBase],
+]);
+
+// Facoltativo: per testare la flash message
+// $smarty->assign('flash_message', 'Serata pubblicata con successo!');
+// $smarty->assign('flash_type', 'success');
+
+
+// ══════════════════════════════════════════════════════════════
+//  MOCK DATI PER LE PAGINE DI CREAZIONE
+// ══════════════════════════════════════════════════════════════
+
+$premiDisponibili = [
+    ['id' => 101, 'nome' => 'Catan',             'immagine' => BASE_URL . '/img/placeholder.jpg'],
+    ['id' => 102, 'nome' => '7 Wonders',         'immagine' => BASE_URL . '/img/placeholder.jpg'],
+    ['id' => 103, 'nome' => 'Carcassonne',       'immagine' => BASE_URL . '/img/placeholder.jpg'],
+    ['id' => 104, 'nome' => 'Wingspan',          'immagine' => BASE_URL . '/img/placeholder.jpg'],
+    ['id' => 105, 'nome' => 'Azul',              'immagine' => BASE_URL . '/img/placeholder.jpg'],
+    ['id' => 106, 'nome' => 'Brass Birmingham',  'immagine' => BASE_URL . '/img/placeholder.jpg'],
+];
+
+$giochiDisponibili = [
+    ['id' => 101, 'nome' => 'Catan',       'immagine' => BASE_URL . '/img/placeholder.jpg'],
+    ['id' => 102, 'nome' => '7 Wonders',   'immagine' => BASE_URL . '/img/placeholder.jpg'],
+    ['id' => 103, 'nome' => 'Carcassonne', 'immagine' => BASE_URL . '/img/placeholder.jpg'],
+    ['id' => 104, 'nome' => 'Wingspan',    'immagine' => BASE_URL . '/img/placeholder.jpg'],
+];
+
+$torneiDisponibili = [
+    ['idEvento' => 302, 'nomeEvento' => 'Torneo 7 Wonders - Sfida Estiva',         'imgEvento' => BASE_URL . '/img/placeholder.jpg', 'gioco' => '7 Wonders'],
+    ['idEvento' => 303, 'nomeEvento' => 'Torneo Carcassonne - Edizione Invernale', 'imgEvento' => BASE_URL . '/img/placeholder.jpg', 'gioco' => 'Carcassonne'],
+    ['idEvento' => 304, 'nomeEvento' => 'Torneo Azul - Notte Blu',                 'imgEvento' => BASE_URL . '/img/placeholder.jpg', 'gioco' => 'Azul'],
+    ['idEvento' => 305, 'nomeEvento' => 'Torneo Brass - Sfida Industriale',        'imgEvento' => BASE_URL . '/img/placeholder.jpg', 'gioco' => 'Brass Birmingham'],
+    ['idEvento' => 306, 'nomeEvento' => 'Torneo Wingspan - Volo Libero',           'imgEvento' => BASE_URL . '/img/placeholder.jpg', 'gioco' => 'Wingspan'],
+];
+
+$valute_enum = [
+    ['value' => 'eur', 'label' => 'Euro (€)'],
+    ['value' => 'usd', 'label' => 'Dollaro USA ($)'],
+    ['value' => 'gbp', 'label' => 'Sterlina (£)'],
+];
+
+$mappaVisteCreazione = [
+    'crea_serata'    => ['template' => 'gestore_creazione_serata.tpl',    'page' => 'gestore_creazione_serata'],
+    'crea_torneo'    => ['template' => 'gestore_creazione_torneo.tpl',    'page' => 'gestore_creazione_torneo'],
+    'crea_challenge' => ['template' => 'gestore_creazione_challenge.tpl', 'page' => 'gestore_creazione_challenge'],
+    'crea_gioco'     => ['template' => 'gestore_creazione_gioco.tpl',     'page' => 'gestore_creazione_gioco'],
+    'crea_bustine'   => ['template' => 'gestore_creazione_bustine.tpl',   'page' => 'gestore_creazione_bustine'],
+    'crea_portadadi' => ['template' => 'gestore_creazione_portadadi.tpl', 'page' => 'gestore_creazione_portadadi'],
+];
+
+
+// ══════════════════════════════════════════════════════════════
+//  SELEZIONE VISTA + ASSIGN + DISPLAY
+// ══════════════════════════════════════════════════════════════
+
+// $vistaCorrente per il dettaglio arriva nella forma "dett_serata:programmato_futura":
+// separiamo la chiave base (per trovare template/pagina) dalla variante (per i dati).
+[$vistaChiave, $vistaVariante] = array_pad(explode(':', $vistaCorrente, 2), 2, null);
+
+if ($vistaCorrente === 'prodotti') {
+    $smarty->assign('current_page', 'gestore_prodotti');
+
+    $smarty->assign('prodotti', $prodotti_gestore);
+    $smarty->assign('total_results', count($prodotti_gestore));
+    $smarty->assign('pagination', [
+        'current_page' => 1,
+        'total_pages'  => 1,
+    ]);
+
+    $smarty->assign('filtri', [
+        'q'                   => $_GET['q'] ?? null,
+        'tipo_prodotto'       => $_GET['tipo_prodotto'] ?? [],
+        'disponibilita'       => $_GET['disponibilita'] ?? [],
+        'disponibilita_enum'  => $disponibilita_enum,
+        'ordinamento'         => $_GET['ordinamento'] ?? null,
+    ]);
+
+    $smarty->assign('livelloDanno_enum', $livelloDanno_enum);
+
+    $smarty->display('gestore_prodotti.tpl');
+
+} elseif (isset($mappaVisteListe[$vistaCorrente])) {
+    $vista = $mappaVisteListe[$vistaCorrente];
+
+    $smarty->assign('current_page', $vista['page']);
+    $smarty->assign('eventi', $vista['eventi'] ?? null);
+    $smarty->assign('prodotti', $vista['prodotti'] ?? null);
+    $smarty->assign('total_results', count($vista['eventi'] ?? $vista['prodotti'] ?? []));
+    $smarty->assign('pagination', ['current_page' => 1, 'total_pages' => 1]);
+    $smarty->assign('filtri', [
+        'q'                  => $_GET['q'] ?? null,
+        'data'               => $_GET['filtro_data'] ?? null,
+        'disponibilita'      => $_GET['disponibilita'] ?? [],
+        'disponibilita_enum' => $disponibilita_enum,
+        'ordinamento'        => $_GET['ordinamento'] ?? null,
+    ]);
+    $smarty->assign('livelloDanno_enum', $livelloDanno_enum);
+
+    $smarty->display($vista['template']);
+
+} elseif (isset($mappaVisteDettaglio[$vistaChiave])) {
+    $vista = $mappaVisteDettaglio[$vistaChiave];
+
+    if ($vistaVariante === null || !isset($vista['varianti'][$vistaVariante])) {
+        die("Variante di dettaglio non riconosciuta. Usa il formato 'chiave:variante', es. 'dett_torneo:terminato_con_podio'. Varianti disponibili per '$vistaChiave': " . implode(', ', array_keys($vista['varianti'])));
+    }
+
+    $datiEvento = $vista['varianti'][$vistaVariante];
+
+    $smarty->assign('current_page', $vista['page']);
+    // Assegniamo ogni chiave del mock direttamente come variabile di root, esattamente
+    // come fa preparaDatiLayout() con array_merge($globalData, $data) nel controller reale.
+    foreach ($datiEvento as $chiave => $valore) {
+        $smarty->assign($chiave, $valore);
+    }
+
+    $smarty->display($vista['template']);
+
+} elseif (isset($mappaVisteCreazione[$vistaCorrente])) {
+    $vista = $mappaVisteCreazione[$vistaCorrente];
+
+    $smarty->assign('current_page', $vista['page']);
+    $smarty->assign('premiDisponibili', $premiDisponibili);
+    $smarty->assign('giochiDisponibili', $giochiDisponibili);
+    $smarty->assign('torneiDisponibili', $torneiDisponibili);
+    $smarty->assign('valute_enum', $valute_enum);
+
+    $smarty->display($vista['template']);
+
+} else {
+    die("Vista '$vistaCorrente' non riconosciuta.");
+}
+
+/*
 
 //administratore
 $smarty->assign('annoCorrente', date('Y'));
@@ -119,7 +894,6 @@ $utentiMock = [
         'numeroSegnalazioni' => 6,
     ],
 ];
-
 // ── base_url mancante prima della display ──
 $smarty->assign('base_url', BASE_URL);
 
@@ -174,6 +948,11 @@ $recensioniUtenteDettaglio = [
         ],
     ],
 ];
+
+
+
+
+
 $smarty->assign('recensioniSegnalate', $recensioniUtenteDettaglio);
 
 $smarty->assign('utenti', $utentiMock);
@@ -188,10 +967,11 @@ $smarty->assign('ordinamento', 'recenti');
 
 $smarty->assign('segnalazioniUrgenti', $segnalazioniUrgenti);
 
-$smarty->display('dettagli_utente_admin.tpl');
 
 
-/*
+
+
+
 
 
 $offerte = [
