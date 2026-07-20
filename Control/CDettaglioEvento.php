@@ -108,7 +108,7 @@ class CDettaglioEvento extends BaseController {
      * Gestisce la prenotazione a un evento.
      * URL: POST /eventi/partecipa
      */
-    public function partecipaEvento(): void { //TODO: DA RIVEDERE!!! SI PUò OTTIMIZZARE
+    public function partecipaEvento(): void { 
         $utente = $this->utenteCorrente();
 
         $idEvento = UHTTPMethods::postInt('id_evento');

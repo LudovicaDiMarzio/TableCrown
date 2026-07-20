@@ -51,10 +51,10 @@ class CGestore extends BaseController {
      */
     public function mostraDashboardGestore(): void {
         //Recupero dati statistici
-        $ordiniTotali = FPersistentManager::PMcontaOrdiniTotali(); //TODO: metodo da implementare
-        $venditeTotali = FPersistentManager::PMcontaVenditeTotali(); //TODO: metodo da implementare
+        $ordiniTotali = FPersistentManager::PMcontaOrdiniTotali(); 
+        $venditeTotali = FPersistentManager::PMcontaVenditeTotali(); 
 
-        $prossiEventiGrezzi = FPersistentManager::PMgetProssimiEventi(5); //TODO: metodo da implementare
+        $prossiEventiGrezzi = FPersistentManager::PMgetProssimiEventi(5); 
         $prossimiEventi = $this->eventiToArray($prossiEventiGrezzi);
 
         $datiPagina = [
@@ -95,6 +95,7 @@ class CGestore extends BaseController {
                 limit: self::RISULTATI_PER_PAGINA,
                 offset: ($pagina - 1) * self::RISULTATI_PER_PAGINA
             );
+            $filtri = $this->completaFiltriPrezzo($filtri, $risultatoGrezzo);
         }
 
         $this->renderCatalogo('gestore_catalogo_giochi', $risultatoGrezzo, $pagina, $filtri, $query, modalita: 'gestore');
@@ -126,6 +127,7 @@ class CGestore extends BaseController {
                 limit: self::RISULTATI_PER_PAGINA,
                 offset: ($pagina - 1) * self::RISULTATI_PER_PAGINA
             );
+            $filtri = $this->completaFiltriPrezzo($filtri, $risultatoGrezzo);
         }
 
         $this->renderCatalogo('gestore_catalogo_bustine', $risultatoGrezzo, $pagina, $filtri, $query, modalita: 'gestore');
@@ -157,6 +159,7 @@ class CGestore extends BaseController {
                 limit: self::RISULTATI_PER_PAGINA,
                 offset: ($pagina - 1) * self::RISULTATI_PER_PAGINA
             );
+            $filtri = $this->completaFiltriPrezzo($filtri, $risultatoGrezzo);
         }
 
         $this->renderCatalogo('gestore_catalogo_portadadi', $risultatoGrezzo, $pagina, $filtri, $query, modalita: 'gestore');
@@ -229,7 +232,7 @@ class CGestore extends BaseController {
         $datiLayout = $this->preparaDatiLayout($datiPagina['vista'], $datiPagina);
 
         //Chiamata alla View
-        ViewEventi::mostraDettaglioEvento($datiLayout); //TODO: nome del metodo da confermare
+        ViewEventi::mostraDettaglioEvento($datiLayout); 
     }
 
 
@@ -1142,7 +1145,7 @@ class CGestore extends BaseController {
      * un concetto di sconti promozionale: una quota di iscrizione è un valore fisso.
      */
     private function costruisciQuotaIscrizione(): EPrezzo {
-        $valore = UHTTPMethods::postFloat('valoreQuota', min: 0); //TODO. niente try/catch??
+        $valore = UHTTPMethods::postFloat('valoreQuota', min: 0); 
         $valuta = $this->postEnum('valuta', Valuta::class);
         return new EPrezzo($valore, $valuta);
     }

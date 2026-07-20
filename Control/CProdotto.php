@@ -110,13 +110,7 @@ class CProdotto extends BaseController {
             return false;
         }
 
-        //TODO: 
-        //$idUtente = USession::getSessionElement('id_persona');
-        //if (!$idUtente) {
-        //    return false;
-        //}
-        //FPersistentManager::PMuserHasPurchased($idUtente, $idProdotto);
-        return false; //DA TOGLIERE QUANDO DISPONIBILE IL METODO DEL PM
+        return FPersistentManager::PMutenteHasProdotto($utente->getIdPersona(), $idProdotto);
     }
 
     /**

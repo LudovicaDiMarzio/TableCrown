@@ -215,20 +215,11 @@ abstract class BaseController {
     }
 
     /**
-     * Restituisce prodotti "correlati" con CRITERIO PROVVISORIO: TUTTI I PRODOTTI
-     * DISPONIBILI NEL CATALOGO, ESCLUSI QUELLI IN $idEsclusi, LIMITATI A $limit.
-     * DA SOSTITUIRE QUANDO DISPONIBILE IL METODO NEL PM.
+     * Restituisce prodotti "correlati" delegando la ricerca al PersistentManager,
+     * escludendo gli ID passati in idsEsclusi e limitando il risultato a $limit.
      */
-    //TODO: DA MODIFICAREEEEE!!!!!!
     protected function prodottiCorrelati(array $idsEsclusi, int $limit = 8): array {
-        $tuttiProdotti = FPersistentManager::PMgetAll(EProdotto::class);
-
-        $correlati = array_filter(
-            $tuttiProdotti,
-            fn($p) => !in_array($p->getIdProdotto(), $idsEsclusi) 
-        );
-
-        $correlati = array_slice(array_values($correlati), 0, $limit);
+        $correlati = FPersistentManager::PMfindCorrelati($idsEsclusi, $limit);
 
         return $this->prodottiToArray($correlati);
     }
@@ -333,13 +324,9 @@ abstract class BaseController {
      * condiviso da tutte le pagine del catalogo (giochi, bustine, porta dadi).
      */
     protected function estraiFiltriPrezzo(): array {
-        //TODO: price_range_min e price_range_max andranno calcolati da FPersistentManager
-        //in base ai prodotti realmente presenti nel catalogo/risultato filtrato.
-        //Per ora metto dei dafault fissi 
-        $priceRangeMin = 0.0; //DA CAMBIARE!!!!!!!
-        $priceRangeMax = 200.0; //DA CAMBIARE!!!!!!!
+        $priceRangeMin = 0.0; //fisso a 0
 
-        //Valori selezionati dall'utente sullo slider
+        //Valori selezionati dall'utente sullo slider (se presenti in GET)
         $priceMinRaw = UHTTPMethods::get('price_min');  
         $priceMaxRaw = UHTTPMethods::get('price_max');
 
@@ -348,9 +335,10 @@ abstract class BaseController {
 
         return [
             'price_min'          => is_numeric($priceMinRaw) ? (float) $priceMinRaw : $priceRangeMin,
-            'price_max'          => is_numeric($priceMaxRaw) ? (float) $priceMaxRaw : $priceRangeMax,
+            //Se non specificato dall'utente, lasciamo null: verrà impostato dopo la query con rangemax
+            'price_max'          => is_numeric($priceMaxRaw) ? (float) $priceMaxRaw : null,
             'price_range_min'    => $priceRangeMin,
-            'price_range_max'    => $priceRangeMax,
+            'price_range_max'    => null, // Verrà popolato dinamicamente da rangemax del PM
             'disponibilita'      => $this->validaValoriEnum($this->estraiArrayDaRequest('disponibilita'), DisponibilitaProdotto::class),
             'in_evidenza_filtro' => array_values(array_intersect($this->estraiArrayDaRequest('in_evidenza_filtro'), self::IN_EVIDENZA_VALIDI)),
             'rating_min'         => is_numeric($ratingMinRaw) ? (float) $ratingMinRaw : 0.0,
@@ -388,6 +376,23 @@ abstract class BaseController {
 
         return $filtri;
     }
+
+    /**
+     * Completa l'array $filtri iniettando il valore rangemax restituito dal pm
+     */
+    protected function completaFiltriPrezzo(array $filtri, array $risultatoGrezzo): array {
+        //Recuperiamo il rangemax calcolato dal pm (con fallback a 0.0 per sicurezza)
+        $reangeMax = (float) ($risultatoGrezzo['rangemax'] ?? 0.0);
+        $filtri['price_range_max'] = $reangeMax;
+
+        //Se l'utente non aveva impostato il limite massimo, impostiamo lo slider al massimo del range
+        if ($filtri['price_max'] === null) {
+            $filtri['price_max'] = $reangeMax;
+        }
+
+        return $filtri;
+    }
+
 
 
     // UTENTE
