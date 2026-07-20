@@ -371,6 +371,8 @@ class CFrontController {
                                 $controller->mostraListaTorneiGestore();
                             } elseif ($sottoRoute2 === 'challenge') { //GET /gestore/eventi/challenge
                                 $controller->mostraListaChallengeGestore();
+                            } elseif ($sottoRoute2 === 'dettaglio') { //GET /gestore/eventi/dettaglio?id=X
+                                $controller->mostraDettaglioEventoGestore((int)$sottoRoute3);
                             } else {
                                 $this->mostra404();
                             }
@@ -413,6 +415,10 @@ class CFrontController {
                                 } else {
                                     $this->mostra404();
                                 }
+                            } elseif ($sottoRoute2 === 'tornei' && $sottoRoute3 === 'esito') { //POST /gestore/eventi/tornei/esito
+                                $controller->inserisciEsitoTorneoGestore();
+                            } elseif ($sottoRoute2 === 'challenge' && $sottoRoute3 === 'genera-classifica') { //POST /gestore/eventi/challenge/genera-classifica
+                                $controller->generaClassificaChallengeGestore();
                             } elseif ($sottoRoute2 === 'attiva') { //POST /gestore/eventi/attiva
                                 $controller->attivaEventoGestore();
                             } elseif ($sottoRoute2 === 'concludi') { //POST /gestore/eventi/concludi

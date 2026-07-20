@@ -40,7 +40,7 @@ class CDettaglioEvento extends BaseController {
             exit();
         }
 
-        $datiPagina = $this->costruisciDatiVista($evento);
+        $datiPagina = $this->costruisciDatiVistaEvento($evento, modalita: 'utente');
         $datiLayout = $this->preparaDatiLayout('evento', $datiPagina);
 
         //Chiamata alla View
@@ -203,79 +203,11 @@ class CDettaglioEvento extends BaseController {
         }
     }
 
-    //==========================================================================
-    // HELPER PRIVATI 
-    //==========================================================================
-
-    /**
-     * Costruisce i dati di dettaglio partendo dagli helper già esistenti
-     * nel BaseController (serataToArray, torneoToArray, challengeToArray),
-     * aggiungendo i campi extra necessari solo alla pagina di dettaglio.
-     */
-    private function costruisciDatiVista(EEvento $evento): array {
-        if ($evento instanceof ESerata) {
-            $dati = $this->serataToArray($evento);
-            $vista = 'dettaglio_serata';
-        } elseif ($evento instanceof ETorneo) {
-            $dati = $this->torneoToArray($evento);
-            //Nel catalogo 'premio' è un link minimale (id, nome, immagine); qui invece
-            //per la view serve la card completa del prodotto, come nel catalogo dei prodotti.
-            $dati['premio'] = $this->prodottoToArray($evento->getPremio());
-            $vista = 'dettaglio_torneo';
-        } elseif ($evento instanceof EChallenge) {
-            $dati = $this->challengeToArray($evento);
-            $dati['premio'] = $this->prodottoToArray($evento->getPremio());
-            //'tornei' nel catalogo è un array di link minimali (id, nome); qui invece
-            //serve la card completa di ogni torneo, quindi sostituiamo con torneoToArray().
-            //Nota: con torneoToArray() ogni torneo avra a sua volta un link minimale alla 
-            //challenge, ma nella UI quel campo può semplicemente essere ignorato
-            $dati['tornei'] = array_map(
-                fn($t) => $this->torneoToArray($t),
-                $evento->getTornei()->toArray()
-            );
-            $dati['punteggi'] = [ //i punteggi non ci sono in challengeToArray() perché non servono nel catalogo, qui li aggiungiamo
-                'primo' => $evento->getPunteggioPrimoClassificato(),
-                'secondo' => $evento->getPunteggioSecondoClassificato(),
-                'terzo' => $evento->getPunteggioTerzoClassificato(),
-            ];
-            $vista = 'dettaglio_challenge';
-        } else {
-            //Difensivo: non dovrebbe mai accadere dato il DiscriminatorMap di EEvento, ma lo aggiungiamo per sicurezza
-            throw new \LogicException('Tipo di evento non riconosciuto: ' . get_class($evento));
-        }
-
-        $dati['vista'] = $vista;
-        $dati['descrizioneEvento'] = $evento->getDescrizioneEvento();
-        $dati['postiRimanenti'] = $evento->getMaxPartecipanti() - $evento->getNumeroPartecipanti();
-        $dati['hasPostiDisponibili'] = $evento->hasPostiDisponibili();
-        $dati['userIscritto'] = $this->utenteIscritto($evento);
-
-        return $dati;
-    }
-
-    /**
-     * Verifica se l'utente attualmente loggato è già iscritto a questo evento.
-     */
-    private function utenteIscritto(EEvento $evento): bool {
-        if (!$this->isLoggedIn() || USession::getSessionElement('ruolo') !== 'utente') {
-            return false;        
-        }
-        $idUtente = USession::getSessionElement('id_persona');
-
-        foreach ($evento->getPartecipazioni() as $partecipazione) {
-            if ($partecipazione->getUtente()->getIdPersona() === $idUtente) {
-                return true;
-            }
-        }
-
-        return false;
-    }
-
     protected function getBreadcrumbs(string $currentPage = ''): array {
         return [
-            ['label' => 'Home', 'url' => '/'],
-            ['label' => 'Eventi', 'url' => '/eventi'],
-            ['label' => 'Dettaglio evento', 'url' => '/eventi/dettaglio/' . $this->idEventoCorrente],
+            ['label' => 'Home', 'url' => BASE_URL . '/'],
+            ['label' => 'Eventi', 'url' => BASE_URL . '/eventi'],
+            ['label' => 'Dettaglio evento', 'url' => BASE_URL . '/eventi/dettaglio/' . $this->idEventoCorrente],
         ];
     }
 

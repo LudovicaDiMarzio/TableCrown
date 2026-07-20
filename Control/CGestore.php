@@ -9,6 +9,7 @@ use TableCrown\Entity\Enumerativi\DisponibilitaProdotto;
 use TableCrown\Entity\Enumerativi\LinguaGioco;
 use TableCrown\Entity\Enumerativi\DifficoltaGioco;
 use TableCrown\Entity\Enumerativi\Categoria;
+use TableCrown\Entity\Enumerativi\StatoEvento;
 use TableCrown\Entity\EGiocoDaTavolo;
 use TableCrown\Entity\EBustine;
 use TableCrown\Entity\EPortaDadi;
@@ -20,10 +21,15 @@ use TableCrown\Entity\ETorneo;
 use TableCrown\Entity\EChallenge;
 use TableCrown\Foundation\FPersistentManager;
 use TableCrown\Presentation\Views\ViewGestore;
+use TableCrown\Presentation\Views\ViewEventi;
 use InvalidArgumentException;
 use RuntimeException;
 
 class CGestore extends BaseController {
+
+    private ?int $idEventoCorrente = null;
+    private ?string $nomeEventoCorrente = null;
+    private ?string $tipoEventoCorrente = null; // 'serata' | 'torneo' | 'challenge'
 
     public function __construct() {
         parent::__construct();
@@ -47,7 +53,7 @@ class CGestore extends BaseController {
         $ordiniTotali = FPersistentManager::PMcontaOrdiniTotali(); //TODO: metodo da implementare
         $venditeTotali = FPersistentManager::PMcontaVenditeTotali(); //TODO: metodo da implementare
 
-        $prossiEventiGrezzi = FPersistentManager::PMgetProssiEventi(5); //TODO: metodo da implementare
+        $prossiEventiGrezzi = FPersistentManager::PMgetProssimiEventi(5); //TODO: metodo da implementare
         $prossimiEventi = $this->eventiToArray($prossiEventiGrezzi);
 
         $datiPagina = [
@@ -181,6 +187,37 @@ class CGestore extends BaseController {
         $eventiTrovati = FPersistentManager::PMricercaEventi($query);
 
         $this->renderListaEventi('gestore_risultati_ricerca', $eventiTrovati, null, $query, modalita: 'gestore');
+    }
+
+    /**
+     * Mostra il dettaglio di un evento lato gestore. Stessa struttura dati della
+     * vista utente (riusa costruisceDatiVistaEvento()), ma con le informazioni
+     * aggiuntive utili al gestore per decidere se pubblicare la classifica.
+     * URL: GET /gestore/eventi/dettaglio?id=X
+     */
+    public function mostraDettaglioEventoGestore(int $idEvento): void {
+        $evento = FPersistentManager::PMgetObjOnAttribute(EEvento::class, 'idEvento', $idEvento);
+
+        if ($evento === null) {
+            UFlashMessage::addMessage('danger', 'L\'evento richiesto non esiste.');
+            header('Location: ' . UHTTPMethods::getReferer(BASE_URL . '/gestore/dashboard'));
+            exit();
+        }
+
+        //(per getBreadcrumbs())
+        $this->idEventoCorrente = $evento->getIdEvento();
+        $this->nomeEventoCorrente = $evento->getNomeEvento();
+        $this->tipoEventoCorrente = match (true) {
+            $evento instanceof ESerata => 'serata',
+            $evento instanceof ETorneo => 'torneo',
+            $evento instanceof EChallenge => 'challenge',
+        };
+
+        $datiPagina = $this->costruisciDatiVistaEvento($evento, modalita: 'gestore');
+        $datiLayout = $this->preparaDatiLayout($datiPagina['vista'], $datiPagina);
+
+        //Chiamata alla View
+        ViewEventi::mostraDettaglioEvento($datiLayout); //TODO: nome del metodo da confermare
     }
 
 
@@ -866,6 +903,147 @@ class CGestore extends BaseController {
         }
     }
 
+    /**
+     * Assegna il podio (1°/2°/3° posto) ai partecipanti di un torneo concluso.
+     * Funziona identico sia per tornei standalone sia per tornei che fanno parte 
+     * di una challenge, perché in entrambi i casi esiste una EPartecipazione
+     * dedicata a livello di singolo torneo.
+     * URL: POST /gestore/eventi/tornei/esito
+     */
+    public function inserisciEsitoTorneoGestore(): void {
+        try {
+            $idEvento = UHTTPMethods::postInt('id_evento');
+            $torneo = FPersistentManager::PMgetObjOnAttribute(ETorneo::class, 'idEvento', $idEvento);
+            if ($torneo === null) {
+                throw new InvalidArgumentException("L'evento selezionato non esiste.");
+            }
+            if ($torneo->getStatoEvento() !== StatoEvento::Terminato) {
+                throw new InvalidArgumentException("L'evento non è ancora terminato. Puoi inserire l'esito solo per un torneo concluso.");
+            }
+            
+            //id_secondo e id_terzo sono opzionali: un torneo potrebbe avere meno
+            //di 3 partecipanti totali.
+            $idPrimoRaw = UHTTPMethods::postInt('id_primo');
+            $idSecondoRaw = UHTTPMethods::post('id_secondo');
+            $idTerzoRaw = UHTTPMethods::post('id_terzo');
+
+            $mappaPosizioni = [$idPrimoRaw => 1];
+            if ($idSecondoRaw !== null && $idSecondoRaw !== '') {
+                $mappaPosizioni[(int) $idSecondoRaw] = 2;
+            }
+            if ($idTerzoRaw !== null && $idTerzoRaw !== '') {
+                $mappaPosizioni[(int) $idTerzoRaw] = 3;
+            }
+
+            if (count($mappaPosizioni) !== count(array_unique(array_keys($mappaPosizioni)))) {
+                throw new InvalidArgumentException("L'esito contiene posizioni duplicati.");
+            }
+
+            //Verifica che tutti gli id selezionati siano effettivamente iscritti a questo torneo
+            $idIscritti = array_map(
+                fn($p) => $p->getUtente()->getIdPersona(),
+                $torneo->getPartecipazioni()->toArray()
+            );
+            foreach (array_keys($mappaPosizioni) as $idUtente) {
+                if (!in_array($idUtente, $idIscritti, true)) {
+                    throw new InvalidArgumentException("L'utente con ID $idUtente non ha partecipato a questo torneo.");
+                }
+            }
+
+            //Applica (o azzera) la posizione su ogni partecipazione del torneo:
+            //reimpostare esplicitamente a null chi non è nel podio permette anche
+            //di correggere un esito inserito per errore in precedenza.
+            foreach ($torneo->getPartecipazioni() as $partecipazione) {
+                $idUtente = $partecipazione->getUtente()->getIdPersona();
+                $partecipazione->aggiornaPosizioneInClassifica($mappaPosizioni[$idUtente] ?? null);
+                FPersistentManager::PMsaveObj($partecipazione);
+            }
+
+            UFlashMessage::addMessage('success', 'Esito del torneo inserito con successo!');
+            header('Location: ' . UHTTPMethods::getReferer(BASE_URL . '/gestore/dashboard'));
+            exit();
+
+        } catch (\Exception $e) {
+            UFlashMessage::addMessage('danger', $e->getMessage());
+            header('Location: ' . UHTTPMethods::getReferer(BASE_URL . '/gestore/dashboard'));
+            exit();
+        }
+    }
+
+    /**
+     * Calcola e salva la classifica finale di una challenge, sommando i punti
+     * guadagnati da ciascun utente in base al podio ottenuto in ogni torneo incluso.
+     * Richiede che tutti i tornei della challenge abbiano già un esito registrato.
+     * URL: POST /gestore/eventi/challenge/genera-classifica
+     */
+    public function generaClassificaChallengeGestore(): void {
+        try {
+            $idChallenge = UHTTPMethods::postInt('id_challenge');
+            $challenge = FPersistentManager::PMgetObjOnAttribute(EChallenge::class, 'idEvento', $idChallenge);
+            if ($challenge === null) {
+                throw new InvalidArgumentException("L'evento selezionato non esiste.");
+            }
+            if ($challenge->getStatoEvento() !== StatoEvento::Terminato) {
+                throw new InvalidArgumentException("L'evento non è ancora terminato. Puoi generare la classifica solo per un challenge concluso.");
+            }
+
+            //Verifica che ogni torneo abbia già un podio inserito
+            foreach ($challenge->getTornei() as $torneo) {
+                $haPodio = false;
+                foreach ($torneo->getPartecipazioni() as $p) {
+                    if ($p->getPosizioneInClassifica() === 1) {
+                        $haPodio = true;
+                        break;
+                    }
+                }
+                if (!$haPodio) {
+                    throw new InvalidArgumentException("Il torneo '{$torneo->getNomeEvento()}' non ha ancora un esito registrato.");
+                }
+            }
+
+            //Somma i punti challenge di ogni utente, sui tornei in cui è arrivato sul podio
+            $puntiPerUtente = []; //[idUtente => punti]
+            foreach ($challenge->getTornei() as $torneo) {
+                foreach ($torneo->getPartecipazioni() as $p) {
+                    $punti = match ($p->getPosizioneInClassifica()) {
+                        1 => $challenge->getPunteggioPrimoClassificato(),
+                        2 => $challenge->getPunteggioSecondoClassificato(),
+                        3 => $challenge->getPunteggioTerzoClassificato(),
+                        default => 0,
+                    };
+                    $idUtente = $p->getUtente()->getIdPersona();
+                    $puntiPerUtente[$idUtente] = ($puntiPerUtente[$idUtente] ?? 0) + $punti;
+                }
+            }
+
+            //Ordina per punti decrescenti: chi ha più punti è primo in classifica
+            arsort($puntiPerUtente);
+
+            //Applica punteggio totale e posizione a ciascuna partecipazione "di challenge"
+            //(distinta da quelle "di torneo" già gestite sopra)
+            $posizione = 1;
+            foreach (array_keys($puntiPerUtente) as $idUtente) {
+                foreach ($challenge->getPartecipazioni() as $partecipazioneChallenge) {
+                    if ($partecipazioneChallenge->getUtente()->getIdPersona() === $idUtente) {
+                        $partecipazioneChallenge->aggiornaPunteggioTotale($puntiPerUtente[$idUtente]);
+                        $partecipazioneChallenge->aggiornaPosizioneInClassifica($posizione);
+                        FPersistentManager::PMsaveObj($partecipazioneChallenge);
+                        break;
+                    }
+                }
+                $posizione++;
+            }
+
+            UFlashMessage::addMessage('success', 'Classifica della challenge generata con successo!');
+            header('Location: ' . UHTTPMethods::getReferer(BASE_URL . '/gestore/dashboard'));
+            exit();
+
+        } catch (\Exception $e) {
+            UFlashMessage::addMessage('danger', $e->getMessage());
+            header('Location: ' . UHTTPMethods::getReferer(BASE_URL . '/gestore/dashboard'));
+            exit();
+        }
+    }
 
     //==========================================================================
     // HELPER PRIVATI CONDIVISI
@@ -997,6 +1175,19 @@ class CGestore extends BaseController {
             'gestore_eventi_ricerca' => array_merge($breadcrumbs, [
                 ['label' => 'Ricerca', 'url' => BASE_URL . '/gestore/eventi/ricerca'],
             ]),
+            'gestore_dettaglio_serata' => array_merge($breadcrumbs, [
+                ['label' => 'Serate', 'url' => BASE_URL . '/gestore/eventi/serate'],
+                ['label' => $this->nomeEventoCorrente ?? 'Dettaglio', 'url' => '#'],
+            ]),
+            'gestore_dettaglio_torneo' => array_merge($breadcrumbs, [
+                ['label' => 'Tornei', 'url' => BASE_URL . '/gestore/eventi/tornei'],
+                ['label' => $this->nomeEventoCorrente ?? 'Dettaglio', 'url' => '#'],
+            ]),
+            'gestore_dettaglio_challenge' => array_merge($breadcrumbs, [
+                ['label' => 'Challenge', 'url' => BASE_URL . '/gestore/eventi/challenge'],
+                ['label' => $this->nomeEventoCorrente ?? 'Dettaglio', 'url' => '#'],
+            ]),
+            
             default => $breadcrumbs,
         };
     }

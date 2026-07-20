@@ -295,14 +295,4 @@ class CRecensioni extends BaseController {
         exit();
     }
 
-    /**
-     * Essendo questo un controller che gestisce solo azioni operative in POST,
-     * non verrà mai chiamato direttamente questo metodo per fare il rendering
-     * di un layout; ma lo inseriamo per non violare l'ereditarietà 
-     */
-    protected function getBreadcrumbs(string $currentPage = ''): array {
-        return [
-            ['label' => 'Home', 'url' => '/'],
-        ];
-    }
 }
