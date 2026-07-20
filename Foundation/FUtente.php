@@ -16,7 +16,7 @@ class FUtente{
     public static function ContaUtentiTotali(): int {
         try{
             $em = FEntityManager::getInstance()->getEntityManager();
-            return $em->getRepository(EUtente::class)->count();
+            return $em->getRepository(EUtente::class)->count([]);
         }
         catch(Exception $e){
             error_log("Errore in contaUtentiTotali: " . $e->getMessage());
