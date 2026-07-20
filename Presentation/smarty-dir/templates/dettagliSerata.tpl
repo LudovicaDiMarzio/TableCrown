@@ -19,9 +19,7 @@
 <div class="dettaglio-container">
     <div class="container">
 
-        <nav class="dettaglio-breadcrumb">
-            <a href="{$base_url}/">Home</a> / <a href="{$base_url}/eventi">Eventi</a> / {$serata.nome}
-        </nav>
+        
 
         <!-- ── BLOCCO SUPERIORE (senza box prezzo) ── -->
         <div class="dettaglio-top">

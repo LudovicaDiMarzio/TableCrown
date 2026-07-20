@@ -226,7 +226,7 @@
                     <div class="products-grid">
                         {foreach $prodotti as $prodotto}
                             <div class="product-card">
-                                <a href="{$base_url}/prodotto/{$prodotto.id}" class="product-card-link">
+                                <a href="{$base_url}/prodotto?id={$prodotto.id}" class="product-card-link">
 
                                     <div class="product-image-wrapper">
                                         <img src="{$base_url}/img/prodotti/{$prodotto.immagine|escape}"
