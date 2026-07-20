@@ -19,6 +19,6 @@ class ViewProfiloOrdini extends ViewProfiloBase {
         // + scontoApplicato + totaleItem (string 2 decimali))
         $smarty->assign('ordini', $dati['ordini'] ?? []);
 
-        $smarty->display('ProfiloOrdini.tpl');
+        $smarty->display('MioOrdine.tpl');
     }
 }

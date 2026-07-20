@@ -1,22 +1,76 @@
-{extends file="common/layout.tpl"}
+<?php
+/* Smarty version 5.8.0, created on 2026-07-20 23:55:07
+  from 'file:ProfiloIndirizzi.tpl' */
 
-{block name="extra_css"}
-    <link rel="stylesheet" href="{$base_url}/css/ProfiloIndirizzi.css">
-{/block}
+/* @var \Smarty\Template $_smarty_tpl */
+if ($_smarty_tpl->getCompiled()->isFresh($_smarty_tpl, array (
+  'version' => '5.8.0',
+  'unifunc' => 'content_6a5e993b326568_19385699',
+  'has_nocache_code' => false,
+  'file_dependency' => 
+  array (
+    'dae25bf53b169dc6cae52b4717cc0ba383acacdb' => 
+    array (
+      0 => 'ProfiloIndirizzi.tpl',
+      1 => 1784584503,
+      2 => 'file',
+    ),
+  ),
+  'includes' => 
+  array (
+  ),
+))) {
+function content_6a5e993b326568_19385699 (\Smarty\Template $_smarty_tpl) {
+$_smarty_current_dir = 'C:\\xampp\\htdocs\\TableCrown\\Presentation\\smarty-dir\\templates';
+$_smarty_tpl->getInheritance()->init($_smarty_tpl, true);
+?>
 
-{block name="content"}
+
+<?php 
+$_smarty_tpl->getInheritance()->instanceBlock($_smarty_tpl, 'Block_19975316006a5e993b303be7_91007330', "extra_css");
+?>
+
+
+<?php 
+$_smarty_tpl->getInheritance()->instanceBlock($_smarty_tpl, 'Block_13698587406a5e993b3085e6_73463974', "content");
+?>
+
+
+<?php 
+$_smarty_tpl->getInheritance()->instanceBlock($_smarty_tpl, 'Block_2902393296a5e993b325093_21322711', "extra_js");
+$_smarty_tpl->getInheritance()->endChild($_smarty_tpl, "common/layout.tpl", $_smarty_current_dir);
+}
+/* {block "extra_css"} */
+class Block_19975316006a5e993b303be7_91007330 extends \Smarty\Runtime\Block
+{
+public function callBlock(\Smarty\Template $_smarty_tpl) {
+$_smarty_current_dir = 'C:\\xampp\\htdocs\\TableCrown\\Presentation\\smarty-dir\\templates';
+?>
+
+    <link rel="stylesheet" href="<?php echo $_smarty_tpl->getValue('base_url');?>
+/css/ProfiloIndirizzi.css">
+<?php
+}
+}
+/* {/block "extra_css"} */
+/* {block "content"} */
+class Block_13698587406a5e993b3085e6_73463974 extends \Smarty\Runtime\Block
+{
+public function callBlock(\Smarty\Template $_smarty_tpl) {
+$_smarty_current_dir = 'C:\\xampp\\htdocs\\TableCrown\\Presentation\\smarty-dir\\templates';
+?>
+
 <div class="indirizzi-container">
     <div class="container">
 
-        {* ── TOPBAR ── *}
-        <div class="indirizzi-topbar">
-            <a href="{$base_url}/profilo" class="indirizzi-back-link">
+                <div class="indirizzi-topbar">
+            <a href="<?php echo $_smarty_tpl->getValue('base_url');?>
+/profilo" class="indirizzi-back-link">
                 <i class="ti ti-arrow-left"></i> Torna all'Area Personale
             </a>
         </div>
 
-        {* ── HEADER ── *}
-        <div class="indirizzi-header">
+                <div class="indirizzi-header">
             <div class="indirizzi-header-text">
                 <span class="indirizzi-eyebrow">Area Personale</span>
                 <h1 class="indirizzi-titolo">
@@ -25,12 +79,13 @@
             </div>
 
             <div class="indirizzi-header-actions">
-                {if isset($indirizzi) && $indirizzi|@count > 0}
+                <?php if ((true && ($_smarty_tpl->hasVariable('indirizzi') && null !== ($_smarty_tpl->getValue('indirizzi') ?? null))) && $_smarty_tpl->getSmarty()->getModifierCallback('count')($_smarty_tpl->getValue('indirizzi')) > 0) {?>
                     <div class="indirizzi-count-badge">
-                        <span class="indirizzi-count-num">{$indirizzi|@count}</span>
-                        <span class="indirizzi-count-label">{if $indirizzi|@count == 1}indirizzo{else}indirizzi{/if}</span>
+                        <span class="indirizzi-count-num"><?php echo $_smarty_tpl->getSmarty()->getModifierCallback('count')($_smarty_tpl->getValue('indirizzi'));?>
+</span>
+                        <span class="indirizzi-count-label"><?php if ($_smarty_tpl->getSmarty()->getModifierCallback('count')($_smarty_tpl->getValue('indirizzi')) == 1) {?>indirizzo<?php } else { ?>indirizzi<?php }?></span>
                     </div>
-                {/if}
+                <?php }?>
 
                 <button type="button" class="indirizzi-add-btn" id="indirizzi-btn-aggiungi" title="Aggiungi nuovo indirizzo">
                     <i class="ti ti-plus"></i>
@@ -38,61 +93,75 @@
             </div>
         </div>
 
-        {* ── LISTA INDIRIZZI ── *}
-        {if isset($indirizzi) && $indirizzi|@count > 0}
+                <?php if ((true && ($_smarty_tpl->hasVariable('indirizzi') && null !== ($_smarty_tpl->getValue('indirizzi') ?? null))) && $_smarty_tpl->getSmarty()->getModifierCallback('count')($_smarty_tpl->getValue('indirizzi')) > 0) {?>
             <div class="indirizzi-list" id="indirizzi-list">
-                {foreach $indirizzi as $indirizzo}
-                    <div class="indirizzi-card {if $indirizzo.predefinito}indirizzi-card-predefinito{/if}" id="indirizzi-card-{$indirizzo.id|escape}">
+                <?php
+$_from = $_smarty_tpl->getSmarty()->getRuntime('Foreach')->init($_smarty_tpl, $_smarty_tpl->getValue('indirizzi'), 'indirizzo');
+$foreach0DoElse = true;
+foreach ($_from ?? [] as $_smarty_tpl->getVariable('indirizzo')->value) {
+$foreach0DoElse = false;
+?>
+                    <div class="indirizzi-card <?php if ($_smarty_tpl->getValue('indirizzo')['predefinito']) {?>indirizzi-card-predefinito<?php }?>" id="indirizzi-card-<?php echo htmlspecialchars((string)$_smarty_tpl->getValue('indirizzo')['id'], ENT_QUOTES, 'UTF-8', true);?>
+">
 
                         <div class="indirizzi-card-top">
-                            <span class="indirizzi-nome">{$indirizzo.nome|escape}</span>
-                            {if $indirizzo.predefinito}
+                            <span class="indirizzi-nome"><?php echo htmlspecialchars((string)$_smarty_tpl->getValue('indirizzo')['nome'], ENT_QUOTES, 'UTF-8', true);?>
+</span>
+                            <?php if ($_smarty_tpl->getValue('indirizzo')['predefinito']) {?>
                                 <span class="indirizzi-predefinito-badge">
                                     <i class="ti ti-star-filled"></i> Predefinito
                                 </span>
-                            {/if}
+                            <?php }?>
                         </div>
 
                         <div class="indirizzi-info-list">
                             <div class="indirizzi-info-row">
                                 <i class="ti ti-road"></i>
-                                <span class="indirizzi-info-value">{$indirizzo.via|escape}</span>
+                                <span class="indirizzi-info-value"><?php echo htmlspecialchars((string)$_smarty_tpl->getValue('indirizzo')['via'], ENT_QUOTES, 'UTF-8', true);?>
+</span>
                             </div>
                             <div class="indirizzi-info-row">
                                 <i class="ti ti-building"></i>
-                                <span class="indirizzi-info-value">{$indirizzo.citta|escape} ({$indirizzo.provincia|escape}), {$indirizzo.cap|escape}</span>
+                                <span class="indirizzi-info-value"><?php echo htmlspecialchars((string)$_smarty_tpl->getValue('indirizzo')['citta'], ENT_QUOTES, 'UTF-8', true);?>
+ (<?php echo htmlspecialchars((string)$_smarty_tpl->getValue('indirizzo')['provincia'], ENT_QUOTES, 'UTF-8', true);?>
+), <?php echo htmlspecialchars((string)$_smarty_tpl->getValue('indirizzo')['cap'], ENT_QUOTES, 'UTF-8', true);?>
+</span>
                             </div>
                             <div class="indirizzi-info-row">
                                 <i class="ti ti-flag"></i>
-                                <span class="indirizzi-info-value">{$indirizzo.nazione|escape}</span>
+                                <span class="indirizzi-info-value"><?php echo htmlspecialchars((string)$_smarty_tpl->getValue('indirizzo')['nazione'], ENT_QUOTES, 'UTF-8', true);?>
+</span>
                             </div>
-                            {* -- corretto: la chiave passata da Control è 'nome_citofono' -- *}
-                            {if isset($indirizzo.nome_citofono) && $indirizzo.nome_citofono}
+                                                        <?php if ((true && (true && null !== ($_smarty_tpl->getValue('indirizzo')['nome_citofono'] ?? null))) && $_smarty_tpl->getValue('indirizzo')['nome_citofono']) {?>
                                 <div class="indirizzi-info-row">
                                     <i class="ti ti-bell"></i>
-                                    <span class="indirizzi-info-value">{$indirizzo.nome_citofono|escape}</span>
+                                    <span class="indirizzi-info-value"><?php echo htmlspecialchars((string)$_smarty_tpl->getValue('indirizzo')['nome_citofono'], ENT_QUOTES, 'UTF-8', true);?>
+</span>
                                 </div>
-                            {/if}
+                            <?php }?>
                         </div>
 
                         <div class="indirizzi-actions">
-                            {if !$indirizzo.predefinito}
-                                <button type="button" class="indirizzi-btn-predefinito" data-id="{$indirizzo.id|escape}">
+                            <?php if (!$_smarty_tpl->getValue('indirizzo')['predefinito']) {?>
+                                <button type="button" class="indirizzi-btn-predefinito" data-id="<?php echo htmlspecialchars((string)$_smarty_tpl->getValue('indirizzo')['id'], ENT_QUOTES, 'UTF-8', true);?>
+">
                                     <i class="ti ti-star"></i> Imposta come predefinito
                                 </button>
-                            {/if}
+                            <?php }?>
 
-                            <button type="button" class="indirizzi-btn-elimina" data-id="{$indirizzo.id|escape}">
+                            <button type="button" class="indirizzi-btn-elimina" data-id="<?php echo htmlspecialchars((string)$_smarty_tpl->getValue('indirizzo')['id'], ENT_QUOTES, 'UTF-8', true);?>
+">
                                 <i class="ti ti-trash"></i> Elimina
                             </button>
                         </div>
 
                     </div>
-                {/foreach}
+                <?php
+}
+$_smarty_tpl->getSmarty()->getRuntime('Foreach')->restore($_smarty_tpl, 1);?>
             </div>
-        {else}
-            {* ── STATO VUOTO ── *}
-            <div class="indirizzi-empty" id="indirizzi-empty">
+        <?php } else { ?>
+                        <div class="indirizzi-empty" id="indirizzi-empty">
                 <div class="indirizzi-empty-icon">
                     <i class="ti ti-map-pin-off"></i>
                 </div>
@@ -102,10 +171,9 @@
                     <i class="ti ti-plus"></i> Aggiungi indirizzo
                 </button>
             </div>
-        {/if}
+        <?php }?>
 
-        {* ── POPUP FORM (solo aggiungi) ── *}
-        <div class="indirizzi-popup-overlay" id="indirizzi-form-popup" hidden>
+                <div class="indirizzi-popup-overlay" id="indirizzi-form-popup" hidden>
             <div class="indirizzi-popup-box">
                 <h2 class="indirizzi-form-titolo">Aggiungi indirizzo</h2>
 
@@ -157,8 +225,7 @@
             </div>
         </div>
 
-        {* ── POPUP CONFERMA ELIMINAZIONE ── *}
-        <div class="indirizzi-popup-overlay" id="indirizzi-elimina-popup" hidden>
+                <div class="indirizzi-popup-overlay" id="indirizzi-elimina-popup" hidden>
             <div class="indirizzi-popup-box indirizzi-popup-box-confirm">
                 <i class="ti ti-alert-triangle indirizzi-popup-icon"></i>
                 <p class="indirizzi-popup-message">Sei sicuro di voler eliminare questo indirizzo?</p>
@@ -170,8 +237,7 @@
             </div>
         </div>
 
-        {* ── POPUP MESSAGGI (feedback errore generico) ── *}
-        <div class="indirizzi-popup-overlay" id="indirizzi-popup" hidden>
+                <div class="indirizzi-popup-overlay" id="indirizzi-popup" hidden>
             <div class="indirizzi-popup-box indirizzi-popup-box-confirm">
                 <i class="ti ti-alert-triangle indirizzi-popup-icon"></i>
                 <p class="indirizzi-popup-message" id="indirizzi-popup-message"></p>
@@ -181,11 +247,20 @@
 
     </div>
 </div>
-{/block}
+<?php
+}
+}
+/* {/block "content"} */
+/* {block "extra_js"} */
+class Block_2902393296a5e993b325093_21322711 extends \Smarty\Runtime\Block
+{
+public function callBlock(\Smarty\Template $_smarty_tpl) {
+$_smarty_current_dir = 'C:\\xampp\\htdocs\\TableCrown\\Presentation\\smarty-dir\\templates';
+?>
 
-{block name="extra_js"}
-<script>
-{literal}
+<?php echo '<script'; ?>
+>
+
 (function() {
 
     var popup        = document.getElementById('indirizzi-popup');
@@ -271,7 +346,8 @@
                 return;
             }
 
-            fetch('{/literal}{$base_url}{literal}/profilo/indirizzi/aggiungi', {
+            fetch('<?php echo $_smarty_tpl->getValue('base_url');?>
+/profilo/indirizzi/aggiungi', {
                 method: 'POST',
                 headers: {
                     'Content-Type': 'application/x-www-form-urlencoded',
@@ -323,7 +399,8 @@
 
             var id = idDaEliminare;
 
-            fetch('{/literal}{$base_url}{literal}/profilo/indirizzi/elimina', {
+            fetch('<?php echo $_smarty_tpl->getValue('base_url');?>
+/profilo/indirizzi/elimina', {
                 method: 'POST',
                 headers: {
                     'Content-Type': 'application/x-www-form-urlencoded',
@@ -359,7 +436,8 @@
 
             var id = predefinitoBtn.getAttribute('data-id');
 
-            fetch('{/literal}{$base_url}{literal}/profilo/indirizzi/predefinito', {
+            fetch('<?php echo $_smarty_tpl->getValue('base_url');?>
+/profilo/indirizzi/predefinito', {
                 method: 'POST',
                 headers: {
                     'Content-Type': 'application/x-www-form-urlencoded',
@@ -383,6 +461,11 @@
     }
 
 })();
-{/literal}
-</script>
-{/block}
+
+<?php echo '</script'; ?>
+>
+<?php
+}
+}
+/* {/block "extra_js"} */
+}

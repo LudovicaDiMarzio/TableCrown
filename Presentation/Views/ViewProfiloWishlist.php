@@ -16,8 +16,8 @@ class ViewProfiloWishlist extends ViewProfiloBase {
         // 'wishlist' = array di 'prodotti' con la stessa struttura usata
         // in home/catalogo (id, nome, immagine, valutazione_media, prezzo,
         // sconto, prezzo_scontato, percentuale_sconto, disponibilita, isAcquistabile)
-        $smarty->assign('wishlist', $dati['wishlist'] ?? []);
+        $smarty->assign('wishlist', $dati['prodotti'] ?? []);
 
-        $smarty->display('ProfiloWishlist.tpl');
+        $smarty->display('Wishlist.tpl');
     }
 }

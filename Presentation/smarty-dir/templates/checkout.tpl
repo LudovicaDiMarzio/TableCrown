@@ -126,35 +126,39 @@
                     {/if}
 
                     {* ── PAGAMENTO ── *}
-                    <section class="checkout-section">
-                        <h2 class="checkout-section-title">Metodo di Pagamento</h2>
+<section class="checkout-section">
+    <h2 class="checkout-section-title">Metodo di Pagamento</h2>
 
-                        {if isset($carte) && $carte|@count > 0}
-                            <div class="checkout-tabs">
-                                <label class="checkout-tab is-active" id="tab-salvata">
-                                    <input type="radio" name="scelta_carta" value="salvata" checked>
-                                    <i class="ti ti-credit-card"></i> Carta Salvata
-                                </label>
-                                <label class="checkout-tab" id="tab-nuova">
-                                    <input type="radio" name="scelta_carta" value="nuova">
-                                    <i class="ti ti-plus"></i> Nuova Carta
-                                </label>
-                            </div>
+    {if isset($carte) && $carte|@count > 0}
+        <div class="checkout-tabs">
+            <label class="checkout-tab is-active" id="tab-salvata">
+                <input type="radio" name="scelta_carta" value="salvata" checked>
+                <i class="ti ti-credit-card"></i> Carta Salvata
+            </label>
+            <label class="checkout-tab" id="tab-nuova">
+                <input type="radio" name="scelta_carta" value="nuova">
+                <i class="ti ti-plus"></i> Nuova Carta
+            </label>
+        </div>
 
-                            <div class="checkout-radio-list" id="carte-salvate-list">
-                                {foreach $carte as $carta}
-                                    <label class="checkout-radio-card">
-                                        <input type="radio" name="id_carta_salvata" value="{$carta.id}">
-                                        <div class="checkout-radio-content">
-                                            <p class="checkout-radio-title"><i class="ti ti-credit-card"></i> {$carta.titolare|escape}</p>
-                                            <p class="checkout-radio-sub">**** **** **** {$carta.ultimeQuattroCifre|escape} — Scad. {$carta.scadenza|escape}</p>
-                                        </div>
-                                    </label>
-                                {/foreach}
-                            </div>
-                        {else}
-                            <input type="hidden" name="scelta_carta" value="nuova">
-                        {/if}
+        <div class="checkout-radio-list" id="carte-salvate-list">
+            {foreach $carte as $carta}
+                <label class="checkout-radio-card">
+                    <input type="radio" name="id_carta_salvata" value="{$carta.id}">
+                    <div class="checkout-radio-content">
+                        <p class="checkout-radio-title"><i class="ti ti-credit-card"></i> {$carta.titolare|escape}</p>
+                        <p class="checkout-radio-sub">**** **** **** {$carta.ultimeQuattroCifre|escape} — Scad. {$carta.scadenza|escape}</p>
+                    </div>
+                </label>
+            {/foreach}
+        </div>
+    {else}
+        <input type="hidden" name="scelta_carta" value="nuova">
+    {/if}
+
+    <input type="hidden" name="id_carta_salvata" id="id_carta_salvata_fallback" value="0" {if isset($carte) && $carte|@count > 0}disabled{/if}>
+
+    <div class="checkout-nuova-carta" id="nuova-carta-form" {if isset($carte) && $carte|@count > 0}style="display:none;"{/if}>
 
                         <div class="checkout-nuova-carta" id="nuova-carta-form" {if isset($carte) && $carte|@count > 0}style="display:none;"{/if}>
                             <div class="form-group">
@@ -224,17 +228,18 @@
 {literal}
 (function() {
 
-    // ── TOGGLE CARTA SALVATA / NUOVA ──
     var tabSalvata = document.getElementById('tab-salvata');
     var tabNuova = document.getElementById('tab-nuova');
     var carteList = document.getElementById('carte-salvate-list');
     var nuovaCartaForm = document.getElementById('nuova-carta-form');
+    var fallbackCartaSalvata = document.getElementById('id_carta_salvata_fallback');
 
     function mostraSalvata() {
         if (tabSalvata) tabSalvata.classList.add('is-active');
         if (tabNuova) tabNuova.classList.remove('is-active');
         if (carteList) carteList.style.display = '';
         if (nuovaCartaForm) nuovaCartaForm.style.display = 'none';
+        if (fallbackCartaSalvata) fallbackCartaSalvata.disabled = true;
     }
 
     function mostraNuova() {
@@ -242,10 +247,11 @@
         if (tabSalvata) tabSalvata.classList.remove('is-active');
         if (carteList) carteList.style.display = 'none';
         if (nuovaCartaForm) nuovaCartaForm.style.display = 'block';
+        if (fallbackCartaSalvata) fallbackCartaSalvata.disabled = false;
     }
 
     if (tabSalvata) tabSalvata.addEventListener('click', mostraSalvata);
-    if (tabNuova) tabNuova.addEventListener('click', mostraNuova);
+    if (tabNuova) tabNuova.addEventListener('click', mostraNuova)
 
     // ── EVIDENZIAZIONE RADIO CARD SELEZIONATA (indirizzi e carte) ──
     document.querySelectorAll('.checkout-radio-list').forEach(function(lista) {
