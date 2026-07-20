@@ -1,15 +1,15 @@
 <?php
 // Presentation/Views/ViewProfiloFactory.php
 
-require_once __DIR__ . '/ViewProfiloBase.php';
-require_once __DIR__ . '/ViewProfiloHub.php';
-require_once __DIR__ . '/ViewModificaAccount.php';
-require_once __DIR__ . '/ViewProfiloOrdini.php';
-require_once __DIR__ . '/ViewProfiloRecensioni.php';
-require_once __DIR__ . '/ViewProfiloWishlist.php';
-require_once __DIR__ . '/ViewProfiloEventi.php';
-require_once __DIR__ . '/ViewProfiloIndirizzi.php';
-require_once __DIR__ . '/ViewProfiloPagamenti.php';
+use Presentation\Views\ViewProfiloBase;
+use Presentation\Views\ViewProfiloHub;
+use Presentation\Views\ViewModificaAccount;
+use Presentation\Views\ViewProfiloOrdini;
+use Presentation\Views\ViewProfiloRecensioni;
+use Presentation\Views\ViewProfiloWishlist;
+use Presentation\Views\ViewProfiloEventi;
+use Presentation\Views\ViewProfiloIndirizzi;
+use Presentation\Views\ViewProfiloPagamenti;
 
 class ViewProfiloFactory {
 

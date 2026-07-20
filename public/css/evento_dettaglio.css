@@ -1,0 +1,261 @@
+/* Condiviso da dettaglio_serata.tpl, dettaglio_torneo.tpl, dettaglio_challenge.tpl
+   Riusa le CSS var del design system dark (le stesse di auth.css) */
+
+.evento-dettaglio-section {
+    padding: 2.5rem 0 4rem;
+}
+
+.evento-header {
+    display: flex;
+    gap: 2rem;
+    margin-bottom: 2rem;
+}
+
+.evento-img-wrapper {
+    position: relative;
+    flex: 0 0 320px;
+}
+
+.evento-img {
+    width: 100%;
+    height: 220px;
+    object-fit: cover;
+    border-radius: 12px;
+}
+
+.evento-stato-badge {
+    position: absolute;
+    top: 12px;
+    left: 12px;
+    display: inline-flex;
+    align-items: center;
+    gap: 0.35rem;
+    padding: 0.35rem 0.75rem;
+    border-radius: 999px;
+    font-size: 0.8rem;
+    font-weight: 600;
+    background-color: rgba(0, 0, 0, 0.6);
+    color: var(--text-secondary, #b5b5b5);
+    border: 1px solid var(--border-color, #3a3a3a);
+}
+
+.evento-stato-terminato {
+    color: #f39c12;
+    border-color: #f39c12;
+}
+
+.evento-info {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    gap: 0.5rem;
+}
+
+.evento-tipo {
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+    font-size: 0.8rem;
+    color: var(--text-muted, #888);
+}
+
+.evento-titolo {
+    font-size: 1.9rem;
+    font-weight: 700;
+    color: var(--text-primary, #fafafa);
+    margin: 0;
+}
+
+.evento-meta {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 1.25rem;
+    margin-top: 0.5rem;
+}
+
+.evento-meta-item {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.4rem;
+    color: var(--text-secondary, #b5b5b5);
+    font-size: 0.9rem;
+}
+
+.evento-tag-iscritto {
+    align-self: flex-start;
+    margin-top: 0.5rem;
+    background-color: rgba(46, 160, 67, 0.15);
+    color: #2ea043;
+    border: 1px solid #2ea043;
+}
+
+.evento-challenge-link {
+    font-size: 0.85rem;
+    color: var(--text-muted, #888);
+}
+
+.evento-challenge-link a {
+    color: var(--accent, #6c9eff);
+}
+
+.evento-descrizione,
+.evento-premio,
+.evento-podio,
+.evento-classifica,
+.evento-tornei {
+    background-color: var(--bg-elevated, #1e1e1e);
+    border: 1px solid var(--border-color, #3a3a3a);
+    border-radius: 12px;
+    padding: 1.5rem;
+    margin-bottom: 1.5rem;
+}
+
+.evento-descrizione h2,
+.evento-premio h2,
+.evento-podio h2,
+.evento-classifica h2,
+.evento-tornei h2 {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    font-size: 1.1rem;
+    margin-bottom: 1rem;
+    color: var(--text-primary, #fafafa);
+}
+
+.evento-columns {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 1.5rem;
+}
+
+.premio-card {
+    display: flex;
+    align-items: center;
+    gap: 1rem;
+}
+
+.premio-img {
+    width: 64px;
+    height: 64px;
+    object-fit: cover;
+    border-radius: 8px;
+}
+
+.premio-nome {
+    font-weight: 600;
+    color: var(--text-primary, #fafafa);
+}
+
+.punteggi-list {
+    margin-top: 1rem;
+    padding-top: 1rem;
+    border-top: 1px solid var(--border-color, #3a3a3a);
+    display: flex;
+    flex-direction: column;
+    gap: 0.4rem;
+    font-size: 0.9rem;
+    color: var(--text-secondary, #b5b5b5);
+}
+
+.punteggio-pos {
+    font-weight: 700;
+    margin-right: 0.4rem;
+    color: var(--text-primary, #fafafa);
+}
+
+.podio-list {
+    display: flex;
+    flex-direction: column;
+    gap: 0.6rem;
+}
+
+.podio-item {
+    display: flex;
+    align-items: center;
+    gap: 0.75rem;
+    padding: 0.6rem 0.9rem;
+    border-radius: 8px;
+    background-color: var(--bg-surface, #262626);
+}
+
+.podio-posizione {
+    font-weight: 700;
+    width: 1.8rem;
+}
+
+.podio-posizione-1 { border-left: 3px solid #ffd700; }
+.podio-posizione-2 { border-left: 3px solid #c0c0c0; }
+.podio-posizione-3 { border-left: 3px solid #cd7f32; }
+
+.classifica-table {
+    width: 100%;
+    border-collapse: collapse;
+    font-size: 0.9rem;
+}
+
+.classifica-table th {
+    text-align: left;
+    color: var(--text-muted, #888);
+    font-weight: 600;
+    padding: 0.5rem;
+    border-bottom: 1px solid var(--border-color, #3a3a3a);
+}
+
+.classifica-table td {
+    padding: 0.5rem;
+    border-bottom: 1px solid var(--border-color, #2a2a2a);
+    color: var(--text-secondary, #b5b5b5);
+}
+
+.classifica-riga-1 td { color: #ffd700; }
+.classifica-riga-2 td { color: #c0c0c0; }
+.classifica-riga-3 td { color: #cd7f32; }
+
+.evento-vuoto {
+    color: var(--text-muted, #888);
+    font-size: 0.9rem;
+    font-style: italic;
+}
+
+.tornei-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(180px, 1fr));
+    gap: 1rem;
+}
+
+.torneo-mini-card {
+    display: block;
+    background-color: var(--bg-surface, #262626);
+    border: 1px solid var(--border-color, #3a3a3a);
+    border-radius: 8px;
+    padding: 0.9rem;
+    text-decoration: none;
+    transition: border-color 0.15s ease;
+}
+
+.torneo-mini-card:hover {
+    border-color: var(--accent, #6c9eff);
+}
+
+.torneo-mini-nome {
+    font-weight: 600;
+    color: var(--text-primary, #fafafa);
+    margin-bottom: 0.2rem;
+}
+
+.torneo-mini-gioco {
+    font-size: 0.8rem;
+    color: var(--text-muted, #888);
+}
+
+@media (max-width: 768px) {
+    .evento-header,
+    .evento-columns {
+        flex-direction: column;
+        grid-template-columns: 1fr;
+    }
+    .evento-img-wrapper {
+        flex: none;
+        width: 100%;
+    }
+}

@@ -6,8 +6,6 @@
 
 {block name="content"}
 
-
-
 <div class="catalogo-container">
 
     {* ── SEARCH BAR E HEADER CATALOGO ── *}
@@ -15,16 +13,13 @@
         <div class="container">
 
             <div class="catalogo-search-wrapper">
-                {* La search bar avvia SEMPRE una nuova ricerca testuale: deve puntare
-                   sempre a /ricerca, indipendentemente dal contesto in cui ci si trova
-                   (a differenza del filters-form sotto, che invece resta context-aware). *}
-                <form class="catalogo-search-form" action="{$base_url}/catalogo/giochi-da-tavolo" method="get" id="search-form">
+                <form class="catalogo-search-form" action="{$base_url}/catalogo/portadadi" method="get" id="search-form">
                     <input class="input catalogo-search-input"
                            type="search"
                            name="q"
                            placeholder="Cerca nel catalogo..."
                            value="{$filtri.q|default:''|escape}"
-                           aria-label="Cerca giochi da tavolo">
+                           aria-label="Cerca portadadi">
                     <button class="button catalogo-search-btn" type="submit" aria-label="Cerca">
                         <i class="ti ti-search"></i>
                     </button>
@@ -52,14 +47,11 @@
 
                 <div class="sort-wrapper">
                     <label for="sort-select" class="sort-label">Ordina per:</label>
-                    {* form="filters-form" collega questa select al form della sidebar
-                       anche se sta fisicamente altrove nel DOM *}
                     <select id="sort-select" class="select catalogo-sort-select" name="ordinamento" form="filters-form">
-                        {* NOTA: rimossi "rilevanza" e "novita" dai valori ammessi (vedi report) *}
                         <option value="prezzo-asc"  {if isset($filtri.ordinamento) && $filtri.ordinamento == 'prezzo-asc'}  selected{/if}>Prezzo: crescente</option>
                         <option value="prezzo-desc" {if isset($filtri.ordinamento) && $filtri.ordinamento == 'prezzo-desc'} selected{/if}>Prezzo: decrescente</option>
                         <option value="popolarita"  {if isset($filtri.ordinamento) && $filtri.ordinamento == 'popolarita'}  selected{/if}>Più venduti</option>
-                        <option value="rating_min"      {if isset($filtri.ordinamento) && $filtri.ordinamento == 'rating_min'}      selected{/if}>Valutazione</option>
+                        <option value="rating"      {if isset($filtri.ordinamento) && $filtri.ordinamento == 'rating'}      selected{/if}>Valutazione</option>
                     </select>
                 </div>
             </div>
@@ -83,9 +75,8 @@
                     </div>
                 </div>
 
-                <form class="filters-form" id="filters-form" method="get" action="{$base_url}/catalogo/giochi-da-tavolo">
+                <form class="filters-form" id="filters-form" method="get" action="{$base_url}/catalogo/portadadi">
 
-                    {* Preserva la ricerca testuale quando si sottomettono i filtri *}
                     {if isset($filtri.q) && $filtri.q}
                         <input type="hidden" name="q" value="{$filtri.q|escape}">
                     {/if}
@@ -129,7 +120,7 @@
                         </div>
                     </div>
 
-                    {* ── FILTRO: DISPONIBILITA' ── (aggiunto 4° valore: non_disponibile) *}
+                    {* ── FILTRO: DISPONIBILITA' ── (4 valori) *}
                     <div class="filter-group">
                         <h4 class="filter-group-title">
                             <i class="ti ti-package"></i> Disponibilità
@@ -171,59 +162,27 @@
                         <h4 class="filter-group-title">
                             <i class="ti ti-tag"></i> In Evidenza
                         </h4>
-                        <div class="checkbox-group" data-exclusive="in_evidenza_filtro">
+                        <div class="checkbox-group" data-exclusive="in_evidenza">
                             <label class="checkbox-label">
                                 <input type="checkbox"
-                                       name="in_evidenza_filtro[]"
+                                       name="in_evidenza[]"
                                        value="sconti"
-                                       {if isset($filtri.in_evidenza_filtro) && in_array('sconti', $filtri.in_evidenza_filtro)} checked{/if}>
+                                       {if isset($filtri.in_evidenza) && in_array('sconti', $filtri.in_evidenza)} checked{/if}>
                                 <span class="checkbox-text">Sconti Attivi</span>
                             </label>
                             <label class="checkbox-label">
                                 <input type="checkbox"
-                                       name="in_evidenza_filtro[]"
+                                       name="in_evidenza[]"
                                        value="novita"
-                                       {if isset($filtri.in_evidenza_filtro) && in_array('novita', $filtri.in_evidenza_filtro)} checked{/if}>
+                                       {if isset($filtri.in_evidenza) && in_array('novita', $filtri.in_evidenza)} checked{/if}>
                                 <span class="checkbox-text">Novità</span>
                             </label>
-                        </div>
-                    </div>
-
-                    {* ── FILTRO: CATEGORIA (enum Categoria) ── *}
-                    <div class="filter-group" id="categoria-filter-group">
-                        <h4 class="filter-group-title">
-                            <i class="ti ti-list"></i> Categoria
-                        </h4>
-                        <div class="checkbox-group" data-exclusive="categoria">
-                            {foreach $filtri.categorie_enum as $cat}
-                                <label class="checkbox-label">
-                                    <input type="checkbox"
-                                           name="categoria_selected[]"
-                                           value="{$cat.value|escape}"
-                                           {if isset($filtri.categoria_selected) && in_array($cat.value, $filtri.categoria_selected)} checked{/if}>
-                                    <span class="checkbox-text">{$cat.label|escape}</span>
-                                </label>
-                            {/foreach}
-                        </div>
-                    </div>
-
-                    {* ── FILTRO: ESPANSIONI ──
-                       Ora è un SOLO campo booleano "mostra_espansioni" (default true).
-                       Hidden input di supporto necessario: un checkbox non checkato
-                       non manda nessun valore, quindi senza l'hidden non potremmo
-                       mai ricevere "0" (decheckato) dal form. *}
-                    <div class="filter-group">
-                        <h4 class="filter-group-title">
-                            <i class="ti ti-puzzle-2"></i> Espansioni
-                        </h4>
-                        <div class="checkbox-group">
                             <label class="checkbox-label">
-                                <input type="hidden" name="mostra_espansioni" value="0">
                                 <input type="checkbox"
-                                       name="mostra_espansioni"
-                                       value="1"
-                                       {if !isset($filtri.mostra_espansioni) || $filtri.mostra_espansioni} checked{/if}>
-                                <span class="checkbox-text">Mostra espansioni</span>
+                                       name="in_evidenza[]"
+                                       value="venduti"
+                                       {if isset($filtri.in_evidenza) && in_array('venduti', $filtri.in_evidenza)} checked{/if}>
+                                <span class="checkbox-text">I più venduti</span>
                             </label>
                         </div>
                     </div>
@@ -249,103 +208,9 @@
                         </div>
                     </div>
 
-                    {* ── FILTRO: ETA' ── *}
-                    <div class="filter-group">
-                        <h4 class="filter-group-title">
-                            <i class="ti ti-baby-carriage"></i> Età
-                        </h4>
-                        <div class="age-inputs">
-                            <input type="number"
-                                   class="input age-input"
-                                   name="age_min"
-                                   placeholder="Età minima"
-                                   value="{$filtri.age_min|default:''|escape}"
-                                   min="0"
-                                   max="18"
-                                   aria-label="Età minima">
-                        </div>
-                    </div>
-
-                    {* ── FILTRO: DIFFICOLTA' ──
-                       NOTA: valori aggiornati secondo report: facile, media, difficile, esperto *}
-                    <div class="filter-group">
-                        <h4 class="filter-group-title">
-                            <i class="ti ti-flame"></i> Difficoltà
-                        </h4>
-                        <div class="checkbox-group" data-exclusive="difficolta">
-                            {assign var="difficolta_levels" value=[
-                                ['value' => 'facile',    'label' => 'Facile'],
-                                ['value' => 'media',     'label' => 'Media'],
-                                ['value' => 'difficile', 'label' => 'Difficile'],
-                                ['value' => 'esperto',   'label' => 'Esperto']
-                            ]}
-                            {foreach $difficolta_levels as $level}
-                                <label class="checkbox-label">
-                                    <input type="checkbox"
-                                           name="difficolta[]"
-                                           value="{$level.value}"
-                                           {if isset($filtri.difficolta) && in_array($level.value, $filtri.difficolta)} checked{/if}>
-                                    <span class="checkbox-text">{$level.label}</span>
-                                </label>
-                            {/foreach}
-                        </div>
-                    </div>
-
-                    {* ── FILTRO: NUMERO GIOCATORI ── *}
-                    <div class="filter-group">
-                        <h4 class="filter-group-title">
-                            <i class="ti ti-users"></i> Giocatori
-                        </h4>
-                        <div class="players-inputs">
-                            <input type="number"
-                                   class="input players-input"
-                                   name="players_min"
-                                   placeholder="Numero minimo"
-                                   value="{$filtri.players_min|default:''|escape}"
-                                   min="1"
-                                   aria-label="Numero giocatori minimo">
-                        </div>
-                    </div>
-
-                    {* ── FILTRO: LINGUA (enum LinguaGioco) ── *}
-                    <div class="filter-group">
-                        <h4 class="filter-group-title">
-                            <i class="ti ti-language"></i> Lingua
-                        </h4>
-                        <div class="checkbox-group" data-exclusive="lingua">
-                            {foreach $filtri.lingue_enum as $lang}
-                                <label class="checkbox-label">
-                                    <input type="checkbox"
-                                           name="lingua_selected[]"
-                                           value="{$lang.value|escape}"
-                                           {if isset($filtri.lingua_selected) && in_array($lang.value, $filtri.lingua_selected)} checked{/if}>
-                                    <span class="checkbox-text">{$lang.label|escape}</span>
-                                </label>
-                            {/foreach}
-                        </div>
-                    </div>
-
-                    {* ── FILTRO: DANNO (enum LivelloDannoGiochi) ── *}
-                    <div class="filter-group" id="danno-filter-group">
-                        <h4 class="filter-group-title">
-                            <i class="ti ti-alert-triangle"></i> Stato / Danno
-                        </h4>
-                        <div class="checkbox-group" data-exclusive="danno">
-                            {foreach $filtri.danno_enum as $liv}
-                                <label class="checkbox-label">
-                                    <input type="checkbox"
-                                           name="danno_selected[]"
-                                           value="{$liv.value|escape}"
-                                           {if isset($filtri.danno_selected) && in_array($liv.value, $filtri.danno_selected)} checked{/if}>
-                                    <span class="checkbox-text">{$liv.label|escape}</span>
-                                </label>
-                            {/foreach}
-                        </div>
-                    </div>
-
                     {* ── BOTTONE RESET FILTRI ── *}
                     <div class="filter-actions">
-                        <a class="pagination-previous" href="{$baseAction}?page={$pagination.current_page - 1}{if isset($filtri.q)}&q={$filtri.q|escape}{/if}">
+                        <a href="{$base_url}/catalogo/portadadi" class="button btn-reset-filters">
                             <i class="ti ti-refresh"></i> Ripristina
                         </a>
                     </div>
@@ -358,7 +223,6 @@
             {* ── GRID PRINCIPALE PRODOTTI ── *}
             <main class="catalogo-main">
 
-                {* Toggle Filtri Mobile *}
                 <div class="catalogo-mobile-toggle">
                     <button class="button btn-toggle-filters" id="btn-toggle-filters">
                         <i class="ti ti-filter"></i> Mostra Filtri
@@ -408,12 +272,12 @@
                                         </div>
 
                                         <div class="product-price-wrapper">
-                                            {if isset($prodotto.prezzo)}
+                                            {if isset($prodotto.prezzo_unitario)}
                                                 {if $prodotto.sconto}
-                                                    <span class="product-price">€{$prodotto.prezzo_scontato|number_format:2}</span>
-                                                    <span class="product-price-old">€{$prodotto.prezzo|number_format:2}</span>
+                                                    <span class="product-price">€{$prodotto.prezzo_unitario|number_format:2}</span>
+                                                    <span class="product-price-old">€{$prodotto.prezzo_originale|number_format:2}</span>
                                                 {else}
-                                                    <span class="product-price">€{$prodotto.prezzo|number_format:2}</span>
+                                                    <span class="product-price">€{$prodotto.prezzo_unitario|number_format:2}</span>
                                                 {/if}
                                             {else}
                                                 <span class="product-price-unavailable">Prezzo N/D</span>
@@ -423,13 +287,12 @@
 
                                 </a>
 
-                                {* ── NUOVO: gestione isAcquistabile ── *}
                                 {if $prodotto.isAcquistabile}
                                     <button class="button btn-add-cart"
                                             data-id="{$prodotto.id}"
                                             data-nome="{$prodotto.nome|escape}"
                                             data-img="{$base_url}/img/prodotti/{$prodotto.immagine}"
-                                            data-prezzo="{if $prodotto.sconto}{$prodotto.prezzo_scontato}{else}{$prodotto.prezzo}{/if}"
+                                            data-prezzo="{$prodotto.prezzo_unitario}"
                                             aria-label="Aggiungi a carrello">
                                         <i class="ti ti-shopping-cart"></i> Aggiungi
                                     </button>
@@ -446,7 +309,7 @@
                     <div class="pagination-wrapper">
                         <nav class="pagination" aria-label="Paginazione">
                             {if $pagination.current_page > 1}
-                                <a class="pagination-previous" href="{$base_url}/catalogo/giochi-da-tavolo?page={$pagination.current_page - 1}{if isset($filtri.q)}&q={$filtri.q|escape}{/if}">
+                                <a class="pagination-previous" href="{$base_url}/catalogo/portadadi?page={$pagination.current_page - 1}{if isset($filtri.q)}&q={$filtri.q|escape}{/if}">
                                     <i class="ti ti-chevron-left"></i> Precedente
                                 </a>
                             {/if}
@@ -457,14 +320,14 @@
                                         {if $i == $pagination.current_page}
                                             <span class="pagination-link is-current" aria-label="Pagina {$i}" aria-current="page">{$i}</span>
                                         {else}
-                                            <a class="pagination-link" aria-label="Vai a pagina {$i}" href="{$base_url}/catalogo/giochi-da-tavolo?page={$i}{if isset($filtri.q)}&q={$filtri.q|escape}{/if}">{$i}</a>
+                                            <a class="pagination-link" aria-label="Vai a pagina {$i}" href="{$base_url}/catalogo/portadadi?page={$i}{if isset($filtri.q)}&q={$filtri.q|escape}{/if}">{$i}</a>
                                         {/if}
                                     </li>
                                 {/for}
                             </ul>
 
                             {if $pagination.current_page < $pagination.total_pages}
-                                <a class="pagination-next" href="{$base_url}/catalogo/giochi-da-tavolo?page={$pagination.current_page + 1}{if isset($filtri.q)}&q={$filtri.q|escape}{/if}">
+                                <a class="pagination-next" href="{$base_url}/catalogo/portadadi?page={$pagination.current_page + 1}{if isset($filtri.q)}&q={$filtri.q|escape}{/if}">
                                     Successiva <i class="ti ti-chevron-right"></i>
                                 </a>
                             {/if}
@@ -479,9 +342,9 @@
                         </div>
                         <h3 class="empty-state-title">Nessun prodotto trovato</h3>
                         <p class="empty-state-message">
-                            Prova a modificare i filtri o la ricerca per trovare altri giochi da tavolo.
+                            Prova a modificare i filtri o la ricerca per trovare altri portadadi.
                         </p>
-                        <a href="{$base_url}/catalogo/giochi-da-tavolo" class="button btn-reset">
+                        <a href="{$base_url}/catalogo/portadadi" class="button btn-reset">
                             <i class="ti ti-refresh"></i> Vedi Catalogo Completo
                         </a>
                     </div>
@@ -492,9 +355,7 @@
         </div>
     </div>
 
-    {* ════════════════════════════════════════════════════════════
-       MODAL 1: PRODOTTO AGGIUNTO AL CARRELLO (utente loggato)
-       ════════════════════════════════════════════════════════════ *}
+    {* ════ MODAL 1: PRODOTTO AGGIUNTO AL CARRELLO ════ *}
     <div class="minicart-modal" id="minicart-modal" aria-hidden="true">
         <div class="modal-background"></div>
         <div class="minicart-content">
@@ -508,7 +369,7 @@
                 </div>
             </div>
             <div class="minicart-actions">
-                <a href="{$base_url}/catalogo/giochi-da-tavolo" class="button btn-minicart-continua">
+                <a href="{$base_url}/catalogo/portadadi" class="button btn-minicart-continua">
                     <i class="ti ti-arrow-left"></i> Continua Shopping
                 </a>
                 <a href="{$base_url}/carrello" class="button btn-minicart-ordine">
@@ -518,9 +379,7 @@
         </div>
     </div>
 
-    {* ════════════════════════════════════════════════════════════
-       MODAL 2: ACCESSO RICHIESTO (utente NON loggato)
-       ════════════════════════════════════════════════════════════ *}
+    {* ════ MODAL 2: ACCESSO RICHIESTO ════ *}
     <div class="login-modal" id="login-modal" aria-hidden="true">
         <div class="modal-background"></div>
         <div class="login-modal-content">
@@ -554,7 +413,6 @@ document.addEventListener('DOMContentLoaded', function() {
 
     var filtersForm = document.getElementById('filters-form');
 
-    // ── CHECKBOX ESCLUSIVI ──
     var exclusiveGroups = document.querySelectorAll('[data-exclusive]');
     exclusiveGroups.forEach(function(group) {
         var checkboxes = group.querySelectorAll('input[type="checkbox"]');
@@ -569,7 +427,6 @@ document.addEventListener('DOMContentLoaded', function() {
         });
     });
 
-    // ── TOGGLE FILTRI MOBILE ──
     var toggleBtn = document.getElementById('btn-toggle-filters');
     var sidebar   = document.getElementById('catalogo-filters');
     var closeBtn  = document.getElementById('filter-close-btn');
@@ -595,7 +452,6 @@ document.addEventListener('DOMContentLoaded', function() {
         }
     });
 
-    // ── RATING SLIDER (display live) ──
     var ratingSlider = document.querySelector('.rating-slider');
     if (ratingSlider) {
         ratingSlider.addEventListener('input', function() {
@@ -603,7 +459,6 @@ document.addEventListener('DOMContentLoaded', function() {
         });
     }
 
-    // ── DUAL PRICE SLIDER (display live) ──
     var priceMinSlider = document.getElementById('price-range-min');
     var priceMaxSlider = document.getElementById('price-range-max');
     var priceValueMin  = document.getElementById('price-value-min');
@@ -651,10 +506,6 @@ document.addEventListener('DOMContentLoaded', function() {
         updatePriceRangeFill();
     }
 
-    // ══════════════════════════════════════════════════════════
-    //  AUTO-SUBMIT DEI FILTRI (nessun bottone "Applica")
-    // ══════════════════════════════════════════════════════════
-
     function debounce(fn, delay) {
         var timer = null;
         return function() {
@@ -669,31 +520,19 @@ document.addEventListener('DOMContentLoaded', function() {
 
     var submitDebounced = debounce(submitFilters, 600);
 
-    // Checkbox e select: submit immediato al cambio
     filtersForm.querySelectorAll('input[type="checkbox"]').forEach(function(el) {
         el.addEventListener('change', submitFilters);
     });
 
-    // Range (prezzo, rating): submit solo al rilascio dello slider (evento "change"),
-    // non durante il trascinamento (evento "input")
     filtersForm.querySelectorAll('input[type="range"]').forEach(function(el) {
         el.addEventListener('change', submitFilters);
     });
 
-    // Campi numerici (età, giocatori): submit con debounce mentre si digita,
-    // così non si ricarica la pagina ad ogni singolo carattere
-    filtersForm.querySelectorAll('input[type="number"]').forEach(function(el) {
-        el.addEventListener('input', submitDebounced);
-    });
-
-    // Select ordinamento: sta fuori dal DOM del form ma è collegata
-    // tramite l'attributo form="filters-form" → submit immediato al cambio
     var sortSelect = document.getElementById('sort-select');
     if (sortSelect) {
         sortSelect.addEventListener('change', submitFilters);
     }
 
-    // ── MODAL: MINICART ──
     var minicartModal  = document.getElementById('minicart-modal');
     var minicartImg    = document.getElementById('minicart-img');
     var minicartNome   = document.getElementById('minicart-nome');
@@ -732,7 +571,6 @@ document.addEventListener('DOMContentLoaded', function() {
         });
     }
 
-    // ── MODAL: LOGIN ──
     var loginModal = document.getElementById('login-modal');
 
     function apriLoginModal() {
@@ -764,7 +602,6 @@ document.addEventListener('DOMContentLoaded', function() {
         });
     }
 
-    // ── AJAX CARRELLO ──
     function aggiungiAlCarrello(idProdotto, quantita, dati) {
         fetch('/carrello/aggiungi', {
             method: 'POST',
@@ -811,7 +648,6 @@ document.addEventListener('DOMContentLoaded', function() {
         });
     }
 
-    // ── CLICK BOTTONI AGGIUNGI (esclude i disabilitati/is-disabled) ──
     document.querySelectorAll('.btn-add-cart:not(.is-disabled)').forEach(function(btn) {
         btn.addEventListener('click', function(e) {
             e.preventDefault();

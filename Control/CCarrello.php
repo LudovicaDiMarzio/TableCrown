@@ -144,7 +144,7 @@ class CCarrello extends BaseController {
         echo json_encode([
             'id' => $prodottoArray['id'],
             'nome' => $prodottoArray['nome'],
-            'immagine_url' => BASE_URL . '/img/prodotti/' . $prodottoArray['immagine'], //DA VERIFICARE
+            'imgProdotto' => $prodottoArray['imgProdotto'], 
             'product_url' => BASE_URL . '/prodotto/' . $prodottoArray['id'],
             'prezzo_unitario' => $prezzoUnitario,
             'sconto' => $prodottoArray['sconto'],
@@ -162,7 +162,7 @@ class CCarrello extends BaseController {
     /**
      * Aggiorna la quantità di un prodotto nel carrello (chiamata AJAX).
      * L'id_item arriva come segmento URL, la nuova quantità come query string.
-     * URL: GET /carrello/aggiorna{id_item}?qty={quantita}
+     * URL: GET /carrello/aggiorna
      * Risponde in JSON.
      */
     public function aggiornaQuantita(): void {

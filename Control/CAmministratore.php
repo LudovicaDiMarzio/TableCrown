@@ -166,7 +166,7 @@ class CAmministratore extends BaseController {
             exit();
         }
 
-        $utente = FPersistentManager::PMgetObjOnAttribute(EUtente::class, 'idPersona', $idUtente);
+        $utente = FPersistentManager::PMgetObjOnAttribute(EUtente::class, 'idpersona', $idUtente);
 
         if (!$utente) {
             UFlashMessage::addMessage('danger', 'L\'utente non esiste.');
@@ -208,7 +208,7 @@ class CAmministratore extends BaseController {
             exit();
         }
 
-        $utente = FPersistentManager::PMgetObjOnAttribute(EUtente::class, 'idPersona', $idUtente);
+        $utente = FPersistentManager::PMgetObjOnAttribute(EUtente::class, 'idpersona', $idUtente);
 
         if (!$utente) {
             UFlashMessage::addMessage('danger', 'L\'utente non esiste.');
@@ -290,7 +290,6 @@ class CAmministratore extends BaseController {
 
     /**
      * Converte un ERecensione in un array associativo per la card admin, con conteggio segnalazioni.
-     * TODO: NON MI PIACEEEE, DA OTTIMIZZARE/MODIFICARE
      */
     private function recensioneAdminToArray(ERecensione $recensione, int $numeroSegnalazioni): array {
         $segnalazioni = $recensione->getSegnalazioni();
