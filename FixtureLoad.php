@@ -18,6 +18,8 @@ use TableCrown\Testing\Fixtures\ProvvedimentoFixture;
 use TableCrown\Testing\Fixtures\CartaDiCreditoFixture;
 use TableCrown\Testing\Fixtures\IndirizzoFixture;
 use TableCrown\Testing\Fixtures\OrdineFixture;
+use TableCrown\Testing\Fixtures\WishlistFixture;
+use TableCrown\Testing\Fixtures\EventoFixture;
 
 
 //creo l'entity manager
@@ -43,6 +45,8 @@ $loader->addFixture(new ProvvedimentoFixture());
 $loader->addFixture(new CartaDiCreditoFixture());
 $loader->addFixture(new IndirizzoFixture());
 $loader->addFixture(new OrdineFixture());
+$loader->addFixture(new WishlistFixture());
+$loader->addFixture(new EventoFixture());
 
 
 
