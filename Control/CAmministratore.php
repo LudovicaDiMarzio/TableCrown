@@ -166,7 +166,7 @@ class CAmministratore extends BaseController {
             exit();
         }
 
-        $utente = FPersistentManager::PMgetObjOnAttribute(EUtente::class, 'idPersona', $idUtente);
+        $utente = FPersistentManager::PMgetObjOnAttribute(EUtente::class, 'idpersona', $idUtente);
 
         if (!$utente) {
             UFlashMessage::addMessage('danger', 'L\'utente non esiste.');
@@ -208,7 +208,7 @@ class CAmministratore extends BaseController {
             exit();
         }
 
-        $utente = FPersistentManager::PMgetObjOnAttribute(EUtente::class, 'idPersona', $idUtente);
+        $utente = FPersistentManager::PMgetObjOnAttribute(EUtente::class, 'idpersona', $idUtente);
 
         if (!$utente) {
             UFlashMessage::addMessage('danger', 'L\'utente non esiste.');
