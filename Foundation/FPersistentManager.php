@@ -212,9 +212,31 @@ class FPersistentManager
      * @param int $offset numero di prodotti da saltare dall'inizio della lista
      * @return array di oggetti
      */
-    public static function PMricercaProdotto(string $StringaDiRicerca, int $limit, int $offset): array
+    public static function PMricercaGiochi(string $StringaDiRicerca, int $limit, int $offset): array
     {
-        return FGiocoDaTavolo::ricercaProdotto($StringaDiRicerca, $limit, $offset);
+        return FGiocoDaTavolo::ricercaGiochi($StringaDiRicerca, $limit, $offset);
+    }
+
+    /**
+     * @param string $StringaDiRicerca stringa da ricercare nella colonna nomeProdotto o descrizioneProdotto 
+     * @param int $limit numero massimo di prodotti da restituire
+     * @param int $offset numero di prodotti da saltare dall'inizio della lista
+     * @return array di oggetti
+     */
+    public static function PMricercaBustine(string $StringaDiRicerca, int $limit, int $offset): array
+    {
+        return FBustine::ricercaBustine($StringaDiRicerca, $limit, $offset);
+    }
+
+    /**
+     * @param string $StringaDiRicerca stringa da ricercare nella colonna nomeProdotto o descrizioneProdotto 
+     * @param int $limit numero massimo di prodotti da restituire
+     * @param int $offset numero di prodotti da saltare dall'inizio della lista
+     * @return array di oggetti
+     */
+    public static function PMricercaPortaDadi(string $StringaDiRicerca, int $limit, int $offset): array
+    {
+        return FPortaDadi::ricercaPortaDadi($StringaDiRicerca, $limit, $offset);
     }
 
     /**
