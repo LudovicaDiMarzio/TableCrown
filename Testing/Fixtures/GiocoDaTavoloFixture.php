@@ -55,13 +55,15 @@ class GiocoDaTavoloFixture extends AbstractFixture implements DependentFixtureIn
         $faker = Factory::create('it_IT');
         $percorsoImg = __DIR__ . 'C:\xampp\htdocs\TableCrown\public\img';
 
+        $percorsoImg = dirname(__DIR__, 2) . '/public/img/carousel/img1.png'; // adatta il path relativo alla tua struttura cartelle
+
         $immaginePredefinita = null;
-        if (file_exists($percorsoImg)) {
+        if (file_exists($percorsoImg) && is_file($percorsoImg)) {
             $immaginePredefinita = file_get_contents($percorsoImg);
         } else {
-            // Fallback: se dimentichi di mettere l'immagine nella cartella, 
-            // mette almeno un link generico per non farti crashare il sito.
-            $immaginePredefinita = "https://via.placeholder.com/640x480.png?text=Immagine+Gioco";
+            // Fallback: se il file non c'è, niente immagine (null), invece di un URL esterno
+            // che romperebbe la logica base64 usata in tutto il resto del progetto.
+            $immaginePredefinita = null;
         }
 
         $componentiDisponibili = [
