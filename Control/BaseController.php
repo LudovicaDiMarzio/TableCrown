@@ -177,6 +177,8 @@ abstract class BaseController {
         $prezzoObj = $prodotto->getPrezzo();
         $inSconto = $prezzoObj !== null && $prezzoObj->hasSconto();
 
+        $immagineRaw = $prodotto->getImgProdotto();
+
         $danneggiato = false;
         $livelloDanno = null;
         if ($prodotto instanceof EGiocoDaTavolo && $prodotto->getDanno() !== null) {
@@ -187,7 +189,7 @@ abstract class BaseController {
         return [
             'id'                 => (int) $prodotto->getIdProdotto(),
             'nome'               => $prodotto->getNomeProdotto(),
-            'immagine'           => $prodotto->getImgProdotto(),
+            'immagine'           => $immagineRaw ? base64_encode($immagineRaw) : null,
             'valutazione_media'  => (float) $prodotto->getValutazioneMedia(),
             'prezzo'             => $prezzoObj?->getValore() ?? 0.0,
             'sconto'             => $inSconto,
@@ -466,7 +468,7 @@ abstract class BaseController {
             'prodotto'    => [
                 'id'          => (int) $recensione->getProdotto()->getIdProdotto(),
                 'nome'        => $recensione->getProdotto()->getNomeProdotto(),
-                'immagine'    => $recensione->getProdotto()->getImgProdotto(),
+                'immagine'    => $recensione->getProdotto()->getImgProdotto() ? base64_encode($recensione->getProdotto()->getImgProdotto()) : null,
             ]
         ];
     }
@@ -516,7 +518,7 @@ abstract class BaseController {
         return [
             'idEvento'          => (int) $evento->getIdEvento(),
             'nomeEvento'        => $evento->getNomeEvento(),
-            'imgEvento'         => $evento->getImgEvento(),
+            'imgEvento'         => $evento->getImgEvento() ? base64_encode($evento->getImgEvento()) : null,
             'dataInizio'        => $evento->getDataInizio()->format('Y-m-d H:i:s'),
             'maxPartecipanti'   => $evento->getMaxPartecipanti(),
             'statoEvento'       => $evento->getStatoEvento()->value, //valori non ancora "puliti", da rivedere se/quando serve esporli come identificatore tecnico altrove
@@ -614,15 +616,12 @@ abstract class BaseController {
     /**
      * Costruisce i dati comuni a tutte le pagine lista eventi e delega il render.
      */
-    protected function renderListaEventi(string $vista, array $risultatoGrezzo, ?string $filtroData = null, ?string $ricerca = null, $modalita = 'utente'): void { 
+    protected function renderListaEventi(string $vista, array $risultatoGrezzo, ?string $filtroData = null, $modalita = 'utente'): void { 
 
         $datiPagina = [
             'vista'  => $vista,
             'eventi' => $this->eventiToArray($risultatoGrezzo),
-            'filtri' => [
-                'data' => $filtroData,
-                'query_string' => $ricerca,
-            ],
+            'filtro_data' => $filtroData,
             'modalita' => $modalita,
         ];
 
@@ -796,7 +795,7 @@ abstract class BaseController {
                 }
             }
             if (!$haPodio) {
-                $mancanti = ['id' => $torneo->getIdEvento(), 'nome' => $torneo->getNomeEvento()];
+                $mancanti[] = ['id' => $torneo->getIdEvento(), 'nome' => $torneo->getNomeEvento()];
             }
         }
         return $mancanti;
@@ -1020,17 +1019,17 @@ abstract class BaseController {
     }
 
     /**
-     * Estrae il contenuto binario dell'immagine caricata, se presente.
+     * Estrae il contenuto binario dell'immagine caricata via form, se presente (opzionale).
      * L'immagine è opzionale: se non viene caricata, restituisce null
      * senza sollevare errori. Se invece è stato tentato un upload ma è fallito
      * per un motivo reale (file troppo grande, tipo non valido, ecc.),
      * lasciamo che postFile() lanci l'eccezione, che verrà gestita dal chiamante.
      */
-    protected function estraiImmagineProdotto(): ?string { //TODO: ESTENDERE QUESTO METODO PER GESTIRE ANCHE ALTRE IMMAGINI (ES. UTENTE) O FARE UN ALTRO METODO
-        if (!isset($_FILES['imgProdotto']) || $_FILES['imgProdotto']['error'] !== UPLOAD_ERR_NO_FILE) {
+    protected function estraiImmagine(string $nomeCampo = 'imgProdotto'): ?string { 
+        if (!isset($_FILES[$nomeCampo]) || $_FILES[$nomeCampo]['error'] === UPLOAD_ERR_NO_FILE) {
             return null;
         }
-        $file = UHTTPMethods::postFile('imgProdotto');
+        $file = UHTTPMethods::postFile($nomeCampo); //se arriviamo qui, un file c'era: se fallisce ora è un vero errore
         return file_get_contents($file['tmp_name']);
     }
 

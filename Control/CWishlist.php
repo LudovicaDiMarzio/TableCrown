@@ -1,7 +1,6 @@
 <?php
 namespace TableCrown\Control;
 
-use TableCrown\Utility\USession;
 use TableCrown\Utility\UHTTPMethods;
 use TableCrown\Utility\UFlashMessage;
 use TableCrown\Entity\EUtente;

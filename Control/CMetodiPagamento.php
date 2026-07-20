@@ -22,7 +22,7 @@ class CMetodiPagamento extends BaseController {
 
     /**
      * Gestisce il salvataggio di una nuova carta di credito nel DB.
-     * URL: POST /pagamenti/aggiungi
+     * URL: POST profilo/pagamenti/aggiungi
      */
     public function aggiungiCarta(): void {
         $utente = $this->utenteCorrente();
@@ -81,7 +81,7 @@ class CMetodiPagamento extends BaseController {
 
     /**
      * Gestisce la rimozione sicura di una carta di credito salvata.
-     * URL: POST /pagamenti/elimina
+     * URL: POST profilo/pagamenti/elimina
      */
     public function eliminaCarta(): void {
         $utente = $this->utenteCorrente();

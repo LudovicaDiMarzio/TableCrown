@@ -75,15 +75,29 @@ class CGestore extends BaseController {
      */
     public function mostraCatalogoGiochiGestore(): void {
         $pagina = $this->estraiPaginaRichiesta();
-        $filtri = $this->estraiFiltriGiochi(); //sarà [] se non ci sono filtri
+        $query = UHTTPMethods::get('q');
+        $query = ($query !== null) ? trim($query) : null;
 
-        $risultatoGrezzo = FPersistentManager::PMfindGiochi(
-            filtri: $filtri,
-            limit: self::RISULTATI_PER_PAGINA,
-            offset: ($pagina - 1) * self::RISULTATI_PER_PAGINA
-        );
+        if ($query !== null) {
+            // --- CASO BARRA DI RICERCA ---
+            //I filtri vengono annullati/resettati
+            $filtri = [];
+            $risultatoGrezzo = FPersistentManager::PMricercaGiochi(
+                stringaDiRicerca: $query,
+                limit: self::RISULTATI_PER_PAGINA,
+                offset: ($pagina - 1) * self::RISULTATI_PER_PAGINA
+            );
+        } else {
+            // --- CASO FILTRI ---
+            $filtri = $this->estraiFiltriGiochi(); //sarà [] se non ci sono filtri
+            $risultatoGrezzo = FPersistentManager::PMfindGiochi(
+                filtri: $filtri,
+                limit: self::RISULTATI_PER_PAGINA,
+                offset: ($pagina - 1) * self::RISULTATI_PER_PAGINA
+            );
+        }
 
-        $this->renderCatalogo('gestore_catalogo_giochi', $risultatoGrezzo, $pagina, $filtri, modalita: 'gestore');
+        $this->renderCatalogo('gestore_catalogo_giochi', $risultatoGrezzo, $pagina, $filtri, $query, modalita: 'gestore');
     }
 
     /**
@@ -92,15 +106,29 @@ class CGestore extends BaseController {
      */
     public function mostraCatalogoBustineGestore(): void {
         $pagina = $this->estraiPaginaRichiesta();
-        $filtri = $this->estraiFiltriPrezzo();
+        $query = UHTTPMethods::get('q');
+        $query = ($query !== null) ? trim($query) : null;
 
-        $risultatoGrezzo = FPersistentManager::PMfindBustine(
-            filtri: $filtri,
-            limit: self::RISULTATI_PER_PAGINA,
-            offset: ($pagina - 1) * self::RISULTATI_PER_PAGINA
-        );
+        if ($query !== null) {
+            // --- CASO BARRA DI RICERCA ---
+            //I filtri vengono annullati/resettati
+            $filtri = [];
+            $risultatoGrezzo = FPersistentManager::PMricercaBustine(
+                stringaDiRicerca: $query,
+                limit: self::RISULTATI_PER_PAGINA,
+                offset: ($pagina - 1) * self::RISULTATI_PER_PAGINA
+            );
+        } else {
+            // --- CASO FILTRI ---
+            $filtri = $this->estraiFiltriPrezzo();
+            $risultatoGrezzo = FPersistentManager::PMfindBustine(
+                filtri: $filtri,
+                limit: self::RISULTATI_PER_PAGINA,
+                offset: ($pagina - 1) * self::RISULTATI_PER_PAGINA
+            );
+        }
 
-        $this->renderCatalogo('gestore_catalogo_bustine', $risultatoGrezzo, $pagina, $filtri, modalita: 'gestore');
+        $this->renderCatalogo('gestore_catalogo_bustine', $risultatoGrezzo, $pagina, $filtri, $query, modalita: 'gestore');
     }
 
     /**
@@ -109,41 +137,31 @@ class CGestore extends BaseController {
      */
     public function mostraCatalogoPortaDadiGestore(): void {
         $pagina = $this->estraiPaginaRichiesta();
-        $filtri = $this->estraiFiltriPrezzo();
-
-        $risultatoGrezzo = FPersistentManager::PMfindPortaDadi(
-            filtri: $filtri,
-            limit: self::RISULTATI_PER_PAGINA,
-            offset: ($pagina - 1) * self::RISULTATI_PER_PAGINA
-        );
-
-        $this->renderCatalogo('gestore_catalogo_portadadi', $risultatoGrezzo, $pagina, $filtri, modalita: 'gestore');
-    }
-
-    /**
-     * Mostra i risultati della ricerca lato gestore.
-     */
-    public function mostraRisultatiRicercaProdottiGestore(): void {
         $query = UHTTPMethods::get('q');
-        $pagina = $this->estraiPaginaRichiesta();
+        $query = ($query !== null) ? trim($query) : null;
 
-        if ($query === null || trim($query) === '') {
-            //Se non c'è nessun termine di ricerca, reindirizziamo alla pagina precedente. Fallback: la home
-            header("Location: " . UHTTPMethods::getReferer(BASE_URL . '/gestore/dashboard'));
-            exit();
+        if ($query !== null) {
+            // --- CASO BARRA DI RICERCA ---
+            //I filtri vengono annullati/resettati
+            $filtri = [];
+            $risultatoGrezzo = FPersistentManager::PMricercaPortaDadi(
+                stringaDiRicerca: $query,
+                limit: self::RISULTATI_PER_PAGINA,
+                offset: ($pagina - 1) * self::RISULTATI_PER_PAGINA
+            );
+        } else {
+            // --- CASO FILTRI ---
+            $filtri = $this->estraiFiltriPrezzo();
+            $risultatoGrezzo = FPersistentManager::PMfindPortaDadi(
+                filtri: $filtri,
+                limit: self::RISULTATI_PER_PAGINA,
+                offset: ($pagina - 1) * self::RISULTATI_PER_PAGINA
+            );
         }
 
-        $query = trim($query);
-
-        //Cerca solo giochi da tavolo
-        $risultatoGrezzo = FPersistentManager::PMricercaProdotto(
-            StringaDiRicerca:$query,
-            limit: self::RISULTATI_PER_PAGINA,
-            offset: ($pagina - 1) * self::RISULTATI_PER_PAGINA
-        );
-
-        $this->renderCatalogo('gestore_risultati_ricerca', $risultatoGrezzo, $pagina, ['q' => $query], $query, modalita: 'gestore');
+        $this->renderCatalogo('gestore_catalogo_portadadi', $risultatoGrezzo, $pagina, $filtri, $query, modalita: 'gestore');
     }
+
 
     // EVENTI
 
@@ -174,21 +192,6 @@ class CGestore extends BaseController {
         $this->renderListaEventi('gestore_eventi_challenge', $challenge, $filtroData, modalita: 'gestore');
     }
 
-    /**
-     * URL: GET /gestore/eventi/ricerca
-     */
-    public function mostraRisultatiRicercaEventiGestore(): void {
-        $query = UHTTPMethods::get('q');
-        if ($query === null || trim($query) === '') {
-            header("Location: " . UHTTPMethods::getReferer(BASE_URL . '/gestore/dashboard'));
-            exit();
-        }
-
-        $query = trim($query);
-        $eventiTrovati = FPersistentManager::PMricercaEventi($query);
-
-        $this->renderListaEventi('gestore_risultati_ricerca', $eventiTrovati, null, $query, modalita: 'gestore');
-    }
 
     /**
      * Mostra il dettaglio di un evento lato gestore. Stessa struttura dati della
@@ -196,7 +199,15 @@ class CGestore extends BaseController {
      * aggiuntive utili al gestore per decidere se pubblicare la classifica.
      * URL: GET /gestore/eventi/dettaglio?id=X
      */
-    public function mostraDettaglioEventoGestore(int $idEvento): void {
+    public function mostraDettaglioEventoGestore(): void {
+        $idEventoRaw = UHTTPMethods::get('id');
+        if ($idEventoRaw === null || !is_numeric($idEventoRaw)) {
+            UFlashMessage::addMessage('danger', 'ID evento non valido.');
+            header('Location: ' . BASE_URL . '/gestore/dashboard');
+            exit();
+        }
+
+        $idEvento = (int) $idEventoRaw;
         $evento = FPersistentManager::PMgetObjOnAttribute(EEvento::class, 'idEvento', $idEvento);
 
         if ($evento === null) {
@@ -240,7 +251,7 @@ class CGestore extends BaseController {
             $categoria = $this->validaValoriEnum(UHTTPMethods::postArray('categoria', required: true), Categoria::class);
             //filtra eventuali righe vuote lasciate dall'input dinamico "aggiungi componente" di Presentation
             $componenti = array_values(array_filter(array_map('trim', UHTTPMethods::postArray('componenti', required: true))));
-            $imgProdotto = $this->estraiImmagineProdotto();
+            $imgProdotto = $this->estraiImmagine('img_prodotto');
 
             // --- PAGINA 2: prezzo, magazzino, stato/danno ---
             $prezzo = $this->costruisciPrezzo();
@@ -304,7 +315,7 @@ class CGestore extends BaseController {
         try {
             $nomeProdotto = UHTTPMethods::postString('nomeProdotto', maxLength: 255);
             $descrizioneProdotto = UHTTPMethods::postString('descrizioneProdotto');
-            $imgProdotto = $this->estraiImmagineProdotto();
+            $imgProdotto = $this->estraiImmagine('img_prodotto');
             $prezzo = $this->costruisciPrezzo();
             $quantita = UHTTPMethods::postInt('quantita', min: 0);
             $disponibilita = $this->postEnum('disponibilita', DisponibilitaProdotto::class);
@@ -338,7 +349,7 @@ class CGestore extends BaseController {
         try {
             $nomeProdotto = UHTTPMethods::postString('nomeProdotto', maxLength: 255);
             $descrizioneProdotto = UHTTPMethods::postString('descrizioneProdotto');
-            $imgProdotto = $this->estraiImmagineProdotto();
+            $imgProdotto = $this->estraiImmagine('img_prodotto');
             $prezzo = $this->costruisciPrezzo();
             $quantita = UHTTPMethods::postInt('quantita', min: 0);
             $disponibilita = $this->postEnum('disponibilita', DisponibilitaProdotto::class);
@@ -512,7 +523,7 @@ class CGestore extends BaseController {
             if ($prodotto instanceof EGiocoDaTavolo && UHTTPMethods::postBool('danneggiato')) {
                 $livello = $this->postEnum('livelloDanno', LivelloDannoGiochi::class);
                 $descrizioneDanno = UHTTPMethods::postString('descrizioneDanno', maxLength: 500);
-                $danno = FPersistentManager::PMfindDannoByLivello($livello); //TODO: metodo da implementare
+                $danno = FPersistentManager::PMgetObjOnAttribute(EDanno::class, 'livelloDanno', $livello);
                 $prodotto->aggiungiDanno($danno, $descrizioneDanno);
             }
 

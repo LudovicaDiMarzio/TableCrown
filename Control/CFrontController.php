@@ -40,17 +40,6 @@ class CFrontController {
                 break;
 
 
-            case 'ricerca':
-                //Corrisponde a: GET /ricerca
-                if ($metodoHTTP === 'GET') {
-                    $controller = new CCatalogo();
-                    $controller->mostraRisultatiRicercaProdotti();
-                } else {
-                    $this->mostra404();
-                }
-                break;
-
-
             case 'catalogo':
                 if ($metodoHTTP !== 'GET') {
                     $this->mostra404();
@@ -76,27 +65,19 @@ class CFrontController {
                         $controller->mostraHubEventi();
                     } elseif ($sottoRoute === 'serate') {
                         $controller = new CEventi();
-                        $controller->mostraListaSerate(); //GET /catalogo/serate
+                        $controller->mostraListaSerate(); //GET /eventi/serate
                     } elseif ($sottoRoute === 'tornei') {
                         $controller = new CEventi();
-                        $controller->mostraListaTornei(); //GET /catalogo/tornei
+                        $controller->mostraListaTornei(); //GET /eventi/tornei
                     } elseif ($sottoRoute === 'challenge') {
                         $controller = new CEventi();
-                        $controller->mostraListaChallenge(); //GET /catalogo/challenge
-                    } elseif (in_array($sottoRoute, ['dettaglio', 'checkout'])) {
-                        if ($sottoRoute2 === null || !is_numeric($sottoRoute2)) {
-                            $this->mostra404();
-                            break;
-                        }
+                        $controller->mostraListaChallenge(); //GET /eventi/challenge
+                    } elseif ($sottoRoute === 'dettaglio') {
                         $controller = new CDettaglioEvento();
-                        if ($sottoRoute === 'dettaglio') {
-                            $controller->mostraDettaglioEvento((int)$sottoRoute2);
-                        } else {
-                            $controller->mostraCheckoutEvento((int)$sottoRoute2);
-                        }
-                    } elseif ($sottoRoute === 'risultati') {
-                        //TODO: implementare il metodo mostraRisultatiRicerca() in CEventi()
-                        $this->mostra404(); //DA TOGLIERE POI
+                        $controller->mostraDettaglioEvento(); //GET /eventi/dettaglio?id=X
+                    } elseif ($sottoRoute === 'checkout') {
+                        $controller = new CDettaglioEvento();
+                        $controller->mostraCheckoutEvento(); //GET /eventi/checkout?id=X
                     } else {
                         $this->mostra404();
                     }
@@ -111,10 +92,10 @@ class CFrontController {
 
 
             case 'prodotto':
-                //Corrisponde a: GET /prodotto/{id} (es. /prodotto/45)
-                if ($metodoHTTP === 'GET' &&$sottoRoute !== null && is_numeric($sottoRoute)) {
+                //Corrisponde a: GET /prodotto?id=X (es. /prodotto?id=45)
+                if ($metodoHTTP === 'GET' &&$sottoRoute === null) {
                     $controller = new CProdotto();
-                    $controller->mostraDettaglioProdotto((int)$sottoRoute);
+                    $controller->mostraDettaglioProdotto();
                 } else {
                     $this->mostra404();
                 }
@@ -178,13 +159,13 @@ class CFrontController {
 
             case 'carrello':
                 $controller = new CCarrello();
-                if ($sottoRoute === 'aggiungi' && $metodoHTTP === 'POST') {
+                if ($sottoRoute === 'aggiungi' && $metodoHTTP === 'POST') { //POST /carrello/aggiungi
                     $controller->aggiungiAlCarrello();
-                } elseif ($sottoRoute === 'rimuovi' && $metodoHTTP === 'POST') { 
+                } elseif ($sottoRoute === 'rimuovi' && $metodoHTTP === 'POST') { //POST /carrello/rimuovi
                     $controller->rimuoviDalCarrello();
-                } elseif ($sottoRoute === 'aggiorna' && $metodoHTTP === 'POST'){ 
+                } elseif ($sottoRoute === 'aggiorna' && $metodoHTTP === 'POST'){ //POST /carrello/aggiorna
                     $controller->aggiornaQuantita();
-                } elseif ($sottoRoute === null && $metodoHTTP === 'GET') {
+                } elseif ($sottoRoute === null && $metodoHTTP === 'GET') { //GET /carrello
                     $controller->mostraCarrello();
                 } else {
                     $this->mostra404();
@@ -362,8 +343,6 @@ class CFrontController {
                             } else {
                                 $this->mostra404();
                             }
-                        } elseif ($sottoRoute === 'ricerca') { //GET /gestore/ricerca
-                            $controller->mostraRisultatiRicercaProdottiGestore();
                         } elseif ($sottoRoute === 'eventi') {
                             if ($sottoRoute2 === 'serate') { //GET /gestore/eventi/serate
                                 $controller->mostraListaSerateGestore();
@@ -372,7 +351,7 @@ class CFrontController {
                             } elseif ($sottoRoute2 === 'challenge') { //GET /gestore/eventi/challenge
                                 $controller->mostraListaChallengeGestore();
                             } elseif ($sottoRoute2 === 'dettaglio') { //GET /gestore/eventi/dettaglio?id=X
-                                $controller->mostraDettaglioEventoGestore((int)$sottoRoute3);
+                                $controller->mostraDettaglioEventoGestore();
                             } else {
                                 $this->mostra404();
                             }
