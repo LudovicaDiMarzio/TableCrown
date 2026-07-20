@@ -7,5 +7,5 @@ namespace TableCrown\Presentation\Views;
  */
 class ViewDashboardAdmin extends BaseViewAdmin {
 
-    protected const TEMPLATE = 'admin_dashboard.tpl';
+    protected const TEMPLATE = 'home_a.tpl';
 }
