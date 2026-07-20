@@ -1,18 +1,18 @@
 <?php
-/* Smarty version 5.8.0, created on 2026-07-18 21:47:22
+/* Smarty version 5.8.0, created on 2026-07-20 20:34:43
   from 'file:catalogo_serate.tpl' */
 
 /* @var \Smarty\Template $_smarty_tpl */
 if ($_smarty_tpl->getCompiled()->isFresh($_smarty_tpl, array (
   'version' => '5.8.0',
-  'unifunc' => 'content_6a5bd84aee8cd8_64897254',
+  'unifunc' => 'content_6a5e6a436006f0_19914266',
   'has_nocache_code' => false,
   'file_dependency' => 
   array (
     '3ff586e237b30946cab394bcf8660186aa80abc0' => 
     array (
       0 => 'catalogo_serate.tpl',
-      1 => 1784404029,
+      1 => 1784566715,
       2 => 'file',
     ),
   ),
@@ -20,18 +20,18 @@ if ($_smarty_tpl->getCompiled()->isFresh($_smarty_tpl, array (
   array (
   ),
 ))) {
-function content_6a5bd84aee8cd8_64897254 (\Smarty\Template $_smarty_tpl) {
+function content_6a5e6a436006f0_19914266 (\Smarty\Template $_smarty_tpl) {
 $_smarty_current_dir = 'C:\\xampp\\htdocs\\TableCrown\\Presentation\\smarty-dir\\templates';
 $_smarty_tpl->getInheritance()->init($_smarty_tpl, true);
 ?>
 
 
 <?php 
-$_smarty_tpl->getInheritance()->instanceBlock($_smarty_tpl, 'Block_7119352126a5bd84aebded9_45409223', "content");
+$_smarty_tpl->getInheritance()->instanceBlock($_smarty_tpl, 'Block_16937310536a5e6a435daa08_26080586', "content");
 $_smarty_tpl->getInheritance()->endChild($_smarty_tpl, "common/layout.tpl", $_smarty_current_dir);
 }
 /* {block "content"} */
-class Block_7119352126a5bd84aebded9_45409223 extends \Smarty\Runtime\Block
+class Block_16937310536a5e6a435daa08_26080586 extends \Smarty\Runtime\Block
 {
 public function callBlock(\Smarty\Template $_smarty_tpl) {
 $_smarty_current_dir = 'C:\\xampp\\htdocs\\TableCrown\\Presentation\\smarty-dir\\templates';
@@ -43,33 +43,7 @@ $_smarty_current_dir = 'C:\\xampp\\htdocs\\TableCrown\\Presentation\\smarty-dir\
 <div class="eventi-lista-container">
     <div class="container">
 
-        <?php if ((true && ($_smarty_tpl->hasVariable('breadcrumbs') && null !== ($_smarty_tpl->getValue('breadcrumbs') ?? null))) && $_smarty_tpl->getSmarty()->getModifierCallback('count')($_smarty_tpl->getValue('breadcrumbs')) > 0) {?>
-        <nav class="eventi-breadcrumb">
-            <?php
-$_from = $_smarty_tpl->getSmarty()->getRuntime('Foreach')->init($_smarty_tpl, $_smarty_tpl->getValue('breadcrumbs'), 'crumb', true);
-$_smarty_tpl->getVariable('crumb')->iteration = 0;
-$foreach0DoElse = true;
-foreach ($_from ?? [] as $_smarty_tpl->getVariable('crumb')->value) {
-$foreach0DoElse = false;
-$_smarty_tpl->getVariable('crumb')->iteration++;
-$_smarty_tpl->getVariable('crumb')->last = $_smarty_tpl->getVariable('crumb')->iteration === $_smarty_tpl->getVariable('crumb')->total;
-$foreach0Backup = clone $_smarty_tpl->getVariable('crumb');
-?>
-                <?php if ($_smarty_tpl->getVariable('crumb')->last) {?>
-                    <span><?php echo htmlspecialchars((string)$_smarty_tpl->getValue('crumb')['label'], ENT_QUOTES, 'UTF-8', true);?>
-</span>
-                <?php } else { ?>
-                    <a href="<?php echo htmlspecialchars((string)$_smarty_tpl->getValue('crumb')['url'], ENT_QUOTES, 'UTF-8', true);?>
-"><?php echo htmlspecialchars((string)$_smarty_tpl->getValue('crumb')['label'], ENT_QUOTES, 'UTF-8', true);?>
-</a>
-                    <i class="ti ti-chevron-right"></i>
-                <?php }?>
-            <?php
-$_smarty_tpl->setVariable('crumb', $foreach0Backup);
-}
-$_smarty_tpl->getSmarty()->getRuntime('Foreach')->restore($_smarty_tpl, 1);?>
-        </nav>
-        <?php }?>
+        
 
         <div class="eventi-lista-layout">
 
@@ -79,15 +53,7 @@ $_smarty_tpl->getSmarty()->getRuntime('Foreach')->restore($_smarty_tpl, 1);?>
                 <form id="form-filtri-eventi" class="eventi-filtri-form" method="get" action="<?php echo $_smarty_tpl->getValue('base_url');?>
 /eventi/serate">
 
-                    <div class="eventi-filter-group">
-                        <h3 class="eventi-filter-group-title">Cerca</h3>
-                        <input type="text"
-                               name="query_string"
-                               class="eventi-ricerca-input"
-                               placeholder="Cerca per nome..."
-                               value="<?php echo htmlspecialchars((string)(($tmp = $_smarty_tpl->getValue('filtri')['query_string'] ?? null)===null||$tmp==='' ? '' ?? null : $tmp), ENT_QUOTES, 'UTF-8', true);?>
-">
-                    </div>
+                    
 
                     <div class="eventi-filter-group eventi-filter-group-last">
                         <h3 class="eventi-filter-group-title">Data</h3>
@@ -105,9 +71,9 @@ $_smarty_tpl->getSmarty()->getRuntime('Foreach')->restore($_smarty_tpl, 1);?>
                 <div class="eventi-grid">
                     <?php
 $_from = $_smarty_tpl->getSmarty()->getRuntime('Foreach')->init($_smarty_tpl, $_smarty_tpl->getValue('eventi'), 'evento');
-$foreach1DoElse = true;
+$foreach0DoElse = true;
 foreach ($_from ?? [] as $_smarty_tpl->getVariable('evento')->value) {
-$foreach1DoElse = false;
+$foreach0DoElse = false;
 ?>
                     <?php $_smarty_tpl->assign('stato', $_smarty_tpl->getValue('evento')['statoEvento'], false, NULL);?>
                     <?php $_smarty_tpl->assign('passato', ($_smarty_tpl->getValue('stato') == 'Terminato'), false, NULL);?>
@@ -185,7 +151,7 @@ if ($_smarty_tpl->getValue('esaurito')) {?> evento-list-card-esaurito<?php }?>">
                     </article>
                     <?php
 }
-if ($foreach1DoElse) {
+if ($foreach0DoElse) {
 ?>
                     <p class="eventi-lista-empty">Nessuna serata trovata.</p>
                     <?php
