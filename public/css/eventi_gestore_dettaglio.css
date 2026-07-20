@@ -1,0 +1,406 @@
+/*
+  TableCrown - Dettaglio Eventi Gestore
+  Prefisso BEM: gdet-*
+  NOTA: uso qui variabili CSS presunte in stile con quelle già usate nei tuoi
+  altri file (--color-*, --spacing-*, --radius-*). Non avendo il contenuto di
+  eventi_gestore.css / il file variabili globale, ho definito dei fallback
+  locali su .gdet-container: se il design system centrale usa nomi diversi,
+  basta sostituire i var(--x, fallback) qui sotto con quelli reali.
+*/
+
+.gdet-container {
+    --gdet-bg-surface: var(--color-surface, #1c1f26);
+    --gdet-bg-surface-alt: var(--color-surface-alt, #262a33);
+    --gdet-border: var(--color-border, #333844);
+    --gdet-text: var(--color-text, #f2f3f5);
+    --gdet-text-muted: var(--color-text-muted, #9aa0ab);
+    --gdet-primary: var(--color-primary, #7c5cff);
+    --gdet-success: var(--color-success, #3ecf8e);
+    --gdet-warning: var(--color-warning, #f5a623);
+    --gdet-danger: var(--color-danger, #f0506e);
+    --gdet-info: var(--color-info, #4dabf7);
+    --gdet-radius: var(--radius-md, 10px);
+    --gdet-radius-sm: var(--radius-sm, 6px);
+
+    max-width: 1000px;
+    margin: 0 auto;
+    padding: 24px 16px 64px;
+    color: var(--gdet-text);
+}
+
+.gdet-back {
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    color: var(--gdet-text-muted);
+    text-decoration: none;
+    font-size: 0.9rem;
+    margin-bottom: 20px;
+}
+.gdet-back:hover { color: var(--gdet-text); }
+
+/* ── HEADER ── */
+.gdet-header {
+    display: flex;
+    gap: 24px;
+    background: var(--gdet-bg-surface);
+    border: 1px solid var(--gdet-border);
+    border-radius: var(--gdet-radius);
+    padding: 20px;
+    margin-bottom: 24px;
+}
+.gdet-header__img-wrapper {
+    position: relative;
+    flex: 0 0 260px;
+}
+.gdet-header__img {
+    width: 100%;
+    height: 180px;
+    object-fit: cover;
+    border-radius: var(--gdet-radius-sm);
+}
+.gdet-header__info {
+    flex: 1;
+    min-width: 0;
+}
+.gdet-type {
+    text-transform: uppercase;
+    font-size: 0.75rem;
+    letter-spacing: 0.05em;
+    color: var(--gdet-text-muted);
+}
+.gdet-title {
+    margin: 4px 0 12px;
+    font-size: 1.6rem;
+    font-weight: 700;
+}
+
+.gdet-meta { display: flex; flex-direction: column; gap: 8px; }
+.gdet-meta-row {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    font-size: 0.9rem;
+    color: var(--gdet-text-muted);
+}
+.gdet-meta-row--full { color: var(--gdet-danger); }
+
+/* ── STATUS BADGE ── */
+.gdet-status {
+    position: absolute;
+    top: 10px;
+    left: 10px;
+    padding: 4px 10px;
+    border-radius: 999px;
+    font-size: 0.75rem;
+    font-weight: 600;
+    text-transform: capitalize;
+    background: var(--gdet-bg-surface-alt);
+    border: 1px solid var(--gdet-border);
+}
+.gdet-status--programmato { color: var(--gdet-info); border-color: var(--gdet-info); }
+.gdet-status--in_corso    { color: var(--gdet-success); border-color: var(--gdet-success); }
+.gdet-status--terminato   { color: var(--gdet-text-muted); }
+.gdet-status--annullato   { color: var(--gdet-danger); border-color: var(--gdet-danger); }
+
+/* ── SECTIONS ── */
+.gdet-section {
+    background: var(--gdet-bg-surface);
+    border: 1px solid var(--gdet-border);
+    border-radius: var(--gdet-radius);
+    padding: 20px;
+    margin-bottom: 20px;
+}
+.gdet-section__title {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    font-size: 1.05rem;
+    margin: 0 0 12px;
+}
+.gdet-section__text {
+    color: var(--gdet-text-muted);
+    line-height: 1.6;
+    margin: 0;
+}
+
+.gdet-link { color: var(--gdet-primary); text-decoration: none; }
+.gdet-link:hover { text-decoration: underline; }
+
+/* ── PREMIO ── */
+.gdet-premio-card {
+    display: flex;
+    align-items: center;
+    gap: 16px;
+    background: var(--gdet-bg-surface-alt);
+    border-radius: var(--gdet-radius-sm);
+    padding: 12px;
+}
+.gdet-premio-card__img {
+    width: 64px;
+    height: 64px;
+    object-fit: cover;
+    border-radius: var(--gdet-radius-sm);
+}
+.gdet-premio-card__info { display: flex; flex-direction: column; gap: 4px; }
+.gdet-premio-card__name { font-weight: 600; }
+.gdet-premio-card__price--old {
+    text-decoration: line-through;
+    color: var(--gdet-text-muted);
+    font-size: 0.85rem;
+}
+
+/* ── PUNTEGGI CHALLENGE ── */
+.gdet-punteggi { display: flex; gap: 16px; flex-wrap: wrap; }
+.gdet-punteggi__item {
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    background: var(--gdet-bg-surface-alt);
+    padding: 6px 12px;
+    border-radius: 999px;
+    font-size: 0.85rem;
+}
+
+/* ── ACTIONS ── */
+.gdet-actions__grid {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 10px;
+}
+.gdet-action-form { display: contents; }
+
+.gdet-btn {
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    padding: 10px 16px;
+    border-radius: var(--gdet-radius-sm);
+    border: none;
+    font-size: 0.9rem;
+    font-weight: 600;
+    cursor: pointer;
+    color: #fff;
+    text-decoration: none;
+}
+.gdet-btn--small { padding: 6px 12px; font-size: 0.8rem; }
+.gdet-btn--success { background: var(--gdet-success); }
+.gdet-btn--warning { background: var(--gdet-warning); color: #2a1e00; }
+.gdet-btn--danger  { background: var(--gdet-danger); }
+.gdet-btn--info    { background: var(--gdet-info); color: #04263f; }
+.gdet-btn--primary { background: var(--gdet-primary); }
+.gdet-btn--disabled {
+    background: var(--gdet-bg-surface-alt);
+    color: var(--gdet-text-muted);
+    cursor: not-allowed;
+    border: 1px dashed var(--gdet-border);
+}
+.gdet-btn[disabled] { opacity: 0.5; cursor: not-allowed; }
+
+/* ── TOGGLE PANEL (checkbox hack, niente JS necessario per aprire/chiudere) ── */
+.gdet-toggle-checkbox { display: none; }
+.gdet-panel {
+    display: none;
+    margin-top: 16px;
+    padding-top: 16px;
+    border-top: 1px dashed var(--gdet-border);
+}
+.gdet-toggle-checkbox:checked + .gdet-btn + .gdet-panel,
+.gdet-toggle-checkbox:checked ~ .gdet-panel {
+    display: block;
+}
+/* Nota: nei casi con più toggle nella stessa sezione (Modifica dati + Riprogramma,
+   oppure più tornei nella challenge), ogni pannello è identificato da id univoco;
+   la regola sopra si appoggia all'ordine nel DOM (checkbox, label, ..., panel). */
+
+.gdet-panel__title { margin: 0 0 4px; font-size: 1rem; }
+.gdet-panel__hint { color: var(--gdet-text-muted); font-size: 0.85rem; margin: 0 0 12px; }
+
+/* ── FORMS ── */
+.gdet-form { display: flex; flex-direction: column; gap: 6px; max-width: 420px; }
+.gdet-form__label { font-size: 0.85rem; color: var(--gdet-text-muted); margin-top: 8px; }
+.gdet-form__input,
+.gdet-form__textarea {
+    background: var(--gdet-bg-surface-alt);
+    border: 1px solid var(--gdet-border);
+    border-radius: var(--gdet-radius-sm);
+    padding: 8px 10px;
+    color: var(--gdet-text);
+    font-size: 0.9rem;
+}
+.gdet-form__textarea { resize: vertical; }
+.gdet-form__img-preview {
+    width: 80px;
+    height: 80px;
+    object-fit: cover;
+    border-radius: var(--gdet-radius-sm);
+    margin-bottom: 6px;
+}
+.gdet-form .gdet-btn { align-self: flex-start; margin-top: 14px; }
+
+/* ── PODIO ── */
+.gdet-podio__list, .gdet-podio { list-style: none; margin: 0 0 16px; padding: 0; display: flex; flex-direction: column; gap: 8px; }
+.gdet-podio--compact { margin-bottom: 12px; }
+.gdet-podio__item {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    background: var(--gdet-bg-surface-alt);
+    border-radius: var(--gdet-radius-sm);
+    padding: 8px 12px;
+}
+.gdet-podio__item--1 { border-left: 3px solid #ffd54f; }
+.gdet-podio__item--2 { border-left: 3px solid #cfd8dc; }
+.gdet-podio__item--3 { border-left: 3px solid #d7a86e; }
+.gdet-podio__medal { font-weight: 700; min-width: 32px; }
+.gdet-podio__name { font-weight: 500; }
+
+/* ── TORNEI DELLA CHALLENGE ── */
+.gdet-tornei-list { display: flex; flex-direction: column; gap: 16px; }
+.gdet-torneo-card {
+    background: var(--gdet-bg-surface-alt);
+    border: 1px solid var(--gdet-border);
+    border-radius: var(--gdet-radius-sm);
+    padding: 14px;
+}
+.gdet-torneo-card__header {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    margin-bottom: 10px;
+}
+.gdet-torneo-card__img {
+    width: 48px;
+    height: 48px;
+    object-fit: cover;
+    border-radius: var(--gdet-radius-sm);
+}
+.gdet-torneo-card__header > div { flex: 1; }
+.gdet-torneo-card__name { margin: 2px 0; font-size: 1rem; }
+.gdet-torneo-card__gioco { font-size: 0.8rem; color: var(--gdet-text-muted); }
+
+/* ── CLASSIFICA FINALE ── */
+.gdet-classifica { width: 100%; border-collapse: collapse; }
+.gdet-classifica th, .gdet-classifica td {
+    text-align: left;
+    padding: 10px 12px;
+    border-bottom: 1px solid var(--gdet-border);
+}
+.gdet-classifica__row--podio { background: var(--gdet-bg-surface-alt); font-weight: 600; }
+
+/* ── MESSAGGI ── */
+.gdet-warning {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    background: rgba(245, 166, 35, 0.12);
+    color: var(--gdet-warning);
+    border: 1px solid var(--gdet-warning);
+    border-radius: var(--gdet-radius-sm);
+    padding: 10px 14px;
+    font-size: 0.85rem;
+    margin-bottom: 14px;
+}
+.gdet-info-text {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    color: var(--gdet-text-muted);
+    font-size: 0.85rem;
+}
+
+/* ── RESPONSIVE ── */
+@media (max-width: 720px) {
+    .gdet-header { flex-direction: column; }
+    .gdet-header__img-wrapper { flex: none; }
+    .gdet-torneo-card__header { flex-wrap: wrap; }
+}
+
+
+/* ── MODAL (dialog nativo) — Modifica dati evento ── */
+.gdet-modal {
+    border: 1px solid var(--gdet-border);
+    border-radius: var(--gdet-radius);
+    background: var(--gdet-bg-surface);
+    color: var(--gdet-text);
+    padding: 0;
+    width: min(480px, calc(100vw - 32px));
+    max-height: min(640px, calc(100vh - 64px));
+    overflow: hidden;
+}
+
+/* Il contenuto scrolla internamente, il <dialog> resta fisso in dimensione */
+.gdet-modal__content {
+    padding: 24px;
+    max-height: inherit;
+    overflow-y: auto;
+    position: relative;
+}
+
+.gdet-modal::backdrop {
+    background: rgba(0, 0, 0, 0.55);
+    backdrop-filter: blur(2px);
+}
+
+/* Piccola animazione di apertura (opzionale ma consigliata) */
+.gdet-modal {
+    opacity: 0;
+    transform: translateY(-12px) scale(0.98);
+    transition: opacity 0.18s ease, transform 0.18s ease, overlay 0.18s ease allow-discrete, display 0.18s ease allow-discrete;
+}
+.gdet-modal[open] {
+    opacity: 1;
+    transform: translateY(0) scale(1);
+}
+@starting-style {
+    .gdet-modal[open] {
+        opacity: 0;
+        transform: translateY(-12px) scale(0.98);
+    }
+}
+
+.gdet-modal__close {
+    position: absolute;
+    top: 12px;
+    right: 12px;
+    width: 32px;
+    height: 32px;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    border: none;
+    border-radius: var(--gdet-radius-sm);
+    background: var(--gdet-bg-surface-alt);
+    color: var(--gdet-text-muted);
+    cursor: pointer;
+    font-size: 1rem;
+}
+.gdet-modal__close:hover {
+    color: var(--gdet-text);
+    background: var(--gdet-border);
+}
+
+.gdet-modal__actions {
+    display: flex;
+    justify-content: flex-end;
+    gap: 10px;
+    margin-top: 18px;
+    padding-top: 14px;
+    border-top: 1px dashed var(--gdet-border);
+}
+
+/* Nel modale il form non deve avere il max-width ridotto di .gdet-form */
+.gdet-modal .gdet-form {
+    max-width: none;
+}
+.gdet-modal .gdet-form .gdet-btn {
+    align-self: auto;
+    margin-top: 0;
+}
+
+@media (max-width: 720px) {
+    .gdet-modal {
+        width: calc(100vw - 24px);
+        max-height: calc(100vh - 32px);
+    }
+}

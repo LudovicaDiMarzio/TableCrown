@@ -1,0 +1,333 @@
+/* ==========================================================================
+   TableCrown - Area Gestore - Modale Modifica Prodotto
+   Overlay + modale, riusa le variabili di layout_gestore.css (:root)
+   ========================================================================== */
+
+.gmp-overlay {
+    display: none;
+    position: fixed;
+    inset: 0;
+    background: rgba(20, 20, 35, 0.55);
+    align-items: center;
+    justify-content: center;
+    z-index: 1000;
+    padding: 20px;
+}
+
+.gmp-overlay.active {
+    display: flex;
+}
+
+.gmp-modal {
+    background: var(--gestore-white);
+    border-radius: var(--gestore-radius);
+    width: 100%;
+    max-width: 520px;
+    max-height: 88vh;
+    display: flex;
+    flex-direction: column;
+    overflow: hidden;
+}
+
+/* ---------- HEADER ---------- */
+
+.gmp-modal__header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 20px 24px;
+    border-bottom: 1px solid var(--gestore-border);
+}
+
+.gmp-modal__product {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+}
+
+.gmp-modal__product-img {
+    width: 48px;
+    height: 48px;
+    object-fit: cover;
+    border-radius: 8px;
+    background: var(--gestore-bg);
+    border: 1px solid var(--gestore-border);
+    flex-shrink: 0;
+}
+
+.gmp-modal__title {
+    margin: 0;
+    font-size: 15px;
+    font-weight: 700;
+    color: var(--gestore-text);
+}
+
+.gmp-modal__product-name {
+    margin: 2px 0 0;
+    font-size: 13px;
+    color: var(--gestore-muted);
+}
+
+.gmp-modal__close {
+    background: none;
+    border: none;
+    font-size: 18px;
+    color: var(--gestore-muted);
+    cursor: pointer;
+    padding: 6px;
+    border-radius: 8px;
+    line-height: 1;
+}
+
+.gmp-modal__close:hover {
+    background: var(--gestore-bg);
+    color: var(--gestore-text);
+}
+
+/* ---------- BODY / SEZIONI ---------- */
+
+.gmp-modal__body {
+    padding: 20px 24px;
+    overflow-y: auto;
+}
+
+.gmp-section {
+    padding: 16px 0;
+    border-bottom: 1px solid var(--gestore-border);
+}
+
+.gmp-section:last-of-type {
+    border-bottom: none;
+}
+
+.gmp-section__header {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    font-size: 14px;
+    font-weight: 700;
+    color: var(--gestore-text);
+    margin-bottom: 12px;
+}
+
+.gmp-section__header i {
+    color: var(--gestore-sidebar-active);
+    font-size: 16px;
+}
+
+.gmp-current-price {
+    margin: 0 0 12px;
+    font-size: 13px;
+    color: var(--gestore-muted);
+}
+
+/* ---------- CHECKBOX ---------- */
+
+.gmp-checkbox {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    font-size: 13px;
+    font-weight: 600;
+    color: var(--gestore-text);
+    cursor: pointer;
+    margin-bottom: 4px;
+}
+
+.gmp-checkbox input {
+    width: 16px;
+    height: 16px;
+    accent-color: var(--gestore-sidebar-active);
+    cursor: pointer;
+}
+
+.gmp-checkbox--danger span {
+    color: var(--gestore-danger);
+}
+
+.gmp-checkbox--danger input {
+    accent-color: var(--gestore-danger);
+}
+
+/* ---------- SUBFIELDS (collassabili) ---------- */
+
+.gmp-subfields {
+    display: none;
+    margin-top: 12px;
+    padding-left: 24px;
+}
+
+.gmp-subfields.active {
+    display: block;
+}
+
+/* ---------- CAMPI ---------- */
+
+.gmp-field-group {
+    margin-bottom: 14px;
+}
+
+.gmp-row {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 16px;
+}
+
+.gmp-label {
+    display: block;
+    font-size: 12px;
+    font-weight: 600;
+    color: var(--gestore-text);
+    margin-bottom: 5px;
+}
+
+.gmp-label__optional {
+    font-weight: 400;
+    color: var(--gestore-muted);
+}
+
+.gmp-input,
+.gmp-textarea,
+.gmp-select {
+    width: 100%;
+    box-sizing: border-box;
+    padding: 9px 11px;
+    border: 1px solid var(--gestore-border);
+    border-radius: 8px;
+    font-size: 13px;
+    font-family: inherit;
+    color: var(--gestore-text);
+    background: var(--gestore-white);
+}
+
+.gmp-input:focus,
+.gmp-textarea:focus,
+.gmp-select:focus {
+    outline: none;
+    border-color: var(--gestore-sidebar-active);
+}
+
+.gmp-textarea {
+    resize: vertical;
+    min-height: 70px;
+}
+
+.gmp-hint {
+    display: block;
+    margin-top: 5px;
+    font-size: 11px;
+    color: var(--gestore-muted);
+}
+
+.gmp-error {
+    display: none;
+    margin-top: 5px;
+    font-size: 11px;
+    font-weight: 600;
+    color: var(--gestore-danger);
+}
+
+.gmp-field-group.has-error .gmp-input,
+.gmp-field-group.has-error .gmp-textarea,
+.gmp-field-group.has-error .gmp-select {
+    border-color: var(--gestore-danger);
+}
+
+.gmp-field-group.has-error .gmp-error {
+    display: block;
+}
+
+/* ---------- FEEDBACK ---------- */
+
+.gmp-feedback {
+    margin: 4px 0 0;
+    font-size: 13px;
+    font-weight: 600;
+    min-height: 18px;
+}
+
+.gmp-feedback--success {
+    color: var(--gestore-success);
+}
+
+.gmp-feedback--error {
+    color: var(--gestore-danger);
+}
+
+/* ---------- FOOTER ---------- */
+
+.gmp-modal__footer {
+    display: flex;
+    gap: 10px;
+    padding: 16px 24px;
+    border-top: 1px solid var(--gestore-border);
+}
+
+.gmp-modal__footer .gmp-btn {
+    flex: 1;
+}
+
+.gmp-btn {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    gap: 6px;
+    padding: 10px 20px;
+    border-radius: 8px;
+    font-size: 14px;
+    font-weight: 600;
+    border: none;
+    cursor: pointer;
+}
+
+.gmp-btn--primary {
+    background: var(--gestore-sidebar-active);
+    color: #fff;
+}
+
+.gmp-btn--primary:hover {
+    background: #5a3ce0;
+}
+
+.gmp-btn--primary:disabled {
+    opacity: 0.6;
+    cursor: not-allowed;
+}
+
+.gmp-btn--ghost {
+    background: var(--gestore-bg);
+    color: var(--gestore-text);
+}
+
+.gmp-btn--ghost:hover {
+    background: #e9e6fb;
+}
+
+/* ---------- BOTTONE "MODIFICA" NELLE LISTE PRODOTTO ---------- */
+
+.gmp-btn-modifica {
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    padding: 7px 14px;
+    border-radius: 8px;
+    font-size: 12px;
+    font-weight: 600;
+    border: 1px solid var(--gestore-border);
+    background: var(--gestore-white);
+    color: var(--gestore-text);
+    cursor: pointer;
+}
+
+.gmp-btn-modifica:hover {
+    border-color: var(--gestore-sidebar-active);
+    color: var(--gestore-sidebar-active);
+}
+
+/* ---------- RESPONSIVE ---------- */
+
+@media (max-width: 640px) {
+    .gmp-row {
+        grid-template-columns: 1fr;
+    }
+}
