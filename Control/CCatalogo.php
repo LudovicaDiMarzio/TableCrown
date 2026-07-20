@@ -18,24 +18,37 @@ class CCatalogo extends BaseController {
 
     /**
      * Mostra la pagina del catalogo dei giochi da tavolo.
+     * Gestisce sia filtri che barra di ricerca.
+     * Nota: la ricerca avviene O tramite filtri O tramite barra di ricerca.
      * URL: GET /catalogo/giochi-da-tavolo
      */
     public function mostraCatalogoGiochi(): void {
         //Per le azioni condivise fra i tre metodi, implementiamo dei metodi privati, in modo da non ripetere il codice ogni volta.
         $pagina = $this->estraiPaginaRichiesta();
-        $filtri = $this->estraiFiltriGiochi(); //sarà [] se non ci sono filtri
+        $query = UHTTPMethods::get('q');
+        $query = ($query !== null) ? trim($query) : null;
 
-        //Chiamata a Foundation
-        //Nota: PMfindGiochi(), così come i metodi successivi del pm, restituiscono
-        //un array [risultati, totaleRisultati], in cui risultati è a sua volta un array
-        //contenente tutti i prodotti che soddisfano i filtri richiesti.
-        $risultatoGrezzo = FPersistentManager::PMfindGiochi(  //SE $filtri E' VUOTO, RESTITUISCE TUTTI I GIOCHI DA TAVOLO
-            filtri: $filtri,
-            limit: self::RISULTATI_PER_PAGINA,
-            offset: ($pagina - 1) * self::RISULTATI_PER_PAGINA
-        );
-
-        $this->renderCatalogo('catalogo_giochi', $risultatoGrezzo, $pagina, $filtri);
+        if ($query !== null) {
+            // --- CASO BARRA DI RICERCA ---
+            //I filtri vengono annullati/resettati
+            $filtri = [];
+            $risultatoGrezzo = FPersistentManager::PMricercaGiochi(
+                stringaDiRicerca: $query,
+                limit: self::RISULTATI_PER_PAGINA,
+                offset: ($pagina - 1) * self::RISULTATI_PER_PAGINA
+            );
+        } else {
+            // --- CASO FILTRI ---
+            $filtri = $this->estraiFiltriGiochi(); //sarà [] se non ci sono filtri
+            $risultatoGrezzo = FPersistentManager::PMfindGiochi(
+                filtri: $filtri,
+                limit: self::RISULTATI_PER_PAGINA,
+                offset: ($pagina - 1) * self::RISULTATI_PER_PAGINA
+            );
+        }
+        
+        //Passiamo sia i filtri (vuoti se c'è una query) sia la query di ricerca al render
+        $this->renderCatalogo('catalogo_giochi', $risultatoGrezzo, $pagina, $filtri, $query);
     }
 
     /**
@@ -43,15 +56,29 @@ class CCatalogo extends BaseController {
      */
     public function mostraCatalogoBustine(): void { 
         $pagina = $this->estraiPaginaRichiesta();
-        $filtri = $this->estraiFiltriPrezzo(); 
+        $query = UHTTPMethods::get('q');
+        $query = ($query !== null) ? trim($query) : null;
 
-        $risultatoGrezzo = FPersistentManager::PMfindBustine(
-            filtri: $filtri,
-            limit: self::RISULTATI_PER_PAGINA,
-            offset: ($pagina - 1) * self::RISULTATI_PER_PAGINA
-        );
-
-        $this->renderCatalogo('catalogo_bustine', $risultatoGrezzo, $pagina, $filtri);
+        if ($query !== null) {
+            // --- CASO BARRA DI RICERCA ---
+            //I filtri vengono annullati/resettati
+            $filtri = [];
+            $risultatoGrezzo = FPersistentManager::PMricercaBustine(
+                stringaDiRicerca: $query,
+                limit: self::RISULTATI_PER_PAGINA,
+                offset: ($pagina - 1) * self::RISULTATI_PER_PAGINA
+            );
+        } else {
+            // --- CASO FILTRI ---
+            $filtri = $this->estraiFiltriPrezzo(); 
+            $risultatoGrezzo = FPersistentManager::PMfindBustine(
+                filtri: $filtri,
+                limit: self::RISULTATI_PER_PAGINA,
+                offset: ($pagina - 1) * self::RISULTATI_PER_PAGINA
+            );
+        }
+        
+        $this->renderCatalogo('catalogo_bustine', $risultatoGrezzo, $pagina, $filtri, $query);
     }
 
     /**
@@ -59,45 +86,29 @@ class CCatalogo extends BaseController {
      */
     public function mostraCatalogoPortaDadi(): void { 
         $pagina = $this->estraiPaginaRichiesta();
-        $filtri = $this->estraiFiltriPrezzo(); 
-
-        $risultatoGrezzo = FPersistentManager::PMfindPortaDadi(
-            filtri: $filtri,
-            limit: self::RISULTATI_PER_PAGINA,
-            offset: ($pagina - 1) * self::RISULTATI_PER_PAGINA
-        );
-
-        $this->renderCatalogo('catalogo_portadadi', $risultatoGrezzo, $pagina, $filtri);
-    }
-
-    /**
-     * Mostra i risultati della ricerca
-     * La barra di ricerca è un componente del layout globale,
-     * ma una ricerca eseguita in questo modo (effettuata in una qualunque
-     * delle pagine del sito), viene sempre gestita dal controller del catalogo
-     * i risultati di ricerca sono limitati a prodotti di tipo gioco da tavolo
-     * URL: GET /ricerca
-     */
-    public function mostraRisultatiRicercaProdotti(): void {
         $query = UHTTPMethods::get('q');
-        $pagina = $this->estraiPaginaRichiesta();
+        $query = ($query !== null) ? trim($query) : null;
 
-        if ($query === null || trim($query) === '') {
-            //Se non c'è nessun termine di ricerca, reindirizziamo alla pagina precedente. Fallback: la home
-            header("Location: " . UHTTPMethods::getReferer(BASE_URL . '/'));
-            exit();
+        if ($query !== null) {
+            // --- CASO BARRA DI RICERCA ---
+            //I filtri vengono annullati/resettati
+            $filtri = [];
+            $risultatoGrezzo = FPersistentManager::PMricercaPortaDadi(
+                stringaDiRicerca: $query,
+                limit: self::RISULTATI_PER_PAGINA,
+                offset: ($pagina - 1) * self::RISULTATI_PER_PAGINA
+            );
+        } else {
+            // --- CASO FILTRI ---
+            $filtri = $this->estraiFiltriPrezzo(); 
+            $risultatoGrezzo = FPersistentManager::PMfindPortaDadi(
+                filtri: $filtri,
+                limit: self::RISULTATI_PER_PAGINA,
+                offset: ($pagina - 1) * self::RISULTATI_PER_PAGINA
+            );
         }
 
-        $query = trim($query);
-
-        //Cerca solo giochi da tavolo
-        $risultatoGrezzo = FPersistentManager::PMricercaProdotto(
-            StringaDiRicerca:$query,
-            limit: self::RISULTATI_PER_PAGINA,
-            offset: ($pagina - 1) * self::RISULTATI_PER_PAGINA
-        );
-
-        $this->renderCatalogo('ricerca', $risultatoGrezzo, $pagina, ['q' => $query], $query);
+        $this->renderCatalogo('catalogo_portadadi', $risultatoGrezzo, $pagina, $filtri, $query);
     }
 
     //==========================================================================
