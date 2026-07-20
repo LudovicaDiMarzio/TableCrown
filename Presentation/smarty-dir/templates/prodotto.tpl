@@ -228,7 +228,7 @@
                     <div class="correlati-grid" id="correlati-grid">
                         {foreach $correlati as $correlato}
                             <div class="correlato-card">
-                                <a href="{$base_url}/prodotto/{$correlato.id}" class="correlato-card-link">
+                                <a href="{$base_url}/prodotto?id={$correlato.id}" class="correlato-card-link">
                                     <div class="correlato-image-wrapper">
                                         <img src="{$base_url}/img/prodotti/{$correlato.immagine|escape}"
                                              alt="{$correlato.nome|escape}"

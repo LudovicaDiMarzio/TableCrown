@@ -27,23 +27,22 @@
         <div class="dettaglio-top dettaglio-top--con-prezzo">
 
             <div class="dettaglio-gallery">
-                <img src="{$challenge.immagine}" alt="{$challenge.nome}" class="dettaglio-img">
+                <img src="{$challenge.imgEvento}" alt="{$challenge.nomeEvento}" class="dettaglio-img">
             </div>
 
             <div class="dettaglio-info">
-                <h1 class="dettaglio-nome" style="color: #2c3e7a;">{$challenge.nome}</h1>
+                <h1 class="dettaglio-nome" style="color: #2c3e7a;">{$challenge.nomeEvento}</h1>
 
                 <ul class="dettaglio-meta">
-                    <li><i class="ti ti-calendar-event"></i> {$challenge.data}</li>
-                    <li><i class="ti ti-users"></i> {$challenge.postiLiberi} / {$challenge.postiTotali} posti liberi</li>
-                    <li><i class="ti ti-chess-king"></i> {$challenge.nomeAttivita}</li>
+                    <li><i class="ti ti-calendar-event"></i> {$challenge.dataInizio}</li>
+                    <li><i class="ti ti-users"></i> {$challenge.postiRimanenti} / {$challenge.maxPartecipanti} posti liberi</li>
                 </ul>
             </div>
 
             <div class="dettaglio-prezzo-box">
 
                 {if $challenge.premio}
-                <a href="{$base_url}/prodotto/{$challenge.premio.id}" class="dettaglio-premio-card">
+                <a href="{$base_url}/prodotto?id={$challenge.premio.id}" class="dettaglio-premio-card">
                     <div class="dettaglio-premio-img-wrapper">
                         <img src="{$challenge.premio.immagine}" alt="{$challenge.premio.nome}" class="dettaglio-premio-img">
                     </div>
@@ -56,10 +55,10 @@
 
                 <div class="dettaglio-prezzo-tot">
                     <span class="dettaglio-prezzo-tot-label">Totale</span>
-                    <span class="dettaglio-prezzo-tot-value" id="prezzo-tot-{$challenge.id}">€ {$challenge.prezzo}</span>
+                    <span class="dettaglio-prezzo-tot-value" id="prezzo-tot-{$challenge.idEvento}">€ {$challenge.quotaIscrizione}</span>
                 </div>
 
-                <button type="button" class="btn-iscriviti" data-id="{$challenge.id}">
+                <button type="button" class="btn-iscriviti" data-id="{$challenge.idEvento}">
                     Iscriviti
                 </button>
             </div>
@@ -69,7 +68,7 @@
         <!-- ── DESCRIZIONE ── -->
         <div class="dettaglio-descrizione">
             <h2 class="dettaglio-section-title">Descrizione</h2>
-            <p class="dettaglio-descrizione-testo">{$challenge.descrizione}</p>
+            <p class="dettaglio-descrizione-testo">{$challenge.descrizioneEvento}</p>
         </div>
 
         <!-- ── TORNEI INCLUSI (se presenti) ── -->
@@ -78,12 +77,12 @@
             <h2 class="dettaglio-section-title">Tornei inclusi</h2>
             <div class="dettaglio-correlati-grid">
                 {foreach from=$challenge.tornei item=torneo}
-                    <a href="{$base_url}/torneo/{$torneo.id}" class="dettaglio-correlato-card">
+                    <a href="{$base_url}/eventi/dettaglio?id={$torneo.idEvento}" class="dettaglio-correlato-card">
                         <div class="dettaglio-correlato-img-wrapper">
-                            <img src="{$torneo.immagine}" alt="{$torneo.nome}" class="dettaglio-correlato-img">
+                            <img src="{$torneo.imgEvento}" alt="{$torneo.nomeEvento}" class="dettaglio-correlato-img">
                         </div>
-                        <p class="dettaglio-correlato-nome">{$torneo.nome}</p>
-                        <p class="dettaglio-correlato-data">{$torneo.data}</p>
+                        <p class="dettaglio-correlato-nome">{$torneo.nomeEvento}</p>
+                        <p class="dettaglio-correlato-data">{$torneo.dataInizio}</p>
                     </a>
                 {/foreach}
             </div>

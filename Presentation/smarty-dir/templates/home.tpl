@@ -38,8 +38,6 @@
                 </div>
             </div>
 
-
-
             <div class="carousel-item">
                 <img src="{$base_url}/img/carousel/slide2.jpg" alt="Eventi e Tornei">
                 <div class="carousel-caption">
@@ -74,82 +72,18 @@
                     {assign var="prezzoEffettivo" value=$haSconto && isset($prodotto.prezzo_scontato) ? $prodotto.prezzo_scontato : $prodotto.prezzo|default:null}
 
                     <div class="card-vector-item">
-                            <a href="{$base_url}/prodotto/{$prodotto.id}" class="card-link-wrapper">
-                                <div class="card home-card-fixed">
-                                    <div class="card-image">
-                                        <figure class="image-container-fixed">
-                                            <img src="{$base_url}/img/prodotti/{$prodotto.immagine}" alt="{$prodotto.nome|escape}" />
-                                        </figure>
-                                    </div>
-                                    <div class="card-content">
-                                        <p class="card-title-custom">{$prodotto.nome|escape}</p>
-
-                                        <div class="card-rating">
-                                            {assign var="media" value=$prodotto.valutazione_media}
-                                            {assign var="stelle" value=[1,2,3,4,5]}
-                                            {foreach $stelle as $s}
-                                                {if $s <= $media}
-                                                    <i class="ti ti-star-filled star-icon"></i>
-                                                {elseif ($s - $media) < 1}
-                                                    <i class="ti ti-star-half-filled star-icon"></i>
-                                                {else}
-                                                    <i class="ti ti-star star-icon"></i>
-                                                {/if}
-                                            {/foreach}
-                                        </div>
-
-                                        <div class="price-container">
-                                            {if $haSconto && isset($prodotto.prezzo_scontato)}
-                                                <span class="price">€{$prodotto.prezzo_scontato|number_format:2}</span>
-                                                {if isset($prodotto.prezzo)}
-                                                    <span class="price-old">€{$prodotto.prezzo|number_format:2}</span>
-                                                {/if}
-                                            {elseif isset($prodotto.prezzo)}
-                                                <span class="price">€{$prodotto.prezzo|number_format:2}</span>
-                                            {else}
-                                                <span class="price-unavailable">Prezzo non disponibile</span>
-                                            {/if}
-                                        </div>
-
-                                        <button class="btn-cart"
-                                                data-id="{$prodotto.id}"
-                                                data-nome="{$prodotto.nome|escape}"
-                                                data-img="{$base_url}/img/prodotti/{$prodotto.immagine}"
-                                                data-prezzo="{$prezzoEffettivo}">
-                                            <i class="ti ti-shopping-cart"></i> Acquista
-                                        </button>
-                                    </div>
-                                </div>
-                            </a>
-                        </div>
-                    {/foreach}
-
-                {* Card Vedi Altro per dati reali *}
-                <div class="card-vector-item card-vector-more">
-                    <a href="{$base_url}/offerte" class="view-more-link" title="Vedi tutte le offerte">
-                        <div class="circle-plus">
-                            <span>+</span>
-                        </div>
-                        <span class="view-more-text">Vedi tutti</span>
-                    </a>
-                </div>
-
-            {else}
-                {assign var="demo_items" value=[1, 2, 3, 4, 5]}
-                {foreach $demo_items as $i}
-                    <div class="card-vector-item">
-                        <a href="#" class="card-link-wrapper">
+                        <a href="{$base_url}/prodotto?id={$prodotto.id}" class="card-link-wrapper">
                             <div class="card home-card-fixed">
                                 <div class="card-image">
                                     <figure class="image-container-fixed">
-                                        <img src="https://bulma.io/assets/images/placeholders/1280x960.png" alt="Placeholder image" />
+                                        <img src="{$base_url}/img/prodotti/{$prodotto.immagine}" alt="{$prodotto.nome|escape}" />
                                     </figure>
                                 </div>
                                 <div class="card-content">
-                                    <p class="card-title-custom">Gioco in Offerta {$i}</p>
+                                    <p class="card-title-custom">{$prodotto.nome|escape}</p>
 
                                     <div class="card-rating">
-                                        {assign var="media" value=4}
+                                        {assign var="media" value=$prodotto.valutazione_media}
                                         {assign var="stelle" value=[1,2,3,4,5]}
                                         {foreach $stelle as $s}
                                             {if $s <= $media}
@@ -163,11 +97,23 @@
                                     </div>
 
                                     <div class="price-container">
-                                        <span class="price">€29.90</span>
-                                        <span class="price-old">€49.90</span>
+                                        {if $haSconto && isset($prodotto.prezzo_scontato)}
+                                            <span class="price">€{$prodotto.prezzo_scontato|number_format:2}</span>
+                                            {if isset($prodotto.prezzo)}
+                                                <span class="price-old">€{$prodotto.prezzo|number_format:2}</span>
+                                            {/if}
+                                        {elseif isset($prodotto.prezzo)}
+                                            <span class="price">€{$prodotto.prezzo|number_format:2}</span>
+                                        {else}
+                                            <span class="price-unavailable">Prezzo non disponibile</span>
+                                        {/if}
                                     </div>
 
-                                    <button class="btn-cart">
+                                    <button class="btn-cart"
+                                            data-id="{$prodotto.id}"
+                                            data-nome="{$prodotto.nome|escape}"
+                                            data-img="{$base_url}/img/prodotti/{$prodotto.immagine}"
+                                            data-prezzo="{$prezzoEffettivo}">
                                         <i class="ti ti-shopping-cart"></i> Acquista
                                     </button>
                                 </div>
@@ -176,15 +122,17 @@
                     </div>
                 {/foreach}
 
-                {* Card Vedi Altro per dati Demo *}
                 <div class="card-vector-item card-vector-more">
-                    <a href="{$base_url}/offerte" class="more-link-wrapper" title="Vedi tutte le offerte">
-                        <div class="more-circle-btn">
-                            <span class="more-plus-icon">+</span>
+                    <a href="{$base_url}/offerte" class="view-more-link" title="Vedi tutte le offerte">
+                        <div class="circle-plus">
+                            <span>+</span>
                         </div>
-                        <span class="more-text">Vedi tutte</span>
+                        <span class="view-more-text">Vedi tutti</span>
                     </a>
                 </div>
+
+            {else}
+                <p class="empty-section-message">Nessuna offerta disponibile al momento.</p>
             {/if}
         </div>
     </section>
@@ -202,82 +150,18 @@
                     {assign var="prezzoEffettivo" value=$haSconto && isset($prodotto.prezzo_scontato) ? $prodotto.prezzo_scontato : $prodotto.prezzo|default:null}
 
                     <div class="card-vector-item">
-                            <a href="{$base_url}/prodotto/{$prodotto.id}" class="card-link-wrapper">
-                                <div class="card home-card-fixed">
-                                    <div class="card-image">
-                                        <figure class="image-container-fixed">
-                                            <img src="{$base_url}/img/prodotti/{$prodotto.immagine}" alt="{$prodotto.nome|escape}" />
-                                        </figure>
-                                    </div>
-                                    <div class="card-content">
-                                        <p class="card-title-custom">{$prodotto.nome|escape}</p>
-
-                                        <div class="card-rating">
-                                            {assign var="media" value=$prodotto.valutazione_media}
-                                            {assign var="stelle" value=[1,2,3,4,5]}
-                                            {foreach $stelle as $s}
-                                                {if $s <= $media}
-                                                    <i class="ti ti-star-filled star-icon"></i>
-                                                {elseif ($s - $media) < 1}
-                                                    <i class="ti ti-star-half-filled star-icon"></i>
-                                                {else}
-                                                    <i class="ti ti-star star-icon"></i>
-                                                {/if}
-                                            {/foreach}
-                                        </div>
-
-                                        <div class="price-container">
-                                            {if $haSconto && isset($prodotto.prezzo_scontato)}
-                                                <span class="price">€{$prodotto.prezzo_scontato|number_format:2}</span>
-                                                {if isset($prodotto.prezzo)}
-                                                    <span class="price-old">€{$prodotto.prezzo|number_format:2}</span>
-                                                {/if}
-                                            {elseif isset($prodotto.prezzo)}
-                                                <span class="price">€{$prodotto.prezzo|number_format:2}</span>
-                                            {else}
-                                                <span class="price-unavailable">Prezzo non disponibile</span>
-                                            {/if}
-                                        </div>
-
-                                        <button class="btn-cart"
-                                                data-id="{$prodotto.id}"
-                                                data-nome="{$prodotto.nome|escape}"
-                                                data-img="{$base_url}/img/prodotti/{$prodotto.immagine}"
-                                                data-prezzo="{$prezzoEffettivo}">
-                                            <i class="ti ti-shopping-cart"></i> Acquista
-                                        </button>
-                                    </div>
-                                </div>
-                            </a>
-                        </div>
-                    {/foreach}
-
-                {* Card Vedi Altro per dati reali *}
-                <div class="card-vector-item card-vector-more">
-                    <a href="{$base_url}/catalogo?ordinamento=novita" class="more-link-wrapper" title="Vedi tutti i nuovi arrivi">
-                        <div class="more-circle-btn">
-                            <span class="more-plus-icon">+</span>
-                        </div>
-                        <span class="more-text">Vedi tutti</span>
-                    </a>
-                </div>
-
-            {else}
-                {assign var="demo_arrivals" value=[1, 2, 3, 4, 5]}
-                {foreach $demo_arrivals as $j}
-                    <div class="card-vector-item">
-                        <a href="#" class="card-link-wrapper">
+                        <a href="{$base_url}/prodotto?id={$prodotto.id}" class="card-link-wrapper">
                             <div class="card home-card-fixed">
                                 <div class="card-image">
                                     <figure class="image-container-fixed">
-                                        <img src="https://bulma.io/assets/images/placeholders/1280x960.png" alt="Placeholder image" />
+                                        <img src="{$base_url}/img/prodotti/{$prodotto.immagine}" alt="{$prodotto.nome|escape}" />
                                     </figure>
                                 </div>
                                 <div class="card-content">
-                                    <p class="card-title-custom">Nuovo Arrivo {$j}</p>
+                                    <p class="card-title-custom">{$prodotto.nome|escape}</p>
 
                                     <div class="card-rating">
-                                        {assign var="media" value=4}
+                                        {assign var="media" value=$prodotto.valutazione_media}
                                         {assign var="stelle" value=[1,2,3,4,5]}
                                         {foreach $stelle as $s}
                                             {if $s <= $media}
@@ -291,10 +175,23 @@
                                     </div>
 
                                     <div class="price-container">
-                                        <span class="price">€39.90</span>
+                                        {if $haSconto && isset($prodotto.prezzo_scontato)}
+                                            <span class="price">€{$prodotto.prezzo_scontato|number_format:2}</span>
+                                            {if isset($prodotto.prezzo)}
+                                                <span class="price-old">€{$prodotto.prezzo|number_format:2}</span>
+                                            {/if}
+                                        {elseif isset($prodotto.prezzo)}
+                                            <span class="price">€{$prodotto.prezzo|number_format:2}</span>
+                                        {else}
+                                            <span class="price-unavailable">Prezzo non disponibile</span>
+                                        {/if}
                                     </div>
 
-                                    <button class="btn-cart">
+                                    <button class="btn-cart"
+                                            data-id="{$prodotto.id}"
+                                            data-nome="{$prodotto.nome|escape}"
+                                            data-img="{$base_url}/img/prodotti/{$prodotto.immagine}"
+                                            data-prezzo="{$prezzoEffettivo}">
                                         <i class="ti ti-shopping-cart"></i> Acquista
                                     </button>
                                 </div>
@@ -303,7 +200,6 @@
                     </div>
                 {/foreach}
 
-                {* Card Vedi Altro per dati Demo *}
                 <div class="card-vector-item card-vector-more">
                     <a href="{$base_url}/catalogo?ordinamento=novita" class="more-link-wrapper" title="Vedi tutti i nuovi arrivi">
                         <div class="more-circle-btn">
@@ -312,6 +208,9 @@
                         <span class="more-text">Vedi tutti</span>
                     </a>
                 </div>
+
+            {else}
+                <p class="empty-section-message">Nessun nuovo arrivo disponibile al momento.</p>
             {/if}
         </div>
     </section>
@@ -377,6 +276,32 @@
     </div>
 </div>
 
+{* ════════════════════════════════════════════════════════════
+   MODAL 3: PRODOTTO NON DISPONIBILE
+   ════════════════════════════════════════════════════════════ *}
+<div class="unavailable-modal" id="unavailable-modal" aria-hidden="true">
+    <div class="modal-background"></div>
+
+    <div class="unavailable-modal-content">
+        <button id="close-unavailable-modal" class="modal-close-btn" type="button" aria-label="Chiudi pop-up">&times;</button>
+
+        <div class="unavailable-modal-icon">
+            <i class="ti ti-ban"></i>
+        </div>
+
+        <h3 class="unavailable-modal-title">Prodotto non disponibile</h3>
+        <p class="unavailable-modal-text" id="unavailable-modal-text">
+            Questo prodotto non è al momento acquistabile.
+        </p>
+
+        <div class="unavailable-modal-actions">
+            <a href="{$base_url}" class="button btn-unavailable-modal">
+                <i class="ti ti-arrow-left"></i> Torna al catalogo
+            </a>
+        </div>
+    </div>
+</div>
+
 {/block}
 
 {block name="extra_js"}
@@ -400,13 +325,15 @@
     });
 </script>
 
+
 <script>
+    // Percorso base del sito, valutato qui da Smarty prima del JS puro sotto.
+    const baseUrl = "{$base_url}";
 
     {literal}
 
     function initHomeCartLogic() {
 
-    // ── ELEMENTI MODAL: AGGIUNTO AL CARRELLO ──
     const minicartModal  = document.getElementById('minicart-modal');
     const minicartImg     = document.getElementById('minicart-img');
     const minicartNome    = document.getElementById('minicart-nome');
@@ -441,7 +368,6 @@
         btn.addEventListener('click', function (e) { e.stopPropagation(); });
     });
 
-    // ── ELEMENTI MODAL: ACCESSO RICHIESTO ──
     const loginModal = document.getElementById('login-modal');
 
     function apriLoginModal() {
@@ -468,54 +394,102 @@
         btn.addEventListener('click', function (e) { e.stopPropagation(); });
     });
 
-    // ── FUNZIONE AJAX: PROVA SEMPRE AD AGGIUNGERE AL CARRELLO ──
-    // Non decide nulla in anticipo: si fida solo della risposta di Control.
-    function aggiungiAlCarrello(idProdotto, quantita, dati) {
-    fetch('/carrello/aggiungi', {
-        method: 'POST',
-        headers: {
-            'Content-Type': 'application/x-www-form-urlencoded',
-            'X-Requested-With': 'XMLHttpRequest'
-        },
-        body: 'id_prodotto=' + idProdotto + '&quantita=' + quantita
-    })
-    .then(function(res) {
-        var status = res.status;
-        return res.text().then(function(text) {
-            try {
-                var data = JSON.parse(text);
-                return { status: status, body: data };
-            } catch(e) {
-                return { status: 401, body: { error: 'auth_required' } };
-            }
-        });
-    })
-    .then(function(result) {
-        if (result.status === 401 || result.body.error === 'auth_required') {
-            apriLoginModal();
-            return;
-        }
-        if (result.body.success) {
-            apriMinicart(dati);
-            var cartBadge = document.getElementById('cart-count');
-            if (cartBadge && result.body.cart_count !== undefined) {
-                cartBadge.textContent = result.body.cart_count;
-                cartBadge.style.display = result.body.cart_count > 0 ? 'inline' : 'none';
-            }
-        } else {
-            console.error('Errore carrello:', result.body.messaggio || 'errore generico');
-        }
-    })
-    .catch(function(err) {
-        console.error('Fetch carrello fallita:', err);
-    });
-}
+    const unavailableModal = document.getElementById('unavailable-modal');
+    const unavailableModalText = document.getElementById('unavailable-modal-text');
 
-    // ── CLICK SU TUTTI I BOTTONI "ACQUISTA" ──
+    function apriUnavailableModal(messaggio) {
+        if (!unavailableModal) return;
+        if (messaggio) {
+            unavailableModalText.textContent = messaggio;
+        }
+        unavailableModal.classList.add('is-active');
+        unavailableModal.setAttribute('aria-hidden', 'false');
+        document.getElementById('close-unavailable-modal')?.focus();
+    }
+
+    function chiudiUnavailableModal() {
+        if (!unavailableModal) return;
+        unavailableModal.classList.remove('is-active');
+        unavailableModal.setAttribute('aria-hidden', 'true');
+    }
+
+    document.getElementById('close-unavailable-modal')?.addEventListener('click', function (e) {
+        e.preventDefault();
+        chiudiUnavailableModal();
+    });
+
+    unavailableModal?.querySelector('.modal-background')?.addEventListener('click', chiudiUnavailableModal);
+
+    unavailableModal?.querySelectorAll('.unavailable-modal-actions a').forEach(function (btn) {
+        btn.addEventListener('click', function (e) { e.stopPropagation(); });
+    });
+
+    function aggiungiAlCarrello(idProdotto, quantita, dati) {
+        fetch(baseUrl + '/carrello/aggiungi', {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/x-www-form-urlencoded',
+                'X-Requested-With': 'XMLHttpRequest'
+            },
+            body: 'id_prodotto=' + idProdotto + '&quantita=' + quantita
+        })
+        .then(function(res) {
+            var status = res.status;
+            return res.text().then(function(text) {
+                var data = parseJsonSicuro(text);
+                if (data === null) {
+                    console.error('Risposta non interpretabile come JSON:', text);
+                    return { status: status, body: { error: 'parse_error' } };
+                }
+                return { status: status, body: data };
+            });
+        })
+        .then(function(result) {
+            if (result.body.error === 'parse_error') {
+                console.error('Errore tecnico nella risposta del server.');
+                return;
+            }
+            if (result.status === 401 || result.body.error === 'auth_required') {
+                apriLoginModal();
+                return;
+            }
+            if (result.body.success !== false) {
+                apriMinicart(dati);
+                var cartBadge = document.getElementById('cart-count');
+                if (cartBadge && result.body.cart_count !== undefined) {
+                    cartBadge.textContent = result.body.cart_count;
+                    cartBadge.style.display = result.body.cart_count > 0 ? 'inline' : 'none';
+                }
+            } else {
+                apriUnavailableModal(result.body.message);
+            }
+        })
+        .catch(function(err) {
+            console.error('Fetch carrello fallita:', err);
+        });
+    }
+
+    function parseJsonSicuro(text) {
+        try {
+            return JSON.parse(text);
+        } catch (e) {
+            var inizio = text.indexOf('{');
+            var fine = text.lastIndexOf('}');
+            if (inizio === -1 || fine === -1 || fine < inizio) {
+                return null;
+            }
+            try {
+                return JSON.parse(text.substring(inizio, fine + 1));
+            } catch (e2) {
+                return null;
+            }
+        }
+    }
+
     document.querySelectorAll('.btn-cart').forEach(function (btn) {
         btn.addEventListener('click', function (e) {
             e.preventDefault();
-            e.stopPropagation(); // blocca la navigazione della card sottostante
+            e.stopPropagation();
 
             const dati = {
                 id: this.dataset.id,

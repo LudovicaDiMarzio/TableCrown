@@ -80,7 +80,7 @@
                             <span class="evento-tornei-label">Tornei che partecipano:</span>
                             <ul class="evento-tornei-lista">
                                 {foreach from=$evento.tornei item=torneo}
-                                <li><a href="{$base_url}/eventi/dettaglio/{$torneo.idEvento}">{$torneo.nomeEvento|escape}</a></li>
+                                <li><a href="{$base_url}/eventi/dettaglio?id={$torneo.idEvento}">{$torneo.nomeEvento|escape}</a></li>
                                 {/foreach}
                             </ul>
                         </div>
@@ -88,11 +88,11 @@
 
                         <div class="evento-list-actions">
                             {if $passato}
-                                <a href="{$base_url}/eventi/risultati/{$evento.idEvento}" class="btn-evento-secondary">
+                                <a href="{$base_url}/eventi/risultati?id={$evento.idEvento}" class="btn-evento-secondary">
                                     Visualizza risultati
                                 </a>
                             {else}
-                                <a href="{$base_url}/eventi/dettaglio/{$evento.idEvento}" class="btn-evento-primary">
+                                <a href="{$base_url}/eventi/dettaglio?id={$evento.idEvento}" class="btn-evento-primary">
                                     Scopri di più
                                 </a>
                             {/if}
