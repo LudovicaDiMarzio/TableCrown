@@ -7,7 +7,6 @@ use TableCrown\Utility\UFlashMessage;
 use TableCrown\Foundation\BancaMockService;
 use TableCrown\Entity\EOrdine;
 use TableCrown\Entity\ECartaDiCredito;
-use TableCrown\Entity\EProdotto;
 use TableCrown\Entity\EIndirizzo;
 use TableCrown\Entity\EUtente;
 use TableCrown\Foundation\FPersistentManager;

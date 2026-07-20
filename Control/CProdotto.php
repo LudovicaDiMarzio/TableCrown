@@ -20,8 +20,17 @@ class CProdotto extends BaseController {
 
     /**
      * Mostra la pagina di dettaglio di un prodotto specifico.
+     * URL: GET /prodotto?id=X (Accesso libero)
      */
-    public function mostraDettaglioProdotto(int $idProdotto): void {
+    public function mostraDettaglioProdotto(): void {
+        $idProdottoRaw = UHTTPMethods::get('id');
+        if ($idProdottoRaw === null || !is_numeric($idProdottoRaw)) {
+            UFlashMessage::addMessage('danger', 'ID prodotto non valido.');
+            header('Location: ' . BASE_URL . '/catalogo/giochi-da-tavolo');
+            exit();
+        }
+
+        $idProdotto = (int) $idProdottoRaw;
         //Recuperiamo il prodotto dal DB
         $prodotto = FPersistentManager::PMgetObjOnAttribute(EProdotto::class, 'idProdotto', $idProdotto);
 
