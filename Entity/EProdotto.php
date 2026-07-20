@@ -57,6 +57,9 @@ abstract class EProdotto {
     #[ORM\OneToMany(targetEntity: ERecensione::class, mappedBy: "prodotto", cascade: ["persist", "remove"])]
     private Collection $recensioni; //elenco delle recensioni del prodotto
 
+    private ?string $imgProdottoCache = null;
+    private bool $imgProdottoLetta = false;
+
     private const GIORNI_NOVITA=30;
     
     public function __construct(string $nomeProdotto,  string $descrizioneProdotto, DisponibilitaProdotto $disponibilitaProdotto, int $quantita, ?string $imgProdotto = null, ?EPrezzo $prezzo = null) {
@@ -81,11 +84,18 @@ abstract class EProdotto {
         return $this->nomeProdotto;
     }
 
+      
+
     public function getImgProdotto(): ?string {
-        if (is_resource($this->imgProdotto)) {
-            return stream_get_contents($this->imgProdotto);
+        if (!$this->imgProdottoLetta) {
+            if (is_resource($this->imgProdotto)) {
+                $this->imgProdottoCache = stream_get_contents($this->imgProdotto);
+            } else {
+                $this->imgProdottoCache = $this->imgProdotto !== null ? (string) $this->imgProdotto : null;
+            }
+            $this->imgProdottoLetta = true;
         }
-        return (string) $this->imgProdotto;
+        return $this->imgProdottoCache;
     }
 
     public function getDescrizioneProdotto(): string {
