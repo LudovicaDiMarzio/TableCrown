@@ -1,7 +1,7 @@
 <?php
 namespace TableCrown\Presentation\Views;
 
-use TableCrown\Foundation\SmartyConfiguration;
+use SmartyConfiguration;
 
 /**
  * Classe astratta che centralizza la logica comune a tutte le View
