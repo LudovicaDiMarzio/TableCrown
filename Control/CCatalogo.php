@@ -33,12 +33,17 @@ class CCatalogo extends BaseController {
             );
         } else {
             // --- CASO FILTRI ---
+            // Il metodo findGiochi(), così come quelli per gli altri tipi di prodotto,
+            // restituisce un array di questo tipo ['tisultati', 'totale', 'rangemin', 'rangemax']
+            // rangemin non ci serve, lo impostiamo a 0.
             $filtri = $this->estraiFiltriGiochi(); //sarà [] se non ci sono filtri
             $risultatoGrezzo = FPersistentManager::PMfindGiochi(
                 filtri: $filtri,
                 limit: self::RISULTATI_PER_PAGINA,
                 offset: ($pagina - 1) * self::RISULTATI_PER_PAGINA
             );
+            //Aggiorniamo i filtri con il rangemax calcolato dal pm
+            $filtri = $this->completaFiltriPrezzo($filtri, $risultatoGrezzo);
         }
         
         //Passiamo sia i filtri (vuoti se c'è una query) sia la query di ricerca al render
@@ -70,6 +75,7 @@ class CCatalogo extends BaseController {
                 limit: self::RISULTATI_PER_PAGINA,
                 offset: ($pagina - 1) * self::RISULTATI_PER_PAGINA
             );
+            $filtri = $this->completaFiltriPrezzo($filtri, $risultatoGrezzo);
         }
         
         $this->renderCatalogo('catalogo_bustine', $risultatoGrezzo, $pagina, $filtri, $query);
@@ -100,6 +106,7 @@ class CCatalogo extends BaseController {
                 limit: self::RISULTATI_PER_PAGINA,
                 offset: ($pagina - 1) * self::RISULTATI_PER_PAGINA
             );
+            $filtri = $this->completaFiltriPrezzo($filtri, $risultatoGrezzo);
         }
 
         $this->renderCatalogo('catalogo_portadadi', $risultatoGrezzo, $pagina, $filtri, $query);
@@ -124,7 +131,6 @@ class CCatalogo extends BaseController {
         
         $this->renderCatalogo('offerte', $risultatoGrezzo, $pagina, []);
     }
-
 
 
     protected function getBreadcrumbs(string $currentPage = ''): array {

@@ -95,6 +95,7 @@ class CGestore extends BaseController {
                 limit: self::RISULTATI_PER_PAGINA,
                 offset: ($pagina - 1) * self::RISULTATI_PER_PAGINA
             );
+            $filtri = $this->completaFiltriPrezzo($filtri, $risultatoGrezzo);
         }
 
         $this->renderCatalogo('gestore_catalogo_giochi', $risultatoGrezzo, $pagina, $filtri, $query, modalita: 'gestore');
@@ -126,6 +127,7 @@ class CGestore extends BaseController {
                 limit: self::RISULTATI_PER_PAGINA,
                 offset: ($pagina - 1) * self::RISULTATI_PER_PAGINA
             );
+            $filtri = $this->completaFiltriPrezzo($filtri, $risultatoGrezzo);
         }
 
         $this->renderCatalogo('gestore_catalogo_bustine', $risultatoGrezzo, $pagina, $filtri, $query, modalita: 'gestore');
@@ -157,6 +159,7 @@ class CGestore extends BaseController {
                 limit: self::RISULTATI_PER_PAGINA,
                 offset: ($pagina - 1) * self::RISULTATI_PER_PAGINA
             );
+            $filtri = $this->completaFiltriPrezzo($filtri, $risultatoGrezzo);
         }
 
         $this->renderCatalogo('gestore_catalogo_portadadi', $risultatoGrezzo, $pagina, $filtri, $query, modalita: 'gestore');
