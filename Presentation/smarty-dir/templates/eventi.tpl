@@ -15,7 +15,7 @@
                         <img src="{$base_url}/image/eventi/serate.jpg" alt="Serate" class="evento-image">
                     </div>
                     <p class="evento-description">Serate a tema con giochi in compagnia, musica e tanto divertimento.</p>
-                    <p class="evento-tagline">Vieni con noi, daaai!</p>
+                    <p class="evento-tagline">Tanto divertimento e gioia</p>
                 </article>
             </a>
 
@@ -26,7 +26,7 @@
                         <img src="{$base_url}/image/eventi/tornei.jpg" alt="Tornei" class="evento-image">
                     </div>
                     <p class="evento-description">Sfide competitive tra giocatori, premi e tornei a eliminazione.</p>
-                    <p class="evento-tagline">Si va a lettooo!!!</p>
+                    <p class="evento-tagline">Tanto divertimento e gioia</p>
                 </article>
             </a>
 
@@ -37,7 +37,7 @@
                         <img src="{$base_url}/image/eventi/challenge.jpg" alt="Challenge" class="evento-image">
                     </div>
                     <p class="evento-description">Sblocca obiettivi, scala la classifica e conquista il podio.</p>
-                    <p class="evento-tagline">Peffo'!!</p>
+                    <p class="evento-tagline">Tanto divertimento e gioia</p>
                 </article>
             </a>
 
