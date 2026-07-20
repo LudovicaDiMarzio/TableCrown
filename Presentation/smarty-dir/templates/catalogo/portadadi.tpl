@@ -613,7 +613,12 @@ document.addEventListener('DOMContentLoaded', function() {
                 apriLoginModal();
                 return;
             }
-            if (result.body.success) {
+            if (result.body.success || result.body.id) {
+                var src = result.body.imgProdotto
+                    ? 'data:image/jpeg;base64,' + result.body.imgProdotto
+                    : (dati.img || '/img/placeholder.jpg');
+                dati.img = src;
+
                 apriMinicart(dati);
                 var cartBadge = document.getElementById('cart-count');
                 if (cartBadge && result.body.cart_count !== undefined) {
