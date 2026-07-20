@@ -49,7 +49,7 @@
 
 .carrello-layout {
     display: grid;
-    grid-template-columns: 1fr 340px;
+    grid-template-columns: minmax(0, 1fr) 340px;
     gap: 2.5rem;
     align-items: start;
 }
@@ -573,12 +573,9 @@
 
 @media (max-width: 992px) {
     .carrello-layout {
-    display: grid;
-    grid-template-columns: minmax(0, 1fr) 340px;
-    gap: 2.5rem;
-    align-items: start;
-}
-    
+        grid-template-columns: 1fr; /* colonna singola sotto i 992px */
+    }
+
     .carrello-summary {
         position: static;
     }
