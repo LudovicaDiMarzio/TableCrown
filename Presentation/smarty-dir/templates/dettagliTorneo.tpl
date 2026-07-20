@@ -77,11 +77,11 @@
         <div class="dettaglio-correlati">
             <h2 class="dettaglio-section-title">Fa parte della Challenge</h2>
             <div class="dettaglio-correlati-grid">
-                <a href="{$base_url}/challenge/{$torneo.challenge.id}" class="dettaglio-correlato-card">
+                <a href="{$base_url}/eventi/dettaglio?id={$torneo.challenge.idEvento}" class="dettaglio-correlato-card">
                     <div class="dettaglio-correlato-img-wrapper">
-                        <img src="{$torneo.challenge.immagine}" alt="{$torneo.challenge.nome}" class="dettaglio-correlato-img">
+                        <img src="{$base_url}/img/placeholder.jpg" alt="{$torneo.challenge.nomeEvento}" class="dettaglio-correlato-img">
                     </div>
-                    <p class="dettaglio-correlato-nome">{$torneo.challenge.nome}</p>
+                    <p class="dettaglio-correlato-nome">{$torneo.challenge.nomeEvento}</p>
                 </a>
             </div>
         </div>
@@ -180,4 +180,3 @@
     }
 })();
 </script>
-{/block}

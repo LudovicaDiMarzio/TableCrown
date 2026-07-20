@@ -84,7 +84,7 @@
                                     Visualizza risultati
                                 </a>
                             {else}
-                                <a href="{$base_url}/eventi/dettaglio/{$evento.idEvento}" class="btn-evento-primary">
+                                <a href="{$base_url}/eventi/dettaglio?id={$evento.idEvento}" class="btn-evento-primary">
                                     Scopri di più
                                 </a>
                             {/if}
