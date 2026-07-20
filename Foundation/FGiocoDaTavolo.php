@@ -219,7 +219,7 @@ class FGiocoDaTavolo
      * @return array di oggetti
      * @throws Exception
     */
-    public static function ricercaProdotto(string $StringaDiRicerca, int $limit, int $offset): array{
+    public static function ricercaGiochi(string $StringaDiRicerca, int $limit, int $offset): array{
 
         try{
 
