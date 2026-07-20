@@ -36,4 +36,32 @@ class FTornei{
         }
     }
 
+
+    /**
+     * @param string $filtroData data di inizio del filtro
+     * @return array di oggetti
+     * @throws Exception     
+     */
+    public static function findTorneiGestore(?string $filtroData): array
+    {
+        try{
+            $qb=FEntityManager::getInstance()->getEntityManager()->createQueryBuilder();
+            $qb->select('t')
+                ->from(ETorneo::class, 't');
+            if($filtroData!==null){
+                $dataObj = new DateTime($filtroData);
+                $qb->andWhere('t.dataInizio>=:dataEvento')
+                    ->setParameter('dataEvento', $dataObj);
+            }
+    
+            $qb->orderBy('t.dataInizio', 'ASC');
+            $risultati = $qb->getQuery()->getResult();
+            return $risultati;
+        }
+        catch(Exception $e){
+            error_log("Errore in findTornei: " . $e->getMessage());
+            return [];
+        }
+    }
+
 }

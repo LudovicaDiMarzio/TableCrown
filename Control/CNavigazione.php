@@ -20,6 +20,7 @@ class CNavigazione extends BaseController {
     /**
      * Mostra la Homepage del sito.
      * Recupera i nuovi arrivi e i prodotti in offerta da mostrare nei caroselli del template.
+     * URL: GET /
      */
     public function mostraHome(): void {
         //Recuperiamo i prodotti in offerta e i nuovi arrivi tramite il pm

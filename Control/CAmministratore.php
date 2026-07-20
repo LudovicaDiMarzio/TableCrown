@@ -290,7 +290,6 @@ class CAmministratore extends BaseController {
 
     /**
      * Converte un ERecensione in un array associativo per la card admin, con conteggio segnalazioni.
-     * TODO: NON MI PIACEEEE, DA OTTIMIZZARE/MODIFICARE
      */
     private function recensioneAdminToArray(ERecensione $recensione, int $numeroSegnalazioni): array {
         $segnalazioni = $recensione->getSegnalazioni();

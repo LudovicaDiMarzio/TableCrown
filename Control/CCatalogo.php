@@ -3,12 +3,6 @@ namespace TableCrown\Control;
 
 use TableCrown\Foundation\FPersistentManager;
 use TableCrown\Utility\UHTTPMethods;
-use TableCrown\Entity\Enumerativi\DisponibilitaProdotto;
-use TableCrown\Entity\Enumerativi\LinguaGioco;
-use TableCrown\Entity\Enumerativi\DifficoltaGioco;
-use TableCrown\Entity\Enumerativi\Categoria;
-use TableCrown\Entity\Enumerativi\LivelloDannoGiochi;
-use TableCrown\Presentation\Views\ViewCatalogo;
 
 class CCatalogo extends BaseController {
     

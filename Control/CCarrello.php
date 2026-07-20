@@ -162,7 +162,7 @@ class CCarrello extends BaseController {
     /**
      * Aggiorna la quantità di un prodotto nel carrello (chiamata AJAX).
      * L'id_item arriva come segmento URL, la nuova quantità come query string.
-     * URL: GET /carrello/aggiorna{id_item}?qty={quantita}
+     * URL: GET /carrello/aggiorna
      * Risponde in JSON.
      */
     public function aggiornaQuantita(): void {

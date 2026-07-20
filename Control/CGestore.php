@@ -199,7 +199,15 @@ class CGestore extends BaseController {
      * aggiuntive utili al gestore per decidere se pubblicare la classifica.
      * URL: GET /gestore/eventi/dettaglio?id=X
      */
-    public function mostraDettaglioEventoGestore(int $idEvento): void {
+    public function mostraDettaglioEventoGestore(): void {
+        $idEventoRaw = UHTTPMethods::get('id');
+        if ($idEventoRaw === null || !is_numeric($idEventoRaw)) {
+            UFlashMessage::addMessage('danger', 'ID evento non valido.');
+            header('Location: ' . BASE_URL . '/gestore/dashboard');
+            exit();
+        }
+
+        $idEvento = (int) $idEventoRaw;
         $evento = FPersistentManager::PMgetObjOnAttribute(EEvento::class, 'idEvento', $idEvento);
 
         if ($evento === null) {
@@ -243,7 +251,7 @@ class CGestore extends BaseController {
             $categoria = $this->validaValoriEnum(UHTTPMethods::postArray('categoria', required: true), Categoria::class);
             //filtra eventuali righe vuote lasciate dall'input dinamico "aggiungi componente" di Presentation
             $componenti = array_values(array_filter(array_map('trim', UHTTPMethods::postArray('componenti', required: true))));
-            $imgProdotto = $this->estraiImmagineProdotto();
+            $imgProdotto = $this->estraiImmagine('img_prodotto');
 
             // --- PAGINA 2: prezzo, magazzino, stato/danno ---
             $prezzo = $this->costruisciPrezzo();
@@ -307,7 +315,7 @@ class CGestore extends BaseController {
         try {
             $nomeProdotto = UHTTPMethods::postString('nomeProdotto', maxLength: 255);
             $descrizioneProdotto = UHTTPMethods::postString('descrizioneProdotto');
-            $imgProdotto = $this->estraiImmagineProdotto();
+            $imgProdotto = $this->estraiImmagine('img_prodotto');
             $prezzo = $this->costruisciPrezzo();
             $quantita = UHTTPMethods::postInt('quantita', min: 0);
             $disponibilita = $this->postEnum('disponibilita', DisponibilitaProdotto::class);
@@ -341,7 +349,7 @@ class CGestore extends BaseController {
         try {
             $nomeProdotto = UHTTPMethods::postString('nomeProdotto', maxLength: 255);
             $descrizioneProdotto = UHTTPMethods::postString('descrizioneProdotto');
-            $imgProdotto = $this->estraiImmagineProdotto();
+            $imgProdotto = $this->estraiImmagine('img_prodotto');
             $prezzo = $this->costruisciPrezzo();
             $quantita = UHTTPMethods::postInt('quantita', min: 0);
             $disponibilita = $this->postEnum('disponibilita', DisponibilitaProdotto::class);
@@ -515,7 +523,7 @@ class CGestore extends BaseController {
             if ($prodotto instanceof EGiocoDaTavolo && UHTTPMethods::postBool('danneggiato')) {
                 $livello = $this->postEnum('livelloDanno', LivelloDannoGiochi::class);
                 $descrizioneDanno = UHTTPMethods::postString('descrizioneDanno', maxLength: 500);
-                $danno = FPersistentManager::PMfindDannoByLivello($livello); //TODO: metodo da implementare
+                $danno = FPersistentManager::PMgetObjOnAttribute(EDanno::class, 'livelloDanno', $livello);
                 $prodotto->aggiungiDanno($danno, $descrizioneDanno);
             }
 

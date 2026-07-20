@@ -2,7 +2,6 @@
 namespace TableCrown\Control;
 
 use TableCrown\Control\BaseController;
-use TableCrown\Utility\UHTTPMethods;
 use TableCrown\Foundation\FPersistentManager;
 use TableCrown\Presentation\Views\ViewEventi;
 
@@ -26,6 +25,7 @@ class CEventi extends BaseController {
      * Corrisponde alla pagina con le tre card ("Serate", "Tornei", "Challenge"),
      * che portano rispettivamente al catalogo delle serate, al catalogo dei tornei
      * e al catalogo delle challenge.
+     * URL: GET /eventi
      */
     public function mostraHubEventi(): void {
         $datiPagina = ['vista' => 'eventi_home'];
@@ -37,7 +37,7 @@ class CEventi extends BaseController {
 
     /**
      * Mostra la lista di eventi di tipo serata.
-     * URL: /eventi/serata
+     * URL: /eventi/serate
      */
     public function mostraListaSerate(): void {
         $filtroData = $this->estraiFiltroData();
@@ -50,7 +50,7 @@ class CEventi extends BaseController {
 
     /**
      * Mostra la lista di eventi di tipo torneo.
-     * URL: /eventi/torneo
+     * URL: /eventi/tornei
      */
     public function mostraListaTornei(): void {
         $filtroData = $this->estraiFiltroData();

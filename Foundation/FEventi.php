@@ -15,7 +15,7 @@ class FEventi{
                ->from(EEvento::class, 'e')
                ->where('e.statoEvento = :statoEvento')
                ->setParameter('statoEvento', StatoEvento::Programmato)
-               ->andWhere('e.nome LIKE :testo')
+               ->andWhere('e.nomeEvento LIKE :testo')
                ->setParameter('testo', '%' . $ricerca . '%')
                ->orderBy('e.dataInizio', 'ASC');
 
@@ -24,6 +24,25 @@ class FEventi{
         }
         catch(Exception $e){
             error_log("Errore in ricercaEventi: " . $e->getMessage());
+            return [];
+        }
+    }
+
+    public static function getProssimiEventi(int $limit): array{
+        try{
+            $qb=FEntityManager::getInstance()->getEntityManager()->createQueryBuilder();
+            $qb->select('e')
+                ->from(EEvento::class, 'e')
+                ->where('e.statoEvento = :statoEvento')
+                ->setParameter('statoEvento', StatoEvento::Programmato)
+                ->orderBy('e.dataInizio', 'ASC')
+                ->setMaxResults($limit);
+            $risultati= $qb->getQuery()->getResult();
+            return $risultati;
+
+        }
+        catch(Exception $e){
+            error_log("Errore in getProssimiEventi: " . $e->getMessage());
             return [];
         }
     }

@@ -3,15 +3,11 @@ namespace TableCrown\Control;
 
 use TableCrown\Utility\UHTTPMethods;
 use TableCrown\Utility\UFlashMessage;
-use TableCrown\Utility\USession;
 use TableCrown\Entity\EEvento;
-use TableCrown\Entity\ESerata;
 use TableCrown\Entity\ETorneo;
 use TableCrown\Entity\EChallenge;
 use TableCrown\Entity\EPartecipazione;
-use TableCrown\Entity\EUtente;
 use TableCrown\Entity\ECartaDiCredito;
-use TableCrown\Entity\EPrezzo;
 use TableCrown\Foundation\FPersistentManager;
 use TableCrown\Foundation\BancaMockService;
 use TableCrown\Presentation\Views\ViewDettaglioEvento;
@@ -29,7 +25,15 @@ class CDettaglioEvento extends BaseController {
      * Mostra la pagina di dettaglio di un evento specifico.
      * URL: GET /eventi/dettaglio?id=X (Accesso libero)
      */
-    public function mostraDettaglioEvento(int $idEvento): void {
+    public function mostraDettaglioEvento(): void {
+        $idEventoRaw = UHTTPMethods::get('id');
+        if ($idEventoRaw === null || !is_numeric($idEventoRaw)) {
+            UFlashMessage::addMessage('danger', 'ID evento non valido.');
+            header('Location: ' . BASE_URL . '/eventi');
+            exit();
+        }
+
+        $idEvento = (int) $idEventoRaw;
         $this->idEventoCorrente = $idEvento;
 
         $evento = FPersistentManager::PMgetObjOnAttribute(EEvento::class, 'idEvento', $idEvento);
@@ -51,7 +55,15 @@ class CDettaglioEvento extends BaseController {
      * Mostra la pagina di checkout specifica per il pagamento della quota di iscrizione di un evento
      * URL: GET /eventi/checkout?id=X
      */
-    public function mostraCheckoutEvento(int $idEvento): void {
+    public function mostraCheckoutEvento(): void {
+        $idEventoRaw = UHTTPMethods::get('id');
+        if ($idEventoRaw === null || !is_numeric($idEventoRaw)) {
+            UFlashMessage::addMessage('danger', 'ID evento non valido.');
+            header('Location: ' . BASE_URL . '/eventi');
+            exit();
+        }
+
+        $idEvento = (int) $idEventoRaw;
         $utente = $this->utenteCorrente();
 
         $evento = FPersistentManager::PMgetObjOnAttribute(EEvento::class, 'idEvento', $idEvento);

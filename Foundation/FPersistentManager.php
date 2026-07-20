@@ -345,6 +345,51 @@ class FPersistentManager
         return FSegnalazione::findRecensioniConSegnalazione($ordinamento);
     }
     
-     
+
+    /**
+     * @return int numero di ordini totali                                  
+     */
+    public static function PMcontaOrdiniTotali(): int {
+        return FOrdini::contaOrdiniTotali();
+    }
+
+    /**
+     * @return int numero totale vendite (in euro)                          
+     */
+    public static function PMcontaVenditeTotali(): int {
+        return FOrdini::contaVenditeTotali();
+    }
+
+    /**
+     * @param int $limit numero mx di eventi da restituire
+     * @return array di oggetti
+     */
+    public static function PMgetProssimiEventi(int $limit): array {
+        return FEventi::getProssimiEventi($limit);
+    }
+
+    /**
+     * @param string $filtroData data di inizio del filtro
+     * @return array di oggetti
+     */
+    public static function PMfindSerateGestore(?string $filtroData): array {
+        return FSerate::findSerateGestore($filtroData);
+    }
+
+    /**
+     * @param string $filtroData data di inizio del filtro
+     * @return array di oggetti
+     */
+    public static function PMfindChallengeGestore(?string $filtroData): array {
+        return FChallenge::findChallengeGestore($filtroData);
+    }
+
+    /**
+     * @param string $filtroData data di inizio del filtro
+     * @return array di oggetti
+     */
+    public static function PMfindTorneiGestore(?string $filtroData): array {
+        return FTornei::findTorneiGestore($filtroData);
+    }
 
 }

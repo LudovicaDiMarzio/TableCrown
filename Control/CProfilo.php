@@ -46,7 +46,7 @@ class CProfilo extends BaseController {
     //==========================================================================
 
     /**
-     * URL: /profilo
+     * URL: GET /profilo
      */
     public function mostraHub(): void{
         $utente = $this->utenteCorrente();
