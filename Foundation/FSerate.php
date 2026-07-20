@@ -38,4 +38,34 @@ class FSerate{
             return [];
         }
     }    
+
+
+    /**
+     * @param string $filtroData data di inizio del filtro
+     * @return array di oggetti
+     * @throws Exception
+     */
+    public static function findSerateGestore(?string $filtroData): array{
+        try{
+            $qb=FEntityManager::getInstance()->getEntityManager()->createQueryBuilder();
+            $qb->select('s')
+                ->from(ESerata::class, 's');
+            
+            if ($filtroData !== null) {
+                $dataObj = new DateTime($filtroData);
+                $qb->andWhere('s.dataInizio >= :dataEvento')
+                    ->setParameter('dataEvento', $dataObj);
+            }
+
+            $qb->orderBy('s.dataInizio', 'ASC');
+
+            $risultati = $qb->getQuery()->getResult();
+
+            return $risultati;
+        }
+        catch(Exception $e){
+            error_log("Errore in findSerata: " . $e->getMessage());
+            return [];
+        }
+    }    
 }
