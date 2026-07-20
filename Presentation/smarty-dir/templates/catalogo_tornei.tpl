@@ -6,18 +6,7 @@
 <div class="eventi-lista-container">
     <div class="container">
 
-        {if isset($breadcrumbs) && $breadcrumbs|@count > 0}
-        <nav class="eventi-breadcrumb">
-            {foreach $breadcrumbs as $crumb}
-                {if $crumb@last}
-                    <span>{$crumb.label|escape}</span>
-                {else}
-                    <a href="{$crumb.url|escape}">{$crumb.label|escape}</a>
-                    <i class="ti ti-chevron-right"></i>
-                {/if}
-            {/foreach}
-        </nav>
-        {/if}
+        
 
         <div class="eventi-lista-layout">
 
