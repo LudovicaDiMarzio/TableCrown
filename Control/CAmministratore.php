@@ -34,17 +34,17 @@ class CAmministratore extends BaseController {
      */
     public function mostraDashboardAdmin(): void {
         //Recupero dati statistici quantitativi
-        $segnalazioniInSospeso = FPersistentManager::PMcontaSegnalazioniInSospeso(); //TODO: metodo da implementare
+        $segnalazioniInSospeso = FPersistentManager::PMcontaSegnalazioniInSospeso(); 
 
-        $utentiTotali = FPersistentManager::PMcontaUtentiTotali(); //TODO: metodo da implementare
-        $utentiNuoviOggi = FPersistentManager::PMcontaUtentiNuoviOggi(); //TODO: metodo da implementare
+        $utentiTotali = FPersistentManager::PMcontaUtentiTotali(); 
+        $utentiNuoviOggi = FPersistentManager::PMcontaUtentiNuoviOggi(); 
 
-        $utentiSospesiTotali = FPersistentManager::PMcontaUtentiSospesiTotali(); //TODO: metodo da implementare
-        $utentiSospesiOggi = FPersistentManager::PMcontaUtentiSospesiOggi(); //TODO: metodo da implementare
+        $utentiSospesiTotali = FPersistentManager::PMcontaUtentiSospesiTotali(); 
+        $utentiSospesiOggi = FPersistentManager::PMcontaUtentiSospesiOggi(); 
 
         //TODO: aggiungere ordinamento in base alla gravità delle motivazioni delle segnalazioni?
         $segnalazioniUrgentiGrezze = FPersistentManager::PMgetSegnalazioniUrgenti('ASC', 5); //TODO: DA CAMBIARE, NE SERVONO 5 MA BISOGNA ORDINARE I CASE DI GRAVITAMOTIVAZIONE
-        $segnalazioniUrgenti = $this->segnalazioniToArray($segnalazioniUrgentiGrezze); //TODO: metodo da implementare
+        $segnalazioniUrgenti = $this->segnalazioniToArray($segnalazioniUrgentiGrezze); 
 
         //Impacchettiamo i dati per Presentation
         $datiPagina = [
@@ -67,10 +67,7 @@ class CAmministratore extends BaseController {
      * URL: GET /admin/utenti
      */
     public function mostraListaUtentiAdmin(): void {
-        //TODO: metodo del pm da implementare
-        //dovrebbe restituire un array di righe tipo ['utente' => EUtente, 'numeroSegnalazioni' => int], una
-        //per ogni utente che ha almeno una recensione con almeno una segnalazione in sospeso.
-        $righeGrezze = FPersistentManager::PMfindUtentiConRecensioniSegnalate('DESC'); 
+        $righeGrezze = FPersistentManager::PMfindUtentiConRecensioniSegnalate('DESC'); //restituisce ['utente' => EUtente, 'numeroSegnalazioni' => int]
 
         $utenti = array_map(
             fn($riga) => $this->utenteAdminToArray($riga['utente'], $riga['numeroSegnalazioni']),
@@ -132,11 +129,7 @@ class CAmministratore extends BaseController {
      * URL: GET /admin/recensioni
      */
     public function mostraListaRecensioniAdmin(): void {
-        //TODO: metodo del pm da implementare
-        //dovrebbe restituire un array di righe tipo ['recensione' => ERecensione, 'numeroSegnalazioni' => int]
-        $righeGrezze = FPersistentManager::PMfindRecensioniConSegnalazioni('DESC'); 
-
-        //TODO: aggiungere filtro ordinamento con opzioni 'grevita' e 'recenti'???
+        $righeGrezze = FPersistentManager::PMfindRecensioniConSegnalazioni('DESC'); //restituisce ['recensione' => ERecensione, 'numeroSegnalazioni' => int]
 
         $recensioni = array_map(
             fn($riga) => $this->recensioneAdminToArray($riga['recensione'], $riga['numeroSegnalazioni']),

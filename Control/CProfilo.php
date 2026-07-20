@@ -226,8 +226,6 @@ class CProfilo extends BaseController {
             exit();
         }
 
-        //TODO: valutare un soft-delete invece di cancellazione fisica
-        //soprattutto perché EUtente ha relazioni con ordini/recensioni/...
         $eliminato = FPersistentManager::PMdeleteObj($utente);
 
         if ($eliminato) {
