@@ -26,11 +26,16 @@ class PortaDadiFixture extends AbstractFixture
     public function load(ObjectManager $manager): void
     {
         $faker = Factory::create('it_IT'); //creazione istanza di faker per la lingua italiana
-        $percorsoImg = __DIR__ . '/../../public/img/default_game.jpg'; 
-        if (!file_exists($percorsoImg)) {
-            throw new \Exception("\n\nERRORE GRAVE: Non riesco a trovare l'immagine per i PortaDadi!\nPercorso calcolato: " . $percorsoImg . "\n\n");
+         $percorsoImg = dirname(__DIR__, 2) . '/public/img/carousel/portadadiimg.png'; // adatta il path relativo alla tua struttura cartelle
+
+        $immaginePredefinita = null;
+        if (file_exists($percorsoImg) && is_file($percorsoImg)) {
+            $immaginePredefinita = file_get_contents($percorsoImg);
+        } else {
+            // Fallback: se il file non c'è, niente immagine (null), invece di un URL esterno
+            // che romperebbe la logica base64 usata in tutto il resto del progetto.
+            $immaginePredefinita = null;
         }
-        $immaginePredefinita = file_get_contents($percorsoImg);
 
         for ($i = 0; $i < self::NUM_PORTADADI; $i++) { //self::NUM_BUSTINE serve per leggere la costante
             
