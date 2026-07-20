@@ -1,0 +1,166 @@
+/* ==========================================================================
+   TableCrown - Area Gestore - Creazione Prodotto
+   Da usare INSIEME a gestore_creazione_evento.css (stepper, form-card,
+   upload-box, picker-grid, modale sono già definiti lì).
+   Qui solo i componenti specifici dei form prodotto.
+   ========================================================================== */
+
+/* ---------- CHIP (categoria, selezione multipla) ---------- */
+
+.gcre-chip-group {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 8px;
+}
+
+.gcre-chip {
+    position: relative;
+    display: inline-flex;
+    align-items: center;
+    padding: 8px 14px;
+    border: 1px solid var(--gestore-border);
+    border-radius: 999px;
+    font-size: 13px;
+    font-weight: 600;
+    color: var(--gestore-text);
+    cursor: pointer;
+    background: var(--gestore-white);
+    user-select: none;
+    transition: all 0.15s ease;
+}
+
+.gcre-chip input[type="checkbox"] {
+    position: absolute;
+    opacity: 0;
+    width: 0;
+    height: 0;
+}
+
+.gcre-chip:hover {
+    border-color: var(--gestore-sidebar-active);
+}
+
+.gcre-chip--checked {
+    background: var(--gestore-sidebar-active);
+    border-color: var(--gestore-sidebar-active);
+    color: #fff;
+}
+
+/* ---------- LISTA DINAMICA (componenti) ---------- */
+
+.gcre-dynamic-list {
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+    margin-bottom: 10px;
+}
+
+.gcre-dynamic-row {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+}
+
+.gcre-dynamic-row .gcre-input {
+    flex: 1;
+}
+
+.gcre-dynamic-remove {
+    flex-shrink: 0;
+    width: 36px;
+    height: 36px;
+    border-radius: 8px;
+    border: 1px solid var(--gestore-border);
+    background: var(--gestore-white);
+    color: var(--gestore-danger);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+    font-size: 16px;
+}
+
+.gcre-dynamic-remove:hover {
+    background: #fde3e9;
+}
+
+.gcre-dynamic-remove:disabled {
+    opacity: 0.35;
+    cursor: not-allowed;
+    color: var(--gestore-muted);
+}
+
+.gcre-dynamic-add {
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    padding: 8px 14px;
+    border: 1px dashed var(--gestore-border);
+    border-radius: 8px;
+    background: var(--gestore-bg);
+    color: var(--gestore-sidebar-active);
+    font-size: 13px;
+    font-weight: 600;
+    cursor: pointer;
+}
+
+.gcre-dynamic-add:hover {
+    border-color: var(--gestore-sidebar-active);
+    background: #f4f2fd;
+}
+
+/* ---------- SEZIONE CONDIZIONALE (sconto / danno / espansione) ---------- */
+
+.gcre-toggle-section {
+    border: 1px solid var(--gestore-border);
+    border-radius: 10px;
+    padding: 14px 16px;
+    margin-bottom: 18px;
+}
+
+.gcre-toggle-header {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    cursor: pointer;
+}
+
+.gcre-toggle-header input[type="checkbox"] {
+    width: 18px;
+    height: 18px;
+    accent-color: var(--gestore-sidebar-active);
+    cursor: pointer;
+}
+
+.gcre-toggle-header__label {
+    font-size: 14px;
+    font-weight: 600;
+    color: var(--gestore-text);
+}
+
+.gcre-toggle-body {
+    display: none;
+    margin-top: 14px;
+    padding-top: 14px;
+    border-top: 1px solid var(--gestore-border);
+}
+
+.gcre-toggle-body.active {
+    display: block;
+}
+
+/* ---------- CHECKBOX SEMPLICE INLINE ---------- */
+
+.gcre-checkbox-inline {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    font-size: 13px;
+    color: var(--gestore-text);
+}
+
+.gcre-checkbox-inline input[type="checkbox"] {
+    width: 16px;
+    height: 16px;
+    accent-color: var(--gestore-sidebar-active);
+}

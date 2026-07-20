@@ -1,0 +1,555 @@
+/* ==========================================================================
+   TableCrown - Area Gestore - Catalogo Prodotti unificato
+   Usa le variabili definite in layout_gestore.css (:root), va sempre
+   caricato dopo quel file (e dopo eventi_gestore.css se presente, per
+   riusarne eventuali override).
+   ========================================================================== */
+
+.gprod-container {
+    display: flex;
+    flex-direction: column;
+    gap: 20px;
+}
+
+/* ---------- HEADER ---------- */
+
+.gprod-header {
+    display: flex;
+    align-items: flex-start;
+    justify-content: space-between;
+    gap: 20px;
+    flex-wrap: wrap;
+}
+
+.gprod-header__titles {
+    display: flex;
+    flex-direction: column;
+    gap: 4px;
+}
+
+.gprod-header__title {
+    margin: 0;
+    font-size: 22px;
+    font-weight: 700;
+    color: var(--gestore-text);
+}
+
+.gprod-header__count {
+    margin: 0;
+    font-size: 13px;
+    color: var(--gestore-muted);
+}
+
+.gprod-header__actions {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    flex-wrap: wrap;
+}
+
+.gprod-search-form {
+    display: flex;
+    align-items: center;
+    background: var(--gestore-white);
+    border: 1px solid var(--gestore-border);
+    border-radius: 10px;
+    padding: 4px 4px 4px 12px;
+    gap: 6px;
+}
+
+.gprod-search-input {
+    border: none;
+    outline: none;
+    font-family: inherit;
+    font-size: 13px;
+    width: 200px;
+    background: transparent;
+    color: var(--gestore-text);
+}
+
+.gprod-search-btn {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 32px;
+    height: 32px;
+    border: none;
+    border-radius: 8px;
+    background: var(--gestore-bg);
+    color: var(--gestore-muted);
+    cursor: pointer;
+}
+
+.gprod-search-btn:hover {
+    background: var(--gestore-sidebar-active);
+    color: #fff;
+}
+
+.gprod-btn-create {
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    padding: 9px 16px;
+    border: none;
+    border-radius: 10px;
+    background: var(--gestore-sidebar-active);
+    color: #fff;
+    font-size: 13px;
+    font-weight: 600;
+    font-family: inherit;
+    cursor: pointer;
+    white-space: nowrap;
+}
+
+.gprod-btn-create:hover {
+    background: #5a3ce0;
+}
+
+/* ---------- LAYOUT ---------- */
+
+.gprod-layout {
+    display: grid;
+    grid-template-columns: 220px 1fr;
+    gap: 20px;
+    align-items: start;
+}
+
+.gprod-sidebar {
+    background: var(--gestore-white);
+    border: 1px solid var(--gestore-border);
+    border-radius: var(--gestore-radius);
+    padding: 18px;
+    position: sticky;
+    top: 20px;
+}
+
+.gprod-filter-title {
+    margin: 0 0 14px;
+    font-size: 14px;
+    font-weight: 700;
+    color: var(--gestore-text);
+    display: flex;
+    align-items: center;
+    gap: 8px;
+}
+
+.gprod-filter-group {
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+    margin-bottom: 16px;
+}
+
+.gprod-filter-label {
+    font-size: 12px;
+    font-weight: 600;
+    color: var(--gestore-muted);
+    text-transform: uppercase;
+    letter-spacing: 0.02em;
+}
+
+.gprod-filter-checkbox {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    font-size: 13px;
+    color: var(--gestore-text);
+    cursor: pointer;
+}
+
+.gprod-filter-select {
+    width: 100%;
+    padding: 8px 10px;
+    border: 1px solid var(--gestore-border);
+    border-radius: 8px;
+    font-family: inherit;
+    font-size: 13px;
+    color: var(--gestore-text);
+    background: var(--gestore-white);
+}
+
+.gprod-filter-actions {
+    padding-top: 14px;
+    border-top: 1px solid var(--gestore-border);
+}
+
+.gprod-filter-reset {
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    font-size: 12px;
+    font-weight: 600;
+    color: var(--gestore-muted);
+    text-decoration: none;
+}
+
+.gprod-filter-reset:hover {
+    color: var(--gestore-sidebar-active);
+}
+
+/* ---------- GRID PRODOTTI ---------- */
+
+.gprod-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(260px, 1fr));
+    gap: 16px;
+    align-content: start;
+}
+
+.gprod-card {
+    background: var(--gestore-white);
+    border: 1px solid var(--gestore-border);
+    border-radius: var(--gestore-radius);
+    overflow: hidden;
+    display: flex;
+    flex-direction: column;
+}
+
+.gprod-card__img-wrapper {
+    position: relative;
+    width: 100%;
+    aspect-ratio: 16 / 9;
+    background: var(--gestore-bg);
+}
+
+.gprod-card__img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    display: block;
+}
+
+.gprod-card__status {
+    position: absolute;
+    top: 10px;
+    left: 10px;
+    font-size: 11px;
+    font-weight: 700;
+    padding: 3px 10px;
+    border-radius: 999px;
+    background: var(--gestore-bg);
+    color: var(--gestore-muted);
+}
+
+/* NB: valori dell'enum DisponibilitaProdotto da confermare con T3 */
+.gprod-card__status--disponibile     { background: #e5f7ec; color: var(--gestore-success); }
+.gprod-card__status--esaurito        { background: #fbeed9; color: #b5790a; }
+.gprod-card__status--non_disponibile { background: #fde3e9; color: var(--gestore-danger); }
+
+.gprod-card__discount {
+    position: absolute;
+    top: 10px;
+    right: 10px;
+    font-size: 11px;
+    font-weight: 700;
+    padding: 3px 10px;
+    border-radius: 999px;
+    background: var(--gestore-danger);
+    color: #fff;
+}
+
+.gprod-card__body {
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+    padding: 14px;
+    flex: 1;
+}
+
+.gprod-card__type {
+    font-size: 11px;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 0.03em;
+    color: var(--gestore-sidebar-active);
+}
+
+.gprod-card__name {
+    margin: 0;
+    font-size: 15px;
+    font-weight: 700;
+    color: var(--gestore-text);
+    line-height: 1.3;
+}
+
+.gprod-card__meta {
+    display: flex;
+    flex-direction: column;
+    gap: 4px;
+}
+
+.gprod-card__meta-row {
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    font-size: 12px;
+    color: var(--gestore-muted);
+}
+
+.gprod-card__stock-empty {
+    color: var(--gestore-danger);
+    font-weight: 600;
+}
+
+.gprod-card__prezzo {
+    display: flex;
+    align-items: baseline;
+    gap: 8px;
+    margin-top: 2px;
+}
+
+.gprod-card__prezzo-old {
+    font-size: 12px;
+    color: var(--gestore-muted);
+    text-decoration: line-through;
+}
+
+.gprod-card__prezzo-new {
+    font-size: 16px;
+    font-weight: 700;
+    color: var(--gestore-text);
+}
+
+.gprod-card__stepper {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 12px;
+    margin-top: 4px;
+    padding: 6px;
+    background: var(--gestore-bg);
+    border-radius: 8px;
+}
+
+.gprod-stepper__btn {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 26px;
+    height: 26px;
+    border: none;
+    border-radius: 6px;
+    background: var(--gestore-white);
+    color: var(--gestore-text);
+    cursor: pointer;
+}
+
+.gprod-stepper__btn:hover {
+    background: var(--gestore-sidebar-active);
+    color: #fff;
+}
+
+.gprod-stepper__value {
+    min-width: 24px;
+    text-align: center;
+    font-size: 13px;
+    font-weight: 700;
+    color: var(--gestore-text);
+}
+
+.gprod-card__footer {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 8px;
+    padding: 12px 14px;
+    border-top: 1px solid var(--gestore-border);
+}
+
+.gprod-btn-edit {
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    padding: 7px 14px;
+    border-radius: 8px;
+    background: var(--gestore-bg);
+    color: var(--gestore-sidebar-active);
+    font-size: 12px;
+    font-weight: 600;
+    text-decoration: none;
+    flex: 1;
+    justify-content: center;
+}
+
+.gprod-btn-edit:hover {
+    background: var(--gestore-sidebar-active);
+    color: #fff;
+}
+
+.gprod-btn-delete {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 32px;
+    height: 32px;
+    border: none;
+    border-radius: 8px;
+    background: #fde3e9;
+    color: var(--gestore-danger);
+    cursor: pointer;
+}
+
+.gprod-btn-delete:hover {
+    background: var(--gestore-danger);
+    color: #fff;
+}
+
+/* ---------- EMPTY STATE ---------- */
+
+.gprod-empty {
+    grid-column: 1 / -1;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    text-align: center;
+    gap: 8px;
+    padding: 60px 20px;
+    background: var(--gestore-white);
+    border: 1px dashed var(--gestore-border);
+    border-radius: var(--gestore-radius);
+}
+
+.gprod-empty__icon {
+    font-size: 34px;
+    color: var(--gestore-muted);
+}
+
+.gprod-empty__title {
+    margin: 0;
+    font-size: 15px;
+    font-weight: 700;
+    color: var(--gestore-text);
+}
+
+.gprod-empty__text {
+    margin: 0;
+    font-size: 13px;
+    color: var(--gestore-muted);
+    max-width: 320px;
+}
+
+/* ---------- PAGINAZIONE ---------- */
+
+.gprod-pagination {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 14px;
+    padding-top: 10px;
+}
+
+.gprod-pagination__link {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 32px;
+    height: 32px;
+    border-radius: 8px;
+    background: var(--gestore-white);
+    border: 1px solid var(--gestore-border);
+    color: var(--gestore-text);
+    text-decoration: none;
+}
+
+.gprod-pagination__link:hover {
+    background: var(--gestore-sidebar-active);
+    color: #fff;
+}
+
+.gprod-pagination__current {
+    font-size: 13px;
+    color: var(--gestore-muted);
+}
+
+/* ---------- MODALE: scelta tipo prodotto ---------- */
+
+.gprod-modal-overlay {
+    position: fixed;
+    inset: 0;
+    background: rgba(18, 20, 43, 0.55);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    z-index: 1000;
+}
+
+.gprod-modal-overlay[hidden] {
+    display: none;
+}
+
+.gprod-modal {
+    position: relative;
+    background: var(--gestore-white);
+    border-radius: var(--gestore-radius);
+    padding: 28px;
+    width: min(90vw, 420px);
+}
+
+.gprod-modal__close {
+    position: absolute;
+    top: 14px;
+    right: 14px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 28px;
+    height: 28px;
+    border: none;
+    border-radius: 8px;
+    background: var(--gestore-bg);
+    color: var(--gestore-muted);
+    cursor: pointer;
+}
+
+.gprod-modal__close:hover {
+    background: var(--gestore-danger);
+    color: #fff;
+}
+
+.gprod-modal__title {
+    margin: 0 0 20px;
+    font-size: 16px;
+    font-weight: 700;
+    color: var(--gestore-text);
+    text-align: center;
+}
+
+.gprod-modal__options {
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+}
+
+.gprod-modal__option {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    padding: 14px 16px;
+    border: 1px solid var(--gestore-border);
+    border-radius: 10px;
+    color: var(--gestore-text);
+    font-size: 14px;
+    font-weight: 600;
+    text-decoration: none;
+}
+
+.gprod-modal__option:hover {
+    background: var(--gestore-sidebar-active);
+    color: #fff;
+    border-color: var(--gestore-sidebar-active);
+}
+
+.gprod-modal__option .ti {
+    font-size: 20px;
+}
+
+/* ---------- RESPONSIVE ---------- */
+
+@media (max-width: 860px) {
+    .gprod-layout {
+        grid-template-columns: 1fr;
+    }
+    .gprod-sidebar {
+        position: static;
+    }
+}
