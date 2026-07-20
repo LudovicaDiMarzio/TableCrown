@@ -135,31 +135,15 @@ class CProfilo extends BaseController {
         try {
             $nome = UHTTPMethods::postString('nome');
             $email = UHTTPMethods::postString('email');
-        } catch (\InvalidArgumentException $e) {
-            UFlashMessage::addMessage('danger', $e->getMessage());
-            header('Location: ' . BASE_URL . '/profilo/modifica');
-            exit();
-        }
-        
 
-        try {
             $utente->rinomina($nome);
             $utente->cambiaEmail($email);
 
-            //L'immagine è opzionale: trattiamo sia "campo assente" sia "errore di
-            //uplaod" allo stesso modo per ora (nessuna modifica all'immagine esistente).
-            //DA CAMBIARE
-            try {
-                //Proviamo a recuperare il file. Se l'utente non lo ha caricato,
-                //postFile lancerà un'eccezione che cattureremo subito.
-                $immagine = UHTTPMethods::postFile('img_profilo'); //opzionale, l'utente potrebbe non cambiarla!
-                //Se non è stata lanciata nessuna eccezione, procediamo con la lettura e l'aggiornamento 
-                $imgBlob = file_get_contents($immagine['tmp_name']);
-                $utente->aggiornaImmagine($imgBlob);
-            } catch (\InvalidArgumentException $e) {
-                //Silenziamo l'errore: significa semplicemente che l'utente non ha caricato
-                //una nuova immagine, quindi teniamo quella vecchia senza interrompere il flusso.
+            $nuovaImmagine = $this->estraiImmagine('img_profilo');
+            if ($nuovaImmagine !== null) {
+                $utente->aggiornaImmagine($nuovaImmagine);
             }
+
         } catch (\InvalidArgumentException $e) {
             UFlashMessage::addMessage('danger', $e->getMessage());
             header('Location: ' . BASE_URL . '/profilo/modifica');
