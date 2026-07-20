@@ -616,15 +616,12 @@ abstract class BaseController {
     /**
      * Costruisce i dati comuni a tutte le pagine lista eventi e delega il render.
      */
-    protected function renderListaEventi(string $vista, array $risultatoGrezzo, ?string $filtroData = null, ?string $ricerca = null, $modalita = 'utente'): void { 
+    protected function renderListaEventi(string $vista, array $risultatoGrezzo, ?string $filtroData = null, $modalita = 'utente'): void { 
 
         $datiPagina = [
             'vista'  => $vista,
             'eventi' => $this->eventiToArray($risultatoGrezzo),
-            'filtri' => [
-                'data' => $filtroData,
-                'query_string' => $ricerca,
-            ],
+            'filtro_data' => $filtroData,
             'modalita' => $modalita,
         ];
 

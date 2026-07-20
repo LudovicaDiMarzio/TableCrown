@@ -72,28 +72,6 @@ class CEventi extends BaseController {
         $this->renderListaEventi('eventi_challenge', $challenge, $filtroData); 
     }
 
-    /**
-     * Mostra i risultati della ricerca per gli eventi.
-     * La barra di ricerca dedicata agli eventi invierà una richiesta GET qui
-     * URL: GET /eventi/ricerca
-     */
-    public function mostraRisultatiRicercaEventi(): void {
-        $query = UHTTPMethods::get('q');
-
-        if ($query === null || trim($query) === '') {
-            //Se non c'è nessun termine di ricerca, reindirizziamo al catalogo principale dei giochi (DA DECIDERE!!!!!!!)
-            header("Location: " . BASE_URL . "/eventi");
-            exit();
-        }
-
-        $query = trim($query);
-
-        //TODO: serve il metodo nel pm
-        $eventiTrovati = FPersistentManager::PMricercaEventi($query);
-
-        $this->renderListaEventi('ricerca', $eventiTrovati, null, $query); 
-    }
-
 
     protected function getBreadcrumbs(string $currentPage = ''): array {
         return [

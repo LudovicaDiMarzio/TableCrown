@@ -40,17 +40,6 @@ class CFrontController {
                 break;
 
 
-            case 'ricerca':
-                //Corrisponde a: GET /ricerca
-                if ($metodoHTTP === 'GET') {
-                    $controller = new CCatalogo();
-                    $controller->mostraRisultatiRicercaProdotti();
-                } else {
-                    $this->mostra404();
-                }
-                break;
-
-
             case 'catalogo':
                 if ($metodoHTTP !== 'GET') {
                     $this->mostra404();
@@ -94,9 +83,6 @@ class CFrontController {
                         } else {
                             $controller->mostraCheckoutEvento((int)$sottoRoute2);
                         }
-                    } elseif ($sottoRoute === 'risultati') {
-                        //TODO: implementare il metodo mostraRisultatiRicerca() in CEventi()
-                        $this->mostra404(); //DA TOGLIERE POI
                     } else {
                         $this->mostra404();
                     }
@@ -362,8 +348,6 @@ class CFrontController {
                             } else {
                                 $this->mostra404();
                             }
-                        } elseif ($sottoRoute === 'ricerca') { //GET /gestore/ricerca
-                            $controller->mostraRisultatiRicercaProdottiGestore();
                         } elseif ($sottoRoute === 'eventi') {
                             if ($sottoRoute2 === 'serate') { //GET /gestore/eventi/serate
                                 $controller->mostraListaSerateGestore();
