@@ -14,7 +14,7 @@ class FOrdini{
     public static function contaOrdiniTotali(): int{
         try{
             $em = FEntityManager::getInstance()->getEntityManager();
-            return $em->getRepository(EOrdine::class)->count();
+            return $em->getRepository(EOrdine::class)->count([]);
         }
         catch(Exception $e){
             error_log("Errore in contaOrdiniTotali: " . $e->getMessage());
