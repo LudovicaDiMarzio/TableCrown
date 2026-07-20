@@ -115,7 +115,7 @@ class CAutenticazione extends BaseController {
         if(!$persona || !$persona->verificaPassword($password)) {
             UFlashMessage::addMessage('danger', 'Email o password errate. Riprova.');
 
-            //UX: Salviamo i vecchi calori prima del redirect PRG
+            //UX: Salviamo i vecchi valori prima del redirect PRG
             USession::setSessionElement('old_email', $email);
             USession::setSessionElement('old_ricordami', $ricordamiBox !== null);
 
@@ -128,27 +128,31 @@ class CAutenticazione extends BaseController {
         USession::setSessionElement('id_persona', $persona->getIdPersona());
         USession::setSessionElement('nickname', $persona->getNomePersona());
 
-        //Gestione "Ricordami" (REMEMBER ME) tramite cookie
-        if ($ricordamiBox !== null) {
-            //Generiamo un token sicuro, unico e casuale
-            $remeberToken = bin2hex(random_bytes(32));
+        //Gestione "Ricordami" (REMEMBER ME) tramite cookie (applicata solo agli utenti normali)
+        if ($persona instanceof EUtente) {
+            if ($ricordamiBox !== null) {
+                //Generiamo un token sicuro, unico e casuale
+                $remeberToken = bin2hex(random_bytes(32));
 
-            //Salviamo il token nel database sull'oggetto persona loggato
-            //Nota: l'entity EUtente deve avere il setter impostaRememberToken() DA AGGIUNGERE
-            $persona->impostaRememberToken($remeberToken);
-            FPersistentManager::PMsaveObj($persona); //Aggiorna l'utente sul DB
+                //Salviamo il token nel database sull'oggetto persona loggato
+                //Nota: l'entity EUtente deve avere il setter impostaRememberToken() DA AGGIUNGERE
+                $persona->impostaRememberToken($remeberToken);
+                FPersistentManager::PMsaveObj($persona); //Aggiorna l'utente sul DB
 
-            //Inviamo il cookie al browser dell'utente (scadenza 30 giorni)
-            UCookie::setCookie('remember_me', $remeberToken, 30);
-        } else {
-            //Se l'utente fa il login senza spuntare "ricordami", puliamo vecchi cookie residui
-            if (UCookie::getCookie('remember_me')) {
-                UCookie::deleteCookie('remember_me');
-                $persona->impostaRememberToken(null);
-                FPersistentManager::PMsaveObj($persona);
+                //Inviamo il cookie al browser dell'utente (scadenza 30 giorni)
+                UCookie::setCookie('remember_me', $remeberToken, 30);
+            } else {
+                //Se l'utente fa il login senza spuntare "ricordami", puliamo vecchi cookie residui
+                if (UCookie::getCookie('remember_me')) {
+                    UCookie::deleteCookie('remember_me');
+                    $persona->impostaRememberToken(null);
+                    FPersistentManager::PMsaveObj($persona);
+                }
+
             }
 
         }
+        
 
         //Controlliamo quale sottoclasse ha restituito Doctrine e mappiamo il ruolo testuale in sessione, così il BaseController può fare i controlli.
         if ($persona instanceof EAmministratore) {
