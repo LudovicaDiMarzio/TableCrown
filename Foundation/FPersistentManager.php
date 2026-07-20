@@ -212,31 +212,31 @@ class FPersistentManager
      * @param int $offset numero di prodotti da saltare dall'inizio della lista
      * @return array di oggetti
      */
-    public static function PMricercaGiochi(string $StringaDiRicerca, int $limit, int $offset): array
+    public static function PMricercaGiochi(string $stringaDiRicerca, int $limit, int $offset): array
     {
-        return FGiocoDaTavolo::ricercaGiochi($StringaDiRicerca, $limit, $offset);
+        return FGiocoDaTavolo::ricercaGiochi($stringaDiRicerca, $limit, $offset);
     }
 
     /**
-     * @param string $StringaDiRicerca stringa da ricercare nella colonna nomeProdotto o descrizioneProdotto 
+     * @param string $stringaDiRicerca stringa da ricercare nella colonna nomeProdotto o descrizioneProdotto 
      * @param int $limit numero massimo di prodotti da restituire
      * @param int $offset numero di prodotti da saltare dall'inizio della lista
      * @return array di oggetti
      */
-    public static function PMricercaBustine(string $StringaDiRicerca, int $limit, int $offset): array
+    public static function PMricercaBustine(string $stringaDiRicerca, int $limit, int $offset): array
     {
-        return FBustine::ricercaBustine($StringaDiRicerca, $limit, $offset);
+        return FBustine::ricercaBustine($stringaDiRicerca, $limit, $offset);
     }
 
     /**
-     * @param string $StringaDiRicerca stringa da ricercare nella colonna nomeProdotto o descrizioneProdotto 
+     * @param string $stringaDiRicerca stringa da ricercare nella colonna nomeProdotto o descrizioneProdotto 
      * @param int $limit numero massimo di prodotti da restituire
      * @param int $offset numero di prodotti da saltare dall'inizio della lista
      * @return array di oggetti
      */
-    public static function PMricercaPortaDadi(string $StringaDiRicerca, int $limit, int $offset): array
+    public static function PMricercaPortaDadi(string $stringaDiRicerca, int $limit, int $offset): array
     {
-        return FPortaDadi::ricercaPortaDadi($StringaDiRicerca, $limit, $offset);
+        return FPortaDadi::ricercaPortaDadi($stringaDiRicerca, $limit, $offset);
     }
 
     /**
