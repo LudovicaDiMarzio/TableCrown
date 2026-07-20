@@ -1,18 +1,18 @@
 <?php
-/* Smarty version 5.8.0, created on 2026-07-20 15:16:04
+/* Smarty version 5.8.0, created on 2026-07-20 23:24:45
   from 'file:home.tpl' */
 
 /* @var \Smarty\Template $_smarty_tpl */
 if ($_smarty_tpl->getCompiled()->isFresh($_smarty_tpl, array (
   'version' => '5.8.0',
-  'unifunc' => 'content_6a5e1f943492e2_20592099',
+  'unifunc' => 'content_6a5e921d39cfa3_81809320',
   'has_nocache_code' => false,
   'file_dependency' => 
   array (
     '520e5be001135a44eb919c9ec9532a433146fce3' => 
     array (
       0 => 'home.tpl',
-      1 => 1784553224,
+      1 => 1784579830,
       2 => 'file',
     ),
   ),
@@ -20,30 +20,28 @@ if ($_smarty_tpl->getCompiled()->isFresh($_smarty_tpl, array (
   array (
   ),
 ))) {
-function content_6a5e1f943492e2_20592099 (\Smarty\Template $_smarty_tpl) {
+function content_6a5e921d39cfa3_81809320 (\Smarty\Template $_smarty_tpl) {
 $_smarty_current_dir = 'C:\\xampp\\htdocs\\TableCrown\\Presentation\\smarty-dir\\templates';
 $_smarty_tpl->getInheritance()->init($_smarty_tpl, true);
 ?>
 
 
 <?php 
-$_smarty_tpl->getInheritance()->instanceBlock($_smarty_tpl, 'Block_16819322766a5e1f92db2c26_66917175', "extra_css");
+$_smarty_tpl->getInheritance()->instanceBlock($_smarty_tpl, 'Block_10686955416a5e921d366e71_21271788', "extra_css");
 ?>
 
 
 <?php 
-$_smarty_tpl->getInheritance()->instanceBlock($_smarty_tpl, 'Block_8613318046a5e1f931a1c49_14206492', "content");
+$_smarty_tpl->getInheritance()->instanceBlock($_smarty_tpl, 'Block_19092788686a5e921d36ab30_17071745', "content");
 ?>
 
 
 <?php 
-$_smarty_tpl->getInheritance()->instanceBlock($_smarty_tpl, 'Block_14184241276a5e1f94342ac9_51217136', "extra_js");
-?>
-
-<?php $_smarty_tpl->getInheritance()->endChild($_smarty_tpl, "common/layout.tpl", $_smarty_current_dir);
+$_smarty_tpl->getInheritance()->instanceBlock($_smarty_tpl, 'Block_20973361626a5e921d39bd32_07371032', "extra_js");
+$_smarty_tpl->getInheritance()->endChild($_smarty_tpl, "common/layout.tpl", $_smarty_current_dir);
 }
 /* {block "extra_css"} */
-class Block_16819322766a5e1f92db2c26_66917175 extends \Smarty\Runtime\Block
+class Block_10686955416a5e921d366e71_21271788 extends \Smarty\Runtime\Block
 {
 public function callBlock(\Smarty\Template $_smarty_tpl) {
 $_smarty_current_dir = 'C:\\xampp\\htdocs\\TableCrown\\Presentation\\smarty-dir\\templates';
@@ -56,7 +54,7 @@ $_smarty_current_dir = 'C:\\xampp\\htdocs\\TableCrown\\Presentation\\smarty-dir\
 }
 /* {/block "extra_css"} */
 /* {block "content"} */
-class Block_8613318046a5e1f931a1c49_14206492 extends \Smarty\Runtime\Block
+class Block_19092788686a5e921d36ab30_17071745 extends \Smarty\Runtime\Block
 {
 public function callBlock(\Smarty\Template $_smarty_tpl) {
 $_smarty_current_dir = 'C:\\xampp\\htdocs\\TableCrown\\Presentation\\smarty-dir\\templates';
@@ -93,8 +91,6 @@ $_smarty_current_dir = 'C:\\xampp\\htdocs\\TableCrown\\Presentation\\smarty-dir\
                     <p class="subtitle is-5 has-text-warning">I migliori titoli del 2026 arrivano su TableCrown</p>
                 </div>
             </div>
-
-
 
             <div class="carousel-item">
                 <img src="<?php echo $_smarty_tpl->getValue('base_url');?>
@@ -134,80 +130,80 @@ $foreach0DoElse = false;
                     <?php $_smarty_tpl->assign('prezzoEffettivo', $_smarty_tpl->getValue('haSconto') && (true && (true && null !== ($_smarty_tpl->getValue('prodotto')['prezzo_scontato'] ?? null))) ? $_smarty_tpl->getValue('prodotto')['prezzo_scontato'] : (($tmp = $_smarty_tpl->getValue('prodotto')['prezzo'] ?? null)===null||$tmp==='' ? null ?? null : $tmp), false, NULL);?>
 
                     <div class="card-vector-item">
-                            <a href="<?php echo $_smarty_tpl->getValue('base_url');?>
-/prodotto/<?php echo $_smarty_tpl->getValue('prodotto')['id'];?>
+                        <a href="<?php echo $_smarty_tpl->getValue('base_url');?>
+/prodotto?id=<?php echo $_smarty_tpl->getValue('prodotto')['id'];?>
 " class="card-link-wrapper">
-                                <div class="card home-card-fixed">
-                                    <div class="card-image">
-                                        <figure class="image-container-fixed">
-                                            <img src="<?php echo $_smarty_tpl->getValue('base_url');?>
+                            <div class="card home-card-fixed">
+                                <div class="card-image">
+                                    <figure class="image-container-fixed">
+                                        <img src="<?php echo $_smarty_tpl->getValue('base_url');?>
 /img/prodotti/<?php echo $_smarty_tpl->getValue('prodotto')['immagine'];?>
 " alt="<?php echo htmlspecialchars((string)$_smarty_tpl->getValue('prodotto')['nome'], ENT_QUOTES, 'UTF-8', true);?>
 " />
-                                        </figure>
-                                    </div>
-                                    <div class="card-content">
-                                        <p class="card-title-custom"><?php echo htmlspecialchars((string)$_smarty_tpl->getValue('prodotto')['nome'], ENT_QUOTES, 'UTF-8', true);?>
+                                    </figure>
+                                </div>
+                                <div class="card-content">
+                                    <p class="card-title-custom"><?php echo htmlspecialchars((string)$_smarty_tpl->getValue('prodotto')['nome'], ENT_QUOTES, 'UTF-8', true);?>
 </p>
 
-                                        <div class="card-rating">
-                                            <?php $_smarty_tpl->assign('media', $_smarty_tpl->getValue('prodotto')['valutazione_media'], false, NULL);?>
-                                            <?php $_smarty_tpl->assign('stelle', array(1,2,3,4,5), false, NULL);?>
-                                            <?php
+                                    <div class="card-rating">
+                                        <?php $_smarty_tpl->assign('media', $_smarty_tpl->getValue('prodotto')['valutazione_media'], false, NULL);?>
+                                        <?php $_smarty_tpl->assign('stelle', array(1,2,3,4,5), false, NULL);?>
+                                        <?php
 $_from = $_smarty_tpl->getSmarty()->getRuntime('Foreach')->init($_smarty_tpl, $_smarty_tpl->getValue('stelle'), 's');
 $foreach1DoElse = true;
 foreach ($_from ?? [] as $_smarty_tpl->getVariable('s')->value) {
 $foreach1DoElse = false;
 ?>
-                                                <?php if ($_smarty_tpl->getValue('s') <= $_smarty_tpl->getValue('media')) {?>
-                                                    <i class="ti ti-star-filled star-icon"></i>
-                                                <?php } elseif (($_smarty_tpl->getValue('s')-$_smarty_tpl->getValue('media')) < 1) {?>
-                                                    <i class="ti ti-star-half-filled star-icon"></i>
-                                                <?php } else { ?>
-                                                    <i class="ti ti-star star-icon"></i>
-                                                <?php }?>
-                                            <?php
+                                            <?php if ($_smarty_tpl->getValue('s') <= $_smarty_tpl->getValue('media')) {?>
+                                                <i class="ti ti-star-filled star-icon"></i>
+                                            <?php } elseif (($_smarty_tpl->getValue('s')-$_smarty_tpl->getValue('media')) < 1) {?>
+                                                <i class="ti ti-star-half-filled star-icon"></i>
+                                            <?php } else { ?>
+                                                <i class="ti ti-star star-icon"></i>
+                                            <?php }?>
+                                        <?php
 }
 $_smarty_tpl->getSmarty()->getRuntime('Foreach')->restore($_smarty_tpl, 1);?>
-                                        </div>
+                                    </div>
 
-                                        <div class="price-container">
-                                            <?php if ($_smarty_tpl->getValue('haSconto') && (true && (true && null !== ($_smarty_tpl->getValue('prodotto')['prezzo_scontato'] ?? null)))) {?>
-                                                <span class="price">€<?php echo $_smarty_tpl->getSmarty()->getModifierCallback('number_format')($_smarty_tpl->getValue('prodotto')['prezzo_scontato'],2);?>
+                                    <div class="price-container">
+                                        <?php if ($_smarty_tpl->getValue('haSconto') && (true && (true && null !== ($_smarty_tpl->getValue('prodotto')['prezzo_scontato'] ?? null)))) {?>
+                                            <span class="price">€<?php echo $_smarty_tpl->getSmarty()->getModifierCallback('number_format')($_smarty_tpl->getValue('prodotto')['prezzo_scontato'],2);?>
 </span>
-                                                <?php if ((true && (true && null !== ($_smarty_tpl->getValue('prodotto')['prezzo'] ?? null)))) {?>
-                                                    <span class="price-old">€<?php echo $_smarty_tpl->getSmarty()->getModifierCallback('number_format')($_smarty_tpl->getValue('prodotto')['prezzo'],2);?>
+                                            <?php if ((true && (true && null !== ($_smarty_tpl->getValue('prodotto')['prezzo'] ?? null)))) {?>
+                                                <span class="price-old">€<?php echo $_smarty_tpl->getSmarty()->getModifierCallback('number_format')($_smarty_tpl->getValue('prodotto')['prezzo'],2);?>
 </span>
-                                                <?php }?>
-                                            <?php } elseif ((true && (true && null !== ($_smarty_tpl->getValue('prodotto')['prezzo'] ?? null)))) {?>
-                                                <span class="price">€<?php echo $_smarty_tpl->getSmarty()->getModifierCallback('number_format')($_smarty_tpl->getValue('prodotto')['prezzo'],2);?>
-</span>
-                                            <?php } else { ?>
-                                                <span class="price-unavailable">Prezzo non disponibile</span>
                                             <?php }?>
-                                        </div>
+                                        <?php } elseif ((true && (true && null !== ($_smarty_tpl->getValue('prodotto')['prezzo'] ?? null)))) {?>
+                                            <span class="price">€<?php echo $_smarty_tpl->getSmarty()->getModifierCallback('number_format')($_smarty_tpl->getValue('prodotto')['prezzo'],2);?>
+</span>
+                                        <?php } else { ?>
+                                            <span class="price-unavailable">Prezzo non disponibile</span>
+                                        <?php }?>
+                                    </div>
 
-                                        <button class="btn-cart"
-                                                data-id="<?php echo $_smarty_tpl->getValue('prodotto')['id'];?>
+                                    <button class="btn-cart"
+                                            data-id="<?php echo $_smarty_tpl->getValue('prodotto')['id'];?>
 "
-                                                data-nome="<?php echo htmlspecialchars((string)$_smarty_tpl->getValue('prodotto')['nome'], ENT_QUOTES, 'UTF-8', true);?>
+                                            data-nome="<?php echo htmlspecialchars((string)$_smarty_tpl->getValue('prodotto')['nome'], ENT_QUOTES, 'UTF-8', true);?>
 "
-                                                data-img="<?php echo $_smarty_tpl->getValue('base_url');?>
+                                            data-img="<?php echo $_smarty_tpl->getValue('base_url');?>
 /img/prodotti/<?php echo $_smarty_tpl->getValue('prodotto')['immagine'];?>
 "
-                                                data-prezzo="<?php echo $_smarty_tpl->getValue('prezzoEffettivo');?>
+                                            data-prezzo="<?php echo $_smarty_tpl->getValue('prezzoEffettivo');?>
 ">
-                                            <i class="ti ti-shopping-cart"></i> Acquista
-                                        </button>
-                                    </div>
+                                        <i class="ti ti-shopping-cart"></i> Acquista
+                                    </button>
                                 </div>
-                            </a>
-                        </div>
-                    <?php
+                            </div>
+                        </a>
+                    </div>
+                <?php
 }
 $_smarty_tpl->getSmarty()->getRuntime('Foreach')->restore($_smarty_tpl, 1);?>
 
-                                <div class="card-vector-item card-vector-more">
+                <div class="card-vector-item card-vector-more">
                     <a href="<?php echo $_smarty_tpl->getValue('base_url');?>
 /offerte" class="view-more-link" title="Vedi tutte le offerte">
                         <div class="circle-plus">
@@ -218,27 +214,44 @@ $_smarty_tpl->getSmarty()->getRuntime('Foreach')->restore($_smarty_tpl, 1);?>
                 </div>
 
             <?php } else { ?>
-                <?php $_smarty_tpl->assign('demo_items', array(1,2,3,4,5), false, NULL);?>
+                <p class="empty-section-message">Nessuna offerta disponibile al momento.</p>
+            <?php }?>
+        </div>
+    </section>
+
+                <section class="home-section">
+        <h2 class="title section-title is-4 text-uppercase">✨ Nuovi Arrivi</h2>
+
+        <div class="card-row-vector">
+            <?php if ((true && ($_smarty_tpl->hasVariable('nuovi_arrivi') && null !== ($_smarty_tpl->getValue('nuovi_arrivi') ?? null))) && $_smarty_tpl->getSmarty()->getModifierCallback('count')($_smarty_tpl->getValue('nuovi_arrivi')) > 0) {?>
                 <?php
-$_from = $_smarty_tpl->getSmarty()->getRuntime('Foreach')->init($_smarty_tpl, $_smarty_tpl->getValue('demo_items'), 'i');
+$_from = $_smarty_tpl->getSmarty()->getRuntime('Foreach')->init($_smarty_tpl, $_smarty_tpl->getValue('nuovi_arrivi'), 'prodotto');
 $foreach2DoElse = true;
-foreach ($_from ?? [] as $_smarty_tpl->getVariable('i')->value) {
+foreach ($_from ?? [] as $_smarty_tpl->getVariable('prodotto')->value) {
 $foreach2DoElse = false;
 ?>
+                    <?php $_smarty_tpl->assign('haSconto', (($tmp = $_smarty_tpl->getValue('prodotto')['sconto'] ?? null)===null||$tmp==='' ? false ?? null : $tmp), false, NULL);?>
+                    <?php $_smarty_tpl->assign('prezzoEffettivo', $_smarty_tpl->getValue('haSconto') && (true && (true && null !== ($_smarty_tpl->getValue('prodotto')['prezzo_scontato'] ?? null))) ? $_smarty_tpl->getValue('prodotto')['prezzo_scontato'] : (($tmp = $_smarty_tpl->getValue('prodotto')['prezzo'] ?? null)===null||$tmp==='' ? null ?? null : $tmp), false, NULL);?>
+
                     <div class="card-vector-item">
-                        <a href="#" class="card-link-wrapper">
+                        <a href="<?php echo $_smarty_tpl->getValue('base_url');?>
+/prodotto?id=<?php echo $_smarty_tpl->getValue('prodotto')['id'];?>
+" class="card-link-wrapper">
                             <div class="card home-card-fixed">
                                 <div class="card-image">
                                     <figure class="image-container-fixed">
-                                        <img src="https://bulma.io/assets/images/placeholders/1280x960.png" alt="Placeholder image" />
+                                        <img src="<?php echo $_smarty_tpl->getValue('base_url');?>
+/img/prodotti/<?php echo $_smarty_tpl->getValue('prodotto')['immagine'];?>
+" alt="<?php echo htmlspecialchars((string)$_smarty_tpl->getValue('prodotto')['nome'], ENT_QUOTES, 'UTF-8', true);?>
+" />
                                     </figure>
                                 </div>
                                 <div class="card-content">
-                                    <p class="card-title-custom">Gioco in Offerta <?php echo $_smarty_tpl->getValue('i');?>
+                                    <p class="card-title-custom"><?php echo htmlspecialchars((string)$_smarty_tpl->getValue('prodotto')['nome'], ENT_QUOTES, 'UTF-8', true);?>
 </p>
 
                                     <div class="card-rating">
-                                        <?php $_smarty_tpl->assign('media', 4, false, NULL);?>
+                                        <?php $_smarty_tpl->assign('media', $_smarty_tpl->getValue('prodotto')['valutazione_media'], false, NULL);?>
                                         <?php $_smarty_tpl->assign('stelle', array(1,2,3,4,5), false, NULL);?>
                                         <?php
 $_from = $_smarty_tpl->getSmarty()->getRuntime('Foreach')->init($_smarty_tpl, $_smarty_tpl->getValue('stelle'), 's');
@@ -259,11 +272,31 @@ $_smarty_tpl->getSmarty()->getRuntime('Foreach')->restore($_smarty_tpl, 1);?>
                                     </div>
 
                                     <div class="price-container">
-                                        <span class="price">€29.90</span>
-                                        <span class="price-old">€49.90</span>
+                                        <?php if ($_smarty_tpl->getValue('haSconto') && (true && (true && null !== ($_smarty_tpl->getValue('prodotto')['prezzo_scontato'] ?? null)))) {?>
+                                            <span class="price">€<?php echo $_smarty_tpl->getSmarty()->getModifierCallback('number_format')($_smarty_tpl->getValue('prodotto')['prezzo_scontato'],2);?>
+</span>
+                                            <?php if ((true && (true && null !== ($_smarty_tpl->getValue('prodotto')['prezzo'] ?? null)))) {?>
+                                                <span class="price-old">€<?php echo $_smarty_tpl->getSmarty()->getModifierCallback('number_format')($_smarty_tpl->getValue('prodotto')['prezzo'],2);?>
+</span>
+                                            <?php }?>
+                                        <?php } elseif ((true && (true && null !== ($_smarty_tpl->getValue('prodotto')['prezzo'] ?? null)))) {?>
+                                            <span class="price">€<?php echo $_smarty_tpl->getSmarty()->getModifierCallback('number_format')($_smarty_tpl->getValue('prodotto')['prezzo'],2);?>
+</span>
+                                        <?php } else { ?>
+                                            <span class="price-unavailable">Prezzo non disponibile</span>
+                                        <?php }?>
                                     </div>
 
-                                    <button class="btn-cart">
+                                    <button class="btn-cart"
+                                            data-id="<?php echo $_smarty_tpl->getValue('prodotto')['id'];?>
+"
+                                            data-nome="<?php echo htmlspecialchars((string)$_smarty_tpl->getValue('prodotto')['nome'], ENT_QUOTES, 'UTF-8', true);?>
+"
+                                            data-img="<?php echo $_smarty_tpl->getValue('base_url');?>
+/img/prodotti/<?php echo $_smarty_tpl->getValue('prodotto')['immagine'];?>
+"
+                                            data-prezzo="<?php echo $_smarty_tpl->getValue('prezzoEffettivo');?>
+">
                                         <i class="ti ti-shopping-cart"></i> Acquista
                                     </button>
                                 </div>
@@ -274,108 +307,7 @@ $_smarty_tpl->getSmarty()->getRuntime('Foreach')->restore($_smarty_tpl, 1);?>
 }
 $_smarty_tpl->getSmarty()->getRuntime('Foreach')->restore($_smarty_tpl, 1);?>
 
-                                <div class="card-vector-item card-vector-more">
-                    <a href="<?php echo $_smarty_tpl->getValue('base_url');?>
-/offerte" class="more-link-wrapper" title="Vedi tutte le offerte">
-                        <div class="more-circle-btn">
-                            <span class="more-plus-icon">+</span>
-                        </div>
-                        <span class="more-text">Vedi tutte</span>
-                    </a>
-                </div>
-            <?php }?>
-        </div>
-    </section>
-
-                <section class="home-section">
-        <h2 class="title section-title is-4 text-uppercase">✨ Nuovi Arrivi</h2>
-
-        <div class="card-row-vector">
-            <?php if ((true && ($_smarty_tpl->hasVariable('nuovi_arrivi') && null !== ($_smarty_tpl->getValue('nuovi_arrivi') ?? null))) && $_smarty_tpl->getSmarty()->getModifierCallback('count')($_smarty_tpl->getValue('nuovi_arrivi')) > 0) {?>
-                <?php
-$_from = $_smarty_tpl->getSmarty()->getRuntime('Foreach')->init($_smarty_tpl, $_smarty_tpl->getValue('nuovi_arrivi'), 'prodotto');
-$foreach4DoElse = true;
-foreach ($_from ?? [] as $_smarty_tpl->getVariable('prodotto')->value) {
-$foreach4DoElse = false;
-?>
-                    <?php $_smarty_tpl->assign('haSconto', (($tmp = $_smarty_tpl->getValue('prodotto')['sconto'] ?? null)===null||$tmp==='' ? false ?? null : $tmp), false, NULL);?>
-                    <?php $_smarty_tpl->assign('prezzoEffettivo', $_smarty_tpl->getValue('haSconto') && (true && (true && null !== ($_smarty_tpl->getValue('prodotto')['prezzo_scontato'] ?? null))) ? $_smarty_tpl->getValue('prodotto')['prezzo_scontato'] : (($tmp = $_smarty_tpl->getValue('prodotto')['prezzo'] ?? null)===null||$tmp==='' ? null ?? null : $tmp), false, NULL);?>
-
-                    <div class="card-vector-item">
-                            <a href="<?php echo $_smarty_tpl->getValue('base_url');?>
-/prodotto/<?php echo $_smarty_tpl->getValue('prodotto')['id'];?>
-" class="card-link-wrapper">
-                                <div class="card home-card-fixed">
-                                    <div class="card-image">
-                                        <figure class="image-container-fixed">
-                                            <img src="<?php echo $_smarty_tpl->getValue('base_url');?>
-/img/prodotti/<?php echo $_smarty_tpl->getValue('prodotto')['immagine'];?>
-" alt="<?php echo htmlspecialchars((string)$_smarty_tpl->getValue('prodotto')['nome'], ENT_QUOTES, 'UTF-8', true);?>
-" />
-                                        </figure>
-                                    </div>
-                                    <div class="card-content">
-                                        <p class="card-title-custom"><?php echo htmlspecialchars((string)$_smarty_tpl->getValue('prodotto')['nome'], ENT_QUOTES, 'UTF-8', true);?>
-</p>
-
-                                        <div class="card-rating">
-                                            <?php $_smarty_tpl->assign('media', $_smarty_tpl->getValue('prodotto')['valutazione_media'], false, NULL);?>
-                                            <?php $_smarty_tpl->assign('stelle', array(1,2,3,4,5), false, NULL);?>
-                                            <?php
-$_from = $_smarty_tpl->getSmarty()->getRuntime('Foreach')->init($_smarty_tpl, $_smarty_tpl->getValue('stelle'), 's');
-$foreach5DoElse = true;
-foreach ($_from ?? [] as $_smarty_tpl->getVariable('s')->value) {
-$foreach5DoElse = false;
-?>
-                                                <?php if ($_smarty_tpl->getValue('s') <= $_smarty_tpl->getValue('media')) {?>
-                                                    <i class="ti ti-star-filled star-icon"></i>
-                                                <?php } elseif (($_smarty_tpl->getValue('s')-$_smarty_tpl->getValue('media')) < 1) {?>
-                                                    <i class="ti ti-star-half-filled star-icon"></i>
-                                                <?php } else { ?>
-                                                    <i class="ti ti-star star-icon"></i>
-                                                <?php }?>
-                                            <?php
-}
-$_smarty_tpl->getSmarty()->getRuntime('Foreach')->restore($_smarty_tpl, 1);?>
-                                        </div>
-
-                                        <div class="price-container">
-                                            <?php if ($_smarty_tpl->getValue('haSconto') && (true && (true && null !== ($_smarty_tpl->getValue('prodotto')['prezzo_scontato'] ?? null)))) {?>
-                                                <span class="price">€<?php echo $_smarty_tpl->getSmarty()->getModifierCallback('number_format')($_smarty_tpl->getValue('prodotto')['prezzo_scontato'],2);?>
-</span>
-                                                <?php if ((true && (true && null !== ($_smarty_tpl->getValue('prodotto')['prezzo'] ?? null)))) {?>
-                                                    <span class="price-old">€<?php echo $_smarty_tpl->getSmarty()->getModifierCallback('number_format')($_smarty_tpl->getValue('prodotto')['prezzo'],2);?>
-</span>
-                                                <?php }?>
-                                            <?php } elseif ((true && (true && null !== ($_smarty_tpl->getValue('prodotto')['prezzo'] ?? null)))) {?>
-                                                <span class="price">€<?php echo $_smarty_tpl->getSmarty()->getModifierCallback('number_format')($_smarty_tpl->getValue('prodotto')['prezzo'],2);?>
-</span>
-                                            <?php } else { ?>
-                                                <span class="price-unavailable">Prezzo non disponibile</span>
-                                            <?php }?>
-                                        </div>
-
-                                        <button class="btn-cart"
-                                                data-id="<?php echo $_smarty_tpl->getValue('prodotto')['id'];?>
-"
-                                                data-nome="<?php echo htmlspecialchars((string)$_smarty_tpl->getValue('prodotto')['nome'], ENT_QUOTES, 'UTF-8', true);?>
-"
-                                                data-img="<?php echo $_smarty_tpl->getValue('base_url');?>
-/img/prodotti/<?php echo $_smarty_tpl->getValue('prodotto')['immagine'];?>
-"
-                                                data-prezzo="<?php echo $_smarty_tpl->getValue('prezzoEffettivo');?>
-">
-                                            <i class="ti ti-shopping-cart"></i> Acquista
-                                        </button>
-                                    </div>
-                                </div>
-                            </a>
-                        </div>
-                    <?php
-}
-$_smarty_tpl->getSmarty()->getRuntime('Foreach')->restore($_smarty_tpl, 1);?>
-
-                                <div class="card-vector-item card-vector-more">
+                <div class="card-vector-item card-vector-more">
                     <a href="<?php echo $_smarty_tpl->getValue('base_url');?>
 /catalogo?ordinamento=novita" class="more-link-wrapper" title="Vedi tutti i nuovi arrivi">
                         <div class="more-circle-btn">
@@ -386,70 +318,7 @@ $_smarty_tpl->getSmarty()->getRuntime('Foreach')->restore($_smarty_tpl, 1);?>
                 </div>
 
             <?php } else { ?>
-                <?php $_smarty_tpl->assign('demo_arrivals', array(1,2,3,4,5), false, NULL);?>
-                <?php
-$_from = $_smarty_tpl->getSmarty()->getRuntime('Foreach')->init($_smarty_tpl, $_smarty_tpl->getValue('demo_arrivals'), 'j');
-$foreach6DoElse = true;
-foreach ($_from ?? [] as $_smarty_tpl->getVariable('j')->value) {
-$foreach6DoElse = false;
-?>
-                    <div class="card-vector-item">
-                        <a href="#" class="card-link-wrapper">
-                            <div class="card home-card-fixed">
-                                <div class="card-image">
-                                    <figure class="image-container-fixed">
-                                        <img src="https://bulma.io/assets/images/placeholders/1280x960.png" alt="Placeholder image" />
-                                    </figure>
-                                </div>
-                                <div class="card-content">
-                                    <p class="card-title-custom">Nuovo Arrivo <?php echo $_smarty_tpl->getValue('j');?>
-</p>
-
-                                    <div class="card-rating">
-                                        <?php $_smarty_tpl->assign('media', 4, false, NULL);?>
-                                        <?php $_smarty_tpl->assign('stelle', array(1,2,3,4,5), false, NULL);?>
-                                        <?php
-$_from = $_smarty_tpl->getSmarty()->getRuntime('Foreach')->init($_smarty_tpl, $_smarty_tpl->getValue('stelle'), 's');
-$foreach7DoElse = true;
-foreach ($_from ?? [] as $_smarty_tpl->getVariable('s')->value) {
-$foreach7DoElse = false;
-?>
-                                            <?php if ($_smarty_tpl->getValue('s') <= $_smarty_tpl->getValue('media')) {?>
-                                                <i class="ti ti-star-filled star-icon"></i>
-                                            <?php } elseif (($_smarty_tpl->getValue('s')-$_smarty_tpl->getValue('media')) < 1) {?>
-                                                <i class="ti ti-star-half-filled star-icon"></i>
-                                            <?php } else { ?>
-                                                <i class="ti ti-star star-icon"></i>
-                                            <?php }?>
-                                        <?php
-}
-$_smarty_tpl->getSmarty()->getRuntime('Foreach')->restore($_smarty_tpl, 1);?>
-                                    </div>
-
-                                    <div class="price-container">
-                                        <span class="price">€39.90</span>
-                                    </div>
-
-                                    <button class="btn-cart">
-                                        <i class="ti ti-shopping-cart"></i> Acquista
-                                    </button>
-                                </div>
-                            </div>
-                        </a>
-                    </div>
-                <?php
-}
-$_smarty_tpl->getSmarty()->getRuntime('Foreach')->restore($_smarty_tpl, 1);?>
-
-                                <div class="card-vector-item card-vector-more">
-                    <a href="<?php echo $_smarty_tpl->getValue('base_url');?>
-/catalogo?ordinamento=novita" class="more-link-wrapper" title="Vedi tutti i nuovi arrivi">
-                        <div class="more-circle-btn">
-                            <span class="more-plus-icon">+</span>
-                        </div>
-                        <span class="more-text">Vedi tutti</span>
-                    </a>
-                </div>
+                <p class="empty-section-message">Nessun nuovo arrivo disponibile al momento.</p>
             <?php }?>
         </div>
     </section>
@@ -513,12 +382,36 @@ $_smarty_tpl->getSmarty()->getRuntime('Foreach')->restore($_smarty_tpl, 1);?>
     </div>
 </div>
 
+<div class="unavailable-modal" id="unavailable-modal" aria-hidden="true">
+    <div class="modal-background"></div>
+
+    <div class="unavailable-modal-content">
+        <button id="close-unavailable-modal" class="modal-close-btn" type="button" aria-label="Chiudi pop-up">&times;</button>
+
+        <div class="unavailable-modal-icon">
+            <i class="ti ti-ban"></i>
+        </div>
+
+        <h3 class="unavailable-modal-title">Prodotto non disponibile</h3>
+        <p class="unavailable-modal-text" id="unavailable-modal-text">
+            Questo prodotto non è al momento acquistabile.
+        </p>
+
+        <div class="unavailable-modal-actions">
+            <a href="<?php echo $_smarty_tpl->getValue('base_url');?>
+" class="button btn-unavailable-modal">
+                <i class="ti ti-arrow-left"></i> Torna al catalogo
+            </a>
+        </div>
+    </div>
+</div>
+
 <?php
 }
 }
 /* {/block "content"} */
 /* {block "extra_js"} */
-class Block_14184241276a5e1f94342ac9_51217136 extends \Smarty\Runtime\Block
+class Block_20973361626a5e921d39bd32_07371032 extends \Smarty\Runtime\Block
 {
 public function callBlock(\Smarty\Template $_smarty_tpl) {
 $_smarty_current_dir = 'C:\\xampp\\htdocs\\TableCrown\\Presentation\\smarty-dir\\templates';
@@ -546,14 +439,17 @@ $_smarty_current_dir = 'C:\\xampp\\htdocs\\TableCrown\\Presentation\\smarty-dir\
 <?php echo '</script'; ?>
 >
 
+
 <?php echo '<script'; ?>
 >
+    // Percorso base del sito, valutato qui da Smarty prima del JS puro sotto.
+    const baseUrl = "<?php echo $_smarty_tpl->getValue('base_url');?>
+";
 
     
 
     function initHomeCartLogic() {
 
-    // ── ELEMENTI MODAL: AGGIUNTO AL CARRELLO ──
     const minicartModal  = document.getElementById('minicart-modal');
     const minicartImg     = document.getElementById('minicart-img');
     const minicartNome    = document.getElementById('minicart-nome');
@@ -588,7 +484,6 @@ $_smarty_current_dir = 'C:\\xampp\\htdocs\\TableCrown\\Presentation\\smarty-dir\
         btn.addEventListener('click', function (e) { e.stopPropagation(); });
     });
 
-    // ── ELEMENTI MODAL: ACCESSO RICHIESTO ──
     const loginModal = document.getElementById('login-modal');
 
     function apriLoginModal() {
@@ -615,54 +510,102 @@ $_smarty_current_dir = 'C:\\xampp\\htdocs\\TableCrown\\Presentation\\smarty-dir\
         btn.addEventListener('click', function (e) { e.stopPropagation(); });
     });
 
-    // ── FUNZIONE AJAX: PROVA SEMPRE AD AGGIUNGERE AL CARRELLO ──
-    // Non decide nulla in anticipo: si fida solo della risposta di Control.
-    function aggiungiAlCarrello(idProdotto, quantita, dati) {
-    fetch('/carrello/aggiungi', {
-        method: 'POST',
-        headers: {
-            'Content-Type': 'application/x-www-form-urlencoded',
-            'X-Requested-With': 'XMLHttpRequest'
-        },
-        body: 'id_prodotto=' + idProdotto + '&quantita=' + quantita
-    })
-    .then(function(res) {
-        var status = res.status;
-        return res.text().then(function(text) {
-            try {
-                var data = JSON.parse(text);
-                return { status: status, body: data };
-            } catch(e) {
-                return { status: 401, body: { error: 'auth_required' } };
-            }
-        });
-    })
-    .then(function(result) {
-        if (result.status === 401 || result.body.error === 'auth_required') {
-            apriLoginModal();
-            return;
-        }
-        if (result.body.success) {
-            apriMinicart(dati);
-            var cartBadge = document.getElementById('cart-count');
-            if (cartBadge && result.body.cart_count !== undefined) {
-                cartBadge.textContent = result.body.cart_count;
-                cartBadge.style.display = result.body.cart_count > 0 ? 'inline' : 'none';
-            }
-        } else {
-            console.error('Errore carrello:', result.body.messaggio || 'errore generico');
-        }
-    })
-    .catch(function(err) {
-        console.error('Fetch carrello fallita:', err);
-    });
-}
+    const unavailableModal = document.getElementById('unavailable-modal');
+    const unavailableModalText = document.getElementById('unavailable-modal-text');
 
-    // ── CLICK SU TUTTI I BOTTONI "ACQUISTA" ──
+    function apriUnavailableModal(messaggio) {
+        if (!unavailableModal) return;
+        if (messaggio) {
+            unavailableModalText.textContent = messaggio;
+        }
+        unavailableModal.classList.add('is-active');
+        unavailableModal.setAttribute('aria-hidden', 'false');
+        document.getElementById('close-unavailable-modal')?.focus();
+    }
+
+    function chiudiUnavailableModal() {
+        if (!unavailableModal) return;
+        unavailableModal.classList.remove('is-active');
+        unavailableModal.setAttribute('aria-hidden', 'true');
+    }
+
+    document.getElementById('close-unavailable-modal')?.addEventListener('click', function (e) {
+        e.preventDefault();
+        chiudiUnavailableModal();
+    });
+
+    unavailableModal?.querySelector('.modal-background')?.addEventListener('click', chiudiUnavailableModal);
+
+    unavailableModal?.querySelectorAll('.unavailable-modal-actions a').forEach(function (btn) {
+        btn.addEventListener('click', function (e) { e.stopPropagation(); });
+    });
+
+    function aggiungiAlCarrello(idProdotto, quantita, dati) {
+        fetch(baseUrl + '/carrello/aggiungi', {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/x-www-form-urlencoded',
+                'X-Requested-With': 'XMLHttpRequest'
+            },
+            body: 'id_prodotto=' + idProdotto + '&quantita=' + quantita
+        })
+        .then(function(res) {
+            var status = res.status;
+            return res.text().then(function(text) {
+                var data = parseJsonSicuro(text);
+                if (data === null) {
+                    console.error('Risposta non interpretabile come JSON:', text);
+                    return { status: status, body: { error: 'parse_error' } };
+                }
+                return { status: status, body: data };
+            });
+        })
+        .then(function(result) {
+            if (result.body.error === 'parse_error') {
+                console.error('Errore tecnico nella risposta del server.');
+                return;
+            }
+            if (result.status === 401 || result.body.error === 'auth_required') {
+                apriLoginModal();
+                return;
+            }
+            if (result.body.success !== false) {
+                apriMinicart(dati);
+                var cartBadge = document.getElementById('cart-count');
+                if (cartBadge && result.body.cart_count !== undefined) {
+                    cartBadge.textContent = result.body.cart_count;
+                    cartBadge.style.display = result.body.cart_count > 0 ? 'inline' : 'none';
+                }
+            } else {
+                apriUnavailableModal(result.body.message);
+            }
+        })
+        .catch(function(err) {
+            console.error('Fetch carrello fallita:', err);
+        });
+    }
+
+    function parseJsonSicuro(text) {
+        try {
+            return JSON.parse(text);
+        } catch (e) {
+            var inizio = text.indexOf('{');
+            var fine = text.lastIndexOf('}');
+            if (inizio === -1 || fine === -1 || fine < inizio) {
+                return null;
+            }
+            try {
+                return JSON.parse(text.substring(inizio, fine + 1));
+            } catch (e2) {
+                return null;
+            }
+        }
+    }
+
     document.querySelectorAll('.btn-cart').forEach(function (btn) {
         btn.addEventListener('click', function (e) {
             e.preventDefault();
-            e.stopPropagation(); // blocca la navigazione della card sottostante
+            e.stopPropagation();
 
             const dati = {
                 id: this.dataset.id,

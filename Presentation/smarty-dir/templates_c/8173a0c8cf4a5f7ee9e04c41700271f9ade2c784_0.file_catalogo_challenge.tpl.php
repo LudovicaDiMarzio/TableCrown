@@ -1,18 +1,18 @@
 <?php
-/* Smarty version 5.8.0, created on 2026-07-20 19:02:53
+/* Smarty version 5.8.0, created on 2026-07-20 20:55:49
   from 'file:catalogo_challenge.tpl' */
 
 /* @var \Smarty\Template $_smarty_tpl */
 if ($_smarty_tpl->getCompiled()->isFresh($_smarty_tpl, array (
   'version' => '5.8.0',
-  'unifunc' => 'content_6a5e54bd2b48c1_39677119',
+  'unifunc' => 'content_6a5e6f35312153_07745590',
   'has_nocache_code' => false,
   'file_dependency' => 
   array (
     '8173a0c8cf4a5f7ee9e04c41700271f9ade2c784' => 
     array (
       0 => 'catalogo_challenge.tpl',
-      1 => 1784566718,
+      1 => 1784573744,
       2 => 'file',
     ),
   ),
@@ -20,18 +20,18 @@ if ($_smarty_tpl->getCompiled()->isFresh($_smarty_tpl, array (
   array (
   ),
 ))) {
-function content_6a5e54bd2b48c1_39677119 (\Smarty\Template $_smarty_tpl) {
+function content_6a5e6f35312153_07745590 (\Smarty\Template $_smarty_tpl) {
 $_smarty_current_dir = 'C:\\xampp\\htdocs\\TableCrown\\Presentation\\smarty-dir\\templates';
 $_smarty_tpl->getInheritance()->init($_smarty_tpl, true);
 ?>
 
 
 <?php 
-$_smarty_tpl->getInheritance()->instanceBlock($_smarty_tpl, 'Block_3955609776a5e54bd28afb4_32027156', "content");
+$_smarty_tpl->getInheritance()->instanceBlock($_smarty_tpl, 'Block_9988554896a5e6f352ec3f1_33075031', "content");
 $_smarty_tpl->getInheritance()->endChild($_smarty_tpl, "common/layout.tpl", $_smarty_current_dir);
 }
 /* {block "content"} */
-class Block_3955609776a5e54bd28afb4_32027156 extends \Smarty\Runtime\Block
+class Block_9988554896a5e6f352ec3f1_33075031 extends \Smarty\Runtime\Block
 {
 public function callBlock(\Smarty\Template $_smarty_tpl) {
 $_smarty_current_dir = 'C:\\xampp\\htdocs\\TableCrown\\Presentation\\smarty-dir\\templates';
@@ -141,7 +141,7 @@ foreach ($_from ?? [] as $_smarty_tpl->getVariable('torneo')->value) {
 $foreach1DoElse = false;
 ?>
                                 <li><a href="<?php echo $_smarty_tpl->getValue('base_url');?>
-/eventi/dettaglio/<?php echo $_smarty_tpl->getValue('torneo')['idEvento'];?>
+/eventi/dettaglio?id=<?php echo $_smarty_tpl->getValue('torneo')['idEvento'];?>
 "><?php echo htmlspecialchars((string)$_smarty_tpl->getValue('torneo')['nomeEvento'], ENT_QUOTES, 'UTF-8', true);?>
 </a></li>
                                 <?php
@@ -154,13 +154,13 @@ $_smarty_tpl->getSmarty()->getRuntime('Foreach')->restore($_smarty_tpl, 1);?>
                         <div class="evento-list-actions">
                             <?php if ($_smarty_tpl->getValue('passato')) {?>
                                 <a href="<?php echo $_smarty_tpl->getValue('base_url');?>
-/eventi/risultati/<?php echo $_smarty_tpl->getValue('evento')['idEvento'];?>
+/eventi/risultati?id=<?php echo $_smarty_tpl->getValue('evento')['idEvento'];?>
 " class="btn-evento-secondary">
                                     Visualizza risultati
                                 </a>
                             <?php } else { ?>
                                 <a href="<?php echo $_smarty_tpl->getValue('base_url');?>
-/eventi/dettaglio/<?php echo $_smarty_tpl->getValue('evento')['idEvento'];?>
+/eventi/dettaglio?id=<?php echo $_smarty_tpl->getValue('evento')['idEvento'];?>
 " class="btn-evento-primary">
                                     Scopri di più
                                 </a>

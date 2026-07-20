@@ -1,18 +1,18 @@
 <?php
-/* Smarty version 5.8.0, created on 2026-07-18 15:21:14
+/* Smarty version 5.8.0, created on 2026-07-21 00:36:20
   from 'file:catalogo/CatalogoOfferte.tpl' */
 
 /* @var \Smarty\Template $_smarty_tpl */
 if ($_smarty_tpl->getCompiled()->isFresh($_smarty_tpl, array (
   'version' => '5.8.0',
-  'unifunc' => 'content_6a5b7dca3a5481_24855575',
+  'unifunc' => 'content_6a5ea2e4842df2_79212867',
   'has_nocache_code' => false,
   'file_dependency' => 
   array (
     '38ec86058c0eb73a4c35c7998c018cf199965b3c' => 
     array (
       0 => 'catalogo/CatalogoOfferte.tpl',
-      1 => 1784380864,
+      1 => 1784579830,
       2 => 'file',
     ),
   ),
@@ -20,28 +20,28 @@ if ($_smarty_tpl->getCompiled()->isFresh($_smarty_tpl, array (
   array (
   ),
 ))) {
-function content_6a5b7dca3a5481_24855575 (\Smarty\Template $_smarty_tpl) {
+function content_6a5ea2e4842df2_79212867 (\Smarty\Template $_smarty_tpl) {
 $_smarty_current_dir = 'C:\\xampp\\htdocs\\TableCrown\\Presentation\\smarty-dir\\templates\\catalogo';
 $_smarty_tpl->getInheritance()->init($_smarty_tpl, true);
 ?>
 
 
 <?php 
-$_smarty_tpl->getInheritance()->instanceBlock($_smarty_tpl, 'Block_21352050646a5b7dca353535_78504569', "extra_css");
+$_smarty_tpl->getInheritance()->instanceBlock($_smarty_tpl, 'Block_2816523086a5ea2e47ed049_46960351', "extra_css");
 ?>
 
 
 <?php 
-$_smarty_tpl->getInheritance()->instanceBlock($_smarty_tpl, 'Block_4340534086a5b7dca3583b6_94747682', "content");
+$_smarty_tpl->getInheritance()->instanceBlock($_smarty_tpl, 'Block_15040825906a5ea2e47efb71_73269580', "content");
 ?>
 
 
 <?php 
-$_smarty_tpl->getInheritance()->instanceBlock($_smarty_tpl, 'Block_2453353156a5b7dca3a48c7_79775217', "extra_js");
+$_smarty_tpl->getInheritance()->instanceBlock($_smarty_tpl, 'Block_9204851816a5ea2e4841c46_39546031', "extra_js");
 $_smarty_tpl->getInheritance()->endChild($_smarty_tpl, "common/layout.tpl", $_smarty_current_dir);
 }
 /* {block "extra_css"} */
-class Block_21352050646a5b7dca353535_78504569 extends \Smarty\Runtime\Block
+class Block_2816523086a5ea2e47ed049_46960351 extends \Smarty\Runtime\Block
 {
 public function callBlock(\Smarty\Template $_smarty_tpl) {
 $_smarty_current_dir = 'C:\\xampp\\htdocs\\TableCrown\\Presentation\\smarty-dir\\templates\\catalogo';
@@ -54,7 +54,7 @@ $_smarty_current_dir = 'C:\\xampp\\htdocs\\TableCrown\\Presentation\\smarty-dir\
 }
 /* {/block "extra_css"} */
 /* {block "content"} */
-class Block_4340534086a5b7dca3583b6_94747682 extends \Smarty\Runtime\Block
+class Block_15040825906a5ea2e47efb71_73269580 extends \Smarty\Runtime\Block
 {
 public function callBlock(\Smarty\Template $_smarty_tpl) {
 $_smarty_current_dir = 'C:\\xampp\\htdocs\\TableCrown\\Presentation\\smarty-dir\\templates\\catalogo';
@@ -215,7 +215,7 @@ $foreach0DoElse = false;
 ?>
                             <div class="product-card">
                                 <a href="<?php echo $_smarty_tpl->getValue('base_url');?>
-/prodotto/<?php echo $_smarty_tpl->getValue('prodotto')['id'];?>
+/prodotto?id=<?php echo $_smarty_tpl->getValue('prodotto')['id'];?>
 " class="product-card-link">
 
                                     <div class="product-image-wrapper">
@@ -462,7 +462,7 @@ if ((true && (true && null !== ($_smarty_tpl->getValue('filtri')['ordinamento'] 
 }
 /* {/block "content"} */
 /* {block "extra_js"} */
-class Block_2453353156a5b7dca3a48c7_79775217 extends \Smarty\Runtime\Block
+class Block_9204851816a5ea2e4841c46_39546031 extends \Smarty\Runtime\Block
 {
 public function callBlock(\Smarty\Template $_smarty_tpl) {
 $_smarty_current_dir = 'C:\\xampp\\htdocs\\TableCrown\\Presentation\\smarty-dir\\templates\\catalogo';
@@ -666,7 +666,12 @@ document.addEventListener('DOMContentLoaded', function() {
                 apriLoginModal();
                 return;
             }
-            if (result.body.success) {
+            if (result.body.success || result.body.id) {
+                var src = result.body.imgProdotto
+                    ? 'data:image/jpeg;base64,' + result.body.imgProdotto
+                    : (dati.img || '/img/placeholder.jpg');
+                dati.img = src;
+
                 apriMinicart(dati);
                 var cartBadge = document.getElementById('cart-count');
                 if (cartBadge && result.body.cart_count !== undefined) {

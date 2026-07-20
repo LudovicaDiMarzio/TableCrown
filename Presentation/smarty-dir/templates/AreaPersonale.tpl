@@ -20,7 +20,7 @@
                         {if isset($utente.avatar) && $utente.avatar}
                             <img src="{$base_url}/img/avatar/{$utente.avatar|escape}"
                                  onerror="this.onerror=null; this.src='{$base_url}/img/avatar-default.png'"
-                                 alt="{$utente.nome|escape}"
+                                 alt="{$utente.name|escape}"
                                  class="account-avatar-img">
                         {else}
                             <i class="ti ti-user"></i>
@@ -29,7 +29,7 @@
 
                     <div class="account-welcome">
                         <span class="account-eyebrow">Area Personale</span>
-                        <h1 class="account-titolo">Ciao, {$utente.nome|escape}!</h1>
+                        <h1 class="account-titolo">Ciao, {$utente.name|escape}!</h1>
 
                         <div class="account-header-links">
                             <a href="{$base_url}/logout" class="account-link-secondary">
@@ -58,7 +58,7 @@
                     {/foreach}
 
                     {* ── METODI DI PAGAMENTO ── *}
-                    <a href="{$base_url}/profilo/pagamento" class="account-card">
+                    <a href="{$base_url}/profilo/pagamenti" class="account-card">
                         <span class="account-card-icon">
                             <i class="ti ti-credit-card"></i>
                         </span>

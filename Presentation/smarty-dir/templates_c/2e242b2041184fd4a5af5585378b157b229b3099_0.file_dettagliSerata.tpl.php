@@ -1,18 +1,18 @@
 <?php
-/* Smarty version 5.8.0, created on 2026-07-20 18:50:13
+/* Smarty version 5.8.0, created on 2026-07-20 21:03:26
   from 'file:dettagliSerata.tpl' */
 
 /* @var \Smarty\Template $_smarty_tpl */
 if ($_smarty_tpl->getCompiled()->isFresh($_smarty_tpl, array (
   'version' => '5.8.0',
-  'unifunc' => 'content_6a5e51c5ab5b84_36314994',
+  'unifunc' => 'content_6a5e70fe880859_30110523',
   'has_nocache_code' => false,
   'file_dependency' => 
   array (
     '2e242b2041184fd4a5af5585378b157b229b3099' => 
     array (
       0 => 'dettagliSerata.tpl',
-      1 => 1784112089,
+      1 => 1784574201,
       2 => 'file',
     ),
   ),
@@ -20,7 +20,7 @@ if ($_smarty_tpl->getCompiled()->isFresh($_smarty_tpl, array (
   array (
   ),
 ))) {
-function content_6a5e51c5ab5b84_36314994 (\Smarty\Template $_smarty_tpl) {
+function content_6a5e70fe880859_30110523 (\Smarty\Template $_smarty_tpl) {
 $_smarty_current_dir = 'C:\\xampp\\htdocs\\TableCrown\\Presentation\\smarty-dir\\templates';
 $_smarty_tpl->getInheritance()->init($_smarty_tpl, true);
 ?>
@@ -28,11 +28,11 @@ $_smarty_tpl->getInheritance()->init($_smarty_tpl, true);
 
 
 <?php 
-$_smarty_tpl->getInheritance()->instanceBlock($_smarty_tpl, 'Block_15018734836a5e51c5aa9729_69673539', "content");
+$_smarty_tpl->getInheritance()->instanceBlock($_smarty_tpl, 'Block_14698608026a5e70fe86b624_44987964', "content");
 $_smarty_tpl->getInheritance()->endChild($_smarty_tpl, "common/layout.tpl", $_smarty_current_dir);
 }
 /* {block "content"} */
-class Block_15018734836a5e51c5aa9729_69673539 extends \Smarty\Runtime\Block
+class Block_14698608026a5e70fe86b624_44987964 extends \Smarty\Runtime\Block
 {
 public function callBlock(\Smarty\Template $_smarty_tpl) {
 $_smarty_current_dir = 'C:\\xampp\\htdocs\\TableCrown\\Presentation\\smarty-dir\\templates';
@@ -44,12 +44,7 @@ $_smarty_current_dir = 'C:\\xampp\\htdocs\\TableCrown\\Presentation\\smarty-dir\
 <div class="dettaglio-container">
     <div class="container">
 
-        <nav class="dettaglio-breadcrumb">
-            <a href="<?php echo $_smarty_tpl->getValue('base_url');?>
-/">Home</a> / <a href="<?php echo $_smarty_tpl->getValue('base_url');?>
-/eventi">Eventi</a> / <?php echo $_smarty_tpl->getValue('serata')['nome'];?>
-
-        </nav>
+        
 
         <!-- ── BLOCCO SUPERIORE (senza box prezzo) ── -->
         <div class="dettaglio-top">

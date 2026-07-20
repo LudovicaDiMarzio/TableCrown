@@ -47,14 +47,17 @@
 
 /* ── LAYOUT PRINCIPALE (Asimmetrico 1fr + 340px) ──────────── */
 
-@media (max-width: 992px) {
-    .carrello-layout {
-        grid-template-columns: 1fr; /* colonna singola sotto i 992px */
-    }
+.carrello-layout {
+    display: grid;
+    grid-template-columns: minmax(0, 1fr) 340px;
+    gap: 2.5rem;
+    align-items: start;
+}
 
-    .carrello-summary {
-        position: static;
-    }
+.carrello-main {
+    display: flex;
+    flex-direction: column;
+    gap: 3rem;
 }
 
 
@@ -570,12 +573,9 @@
 
 @media (max-width: 992px) {
     .carrello-layout {
-    display: grid;
-    grid-template-columns: minmax(0, 1fr) 340px;
-    gap: 2.5rem;
-    align-items: start;
-}
-    
+        grid-template-columns: 1fr; /* colonna singola sotto i 992px */
+    }
+
     .carrello-summary {
         position: static;
     }

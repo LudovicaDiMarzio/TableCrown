@@ -4,7 +4,7 @@
 namespace TableCrown\Presentation\Views;
 
 use SmartyConfiguration;
-use Smarty;
+use Smarty\Smarty;
 
 abstract class ViewProfiloBase {
 

@@ -1,22 +1,76 @@
-{extends file="common/layout.tpl"}
+<?php
+/* Smarty version 5.8.0, created on 2026-07-21 01:51:24
+  from 'file:ProfiloPagamenti.tpl' */
 
-{block name="extra_css"}
-    <link rel="stylesheet" href="{$base_url}/css/ProfiloPagamenti.css">
-{/block}
+/* @var \Smarty\Template $_smarty_tpl */
+if ($_smarty_tpl->getCompiled()->isFresh($_smarty_tpl, array (
+  'version' => '5.8.0',
+  'unifunc' => 'content_6a5eb47c6b7f21_31573460',
+  'has_nocache_code' => false,
+  'file_dependency' => 
+  array (
+    'c66dfbf4459f8da985e2ff347335c860a7cfd955' => 
+    array (
+      0 => 'ProfiloPagamenti.tpl',
+      1 => 1784591482,
+      2 => 'file',
+    ),
+  ),
+  'includes' => 
+  array (
+  ),
+))) {
+function content_6a5eb47c6b7f21_31573460 (\Smarty\Template $_smarty_tpl) {
+$_smarty_current_dir = 'C:\\xampp\\htdocs\\TableCrown\\Presentation\\smarty-dir\\templates';
+$_smarty_tpl->getInheritance()->init($_smarty_tpl, true);
+?>
 
-{block name="content"}
+
+<?php 
+$_smarty_tpl->getInheritance()->instanceBlock($_smarty_tpl, 'Block_11595495166a5eb47c697cc2_35343122', "extra_css");
+?>
+
+
+<?php 
+$_smarty_tpl->getInheritance()->instanceBlock($_smarty_tpl, 'Block_7649199326a5eb47c69bee1_04800002', "content");
+?>
+
+
+<?php 
+$_smarty_tpl->getInheritance()->instanceBlock($_smarty_tpl, 'Block_4107358956a5eb47c6b6f76_04590861', "extra_js");
+$_smarty_tpl->getInheritance()->endChild($_smarty_tpl, "common/layout.tpl", $_smarty_current_dir);
+}
+/* {block "extra_css"} */
+class Block_11595495166a5eb47c697cc2_35343122 extends \Smarty\Runtime\Block
+{
+public function callBlock(\Smarty\Template $_smarty_tpl) {
+$_smarty_current_dir = 'C:\\xampp\\htdocs\\TableCrown\\Presentation\\smarty-dir\\templates';
+?>
+
+    <link rel="stylesheet" href="<?php echo $_smarty_tpl->getValue('base_url');?>
+/css/ProfiloPagamenti.css">
+<?php
+}
+}
+/* {/block "extra_css"} */
+/* {block "content"} */
+class Block_7649199326a5eb47c69bee1_04800002 extends \Smarty\Runtime\Block
+{
+public function callBlock(\Smarty\Template $_smarty_tpl) {
+$_smarty_current_dir = 'C:\\xampp\\htdocs\\TableCrown\\Presentation\\smarty-dir\\templates';
+?>
+
 <div class="pagamenti-container">
     <div class="container">
 
-        {* ── TOPBAR ── *}
-        <div class="pagamenti-topbar">
-            <a href="{$base_url}/profilo" class="pagamenti-back-link">
+                <div class="pagamenti-topbar">
+            <a href="<?php echo $_smarty_tpl->getValue('base_url');?>
+/profilo" class="pagamenti-back-link">
                 <i class="ti ti-arrow-left"></i> Torna all'Area Personale
             </a>
         </div>
 
-        {* ── HEADER ── *}
-        <div class="pagamenti-header">
+                <div class="pagamenti-header">
             <div class="pagamenti-header-text">
                 <span class="pagamenti-eyebrow">Area Personale</span>
                 <h1 class="pagamenti-titolo">
@@ -25,12 +79,13 @@
             </div>
 
             <div class="pagamenti-header-actions">
-                {if isset($metodi) && $metodi|@count > 0}
+                <?php if ((true && ($_smarty_tpl->hasVariable('metodi') && null !== ($_smarty_tpl->getValue('metodi') ?? null))) && $_smarty_tpl->getSmarty()->getModifierCallback('count')($_smarty_tpl->getValue('metodi')) > 0) {?>
                     <div class="pagamenti-count-badge">
-                        <span class="pagamenti-count-num">{$metodi|@count}</span>
-                        <span class="pagamenti-count-label">{if $metodi|@count == 1}carta{else}carte{/if}</span>
+                        <span class="pagamenti-count-num"><?php echo $_smarty_tpl->getSmarty()->getModifierCallback('count')($_smarty_tpl->getValue('metodi'));?>
+</span>
+                        <span class="pagamenti-count-label"><?php if ($_smarty_tpl->getSmarty()->getModifierCallback('count')($_smarty_tpl->getValue('metodi')) == 1) {?>carta<?php } else { ?>carte<?php }?></span>
                     </div>
-                {/if}
+                <?php }?>
 
                 <button type="button" class="pagamenti-add-btn" id="pagamenti-btn-aggiungi" title="Aggiungi nuova carta">
                     <i class="ti ti-plus"></i>
@@ -38,47 +93,53 @@
             </div>
         </div>
 
-        {* ── LISTA CARTE ── *}
-        {if isset($metodi) && $metodi|@count > 0}
+                <?php if ((true && ($_smarty_tpl->hasVariable('metodi') && null !== ($_smarty_tpl->getValue('metodi') ?? null))) && $_smarty_tpl->getSmarty()->getModifierCallback('count')($_smarty_tpl->getValue('metodi')) > 0) {?>
             <div class="pagamenti-list" id="pagamenti-list">
-                {foreach $metodi as $carta}
-                    {* -- 'predefinito' non ancora restituito da cartaToArray(): in attesa di implementazione lato Control -- *}
-                    <div class="pagamenti-card {if isset($carta.predefinito) && $carta.predefinito}pagamenti-card-predefinito{/if}" id="pagamenti-card-{$carta.id|escape}">
+                <?php
+$_from = $_smarty_tpl->getSmarty()->getRuntime('Foreach')->init($_smarty_tpl, $_smarty_tpl->getValue('metodi'), 'carta');
+$foreach0DoElse = true;
+foreach ($_from ?? [] as $_smarty_tpl->getVariable('carta')->value) {
+$foreach0DoElse = false;
+?>
+                                        <div class="pagamenti-card <?php if ((true && (true && null !== ($_smarty_tpl->getValue('carta')['predefinito'] ?? null))) && $_smarty_tpl->getValue('carta')['predefinito']) {?>pagamenti-card-predefinito<?php }?>" id="pagamenti-card-<?php echo htmlspecialchars((string)$_smarty_tpl->getValue('carta')['id'], ENT_QUOTES, 'UTF-8', true);?>
+">
 
                         <div class="pagamenti-card-top">
                             <span class="pagamenti-card-icon"><i class="ti ti-credit-card"></i></span>
-                            {if isset($carta.predefinito) && $carta.predefinito}
+                            <?php if ((true && (true && null !== ($_smarty_tpl->getValue('carta')['predefinito'] ?? null))) && $_smarty_tpl->getValue('carta')['predefinito']) {?>
                                 <span class="pagamenti-predefinito-badge">
                                     <i class="ti ti-star-filled"></i> Predefinito
                                 </span>
-                            {/if}
+                            <?php }?>
                         </div>
 
                         <div class="pagamenti-numero-mascherato">
-                            •••• •••• •••• {$carta.ultimeQuattroCifre|escape}
+                            •••• •••• •••• <?php echo htmlspecialchars((string)$_smarty_tpl->getValue('carta')['ultimeQuattroCifre'], ENT_QUOTES, 'UTF-8', true);?>
+
                         </div>
 
                         <div class="pagamenti-info-list">
                             <div class="pagamenti-info-row">
                                 <i class="ti ti-user"></i>
-                                <span class="pagamenti-info-value">{$carta.titolare|escape}</span>
+                                <span class="pagamenti-info-value"><?php echo htmlspecialchars((string)$_smarty_tpl->getValue('carta')['titolare'], ENT_QUOTES, 'UTF-8', true);?>
+</span>
                             </div>
                             <div class="pagamenti-info-row">
                                 <i class="ti ti-calendar"></i>
-                                <span class="pagamenti-info-value">Scadenza {$carta.scadenza|escape}</span>
+                                <span class="pagamenti-info-value">Scadenza <?php echo htmlspecialchars((string)$_smarty_tpl->getValue('carta')['scadenza'], ENT_QUOTES, 'UTF-8', true);?>
+</span>
                             </div>
                         </div>
 
                         <div class="pagamenti-actions">
                             
-                            {* ── ELIMINA: form nativo, niente fetch/JSON.
-                                 Corrisponde esattamente a CMetodiPagamento::eliminaCarta(),
-                                 che legge $_POST['id_carta'] e fa redirect (pattern PRG). ── *}
-                            <form action="{$base_url}/profilo/pagamenti/elimina"
+                                                        <form action="<?php echo $_smarty_tpl->getValue('base_url');?>
+/profilo/pagamenti/elimina"
                                   method="post"
                                   class="form-elimina-carta"
                                   data-confirm="Sei sicuro di voler eliminare questo metodo di pagamento?">
-                                <input type="hidden" name="id_carta" value="{$carta.id|escape}">
+                                <input type="hidden" name="id_carta" value="<?php echo htmlspecialchars((string)$_smarty_tpl->getValue('carta')['id'], ENT_QUOTES, 'UTF-8', true);?>
+">
                                 <button type="submit" class="pagamenti-btn-elimina">
                                     <i class="ti ti-trash"></i> Elimina
                                 </button>
@@ -86,11 +147,12 @@
                         </div>
 
                     </div>
-                {/foreach}
+                <?php
+}
+$_smarty_tpl->getSmarty()->getRuntime('Foreach')->restore($_smarty_tpl, 1);?>
             </div>
-        {else}
-            {* ── STATO VUOTO ── *}
-            <div class="pagamenti-empty" id="pagamenti-empty">
+        <?php } else { ?>
+                        <div class="pagamenti-empty" id="pagamenti-empty">
                 <div class="pagamenti-empty-icon">
                     <i class="ti ti-credit-card-off"></i>
                 </div>
@@ -100,19 +162,14 @@
                     <i class="ti ti-plus"></i> Aggiungi carta
                 </button>
             </div>
-        {/if}
+        <?php }?>
 
-        {* ── POPUP FORM (solo aggiungi) ──
-             Form nativo (niente fetch): corrisponde a CMetodiPagamento::aggiungiCarta(),
-             che legge $_POST tramite UHTTPMethods::postString() e fa redirect (pattern PRG).
-             NB: rispetto alla versione precedente, agli input è stato aggiunto l'attributo
-             "name", indispensabile per un submit di form nativo (prima c'era solo "id",
-             che serve solo a JS/CSS e non viene mai inviato al server). ── *}
-        <div class="pagamenti-popup-overlay" id="pagamenti-form-popup" hidden>
+                <div class="pagamenti-popup-overlay" id="pagamenti-form-popup" hidden>
             <div class="pagamenti-popup-box">
                 <h2 class="pagamenti-form-titolo">Aggiungi carta</h2>
 
-                <form id="pagamenti-form" action="{$base_url}/profilo/pagamenti/aggiungi" method="post">
+                <form id="pagamenti-form" action="<?php echo $_smarty_tpl->getValue('base_url');?>
+/profilo/pagamenti/aggiungi" method="post">
                     <div class="pagamenti-form-grid">
                         <div class="pagamenti-form-field pagamenti-form-field-full">
                             <label class="pagamenti-form-label" for="pagamenti-form-numero">Numero carta</label>
@@ -145,11 +202,20 @@
 
     </div>
 </div>
-{/block}
+<?php
+}
+}
+/* {/block "content"} */
+/* {block "extra_js"} */
+class Block_4107358956a5eb47c6b6f76_04590861 extends \Smarty\Runtime\Block
+{
+public function callBlock(\Smarty\Template $_smarty_tpl) {
+$_smarty_current_dir = 'C:\\xampp\\htdocs\\TableCrown\\Presentation\\smarty-dir\\templates';
+?>
 
-{block name="extra_js"}
-<script>
-{literal}
+<?php echo '<script'; ?>
+>
+
 (function() {
 
     // ── APERTURA/CHIUSURA POPUP "AGGIUNGI CARTA" ──
@@ -195,6 +261,11 @@
     });
 
 })();
-{/literal}
-</script>
-{/block}
+
+<?php echo '</script'; ?>
+>
+<?php
+}
+}
+/* {/block "extra_js"} */
+}

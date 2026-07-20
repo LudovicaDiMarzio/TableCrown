@@ -1,15 +1,18 @@
 <?php
 // Presentation/Views/ViewProfiloFactory.php
 
-use Presentation\Views\ViewProfiloBase;
-use Presentation\Views\ViewProfiloHub;
-use Presentation\Views\ViewModificaAccount;
-use Presentation\Views\ViewProfiloOrdini;
-use Presentation\Views\ViewProfiloRecensioni;
-use Presentation\Views\ViewProfiloWishlist;
-use Presentation\Views\ViewProfiloEventi;
-use Presentation\Views\ViewProfiloIndirizzi;
-use Presentation\Views\ViewProfiloPagamenti;
+namespace TableCrown\Presentation\Views;
+
+use TableCrown\Presentation\Views\ViewProfiloBase;
+use TableCrown\Presentation\Views\ViewProfiloHub;
+use TableCrown\Presentation\Views\ViewModificaAccount;
+use TableCrown\Presentation\Views\ViewProfiloOrdini;
+use TableCrown\Presentation\Views\ViewProfiloRecensioni;
+use TableCrown\Presentation\Views\ViewProfiloWishlist;
+use TableCrown\Presentation\Views\ViewProfiloEventi;
+use TableCrown\Presentation\Views\ViewProfiloIndirizzi;
+use TableCrown\Presentation\Views\ViewProfiloPagamenti;
+use InvalidArgumentException;
 
 class ViewProfiloFactory {
 
@@ -43,7 +46,7 @@ class ViewProfiloFactory {
             'profilo_wishlist'   => ViewProfiloWishlist::mostraProfiloWishlist($dati),
             'profilo_eventi'     => ViewProfiloEventi::mostraProfiloEventi($dati),
             'profilo_indirizzi'  => ViewProfiloIndirizzi::mostraProfiloIndirizzi($dati),
-            'profilo_pagamenti' => ViewProfiloPagamenti::mostraProfiloPagamenti($dati),
+            'profilo_pagamenti'  => ViewProfiloPagamenti::mostraProfiloPagamenti($dati),
         };
     }
 }

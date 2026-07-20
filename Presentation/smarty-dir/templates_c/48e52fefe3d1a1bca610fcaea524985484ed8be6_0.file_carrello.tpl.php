@@ -1,18 +1,18 @@
 <?php
-/* Smarty version 5.8.0, created on 2026-07-18 15:31:20
+/* Smarty version 5.8.0, created on 2026-07-20 23:24:40
   from 'file:carrello.tpl' */
 
 /* @var \Smarty\Template $_smarty_tpl */
 if ($_smarty_tpl->getCompiled()->isFresh($_smarty_tpl, array (
   'version' => '5.8.0',
-  'unifunc' => 'content_6a5b8028014739_62667932',
+  'unifunc' => 'content_6a5e92182413a6_57863213',
   'has_nocache_code' => false,
   'file_dependency' => 
   array (
     '48e52fefe3d1a1bca610fcaea524985484ed8be6' => 
     array (
       0 => 'carrello.tpl',
-      1 => 1784217688,
+      1 => 1784578649,
       2 => 'file',
     ),
   ),
@@ -20,30 +20,30 @@ if ($_smarty_tpl->getCompiled()->isFresh($_smarty_tpl, array (
   array (
   ),
 ))) {
-function content_6a5b8028014739_62667932 (\Smarty\Template $_smarty_tpl) {
+function content_6a5e92182413a6_57863213 (\Smarty\Template $_smarty_tpl) {
 $_smarty_current_dir = 'C:\\xampp\\htdocs\\TableCrown\\Presentation\\smarty-dir\\templates';
 $_smarty_tpl->getInheritance()->init($_smarty_tpl, true);
 ?>
 
 
 <?php 
-$_smarty_tpl->getInheritance()->instanceBlock($_smarty_tpl, 'Block_18878311986a5b8027f20f80_82104349', "extra_css");
+$_smarty_tpl->getInheritance()->instanceBlock($_smarty_tpl, 'Block_18811530136a5e92181feef2_33513265', "extra_css");
 ?>
 
 
 <?php 
-$_smarty_tpl->getInheritance()->instanceBlock($_smarty_tpl, 'Block_21356369926a5b8027f25035_12976872', "content");
+$_smarty_tpl->getInheritance()->instanceBlock($_smarty_tpl, 'Block_968809986a5e92182058a8_90205380', "content");
 ?>
 
 
 <?php 
-$_smarty_tpl->getInheritance()->instanceBlock($_smarty_tpl, 'Block_6820910106a5b8028011333_60173757', "extra_js");
+$_smarty_tpl->getInheritance()->instanceBlock($_smarty_tpl, 'Block_5624843946a5e921823ab91_98124326', "extra_js");
 ?>
 
 <?php $_smarty_tpl->getInheritance()->endChild($_smarty_tpl, "common/layout.tpl", $_smarty_current_dir);
 }
 /* {block "extra_css"} */
-class Block_18878311986a5b8027f20f80_82104349 extends \Smarty\Runtime\Block
+class Block_18811530136a5e92181feef2_33513265 extends \Smarty\Runtime\Block
 {
 public function callBlock(\Smarty\Template $_smarty_tpl) {
 $_smarty_current_dir = 'C:\\xampp\\htdocs\\TableCrown\\Presentation\\smarty-dir\\templates';
@@ -56,7 +56,7 @@ $_smarty_current_dir = 'C:\\xampp\\htdocs\\TableCrown\\Presentation\\smarty-dir\
 }
 /* {/block "extra_css"} */
 /* {block "content"} */
-class Block_21356369926a5b8027f25035_12976872 extends \Smarty\Runtime\Block
+class Block_968809986a5e92182058a8_90205380 extends \Smarty\Runtime\Block
 {
 public function callBlock(\Smarty\Template $_smarty_tpl) {
 $_smarty_current_dir = 'C:\\xampp\\htdocs\\TableCrown\\Presentation\\smarty-dir\\templates';
@@ -378,7 +378,7 @@ $_smarty_tpl->getSmarty()->getRuntime('Foreach')->restore($_smarty_tpl, 1);?>
 }
 /* {/block "content"} */
 /* {block "extra_js"} */
-class Block_6820910106a5b8028011333_60173757 extends \Smarty\Runtime\Block
+class Block_5624843946a5e921823ab91_98124326 extends \Smarty\Runtime\Block
 {
 public function callBlock(\Smarty\Template $_smarty_tpl) {
 $_smarty_current_dir = 'C:\\xampp\\htdocs\\TableCrown\\Presentation\\smarty-dir\\templates';
