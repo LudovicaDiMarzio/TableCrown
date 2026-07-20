@@ -1,7 +1,3 @@
-{extends file="common/layout.tpl"}
-
-{block name="content"}
-<link rel="stylesheet" href="{$base_url}/css/evento_dettaglio.css">
 {* Vista dettaglio Serata - lato utente. Dati attesi da CDettaglioEvento::mostraDettaglioEvento() *}
 <section class="evento-dettaglio-section">
   <div class="container">
@@ -39,4 +35,3 @@
 
   </div>
 </section>
-{/block}

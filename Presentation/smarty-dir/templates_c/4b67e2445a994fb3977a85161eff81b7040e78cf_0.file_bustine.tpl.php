@@ -1,18 +1,18 @@
 <?php
-/* Smarty version 5.8.0, created on 2026-07-18 16:54:38
+/* Smarty version 5.8.0, created on 2026-07-18 12:05:28
   from 'file:catalogo/bustine.tpl' */
 
 /* @var \Smarty\Template $_smarty_tpl */
 if ($_smarty_tpl->getCompiled()->isFresh($_smarty_tpl, array (
   'version' => '5.8.0',
-  'unifunc' => 'content_6a5b93ae639984_18554135',
+  'unifunc' => 'content_6a5b4fe804eda2_93672637',
   'has_nocache_code' => false,
   'file_dependency' => 
   array (
     '4b67e2445a994fb3977a85161eff81b7040e78cf' => 
     array (
       0 => 'catalogo/bustine.tpl',
-      1 => 1784386474,
+      1 => 1784368293,
       2 => 'file',
     ),
   ),
@@ -20,28 +20,28 @@ if ($_smarty_tpl->getCompiled()->isFresh($_smarty_tpl, array (
   array (
   ),
 ))) {
-function content_6a5b93ae639984_18554135 (\Smarty\Template $_smarty_tpl) {
+function content_6a5b4fe804eda2_93672637 (\Smarty\Template $_smarty_tpl) {
 $_smarty_current_dir = 'C:\\xampp\\htdocs\\TableCrown\\Presentation\\smarty-dir\\templates\\catalogo';
 $_smarty_tpl->getInheritance()->init($_smarty_tpl, true);
 ?>
 
 
 <?php 
-$_smarty_tpl->getInheritance()->instanceBlock($_smarty_tpl, 'Block_16875054856a5b93ae5e5801_18745858', "extra_css");
+$_smarty_tpl->getInheritance()->instanceBlock($_smarty_tpl, 'Block_137877396a5b4fe6b38584_32754465', "extra_css");
 ?>
 
 
 <?php 
-$_smarty_tpl->getInheritance()->instanceBlock($_smarty_tpl, 'Block_11651393756a5b93ae5eacd3_81809126', "content");
+$_smarty_tpl->getInheritance()->instanceBlock($_smarty_tpl, 'Block_17576642536a5b4fe6ed0c00_83379551', "content");
 ?>
 
 
 <?php 
-$_smarty_tpl->getInheritance()->instanceBlock($_smarty_tpl, 'Block_5681934406a5b93ae638d37_67809900', "extra_js");
+$_smarty_tpl->getInheritance()->instanceBlock($_smarty_tpl, 'Block_13680170456a5b4fe804bb64_13066084', "extra_js");
 $_smarty_tpl->getInheritance()->endChild($_smarty_tpl, "common/layout.tpl", $_smarty_current_dir);
 }
 /* {block "extra_css"} */
-class Block_16875054856a5b93ae5e5801_18745858 extends \Smarty\Runtime\Block
+class Block_137877396a5b4fe6b38584_32754465 extends \Smarty\Runtime\Block
 {
 public function callBlock(\Smarty\Template $_smarty_tpl) {
 $_smarty_current_dir = 'C:\\xampp\\htdocs\\TableCrown\\Presentation\\smarty-dir\\templates\\catalogo';
@@ -54,7 +54,7 @@ $_smarty_current_dir = 'C:\\xampp\\htdocs\\TableCrown\\Presentation\\smarty-dir\
 }
 /* {/block "extra_css"} */
 /* {block "content"} */
-class Block_11651393756a5b93ae5eacd3_81809126 extends \Smarty\Runtime\Block
+class Block_17576642536a5b4fe6ed0c00_83379551 extends \Smarty\Runtime\Block
 {
 public function callBlock(\Smarty\Template $_smarty_tpl) {
 $_smarty_current_dir = 'C:\\xampp\\htdocs\\TableCrown\\Presentation\\smarty-dir\\templates\\catalogo';
@@ -225,20 +225,27 @@ $_smarty_current_dir = 'C:\\xampp\\htdocs\\TableCrown\\Presentation\\smarty-dir\
                         <h4 class="filter-group-title">
                             <i class="ti ti-tag"></i> In Evidenza
                         </h4>
-                        <div class="checkbox-group" data-exclusive="in_evidenza_filtro">
+                        <div class="checkbox-group" data-exclusive="in_evidenza">
                             <label class="checkbox-label">
                                 <input type="checkbox"
-                                       name="in_evidenza_filtro[]"
+                                       name="in_evidenza[]"
                                        value="sconti"
-                                       <?php if ((true && (true && null !== ($_smarty_tpl->getValue('filtri')['in_evidenza_filtro'] ?? null))) && $_smarty_tpl->getSmarty()->getModifierCallback('in_array')('sconti',$_smarty_tpl->getValue('filtri')['in_evidenza_filtro'])) {?> checked<?php }?>>
+                                       <?php if ((true && (true && null !== ($_smarty_tpl->getValue('filtri')['in_evidenza'] ?? null))) && $_smarty_tpl->getSmarty()->getModifierCallback('in_array')('sconti',$_smarty_tpl->getValue('filtri')['in_evidenza'])) {?> checked<?php }?>>
                                 <span class="checkbox-text">Sconti Attivi</span>
                             </label>
                             <label class="checkbox-label">
                                 <input type="checkbox"
-                                       name="in_evidenza_filtro[]"
+                                       name="in_evidenza[]"
                                        value="novita"
-                                       <?php if ((true && (true && null !== ($_smarty_tpl->getValue('filtri')['in_evidenza_filtro'] ?? null))) && $_smarty_tpl->getSmarty()->getModifierCallback('in_array')('novita',$_smarty_tpl->getValue('filtri')['in_evidenza_filtro'])) {?> checked<?php }?>>
+                                       <?php if ((true && (true && null !== ($_smarty_tpl->getValue('filtri')['in_evidenza'] ?? null))) && $_smarty_tpl->getSmarty()->getModifierCallback('in_array')('novita',$_smarty_tpl->getValue('filtri')['in_evidenza'])) {?> checked<?php }?>>
                                 <span class="checkbox-text">Novità</span>
+                            </label>
+                            <label class="checkbox-label">
+                                <input type="checkbox"
+                                       name="in_evidenza[]"
+                                       value="venduti"
+                                       <?php if ((true && (true && null !== ($_smarty_tpl->getValue('filtri')['in_evidenza'] ?? null))) && $_smarty_tpl->getSmarty()->getModifierCallback('in_array')('venduti',$_smarty_tpl->getValue('filtri')['in_evidenza'])) {?> checked<?php }?>>
+                                <span class="checkbox-text">I più venduti</span>
                             </label>
                         </div>
                     </div>
@@ -348,14 +355,14 @@ $_smarty_tpl->getSmarty()->getRuntime('Foreach')->restore($_smarty_tpl, 1);?>
                                         </div>
 
                                         <div class="product-price-wrapper">
-                                            <?php if ((true && (true && null !== ($_smarty_tpl->getValue('prodotto')['prezzo'] ?? null)))) {?>
+                                            <?php if ((true && (true && null !== ($_smarty_tpl->getValue('prodotto')['prezzo_unitario'] ?? null)))) {?>
                                                 <?php if ($_smarty_tpl->getValue('prodotto')['sconto']) {?>
-                                                    <span class="product-price">€<?php echo $_smarty_tpl->getSmarty()->getModifierCallback('number_format')($_smarty_tpl->getValue('prodotto')['prezzo_scontato'],2);?>
+                                                    <span class="product-price">€<?php echo $_smarty_tpl->getSmarty()->getModifierCallback('number_format')($_smarty_tpl->getValue('prodotto')['prezzo_unitario'],2);?>
 </span>
-                                                    <span class="product-price-old">€<?php echo $_smarty_tpl->getSmarty()->getModifierCallback('number_format')($_smarty_tpl->getValue('prodotto')['prezzo'],2);?>
+                                                    <span class="product-price-old">€<?php echo $_smarty_tpl->getSmarty()->getModifierCallback('number_format')($_smarty_tpl->getValue('prodotto')['prezzo_originale'],2);?>
 </span>
                                                 <?php } else { ?>
-                                                    <span class="product-price">€<?php echo $_smarty_tpl->getSmarty()->getModifierCallback('number_format')($_smarty_tpl->getValue('prodotto')['prezzo'],2);?>
+                                                    <span class="product-price">€<?php echo $_smarty_tpl->getSmarty()->getModifierCallback('number_format')($_smarty_tpl->getValue('prodotto')['prezzo_unitario'],2);?>
 </span>
                                                 <?php }?>
                                             <?php } else { ?>
@@ -375,11 +382,8 @@ $_smarty_tpl->getSmarty()->getRuntime('Foreach')->restore($_smarty_tpl, 1);?>
                                             data-img="<?php echo $_smarty_tpl->getValue('base_url');?>
 /img/prodotti/<?php echo $_smarty_tpl->getValue('prodotto')['immagine'];?>
 "
-                                            data-prezzo="<?php if ($_smarty_tpl->getValue('prodotto')['sconto']) {
-echo $_smarty_tpl->getValue('prodotto')['prezzo_scontato'];
-} else {
-echo $_smarty_tpl->getValue('prodotto')['prezzo'];
-}?>"
+                                            data-prezzo="<?php echo $_smarty_tpl->getValue('prodotto')['prezzo_unitario'];?>
+"
                                             aria-label="Aggiungi a carrello">
                                         <i class="ti ti-shopping-cart"></i> Aggiungi
                                     </button>
@@ -519,7 +523,7 @@ if ((true && (true && null !== ($_smarty_tpl->getValue('filtri')['q'] ?? null)))
 }
 /* {/block "content"} */
 /* {block "extra_js"} */
-class Block_5681934406a5b93ae638d37_67809900 extends \Smarty\Runtime\Block
+class Block_13680170456a5b4fe804bb64_13066084 extends \Smarty\Runtime\Block
 {
 public function callBlock(\Smarty\Template $_smarty_tpl) {
 $_smarty_current_dir = 'C:\\xampp\\htdocs\\TableCrown\\Presentation\\smarty-dir\\templates\\catalogo';

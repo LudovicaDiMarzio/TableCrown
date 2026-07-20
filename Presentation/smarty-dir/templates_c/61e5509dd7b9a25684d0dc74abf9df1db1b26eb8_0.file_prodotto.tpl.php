@@ -1,18 +1,18 @@
 <?php
-/* Smarty version 5.8.0, created on 2026-07-18 10:43:08
+/* Smarty version 5.8.0, created on 2026-07-17 12:47:37
   from 'file:prodotto.tpl' */
 
 /* @var \Smarty\Template $_smarty_tpl */
 if ($_smarty_tpl->getCompiled()->isFresh($_smarty_tpl, array (
   'version' => '5.8.0',
-  'unifunc' => 'content_6a5b3c9c5ef8a2_80506328',
+  'unifunc' => 'content_6a5a0849cc6de7_23707608',
   'has_nocache_code' => false,
   'file_dependency' => 
   array (
     '61e5509dd7b9a25684d0dc74abf9df1db1b26eb8' => 
     array (
       0 => 'prodotto.tpl',
-      1 => 1784364185,
+      1 => 1784284223,
       2 => 'file',
     ),
   ),
@@ -20,28 +20,28 @@ if ($_smarty_tpl->getCompiled()->isFresh($_smarty_tpl, array (
   array (
   ),
 ))) {
-function content_6a5b3c9c5ef8a2_80506328 (\Smarty\Template $_smarty_tpl) {
+function content_6a5a0849cc6de7_23707608 (\Smarty\Template $_smarty_tpl) {
 $_smarty_current_dir = 'C:\\xampp\\htdocs\\TableCrown\\Presentation\\smarty-dir\\templates';
 $_smarty_tpl->getInheritance()->init($_smarty_tpl, true);
 ?>
 
 
 <?php 
-$_smarty_tpl->getInheritance()->instanceBlock($_smarty_tpl, 'Block_11233842066a5b3c9c59b5e6_14361756', "extra_css");
+$_smarty_tpl->getInheritance()->instanceBlock($_smarty_tpl, 'Block_1040425186a5a0849b4cd33_99428547', "extra_css");
 ?>
 
 
 <?php 
-$_smarty_tpl->getInheritance()->instanceBlock($_smarty_tpl, 'Block_5744900016a5b3c9c59fcf0_52816285', "content");
+$_smarty_tpl->getInheritance()->instanceBlock($_smarty_tpl, 'Block_13603203546a5a0849b57473_04952884', "content");
 ?>
 
 
 <?php 
-$_smarty_tpl->getInheritance()->instanceBlock($_smarty_tpl, 'Block_20944370266a5b3c9c5ed131_97720803', "extra_js");
+$_smarty_tpl->getInheritance()->instanceBlock($_smarty_tpl, 'Block_20305041876a5a0849cc39d7_05989722', "extra_js");
 $_smarty_tpl->getInheritance()->endChild($_smarty_tpl, "common/layout.tpl", $_smarty_current_dir);
 }
 /* {block "extra_css"} */
-class Block_11233842066a5b3c9c59b5e6_14361756 extends \Smarty\Runtime\Block
+class Block_1040425186a5a0849b4cd33_99428547 extends \Smarty\Runtime\Block
 {
 public function callBlock(\Smarty\Template $_smarty_tpl) {
 $_smarty_current_dir = 'C:\\xampp\\htdocs\\TableCrown\\Presentation\\smarty-dir\\templates';
@@ -54,7 +54,7 @@ $_smarty_current_dir = 'C:\\xampp\\htdocs\\TableCrown\\Presentation\\smarty-dir\
 }
 /* {/block "extra_css"} */
 /* {block "content"} */
-class Block_5744900016a5b3c9c59fcf0_52816285 extends \Smarty\Runtime\Block
+class Block_13603203546a5a0849b57473_04952884 extends \Smarty\Runtime\Block
 {
 public function callBlock(\Smarty\Template $_smarty_tpl) {
 $_smarty_current_dir = 'C:\\xampp\\htdocs\\TableCrown\\Presentation\\smarty-dir\\templates';
@@ -84,17 +84,17 @@ $_smarty_current_dir = 'C:\\xampp\\htdocs\\TableCrown\\Presentation\\smarty-dir\
 
                         <div class="prodotto-info">
 
-                        <?php if ($_smarty_tpl->getValue('disponibilita') == 'esaurito') {?>
-                <span class="prodotto-badge prodotto-badge-esaurito">Esaurito</span>
-            <?php } elseif ($_smarty_tpl->getValue('disponibilita') == 'non_disponibile') {?>
-                <span class="prodotto-badge prodotto-badge-non-disponibile">Non disponibile</span>
-            <?php } elseif ($_smarty_tpl->getValue('disponibilita') == 'in_arrivo') {?>
-                <span class="prodotto-badge prodotto-badge-in-arrivo">In arrivo</span>
-            <?php } elseif ($_smarty_tpl->getValue('disponibilita') == 'disponibile') {?>
-                <span class="prodotto-badge prodotto-badge-disponibile">Disponibile</span>
-            <?php } else { ?>
-                <span class="prodotto-badge prodotto-badge-sconosciuto">Stato sconosciuto</span>
-            <?php }?>
+                                <?php if ($_smarty_tpl->getValue('disponibilita') == 'esaurito') {?>
+                    <span class="prodotto-badge prodotto-badge-esaurito">Esaurito</span>
+                <?php } elseif ($_smarty_tpl->getValue('disponibilita') == 'annunciato') {?>
+                    <span class="prodotto-badge prodotto-badge-annunciato">Annunciato</span>
+                <?php } elseif ($_smarty_tpl->getValue('disponibilita') == 'non disponibile') {?>
+                    <span class="prodotto-badge prodotto-badge-non-disponibile">Non disponibile</span>
+                <?php } elseif ($_smarty_tpl->getValue('disponibilita') == 'in arrivo') {?>
+                    <span class="prodotto-badge prodotto-badge-in-arrivo">In arrivo</span>
+                <?php } else { ?>
+                    <span class="prodotto-badge prodotto-badge-disponibile">Disponibile</span>
+                <?php }?>
 
                 <h1 class="prodotto-nome"><?php echo htmlspecialchars((string)$_smarty_tpl->getValue('nome'), ENT_QUOTES, 'UTF-8', true);?>
 </h1>
@@ -199,44 +199,40 @@ $_smarty_tpl->getSmarty()->getRuntime('Foreach')->restore($_smarty_tpl, 1);?>
                     <?php }?>
                 </div>
 
-                                <?php if ($_smarty_tpl->getValue('disponibilita') == 'disponibile') {?>
-
-                                        <div class="acquisto-quantita">
-                        <label class="acquisto-quantita-label" for="qty-input">Quantità:</label>
-                        <div class="quantita-stepper">
-                            <button class="button quantita-btn" id="qty-minus" type="button" aria-label="Diminuisci quantità">
-                                <i class="ti ti-minus"></i>
-                            </button>
-                            <input type="number"
-                                   id="qty-input"
-                                   class="input quantita-input"
-                                   value="1"
-                                   min="1"
-                                   max="99"
-                                   aria-label="Quantità">
-                            <button class="button quantita-btn" id="qty-plus" type="button" aria-label="Aumenta quantità">
-                                <i class="ti ti-plus"></i>
-                            </button>
-                        </div>
+                                <div class="acquisto-quantita">
+                    <label class="acquisto-quantita-label" for="qty-input">Quantità:</label>
+                    <div class="quantita-stepper">
+                        <button class="button quantita-btn" id="qty-minus" type="button" aria-label="Diminuisci quantità">
+                            <i class="ti ti-minus"></i>
+                        </button>
+                        <input type="number"
+                               id="qty-input"
+                               class="input quantita-input"
+                               value="1"
+                               min="1"
+                               max="99"
+                               aria-label="Quantità">
+                        <button class="button quantita-btn" id="qty-plus" type="button" aria-label="Aumenta quantità">
+                            <i class="ti ti-plus"></i>
+                        </button>
                     </div>
+                </div>
 
-                                        <?php if ((true && ($_smarty_tpl->hasVariable('prezzo') && null !== ($_smarty_tpl->getValue('prezzo') ?? null)))) {?>
-                        <div class="acquisto-prezzo-tot">
-                            <span class="prezzo-tot-label">Totale:</span>
-                            <span class="prezzo-tot-value" id="prezzo-tot" data-unit="<?php if ($_smarty_tpl->getValue('sconto')) {
+                                <?php if ((true && ($_smarty_tpl->hasVariable('prezzo') && null !== ($_smarty_tpl->getValue('prezzo') ?? null)))) {?>
+                    <div class="acquisto-prezzo-tot">
+                        <span class="prezzo-tot-label">Totale:</span>
+                        <span class="prezzo-tot-value" id="prezzo-tot" data-unit="<?php if ($_smarty_tpl->getValue('sconto')) {
 echo $_smarty_tpl->getValue('prezzo_scontato');
 } else {
 echo $_smarty_tpl->getValue('prezzo');
 }?>">
-                                €<?php if ($_smarty_tpl->getValue('sconto')) {
+                            €<?php if ($_smarty_tpl->getValue('sconto')) {
 echo $_smarty_tpl->getSmarty()->getModifierCallback('number_format')($_smarty_tpl->getValue('prezzo_scontato'),2);
 } else {
 echo $_smarty_tpl->getSmarty()->getModifierCallback('number_format')($_smarty_tpl->getValue('prezzo'),2);
 }?>
-                            </span>
-                        </div>
-                    <?php }?>
-
+                        </span>
+                    </div>
                 <?php }?>
 
                                 <?php if ($_smarty_tpl->getValue('disponibilita') == 'disponibile') {?>
@@ -613,7 +609,7 @@ $_smarty_tpl->getSmarty()->getRuntime('Foreach')->restore($_smarty_tpl, 1);?>
 }
 /* {/block "content"} */
 /* {block "extra_js"} */
-class Block_20944370266a5b3c9c5ed131_97720803 extends \Smarty\Runtime\Block
+class Block_20305041876a5a0849cc39d7_05989722 extends \Smarty\Runtime\Block
 {
 public function callBlock(\Smarty\Template $_smarty_tpl) {
 $_smarty_current_dir = 'C:\\xampp\\htdocs\\TableCrown\\Presentation\\smarty-dir\\templates';

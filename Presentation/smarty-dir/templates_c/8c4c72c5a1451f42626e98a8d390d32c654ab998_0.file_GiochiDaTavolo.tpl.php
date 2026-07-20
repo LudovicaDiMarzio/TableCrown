@@ -1,18 +1,18 @@
 <?php
-/* Smarty version 5.8.0, created on 2026-07-18 16:54:48
+/* Smarty version 5.8.0, created on 2026-07-17 13:00:35
   from 'file:catalogo/GiochiDaTavolo.tpl' */
 
 /* @var \Smarty\Template $_smarty_tpl */
 if ($_smarty_tpl->getCompiled()->isFresh($_smarty_tpl, array (
   'version' => '5.8.0',
-  'unifunc' => 'content_6a5b93b816e9b2_01167359',
+  'unifunc' => 'content_6a5a0b53910007_49733281',
   'has_nocache_code' => false,
   'file_dependency' => 
   array (
     '8c4c72c5a1451f42626e98a8d390d32c654ab998' => 
     array (
       0 => 'catalogo/GiochiDaTavolo.tpl',
-      1 => 1784386406,
+      1 => 1784284223,
       2 => 'file',
     ),
   ),
@@ -20,30 +20,28 @@ if ($_smarty_tpl->getCompiled()->isFresh($_smarty_tpl, array (
   array (
   ),
 ))) {
-function content_6a5b93b816e9b2_01167359 (\Smarty\Template $_smarty_tpl) {
+function content_6a5a0b53910007_49733281 (\Smarty\Template $_smarty_tpl) {
 $_smarty_current_dir = 'C:\\xampp\\htdocs\\TableCrown\\Presentation\\smarty-dir\\templates\\catalogo';
 $_smarty_tpl->getInheritance()->init($_smarty_tpl, true);
 ?>
 
 
 <?php 
-$_smarty_tpl->getInheritance()->instanceBlock($_smarty_tpl, 'Block_21353833826a5b93b8109d74_00261718', "extra_css");
+$_smarty_tpl->getInheritance()->instanceBlock($_smarty_tpl, 'Block_5402853516a5a0b53730122_80548732', "extra_css");
 ?>
 
 
 <?php 
-$_smarty_tpl->getInheritance()->instanceBlock($_smarty_tpl, 'Block_20553818046a5b93b810d9c1_72945424', "content");
+$_smarty_tpl->getInheritance()->instanceBlock($_smarty_tpl, 'Block_15958470196a5a0b537398a8_01554706', "content");
 ?>
 
 
 <?php 
-$_smarty_tpl->getInheritance()->instanceBlock($_smarty_tpl, 'Block_19625106896a5b93b816dcd5_07844625', "extra_js");
-?>
-
-<?php $_smarty_tpl->getInheritance()->endChild($_smarty_tpl, "common/layout.tpl", $_smarty_current_dir);
+$_smarty_tpl->getInheritance()->instanceBlock($_smarty_tpl, 'Block_10635604896a5a0b5390d984_39561311', "extra_js");
+$_smarty_tpl->getInheritance()->endChild($_smarty_tpl, "common/layout.tpl", $_smarty_current_dir);
 }
 /* {block "extra_css"} */
-class Block_21353833826a5b93b8109d74_00261718 extends \Smarty\Runtime\Block
+class Block_5402853516a5a0b53730122_80548732 extends \Smarty\Runtime\Block
 {
 public function callBlock(\Smarty\Template $_smarty_tpl) {
 $_smarty_current_dir = 'C:\\xampp\\htdocs\\TableCrown\\Presentation\\smarty-dir\\templates\\catalogo';
@@ -56,13 +54,11 @@ $_smarty_current_dir = 'C:\\xampp\\htdocs\\TableCrown\\Presentation\\smarty-dir\
 }
 /* {/block "extra_css"} */
 /* {block "content"} */
-class Block_20553818046a5b93b810d9c1_72945424 extends \Smarty\Runtime\Block
+class Block_15958470196a5a0b537398a8_01554706 extends \Smarty\Runtime\Block
 {
 public function callBlock(\Smarty\Template $_smarty_tpl) {
 $_smarty_current_dir = 'C:\\xampp\\htdocs\\TableCrown\\Presentation\\smarty-dir\\templates\\catalogo';
 ?>
-
-
 
 
 <div class="catalogo-container">
@@ -71,7 +67,7 @@ $_smarty_current_dir = 'C:\\xampp\\htdocs\\TableCrown\\Presentation\\smarty-dir\
         <div class="container">
 
             <div class="catalogo-search-wrapper">
-                                <form class="catalogo-search-form" action="<?php echo $_smarty_tpl->getValue('base_url');?>
+                <form class="catalogo-search-form" action="<?php echo $_smarty_tpl->getValue('base_url');?>
 /catalogo/giochi-da-tavolo" method="get" id="search-form">
                     <input class="input catalogo-search-input"
                            type="search"
@@ -113,7 +109,7 @@ $_smarty_current_dir = 'C:\\xampp\\htdocs\\TableCrown\\Presentation\\smarty-dir\
                                                 <option value="prezzo-asc"  <?php if ((true && (true && null !== ($_smarty_tpl->getValue('filtri')['ordinamento'] ?? null))) && $_smarty_tpl->getValue('filtri')['ordinamento'] == 'prezzo-asc') {?>  selected<?php }?>>Prezzo: crescente</option>
                         <option value="prezzo-desc" <?php if ((true && (true && null !== ($_smarty_tpl->getValue('filtri')['ordinamento'] ?? null))) && $_smarty_tpl->getValue('filtri')['ordinamento'] == 'prezzo-desc') {?> selected<?php }?>>Prezzo: decrescente</option>
                         <option value="popolarita"  <?php if ((true && (true && null !== ($_smarty_tpl->getValue('filtri')['ordinamento'] ?? null))) && $_smarty_tpl->getValue('filtri')['ordinamento'] == 'popolarita') {?>  selected<?php }?>>Più venduti</option>
-                        <option value="rating_min"      <?php if ((true && (true && null !== ($_smarty_tpl->getValue('filtri')['ordinamento'] ?? null))) && $_smarty_tpl->getValue('filtri')['ordinamento'] == 'rating_min') {?>      selected<?php }?>>Valutazione</option>
+                        <option value="rating"      <?php if ((true && (true && null !== ($_smarty_tpl->getValue('filtri')['ordinamento'] ?? null))) && $_smarty_tpl->getValue('filtri')['ordinamento'] == 'rating') {?>      selected<?php }?>>Valutazione</option>
                     </select>
                 </div>
             </div>
@@ -229,21 +225,22 @@ $_smarty_current_dir = 'C:\\xampp\\htdocs\\TableCrown\\Presentation\\smarty-dir\
                         <h4 class="filter-group-title">
                             <i class="ti ti-tag"></i> In Evidenza
                         </h4>
-                        <div class="checkbox-group" data-exclusive="in_evidenza_filtro">
+                        <div class="checkbox-group" data-exclusive="in_evidenza">
                             <label class="checkbox-label">
                                 <input type="checkbox"
-                                       name="in_evidenza_filtro[]"
+                                       name="in_evidenza[]"
                                        value="sconti"
-                                       <?php if ((true && (true && null !== ($_smarty_tpl->getValue('filtri')['in_evidenza_filtro'] ?? null))) && $_smarty_tpl->getSmarty()->getModifierCallback('in_array')('sconti',$_smarty_tpl->getValue('filtri')['in_evidenza_filtro'])) {?> checked<?php }?>>
+                                       <?php if ((true && (true && null !== ($_smarty_tpl->getValue('filtri')['in_evidenza'] ?? null))) && $_smarty_tpl->getSmarty()->getModifierCallback('in_array')('sconti',$_smarty_tpl->getValue('filtri')['in_evidenza'])) {?> checked<?php }?>>
                                 <span class="checkbox-text">Sconti Attivi</span>
                             </label>
                             <label class="checkbox-label">
                                 <input type="checkbox"
-                                       name="in_evidenza_filtro[]"
+                                       name="in_evidenza[]"
                                        value="novita"
-                                       <?php if ((true && (true && null !== ($_smarty_tpl->getValue('filtri')['in_evidenza_filtro'] ?? null))) && $_smarty_tpl->getSmarty()->getModifierCallback('in_array')('novita',$_smarty_tpl->getValue('filtri')['in_evidenza_filtro'])) {?> checked<?php }?>>
+                                       <?php if ((true && (true && null !== ($_smarty_tpl->getValue('filtri')['in_evidenza'] ?? null))) && $_smarty_tpl->getSmarty()->getModifierCallback('in_array')('novita',$_smarty_tpl->getValue('filtri')['in_evidenza'])) {?> checked<?php }?>>
                                 <span class="checkbox-text">Novità</span>
                             </label>
+                            
                         </div>
                     </div>
 
@@ -424,10 +421,8 @@ $_smarty_tpl->getSmarty()->getRuntime('Foreach')->restore($_smarty_tpl, 1);?>
                     </div>
 
                                         <div class="filter-actions">
-                        <a class="pagination-previous" href="<?php echo $_smarty_tpl->getValue('baseAction');?>
-?page=<?php echo $_smarty_tpl->getValue('pagination')['current_page']-1;
-if ((true && (true && null !== ($_smarty_tpl->getValue('filtri')['q'] ?? null)))) {?>&q=<?php echo htmlspecialchars((string)$_smarty_tpl->getValue('filtri')['q'], ENT_QUOTES, 'UTF-8', true);
-}?>">
+                        <a href="<?php echo $_smarty_tpl->getValue('base_url');?>
+/catalogo/giochi-da-tavolo" class="button btn-reset-filters">
                             <i class="ti ti-refresh"></i> Ripristina
                         </a>
                     </div>
@@ -679,7 +674,7 @@ if ((true && (true && null !== ($_smarty_tpl->getValue('filtri')['q'] ?? null)))
 }
 /* {/block "content"} */
 /* {block "extra_js"} */
-class Block_19625106896a5b93b816dcd5_07844625 extends \Smarty\Runtime\Block
+class Block_10635604896a5a0b5390d984_39561311 extends \Smarty\Runtime\Block
 {
 public function callBlock(\Smarty\Template $_smarty_tpl) {
 $_smarty_current_dir = 'C:\\xampp\\htdocs\\TableCrown\\Presentation\\smarty-dir\\templates\\catalogo';

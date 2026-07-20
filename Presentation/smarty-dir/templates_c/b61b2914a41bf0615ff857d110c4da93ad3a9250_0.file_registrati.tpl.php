@@ -1,18 +1,18 @@
 <?php
-/* Smarty version 5.8.0, created on 2026-07-18 22:22:20
+/* Smarty version 5.8.0, created on 2026-07-20 15:25:20
   from 'file:registrati.tpl' */
 
 /* @var \Smarty\Template $_smarty_tpl */
 if ($_smarty_tpl->getCompiled()->isFresh($_smarty_tpl, array (
   'version' => '5.8.0',
-  'unifunc' => 'content_6a5be07cc64755_76203014',
+  'unifunc' => 'content_6a5e21c0c6d6c7_08331881',
   'has_nocache_code' => false,
   'file_dependency' => 
   array (
     'b61b2914a41bf0615ff857d110c4da93ad3a9250' => 
     array (
       0 => 'registrati.tpl',
-      1 => 1784277013,
+      1 => 1784553224,
       2 => 'file',
     ),
   ),
@@ -20,23 +20,23 @@ if ($_smarty_tpl->getCompiled()->isFresh($_smarty_tpl, array (
   array (
   ),
 ))) {
-function content_6a5be07cc64755_76203014 (\Smarty\Template $_smarty_tpl) {
+function content_6a5e21c0c6d6c7_08331881 (\Smarty\Template $_smarty_tpl) {
 $_smarty_current_dir = 'C:\\xampp\\htdocs\\TableCrown\\Presentation\\smarty-dir\\templates';
 $_smarty_tpl->getInheritance()->init($_smarty_tpl, true);
 ?>
 
 
 <?php 
-$_smarty_tpl->getInheritance()->instanceBlock($_smarty_tpl, 'Block_20934394326a5be07cb546c0_71215997', "extra_css");
+$_smarty_tpl->getInheritance()->instanceBlock($_smarty_tpl, 'Block_13812325466a5e21c0c2fa85_35208245', "extra_css");
 ?>
 
 
 <?php 
-$_smarty_tpl->getInheritance()->instanceBlock($_smarty_tpl, 'Block_16177461856a5be07cc12680_86732629', "content");
+$_smarty_tpl->getInheritance()->instanceBlock($_smarty_tpl, 'Block_148760616a5e21c0c4bfa6_23397832', "content");
 $_smarty_tpl->getInheritance()->endChild($_smarty_tpl, "common/layout.tpl", $_smarty_current_dir);
 }
 /* {block "extra_css"} */
-class Block_20934394326a5be07cb546c0_71215997 extends \Smarty\Runtime\Block
+class Block_13812325466a5e21c0c2fa85_35208245 extends \Smarty\Runtime\Block
 {
 public function callBlock(\Smarty\Template $_smarty_tpl) {
 $_smarty_current_dir = 'C:\\xampp\\htdocs\\TableCrown\\Presentation\\smarty-dir\\templates';
@@ -49,7 +49,7 @@ $_smarty_current_dir = 'C:\\xampp\\htdocs\\TableCrown\\Presentation\\smarty-dir\
 }
 /* {/block "extra_css"} */
 /* {block "content"} */
-class Block_16177461856a5be07cc12680_86732629 extends \Smarty\Runtime\Block
+class Block_148760616a5e21c0c4bfa6_23397832 extends \Smarty\Runtime\Block
 {
 public function callBlock(\Smarty\Template $_smarty_tpl) {
 $_smarty_current_dir = 'C:\\xampp\\htdocs\\TableCrown\\Presentation\\smarty-dir\\templates';

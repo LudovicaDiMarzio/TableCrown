@@ -10,7 +10,7 @@
 
     {* ── SEARCH BAR ── *}
     <div class="home-search-bar">
-        <form class="home-search-form" action="{$base_url}/catalogo/giochi-da-tavolo" method="get">
+        <form class="home-search-form" action="{$base_url}/catalogo" method="get">
             <input class="input home-search-input"
                    type="search"
                    name="q"
@@ -252,6 +252,15 @@
                         </div>
                     {/foreach}
 
+                {* Card Vedi Altro per dati reali *}
+                <div class="card-vector-item card-vector-more">
+                    <a href="{$base_url}/catalogo?ordinamento=novita" class="more-link-wrapper" title="Vedi tutti i nuovi arrivi">
+                        <div class="more-circle-btn">
+                            <span class="more-plus-icon">+</span>
+                        </div>
+                        <span class="more-text">Vedi tutti</span>
+                    </a>
+                </div>
 
             {else}
                 {assign var="demo_arrivals" value=[1, 2, 3, 4, 5]}
@@ -486,12 +495,7 @@
             apriLoginModal();
             return;
         }
-        if (result.body.success || result.body.id) {
-            var src = result.body.imgProdotto
-                ? 'data:image/jpeg;base64,' + result.body.imgProdotto
-                : (dati.img || '/img/placeholder.jpg');
-            dati.img = src;
-
+        if (result.body.success) {
             apriMinicart(dati);
             var cartBadge = document.getElementById('cart-count');
             if (cartBadge && result.body.cart_count !== undefined) {

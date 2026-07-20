@@ -496,9 +496,7 @@
 
         var img = riga.querySelector('.carrello-item-img');
         if (img) {
-            img.src = data.imgProdotto
-                ? 'data:image/jpeg;base64,' + data.imgProdotto
-                : '/img/default.png';
+            img.src = data.immagine_url;
             img.alt = data.nome;
         }
 
