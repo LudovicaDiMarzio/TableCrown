@@ -1,78 +1,91 @@
 <?php
-namespace Testing\Fixtures;
+namespace TableCrown\Testing\Fixtures;
 
 use Doctrine\Common\DataFixtures\AbstractFixture;
 use Doctrine\Common\DataFixtures\DependentFixtureInterface;
 use Doctrine\Persistence\ObjectManager;
 use Faker\Factory;
 
-// Importiamo le Entity
+// Importo le classi necessarie
 use TableCrown\Entity\EWishlist;
 use TableCrown\Entity\EUtente;
-use TableCrown\Entity\EGiocoDaTavolo;
-use TableCrown\Entity\EPortaDadi;
-use TableCrown\Entity\EBustine;
+use TableCrown\Entity\EProdotto;
+use TableCrown\Entity\EGiocoDaTavolo; // <-- Aggiunto
+use TableCrown\Entity\EBustine;       // <-- Aggiunto
+use TableCrown\Entity\EPortaDadi;     // <-- Aggiunto
 
 class WishlistFixture extends AbstractFixture implements DependentFixtureInterface
 {
     private const NUM_UTENTI = 20;
 
-    public function load(ObjectManager $manager): void
-    {
-        $faker = Factory::create('it_IT');
-
-        echo "Generazione delle liste dei desideri (Wishlist) in corso...\n";
-
-        for ($i = 0; $i < self::NUM_UTENTI; $i++) {
-            
-            // 1. Peschiamo l'utente
-            $utente = $this->getReference('utente_' . $i, EUtente::class);
-
-            // 2. Creiamo la wishlist base per questo utente
-            $wishlist = new EWishlist($utente);
-
-            // 3. Quanti prodotti ha salvato l'utente? (Simuliamo da 0 a 5)
-            $numeroPreferiti = $faker->numberBetween(0, 5);
-
-            for ($j = 0; $j < $numeroPreferiti; $j++) {
-                
-                // Peschiamo un prodotto a caso (polimorfismo)
-                $tipoProdotto = $faker->randomElement(['gioco', 'portadadi', 'bustine']);
-
-                if ($tipoProdotto === 'gioco') {
-                    $prodotto = $this->getReference('gioco_' . $faker->numberBetween(0, 9), EGiocoDaTavolo::class);
-                } elseif ($tipoProdotto === 'portadadi') {
-                    $prodotto = $this->getReference('portadadi_' . $faker->numberBetween(0, 4), EPortaDadi::class);
-                } else {
-                    $prodotto = $this->getReference('bustine_' . $faker->numberBetween(0, 4), EBustine::class);
-                }
-
-                // Aggiungiamo il prodotto alla wishlist. 
-                // Se Faker dovesse pescare per sbaglio due volte lo stesso gioco nello stesso ciclo,
-                // la tua classe EWishlist ignorerà il duplicato in automatico grazie al tuo "contains()"!
-                $wishlist->addProdotto($prodotto);
-            }
-
-            // Mettiamo il segnalibro
-            $this->addReference('wishlist_' . $i, $wishlist);
-
-            $manager->persist($wishlist);
-        }
-
-        $manager->flush();
-        echo "Wishlist create e popolate con successo!\n";
-    }
-
-    /**
-     * La wishlist ha bisogno dell'utente e dell'intero catalogo prodotti!
-     */
     public function getDependencies(): array
     {
         return [
             UtenteFixture::class,
             GiocoDaTavoloFixture::class,
-            PortaDadiFixture::class,
             BustineFixture::class,
+            PortaDadiFixture::class,
         ];
+    }
+
+    public function load(ObjectManager $manager): void
+    {
+        $faker = Factory::create('it_IT');
+
+        for ($i = 0; $i < self::NUM_UTENTI; $i++) {
+            
+            // 1. Non tutti hanno una wishlist (70% di probabilità)
+            if (!$faker->boolean(70)) {
+                continue; 
+            }
+
+            /** @var EUtente $utente */
+            $utente = $this->getReference('utente_' . $i, EUtente::class);
+
+            $wishlist = new EWishlist($utente);
+
+            // 2. Garantiamo prodotti MISTI.
+            // Inseriamo SEMPRE almeno un Gioco da Tavolo
+            $numGiochi = $faker->numberBetween(1, 3);
+            for ($j = 0; $j < $numGiochi; $j++) {
+                $randomId = $faker->numberBetween(0, 19);
+                // CHIEDIAMO LA CLASSE ESATTA: EGiocoDaTavolo::class
+                $gioco = $this->getReference('gioco_' . $randomId, EGiocoDaTavolo::class);
+                $wishlist->addProdotto($gioco);
+            }
+
+            // Inseriamo SEMPRE almeno un accessorio (Bustina o Porta Dadi)
+            if ($faker->boolean(50)) {
+                $numBustine = $faker->numberBetween(1, 2);
+                for ($j = 0; $j < $numBustine; $j++) {
+                    $randomId = $faker->numberBetween(0, 9);
+                    // CHIEDIAMO LA CLASSE ESATTA: EBustine::class
+                    $bustina = $this->getReference('bustine_' . $randomId, EBustine::class);
+                    $wishlist->addProdotto($bustina);
+                }
+            } else {
+                $numPortaDadi = $faker->numberBetween(1, 2);
+                for ($j = 0; $j < $numPortaDadi; $j++) {
+                    $randomId = $faker->numberBetween(0, 9);
+                    // CHIEDIAMO LA CLASSE ESATTA: EPortaDadi::class
+                    $portaDadi = $this->getReference('porta_dadi_' . $randomId, EPortaDadi::class);
+                    $wishlist->addProdotto($portaDadi);
+                }
+            }
+            
+            // Piccola chance extra (30%) di avere ENTRAMBI gli accessori
+            if ($faker->boolean(30)) {
+                $randomId = $faker->numberBetween(0, 9);
+                $prodottoExtra = $faker->boolean() ? 
+                    $this->getReference('bustine_' . $randomId, EBustine::class) : 
+                    $this->getReference('porta_dadi_' . $randomId, EPortaDadi::class);
+                
+                $wishlist->addProdotto($prodottoExtra);
+            }
+
+            $manager->persist($wishlist);
+        }
+
+        $manager->flush();
     }
 }

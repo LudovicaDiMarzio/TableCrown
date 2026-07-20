@@ -115,11 +115,6 @@ class FGiocoDaTavolo
                     $qb->andWhere($qb->expr()->in('g.disponibilitaProdotto',':disponibilita'))
                         ->setParameter('disponibilita',$filtri['disponibilita']);
                 }
-
-                if (!empty($enumDisponibilita)) {
-                    $qb->andWhere($qb->expr()->in('g.disponibilitaProdotto', ':disponibilita'))
-                        ->setParameter('disponibilita', $enumDisponibilita);
-                }
             }
 
             //filtro per l'ordinamento dei risultati

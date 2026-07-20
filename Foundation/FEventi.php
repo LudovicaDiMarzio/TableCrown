@@ -15,7 +15,7 @@ class FEventi{
                ->from(EEvento::class, 'e')
                ->where('e.statoEvento = :statoEvento')
                ->setParameter('statoEvento', StatoEvento::Programmato)
-               ->andWhere('e.nome LIKE :testo')
+               ->andWhere('e.nomeEvento LIKE :testo')
                ->setParameter('testo', '%' . $ricerca . '%')
                ->orderBy('e.dataInizio', 'ASC');
 
