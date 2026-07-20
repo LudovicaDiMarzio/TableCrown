@@ -253,7 +253,7 @@ class CAutenticazione extends BaseController {
         $ruolo = USession::getSessionElement('ruolo');
 
         if ($idPersona && $ruolo === 'utente') {
-            $utente = FPersistentManager::PMgetObjOnAttribute(EUtente::class, 'idPersona', $idPersona);
+            $utente = FPersistentManager::PMgetObjOnAttribute(EUtente::class, 'idpersona', $idPersona);
             if ($utente) {
                 $utente->impostaRememberToken(null);
                 FPersistentManager::PMsaveObj($utente);

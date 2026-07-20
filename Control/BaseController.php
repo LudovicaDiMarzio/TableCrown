@@ -411,7 +411,7 @@ abstract class BaseController {
     protected function utenteCorrente(): EUtente {
         $this->requireRole('utente');
         $idUtente = USession::getSessionElement('id_persona');
-        return FPersistentManager::PMgetObjOnAttribute(EUtente::class, 'idPersona', $idUtente);
+        return FPersistentManager::PMgetObjOnAttribute(EUtente::class, 'idpersona', $idUtente);
     }
 
     /**
@@ -425,7 +425,7 @@ abstract class BaseController {
             return null;
         }
         $idUtente = USession::getSessionElement('id_persona');
-        return FPersistentManager::PMgetObjOnAttribute(EUtente::class, 'idPersona', $idUtente);
+        return FPersistentManager::PMgetObjOnAttribute(EUtente::class, 'idpersona', $idUtente);
     }
 
     // ENUM
