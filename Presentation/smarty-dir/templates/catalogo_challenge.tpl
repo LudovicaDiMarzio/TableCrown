@@ -16,14 +16,6 @@
 
                 <form id="form-filtri-eventi" class="eventi-filtri-form" method="get" action="{$base_url}/eventi/challenge">
 
-                    <div class="eventi-filter-group">
-                        <h3 class="eventi-filter-group-title">Cerca</h3>
-                        <input type="text"
-                               name="query_string"
-                               class="eventi-ricerca-input"
-                               placeholder="Cerca per nome..."
-                               value="{$filtri.query_string|default:''|escape}">
-                    </div>
 
                     <div class="eventi-filter-group eventi-filter-group-last">
                         <h3 class="eventi-filter-group-title">Data</h3>
