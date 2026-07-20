@@ -19,6 +19,7 @@ use TableCrown\Entity\EEvento;
 use TableCrown\Entity\ESerata;
 use TableCrown\Entity\ETorneo;
 use TableCrown\Entity\EChallenge;
+use TableCrown\Entity\EDanno;
 use TableCrown\Foundation\FPersistentManager;
 use TableCrown\Presentation\Views\ViewGestore;
 use TableCrown\Presentation\Views\ViewEventi;
@@ -1090,8 +1091,7 @@ class CGestore extends BaseController {
         $descrizioneDanno = UHTTPMethods::postString('descrizioneDanno', maxLength: 500);
 
         //Recuperiamo il record EDanno già esistente e condiviso per quel livello (sconto fisso)
-        //TODO: metodo del pm da implementare
-        $danno = FPersistentManager::PMfindDannoByLivello($livello);
+        $danno = FPersistentManager::PMgetObjOnAttribute(EDanno::class, 'livelloDanno', $livello);
 
         return [$danno, $descrizioneDanno];
     }
@@ -1135,7 +1135,6 @@ class CGestore extends BaseController {
         $valuta = $this->postEnum('valuta', Valuta::class);
         return new EPrezzo($valore, $valuta);
     }
-
 
     /**
      * Costruisce i breadcrumb per le pagine del pannello gestore.

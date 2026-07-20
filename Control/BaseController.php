@@ -177,6 +177,13 @@ abstract class BaseController {
         $prezzoObj = $prodotto->getPrezzo();
         $inSconto = $prezzoObj !== null && $prezzoObj->hasSconto();
 
+        $danneggiato = false;
+        $livelloDanno = null;
+        if ($prodotto instanceof EGiocoDaTavolo && $prodotto->getDanno() !== null) {
+            $danneggiato = true;
+            $livelloDanno = $prodotto->getDanno()->getLivelloDanno()->value;
+        }
+
         return [
             'id'                 => (int) $prodotto->getIdProdotto(),
             'nome'               => $prodotto->getNomeProdotto(),
@@ -188,6 +195,9 @@ abstract class BaseController {
             'percentuale_sconto' => $inSconto ? $prezzoObj->getSconto() : null,
             'disponibilita'      => $prodotto->getDisponibilitaProdotto()->value,
             'isAcquistabile'     => $prodotto->isAcquistabile(),
+            'quantita'           => $prodotto->getQuantita(),
+            'danneggiato'        => $danneggiato,
+            'livello_danno'      => $livelloDanno,
         ];
     }
 
@@ -610,8 +620,8 @@ abstract class BaseController {
             'vista'  => $vista,
             'eventi' => $this->eventiToArray($risultatoGrezzo),
             'filtri' => [
-                'filtro_data' => $filtroData,
-                'ricerca' => $ricerca,
+                'data' => $filtroData,
+                'query_string' => $ricerca,
             ],
             'modalita' => $modalita,
         ];
