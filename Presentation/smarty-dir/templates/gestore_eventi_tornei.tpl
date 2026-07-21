@@ -20,6 +20,10 @@
   Concludi/Annulla/Elimina/Riprogramma/Inserisci Esito che avevo messo in lista.
   Anche il link al sotto-evento "challenge" ora punta alla route di dettaglio
   unificata /gestore/eventi/dettaglio/{id} invece che a /gestore/eventi/challenge/{id}.
+
+  FIX: i pulsanti "Nuovo Torneo" puntavano a /gestore/eventi/tornei/nuovo,
+  route inesistente. La route reale (vedi CGestore::mostraFormCreaTorneo())
+  è GET /gestore/crea/torneo.
 *}
 {extends file="layout_gestore.tpl"}
 
@@ -42,15 +46,14 @@
         </div>
 
         <div class="gcat-header__actions">
-            <form class="gcat-search-form" action="{$base_url}/gestore/eventi/ricerca" method="get">
-                <input class="gcat-search-input" type="search" name="q" placeholder="Cerca tra tutti gli eventi..." aria-label="Cerca eventi">
-                <button class="gcat-search-btn" type="submit" aria-label="Cerca">
-                    <i class="ti ti-search"></i>
-                </button>
-            </form>
+            <form class="gcat-search-form" onsubmit="filtraEventiClientSide(this.querySelector('input[name=q]')); return false;">
+    <input class="gcat-search-input" type="search" name="q" placeholder="..." aria-label="Cerca eventi">
+    <button class="gcat-search-btn" type="submit" aria-label="Cerca">
+        <i class="ti ti-search"></i>
+    </button>
+</form>
 
-            {* TODO T1: verificare che questa route GET esista per mostrare il form di creazione *}
-            <a href="{$base_url}/gestore/eventi/tornei/nuovo" class="gcat-btn-create">
+            <a href="{$base_url}/gestore/crea/torneo" class="gcat-btn-create">
                 <i class="ti ti-plus"></i> Nuovo Torneo
             </a>
         </div>
@@ -116,7 +119,7 @@
                                     <span class="gcat-card__meta-row">
                                         <i class="ti ti-swords"></i>
                                         Parte della challenge
-                                        <a href="{$base_url}/gestore/eventi/dettaglio/{$evento.challenge.idEvento}" class="gcat-card__sub-event-tag">{$evento.challenge.nomeEvento|escape}</a>
+                                        <a href="{$base_url}/gestore/eventi/dettaglio?id={$evento.challenge.idEvento}" class="gcat-card__sub-event-tag">{$evento.challenge.nomeEvento|escape}</a>
                                     </span>
                                 {/if}
                             </div>
@@ -129,7 +132,7 @@
                             {else}
                                 <span class="gcat-card__price-free">Gratuito</span>
                             {/if}
-                            <a href="{$base_url}/gestore/eventi/dettaglio/{$evento.idEvento}" class="gcat-btn-manage">
+                            <a href="{$base_url}/gestore/eventi/dettaglio?id={$evento.idEvento}" class="gcat-btn-manage">
                                 <i class="ti ti-eye"></i> Vedi dettaglio
                             </a>
                         </div>
@@ -146,7 +149,7 @@
                             Non è stato ancora pubblicato nessun torneo.
                         {/if}
                     </p>
-                    <a href="{$base_url}/gestore/eventi/tornei/nuovo" class="gcat-btn-create">
+                    <a href="{$base_url}/gestore/crea/torneo" class="gcat-btn-create">
                         <i class="ti ti-plus"></i> Crea il primo torneo
                     </a>
                 </div>
@@ -156,5 +159,16 @@
     </div>
 
 </div>
+<script>
+    function filtraEventiClientSide(input) {
+    var query = input.value.trim().toLowerCase();
+    var cards = document.querySelectorAll('.gcat-grid .gcat-card');
 
+    cards.forEach(function (card) {
+        var nomeEl = card.querySelector('.gcat-card__name');
+        var nome = nomeEl ? nomeEl.textContent.toLowerCase() : '';
+        card.style.display = (query === '' || nome.indexOf(query) !== -1) ? '' : 'none';
+    });
+}
+</script>
 {/block}
