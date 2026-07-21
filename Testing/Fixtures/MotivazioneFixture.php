@@ -15,7 +15,7 @@ class MotivazioneFixture extends AbstractFixture
             ['nome' => 'Spam',                  'gravita' => GravitaMotivazione::BASSA],
             ['nome' => 'Contenuto offensivo',   'gravita' => GravitaMotivazione::ALTA],
             ['nome' => 'Contenuto inappropriato','gravita' => GravitaMotivazione::MEDIA],
-            ['nome' => 'Atro',                  'gravita' => GravitaMotivazione::BASSA],
+            ['nome' => 'Altro',                  'gravita' => GravitaMotivazione::BASSA],
         ];
 
         //creo un oggetto motivazione per ogni motivazionenell'array

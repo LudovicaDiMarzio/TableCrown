@@ -254,7 +254,7 @@ abstract class BaseController {
      * Ritorna sempre un numero intero >= 1: se valido, ritorna il numero letto, altrimenti 1 (pagina 1)
      */
     protected function estraiPaginaRichiesta(): int {
-        $pagina = UHTTPMethods::get('pagina');
+        $pagina = UHTTPMethods::get('page');
         if ($pagina === null || !is_numeric($pagina) || $pagina < 1) {
             return 1; //se la pagina non è valida per qualche motivo, reindirizziamo l'utente alla pagina 1 del catalogo
         }
