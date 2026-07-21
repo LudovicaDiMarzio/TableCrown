@@ -1,35 +1,72 @@
-{*
-  TableCrown\Presentation\Views\Gestore - Creazione Porta Dadi
-  Estende layout_gestore.tpl.
+<?php
+/* Smarty version 5.8.0, created on 2026-07-21 22:27:14
+  from 'file:gestore_creazione_bustine.tpl' */
 
-  Wizard a 3 step. Form multipart -> POST /gestore/catalogo/porta-dadi/nuovo
-  (CGestore::creaPortaDadi()).
+/* @var \Smarty\Template $_smarty_tpl */
+if ($_smarty_tpl->getCompiled()->isFresh($_smarty_tpl, array (
+  'version' => '5.8.0',
+  'unifunc' => 'content_6a5fd622200452_66473237',
+  'has_nocache_code' => false,
+  'file_dependency' => 
+  array (
+    '2e3e0f302811190a62731b842d5d63d281c698e7' => 
+    array (
+      0 => 'gestore_creazione_bustine.tpl',
+      1 => 1784665592,
+      2 => 'file',
+    ),
+  ),
+  'includes' => 
+  array (
+  ),
+))) {
+function content_6a5fd622200452_66473237 (\Smarty\Template $_smarty_tpl) {
+$_smarty_current_dir = 'C:\\xampp\\htdocs\\TableCrown\\Presentation\\smarty-dir\\templates';
+$_smarty_tpl->getInheritance()->init($_smarty_tpl, true);
+?>
 
-  Campi attesi: nomeProdotto, descrizioneProdotto, imgProdotto (file, OPZIONALE),
-  prezzoListino, valuta, scontoAttivo (opz.) -> valoreSconto, scadenzaOfferta (opz.),
-  quantita, disponibilita.
 
-  Variabili di pagina ATTESE dal futuro controller GET
-  mostraFormCreazionePortaDadiGestore():
-    $valute_enum, $disponibilita_enum
-*}
-{extends file="layout_gestore.tpl"}
+<?php 
+$_smarty_tpl->getInheritance()->instanceBlock($_smarty_tpl, 'Block_5223195966a5fd6221ed515_03900792', "page_css");
+?>
 
-{block name="page_css"}
-    <link rel="stylesheet" href="{$base_url}/css/gestore_creazione_evento.css">
-    <link rel="stylesheet" href="{$base_url}/css/gestore_creazione_prodotto.css">
-{/block}
 
-{block name="content"}
+<?php 
+$_smarty_tpl->getInheritance()->instanceBlock($_smarty_tpl, 'Block_12168326286a5fd6221f1110_50432346', "content");
+$_smarty_tpl->getInheritance()->endChild($_smarty_tpl, "layout_gestore.tpl", $_smarty_current_dir);
+}
+/* {block "page_css"} */
+class Block_5223195966a5fd6221ed515_03900792 extends \Smarty\Runtime\Block
+{
+public function callBlock(\Smarty\Template $_smarty_tpl) {
+$_smarty_current_dir = 'C:\\xampp\\htdocs\\TableCrown\\Presentation\\smarty-dir\\templates';
+?>
+
+    <link rel="stylesheet" href="<?php echo $_smarty_tpl->getValue('base_url');?>
+/css/gestore_creazione_evento.css">
+    <link rel="stylesheet" href="<?php echo $_smarty_tpl->getValue('base_url');?>
+/css/gestore_creazione_prodotto.css">
+<?php
+}
+}
+/* {/block "page_css"} */
+/* {block "content"} */
+class Block_12168326286a5fd6221f1110_50432346 extends \Smarty\Runtime\Block
+{
+public function callBlock(\Smarty\Template $_smarty_tpl) {
+$_smarty_current_dir = 'C:\\xampp\\htdocs\\TableCrown\\Presentation\\smarty-dir\\templates';
+?>
+
 
 <div class="gcre-container">
 
     <div class="gcre-header">
         <div>
-            <h1 class="gcre-header__title">Nuovo Porta Dadi</h1>
+            <h1 class="gcre-header__title">Nuove Bustine</h1>
             <p class="gcre-header__subtitle">Compila i 3 step per pubblicare un nuovo prodotto.</p>
         </div>
-        <a href="{$base_url}/gestore/catalogo/porta-dadi" class="gcre-header__close">
+        <a href="<?php echo $_smarty_tpl->getValue('base_url');?>
+/gestore/catalogo/bustine" class="gcre-header__close">
             <i class="ti ti-x"></i> Annulla
         </a>
     </div>
@@ -51,35 +88,35 @@
         </div>
     </div>
 
-    <form id="formCreaPortaDadi" class="gcre-form-card" method="post" enctype="multipart/form-data"
-          action="{$base_url}/gestore/catalogo/porta-dadi/nuovo">
+    <form id="formCreaBustine" class="gcre-form-card" method="post" enctype="multipart/form-data"
+          action="<?php echo $_smarty_tpl->getValue('base_url');?>
+/gestore/catalogo/bustine/nuovo">
 
-        {* ── STEP 1: Informazioni ── *}
-        <div class="gcre-step active" data-step="1">
+                <div class="gcre-step active" data-step="1">
             <h2 class="gcre-step__title">Informazioni</h2>
             <p class="gcre-step__subtitle">Nome, descrizione e immagine del prodotto.</p>
 
             <div class="gcre-field-group" data-field="nomeProdotto">
                 <label class="gcre-label" for="nomeProdotto">Nome del prodotto</label>
                 <input type="text" id="nomeProdotto" name="nomeProdotto" maxlength="255"
-                       class="gcre-input" placeholder="Es. Porta Dadi in Legno di Noce" required>
+                       class="gcre-input" placeholder="Es. Bustina Protettiva 63x88mm" required>
                 <span class="gcre-error">Inserisci un nome per il prodotto.</span>
             </div>
 
             <div class="gcre-field-group" data-field="descrizioneProdotto">
                 <label class="gcre-label" for="descrizioneProdotto">Descrizione</label>
                 <textarea id="descrizioneProdotto" name="descrizioneProdotto" class="gcre-textarea"
-                          placeholder="Materiale, dimensioni, finitura..." required></textarea>
+                          placeholder="Materiale, formato, confezione..." required></textarea>
                 <span class="gcre-error">Inserisci una descrizione.</span>
             </div>
 
             <div class="gcre-field-group" data-field="imgProdotto">
                 <label class="gcre-label">Immagine <span class="gcre-label__optional">(opzionale)</span></label>
-                <label class="gcre-upload-box" id="uploadBoxPortaDadi">
-                    <img id="uploadPreviewPortaDadi" class="gcre-upload-box__preview" src="" alt="" style="display:none;">
-                    <i class="ti ti-photo" id="uploadIconPortaDadi" style="font-size: 28px; color: var(--gestore-muted);"></i>
+                <label class="gcre-upload-box" id="uploadBoxBustine">
+                    <img id="uploadPreviewBustine" class="gcre-upload-box__preview" src="" alt="" style="display:none;">
+                    <i class="ti ti-photo" id="uploadIconBustine" style="font-size: 28px; color: var(--gestore-muted);"></i>
                     <div class="gcre-upload-box__text">
-                        <span class="gcre-upload-box__title" id="uploadTextPortaDadi">Carica un'immagine</span>
+                        <span class="gcre-upload-box__title" id="uploadTextBustine">Carica un'immagine</span>
                         <span class="gcre-upload-box__hint">PNG o JPG, consigliata almeno 800x450px</span>
                     </div>
                     <input type="file" name="img_prodotto" id="imgProdotto" accept="image/*" style="display:none;">
@@ -87,8 +124,7 @@
             </div>
         </div>
 
-        {* ── STEP 2: Prezzo ── *}
-        <div class="gcre-step" data-step="2">
+                <div class="gcre-step" data-step="2">
             <h2 class="gcre-step__title">Prezzo</h2>
             <p class="gcre-step__subtitle">Prezzo di listino ed eventuale sconto promozionale.</p>
 
@@ -102,16 +138,24 @@
                 <div class="gcre-field-group" data-field="valuta">
                     <label class="gcre-label" for="valuta">Valuta</label>
                     <select id="valuta" name="valuta" class="gcre-select" required>
-                        {if isset($valute_enum) && $valute_enum|@count > 0}
-                            {foreach $valute_enum as $v}
-                                <option value="{$v.value}">{$v.label}</option>
-                            {/foreach}
-                        {else}
-    {* placeholder — DA VERIFICARE contro i case reali di Valuta *}
-    <option value="EUR">Euro (€)</option>
-    <option value="USD">Dollaro USA ($)</option>
-    <option value="GBP">Sterlina (£)</option>
-{/if}
+                        <?php if ((true && ($_smarty_tpl->hasVariable('valute_enum') && null !== ($_smarty_tpl->getValue('valute_enum') ?? null))) && $_smarty_tpl->getSmarty()->getModifierCallback('count')($_smarty_tpl->getValue('valute_enum')) > 0) {?>
+                            <?php
+$_from = $_smarty_tpl->getSmarty()->getRuntime('Foreach')->init($_smarty_tpl, $_smarty_tpl->getValue('valute_enum'), 'v');
+$foreach0DoElse = true;
+foreach ($_from ?? [] as $_smarty_tpl->getVariable('v')->value) {
+$foreach0DoElse = false;
+?>
+                                <option value="<?php echo $_smarty_tpl->getValue('v')['value'];?>
+"><?php echo $_smarty_tpl->getValue('v')['label'];?>
+</option>
+                            <?php
+}
+$_smarty_tpl->getSmarty()->getRuntime('Foreach')->restore($_smarty_tpl, 1);?>
+                        <?php } else { ?>
+                                                        <option value="eur">Euro (€)</option>
+                            <option value="usd">Dollaro USA ($)</option>
+                            <option value="gbp">Sterlina (£)</option>
+                        <?php }?>
                     </select>
                     <span class="gcre-error">Seleziona una valuta.</span>
                 </div>
@@ -140,8 +184,7 @@
             </div>
         </div>
 
-        {* ── STEP 3: Magazzino ── *}
-        <div class="gcre-step" data-step="3">
+                <div class="gcre-step" data-step="3">
             <h2 class="gcre-step__title">Magazzino</h2>
             <p class="gcre-step__subtitle">Quantità disponibile e stato del prodotto.</p>
 
@@ -149,22 +192,30 @@
                 <div class="gcre-field-group" data-field="quantita">
                     <label class="gcre-label" for="quantita">Quantità in magazzino</label>
                     <input type="number" id="quantita" name="quantita" class="gcre-input"
-                           min="0" step="1" placeholder="Es. 40" required>
+                           min="0" step="1" placeholder="Es. 100" required>
                     <span class="gcre-error">Inserisci una quantità valida.</span>
                 </div>
                 <div class="gcre-field-group" data-field="disponibilita">
                     <label class="gcre-label" for="disponibilita">Disponibilità</label>
                     <select id="disponibilita" name="disponibilita" class="gcre-select" required>
-                        {if isset($disponibilita_enum) && $disponibilita_enum|@count > 0}
-                            {foreach $disponibilita_enum as $d}
-                                <option value="{$d.value}">{$d.label}</option>
-                            {/foreach}
-                        {else}
-                            {* TODO: CASE REALI DI DisponibilitaProdotto DA CONFERMARE — placeholder *}
-                            <option value="disponibile">Disponibile</option>
+                        <?php if ((true && ($_smarty_tpl->hasVariable('disponibilita_enum') && null !== ($_smarty_tpl->getValue('disponibilita_enum') ?? null))) && $_smarty_tpl->getSmarty()->getModifierCallback('count')($_smarty_tpl->getValue('disponibilita_enum')) > 0) {?>
+                            <?php
+$_from = $_smarty_tpl->getSmarty()->getRuntime('Foreach')->init($_smarty_tpl, $_smarty_tpl->getValue('disponibilita_enum'), 'd');
+$foreach1DoElse = true;
+foreach ($_from ?? [] as $_smarty_tpl->getVariable('d')->value) {
+$foreach1DoElse = false;
+?>
+                                <option value="<?php echo $_smarty_tpl->getValue('d')['value'];?>
+"><?php echo $_smarty_tpl->getValue('d')['label'];?>
+</option>
+                            <?php
+}
+$_smarty_tpl->getSmarty()->getRuntime('Foreach')->restore($_smarty_tpl, 1);?>
+                        <?php } else { ?>
+                                                        <option value="disponibile">Disponibile</option>
                             <option value="esaurito">Esaurito</option>
                             <option value="non_disponibile">Non disponibile</option>
-                        {/if}
+                        <?php }?>
                     </select>
                     <span class="gcre-error">Seleziona una disponibilità.</span>
                 </div>
@@ -172,54 +223,54 @@
         </div>
 
         <div class="gcre-nav">
-            <button type="button" class="gcre-btn gcre-btn--ghost" id="btnBackPortaDadi" style="visibility:hidden;">
+            <button type="button" class="gcre-btn gcre-btn--ghost" id="btnBackBustine" style="visibility:hidden;">
                 <i class="ti ti-arrow-left"></i> Indietro
             </button>
-            <button type="button" class="gcre-btn gcre-btn--primary" id="btnNextPortaDadi">
+            <button type="button" class="gcre-btn gcre-btn--primary" id="btnNextBustine">
                 Avanti <i class="ti ti-arrow-right"></i>
             </button>
         </div>
     </form>
 </div>
 
-{* ── MODALE RIEPILOGO ── *}
-<div class="gcre-overlay" id="overlayPortaDadi">
+<div class="gcre-overlay" id="overlayBustine">
     <div class="gcre-modal">
         <div class="gcre-modal__header">
             <h3 class="gcre-modal__title">Rivedi il tuo prodotto</h3>
             <p class="gcre-modal__subtitle">Controlla i dati prima di pubblicare.</p>
         </div>
         <div class="gcre-modal__body">
-            <img class="gcre-modal__img" id="riepilogoImgPortaDadi" src="" alt="">
+            <img class="gcre-modal__img" id="riepilogoImgBustine" src="" alt="">
             <div class="gcre-summary-row">
                 <span class="gcre-summary-label">Nome</span>
-                <span class="gcre-summary-value" id="riepilogoNomePortaDadi"></span>
+                <span class="gcre-summary-value" id="riepilogoNomeBustine"></span>
             </div>
             <div class="gcre-summary-row">
                 <span class="gcre-summary-label">Prezzo</span>
-                <span class="gcre-summary-value" id="riepilogoPrezzoPortaDadi"></span>
+                <span class="gcre-summary-value" id="riepilogoPrezzoBustine"></span>
             </div>
             <div class="gcre-summary-row">
                 <span class="gcre-summary-label">Quantità</span>
-                <span class="gcre-summary-value" id="riepilogoQuantitaPortaDadi"></span>
+                <span class="gcre-summary-value" id="riepilogoQuantitaBustine"></span>
             </div>
         </div>
         <div class="gcre-modal__footer">
-            <button type="button" class="gcre-btn gcre-btn--ghost" id="btnModificaPortaDadi">Modifica</button>
-            <button type="button" class="gcre-btn gcre-btn--primary" id="btnCreaPortaDadi">
+            <button type="button" class="gcre-btn gcre-btn--ghost" id="btnModificaBustine">Modifica</button>
+            <button type="button" class="gcre-btn gcre-btn--primary" id="btnCreaBustine">
                 <i class="ti ti-check"></i> Crea Prodotto
             </button>
         </div>
     </div>
 </div>
 
-<script>
+<?php echo '<script'; ?>
+>
 (function () {
-    const form = document.getElementById('formCreaPortaDadi');
+    const form = document.getElementById('formCreaBustine');
     const steps = Array.from(form.querySelectorAll('.gcre-step'));
     const stepperItems = Array.from(document.querySelectorAll('#gcreStepper .gcre-stepper__item'));
-    const btnNext = document.getElementById('btnNextPortaDadi');
-    const btnBack = document.getElementById('btnBackPortaDadi');
+    const btnNext = document.getElementById('btnNextBustine');
+    const btnBack = document.getElementById('btnBackBustine');
     let current = 1;
 
     function showStep(n) {
@@ -246,9 +297,9 @@
     document.getElementById('imgProdotto').addEventListener('change', function () {
         const file = this.files[0];
         if (!file) return;
-        const preview = document.getElementById('uploadPreviewPortaDadi');
-        const icon = document.getElementById('uploadIconPortaDadi');
-        const text = document.getElementById('uploadTextPortaDadi');
+        const preview = document.getElementById('uploadPreviewBustine');
+        const icon = document.getElementById('uploadIconBustine');
+        const text = document.getElementById('uploadTextBustine');
         const reader = new FileReader();
         reader.onload = e => {
             preview.src = e.target.result;
@@ -294,29 +345,34 @@
         if (current > 1) showStep(current - 1);
     });
 
-    const overlay = document.getElementById('overlayPortaDadi');
+    const overlay = document.getElementById('overlayBustine');
 
     function openRiepilogo() {
-        document.getElementById('riepilogoNomePortaDadi').textContent = document.getElementById('nomeProdotto').value;
+        document.getElementById('riepilogoNomeBustine').textContent = document.getElementById('nomeProdotto').value;
 
         const prezzo = parseFloat(document.getElementById('prezzoListino').value || '0').toFixed(2);
         const valutaSelect = document.getElementById('valuta');
         const valutaLabel = valutaSelect.options[valutaSelect.selectedIndex]?.text || '';
         const scontoAttivo = document.getElementById('scontoAttivo').checked;
         const scontoTxt = scontoAttivo ? ' (-' + (document.getElementById('valoreSconto').value || 0) + '%)' : '';
-        document.getElementById('riepilogoPrezzoPortaDadi').textContent = prezzo + ' ' + valutaLabel + scontoTxt;
+        document.getElementById('riepilogoPrezzoBustine').textContent = prezzo + ' ' + valutaLabel + scontoTxt;
 
-        document.getElementById('riepilogoQuantitaPortaDadi').textContent = document.getElementById('quantita').value;
+        document.getElementById('riepilogoQuantitaBustine').textContent = document.getElementById('quantita').value;
 
-        const preview = document.getElementById('uploadPreviewPortaDadi');
-        document.getElementById('riepilogoImgPortaDadi').src = preview.src || '';
+        const preview = document.getElementById('uploadPreviewBustine');
+        document.getElementById('riepilogoImgBustine').src = preview.src || '';
 
         overlay.classList.add('active');
     }
 
-    document.getElementById('btnModificaPortaDadi').addEventListener('click', () => overlay.classList.remove('active'));
-    document.getElementById('btnCreaPortaDadi').addEventListener('click', () => form.submit());
+    document.getElementById('btnModificaBustine').addEventListener('click', () => overlay.classList.remove('active'));
+    document.getElementById('btnCreaBustine').addEventListener('click', () => form.submit());
 })();
-</script>
+<?php echo '</script'; ?>
+>
 
-{/block}
+<?php
+}
+}
+/* {/block "content"} */
+}

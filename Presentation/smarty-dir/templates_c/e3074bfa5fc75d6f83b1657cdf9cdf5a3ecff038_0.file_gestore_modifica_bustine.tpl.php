@@ -1,11 +1,28 @@
-{*
-  TableCrown\Presentation\Views\Gestore - Modale Modifica Bustine (frammento)
-  NON usa {extends}: è un partial incluso in catalogo_bustine.tpl, fuori dal foreach.
-  Nessuna sezione "danno" (riservata a EGiocoDaTavolo).
-  Tutti i valori vengono iniettati via JS dai data-* del bottone .gmp-btn-modifica
-  cliccato, NON da variabili Smarty ($prodotto non esiste in questo contesto).
-*}
+<?php
+/* Smarty version 5.8.0, created on 2026-07-21 22:15:05
+  from 'file:gestore_modifica_bustine.tpl' */
 
+/* @var \Smarty\Template $_smarty_tpl */
+if ($_smarty_tpl->getCompiled()->isFresh($_smarty_tpl, array (
+  'version' => '5.8.0',
+  'unifunc' => 'content_6a5fd349865318_94225471',
+  'has_nocache_code' => false,
+  'file_dependency' => 
+  array (
+    'e3074bfa5fc75d6f83b1657cdf9cdf5a3ecff038' => 
+    array (
+      0 => 'gestore_modifica_bustine.tpl',
+      1 => 1784664892,
+      2 => 'file',
+    ),
+  ),
+  'includes' => 
+  array (
+  ),
+))) {
+function content_6a5fd349865318_94225471 (\Smarty\Template $_smarty_tpl) {
+$_smarty_current_dir = 'C:\\xampp\\htdocs\\TableCrown\\Presentation\\smarty-dir\\templates';
+?>
 <div class="gmp-overlay" id="gmpOverlayBustine">
     <div class="gmp-modal">
 
@@ -65,7 +82,8 @@
     </div>
 </div>
 
-<script>
+<?php echo '<script'; ?>
+>
     let gmpBustineIdProdotto = null;
 
     document.addEventListener('click', function (e) {
@@ -113,7 +131,8 @@
             params.append('rimuoviSconto', '1');
         }
 
-        fetch('{$base_url}/gestore/prodotti/modifica', {
+        fetch('<?php echo $_smarty_tpl->getValue('base_url');?>
+/gestore/prodotti/modifica', {
             method: 'POST',
             headers: { 'X-Requested-With': 'XMLHttpRequest' },
             body: params
@@ -135,4 +154,6 @@
                 document.getElementById('gmpBustineFeedback').classList.add('gmp-feedback--error');
             });
     }
-</script>
+<?php echo '</script'; ?>
+><?php }
+}

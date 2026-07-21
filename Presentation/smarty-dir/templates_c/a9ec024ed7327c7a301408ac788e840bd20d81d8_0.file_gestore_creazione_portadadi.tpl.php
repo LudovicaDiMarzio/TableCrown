@@ -1,26 +1,62 @@
-{*
-  TableCrown\Presentation\Views\Gestore - Creazione Porta Dadi
-  Estende layout_gestore.tpl.
+<?php
+/* Smarty version 5.8.0, created on 2026-07-21 22:20:14
+  from 'file:gestore_creazione_portadadi.tpl' */
 
-  Wizard a 3 step. Form multipart -> POST /gestore/catalogo/porta-dadi/nuovo
-  (CGestore::creaPortaDadi()).
+/* @var \Smarty\Template $_smarty_tpl */
+if ($_smarty_tpl->getCompiled()->isFresh($_smarty_tpl, array (
+  'version' => '5.8.0',
+  'unifunc' => 'content_6a5fd47ee5aa25_61655861',
+  'has_nocache_code' => false,
+  'file_dependency' => 
+  array (
+    'a9ec024ed7327c7a301408ac788e840bd20d81d8' => 
+    array (
+      0 => 'gestore_creazione_portadadi.tpl',
+      1 => 1784665212,
+      2 => 'file',
+    ),
+  ),
+  'includes' => 
+  array (
+  ),
+))) {
+function content_6a5fd47ee5aa25_61655861 (\Smarty\Template $_smarty_tpl) {
+$_smarty_current_dir = 'C:\\xampp\\htdocs\\TableCrown\\Presentation\\smarty-dir\\templates';
+$_smarty_tpl->getInheritance()->init($_smarty_tpl, true);
+?>
 
-  Campi attesi: nomeProdotto, descrizioneProdotto, imgProdotto (file, OPZIONALE),
-  prezzoListino, valuta, scontoAttivo (opz.) -> valoreSconto, scadenzaOfferta (opz.),
-  quantita, disponibilita.
 
-  Variabili di pagina ATTESE dal futuro controller GET
-  mostraFormCreazionePortaDadiGestore():
-    $valute_enum, $disponibilita_enum
-*}
-{extends file="layout_gestore.tpl"}
+<?php 
+$_smarty_tpl->getInheritance()->instanceBlock($_smarty_tpl, 'Block_18087571686a5fd47ee46cb0_06835778', "page_css");
+?>
 
-{block name="page_css"}
-    <link rel="stylesheet" href="{$base_url}/css/gestore_creazione_evento.css">
-    <link rel="stylesheet" href="{$base_url}/css/gestore_creazione_prodotto.css">
-{/block}
 
-{block name="content"}
+<?php 
+$_smarty_tpl->getInheritance()->instanceBlock($_smarty_tpl, 'Block_12267482926a5fd47ee4aa23_19117155', "content");
+$_smarty_tpl->getInheritance()->endChild($_smarty_tpl, "layout_gestore.tpl", $_smarty_current_dir);
+}
+/* {block "page_css"} */
+class Block_18087571686a5fd47ee46cb0_06835778 extends \Smarty\Runtime\Block
+{
+public function callBlock(\Smarty\Template $_smarty_tpl) {
+$_smarty_current_dir = 'C:\\xampp\\htdocs\\TableCrown\\Presentation\\smarty-dir\\templates';
+?>
+
+    <link rel="stylesheet" href="<?php echo $_smarty_tpl->getValue('base_url');?>
+/css/gestore_creazione_evento.css">
+    <link rel="stylesheet" href="<?php echo $_smarty_tpl->getValue('base_url');?>
+/css/gestore_creazione_prodotto.css">
+<?php
+}
+}
+/* {/block "page_css"} */
+/* {block "content"} */
+class Block_12267482926a5fd47ee4aa23_19117155 extends \Smarty\Runtime\Block
+{
+public function callBlock(\Smarty\Template $_smarty_tpl) {
+$_smarty_current_dir = 'C:\\xampp\\htdocs\\TableCrown\\Presentation\\smarty-dir\\templates';
+?>
+
 
 <div class="gcre-container">
 
@@ -29,7 +65,8 @@
             <h1 class="gcre-header__title">Nuovo Porta Dadi</h1>
             <p class="gcre-header__subtitle">Compila i 3 step per pubblicare un nuovo prodotto.</p>
         </div>
-        <a href="{$base_url}/gestore/catalogo/porta-dadi" class="gcre-header__close">
+        <a href="<?php echo $_smarty_tpl->getValue('base_url');?>
+/gestore/catalogo/porta-dadi" class="gcre-header__close">
             <i class="ti ti-x"></i> Annulla
         </a>
     </div>
@@ -52,10 +89,10 @@
     </div>
 
     <form id="formCreaPortaDadi" class="gcre-form-card" method="post" enctype="multipart/form-data"
-          action="{$base_url}/gestore/catalogo/porta-dadi/nuovo">
+          action="<?php echo $_smarty_tpl->getValue('base_url');?>
+/gestore/catalogo/porta-dadi/nuovo">
 
-        {* ── STEP 1: Informazioni ── *}
-        <div class="gcre-step active" data-step="1">
+                <div class="gcre-step active" data-step="1">
             <h2 class="gcre-step__title">Informazioni</h2>
             <p class="gcre-step__subtitle">Nome, descrizione e immagine del prodotto.</p>
 
@@ -82,13 +119,12 @@
                         <span class="gcre-upload-box__title" id="uploadTextPortaDadi">Carica un'immagine</span>
                         <span class="gcre-upload-box__hint">PNG o JPG, consigliata almeno 800x450px</span>
                     </div>
-                    <input type="file" name="img_prodotto" id="imgProdotto" accept="image/*" style="display:none;">
+                    <input type="file" name="imgProdotto" id="imgProdotto" accept="image/*" style="display:none;">
                 </label>
             </div>
         </div>
 
-        {* ── STEP 2: Prezzo ── *}
-        <div class="gcre-step" data-step="2">
+                <div class="gcre-step" data-step="2">
             <h2 class="gcre-step__title">Prezzo</h2>
             <p class="gcre-step__subtitle">Prezzo di listino ed eventuale sconto promozionale.</p>
 
@@ -102,16 +138,24 @@
                 <div class="gcre-field-group" data-field="valuta">
                     <label class="gcre-label" for="valuta">Valuta</label>
                     <select id="valuta" name="valuta" class="gcre-select" required>
-                        {if isset($valute_enum) && $valute_enum|@count > 0}
-                            {foreach $valute_enum as $v}
-                                <option value="{$v.value}">{$v.label}</option>
-                            {/foreach}
-                        {else}
-    {* placeholder — DA VERIFICARE contro i case reali di Valuta *}
-    <option value="EUR">Euro (€)</option>
+                        <?php if ((true && ($_smarty_tpl->hasVariable('valute_enum') && null !== ($_smarty_tpl->getValue('valute_enum') ?? null))) && $_smarty_tpl->getSmarty()->getModifierCallback('count')($_smarty_tpl->getValue('valute_enum')) > 0) {?>
+                            <?php
+$_from = $_smarty_tpl->getSmarty()->getRuntime('Foreach')->init($_smarty_tpl, $_smarty_tpl->getValue('valute_enum'), 'v');
+$foreach0DoElse = true;
+foreach ($_from ?? [] as $_smarty_tpl->getVariable('v')->value) {
+$foreach0DoElse = false;
+?>
+                                <option value="<?php echo $_smarty_tpl->getValue('v')['value'];?>
+"><?php echo $_smarty_tpl->getValue('v')['label'];?>
+</option>
+                            <?php
+}
+$_smarty_tpl->getSmarty()->getRuntime('Foreach')->restore($_smarty_tpl, 1);?>
+                        <?php } else { ?>
+        <option value="EUR">Euro (€)</option>
     <option value="USD">Dollaro USA ($)</option>
     <option value="GBP">Sterlina (£)</option>
-{/if}
+<?php }?>
                     </select>
                     <span class="gcre-error">Seleziona una valuta.</span>
                 </div>
@@ -140,8 +184,7 @@
             </div>
         </div>
 
-        {* ── STEP 3: Magazzino ── *}
-        <div class="gcre-step" data-step="3">
+                <div class="gcre-step" data-step="3">
             <h2 class="gcre-step__title">Magazzino</h2>
             <p class="gcre-step__subtitle">Quantità disponibile e stato del prodotto.</p>
 
@@ -155,16 +198,24 @@
                 <div class="gcre-field-group" data-field="disponibilita">
                     <label class="gcre-label" for="disponibilita">Disponibilità</label>
                     <select id="disponibilita" name="disponibilita" class="gcre-select" required>
-                        {if isset($disponibilita_enum) && $disponibilita_enum|@count > 0}
-                            {foreach $disponibilita_enum as $d}
-                                <option value="{$d.value}">{$d.label}</option>
-                            {/foreach}
-                        {else}
-                            {* TODO: CASE REALI DI DisponibilitaProdotto DA CONFERMARE — placeholder *}
-                            <option value="disponibile">Disponibile</option>
+                        <?php if ((true && ($_smarty_tpl->hasVariable('disponibilita_enum') && null !== ($_smarty_tpl->getValue('disponibilita_enum') ?? null))) && $_smarty_tpl->getSmarty()->getModifierCallback('count')($_smarty_tpl->getValue('disponibilita_enum')) > 0) {?>
+                            <?php
+$_from = $_smarty_tpl->getSmarty()->getRuntime('Foreach')->init($_smarty_tpl, $_smarty_tpl->getValue('disponibilita_enum'), 'd');
+$foreach1DoElse = true;
+foreach ($_from ?? [] as $_smarty_tpl->getVariable('d')->value) {
+$foreach1DoElse = false;
+?>
+                                <option value="<?php echo $_smarty_tpl->getValue('d')['value'];?>
+"><?php echo $_smarty_tpl->getValue('d')['label'];?>
+</option>
+                            <?php
+}
+$_smarty_tpl->getSmarty()->getRuntime('Foreach')->restore($_smarty_tpl, 1);?>
+                        <?php } else { ?>
+                                                        <option value="disponibile">Disponibile</option>
                             <option value="esaurito">Esaurito</option>
                             <option value="non_disponibile">Non disponibile</option>
-                        {/if}
+                        <?php }?>
                     </select>
                     <span class="gcre-error">Seleziona una disponibilità.</span>
                 </div>
@@ -182,7 +233,6 @@
     </form>
 </div>
 
-{* ── MODALE RIEPILOGO ── *}
 <div class="gcre-overlay" id="overlayPortaDadi">
     <div class="gcre-modal">
         <div class="gcre-modal__header">
@@ -213,7 +263,8 @@
     </div>
 </div>
 
-<script>
+<?php echo '<script'; ?>
+>
 (function () {
     const form = document.getElementById('formCreaPortaDadi');
     const steps = Array.from(form.querySelectorAll('.gcre-step'));
@@ -317,6 +368,11 @@
     document.getElementById('btnModificaPortaDadi').addEventListener('click', () => overlay.classList.remove('active'));
     document.getElementById('btnCreaPortaDadi').addEventListener('click', () => form.submit());
 })();
-</script>
+<?php echo '</script'; ?>
+>
 
-{/block}
+<?php
+}
+}
+/* {/block "content"} */
+}

@@ -1,8 +1,28 @@
-{*
-  TableCrown\Presentation\Views\Gestore - Modale Modifica Gioco (frammento)
-  Usa le classi definite in gestore_modifica_prodotto.css (.gmp-*)
-*}
+<?php
+/* Smarty version 5.8.0, created on 2026-07-21 21:56:39
+  from 'file:gestore_modifica_gioco.tpl' */
 
+/* @var \Smarty\Template $_smarty_tpl */
+if ($_smarty_tpl->getCompiled()->isFresh($_smarty_tpl, array (
+  'version' => '5.8.0',
+  'unifunc' => 'content_6a5fcef7ef45d0_84354390',
+  'has_nocache_code' => false,
+  'file_dependency' => 
+  array (
+    'ed39e11888f608b606ccfa9b8d2cae24d9701694' => 
+    array (
+      0 => 'gestore_modifica_gioco.tpl',
+      1 => 1784663792,
+      2 => 'file',
+    ),
+  ),
+  'includes' => 
+  array (
+  ),
+))) {
+function content_6a5fcef7ef45d0_84354390 (\Smarty\Template $_smarty_tpl) {
+$_smarty_current_dir = 'C:\\xampp\\htdocs\\TableCrown\\Presentation\\smarty-dir\\templates';
+?>
 <div class="gmp-overlay" id="gmpOverlay">
     <div class="gmp-modal">
 
@@ -21,8 +41,7 @@
 
         <div class="gmp-modal__body">
 
-            {* ── SCONTO ── *}
-            <div class="gmp-section">
+                        <div class="gmp-section">
                 <div class="gmp-section__header">
                     <i class="ti ti-discount-2"></i> Sconto promozionale
                 </div>
@@ -51,8 +70,7 @@
                 <p class="gmp-feedback" id="gmpFeedbackSconto"></p>
             </div>
 
-            {* ── DANNO ── *}
-            <div class="gmp-section">
+                        <div class="gmp-section">
                 <div class="gmp-section__header">
                     <i class="ti ti-alert-triangle"></i> Stato del prodotto
                 </div>
@@ -67,9 +85,18 @@
                     <div class="gmp-field-group">
                         <label class="gmp-label" for="gmpLivelloDanno">Livello di danno</label>
                         <select class="gmp-select" id="gmpLivelloDanno">
-                            {foreach $livelloDanno_enum|default:[] as $opt}
-                                <option value="{$opt.value}">{$opt.label}</option>
-                            {/foreach}
+                            <?php
+$_from = $_smarty_tpl->getSmarty()->getRuntime('Foreach')->init($_smarty_tpl, (($tmp = $_smarty_tpl->getValue('livelloDanno_enum') ?? null)===null||$tmp==='' ? array() ?? null : $tmp), 'opt');
+$foreach0DoElse = true;
+foreach ($_from ?? [] as $_smarty_tpl->getVariable('opt')->value) {
+$foreach0DoElse = false;
+?>
+                                <option value="<?php echo $_smarty_tpl->getValue('opt')['value'];?>
+"><?php echo $_smarty_tpl->getValue('opt')['label'];?>
+</option>
+                            <?php
+}
+$_smarty_tpl->getSmarty()->getRuntime('Foreach')->restore($_smarty_tpl, 1);?>
                         </select>
                     </div>
                     <div class="gmp-field-group">
@@ -93,7 +120,8 @@
     </div>
 </div>
 
-<script>
+<?php echo '<script'; ?>
+>
     let gmpIdProdotto = null;
 
     document.addEventListener('click', function (e) {
@@ -152,7 +180,8 @@
         fd.append('livelloDanno', document.getElementById('gmpLivelloDanno').value);
         fd.append('descrizioneDanno', document.getElementById('gmpDescrizioneDanno').value);
 
-        fetch('{$base_url}/gestore/prodotti/modifica', {
+        fetch('<?php echo $_smarty_tpl->getValue('base_url');?>
+/gestore/prodotti/modifica', {
     method: 'POST',
     headers: { 'X-Requested-With': 'XMLHttpRequest' },
     body: fd
@@ -174,4 +203,6 @@
                 document.getElementById('gmpFeedbackSconto').classList.add('gmp-feedback--error');
             });
     }
-</script>
+<?php echo '</script'; ?>
+><?php }
+}

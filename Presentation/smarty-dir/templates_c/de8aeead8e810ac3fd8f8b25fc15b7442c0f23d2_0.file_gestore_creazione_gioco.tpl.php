@@ -1,40 +1,62 @@
-{*
-  TableCrown\Presentation\Views\Gestore - Creazione Gioco da Tavolo
-  Estende layout_gestore.tpl.
+<?php
+/* Smarty version 5.8.0, created on 2026-07-21 21:00:41
+  from 'file:gestore_creazione_gioco.tpl' */
 
-  Wizard a 3 step, ricalca ESATTAMENTE le 3 "PAGINA" già commentate
-  dentro CGestore::creaGiocoDaTavolo(): dati base / prezzo-magazzino-stato /
-  caratteristiche di gioco.
+/* @var \Smarty\Template $_smarty_tpl */
+if ($_smarty_tpl->getCompiled()->isFresh($_smarty_tpl, array (
+  'version' => '5.8.0',
+  'unifunc' => 'content_6a5fc1d9dae9f9_38969697',
+  'has_nocache_code' => false,
+  'file_dependency' => 
+  array (
+    'de8aeead8e810ac3fd8f8b25fc15b7442c0f23d2' => 
+    array (
+      0 => 'gestore_creazione_gioco.tpl',
+      1 => 1784555427,
+      2 => 'file',
+    ),
+  ),
+  'includes' => 
+  array (
+  ),
+))) {
+function content_6a5fc1d9dae9f9_38969697 (\Smarty\Template $_smarty_tpl) {
+$_smarty_current_dir = 'C:\\xampp\\htdocs\\TableCrown\\Presentation\\smarty-dir\\templates';
+$_smarty_tpl->getInheritance()->init($_smarty_tpl, true);
+?>
 
-  Form multipart -> POST /gestore/catalogo/giochi-da-tavolo/nuovo
 
-  Campi attesi da creaGiocoDaTavolo():
-    nomeProdotto, descrizioneProdotto, categoria[] (>=1), componenti[] (>=1),
-    imgProdotto (file, OPZIONALE - vedi nota sul bug di estraiImmagineProdotto()),
-    prezzoListino, valuta, scontoAttivo (opz.) -> valoreSconto, scadenzaOfferta (opz.),
-    quantita, disponibilita, danneggiato (opz.) -> livelloDanno, descrizioneDanno,
-    difficolta, lingua, numeroGiocatoriMin, numeroGiocatoriMax, etaMinima, durataMedia,
-    giocoBaseId (opzionale, solo se è un'espansione)
+<?php 
+$_smarty_tpl->getInheritance()->instanceBlock($_smarty_tpl, 'Block_2367442186a5fc1d9d996f0_06037461', "page_css");
+?>
 
-  Variabili di pagina ATTESE dal (futuro) controller GET
-  mostraFormCreazioneGiocoGestore(), non ancora implementato in CGestore:
-    $categorie_enum   => enumToOptions(Categoria::cases(), ['gdr' => 'GDR'])
-    $disponibilita_enum => enumToOptions(DisponibilitaProdotto::cases())
-    $danno_enum       => enumToOptions(LivelloDannoGiochi::cases())
-    $difficolta_enum  => enumToOptions(DifficoltaGioco::cases())
-    $lingue_enum      => array_map(fn($c) => ['value'=>$c->value,'label'=>$c->name], LinguaGioco::cases())
-    $valute_enum      => enumToOptions(Valuta::cases()) — CASE DA CONFERMARE
-    $giochiBaseDisponibili => prodottiToArray(...) filtrato sui soli EGiocoDaTavolo
-                              NON espansione (giocoBase === null)
-*}
-{extends file="layout_gestore.tpl"}
 
-{block name="page_css"}
-    <link rel="stylesheet" href="{$base_url}/css/gestore_creazione_evento.css">
-    <link rel="stylesheet" href="{$base_url}/css/gestore_creazione_prodotto.css">
-{/block}
+<?php 
+$_smarty_tpl->getInheritance()->instanceBlock($_smarty_tpl, 'Block_3886580526a5fc1d9d9c156_18015672', "content");
+$_smarty_tpl->getInheritance()->endChild($_smarty_tpl, "layout_gestore.tpl", $_smarty_current_dir);
+}
+/* {block "page_css"} */
+class Block_2367442186a5fc1d9d996f0_06037461 extends \Smarty\Runtime\Block
+{
+public function callBlock(\Smarty\Template $_smarty_tpl) {
+$_smarty_current_dir = 'C:\\xampp\\htdocs\\TableCrown\\Presentation\\smarty-dir\\templates';
+?>
 
-{block name="content"}
+    <link rel="stylesheet" href="<?php echo $_smarty_tpl->getValue('base_url');?>
+/css/gestore_creazione_evento.css">
+    <link rel="stylesheet" href="<?php echo $_smarty_tpl->getValue('base_url');?>
+/css/gestore_creazione_prodotto.css">
+<?php
+}
+}
+/* {/block "page_css"} */
+/* {block "content"} */
+class Block_3886580526a5fc1d9d9c156_18015672 extends \Smarty\Runtime\Block
+{
+public function callBlock(\Smarty\Template $_smarty_tpl) {
+$_smarty_current_dir = 'C:\\xampp\\htdocs\\TableCrown\\Presentation\\smarty-dir\\templates';
+?>
+
 
 <div class="gcre-container">
 
@@ -43,7 +65,8 @@
             <h1 class="gcre-header__title">Nuovo Gioco da Tavolo</h1>
             <p class="gcre-header__subtitle">Compila i 3 step per pubblicare un nuovo prodotto.</p>
         </div>
-        <a href="{$base_url}/gestore/catalogo/giochi-da-tavolo" class="gcre-header__close">
+        <a href="<?php echo $_smarty_tpl->getValue('base_url');?>
+/gestore/catalogo/giochi-da-tavolo" class="gcre-header__close">
             <i class="ti ti-x"></i> Annulla
         </a>
     </div>
@@ -66,10 +89,10 @@
     </div>
 
     <form id="formCreaGioco" class="gcre-form-card" method="post" enctype="multipart/form-data"
-          action="{$base_url}/gestore/catalogo/giochi-da-tavolo/nuovo">
+          action="<?php echo $_smarty_tpl->getValue('base_url');?>
+/gestore/catalogo/giochi-da-tavolo/nuovo">
 
-        {* ══════════ STEP 1: DATI BASE ══════════ *}
-        <div class="gcre-step active" data-step="1">
+                <div class="gcre-step active" data-step="1">
             <h2 class="gcre-step__title">Dati base</h2>
             <p class="gcre-step__subtitle">Nome, descrizione, categorie e componenti del gioco.</p>
 
@@ -90,22 +113,30 @@
             <div class="gcre-field-group" data-field="categoria">
                 <label class="gcre-label">Categorie</label>
                 <div class="gcre-chip-group" id="categoriaChips">
-                    {if isset($categorie_enum) && $categorie_enum|@count > 0}
-                        {foreach $categorie_enum as $cat}
+                    <?php if ((true && ($_smarty_tpl->hasVariable('categorie_enum') && null !== ($_smarty_tpl->getValue('categorie_enum') ?? null))) && $_smarty_tpl->getSmarty()->getModifierCallback('count')($_smarty_tpl->getValue('categorie_enum')) > 0) {?>
+                        <?php
+$_from = $_smarty_tpl->getSmarty()->getRuntime('Foreach')->init($_smarty_tpl, $_smarty_tpl->getValue('categorie_enum'), 'cat');
+$foreach0DoElse = true;
+foreach ($_from ?? [] as $_smarty_tpl->getVariable('cat')->value) {
+$foreach0DoElse = false;
+?>
                             <label class="gcre-chip">
-                                <input type="checkbox" name="categoria[]" value="{$cat.value}">
-                                {$cat.label}
+                                <input type="checkbox" name="categoria[]" value="<?php echo $_smarty_tpl->getValue('cat')['value'];?>
+">
+                                <?php echo $_smarty_tpl->getValue('cat')['label'];?>
+
                             </label>
-                        {/foreach}
-                    {else}
-                        {* TODO: CASE REALI DI Categoria DA CONFERMARE — placeholder provvisorio *}
-                        <label class="gcre-chip"><input type="checkbox" name="categoria[]" value="strategia">Strategia</label>
+                        <?php
+}
+$_smarty_tpl->getSmarty()->getRuntime('Foreach')->restore($_smarty_tpl, 1);?>
+                    <?php } else { ?>
+                                                <label class="gcre-chip"><input type="checkbox" name="categoria[]" value="strategia">Strategia</label>
                         <label class="gcre-chip"><input type="checkbox" name="categoria[]" value="party">Party</label>
                         <label class="gcre-chip"><input type="checkbox" name="categoria[]" value="famiglia">Famiglia</label>
                         <label class="gcre-chip"><input type="checkbox" name="categoria[]" value="cooperativo">Cooperativo</label>
                         <label class="gcre-chip"><input type="checkbox" name="categoria[]" value="astratto">Astratto</label>
                         <label class="gcre-chip"><input type="checkbox" name="categoria[]" value="gdr">GDR</label>
-                    {/if}
+                    <?php }?>
                 </div>
                 <span class="gcre-error">Seleziona almeno una categoria.</span>
             </div>
@@ -133,13 +164,12 @@
                         <span class="gcre-upload-box__title" id="uploadTextGioco">Carica un'immagine</span>
                         <span class="gcre-upload-box__hint">PNG o JPG, consigliata almeno 800x450px</span>
                     </div>
-                    <input type="file" name="img_prodotto" id="imgProdotto" accept="image/*" style="display:none;">
+                    <input type="file" name="imgProdotto" id="imgProdotto" accept="image/*" style="display:none;">
                 </label>
             </div>
         </div>
 
-        {* ══════════ STEP 2: PREZZO, MAGAZZINO, STATO/DANNO ══════════ *}
-        <div class="gcre-step" data-step="2">
+                <div class="gcre-step" data-step="2">
             <h2 class="gcre-step__title">Prezzo e magazzino</h2>
             <p class="gcre-step__subtitle">Prezzo di listino, eventuale sconto, quantità e stato del prodotto.</p>
 
@@ -153,16 +183,24 @@
                 <div class="gcre-field-group" data-field="valuta">
                     <label class="gcre-label" for="valuta">Valuta</label>
                     <select id="valuta" name="valuta" class="gcre-select" required>
-                        {if isset($valute_enum) && $valute_enum|@count > 0}
-                            {foreach $valute_enum as $v}
-                                <option value="{$v.value}">{$v.label}</option>
-                            {/foreach}
-                        {else}
-    {* placeholder — DA VERIFICARE contro i case reali di Valuta *}
-    <option value="EUR">Euro (€)</option>
-    <option value="USD">Dollaro USA ($)</option>
-    <option value="GBP">Sterlina (£)</option>
-{/if}
+                        <?php if ((true && ($_smarty_tpl->hasVariable('valute_enum') && null !== ($_smarty_tpl->getValue('valute_enum') ?? null))) && $_smarty_tpl->getSmarty()->getModifierCallback('count')($_smarty_tpl->getValue('valute_enum')) > 0) {?>
+                            <?php
+$_from = $_smarty_tpl->getSmarty()->getRuntime('Foreach')->init($_smarty_tpl, $_smarty_tpl->getValue('valute_enum'), 'v');
+$foreach1DoElse = true;
+foreach ($_from ?? [] as $_smarty_tpl->getVariable('v')->value) {
+$foreach1DoElse = false;
+?>
+                                <option value="<?php echo $_smarty_tpl->getValue('v')['value'];?>
+"><?php echo $_smarty_tpl->getValue('v')['label'];?>
+</option>
+                            <?php
+}
+$_smarty_tpl->getSmarty()->getRuntime('Foreach')->restore($_smarty_tpl, 1);?>
+                        <?php } else { ?>
+                                                        <option value="eur">Euro (€)</option>
+                            <option value="usd">Dollaro USA ($)</option>
+                            <option value="gbp">Sterlina (£)</option>
+                        <?php }?>
                     </select>
                     <span class="gcre-error">Seleziona una valuta.</span>
                 </div>
@@ -200,16 +238,24 @@
                 <div class="gcre-field-group" data-field="disponibilita">
                     <label class="gcre-label" for="disponibilita">Disponibilità</label>
                     <select id="disponibilita" name="disponibilita" class="gcre-select" required>
-                        {if isset($disponibilita_enum) && $disponibilita_enum|@count > 0}
-                            {foreach $disponibilita_enum as $d}
-                                <option value="{$d.value}">{$d.label}</option>
-                            {/foreach}
-                        {else}
-                            {* TODO: CASE REALI DI DisponibilitaProdotto DA CONFERMARE — placeholder *}
-                            <option value="disponibile">Disponibile</option>
+                        <?php if ((true && ($_smarty_tpl->hasVariable('disponibilita_enum') && null !== ($_smarty_tpl->getValue('disponibilita_enum') ?? null))) && $_smarty_tpl->getSmarty()->getModifierCallback('count')($_smarty_tpl->getValue('disponibilita_enum')) > 0) {?>
+                            <?php
+$_from = $_smarty_tpl->getSmarty()->getRuntime('Foreach')->init($_smarty_tpl, $_smarty_tpl->getValue('disponibilita_enum'), 'd');
+$foreach2DoElse = true;
+foreach ($_from ?? [] as $_smarty_tpl->getVariable('d')->value) {
+$foreach2DoElse = false;
+?>
+                                <option value="<?php echo $_smarty_tpl->getValue('d')['value'];?>
+"><?php echo $_smarty_tpl->getValue('d')['label'];?>
+</option>
+                            <?php
+}
+$_smarty_tpl->getSmarty()->getRuntime('Foreach')->restore($_smarty_tpl, 1);?>
+                        <?php } else { ?>
+                                                        <option value="disponibile">Disponibile</option>
                             <option value="esaurito">Esaurito</option>
                             <option value="non_disponibile">Non disponibile</option>
-                        {/if}
+                        <?php }?>
                     </select>
                     <span class="gcre-error">Seleziona una disponibilità.</span>
                 </div>
@@ -224,16 +270,24 @@
                     <div class="gcre-field-group" data-field="livelloDanno" data-conditional="danneggiato">
                         <label class="gcre-label" for="livelloDanno">Livello di danno</label>
                         <select id="livelloDanno" name="livelloDanno" class="gcre-select">
-                            {if isset($danno_enum) && $danno_enum|@count > 0}
-                                {foreach $danno_enum as $d}
-                                    <option value="{$d.value}">{$d.label}</option>
-                                {/foreach}
-                            {else}
-                                {* TODO: CASE REALI DI LivelloDannoGiochi DA CONFERMARE — placeholder *}
-                                <option value="lieve">Lieve</option>
+                            <?php if ((true && ($_smarty_tpl->hasVariable('danno_enum') && null !== ($_smarty_tpl->getValue('danno_enum') ?? null))) && $_smarty_tpl->getSmarty()->getModifierCallback('count')($_smarty_tpl->getValue('danno_enum')) > 0) {?>
+                                <?php
+$_from = $_smarty_tpl->getSmarty()->getRuntime('Foreach')->init($_smarty_tpl, $_smarty_tpl->getValue('danno_enum'), 'd');
+$foreach3DoElse = true;
+foreach ($_from ?? [] as $_smarty_tpl->getVariable('d')->value) {
+$foreach3DoElse = false;
+?>
+                                    <option value="<?php echo $_smarty_tpl->getValue('d')['value'];?>
+"><?php echo $_smarty_tpl->getValue('d')['label'];?>
+</option>
+                                <?php
+}
+$_smarty_tpl->getSmarty()->getRuntime('Foreach')->restore($_smarty_tpl, 1);?>
+                            <?php } else { ?>
+                                                                <option value="lieve">Lieve</option>
                                 <option value="medio">Medio</option>
                                 <option value="grave">Grave</option>
-                            {/if}
+                            <?php }?>
                         </select>
                         <span class="gcre-error">Seleziona un livello di danno.</span>
                     </div>
@@ -247,8 +301,7 @@
             </div>
         </div>
 
-        {* ══════════ STEP 3: CARATTERISTICHE DI GIOCO ══════════ *}
-        <div class="gcre-step" data-step="3">
+                <div class="gcre-step" data-step="3">
             <h2 class="gcre-step__title">Caratteristiche di gioco</h2>
             <p class="gcre-step__subtitle">Difficoltà, lingua, numero di giocatori, età e durata.</p>
 
@@ -256,33 +309,49 @@
                 <div class="gcre-field-group" data-field="difficolta">
                     <label class="gcre-label" for="difficolta">Difficoltà</label>
                     <select id="difficolta" name="difficolta" class="gcre-select" required>
-                        {if isset($difficolta_enum) && $difficolta_enum|@count > 0}
-                            {foreach $difficolta_enum as $d}
-                                <option value="{$d.value}">{$d.label}</option>
-                            {/foreach}
-                        {else}
-                            {* TODO: CASE REALI DI DifficoltaGioco DA CONFERMARE — placeholder *}
-                            <option value="facile">Facile</option>
+                        <?php if ((true && ($_smarty_tpl->hasVariable('difficolta_enum') && null !== ($_smarty_tpl->getValue('difficolta_enum') ?? null))) && $_smarty_tpl->getSmarty()->getModifierCallback('count')($_smarty_tpl->getValue('difficolta_enum')) > 0) {?>
+                            <?php
+$_from = $_smarty_tpl->getSmarty()->getRuntime('Foreach')->init($_smarty_tpl, $_smarty_tpl->getValue('difficolta_enum'), 'd');
+$foreach4DoElse = true;
+foreach ($_from ?? [] as $_smarty_tpl->getVariable('d')->value) {
+$foreach4DoElse = false;
+?>
+                                <option value="<?php echo $_smarty_tpl->getValue('d')['value'];?>
+"><?php echo $_smarty_tpl->getValue('d')['label'];?>
+</option>
+                            <?php
+}
+$_smarty_tpl->getSmarty()->getRuntime('Foreach')->restore($_smarty_tpl, 1);?>
+                        <?php } else { ?>
+                                                        <option value="facile">Facile</option>
                             <option value="media">Media</option>
                             <option value="difficile">Difficile</option>
-                        {/if}
+                        <?php }?>
                     </select>
                     <span class="gcre-error">Seleziona una difficoltà.</span>
                 </div>
                 <div class="gcre-field-group" data-field="lingua">
                     <label class="gcre-label" for="lingua">Lingua</label>
                     <select id="lingua" name="lingua" class="gcre-select" required>
-                        {if isset($lingue_enum) && $lingue_enum|@count > 0}
-                            {foreach $lingue_enum as $l}
-                                <option value="{$l.value}">{$l.label}</option>
-                            {/foreach}
-                        {else}
-                            {* TODO: CASE REALI DI LinguaGioco DA CONFERMARE — placeholder *}
-                            <option value="IT">IT</option>
+                        <?php if ((true && ($_smarty_tpl->hasVariable('lingue_enum') && null !== ($_smarty_tpl->getValue('lingue_enum') ?? null))) && $_smarty_tpl->getSmarty()->getModifierCallback('count')($_smarty_tpl->getValue('lingue_enum')) > 0) {?>
+                            <?php
+$_from = $_smarty_tpl->getSmarty()->getRuntime('Foreach')->init($_smarty_tpl, $_smarty_tpl->getValue('lingue_enum'), 'l');
+$foreach5DoElse = true;
+foreach ($_from ?? [] as $_smarty_tpl->getVariable('l')->value) {
+$foreach5DoElse = false;
+?>
+                                <option value="<?php echo $_smarty_tpl->getValue('l')['value'];?>
+"><?php echo $_smarty_tpl->getValue('l')['label'];?>
+</option>
+                            <?php
+}
+$_smarty_tpl->getSmarty()->getRuntime('Foreach')->restore($_smarty_tpl, 1);?>
+                        <?php } else { ?>
+                                                        <option value="IT">IT</option>
                             <option value="EN">EN</option>
                             <option value="FR">FR</option>
                             <option value="DE">DE</option>
-                        {/if}
+                        <?php }?>
                     </select>
                     <span class="gcre-error">Seleziona una lingua.</span>
                 </div>
@@ -329,17 +398,29 @@
                         <label class="gcre-label">Gioco base</label>
                         <input type="search" class="gcre-input gcre-picker-search" id="searchGiocoBase" placeholder="Cerca un gioco...">
                         <div class="gcre-picker-grid" id="pickerGiocoBase">
-                            {if isset($giochiBaseDisponibili) && $giochiBaseDisponibili|@count > 0}
-                                {foreach $giochiBaseDisponibili as $g}
-                                    <div class="gcre-picker-card" data-id="{$g.id}" data-nome="{$g.nome|escape}">
+                            <?php if ((true && ($_smarty_tpl->hasVariable('giochiBaseDisponibili') && null !== ($_smarty_tpl->getValue('giochiBaseDisponibili') ?? null))) && $_smarty_tpl->getSmarty()->getModifierCallback('count')($_smarty_tpl->getValue('giochiBaseDisponibili')) > 0) {?>
+                                <?php
+$_from = $_smarty_tpl->getSmarty()->getRuntime('Foreach')->init($_smarty_tpl, $_smarty_tpl->getValue('giochiBaseDisponibili'), 'g');
+$foreach6DoElse = true;
+foreach ($_from ?? [] as $_smarty_tpl->getVariable('g')->value) {
+$foreach6DoElse = false;
+?>
+                                    <div class="gcre-picker-card" data-id="<?php echo $_smarty_tpl->getValue('g')['id'];?>
+" data-nome="<?php echo htmlspecialchars((string)$_smarty_tpl->getValue('g')['nome'], ENT_QUOTES, 'UTF-8', true);?>
+">
                                         <span class="gcre-picker-card__check"><i class="ti ti-check"></i></span>
-                                        <img class="gcre-picker-card__img" src="{$g.immagine}" alt="{$g.nome|escape}">
-                                        <span class="gcre-picker-card__name">{$g.nome|escape}</span>
+                                        <img class="gcre-picker-card__img" src="<?php echo $_smarty_tpl->getValue('g')['immagine'];?>
+" alt="<?php echo htmlspecialchars((string)$_smarty_tpl->getValue('g')['nome'], ENT_QUOTES, 'UTF-8', true);?>
+">
+                                        <span class="gcre-picker-card__name"><?php echo htmlspecialchars((string)$_smarty_tpl->getValue('g')['nome'], ENT_QUOTES, 'UTF-8', true);?>
+</span>
                                     </div>
-                                {/foreach}
-                            {else}
+                                <?php
+}
+$_smarty_tpl->getSmarty()->getRuntime('Foreach')->restore($_smarty_tpl, 1);?>
+                            <?php } else { ?>
                                 <div class="gcre-picker-empty">Nessun gioco base disponibile nel catalogo.</div>
-                            {/if}
+                            <?php }?>
                         </div>
                     </div>
                 </div>
@@ -357,7 +438,6 @@
     </form>
 </div>
 
-{* ── MODALE RIEPILOGO ── *}
 <div class="gcre-overlay" id="overlayGioco">
     <div class="gcre-modal">
         <div class="gcre-modal__header">
@@ -400,7 +480,8 @@
     </div>
 </div>
 
-<script>
+<?php echo '<script'; ?>
+>
 (function () {
     const form = document.getElementById('formCreaGioco');
     const steps = Array.from(form.querySelectorAll('.gcre-step'));
@@ -599,6 +680,11 @@
     document.getElementById('btnModificaGioco').addEventListener('click', () => overlay.classList.remove('active'));
     document.getElementById('btnCreaGioco').addEventListener('click', () => form.submit());
 })();
-</script>
+<?php echo '</script'; ?>
+>
 
-{/block}
+<?php
+}
+}
+/* {/block "content"} */
+}

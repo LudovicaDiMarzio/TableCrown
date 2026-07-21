@@ -1,11 +1,28 @@
-{*
-  TableCrown\Presentation\Views\Gestore - Modale Modifica Porta Dadi (frammento)
-  NON usa {extends}: è un partial incluso in catalogo_porta_dadi.tpl, fuori dal foreach.
-  Nessuna sezione "danno" (riservata a EGiocoDaTavolo).
-  Tutti i valori vengono iniettati via JS dai data-* del bottone .gmp-btn-modifica
-  cliccato, NON da variabili Smarty ($prodotto non esiste in questo contesto).
-*}
+<?php
+/* Smarty version 5.8.0, created on 2026-07-21 22:15:14
+  from 'file:gestore_modifica_portadadi.tpl' */
 
+/* @var \Smarty\Template $_smarty_tpl */
+if ($_smarty_tpl->getCompiled()->isFresh($_smarty_tpl, array (
+  'version' => '5.8.0',
+  'unifunc' => 'content_6a5fd352b36302_13842044',
+  'has_nocache_code' => false,
+  'file_dependency' => 
+  array (
+    'fdad4931c2e3398c708325c0d2828f7d21b560ba' => 
+    array (
+      0 => 'gestore_modifica_portadadi.tpl',
+      1 => 1784664901,
+      2 => 'file',
+    ),
+  ),
+  'includes' => 
+  array (
+  ),
+))) {
+function content_6a5fd352b36302_13842044 (\Smarty\Template $_smarty_tpl) {
+$_smarty_current_dir = 'C:\\xampp\\htdocs\\TableCrown\\Presentation\\smarty-dir\\templates';
+?>
 <div class="gmp-overlay" id="gmpOverlayPortaDadi">
     <div class="gmp-modal">
 
@@ -65,7 +82,8 @@
     </div>
 </div>
 
-<script>
+<?php echo '<script'; ?>
+>
     let gmpPortaDadiIdProdotto = null;
 
     document.addEventListener('click', function (e) {
@@ -113,7 +131,8 @@
             params.append('rimuoviSconto', '1');
         }
 
-        fetch('{$base_url}/gestore/prodotti/modifica', {
+        fetch('<?php echo $_smarty_tpl->getValue('base_url');?>
+/gestore/prodotti/modifica', {
             method: 'POST',
             headers: { 'X-Requested-With': 'XMLHttpRequest' },
             body: params
@@ -135,4 +154,6 @@
                 document.getElementById('gmpPortaDadiFeedback').classList.add('gmp-feedback--error');
             });
     }
-</script>
+<?php echo '</script'; ?>
+><?php }
+}
