@@ -91,7 +91,7 @@
                 <div class="account-livello-wrapper">
                     <div class="account-livello-row">
                         <span class="account-livello-label">
-                            <i class="ti ti-star"></i> Livello Giocatore
+                            <i class="ti ti-star"></i> {$playerLevel|escape|capitalize}
                         </span>
                         <button type="button"
                                 class="account-livello-info"
@@ -103,7 +103,11 @@
                     </div>
 
                     <div class="account-livello-tooltip" id="account-livello-tooltip" role="tooltip">
-                        Vinci altri tornei per diventare il livello successivo!
+                        {if $torneiMancanti}
+                            Vinci altri {$torneiMancanti} tornei per diventare il livello successivo!
+                        {else}
+                            Hai raggiunto il livello massimo!
+                        {/if}
                     </div>
                 </div>
 
