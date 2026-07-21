@@ -1,18 +1,18 @@
 <?php
-/* Smarty version 5.8.0, created on 2026-07-21 00:56:39
+/* Smarty version 5.8.0, created on 2026-07-21 13:24:17
   from 'file:catalogo_tornei.tpl' */
 
 /* @var \Smarty\Template $_smarty_tpl */
 if ($_smarty_tpl->getCompiled()->isFresh($_smarty_tpl, array (
   'version' => '5.8.0',
-  'unifunc' => 'content_6a5ea7a740e102_97806809',
+  'unifunc' => 'content_6a5f56e113a192_27918061',
   'has_nocache_code' => false,
   'file_dependency' => 
   array (
     'a524171fbb5497b11b5331620d3555a287bc7536' => 
     array (
       0 => 'catalogo_tornei.tpl',
-      1 => 1784579830,
+      1 => 1784632524,
       2 => 'file',
     ),
   ),
@@ -20,18 +20,18 @@ if ($_smarty_tpl->getCompiled()->isFresh($_smarty_tpl, array (
   array (
   ),
 ))) {
-function content_6a5ea7a740e102_97806809 (\Smarty\Template $_smarty_tpl) {
+function content_6a5f56e113a192_27918061 (\Smarty\Template $_smarty_tpl) {
 $_smarty_current_dir = 'C:\\xampp\\htdocs\\TableCrown\\Presentation\\smarty-dir\\templates';
 $_smarty_tpl->getInheritance()->init($_smarty_tpl, true);
 ?>
 
 
 <?php 
-$_smarty_tpl->getInheritance()->instanceBlock($_smarty_tpl, 'Block_16112379536a5ea7a73c0e48_93652358', "content");
+$_smarty_tpl->getInheritance()->instanceBlock($_smarty_tpl, 'Block_2604694176a5f56e1070441_73826310', "content");
 $_smarty_tpl->getInheritance()->endChild($_smarty_tpl, "common/layout.tpl", $_smarty_current_dir);
 }
 /* {block "content"} */
-class Block_16112379536a5ea7a73c0e48_93652358 extends \Smarty\Runtime\Block
+class Block_2604694176a5f56e1070441_73826310 extends \Smarty\Runtime\Block
 {
 public function callBlock(\Smarty\Template $_smarty_tpl) {
 $_smarty_current_dir = 'C:\\xampp\\htdocs\\TableCrown\\Presentation\\smarty-dir\\templates';
