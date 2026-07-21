@@ -28,7 +28,7 @@ use TableCrown\Entity\Enumerativi\LivelloDannoGiochi;
 use TableCrown\Entity\Enumerativi\DifficoltaGioco;
 use TableCrown\Entity\Enumerativi\LinguaGioco;
 use TableCrown\Entity\Enumerativi\StatoEvento;
-use TableCrown\Foundation\BancaMockService;
+use TableCrown\Foundation\PaymentInterface;
 use TableCrown\Presentation\Views\ViewCatalogo;
 use TableCrown\Presentation\Views\ViewEventi;
 use InvalidArgumentException;
@@ -867,7 +867,7 @@ abstract class BaseController {
      * che vale per entrambi i casi (per le carte nuove è ridondante col controllo già
      * fatto nel costruttore di ECartaDiCredito, ma lo teniamo per sicurezza e uniformità).
      */
-    protected function risolviCartaPagamento(string $sceltaCarta, ?int $idCartaSalvata, EUtente $utente, BancaMockService $bancaService): ECartaDiCredito {
+    protected function risolviCartaPagamento(string $sceltaCarta, ?int $idCartaSalvata, EUtente $utente, PaymentInterface $bancaService): ECartaDiCredito {
         if ($sceltaCarta === 'salvata') {
             if (!$idCartaSalvata) {
                 throw new InvalidArgumentException("Seleziona una delle tue carte salvate.");
