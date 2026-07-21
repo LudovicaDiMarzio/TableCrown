@@ -333,7 +333,18 @@ class CFrontController {
                     if ($metodoHTTP === 'GET') {
                         if ($sottoRoute === 'dashboard') { //GET /gestore/dashboard
                             $controller->mostraDashboardGestore();
-                        } elseif ($sottoRoute === 'catalogo') {
+                        } elseif ($sottoRoute === 'crea') {
+                            if ($sottoRoute2 === 'giochi-da-tavolo') { //GET /gestore/crea/giochi-da-tavolo
+                                $controller->mostraFormCreaGiocoGestore();
+                            } elseif ($sottoRoute2 === 'bustine') { //GET /gestore/crea/bustine
+                                $controller->mostraFormCreaBustineGestore();
+                            } elseif ($sottoRoute2 === 'porta-dadi') { //GET /gestore/crea/porta-dadi
+                                $controller->mostraFormCreaPortaDadiGestore();
+                            } else {
+                                $this->mostra404();
+                            }
+                        }
+                        elseif ($sottoRoute === 'catalogo') {
                             if ($sottoRoute2 === 'giochi-da-tavolo') { //GET /gestore/catalogo/giochi-da-tavolo
                                 $controller->mostraCatalogoGiochiGestore();
                             } elseif ($sottoRoute2 === 'bustine') { //GET /gestore/catalogo/bustine

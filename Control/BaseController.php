@@ -31,6 +31,7 @@ use TableCrown\Entity\Enumerativi\StatoEvento;
 use TableCrown\Foundation\PaymentInterface;
 use TableCrown\Presentation\Views\ViewCatalogo;
 use TableCrown\Presentation\Views\ViewEventi;
+use TableCrown\Presentation\Views\ViewGestore;
 use InvalidArgumentException;
 use DateTime;
 
@@ -83,8 +84,7 @@ abstract class BaseController {
         //cart_count solo per gli utenti loggati con ruolo 'utente'
         if ($this->isLoggedIn() && USession::getSessionElement('ruolo') === 'utente') {
             $carrello = USession::getSessionElement('carrello') ?? [];
-            //SISTEMARE BUG DI $cartCount: INCOERENZA CON LA STRUTTURA DEL CARRELLO (confronta con CCarrello)
-            $cartCount = array_sum(array_column($carrello, 'quantita')); //array_column estrae la colonna 'quantita' da ogni riga del carrello
+            $cartCount = array_sum($carrello);
             if ($cartCount > 0) {
                 $globalData['cart_count'] = $cartCount; //Il badge appare solo se gli articoli sono > 0
             }
@@ -304,7 +304,18 @@ abstract class BaseController {
         ];
 
         $datiLayout = $this->preparaDatiLayout($vista, $datiPagina);
-        ViewCatalogo::render($datiLayout);
+
+        if ($modalita === 'gestore') {
+            match ($vista) {
+                'gestore_catalogo_giochi' => ViewGestore::mostraCatalogoGiochi($datiLayout),
+                'gestore_catalogo_bustine' => ViewGestore::mostraCatalogoBustine($datiLayout),
+                'gestore_catalogo_portadadi' => ViewGestore::mostraCatalogoPortaDadi($datiLayout),
+                default => throw new \InvalidArgumentException("La vista '$vista' non è valida per la modalità '$modalita'."),
+            };
+        } else {
+            ViewCatalogo::render($datiLayout);
+        }
+
     }
 
     /**
@@ -417,10 +428,7 @@ abstract class BaseController {
         $this->requireRole('utente');
         $idUtente = USession::getSessionElement('id_persona');
 
-        $utente = null;
-        if ($idUtente) {
-            $utente = FPersistentManager::PMgetObjOnAttribute(EUtente::class, 'idpersona', $idUtente);
-        }
+        $utente = $this->utenteCorrenteOpzionale(); //recupera internamente l'oggetto dal db
 
         //Difensivo: se per qualsiasi motivo non troviamo l'utente nel db,
         //puliamo la sessione e lo reindirizziamo al login anziché far generare un errore.
@@ -448,6 +456,9 @@ abstract class BaseController {
             return null;
         }
         $idUtente = USession::getSessionElement('id_persona');
+        if (!$idUtente) {
+            return null;
+        }
         return FPersistentManager::PMgetObjOnAttribute(EUtente::class, 'idpersona', $idUtente);
     }
 
@@ -649,7 +660,19 @@ abstract class BaseController {
         ];
 
         $datiLayout = $this->preparaDatiLayout($vista, $datiPagina);
-        ViewEventi::mostraEventi($datiLayout);
+
+        //Smistamento in base alla modalità (utente vs gestore)
+        if ($modalita === 'gestore') {
+            match ($vista) {
+                'gestore_eventi_serate' => ViewGestore::mostraEventiSerate($datiLayout),
+                'gestore_eventi_tornei' => ViewGestore::mostraEventiTornei($datiLayout),
+                'gestore_eventi_challenge' => ViewGestore::mostraEventiChallenge($datiLayout),
+                default => throw new \InvalidArgumentException("La vista '$vista' non è valida per la modalità '$modalita'."),
+            };
+        } else {
+            //vista pubblica per utenti semplici
+            ViewEventi::mostraEventi($datiLayout);
+        }
     }
 
     /**

@@ -61,14 +61,20 @@ class CProdotto extends BaseController {
      * i campi specifici dei giochi da tavolo.
      */
     private function costruisciDatiVista(EProdotto $prodotto): array {
+        $idProdotto = $prodotto->getIdProdotto();
+        //Controlliamo se l'utente corrente ha i requisiti per scrivere una recensione
+        $hasPurchased = $this->haAcquistatoProdotto($idProdotto);
+        $puoRecensire = $hasPurchased;
+
         $dati = array_merge($this->prodottoToArray($prodotto),[
             'descrizioneProdotto' => $prodotto->getDescrizioneProdotto(),
             'quantita' => $prodotto->getQuantita(),
             'dataPubblicazione' => $prodotto->getDataPubblicazione()->format('Y-m-d H:i:s'),
             'recensioni' => $this->recensioniToArray($prodotto->getRecensioni()),
-            'correlati' => $this->prodottiCorrelati([$prodotto->getIdProdotto()]),
-            'userHasPurchased' => $this->haAcquistatoProdotto($prodotto->getIdProdotto()),
-            'isInWishlist' => $this->isProdottoInWishlist($prodotto->getIdProdotto()),
+            'correlati' => $this->prodottiCorrelati([$idProdotto]),
+            'userHasPurchased' => $hasPurchased,
+            'puoRecensire' => $puoRecensire,
+            'isInWishlist' => $this->isProdottoInWishlist($idProdotto),
             'motivazioni' => $this->motivazioniToArray(FPersistentManager::PMgetAll(EMotivazione::class)),
         ]);
        

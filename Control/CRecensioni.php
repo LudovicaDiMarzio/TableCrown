@@ -47,6 +47,13 @@ class CRecensioni extends BaseController {
                 throw new \InvalidArgumentException("Il prodotto selezionato non esiste.");
             }
 
+            //Regole di business: l'utente può recensire un prodotto solo se l'ha già acquistato
+            $haAcquistato = FPersistentManager::PMutenteHasProdotto($utente->getIdPersona(), $idProdotto);
+
+            if (!$haAcquistato) {
+                throw new \InvalidArgumentException("Puoi recensire solo i prodotti che hai acquistato.");
+            }
+
             //Istanziamo la recensione
             $recensione = new ERecensione($valutazione, $testo, $utente, $prodotto);
 
