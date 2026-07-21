@@ -10,7 +10,7 @@
 
     {* ── SEARCH BAR ── *}
     <div class="home-search-bar">
-        <form class="home-search-form" action="{$base_url}/catalogo" method="get">
+        <form class="home-search-form" action="{$base_url}/catalogo/giochi-da-tavolo" method="get">
             <input class="input home-search-input"
                    type="search"
                    name="q"
