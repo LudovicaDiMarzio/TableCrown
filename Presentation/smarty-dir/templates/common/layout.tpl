@@ -125,25 +125,25 @@
     </nav>
 
     {* ── BREADCRUMB ── *}
-{if isset($breadcrumbs) && $breadcrumbs|@count > 0}
-<section class="section breadcrumb-section">
-    <div class="container">
-        <nav class="breadcrumb is-small" aria-label="breadcrumbs">
-            <ul>
-                {foreach $breadcrumbs as $crumb}
-                    {if $crumb@last}
-                        <li class="is-active">
-                            <a href="#" aria-current="page">{$crumb.label|escape}</a>
-                        </li>
-                    {else}
-                        <li><a href="{$crumb.url|escape}">{$crumb.label|escape}</a></li>
-                    {/if}
-                {/foreach}
-            </ul>
-        </nav>
-    </div>
-</section>
-{/if}
+    {if isset($breadcrumbs) && $breadcrumbs|@count > 0}
+    <section class="section breadcrumb-section">
+        <div class="container">
+            <nav class="breadcrumb is-small" aria-label="breadcrumbs">
+                <ul>
+                    {foreach $breadcrumbs as $crumb}
+                        {if $crumb@last}
+                            <li class="is-active">
+                                <a href="#" aria-current="page">{$crumb.label|escape}</a>
+                            </li>
+                        {else}
+                            <li><a href="{$crumb.url|escape}">{$crumb.label|escape}</a></li>
+                        {/if}
+                    {/foreach}
+                </ul>
+            </nav>
+        </div>
+    </section>
+    {/if}
 
     {* ── FLASH MESSAGE ── *}
     {if isset($flash_message)}
