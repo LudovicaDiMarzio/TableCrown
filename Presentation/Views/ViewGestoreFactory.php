@@ -4,22 +4,28 @@
  */
 namespace TableCrown\Presentation\Views;
 
+use SmartyConfiguration;
+
 use InvalidArgumentException;
 
 class ViewGestoreFactory {
 
     public static function crea(string $vista): ViewGestoreInterface {
-        return match ($vista) {
-            'gestore_dashboard' => new ViewGestoreDashboard(),
+    return match ($vista) {
+        'gestore_dashboard' => new ViewGestoreDashboard(),
 
-            'gestore_creazione_gioco' => new ViewGestoreCreazioneGioco(),
-            'gestore_creazione_bustine' => new ViewGestoreCreazioneBustine(),
-            'gestore_creazione_portadadi' => new ViewGestoreCreazionePortaDadi(),
-            'gestore_creazione_serata' => new ViewGestoreCreazioneSerata(),
-            'gestore_creazione_torneo' => new ViewGestoreCreazioneTorneo(),
-            'gestore_creazione_challenge' => new ViewGestoreCreazioneChallenge(),
+        'gestore_catalogo_giochi'     => new ViewGestoreCatalogoGiochi(),
+        'gestore_catalogo_bustine'    => new ViewGestoreCatalogoBustine(),
+        'gestore_catalogo_portadadi'  => new ViewGestoreCatalogoPortaDadi(),
 
-            default => throw new InvalidArgumentException("Vista gestore non riconosciuta: '$vista'."),
+        'gestore_creazione_gioco' => new ViewGestoreCreazioneGioco(),
+        'gestore_creazione_bustine' => new ViewGestoreCreazioneBustine(),
+        'gestore_creazione_portadadi' => new ViewGestoreCreazionePortaDadi(),
+        'gestore_creazione_serata' => new ViewGestoreCreazioneSerata(),
+        'gestore_creazione_torneo' => new ViewGestoreCreazioneTorneo(),
+        'gestore_creazione_challenge' => new ViewGestoreCreazioneChallenge(),
+
+        default => throw new InvalidArgumentException("Vista gestore non riconosciuta: '$vista'."),
         };
     }
 }
