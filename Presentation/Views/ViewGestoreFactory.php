@@ -43,4 +43,28 @@ class ViewGestoreFactory {
 
     $view->render($dati);
 }
+
+public static function mostraDettaglioSerata(array $dati): void {
+    (new ViewGestoreDettaglioSerata())->render($dati);
+}
+
+public static function mostraDettaglioTorneo(array $dati): void {
+    (new ViewGestoreDettaglioTorneo())->render($dati);
+}
+
+public static function mostraDettaglioChallenge(array $dati): void {
+    (new ViewGestoreDettaglioChallenge())->render($dati);
+}
+
+public static function mostraEventiSerate(array $dati): void {
+    (new ViewGestoreEventiSerate())->render($dati);
+}
+
+public static function mostraEventiTornei(array $dati): void {
+    (new ViewGestoreEventiTornei())->render($dati);
+}
+
+public static function mostraEventiChallenge(array $dati): void {
+    (new ViewGestoreEventiChallenge())->render($dati);
+}
 }

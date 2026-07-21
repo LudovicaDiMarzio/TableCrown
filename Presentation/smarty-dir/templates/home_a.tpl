@@ -17,7 +17,7 @@
 {extends file="layout_admin.tpl"}
 
 {block name="page_css"}
-    <link rel="stylesheet" href="/css/home_a.css">
+    <link rel="stylesheet" href="{$base_url}/css/home_a.css">
 {/block}
 
 {block name="content"}
