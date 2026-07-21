@@ -122,7 +122,7 @@
                 </div>
                 <h2 class="wishlist-empty-titolo">La tua wishlist è vuota</h2>
                 <p class="wishlist-empty-testo">Salva i prodotti che ti piacciono per ritrovarli facilmente quando vuoi.</p>
-                <a href="{$base_url}/catalogo" class="wishlist-empty-btn">
+                <a href="{$base_url}/catalogo/giochi-da-tavolo" class="wishlist-empty-btn">
                     <i class="ti ti-shopping-bag"></i> Scopri il catalogo
                 </a>
             </div>
@@ -188,11 +188,14 @@
             var card = document.getElementById('wishlist-card-' + id);
 
             fetch('{/literal}{$base_url}{literal}/wishlist/rimuovi', {
-                method: 'POST',
-                headers: { 'Content-Type': 'application/json' },
-                credentials: 'same-origin',
-                body: JSON.stringify({ id: id })
-            })
+    method: 'POST',
+    headers: {
+        'Content-Type': 'application/x-www-form-urlencoded',
+        'X-Requested-With': 'XMLHttpRequest'
+    },
+    credentials: 'same-origin',
+    body: 'id_prodotto=' + encodeURIComponent(id)
+})
             .then(function(response) { return response.json(); })
             .then(function(data) {
                 if (data.status === 'ok') {

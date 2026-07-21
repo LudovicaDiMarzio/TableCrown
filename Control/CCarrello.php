@@ -144,7 +144,7 @@ class CCarrello extends BaseController {
         echo json_encode([
             'id' => $prodottoArray['id'],
             'nome' => $prodottoArray['nome'],
-            'imgProdotto' => $prodottoArray['imgProdotto'], 
+            'imgProdotto' => $prodottoArray['immagine'], 
             'product_url' => BASE_URL . '/prodotto/' . $prodottoArray['id'],
             'prezzo_unitario' => $prezzoUnitario,
             'sconto' => $prodottoArray['sconto'],

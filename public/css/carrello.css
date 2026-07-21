@@ -9,6 +9,7 @@
 
 .carrello-container {
     padding: 2rem 0 4rem;
+    overflow-x: hidden;
 }
 
 .carrello-container .container {
@@ -48,7 +49,7 @@
 
 .carrello-layout {
     display: grid;
-    grid-template-columns: 1fr 340px;
+    grid-template-columns: minmax(0, 1fr) 340px;
     gap: 2.5rem;
     align-items: start;
 }
@@ -77,7 +78,7 @@
     gap: 1.5rem;
     padding: 1.5rem;
     border-bottom: 1px solid var(--color-border-dark);
-    transition: background-color var(--transition);
+    min-width: 0;
 }
 
 .carrello-item:last-child {
@@ -107,18 +108,15 @@
 /* Info del Prodotto (Nome + Prezzo unitario) */
 .carrello-item-info {
     flex: 1;
+    min-width: 0; /* <- questa è la riga che manca */
     display: flex;
     flex-direction: column;
     gap: 0.5rem;
 }
 
 .carrello-item-nome {
-    font-size: var(--font-size-md);
-    font-weight: 600;
-    color: var(--color-text-light);
-    text-decoration: none;
-    line-height: 1.4;
-    transition: color var(--transition);
+    /* evita che un nome prodotto lungo forzi la larghezza della riga */
+    overflow-wrap: anywhere;
 }
 
 .carrello-item-nome:hover {
@@ -154,6 +152,7 @@
     display: flex;
     align-items: center;
     gap: 2rem;
+    flex-wrap: wrap; /* fallback extra: va a capo invece di allargare */
 }
 
 /* Struttura Stepper Quantità riutilizzata */
@@ -574,9 +573,9 @@
 
 @media (max-width: 992px) {
     .carrello-layout {
-        grid-template-columns: 1fr;
+        grid-template-columns: 1fr; /* colonna singola sotto i 992px */
     }
-    
+
     .carrello-summary {
         position: static;
     }

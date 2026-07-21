@@ -1,6 +1,7 @@
 <?php
 namespace TableCrown\Presentation\Views;
 
+use SmartyConfiguration;
 /**
  * View incaricata di renderizzare la pagina di checkout, condivisa sia dal flusso
  * di acquisto prodotti (CCheckout) sia dal flusso di iscrizione eventi (CDettaglioEvento).

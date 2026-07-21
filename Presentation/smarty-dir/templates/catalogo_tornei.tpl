@@ -74,18 +74,18 @@
                         </div>
 
                         {if $evento.challenge}
-                        <a href="{$base_url}/eventi/dettaglio/{$evento.challenge.idEvento}" class="evento-challenge-link">
+                        <a href="{$base_url}/eventi/dettaglio?id={$evento.challenge.idEvento}" class="evento-challenge-link">
                             <i class="ti ti-trophy"></i> Fa parte della challenge: {$evento.challenge.nomeEvento|escape}
                         </a>
                         {/if}
 
                         <div class="evento-list-actions">
                             {if $passato}
-                                <a href="{$base_url}/eventi/risultati/{$evento.idEvento}" class="btn-evento-secondary">
+                                a href="{$base_url}/eventi/dettaglio?id={$evento.idEvento}" class="btn-evento-primary">
                                     Visualizza risultati
                                 </a>
                             {else}
-                                <a href="{$base_url}/eventi/dettaglio/{$evento.idEvento}" class="btn-evento-primary">
+                                <a href="{$base_url}/eventi/dettaglio?id={$evento.idEvento}" class="btn-evento-primary">
                                     Scopri di più
                                 </a>
                             {/if}
