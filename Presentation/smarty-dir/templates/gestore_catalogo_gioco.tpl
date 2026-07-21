@@ -32,13 +32,13 @@
         </div>
 
         <div class="gprod-header__actions">
-            <form class="gprod-search-form" action="{$base_url}/gestore/ricerca" method="get">
-                <input class="gprod-search-input" type="search" name="q" placeholder="Cerca giochi da tavolo..."
-                       value="{if isset($filtri) && isset($filtri.q)}{$filtri.q|escape}{/if}" aria-label="Cerca prodotti">
-                <button class="gprod-search-btn" type="submit" aria-label="Cerca">
-                    <i class="ti ti-search"></i>
-                </button>
-            </form>
+            <form class="gprod-search-form" action="{$base_url}/gestore/catalogo/giochi-da-tavolo" method="get" onsubmit="return gestisciRicercaVuota(this)">
+    <input class="gprod-search-input" type="search" name="q" placeholder="Cerca giochi da tavolo..."
+           value="{if isset($filtri) && isset($filtri.q)}{$filtri.q|escape}{/if}" aria-label="Cerca prodotti">
+    <button class="gprod-search-btn" type="submit" aria-label="Cerca">
+        <i class="ti ti-search"></i>
+    </button>
+</form>
 
             <a href="{$base_url}/gestore/crea/giochi-da-tavolo" class="gprod-btn-create">
     <i class="ti ti-plus"></i> Nuovo Gioco
@@ -165,7 +165,7 @@
                             Non è stato ancora pubblicato nessun gioco da tavolo.
                         {/if}
                     </p>
-                    <a href="{$base_url}/gestore/catalogo/giochi-da-tavolo/nuovo" class="gprod-btn-create">
+                    <a href="{$base_url}/gestore/crea/giochi-da-tavolo" class="gprod-btn-create">
                         <i class="ti ti-plus"></i> Crea il primo gioco
                     </a>
                 </div>
@@ -236,6 +236,18 @@
         })
         .catch(function () { alert('Errore di rete durante la rimozione del prodotto.'); });
     }
+
+    function gestisciRicercaVuota(form) {
+    var input = form.querySelector('input[name="q"]');
+    if (input.value.trim() === '') {
+        // Query vuota: reindirizza al catalogo senza il parametro q,
+        // invece di inviare q="" (che il controller tratterebbe come ricerca)
+        window.location.href = '{$base_url}/gestore/catalogo/giochi-da-tavolo';
+        return false; // blocca il submit naturale del form
+    }
+    return true; // query valida, invia normalmente
+}
+
 </script>
 
 {include file="gestore_modifica_gioco.tpl"}

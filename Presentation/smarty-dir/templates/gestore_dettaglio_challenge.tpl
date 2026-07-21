@@ -160,11 +160,10 @@
             </button>
 
             {if $stato == 'annullato'}
-                <input type="checkbox" id="toggle-riprogramma" class="gdet-toggle-checkbox">
-                <label for="toggle-riprogramma" class="gdet-btn gdet-btn--primary">
-                    <i class="ti ti-calendar-repeat"></i> Riprogramma
-                </label>
-            {/if}
+    <button type="button" class="gdet-btn gdet-btn--primary" onclick="document.getElementById('modal-riprogramma').showModal()">
+        <i class="ti ti-calendar-repeat"></i> Riprogramma
+    </button>
+{/if}
         </div>
 
         {* ── POPUP: Modifica dati evento (conforme a CGestore::modificaEventoGestore) ── *}
@@ -206,19 +205,33 @@
         </dialog>
 
         {if $stato == 'annullato'}
-            <div class="gdet-panel" id="panel-riprogramma">
-                <h3 class="gdet-panel__title">Riprogramma evento</h3>
-                <p class="gdet-panel__hint">Imposta una nuova data futura: l'evento tornerà in stato "Programmato".</p>
-                <form method="post" action="{$base_url}/gestore/eventi/riprogramma" class="gdet-form" id="form-riprogramma-{$idEvento}">
-                    <input type="hidden" name="id_evento" value="{$idEvento}">
-                    <label class="gdet-form__label" for="nuovaDataInizio">Nuova data e ora</label>
-                    <input type="datetime-local" id="nuovaDataInizio" name="nuovaDataInizio" class="gdet-form__input" required>
+    <dialog class="gdet-modal" id="modal-riprogramma">
+        <div class="gdet-modal__content">
+            <button type="button" class="gdet-modal__close" onclick="document.getElementById('modal-riprogramma').close()" aria-label="Chiudi">
+                <i class="ti ti-x"></i>
+            </button>
+
+            <h3 class="gdet-panel__title">Riprogramma evento</h3>
+            <p class="gdet-panel__hint">Imposta una nuova data futura: l'evento tornerà in stato "Programmato".</p>
+
+            <form method="post" action="{$base_url}/gestore/eventi/riprogramma" class="gdet-form" id="form-riprogramma-{$idEvento}">
+                <input type="hidden" name="id_evento" value="{$idEvento}">
+                <label class="gdet-form__label" for="nuovaDataInizio">Nuova data e ora</label>
+                <label class="gdet-form__label" for="nuovaDataInizio_visibile">Nuova data e ora</label>
+<input type="datetime-local" id="nuovaDataInizio_visibile" class="gdet-form__input" required>
+<input type="hidden" id="nuovaDataInizio" name="nuovaDataInizio">
+                <div class="gdet-modal__actions">
+                    <button type="button" class="gdet-btn gdet-btn--muted" onclick="document.getElementById('modal-riprogramma').close()">
+                        Annulla
+                    </button>
                     <button type="submit" class="gdet-btn gdet-btn--primary">
                         <i class="ti ti-calendar-repeat"></i> Conferma riprogrammazione
                     </button>
-                </form>
-            </div>
-        {/if}
+                </div>
+            </form>
+        </div>
+    </dialog>
+{/if}
     </section>
 
     {* ── SEZIONE 4: TORNEI + CLASSIFICA FINALE ── *}
@@ -389,26 +402,31 @@
 
     // Chiude il popup "Modifica dati" cliccando sul backdrop
     (function() {
-        var dialog = document.getElementById('modal-modifica');
+    ['modal-modifica', 'modal-riprogramma'].forEach(function(id) {
+        var dialog = document.getElementById(id);
         if (dialog) {
             dialog.addEventListener('click', function(e) {
                 if (e.target === dialog) dialog.close();
             });
         }
-    })();
+    });
+})();
 
     {if $stato == 'annullato'}
-    (function() {
-        var form = document.getElementById('form-riprogramma-{$idEvento}');
-        if (!form) return;
-        form.addEventListener('submit', function() {
-            var input = form.querySelector('[name="nuovaDataInizio"]');
-            if (input && input.value) {
-                input.value = input.value.replace('T', ' ') + ':00';
-            }
-        });
-    })();
-    {/if}
+(function() {
+    var form = document.getElementById('form-riprogramma-{$idEvento}');
+    if (!form) return;
+    form.addEventListener('submit', function() {
+        var visibile = form.querySelector('#nuovaDataInizio_visibile');
+        var hidden = form.querySelector('#nuovaDataInizio');
+        if (visibile && visibile.value) {
+            var valore = visibile.value; // "YYYY-MM-DDTHH:MM"
+            if (valore.length === 16) valore += ':00';
+            hidden.value = valore.replace('T', ' ');
+        }
+    });
+})();
+{/if}
 </script>
 
 {/block}

@@ -127,11 +127,11 @@
                                 <option value="{$v.value}">{$v.label}</option>
                             {/foreach}
                         {else}
-                            {* TODO: CASE REALI DI Valuta DA CONFERMARE — placeholder provvisorio *}
-                            <option value="eur">Euro (€)</option>
-                            <option value="usd">Dollaro USA ($)</option>
-                            <option value="gbp">Sterlina (£)</option>
-                        {/if}
+                            {* placeholder — DA VERIFICARE contro i case reali di Valuta *}
+    <option value="EUR">Euro (€)</option>
+    <option value="USD">Dollaro USA ($)</option>
+    <option value="GBP">Sterlina (£)</option>
+{/if}
                     </select>
                     <span class="gcre-error">Seleziona una valuta.</span>
                 </div>
