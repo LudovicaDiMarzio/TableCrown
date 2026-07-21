@@ -74,9 +74,27 @@ class CEventi extends BaseController {
 
 
     protected function getBreadcrumbs(string $currentPage = ''): array {
-        return [
+        $breadcrumbs = [
             ['label' => 'Home', 'url' => BASE_URL . '/'],
             ['label' => 'Eventi', 'url' => BASE_URL . '/eventi']
         ];
+
+        //Mappiamo il nome della vista sull'etichetta visualizzata nell'interfaccia
+        $label = match($currentPage) {
+            'eventi_serate' => 'Serate',
+            'eventi_tornei' => 'Tornei',
+            'eventi_challenge' => 'Challenge',
+            default => '',
+        };
+
+        //Se siamo in una sottopagina (es. "Serate", "Tornei", "Challenge"),
+        //la aggiungiamo alla fine senza URL in modo che non sia cliccabile.
+        if (!empty($label)) {
+            $breadcrumbs[] = [
+                'label' => $label,
+                'url' => null, //l'ultima voce è la pagina corrente, non cliccabile
+            ];
+        }
+        return $breadcrumbs;
     }
 }
