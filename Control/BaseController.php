@@ -84,8 +84,7 @@ abstract class BaseController {
         //cart_count solo per gli utenti loggati con ruolo 'utente'
         if ($this->isLoggedIn() && USession::getSessionElement('ruolo') === 'utente') {
             $carrello = USession::getSessionElement('carrello') ?? [];
-            //SISTEMARE BUG DI $cartCount: INCOERENZA CON LA STRUTTURA DEL CARRELLO (confronta con CCarrello)
-            $cartCount = array_sum(array_column($carrello, 'quantita')); //array_column estrae la colonna 'quantita' da ogni riga del carrello
+            $cartCount = array_sum($carrello);
             if ($cartCount > 0) {
                 $globalData['cart_count'] = $cartCount; //Il badge appare solo se gli articoli sono > 0
             }
