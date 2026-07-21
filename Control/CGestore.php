@@ -1157,7 +1157,6 @@ class CGestore extends BaseController {
      */
     protected function getBreadcrumbs(string $currentPage = ''): array {
         $breadcrumbs = [
-            ['label' => 'Home', 'url' => BASE_URL . '/'],
             ['label' => 'Dashboard Gestore', 'url' => BASE_URL . '/gestore/dashboard'],
         ];
 
