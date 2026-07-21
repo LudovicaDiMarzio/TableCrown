@@ -136,22 +136,18 @@ class CCatalogo extends BaseController {
     protected function getBreadcrumbs(string $currentPage = ''): array {
         $breadcrumbs = [['label' => 'Home', 'url' => BASE_URL . '/']];
 
-        switch ($currentPage) {
-            case 'catalogo_giochi':
-                $breadcrumbs[] = ['label' => 'Giochi da tavolo', 'url' => BASE_URL . '/catalogo/giochi-da-tavolo'];
-                break;
-            case 'catalogo_bustine':
-                $breadcrumbs[] = ['label' => 'Bustine', 'url' => BASE_URL . '/catalogo/bustine'];
-                break;
-            case 'catalogo_portadadi':
-                $breadcrumbs[] = ['label' => 'Porta Dadi', 'url' => BASE_URL . '/catalogo/porta-dadi'];
-                break;
-            case 'ricerca':
-                $breadcrumbs[] = ['label' => 'Risultati ricerca', 'url' => BASE_URL . '/ricerca'];
-                break;
-            case 'offerte':
-                $breadcrumbs[] = ['label' => 'Offerte', 'url' => BASE_URL . '/offerte'];
-                break;
+        $voceCatalogo = match ($currentPage) {
+            'catalogo_giochi' => ['label' => 'Giochi da tavolo', 'url' => BASE_URL . '/catalogo/giochi-da-tavolo'],
+            'catalogo_bustine' => ['label' => 'Bustine', 'url' => BASE_URL . '/catalogo/bustine'],
+            'catalogo_portadadi' => ['label' => 'Porta Dadi', 'url' => BASE_URL . '/catalogo/porta-dadi'],
+            'ricerca' => ['label' => 'Risultati ricerca', 'url' => BASE_URL . '/ricerca'],
+            'offerte' => ['label' => 'Offerte', 'url' => BASE_URL . '/offerte'],
+            default => null, //gestisce eventuali pagine non riconosciute senza lanciare errori
+        };
+
+        //Se match ha trovato una corrispondenza valida, la aggiunge all'array
+        if ($voceCatalogo !== null) {
+            $breadcrumbs[] = $voceCatalogo;
         }
 
         return $breadcrumbs;

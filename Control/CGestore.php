@@ -1161,7 +1161,7 @@ class CGestore extends BaseController {
             ['label' => 'Dashboard Gestore', 'url' => BASE_URL . '/gestore/dashboard'],
         ];
 
-        return match ($currentPage) { //DECIDERE SE USARE match COME IN CAmministratore O switch COME IN CCatalogo
+        return match ($currentPage) { 
             'gestore_dashboard' => $breadcrumbs,
             'gestore_catalogo_giochi' => array_merge($breadcrumbs, [
                 ['label' => 'Giochi da tavolo', 'url' => BASE_URL . '/gestore/catalogo/giochi-da-tavolo'],
