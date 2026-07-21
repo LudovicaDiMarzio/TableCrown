@@ -1,29 +1,39 @@
 <?php
-/**
- * Punto d'ingresso statico chiamato da CGestore (stesso ruolo di
- * ViewCatalogo/ViewEventi per le rispettive aree), che poi delega
- * alla View concreta tramite ViewGestoreFactory.
- */
 namespace TableCrown\Presentation\Views;
-
-use SmartyConfiguration;
 
 use InvalidArgumentException;
 
 class ViewGestore {
 
-    /**
-     * URL: GET /gestore/dashboard (CGestore::mostraDashboardGestore())
-     */
     public static function mostraDashboard(array $dati): void {
-        $dati['vista'] = $dati['vista'] ?? 'gestore_dashboard';
-        ViewGestoreFactory::crea($dati['vista'])->render($dati);
+        ViewGestoreFactory::mostraDashboard($dati);
+    }
+
+    public static function mostraCatalogoGiochi(array $dati): void {
+        ViewGestoreFactory::mostraCatalogoGiochi($dati);
+    }
+
+    public static function mostraCatalogoBustine(array $dati): void {
+        ViewGestoreFactory::mostraCatalogoBustine($dati);
+    }
+
+    public static function mostraCatalogoPortaDadi(array $dati): void {
+        ViewGestoreFactory::mostraCatalogoPortaDadi($dati);
     }
 
     public static function mostraFormCreazione(array $dati): void {
         if (!isset($dati['vista'])) {
             throw new InvalidArgumentException("La chiave 'vista' è obbligatoria per mostrare un form di creazione gestore.");
         }
-        ViewGestoreFactory::crea($dati['vista'])->render($dati);
+        ViewGestoreFactory::mostraFormCreazione($dati);
     }
+
+    public static function mostraModificaProdotto(array $dati): void {
+    if (!isset($dati['vista'])) {
+        throw new InvalidArgumentException("La chiave 'vista' è obbligatoria per mostrare la modifica di un prodotto gestore.");
+    }
+    ViewGestoreFactory::mostraModificaProdotto($dati);
+}
+
+
 }
