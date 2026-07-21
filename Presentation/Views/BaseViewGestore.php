@@ -6,25 +6,17 @@
  */
 namespace TableCrown\Presentation\Views;
 
-use Smarty\Smarty;
+use SmartyConfiguration;
 
 abstract class BaseViewGestore implements ViewGestoreInterface {
 
-    protected Smarty $smarty;
-
-    public function __construct() {
-        $this->smarty = new Smarty();
-        $this->smarty->setTemplateDir(__DIR__ . '/../templates/');
-        $this->smarty->setCompileDir(__DIR__ . '/../templates_c/');
-        //NOTA: percorsi da allineare a quelli usati in BaseViewAdmin/BaseViewCatalogo/BaseViewEventi,
-        //non avendone il codice sotto mano ho mantenuto la stessa convenzione ipotizzata lì.
-    }
-
     public function render(array $dati): void {
+        $smarty = SmartyConfiguration::getSmarty();
+
         foreach ($dati as $chiave => $valore) {
-            $this->smarty->assign($chiave, $valore);
+            $smarty->assign($chiave, $valore);
         }
-        $this->smarty->display($this->getTemplateName($dati));
+        $smarty->display($this->getTemplateName($dati));
     }
 
     /**
