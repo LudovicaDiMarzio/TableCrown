@@ -279,7 +279,7 @@
             <h2 class="prodotto-section-title">Recensioni</h2>
 
             {if isset($utente) && $utente}
-                {if isset($userHasPurchased) && $userHasPurchased}
+                {if isset($puoRecensire) && $puoRecensire}
                     <div class="recensione-form-wrapper">
                         <button class="button btn-scrivi-recensione" id="btn-scrivi-recensione" type="button">
                             <i class="ti ti-pencil"></i> Scrivi la tua recensione

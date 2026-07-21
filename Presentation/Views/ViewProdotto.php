@@ -36,7 +36,8 @@ class ViewProdotto {
         $smarty->assign('prezzo_scontato',    $dati['prezzo_scontato'] ?? null);
         $smarty->assign('percentuale_sconto', $dati['percentuale_sconto'] ?? null);
         $smarty->assign('disponibilita',      $dati['disponibilita'] ?? null);
-        $smarty->assign('isAcquistabile',     $dati['isAcquistabile'] ?? false);
+       $smarty->assign('userHasPurchased',    $dati['userHasPurchased'] ?? false);
+        $smarty->assign('puoRecensire',        $dati['puoRecensire'] ?? false);
 
         // --- Campi esclusivi della pagina di dettaglio ---
         $smarty->assign('descrizioneProdotto', $dati['descrizioneProdotto'] ?? '');
