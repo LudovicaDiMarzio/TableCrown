@@ -702,12 +702,12 @@ class CGestore extends BaseController {
             }
 
             UFlashMessage::addMessage('success', 'Torneo pubblicato con successo!');
-            header('Location: ' . BASE_URL . '/gestore/eventi/torneo');
+            header('Location: ' . BASE_URL . '/gestore/eventi/tornei');
             exit();
 
         } catch (\Exception $e) {
             UFlashMessage::addMessage('danger', $e->getMessage());
-            header('Location: ' . UHTTPMethods::getReferer(BASE_URL . '/gestore/eventi/torneo'));
+            header('Location: ' . UHTTPMethods::getReferer(BASE_URL . '/gestore/eventi/tornei'));
             exit();
         }
 
