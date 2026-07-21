@@ -15,7 +15,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>{if $pageTitle}{$pageTitle} - {/if}TableCrown Admin</title>
-    <link rel="stylesheet" href="css/layout_admin.css">
+    <link rel="stylesheet" href="{$base_url}/css/layout_admin.css">
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@tabler/icons-webfont@latest/tabler-icons.min.css">
     {block name="page_css"}{/block}
 </head>
@@ -60,11 +60,10 @@
 
             <div class="admin-topbar__actions">
                 <div class="admin-topbar__profile" id="adminProfileToggle">
-                    <span class="admin-topbar__avatar"
-                          {if $admin.avatarUrl}style="background-image:url('{$admin.avatarUrl}')"{/if}></span>
+                    <span class="admin-topbar__avatar"></span>
                     <div class="admin-topbar__identity">
-                        <span class="admin-topbar__admin-name">{$admin.nome}</span>
-                        <span class="admin-topbar__admin-role">{$admin.ruolo}</span>
+                        <span class="admin-topbar__admin-name">{$utente.name}</span>
+                        <span class="admin-topbar__admin-role">Amministratore</span>
                     </div>
                     <span class="admin-topbar__chevron ti ti-chevron-down"></span>
                     <div class="admin-topbar__dropdown" id="adminProfileDropdown">

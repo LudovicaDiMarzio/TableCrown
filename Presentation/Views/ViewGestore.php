@@ -35,5 +35,29 @@ class ViewGestore {
     ViewGestoreFactory::mostraModificaProdotto($dati);
 }
 
+public static function mostraDettaglioSerata(array $dati): void {
+    ViewGestoreFactory::mostraDettaglioSerata($dati);
+}
+
+public static function mostraDettaglioTorneo(array $dati): void {
+    ViewGestoreFactory::mostraDettaglioTorneo($dati);
+}
+
+public static function mostraDettaglioChallenge(array $dati): void {
+    ViewGestoreFactory::mostraDettaglioChallenge($dati);
+}
+
+public static function mostraEventiSerate(array $dati): void {
+    ViewGestoreFactory::mostraEventiSerate($dati);
+}
+
+public static function mostraEventiTornei(array $dati): void {
+    ViewGestoreFactory::mostraEventiTornei($dati);
+}
+
+public static function mostraEventiChallenge(array $dati): void {
+    ViewGestoreFactory::mostraEventiChallenge($dati);
+}
+
 
 }
