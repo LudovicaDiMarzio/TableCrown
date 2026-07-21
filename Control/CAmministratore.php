@@ -42,8 +42,7 @@ class CAmministratore extends BaseController {
         $utentiSospesiTotali = FPersistentManager::PMcontaUtentiSospesiTotali(); 
         $utentiSospesiOggi = FPersistentManager::PMcontaUtentiSospesiOggi(); 
 
-        //TODO: aggiungere ordinamento in base alla gravità delle motivazioni delle segnalazioni?
-        $segnalazioniUrgentiGrezze = FPersistentManager::PMgetSegnalazioniUrgenti('ASC', 5); //TODO: DA CAMBIARE, NE SERVONO 5 MA BISOGNA ORDINARE I CASE DI GRAVITAMOTIVAZIONE
+        $segnalazioniUrgentiGrezze = FPersistentManager::PMgetSegnalazioniUrgenti('ASC', 5); 
         $segnalazioniUrgenti = $this->segnalazioniToArray($segnalazioniUrgentiGrezze); 
 
         //Impacchettiamo i dati per Presentation
@@ -67,10 +66,10 @@ class CAmministratore extends BaseController {
      * URL: GET /admin/utenti
      */
     public function mostraListaUtentiAdmin(): void {
-        $righeGrezze = FPersistentManager::PMfindUtentiConRecensioniSegnalate('DESC'); //restituisce ['utente' => EUtente, 'numeroSegnalazioni' => int]
+        $righeGrezze = FPersistentManager::PMfindUtentiConRecensioniSegnalate('DESC'); //restituisce ['risultati' => ['utente' => EUtente, 'numeroSegnalazioni' => int], 'totale' => int]
 
         $utenti = array_map(
-            fn($riga) => $this->utenteAdminToArray($riga['utente'], $riga['numeroSegnalazioni']),
+            fn($riga) => $this->utenteAdminToArray($riga['risultati']['utente'], $riga['risultati']['numeroSegnalazioni']),
             $righeGrezze
         );
 
