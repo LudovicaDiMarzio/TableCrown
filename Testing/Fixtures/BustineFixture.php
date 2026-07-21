@@ -28,7 +28,7 @@ class BustineFixture extends AbstractFixture
     {
         $faker = Factory::create('it_IT'); //creazione istanza di faker per la lingua italiana
 
-        $percorsoImg = dirname(__DIR__, 2) . '/public/img/carousel/bustineimg.png'; // adatta il path relativo alla tua struttura cartelle
+        $percorsoImg = dirname(__DIR__, 2) . '/public/img/bustineimg.png'; // adatta il path relativo alla tua struttura cartelle
 
         $immaginePredefinita = null;
         if (file_exists($percorsoImg) && is_file($percorsoImg)) {

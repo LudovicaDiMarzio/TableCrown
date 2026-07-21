@@ -26,7 +26,7 @@ class PortaDadiFixture extends AbstractFixture
     public function load(ObjectManager $manager): void
     {
         $faker = Factory::create('it_IT'); //creazione istanza di faker per la lingua italiana
-         $percorsoImg = dirname(__DIR__, 2) . '/public/img/carousel/portadadiimg.png'; // adatta il path relativo alla tua struttura cartelle
+         $percorsoImg = dirname(__DIR__, 2) . '/public/img/portadadiimg.png'; // adatta il path relativo alla tua struttura cartelle
 
         $immaginePredefinita = null;
         if (file_exists($percorsoImg) && is_file($percorsoImg)) {
