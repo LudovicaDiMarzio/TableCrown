@@ -1,23 +1,9 @@
-{*
-  TableCrown\Presentation\Views\Gestore - Hub Gestore (Dashboard)
-  Estende layout_gestore.tpl.
-
-  Variabili specifiche di pagina (da CGestore::mostraDashboardGestore()):
-    $ordiniTotali   => int
-    $venditeTotali  => float
-    $prossimiEventi => array di eventi mappati (mappaEvento() -> serataToArray/torneoToArray/challengeToArray)
-      ognuno ha almeno: idEvento, nomeEvento, imgEvento, dataInizio, maxPartecipanti,
-      statoEvento, numeroPartecipanti, richiedeQuota, postiDisponibili, tipo
-      + campi specifici per tipo ('torneo'/'challenge': quotaIscrizione, premio, gioco/tornei)
-
-  NB: qui NON ci sono "eventi attivi", "partecipanti totali", "ordini recenti",
-  "avvisi" o grafici vendite: il controller non li passa, quindi non sono in questa vista.
-*}
 {extends file="layout_gestore.tpl"}
 
 {block name="page_css"}
     <link rel="stylesheet" href="{$base_url}/css/hub_gestore.css">
 {/block}
+
 
 {block name="content"}
     <div class="hub-header">
@@ -25,7 +11,6 @@
         <p class="hub-header__subtitle">Panoramica delle attività del negozio</p>
     </div>
 
-    {* ---------- STATISTICHE (solo i 2 dati realmente disponibili) ---------- *}
     <div class="hub-stats">
         <div class="hub-stat-card">
             <span class="hub-stat-card__icon hub-stat-card__icon--orders"><span class="ti ti-shopping-cart"></span></span>
@@ -46,7 +31,6 @@
 
     <div class="hub-grid">
 
-        {* ---------- PROSSIMI EVENTI ---------- *}
         <section class="hub-panel hub-panel--events">
             <div class="hub-panel__header">
                 <h2 class="hub-panel__title">Prossimi Eventi</h2>
@@ -58,7 +42,6 @@
             {else}
                 <div class="hub-event-list">
                     {foreach $prossimiEventi as $evento}
-                        {* Mappo il tipo evento sull'url plurale corretta della sezione gestore *}
                         {if $evento.tipo === 'serata'}
                             {assign var="urlTipoEvento" value="serate"}
                             {assign var="labelTipoEvento" value="Serata"}
@@ -93,31 +76,88 @@
                 </div>
             {/if}
 
-            <a href="{$base_url}/gestore/eventi/serate" class="hub-panel__more">Vedi tutti gli eventi &rarr;</a>
+            
         </section>
 
-        {* ---------- AZIONI RAPIDE ---------- *}
         <section class="hub-panel hub-panel--actions">
             <div class="hub-panel__header">
                 <h2 class="hub-panel__title">Azioni rapide</h2>
             </div>
 
             <div class="hub-quick-actions">
-                {* TODO T1: verificare che queste route GET esistano per mostrare i form di creazione *}
-                <a href="{$base_url}/gestore/catalogo/giochi-da-tavolo/nuovo" class="hub-quick-action">
+                <button type="button" class="hub-quick-action" id="btnAggiungiProdotto">
                     <span class="ti ti-plus"></span> Aggiungi prodotto
-                </a>
-                <a href="{$base_url}/gestore/eventi/serate/nuovo" class="hub-quick-action hub-quick-action--gold">
+                </button>
+                <a href="{$base_url}/gestore/crea/serata" class="hub-quick-action hub-quick-action--gold">
                     <span class="ti ti-moon-stars"></span> Crea Serata
                 </a>
-                <a href="{$base_url}/gestore/eventi/tornei/nuovo" class="hub-quick-action hub-quick-action--gold">
+                <a href="{$base_url}/gestore/crea/torneo" class="hub-quick-action hub-quick-action--gold">
                     <span class="ti ti-trophy"></span> Crea Torneo
                 </a>
-                <a href="{$base_url}/gestore/eventi/challenge/nuovo" class="hub-quick-action hub-quick-action--gold">
+                <a href="{$base_url}/gestore/crea/challenge" class="hub-quick-action hub-quick-action--gold">
                     <span class="ti ti-swords"></span> Crea Challenge
                 </a>
             </div>
         </section>
 
     </div>
+
+    {* ---------- MODALE SCELTA TIPO PRODOTTO ---------- *}
+    <div class="hub-modal-overlay" id="modalAggiungiProdotto">
+        <div class="hub-modal" role="dialog" aria-modal="true" aria-labelledby="modalAggiungiProdottoTitle">
+            <div class="hub-modal__header">
+                <h2 class="hub-modal__title" id="modalAggiungiProdottoTitle">Che tipo di prodotto vuoi aggiungere?</h2>
+                <button type="button" class="hub-modal__close" id="btnChiudiModaleProdotto" aria-label="Chiudi">
+                    <span class="ti ti-x"></span>
+                </button>
+            </div>
+            <div class="hub-modal__body">
+                <a href="{$base_url}/gestore/crea/giochi-da-tavolo" class="hub-modal-choice">
+                    <span class="ti ti-dice hub-modal-choice__icon"></span>
+                    <span class="hub-modal-choice__label">Gioco</span>
+                </a>
+                <a href="{$base_url}/gestore/crea/bustine" class="hub-modal-choice">
+                    <span class="ti ti-cards hub-modal-choice__icon"></span>
+                    <span class="hub-modal-choice__label">Bustina</span>
+                </a>
+                <a href="{$base_url}/gestore/crea/porta-dadi" class="hub-modal-choice">
+                    <span class="ti ti-box hub-modal-choice__icon"></span>
+                    <span class="hub-modal-choice__label">Portadadi</span>
+                </a>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        (function () {
+            var btnApri   = document.getElementById('btnAggiungiProdotto');
+            var overlay   = document.getElementById('modalAggiungiProdotto');
+            var btnChiudi = document.getElementById('btnChiudiModaleProdotto');
+
+            function apriModale() {
+                overlay.classList.add('hub-modal-overlay--visibile');
+                document.body.classList.add('hub-modal-open');
+            }
+
+            function chiudiModale() {
+                overlay.classList.remove('hub-modal-overlay--visibile');
+                document.body.classList.remove('hub-modal-open');
+            }
+
+            if (btnApri) {
+                btnApri.addEventListener('click', apriModale);
+            }
+            if (btnChiudi) {
+                btnChiudi.addEventListener('click', chiudiModale);
+            }
+            if (overlay) {
+                overlay.addEventListener('click', function (e) {
+                    if (e.target === overlay) chiudiModale();
+                });
+            }
+            document.addEventListener('keydown', function (e) {
+                if (e.key === 'Escape') chiudiModale();
+            });
+        })();
+    </script>
 {/block}

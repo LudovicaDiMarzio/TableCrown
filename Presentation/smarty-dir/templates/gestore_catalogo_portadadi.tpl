@@ -41,7 +41,7 @@
                 </button>
             </form>
 
-            <a href="{$base_url}/gestore/catalogo/porta-dadi/nuovo" class="gprod-btn-create">
+            <a href="{$base_url}/gestore/crea/porta-dadi" class="gprod-btn-create">
                 <i class="ti ti-plus"></i> Nuovo Porta Dadi
             </a>
         </div>
@@ -159,7 +159,7 @@
                             Non è stato ancora pubblicato nessun porta dadi.
                         {/if}
                     </p>
-                    <a href="{$base_url}/gestore/catalogo/porta-dadi/nuovo" class="gprod-btn-create">
+                    <a href="{$base_url}/gestore/crea/porta-dadi" class="gprod-btn-create">
                         <i class="ti ti-plus"></i> Crea il primo porta dadi
                     </a>
                 </div>
@@ -190,8 +190,8 @@
 
         fetch('{$base_url}/gestore/prodotti/quantita', {
             method: 'POST',
-            headers: { 'Content-Type': 'application/json' },
-            body: JSON.stringify({ id_prodotto: idProdotto, delta_quantita: delta })
+            headers: { 'X-Requested-With': 'XMLHttpRequest' },
+            body: new URLSearchParams({ id_prodotto: idProdotto, delta_quantita: delta })
         })
         .then(function (res) { return res.json(); })
         .then(function (data) {
@@ -217,8 +217,8 @@
 
         fetch('{$base_url}/gestore/catalogo/prodotto/elimina', {
             method: 'POST',
-            headers: { 'Content-Type': 'application/json' },
-            body: JSON.stringify({ id_prodotto: idProdotto })
+            headers: { 'X-Requested-With': 'XMLHttpRequest' },
+            body: new URLSearchParams({ id_prodotto: idProdotto })
         })
         .then(function (res) { return res.json(); })
         .then(function (data) {
@@ -232,6 +232,6 @@
     }
 </script>
 
-{include file="gestore_modifica_prodotto.tpl"}
+{include file="gestore_modifica_portadadi.tpl"}
 
 {/block}

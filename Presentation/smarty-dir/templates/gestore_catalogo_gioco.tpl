@@ -40,9 +40,9 @@
                 </button>
             </form>
 
-            <a href="{$base_url}/gestore/catalogo/giochi-da-tavolo/nuovo" class="gprod-btn-create">
-                <i class="ti ti-plus"></i> Nuovo Gioco
-            </a>
+            <a href="{$base_url}/gestore/crea/giochi-da-tavolo" class="gprod-btn-create">
+    <i class="ti ti-plus"></i> Nuovo Gioco
+</a>
         </div>
     </div>
 
@@ -134,15 +134,20 @@
 
                         <div class="gprod-card__footer">
                             <button type="button" class="gprod-btn-edit gmp-btn-modifica"
-                                data-id="{$prodotto.id}"
-                                data-nome="{$prodotto.nome|escape}"
-                                data-immagine="{$prodotto.immagine}"
-                                data-prezzo="{$prodotto.prezzo}"
-                                data-sconto="{if $prodotto.sconto}1{else}0{/if}"
-                                data-percentuale-sconto="{$prodotto.percentuale_sconto|default:0}"
-                                data-is-gioco="1">
-                                <i class="ti ti-pencil"></i> Modifica
-                            </button>
+    data-id="{$prodotto.id}"
+    data-nome="{$prodotto.nome|escape}"
+    data-immagine="{$prodotto.immagine}"
+    data-tipo="{$prodotto.tipo|default:'Gioco da Tavolo'|escape}"
+    data-prezzo="{$prodotto.prezzo}"
+    data-sconto="{if $prodotto.sconto}1{else}0{/if}"
+    data-percentuale-sconto="{$prodotto.percentuale_sconto|default:0}"
+    data-scadenza-sconto="{$prodotto.scadenza_sconto|default:''}"
+    data-danneggiato="{if $prodotto.danneggiato}1{else}0{/if}"
+    data-livello-danno="{$prodotto.livello_danno_attuale|default:''}"
+    data-descrizione-danno="{$prodotto.descrizione_danno_attuale|default:''}"
+    data-is-gioco="1">
+    <i class="ti ti-pencil"></i> Modifica
+</button>
                             <button type="button" class="gprod-btn-delete" onclick="eliminaProdotto(this)">
                                 <i class="ti ti-trash"></i>
                             </button>
@@ -190,10 +195,10 @@
         var valueEl = card.querySelector('.gprod-stepper__value');
 
         fetch('{$base_url}/gestore/prodotti/quantita', {
-            method: 'POST',
-            headers: { 'Content-Type': 'application/json' },
-            body: JSON.stringify({ id_prodotto: idProdotto, delta_quantita: delta })
-        })
+    method: 'POST',
+    headers: { 'X-Requested-With': 'XMLHttpRequest' },
+    body: new URLSearchParams({ id_prodotto: idProdotto, delta_quantita: delta })
+})
         .then(function (res) { return res.json(); })
         .then(function (data) {
             if (data.status === 'ok') {
@@ -217,10 +222,10 @@
         var idProdotto = card.dataset.idProdotto;
 
         fetch('{$base_url}/gestore/catalogo/prodotto/elimina', {
-            method: 'POST',
-            headers: { 'Content-Type': 'application/json' },
-            body: JSON.stringify({ id_prodotto: idProdotto })
-        })
+    method: 'POST',
+    headers: { 'X-Requested-With': 'XMLHttpRequest' },
+    body: new URLSearchParams({ id_prodotto: idProdotto })
+})
         .then(function (res) { return res.json(); })
         .then(function (data) {
             if (data.status === 'ok') {
@@ -233,6 +238,6 @@
     }
 </script>
 
-{include file="gestore_modifica_prodotto.tpl"}
+{include file="gestore_modifica_gioco.tpl"}
 
 {/block}
