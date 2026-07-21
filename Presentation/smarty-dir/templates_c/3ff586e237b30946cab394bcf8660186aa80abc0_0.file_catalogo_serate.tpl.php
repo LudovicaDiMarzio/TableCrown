@@ -1,18 +1,18 @@
 <?php
-/* Smarty version 5.8.0, created on 2026-07-20 20:34:43
+/* Smarty version 5.8.0, created on 2026-07-21 10:12:30
   from 'file:catalogo_serate.tpl' */
 
 /* @var \Smarty\Template $_smarty_tpl */
 if ($_smarty_tpl->getCompiled()->isFresh($_smarty_tpl, array (
   'version' => '5.8.0',
-  'unifunc' => 'content_6a5e6a436006f0_19914266',
+  'unifunc' => 'content_6a5f29ee4db535_12345720',
   'has_nocache_code' => false,
   'file_dependency' => 
   array (
     '3ff586e237b30946cab394bcf8660186aa80abc0' => 
     array (
       0 => 'catalogo_serate.tpl',
-      1 => 1784566715,
+      1 => 1784621536,
       2 => 'file',
     ),
   ),
@@ -20,18 +20,18 @@ if ($_smarty_tpl->getCompiled()->isFresh($_smarty_tpl, array (
   array (
   ),
 ))) {
-function content_6a5e6a436006f0_19914266 (\Smarty\Template $_smarty_tpl) {
+function content_6a5f29ee4db535_12345720 (\Smarty\Template $_smarty_tpl) {
 $_smarty_current_dir = 'C:\\xampp\\htdocs\\TableCrown\\Presentation\\smarty-dir\\templates';
 $_smarty_tpl->getInheritance()->init($_smarty_tpl, true);
 ?>
 
 
 <?php 
-$_smarty_tpl->getInheritance()->instanceBlock($_smarty_tpl, 'Block_16937310536a5e6a435daa08_26080586', "content");
+$_smarty_tpl->getInheritance()->instanceBlock($_smarty_tpl, 'Block_6669904446a5f29ee4abc42_81435393', "content");
 $_smarty_tpl->getInheritance()->endChild($_smarty_tpl, "common/layout.tpl", $_smarty_current_dir);
 }
 /* {block "content"} */
-class Block_16937310536a5e6a435daa08_26080586 extends \Smarty\Runtime\Block
+class Block_6669904446a5f29ee4abc42_81435393 extends \Smarty\Runtime\Block
 {
 public function callBlock(\Smarty\Template $_smarty_tpl) {
 $_smarty_current_dir = 'C:\\xampp\\htdocs\\TableCrown\\Presentation\\smarty-dir\\templates';
@@ -141,7 +141,7 @@ if ($_smarty_tpl->getValue('esaurito')) {?> evento-list-card-esaurito<?php }?>">
                                 </a>
                             <?php } else { ?>
                                 <a href="<?php echo $_smarty_tpl->getValue('base_url');?>
-/eventi/dettaglio/<?php echo $_smarty_tpl->getValue('evento')['idEvento'];?>
+/eventi/dettaglio?id=<?php echo $_smarty_tpl->getValue('evento')['idEvento'];?>
 " class="btn-evento-primary">
                                     Scopri di più
                                 </a>

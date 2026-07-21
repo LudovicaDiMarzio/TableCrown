@@ -19,8 +19,6 @@
 <div class="dettaglio-container">
     <div class="container">
 
-        
-
         <!-- ── BLOCCO SUPERIORE (senza box prezzo) ── -->
         <div class="dettaglio-top">
 
@@ -60,26 +58,17 @@
                     </div>
                 </div>
 
-                <div class="dettaglio-azione-card">
-                    <span class="dettaglio-azione-label">Quanti posti vuoi prenotare?</span>
-                    <div class="dettaglio-azione-row">
-                        <div class="dettaglio-qty" id="qty-prenota">
-                            <button type="button" class="dettaglio-qty-btn" id="btn-qty-minus"
-                                    {if $serata.postiLiberi <= 0}disabled{/if}>−</button>
-                            <input type="number" class="dettaglio-qty-input" id="input-qty-posti"
-                                   value="1" min="1" max="{$serata.postiLiberi}" readonly>
-                            <button type="button" class="dettaglio-qty-btn" id="btn-qty-plus"
-                                    {if $serata.postiLiberi <= 0}disabled{/if}>+</button>
-                        </div>
-                        <a href="#recensioni" class="dettaglio-recensioni-link" style="display:none;"></a>
-                    </div>
+                <form method="POST" action="{$base_url}/eventi/partecipa" id="form-prenota">
+                    <input type="hidden" name="id_evento" value="{$serata.id}">
 
-                    <button type="button" class="btn-partecipa" data-id="{$serata.id}" id="btn-prenota"
-                            {if $serata.postiLiberi <= 0}disabled{/if}>
-                        <i class="ti ti-calendar-check"></i>
-                        {if $serata.postiLiberi <= 0}Posti esauriti{else}Prenota{/if}
-                    </button>
-                </div>
+                    <div class="dettaglio-azione-card">
+                        <button type="submit" class="btn-partecipa" id="btn-prenota"
+                                {if $serata.postiLiberi <= 0}disabled{/if}>
+                            <i class="ti ti-calendar-check"></i>
+                            {if $serata.postiLiberi <= 0}Posti esauriti{else}Prenota{/if}
+                        </button>
+                    </div>
+                </form>
             </div>
 
         </div>
@@ -93,13 +82,13 @@
     </div>
 </div>
 
+
 <script>
 (function () {
     const maxPosti = parseInt("{$serata.postiLiberi|default:0}", 10);
     const input = document.getElementById('input-qty-posti');
     const btnMinus = document.getElementById('btn-qty-minus');
     const btnPlus = document.getElementById('btn-qty-plus');
-    const btnPrenota = document.getElementById('btn-prenota');
 
     function clamp(val) {
         if (val < 1) return 1;
@@ -114,14 +103,6 @@
     btnPlus.addEventListener('click', function () {
         input.value = clamp(parseInt(input.value, 10) + 1);
     });
-
-    if (btnPrenota) {
-        btnPrenota.addEventListener('click', function () {
-            const posti = parseInt(input.value, 10);
-            // TODO: chiamata fetch al Controller per la prenotazione
-            console.log('Prenotazione serata', btnPrenota.dataset.id, 'posti:', posti);
-        });
-    }
 })();
 </script>
 {/block}
