@@ -13,7 +13,7 @@
      - descrizione
      - prezzo
      - premio           ({id, nome, immagine} — prodotto in palio, opzionale)
-     - tornei []        ({id, nome, immagine, data} — i tornei che
+     - tornei []        ({idEvento, nomeEvento, imgEvento, dataInizio} — i tornei che
                           fanno parte della challenge, può essere vuoto)
    ============================================================ *}
 
@@ -27,15 +27,15 @@
         <div class="dettaglio-top dettaglio-top--con-prezzo">
 
             <div class="dettaglio-gallery">
-                <img src="{$challenge.imgEvento}" alt="{$challenge.nomeEvento}" class="dettaglio-img">
+                <img src="{$challenge.immagine}" alt="{$challenge.nome}" class="dettaglio-img">
             </div>
 
             <div class="dettaglio-info">
-                <h1 class="dettaglio-nome" style="color: #2c3e7a;">{$challenge.nomeEvento}</h1>
+                <h1 class="dettaglio-nome" style="color: #2c3e7a;">{$challenge.nome}</h1>
 
                 <ul class="dettaglio-meta">
-                    <li><i class="ti ti-calendar-event"></i> {$challenge.dataInizio}</li>
-                    <li><i class="ti ti-users"></i> {$challenge.postiRimanenti} / {$challenge.maxPartecipanti} posti liberi</li>
+                    <li><i class="ti ti-calendar-event"></i> {$challenge.data}</li>
+                    <li><i class="ti ti-users"></i> {$challenge.postiLiberi} / {$challenge.postiTotali} posti liberi</li>
                 </ul>
             </div>
 
@@ -55,12 +55,21 @@
 
                 <div class="dettaglio-prezzo-tot">
                     <span class="dettaglio-prezzo-tot-label">Totale</span>
-                    <span class="dettaglio-prezzo-tot-value" id="prezzo-tot-{$challenge.idEvento}">€ {$challenge.quotaIscrizione}</span>
+                    <span class="dettaglio-prezzo-tot-value" id="prezzo-tot-{$challenge.id}">€ {$challenge.prezzo}</span>
                 </div>
 
-                <button type="button" class="btn-iscriviti" data-id="{$challenge.idEvento}">
-                    Iscriviti
-                </button>
+                {if $challenge.prezzo > 0}
+                    <a href="{$base_url}/eventi/checkout?id={$challenge.id}" class="btn-iscriviti">
+                        Iscriviti
+                    </a>
+                {else}
+                    <form action="{$base_url}/eventi/partecipa" method="post" class="dettaglio-form-iscrizione">
+                        <input type="hidden" name="id_evento" value="{$challenge.id}">
+                        <button type="submit" class="btn-iscriviti">
+                            Iscriviti
+                        </button>
+                    </form>
+                {/if}
             </div>
 
         </div>
@@ -68,7 +77,7 @@
         <!-- ── DESCRIZIONE ── -->
         <div class="dettaglio-descrizione">
             <h2 class="dettaglio-section-title">Descrizione</h2>
-            <p class="dettaglio-descrizione-testo">{$challenge.descrizioneEvento}</p>
+            <p class="dettaglio-descrizione-testo">{$challenge.descrizione}</p>
         </div>
 
         <!-- ── TORNEI INCLUSI (se presenti) ── -->
