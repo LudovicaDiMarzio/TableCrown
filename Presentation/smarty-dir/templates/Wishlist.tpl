@@ -10,7 +10,7 @@
 
         {* ── TOPBAR: TORNA ALL'AREA PERSONALE ── *}
         <div class="wishlist-topbar">
-            <a href="{$base_url}/profilo" class="wishlist-back-link">
+            <a href="{$base_url}/account" class="wishlist-back-link">
                 <i class="ti ti-arrow-left"></i> Torna all'Area Personale
             </a>
         </div>

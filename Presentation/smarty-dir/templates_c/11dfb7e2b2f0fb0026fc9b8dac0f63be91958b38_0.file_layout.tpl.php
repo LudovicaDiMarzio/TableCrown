@@ -1,18 +1,18 @@
 <?php
-/* Smarty version 5.8.0, created on 2026-07-20 20:34:42
+/* Smarty version 5.8.0, created on 2026-07-21 13:13:08
   from 'file:common/layout.tpl' */
 
 /* @var \Smarty\Template $_smarty_tpl */
 if ($_smarty_tpl->getCompiled()->isFresh($_smarty_tpl, array (
   'version' => '5.8.0',
-  'unifunc' => 'content_6a5e6a421d0a70_32249696',
+  'unifunc' => 'content_6a5f5444c03b15_32665764',
   'has_nocache_code' => false,
   'file_dependency' => 
   array (
     '11dfb7e2b2f0fb0026fc9b8dac0f63be91958b38' => 
     array (
       0 => 'common/layout.tpl',
-      1 => 1784407189,
+      1 => 1784632352,
       2 => 'file',
     ),
   ),
@@ -20,7 +20,7 @@ if ($_smarty_tpl->getCompiled()->isFresh($_smarty_tpl, array (
   array (
   ),
 ))) {
-function content_6a5e6a421d0a70_32249696 (\Smarty\Template $_smarty_tpl) {
+function content_6a5f5444c03b15_32665764 (\Smarty\Template $_smarty_tpl) {
 $_smarty_current_dir = 'C:\\xampp\\htdocs\\TableCrown\\Presentation\\smarty-dir\\templates\\common';
 $_smarty_tpl->getInheritance()->init($_smarty_tpl, false);
 ?>
@@ -31,7 +31,7 @@ $_smarty_tpl->getInheritance()->init($_smarty_tpl, false);
     <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
 
     <title><?php 
-$_smarty_tpl->getInheritance()->instanceBlock($_smarty_tpl, 'Block_2887735056a5e6a421b4d75_93915048', "page_title");
+$_smarty_tpl->getInheritance()->instanceBlock($_smarty_tpl, 'Block_4396223976a5f5444797c24_12109051', "page_title");
 ?>
 </title>
 
@@ -45,7 +45,7 @@ $_smarty_tpl->getInheritance()->instanceBlock($_smarty_tpl, 'Block_2887735056a5e
 /css/layout.css">
     
     <?php 
-$_smarty_tpl->getInheritance()->instanceBlock($_smarty_tpl, 'Block_11161815296a5e6a421b59c0_88249512', "extra_css");
+$_smarty_tpl->getInheritance()->instanceBlock($_smarty_tpl, 'Block_11725687606a5f54448d8933_15474693', "extra_css");
 ?>
 
 </head>
@@ -168,12 +168,12 @@ $_smarty_tpl->getInheritance()->instanceBlock($_smarty_tpl, 'Block_11161815296a5
         </div>
     </nav>
 
-        <?php if ((true && ($_smarty_tpl->hasVariable('breadcrumbs') && null !== ($_smarty_tpl->getValue('breadcrumbs') ?? null))) && $_smarty_tpl->getSmarty()->getModifierCallback('count')($_smarty_tpl->getValue('breadcrumbs')) > 0) {?>
-    <section class="section breadcrumb-section">
-        <div class="container">
-            <nav class="breadcrumb is-small" aria-label="breadcrumbs">
-                <ul>
-                    <?php
+    <?php if ((true && ($_smarty_tpl->hasVariable('breadcrumbs') && null !== ($_smarty_tpl->getValue('breadcrumbs') ?? null))) && $_smarty_tpl->getSmarty()->getModifierCallback('count')($_smarty_tpl->getValue('breadcrumbs')) > 0) {?>
+<section class="section breadcrumb-section">
+    <div class="container">
+        <nav class="breadcrumb is-small" aria-label="breadcrumbs">
+            <ul>
+                <?php
 $_from = $_smarty_tpl->getSmarty()->getRuntime('Foreach')->init($_smarty_tpl, $_smarty_tpl->getValue('breadcrumbs'), 'crumb', true);
 $_smarty_tpl->getVariable('crumb')->iteration = 0;
 $foreach0DoElse = true;
@@ -183,25 +183,25 @@ $_smarty_tpl->getVariable('crumb')->iteration++;
 $_smarty_tpl->getVariable('crumb')->last = $_smarty_tpl->getVariable('crumb')->iteration === $_smarty_tpl->getVariable('crumb')->total;
 $foreach0Backup = clone $_smarty_tpl->getVariable('crumb');
 ?>
-                        <?php if ($_smarty_tpl->getVariable('crumb')->last) {?>
-                            <li class="is-active">
-                                <a href="#" aria-current="page"><?php echo htmlspecialchars((string)$_smarty_tpl->getValue('crumb')['label'], ENT_QUOTES, 'UTF-8', true);?>
+                    <?php if ($_smarty_tpl->getVariable('crumb')->last) {?>
+                        <li class="is-active">
+                            <a href="#" aria-current="page"><?php echo htmlspecialchars((string)$_smarty_tpl->getValue('crumb')['label'], ENT_QUOTES, 'UTF-8', true);?>
 </a>
-                            </li>
-                        <?php } else { ?>
-                            <li><a href="<?php echo htmlspecialchars((string)$_smarty_tpl->getValue('crumb')['url'], ENT_QUOTES, 'UTF-8', true);?>
+                        </li>
+                    <?php } else { ?>
+                        <li><a href="<?php echo htmlspecialchars((string)$_smarty_tpl->getValue('crumb')['url'], ENT_QUOTES, 'UTF-8', true);?>
 "><?php echo htmlspecialchars((string)$_smarty_tpl->getValue('crumb')['label'], ENT_QUOTES, 'UTF-8', true);?>
 </a></li>
-                        <?php }?>
-                    <?php
+                    <?php }?>
+                <?php
 $_smarty_tpl->setVariable('crumb', $foreach0Backup);
 }
 $_smarty_tpl->getSmarty()->getRuntime('Foreach')->restore($_smarty_tpl, 1);?>
-                </ul>
-            </nav>
-        </div>
-    </section>
-    <?php }?>
+            </ul>
+        </nav>
+    </div>
+</section>
+<?php }?>
 
         <?php if ((true && ($_smarty_tpl->hasVariable('flash_message') && null !== ($_smarty_tpl->getValue('flash_message') ?? null)))) {?>
     <section class="section flash-section">
@@ -218,7 +218,7 @@ $_smarty_tpl->getSmarty()->getRuntime('Foreach')->restore($_smarty_tpl, 1);?>
 
         <main>
         <?php 
-$_smarty_tpl->getInheritance()->instanceBlock($_smarty_tpl, 'Block_5231205986a5e6a421cbc30_67122453', "content");
+$_smarty_tpl->getInheritance()->instanceBlock($_smarty_tpl, 'Block_730722096a5f5444bff772_71797038', "content");
 ?>
 
     </main>
@@ -382,7 +382,7 @@ $_smarty_tpl->getInheritance()->instanceBlock($_smarty_tpl, 'Block_5231205986a5e
 >
 
     <?php 
-$_smarty_tpl->getInheritance()->instanceBlock($_smarty_tpl, 'Block_19403247216a5e6a421cfb62_89186328', "extra_js");
+$_smarty_tpl->getInheritance()->instanceBlock($_smarty_tpl, 'Block_5607189916a5f5444c02a38_90592528', "extra_js");
 ?>
 
 
@@ -390,7 +390,7 @@ $_smarty_tpl->getInheritance()->instanceBlock($_smarty_tpl, 'Block_19403247216a5
 </html>
 <?php }
 /* {block "page_title"} */
-class Block_2887735056a5e6a421b4d75_93915048 extends \Smarty\Runtime\Block
+class Block_4396223976a5f5444797c24_12109051 extends \Smarty\Runtime\Block
 {
 public function callBlock(\Smarty\Template $_smarty_tpl) {
 $_smarty_current_dir = 'C:\\xampp\\htdocs\\TableCrown\\Presentation\\smarty-dir\\templates\\common';
@@ -400,7 +400,7 @@ TableCrown<?php
 }
 /* {/block "page_title"} */
 /* {block "extra_css"} */
-class Block_11161815296a5e6a421b59c0_88249512 extends \Smarty\Runtime\Block
+class Block_11725687606a5f54448d8933_15474693 extends \Smarty\Runtime\Block
 {
 public function callBlock(\Smarty\Template $_smarty_tpl) {
 $_smarty_current_dir = 'C:\\xampp\\htdocs\\TableCrown\\Presentation\\smarty-dir\\templates\\common';
@@ -408,7 +408,7 @@ $_smarty_current_dir = 'C:\\xampp\\htdocs\\TableCrown\\Presentation\\smarty-dir\
 }
 /* {/block "extra_css"} */
 /* {block "content"} */
-class Block_5231205986a5e6a421cbc30_67122453 extends \Smarty\Runtime\Block
+class Block_730722096a5f5444bff772_71797038 extends \Smarty\Runtime\Block
 {
 public function callBlock(\Smarty\Template $_smarty_tpl) {
 $_smarty_current_dir = 'C:\\xampp\\htdocs\\TableCrown\\Presentation\\smarty-dir\\templates\\common';
@@ -416,7 +416,7 @@ $_smarty_current_dir = 'C:\\xampp\\htdocs\\TableCrown\\Presentation\\smarty-dir\
 }
 /* {/block "content"} */
 /* {block "extra_js"} */
-class Block_19403247216a5e6a421cfb62_89186328 extends \Smarty\Runtime\Block
+class Block_5607189916a5f5444c02a38_90592528 extends \Smarty\Runtime\Block
 {
 public function callBlock(\Smarty\Template $_smarty_tpl) {
 $_smarty_current_dir = 'C:\\xampp\\htdocs\\TableCrown\\Presentation\\smarty-dir\\templates\\common';
