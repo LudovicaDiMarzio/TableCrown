@@ -82,7 +82,7 @@ class FProdotto{
                 ->andWhere("o.stato = :statoCompletato")
                 ->setParameter('idUtente', $iduser)
                 ->setParameter('idProdotto', $idprodotto)
-                ->setParameter('statoCompletato', StatoOrdine::CONSEGNATO);
+                ->setParameter('statoCompletato', StatoOrdine::IN_LAVORAZIONE);
 
             $risultato = (int) $qb->getQuery()->getSingleScalarResult();
             return $risultato > 0;
