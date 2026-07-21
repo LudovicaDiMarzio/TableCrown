@@ -15,17 +15,17 @@ class BancaMockService implements PaymentInterface
     //serve per generare un token tipo quello che genererebbe stripe
     public function generaToken(string $numeroCarta, string $cvv): array 
     {
-        //togliamo tutti gli spazi
-        $numeroPulito = preg_replace('/\s+/', '', $numeroCarta);
+        //togliamo tutti gli spazi e i caratteri non accettati 
+        $numeroPulito = preg_replace('/[\s\-]+/', '', $numeroCarta);
         $cvvPulito = trim($cvv);
 
         //controllo che ci siano tra 13 e 19 cifre (come nelle carte reali) e siano solo numeri
-        if (strlen($numeroPulito) < 13 || strlen($numeroPulito) > 19 || !is_numeric($numeroPulito)) {
+        if (strlen($numeroPulito) < 13 || strlen($numeroPulito) > 19 || !ctype_digit($numeroPulito)) {
             throw new InvalidArgumentException("Numero di carta non valido. Richiesta rifiutata dalla banca.");
         }
 
         //controllo che il cvv di 3 cifre e sia numerico
-        if (strlen($cvvPulito) < 3 || strlen($cvvPulito) > 4 || !is_numeric($cvvPulito)) {
+        if (strlen($cvvPulito) < 3 || strlen($cvvPulito) > 4 || !ctype_digit($cvvPulito)) {
             throw new InvalidArgumentException("CVV non valido.");
         }
 
@@ -44,7 +44,7 @@ class BancaMockService implements PaymentInterface
     {
         //controllo che il token esista e che inizi con tok_ (validità del token)
         if (empty($token) || !str_starts_with($token, 'tok_')) {
-            throw new Exception("Token di pagamento non valido o assente.");
+            throw new InvalidArgumentException("Token di pagamento non valido o assente.");
         }
 
         //controllo che l'importo sia positivo
