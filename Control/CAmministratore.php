@@ -66,14 +66,17 @@ class CAmministratore extends BaseController {
      * URL: GET /admin/utenti
      */
     public function mostraListaUtentiAdmin(): void {
-        $righeGrezze = FPersistentManager::PMfindUtentiConRecensioniSegnalate('DESC'); //restituisce ['risultati' => ['utente' => EUtente, 'numeroSegnalazioni' => int], 'totale' => int]
+        $datiGrezzi = FPersistentManager::PMfindUtentiConRecensioniSegnalate('DESC'); //restituisce ['risultati' => [['utente' => EUtente, 'numeroSegnalazioni' => int],[],...], 'totale' => int]
+
+        //Estraiamo la lista dei risultati (o array vuoto se non ce ne sono)
+        $listaRisultati = $datiGrezzi['risultati'] ?? [];
 
         $utenti = array_map(
-            fn($riga) => $this->utenteAdminToArray($riga['risultati']['utente'], $riga['risultati']['numeroSegnalazioni']),
-            $righeGrezze
+            fn($riga) => $this->utenteAdminToArray($riga['utente'], $riga['numeroSegnalazioni']),
+            $listaRisultati
         );
 
-        $datiLayout = $this->preparaDatiLayout('admin_lista_utenti', ['utenti' => $utenti]);
+        $datiLayout = $this->preparaDatiLayout('admin_lista_utenti', ['utenti' => $utenti, 'totale' => $datiGrezzi['totale'] ?? count($utenti)]);
 
         ViewAdminFactory::mostraListaUtenti($datiLayout);
     }
