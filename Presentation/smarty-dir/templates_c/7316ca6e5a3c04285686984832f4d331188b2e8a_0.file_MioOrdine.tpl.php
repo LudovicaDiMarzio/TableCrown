@@ -1,18 +1,18 @@
 <?php
-/* Smarty version 5.8.0, created on 2026-07-21 00:08:03
+/* Smarty version 5.8.0, created on 2026-07-21 09:56:07
   from 'file:MioOrdine.tpl' */
 
 /* @var \Smarty\Template $_smarty_tpl */
 if ($_smarty_tpl->getCompiled()->isFresh($_smarty_tpl, array (
   'version' => '5.8.0',
-  'unifunc' => 'content_6a5e9c4336ea26_95061331',
+  'unifunc' => 'content_6a5f26172cf026_83040468',
   'has_nocache_code' => false,
   'file_dependency' => 
   array (
     '7316ca6e5a3c04285686984832f4d331188b2e8a' => 
     array (
       0 => 'MioOrdine.tpl',
-      1 => 1784454027,
+      1 => 1784620564,
       2 => 'file',
     ),
   ),
@@ -20,28 +20,28 @@ if ($_smarty_tpl->getCompiled()->isFresh($_smarty_tpl, array (
   array (
   ),
 ))) {
-function content_6a5e9c4336ea26_95061331 (\Smarty\Template $_smarty_tpl) {
+function content_6a5f26172cf026_83040468 (\Smarty\Template $_smarty_tpl) {
 $_smarty_current_dir = 'C:\\xampp\\htdocs\\TableCrown\\Presentation\\smarty-dir\\templates';
 $_smarty_tpl->getInheritance()->init($_smarty_tpl, true);
 ?>
 
 
 <?php 
-$_smarty_tpl->getInheritance()->instanceBlock($_smarty_tpl, 'Block_2812804706a5e9c432d0d32_37934141', "extra_css");
+$_smarty_tpl->getInheritance()->instanceBlock($_smarty_tpl, 'Block_16880148696a5f26172a6308_76567872', "extra_css");
 ?>
 
 
 <?php 
-$_smarty_tpl->getInheritance()->instanceBlock($_smarty_tpl, 'Block_4493211086a5e9c432d47c8_41080175', "content");
+$_smarty_tpl->getInheritance()->instanceBlock($_smarty_tpl, 'Block_16042263466a5f26172a9c03_04750930', "content");
 ?>
 
 
 <?php 
-$_smarty_tpl->getInheritance()->instanceBlock($_smarty_tpl, 'Block_5752034896a5e9c4336ddd0_37038802', "extra_js");
+$_smarty_tpl->getInheritance()->instanceBlock($_smarty_tpl, 'Block_7247817266a5f26172ce650_99555741', "extra_js");
 $_smarty_tpl->getInheritance()->endChild($_smarty_tpl, "common/layout.tpl", $_smarty_current_dir);
 }
 /* {block "extra_css"} */
-class Block_2812804706a5e9c432d0d32_37934141 extends \Smarty\Runtime\Block
+class Block_16880148696a5f26172a6308_76567872 extends \Smarty\Runtime\Block
 {
 public function callBlock(\Smarty\Template $_smarty_tpl) {
 $_smarty_current_dir = 'C:\\xampp\\htdocs\\TableCrown\\Presentation\\smarty-dir\\templates';
@@ -54,7 +54,7 @@ $_smarty_current_dir = 'C:\\xampp\\htdocs\\TableCrown\\Presentation\\smarty-dir\
 }
 /* {/block "extra_css"} */
 /* {block "content"} */
-class Block_4493211086a5e9c432d47c8_41080175 extends \Smarty\Runtime\Block
+class Block_16042263466a5f26172a9c03_04750930 extends \Smarty\Runtime\Block
 {
 public function callBlock(\Smarty\Template $_smarty_tpl) {
 $_smarty_current_dir = 'C:\\xampp\\htdocs\\TableCrown\\Presentation\\smarty-dir\\templates';
@@ -65,7 +65,7 @@ $_smarty_current_dir = 'C:\\xampp\\htdocs\\TableCrown\\Presentation\\smarty-dir\
 
                 <div class="mieordini-topbar">
             <a href="<?php echo $_smarty_tpl->getValue('base_url');?>
-/account" class="mieordini-back-link">
+/profilo" class="mieordini-back-link">
                 <i class="ti ti-arrow-left"></i> Torna all'Area Personale
             </a>
         </div>
@@ -139,7 +139,7 @@ $foreach1DoElse = false;
 ?>
                                     <div class="mieordini-item">
                                         <a href="<?php echo $_smarty_tpl->getValue('base_url');?>
-/prodotto/<?php echo htmlspecialchars((string)$_smarty_tpl->getValue('item')['prodotto']['id'], ENT_QUOTES, 'UTF-8', true);?>
+/prodotto?id=<?php echo htmlspecialchars((string)$_smarty_tpl->getValue('item')['prodotto']['id'], ENT_QUOTES, 'UTF-8', true);?>
 " class="mieordini-item-media">
                                             <?php if ((true && (true && null !== ($_smarty_tpl->getValue('item')['prodotto']['immagine'] ?? null))) && $_smarty_tpl->getValue('item')['prodotto']['immagine']) {?>
                                                 <img src="<?php echo $_smarty_tpl->getValue('base_url');?>
@@ -159,7 +159,7 @@ $foreach1DoElse = false;
 
                                         <div class="mieordini-item-info">
                                             <a href="<?php echo $_smarty_tpl->getValue('base_url');?>
-/prodotto/<?php echo htmlspecialchars((string)$_smarty_tpl->getValue('item')['prodotto']['id'], ENT_QUOTES, 'UTF-8', true);?>
+/prodotto?id=<?php echo htmlspecialchars((string)$_smarty_tpl->getValue('item')['prodotto']['id'], ENT_QUOTES, 'UTF-8', true);?>
 " class="mieordini-item-nome">
                                                 <?php echo htmlspecialchars((string)$_smarty_tpl->getValue('item')['prodotto']['nome'], ENT_QUOTES, 'UTF-8', true);?>
 
@@ -249,7 +249,7 @@ $_smarty_tpl->getSmarty()->getRuntime('Foreach')->restore($_smarty_tpl, 1);?>
 }
 /* {/block "content"} */
 /* {block "extra_js"} */
-class Block_5752034896a5e9c4336ddd0_37038802 extends \Smarty\Runtime\Block
+class Block_7247817266a5f26172ce650_99555741 extends \Smarty\Runtime\Block
 {
 public function callBlock(\Smarty\Template $_smarty_tpl) {
 $_smarty_current_dir = 'C:\\xampp\\htdocs\\TableCrown\\Presentation\\smarty-dir\\templates';

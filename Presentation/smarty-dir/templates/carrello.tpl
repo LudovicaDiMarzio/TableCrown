@@ -254,7 +254,7 @@
             <div class="carrello-vuoto">
                 <i class="ti ti-shopping-cart-off"></i>
                 <p>Il tuo carrello è vuoto.</p>
-                <a href="{$base_url}/catalogo" class="btn-primary">Vai al Catalogo</a>
+                <a href="{$base_url}/catalogo/giochi-da-tavolo" class="btn-primary">Vai al Catalogo</a>
             </div>
 
         {/if}
