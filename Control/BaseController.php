@@ -429,10 +429,7 @@ abstract class BaseController {
         $this->requireRole('utente');
         $idUtente = USession::getSessionElement('id_persona');
 
-        $utente = null;
-        if ($idUtente) {
-            $utente = FPersistentManager::PMgetObjOnAttribute(EUtente::class, 'idpersona', $idUtente);
-        }
+        $utente = $this->utenteCorrenteOpzionale(); //recupera internamente l'oggetto dal db
 
         //Difensivo: se per qualsiasi motivo non troviamo l'utente nel db,
         //puliamo la sessione e lo reindirizziamo al login anziché far generare un errore.
@@ -460,6 +457,9 @@ abstract class BaseController {
             return null;
         }
         $idUtente = USession::getSessionElement('id_persona');
+        if (!$idUtente) {
+            return null;
+        }
         return FPersistentManager::PMgetObjOnAttribute(EUtente::class, 'idpersona', $idUtente);
     }
 
