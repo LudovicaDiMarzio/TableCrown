@@ -22,7 +22,6 @@ use TableCrown\Entity\EChallenge;
 use TableCrown\Entity\EDanno;
 use TableCrown\Foundation\FPersistentManager;
 use TableCrown\Presentation\Views\ViewGestore;
-use TableCrown\Presentation\Views\ViewEventi;
 use InvalidArgumentException;
 use RuntimeException;
 
@@ -165,6 +164,39 @@ class CGestore extends BaseController {
         $this->renderCatalogo('gestore_catalogo_portadadi', $risultatoGrezzo, $pagina, $filtri, $query, modalita: 'gestore');
     }
 
+    /**
+     * Mostra il form per creare un nuovo Gioco da Tavolo.
+     * URL: GET /gestore/crea/gioco-da-tavolo
+     */
+    public function mostraFormCreaGiocoGestore(): void {
+        $datiPagina = ['vista' => 'gestore_creazione_gioco'];
+
+        $datiLayout = $this->preparaDatiLayout('gestore_creazione_gioco', $datiPagina);
+        ViewGestore::mostraFormCreazione($datiLayout);
+    }
+
+    /**
+     * Mostra il form per creare nuove Bustine.
+     * URL: GET /gestore/crea/bustine
+     */
+    public function mostraFormCreaBustineGestore(): void {
+        $datiPagina = ['vista' => 'gestore_creazione_bustine'];
+
+        $datiLayout = $this->preparaDatiLayout('gestore_creazione_bustine', $datiPagina);
+        ViewGestore::mostraFormCreazione($datiLayout);
+    }
+
+    /**
+     * Mostra il form per creare nuove Porta Dadi.
+     * URL: GET /gestore/crea/porta-dadi
+     */
+    public function mostraFormCreaPortaDadiGestore(): void {
+        $datiPagina = ['vista' => 'gestore_creazione_portadadi'];
+
+        $datiLayout = $this->preparaDatiLayout('gestore_creazione_portadadi', $datiPagina);
+        ViewGestore::mostraFormCreazione($datiLayout);
+    }
+
 
     // EVENTI
 
@@ -231,8 +263,13 @@ class CGestore extends BaseController {
         $datiPagina = $this->costruisciDatiVistaEvento($evento, modalita: 'gestore');
         $datiLayout = $this->preparaDatiLayout($datiPagina['vista'], $datiPagina);
 
-        //Chiamata alla View
-        ViewEventi::mostraDettaglioEvento($datiLayout); 
+        //Smistamento sulle vie dedicate del gestore
+        match ($this->tipoEventoCorrente) {
+            'serata' => ViewGestore::mostraDettaglioSerata($datiLayout),
+            'torneo' => ViewGestore::mostraDettaglioTorneo($datiLayout),
+            'challenge' => ViewGestore::mostraDettaglioChallenge($datiLayout),
+            default => throw new \InvalidArgumentException("La vista '$datiPagina[vista]' non è valida per la modalità 'gestore'."),
+        };
     }
 
 

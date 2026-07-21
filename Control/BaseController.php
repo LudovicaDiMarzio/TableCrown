@@ -31,6 +31,7 @@ use TableCrown\Entity\Enumerativi\StatoEvento;
 use TableCrown\Foundation\PaymentInterface;
 use TableCrown\Presentation\Views\ViewCatalogo;
 use TableCrown\Presentation\Views\ViewEventi;
+use TableCrown\Presentation\Views\ViewGestore;
 use InvalidArgumentException;
 use DateTime;
 
@@ -304,7 +305,18 @@ abstract class BaseController {
         ];
 
         $datiLayout = $this->preparaDatiLayout($vista, $datiPagina);
-        ViewCatalogo::render($datiLayout);
+
+        if ($modalita === 'gestore') {
+            match ($vista) {
+                'gestore_catalogo_giochi' => ViewGestore::mostraCatalogoGiochi($datiLayout),
+                'gestore_catalogo_bustine' => ViewGestore::mostraCatalogoBustine($datiLayout),
+                'gestore_catalogo_portadadi' => ViewGestore::mostraCatalogoPortaDadi($datiLayout),
+                default => throw new \InvalidArgumentException("La vista '$vista' non è valida per la modalità '$modalita'."),
+            };
+        } else {
+            ViewCatalogo::render($datiLayout);
+        }
+
     }
 
     /**
@@ -649,7 +661,19 @@ abstract class BaseController {
         ];
 
         $datiLayout = $this->preparaDatiLayout($vista, $datiPagina);
-        ViewEventi::mostraEventi($datiLayout);
+
+        //Smistamento in base alla modalità (utente vs gestore)
+        if ($modalita === 'gestore') {
+            match ($vista) {
+                'gestore_eventi_serate' => ViewGestore::mostraEventiSerate($datiLayout),
+                'gestore_eventi_tornei' => ViewGestore::mostraEventiTornei($datiLayout),
+                'gestore_eventi_challenge' => ViewGestore::mostraEventiChallenge($datiLayout),
+                default => throw new \InvalidArgumentException("La vista '$vista' non è valida per la modalità '$modalita'."),
+            };
+        } else {
+            //vista pubblica per utenti semplici
+            ViewEventi::mostraEventi($datiLayout);
+        }
     }
 
     /**
