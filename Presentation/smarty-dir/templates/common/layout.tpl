@@ -233,10 +233,7 @@
                             <i class="ti ti-map-pin footer-contact-icon"></i>
                             <span>Giulianova, Abruzzo</span>
                         </li>
-                    </ul>
-                    <a href="{$base_url}/recensioni/nuova" class="footer-review-link">✍ Lasciaci una recensione</a>
-                </div>
-
+                    
             </div>
 
             <div class="footer-divider"></div>
