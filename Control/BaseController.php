@@ -656,17 +656,18 @@ abstract class BaseController {
      * che ne ha bisogno per rivedere podio/classifica prima di pubblicarli).
      */
     protected function costruisciDatiVistaEvento(EEvento $evento, string $modalita = 'utente'): array {
+        //Mappatura base ereditata da mappaEvento()
+        $dati = $this->mappaEvento($evento);
+        
+        //Personalizzazioni specifiche per tipo di evento
         if ($evento instanceof ESerata) {
-            $dati = $this->serataToArray($evento);
             $vista = $modalita === 'gestore' ? 'gestore_dettaglio_serata' : 'dettaglio_serata';
         } elseif ($evento instanceof ETorneo) {
-            $dati = $this->torneoToArray($evento);
             //Nel catalogo 'premio' è un link minimale (id, nome, immagine); qui invece
             //per la view serve la card completa del prodotto, come nel catalogo dei prodotti.
             $dati['premio'] = $this->prodottoToArray($evento->getPremio());
             $vista = $modalita === 'gestore' ? 'gestore_dettaglio_torneo' : 'dettaglio_torneo';
         } elseif ($evento instanceof EChallenge) {
-            $dati = $this->challengeToArray($evento);
             $dati['premio'] = $this->prodottoToArray($evento->getPremio());
             //'tornei' nel catalogo è un array di link minimali (id, nome); qui invece
             //serve la card completa di ogni torneo, quindi sostituiamo con torneoToArray().
