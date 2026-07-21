@@ -197,6 +197,39 @@ class CGestore extends BaseController {
         ViewGestore::mostraFormCreazione($datiLayout);
     }
 
+    /**
+     * Mostra il form per la creazione di una nuova Serata.
+     * URL: GET /gestore/crea/serata
+     */
+    public function mostraFormCreaSerata(): void {
+        $datiPagina = ['vista' => 'gestore_creazione_serata'];
+
+        $datiLayout = $this->preparaDatiLayout('gestore_creazione_serata', $datiPagina);
+        ViewGestore::mostraFormCreazione($datiLayout);
+    }
+
+    /**
+     * Mostra il form per la creazione di una nuova Torneo.
+     * URL: GET /gestore/crea/torneo
+     */
+    public function mostraFormCreaTorneo(): void {
+        $datiPagina = ['vista' => 'gestore_creazione_torneo'];
+
+        $datiLayout = $this->preparaDatiLayout('gestore_creazione_torneo', $datiPagina);
+        ViewGestore::mostraFormCreazione($datiLayout);
+    }
+
+    /**
+     * Mostra il form per la creazione di una nuova Challenge.
+     * URL: GET /gestore/crea/challenge
+     */
+    public function mostraFormCreaChallenge(): void {
+        $datiPagina = ['vista' => 'gestore_creazione_challenge'];
+
+        $datiLayout = $this->preparaDatiLayout('gestore_creazione_challenge', $datiPagina);
+        ViewGestore::mostraFormCreazione($datiLayout);
+    }
+
 
     // EVENTI
 

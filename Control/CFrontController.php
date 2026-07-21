@@ -340,6 +340,12 @@ class CFrontController {
                                 $controller->mostraFormCreaBustineGestore();
                             } elseif ($sottoRoute2 === 'porta-dadi') { //GET /gestore/crea/porta-dadi
                                 $controller->mostraFormCreaPortaDadiGestore();
+                            } elseif ($sottoRoute2 === 'serata') { //GET /gestore/crea/serata
+                                $controller->mostraFormCreaSerata();
+                            } elseif ($sottoRoute2 === 'torneo') { //GET /gestore/crea/torneo
+                                $controller->mostraFormCreaTorneo();
+                            } elseif ($sottoRoute2 === 'challenge') { //GET /gestore/crea/challenge
+                                $controller->mostraFormCreaChallenge();
                             } else {
                                 $this->mostra404();
                             }
