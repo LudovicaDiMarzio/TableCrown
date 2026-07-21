@@ -416,7 +416,25 @@ abstract class BaseController {
     protected function utenteCorrente(): EUtente {
         $this->requireRole('utente');
         $idUtente = USession::getSessionElement('id_persona');
-        return FPersistentManager::PMgetObjOnAttribute(EUtente::class, 'idpersona', $idUtente);
+
+        $utente = null;
+        if ($idUtente) {
+            $utente = FPersistentManager::PMgetObjOnAttribute(EUtente::class, 'idpersona', $idUtente);
+        }
+
+        //Difensivo: se per qualsiasi motivo non troviamo l'utente nel db,
+        //puliamo la sessione e lo reindirizziamo al login anziché far generare un errore.
+        if (!$utente) {
+            USession::unsetSession(); //svuota l'array $_SESSION in memoria
+            USession::destroySession(); //cancella il file/dati della sessione sul server
+            //Ripuliamo anche il cookie Remember Me
+            UCookie::deleteCookie('remember_me');
+            UFlashMessage::addMessage('danger', 'Sessione non valida o scaduta. Effettuare nuovamente il login.');
+            header('Location: ' . BASE_URL . '/accedi');
+            exit();
+        }
+
+        return $utente;
     }
 
     /**
