@@ -10,7 +10,7 @@
 
         {* ── TOPBAR ── *}
         <div class="mieordini-topbar">
-            <a href="{$base_url}/account" class="mieordini-back-link">
+            <a href="{$base_url}/profilo" class="mieordini-back-link">
                 <i class="ti ti-arrow-left"></i> Torna all'Area Personale
             </a>
         </div>
@@ -68,7 +68,7 @@
                             <div class="mieordini-items">
                                 {foreach $ordine.items as $item}
                                     <div class="mieordini-item">
-                                        <a href="{$base_url}/prodotto/{$item.prodotto.id|escape}" class="mieordini-item-media">
+                                        <a href="{$base_url}/prodotto?id={$item.prodotto.id|escape}" class="mieordini-item-media">
                                             {if isset($item.prodotto.immagine) && $item.prodotto.immagine}
                                                 <img src="{$base_url}/img/prodotti/{$item.prodotto.immagine|escape}"
                                                      onerror="this.onerror=null; this.src='{$base_url}/img/prodotto-default.png'"
@@ -82,7 +82,7 @@
                                         </a>
 
                                         <div class="mieordini-item-info">
-                                            <a href="{$base_url}/prodotto/{$item.prodotto.id|escape}" class="mieordini-item-nome">
+                                            <a href="{$base_url}/prodotto?id={$item.prodotto.id|escape}" class="mieordini-item-nome">
                                                 {$item.prodotto.nome|escape}
                                             </a>
                                             <span class="mieordini-item-qty">Quantità: {$item.quantita|escape}</span>
