@@ -1,31 +1,46 @@
 <?php
-/**
- * Costruisce la View concreta corretta in base al nome della vista richiesta.
- */
+
 namespace TableCrown\Presentation\Views;
-
-use SmartyConfiguration;
-
-use InvalidArgumentException;
 
 class ViewGestoreFactory {
 
-    public static function crea(string $vista): ViewGestoreInterface {
-    return match ($vista) {
-        'gestore_dashboard' => new ViewGestoreDashboard(),
-
-        'gestore_catalogo_giochi'     => new ViewGestoreCatalogoGiochi(),
-        'gestore_catalogo_bustine'    => new ViewGestoreCatalogoBustine(),
-        'gestore_catalogo_portadadi'  => new ViewGestoreCatalogoPortaDadi(),
-
-        'gestore_creazione_gioco' => new ViewGestoreCreazioneGioco(),
-        'gestore_creazione_bustine' => new ViewGestoreCreazioneBustine(),
-        'gestore_creazione_portadadi' => new ViewGestoreCreazionePortaDadi(),
-        'gestore_creazione_serata' => new ViewGestoreCreazioneSerata(),
-        'gestore_creazione_torneo' => new ViewGestoreCreazioneTorneo(),
-        'gestore_creazione_challenge' => new ViewGestoreCreazioneChallenge(),
-
-        default => throw new InvalidArgumentException("Vista gestore non riconosciuta: '$vista'."),
-        };
+    public static function mostraDashboard(array $dati): void {
+        (new ViewGestoreDashboard())->render($dati);
     }
+
+    public static function mostraCatalogoGiochi(array $dati): void {
+        (new ViewGestoreCatalogoGiochi())->render($dati);
+    }
+
+    public static function mostraCatalogoBustine(array $dati): void {
+        (new ViewGestoreCatalogoBustine())->render($dati);
+    }
+
+    public static function mostraCatalogoPortaDadi(array $dati): void {
+        (new ViewGestoreCatalogoPortaDadi())->render($dati);
+    }
+
+    public static function mostraFormCreazione(array $dati): void {
+        $view = match ($dati['vista']) {
+            'gestore_creazione_gioco'     => new ViewGestoreCreazioneGioco(),
+            'gestore_creazione_bustine'   => new ViewGestoreCreazioneBustine(),
+            'gestore_creazione_portadadi' => new ViewGestoreCreazionePortaDadi(),
+            'gestore_creazione_serata'    => new ViewGestoreCreazioneSerata(),
+            'gestore_creazione_torneo'    => new ViewGestoreCreazioneTorneo(),
+            'gestore_creazione_challenge' => new ViewGestoreCreazioneChallenge(),
+            default => throw new \InvalidArgumentException("Vista di creazione non riconosciuta: '{$dati['vista']}'."),
+        };
+
+        $view->render($dati);
+    }
+    public static function mostraModificaProdotto(array $dati): void {
+    $view = match ($dati['vista']) {
+        'gestore_modifica_gioco'     => new ViewGestoreModificaGioco(),
+        'gestore_modifica_bustine'   => new ViewGestoreModificaBustine(),
+        'gestore_modifica_portadadi' => new ViewGestoreModificaPortaDadi(),
+        default => throw new \InvalidArgumentException("Vista di modifica non riconosciuta: '{$dati['vista']}'."),
+    };
+
+    $view->render($dati);
+}
 }
