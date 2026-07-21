@@ -18,6 +18,8 @@ use TableCrown\Testing\Fixtures\ProvvedimentoFixture;
 use TableCrown\Testing\Fixtures\CartaDiCreditoFixture;
 use TableCrown\Testing\Fixtures\IndirizzoFixture;
 use TableCrown\Testing\Fixtures\OrdineFixture;
+use TableCrown\Testing\Fixtures\WishlistFixture;
+use TableCrown\Testing\Fixtures\EventoFixture;
 
 
 //creo l'entity manager
@@ -25,6 +27,8 @@ $em = getEntityManagerBoot();
 
 //cerca i file che estendono AbstractFixture li organizza nell'ordine corretto 
 $loader = new Loader();
+
+
 
 // aggiungi le fixture nell'ordine corretto
 $loader->addFixture(new UtenteFixture());
@@ -41,6 +45,8 @@ $loader->addFixture(new ProvvedimentoFixture());
 $loader->addFixture(new CartaDiCreditoFixture());
 $loader->addFixture(new IndirizzoFixture());
 $loader->addFixture(new OrdineFixture());
+$loader->addFixture(new WishlistFixture());
+$loader->addFixture(new EventoFixture());
 
 
 
@@ -50,5 +56,11 @@ $executor = new ORMExecutor($em, $purger);
 
 //avvia concretamente il processo di svuotamento e inserimento dei dati, con il loader che recupera le classi fixture e le dispone in un array pronto per l'esecuzione
 $executor->execute($loader->getFixtures());
+
+// 1. Diciamo al DB di ignorare temporaneamente i vincoli di integrità
+$em->getConnection()->executeStatement('SET FOREIGN_KEY_CHECKS=0');
+
+// 3. Riattiviamo immediatamente i controlli per la sicurezza del DB
+$em->getConnection()->executeStatement('SET FOREIGN_KEY_CHECKS=1');
 
 echo "Fixture caricate con successo!\n";
