@@ -53,9 +53,8 @@ class GiocoDaTavoloFixture extends AbstractFixture implements DependentFixtureIn
     public function load(ObjectManager $manager): void
     {
         $faker = Factory::create('it_IT');
-        $percorsoImg = __DIR__ . 'C:\xampp\htdocs\TableCrown\public\img';
 
-        $percorsoImg = dirname(__DIR__, 2) . '/public/img/carousel/img1.png'; // adatta il path relativo alla tua struttura cartelle
+        $percorsoImg = dirname(__DIR__, 2) . '/public/img/img1.png'; // adatta il path relativo alla tua struttura cartelle
 
         $immaginePredefinita = null;
         if (file_exists($percorsoImg) && is_file($percorsoImg)) {
