@@ -131,6 +131,13 @@ class CDettaglioEvento extends BaseController {
             exit();
         }
 
+        //Regole di business: controllo disponibilità posti
+        if (!$evento->hasPostiDisponibili()) {
+            UFlashMessage::addMessage('danger', 'Spiacenti, i posti per questo evento sono esauriti.');
+            header('Location: ' . BASE_URL . '/eventi/dettaglio/' . $idEvento);
+            exit();
+        }
+
         //Regole di business: se l'utente prova ad iscriversi ad un torneo che fa parte di una challenge, lo blocchiamo
         if ($evento instanceof ETorneo && $evento->getChallenge() !== null) {
             UFlashMessage::addMessage('danger', 'Questo torneo fa parte di una Challenge. Iscriviti direttamente alla Challenge associata per partecipare.');
@@ -138,7 +145,7 @@ class CDettaglioEvento extends BaseController {
             exit();
         }
 
-        //Gestione del pagamento 
+        //Gestione del pagamento (se richiesto dall'evento) 
         if ($evento->richiedeQuota()) {
             try {
                 $quota = null;
@@ -191,7 +198,7 @@ class CDettaglioEvento extends BaseController {
                 foreach ($evento->getTornei() as $torneo) {
                     if (!$this->utenteIscritto($torneo)) {
                         $pTorneo = new EPartecipazione($utente, $torneo);
-                        if ($torneo->richiedeQuota()) {//FORSE SI PUÒ TOGLIERE QUESTO CONTROLLO
+                        if ($torneo->richiedeQuota()) {
                             $pTorneo->aggiornaPagamento();
                         }
                         $partecipazioniDaSalvare[] = $pTorneo;

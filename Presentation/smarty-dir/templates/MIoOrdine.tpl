@@ -134,7 +134,7 @@
                 </div>
                 <h2 class="mieordini-empty-titolo">Non hai ancora effettuato ordini</h2>
                 <p class="mieordini-empty-testo">Quando completerai un acquisto, lo troverai qui insieme allo stato della spedizione.</p>
-                <a href="{$base_url}/catalogo" class="mieordini-empty-btn">
+                <a href="{$base_url}/catalogo/giochi-da-tavolo" class="mieordini-empty-btn">
                     <i class="ti ti-shopping-bag"></i> Scopri il catalogo
                 </a>
             </div>

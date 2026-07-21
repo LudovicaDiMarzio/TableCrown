@@ -59,9 +59,18 @@
                     <span class="dettaglio-prezzo-tot-value" id="prezzo-tot-{$torneo.id}">€ {$torneo.prezzo}</span>
                 </div>
 
-                <button type="button" class="btn-iscriviti" data-id="{$torneo.id}">
-                    Iscriviti
-                </button>
+                {if $torneo.prezzo > 0}
+    <a href="{$base_url}/eventi/checkout?id={$torneo.id}" class="btn-iscriviti">
+        Iscriviti
+    </a>
+{else}
+    <form action="{$base_url}/eventi/partecipa" method="post" class="dettaglio-form-iscrizione">
+        <input type="hidden" name="id_evento" value="{$torneo.id}">
+        <button type="submit" class="btn-iscriviti">
+            Iscriviti
+        </button>
+    </form>
+{/if}
             </div>
 
         </div>
