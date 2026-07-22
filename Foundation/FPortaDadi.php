@@ -29,7 +29,7 @@ class FPortaDadi{
                    ->setParameter('prezzo_min', $filtri['price_min']);
             }
 
-            if (isset($filtiri['price_max'])){
+            if (isset($filtri['price_max'])){
                 $qb->andwhere('pr.valore <= :prezzo_max')
                    ->setParameter('prezzo_max', $filtri['price_max']);
             }
@@ -100,7 +100,7 @@ class FPortaDadi{
             
             //cloniamo la query per poterla modificare ed effettuarci un count
             $qbCount = clone $qb;
-            $qbCount->select('count(p.id)');
+            $qbCount->select('count(p.idProdotto)');
             $qbCount->resetDQLPart('orderBy');
             $totale = $qbCount->getQuery()->getSingleScalarResult();
 
@@ -131,8 +131,8 @@ class FPortaDadi{
             error_log("Errore in findPortaDadi: " . $e->getMessage());
             return ['risultati' => [], 
                     'totale' => 0,
-                    'prezzo_min_slider' => 0.0, 
-                    'prezzo_max_slider' => 50.0
+                    'rangemin' => 0.0,
+                    'rangemax' => 50.0
             ];
         }
     }
