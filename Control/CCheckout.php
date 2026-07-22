@@ -36,6 +36,9 @@ class CCheckout extends BaseController {
     public function mostraCheckout(): void {
         $utente = $this->utenteCorrente();
 
+        //Salviamo in sessione che l'utente è nel checkout
+        USession::setSessionElement('provenienza_checkout', true);
+
         //Recuperiamo il carrello dalla sessione
         $carrello = USession::getSessionElement('carrello') ?? [];
         if (empty($carrello)) {
