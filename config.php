@@ -14,7 +14,7 @@ define('ENVIRONMENT', 'development');
 if (ENVIRONMENT === 'development') {
     define('BASE_URL', 'http://localhost/TableCrown');
 } else {
-    define('BASE_URL', 'https://www.tablecrown.it');
+    define('BASE_URL', 'https://tablecrown.alwaysdata.net');
 }
 
 // ── PERCORSI FISICI (uguali in ogni ambiente) ─────────────────
@@ -35,10 +35,10 @@ if (ENVIRONMENT === 'development') {
     define('DB_PASS', '');
     define('DB_PORT', 3306);
 } else {
-    define('DB_HOST', 'localhost');
-    define('DB_NAME', 'tablecrown_prod');
-    define('DB_USER', 'tuo_utente_db');
-    define('DB_PASS', 'tua_password_db');
+    define('DB_HOST', 'mysql-tablecrown.alwaysdata.net');
+    define('DB_NAME', 'tablecrown_db');
+    define('DB_USER', 'tablecrown');
+    define('DB_PASS', 'cabletrown');
     define('DB_PORT', 3306);
 }
 
