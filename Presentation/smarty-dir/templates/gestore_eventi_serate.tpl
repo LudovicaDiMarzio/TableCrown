@@ -21,6 +21,10 @@
   e, per Torneo/Challenge, la pubblicazione esiti, partono da lì e NON dalla
   card di lista. Rimossi quindi il pannello "Gestisci" e i form rapidi che
   avevo messo qui in precedenza.
+
+  FIX: il pulsante "Nuova Serata" puntava a /gestore/eventi/serate/nuovo,
+  route inesistente. La route reale (vedi CGestore::mostraFormCreaSerata())
+  è GET /gestore/crea/serata.
 *}
 {extends file="layout_gestore.tpl"}
 
@@ -46,15 +50,14 @@
             {* La ricerca eventi è gestita da un controller/vista diversi
                (CGestore::mostraRisultatiRicercaEventiGestore), quindi la
                search box punta sempre lì, non resta sulla pagina corrente *}
-            <form class="gcat-search-form" action="{$base_url}/gestore/eventi/ricerca" method="get">
-                <input class="gcat-search-input" type="search" name="q" placeholder="Cerca tra tutti gli eventi..." aria-label="Cerca eventi">
-                <button class="gcat-search-btn" type="submit" aria-label="Cerca">
-                    <i class="ti ti-search"></i>
-                </button>
-            </form>
+            <form class="gcat-search-form" onsubmit="filtraEventiClientSide(this.querySelector('input[name=q]')); return false;">
+    <input class="gcat-search-input" type="search" name="q" placeholder="..." aria-label="Cerca eventi">
+    <button class="gcat-search-btn" type="submit" aria-label="Cerca">
+        <i class="ti ti-search"></i>
+    </button>
+</form>
 
-            {* TODO T1: verificare che questa route GET esista per mostrare il form di creazione *}
-            <a href="{$base_url}/gestore/eventi/serate/nuovo" class="gcat-btn-create">
+            <a href="{$base_url}/gestore/crea/serata" class="gcat-btn-create">
                 <i class="ti ti-plus"></i> Nuova Serata
             </a>
         </div>
@@ -123,7 +126,7 @@
                             {else}
                                 <span class="gcat-card__price-free">Gratuita</span>
                             {/if}
-                            <a href="{$base_url}/gestore/eventi/dettaglio/{$evento.idEvento}" class="gcat-btn-manage">
+                            <a href="{$base_url}/gestore/eventi/dettaglio?id={$evento.idEvento}" class="gcat-btn-manage">
                                 <i class="ti ti-eye"></i> Vedi dettaglio
                             </a>
                         </div>
@@ -140,7 +143,7 @@
                             Non è stata ancora pubblicata nessuna serata.
                         {/if}
                     </p>
-                    <a href="{$base_url}/gestore/eventi/serate/nuovo" class="gcat-btn-create">
+                    <a href="{$base_url}/gestore/crea/serata" class="gcat-btn-create">
                         <i class="ti ti-plus"></i> Crea la prima serata
                     </a>
                 </div>
@@ -150,5 +153,16 @@
     </div>
 
 </div>
+<script>
+    function filtraEventiClientSide(input) {
+    var query = input.value.trim().toLowerCase();
+    var cards = document.querySelectorAll('.gcat-grid .gcat-card');
 
+    cards.forEach(function (card) {
+        var nomeEl = card.querySelector('.gcat-card__name');
+        var nome = nomeEl ? nomeEl.textContent.toLowerCase() : '';
+        card.style.display = (query === '' || nome.indexOf(query) !== -1) ? '' : 'none';
+    });
+}
+</script>
 {/block}

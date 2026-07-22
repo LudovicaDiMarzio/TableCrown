@@ -23,6 +23,10 @@
   "Inserisci Esito" e "Genera Classifica" che avevo messo in lista.
   Anche i link ai tornei figli ora puntano alla route di dettaglio unificata
   /gestore/eventi/dettaglio/{id} invece che a /gestore/eventi/tornei/{id}.
+
+  FIX: il pulsante "Nuova Challenge" puntava a /gestore/eventi/challenge/nuovo,
+  route inesistente. La route reale (vedi CGestore::mostraFormCreaChallenge())
+  è GET /gestore/crea/challenge.
 *}
 {extends file="layout_gestore.tpl"}
 
@@ -45,17 +49,16 @@
         </div>
 
         <div class="gcat-header__actions">
-            <form class="gcat-search-form" action="{$base_url}/gestore/eventi/ricerca" method="get">
-                <input class="gcat-search-input" type="search" name="q" placeholder="Cerca tra tutti gli eventi..." aria-label="Cerca eventi">
-                <button class="gcat-search-btn" type="submit" aria-label="Cerca">
-                    <i class="ti ti-search"></i>
-                </button>
-            </form>
+            <form class="gcat-search-form" onsubmit="filtraEventiClientSide(this.querySelector('input[name=q]')); return false;">
+    <input class="gcat-search-input" type="search" name="q" placeholder="..." aria-label="Cerca eventi">
+    <button class="gcat-search-btn" type="submit" aria-label="Cerca">
+        <i class="ti ti-search"></i>
+    </button>
+</form>
 
-            {* TODO T1: verificare che questa route GET esista per mostrare il form di creazione.
-               NB: creaChallenge() richiede tornei GIA' esistenti e non ancora assegnati
+            {* NB: creaChallenge() richiede tornei GIA' esistenti e non ancora assegnati
                (idTorneiSelezionati), quindi il form dovrà proporre solo quelli liberi. *}
-            <a href="{$base_url}/gestore/eventi/challenge/nuovo" class="gcat-btn-create">
+            <a href="{$base_url}/gestore/crea/challenge" class="gcat-btn-create">
                 <i class="ti ti-plus"></i> Nuova Challenge
             </a>
         </div>
@@ -122,7 +125,7 @@
                             {if $evento.tornei|@count > 0}
                                 <div class="gcat-card__sub-events">
                                     {foreach $evento.tornei as $torneo}
-                                        <a href="{$base_url}/gestore/eventi/dettaglio/{$torneo.idEvento}" class="gcat-card__sub-event-tag">{$torneo.nomeEvento|escape}</a>
+                                        <a href="{$base_url}/gestore/eventi/dettaglio?id={$torneo.idEvento}" class="gcat-card__sub-event-tag">{$torneo.nomeEvento|escape}</a>
                                     {/foreach}
                                 </div>
                             {/if}
@@ -135,7 +138,7 @@
                             {else}
                                 <span class="gcat-card__price-free">Gratuita</span>
                             {/if}
-                            <a href="{$base_url}/gestore/eventi/dettaglio/{$evento.idEvento}" class="gcat-btn-manage">
+                            <a href="{$base_url}/gestore/eventi/dettaglio?id={$evento.idEvento}" class="gcat-btn-manage">
                                 <i class="ti ti-eye"></i> Vedi dettaglio
                             </a>
                         </div>
@@ -152,7 +155,7 @@
                             Non è stata ancora pubblicata nessuna challenge.
                         {/if}
                     </p>
-                    <a href="{$base_url}/gestore/eventi/challenge/nuovo" class="gcat-btn-create">
+                    <a href="{$base_url}/gestore/crea/challenge" class="gcat-btn-create">
                         <i class="ti ti-plus"></i> Crea la prima challenge
                     </a>
                 </div>
@@ -162,5 +165,16 @@
     </div>
 
 </div>
+<script>
+    function filtraEventiClientSide(input) {
+    var query = input.value.trim().toLowerCase();
+    var cards = document.querySelectorAll('.gcat-grid .gcat-card');
 
+    cards.forEach(function (card) {
+        var nomeEl = card.querySelector('.gcat-card__name');
+        var nome = nomeEl ? nomeEl.textContent.toLowerCase() : '';
+        card.style.display = (query === '' || nome.indexOf(query) !== -1) ? '' : 'none';
+    });
+}
+</script>
 {/block}

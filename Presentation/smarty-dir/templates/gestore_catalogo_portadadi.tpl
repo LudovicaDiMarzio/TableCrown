@@ -33,13 +33,13 @@
         </div>
 
         <div class="gprod-header__actions">
-            <form class="gprod-search-form" action="{$base_url}/gestore/ricerca" method="get">
-                <input class="gprod-search-input" type="search" name="q" placeholder="Cerca porta dadi..."
-                       value="{if isset($filtri) && isset($filtri.q)}{$filtri.q|escape}{/if}" aria-label="Cerca prodotti">
-                <button class="gprod-search-btn" type="submit" aria-label="Cerca">
-                    <i class="ti ti-search"></i>
-                </button>
-            </form>
+            <form class="gprod-search-form" action="{$base_url}/gestore/catalogo/portadadi" method="get" onsubmit="return gestisciRicercaVuota(this)">
+    <input class="gprod-search-input" type="search" name="q" placeholder="Cerca porta dadi..."
+           value="{if isset($filtri) && isset($filtri.q)}{$filtri.q|escape}{/if}" aria-label="Cerca prodotti">
+    <button class="gprod-search-btn" type="submit" aria-label="Cerca">
+        <i class="ti ti-search"></i>
+    </button>
+</form>
 
             <a href="{$base_url}/gestore/crea/porta-dadi" class="gprod-btn-create">
                 <i class="ti ti-plus"></i> Nuovo Porta Dadi
@@ -230,6 +230,16 @@
         })
         .catch(function () { alert('Errore di rete durante la rimozione del prodotto.'); });
     }
+
+    function gestisciRicercaVuota(form) {
+    var input = form.querySelector('input[name="q"]');
+    if (input.value.trim() === '') {
+        window.location.href = '{$base_url}/gestore/catalogo/porta-dadi';
+        return false;
+    }
+    return true;
+}
+
 </script>
 
 {include file="gestore_modifica_portadadi.tpl"}
