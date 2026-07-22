@@ -33,7 +33,7 @@
                                  data-prezzo-unitario="{$p.prezzo_unitario}"
                                  data-risparmio-unitario="{if $p.sconto}{$p.prezzo-$p.prezzo_unitario}{else}0{/if}">
 
-                                <a href="{$base_url}/prodotto/{$p.id}" class="carrello-item-img-link">
+                                <a href="{$base_url}/prodotti/?id={$p.id}" class="carrello-item-img-link">
                                     <img src="{$immagineSrc}"
                                          onerror="this.onerror=null; this.src='{$base_url}/img/default.png'"
                                          alt="{$p.nome|escape}"
@@ -41,7 +41,7 @@
                                 </a>
 
                                 <div class="carrello-item-info">
-                                    <a href="{$base_url}/prodotto/{$p.id}" class="carrello-item-nome">
+                                    <a href="{$base_url}/prodotto/?id={$p.id}" class="carrello-item-nome">
                                         {$p.nome|escape}
                                     </a>
 
@@ -170,7 +170,7 @@
         {assign var="immagineSrcCorrelato" value="`$base_url`/img/default.png"}
     {/if}
     <div class="correlato-card">
-                                            <a href="{$base_url}/prodotto/{$correlato.id}" class="correlato-card-link">
+                                            <a href="{$base_url}/prodotto/?id={$correlato.id}" class="correlato-card-link">
                                                 <div class="correlato-image-wrapper">
                                                     <img src="{$immagineSrcCorrelato}"
                                                          onerror="this.onerror=null; this.src='{$base_url}/img/default.png'"

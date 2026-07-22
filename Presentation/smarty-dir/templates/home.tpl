@@ -119,7 +119,7 @@
                                             data-nome="{$prodotto.nome|escape}"
                                             data-img="{$immagineSrc}"
                                             data-prezzo="{$prezzoEffettivo}">
-                                        <i class="ti ti-shopping-cart"></i> Acquista
+                                        <i class="ti ti-shopping-cart"></i> Aggiungi
                                     </button>
                                 </div>
                             </div>
@@ -202,7 +202,7 @@
                                             data-nome="{$prodotto.nome|escape}"
                                             data-img="{$immagineSrc}"
                                             data-prezzo="{$prezzoEffettivo}">
-                                        <i class="ti ti-shopping-cart"></i> Acquista
+                                        <i class="ti ti-shopping-cart"></i> Aggiungi 
                                     </button>
                                 </div>
                             </div>
@@ -247,7 +247,7 @@
         </div>
 
         <div class="minicart-actions">
-            <a href="{$base_url}/catalogo" class="button btn-minicart-continua">
+            <a href="{$base_url}/catalogo/giochi-da-tavolo" class="button btn-minicart-continua">
                 <i class="ti ti-arrow-left"></i> Continua Shopping
             </a>
             <a href="{$base_url}/carrello" class="button btn-minicart-ordine">
