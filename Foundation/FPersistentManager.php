@@ -378,7 +378,7 @@ class FPersistentManager
     /**
      * @return int numero totale vendite (in euro)                          
      */
-    public static function PMcontaVenditeTotali(): int {
+    public static function PMcontaVenditeTotali(): float {
         return FOrdini::contaVenditeTotali();
     }
 
