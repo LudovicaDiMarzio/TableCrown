@@ -414,4 +414,18 @@ class FPersistentManager
         return FTornei::findTorneiGestore($filtroData);
     }
 
+    /**
+     * @return array di oggetti +int     
+     */
+    public static function PMfindPremiChallenge(): array {
+        return FChallenge::findPremiChallenge();
+    }
+
+    /**
+     * @return array di oggetti +int     
+     */
+    public static function PMfindPremiTornei(): array {
+        return FTornei::findPremiTornei();
+    }
+
 }

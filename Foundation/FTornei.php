@@ -2,7 +2,11 @@
 namespace TableCrown\Foundation;
 
 use TableCrown\Entity\ETorneo;
+use TableCrown\Entity\EBustine;
+use TableCrown\Entity\EPortaDadi;
+use TableCrown\Entity\EProdotto;
 use TableCrown\Entity\Enumerativi\StatoEvento;
+use TableCrown\Entity\Enumerativi\DisponibilitaProdotto;
 use DateTime;
 use Exception;
 
@@ -63,5 +67,36 @@ class FTornei{
             return [];
         }
     }
+
+    /**
+     * @return array di oggetti +int
+     * @throws Exception
+     */
+    public static function findPremiTornei(): array {
+    try {
+        $qb = FEntityManager::getInstance()->getEntityManager()->createQueryBuilder();
+        $qb->select('bd')
+            ->from(EProdotto::class, 'bd')
+            ->where('bd INSTANCE OF ' . EBustine::class . ' OR bd INSTANCE OF ' . EPortaDadi::class)
+            ->andWhere('bd.disponibilitaProdotto = :disponibilita')
+            ->setParameter('disponibilita', DisponibilitaProdotto::Disponibile)
+            ->andWhere('bd.quantita > 0');
+
+        $risultati = $qb->getQuery()->getResult();
+
+        $qbCount = clone $qb;
+        $qbCount->select('COUNT(bd.idProdotto)');
+        $totale = $qbCount->getQuery()->getSingleScalarResult();
+
+        return [
+            'risultati' => $risultati,
+            'totale' => (int) $totale
+        ];
+
+    } catch (Exception $e) {
+        error_log("Errore in findPremiTornei: " . $e->getMessage());
+        return ['risultati' => [], 'totale' => 0];
+    }
+}
 
 }
