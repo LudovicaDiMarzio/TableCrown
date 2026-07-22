@@ -76,8 +76,8 @@ class FUtente{
         try{
             $qb=FEntityManager::getInstance()->getEntityManager()->createQueryBuilder();
             $qb->select('u','COUNT(s.idsegnalazione) AS numeroSegnalazioni')
-                ->from(ESegnalazione::class, 's')
-                ->join('s.utente', 'u')
+                ->from(EUtente::class, 'u')
+                ->join('u.segnalazioni', 's')
                 ->where('s.statosegnalazione=:stato')
                 ->setParameter('stato', StatoSegnalazione::IN_ATTESA)
                 ->groupBy('u.idpersona')

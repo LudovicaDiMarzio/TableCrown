@@ -18,7 +18,7 @@ class FSegnalazione{
     public static function contaUtentiSospesiOggi(): int{
         try{
             $qb=FEntityManager::getInstance()->getEntityManager()->createQueryBuilder();
-            $qb->select('COUNT(p.idprovvediemnto)')
+            $qb->select('COUNT(p.idprovvedimento)')
                 ->from(EProvvedimento::class, 'p')
                 ->where('p.tipoprovvedimento=:tipo')
                 ->andWhere('p.dataemissione>=:data')
