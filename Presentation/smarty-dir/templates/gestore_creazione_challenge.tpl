@@ -114,11 +114,12 @@
 
             <div class="gcre-row">
                 <div class="gcre-field-group" data-field="valoreQuota">
-                    <label class="gcre-label" for="valoreQuota">Quota di iscrizione</label>
-                    <input type="number" id="valoreQuota" name="valoreQuota" class="gcre-input"
-                           min="0" step="0.01" placeholder="0.00" required>
-                    <span class="gcre-error">Inserisci una quota valida (0 se gratuita).</span>
-                </div>
+    <label class="gcre-label" for="valoreQuota">Quota di iscrizione</label>
+    <input type="number" id="valoreQuota" name="valoreQuota" class="gcre-input"
+           min="0" step="0.01" placeholder="0.00" required>
+    <span class="gcre-error">Inserisci una quota valida (0 se gratuita).</span>
+</div>
+<input type="hidden" name="valuta" value="EUR">
                 
             </div>
 
@@ -434,9 +435,7 @@
         document.getElementById('riepilogoMaxChallenge').textContent = document.getElementById('maxPartecipanti').value;
 
         const quota = parseFloat(document.getElementById('valoreQuota').value || '0').toFixed(2);
-        const valutaSelect = document.getElementById('valuta');
-        const valutaLabel = valutaSelect.options[valutaSelect.selectedIndex]?.text || '';
-        document.getElementById('riepilogoQuotaChallenge').textContent = quota + ' (' + valutaLabel + ')';
+document.getElementById('riepilogoQuotaChallenge').textContent = quota + ' €';
 
         const rawDate = document.getElementById('dataInizio_input').value;
         if (rawDate) {
