@@ -445,12 +445,12 @@ abstract class BaseController {
      */
     protected function completaFiltriPrezzo(array $filtri, array $risultatoGrezzo): array {
         //Recuperiamo il rangemax calcolato dal pm (con fallback a 0.0 per sicurezza)
-        $reangeMax = (float) ($risultatoGrezzo['rangemax'] ?? 0.0);
-        $filtri['price_range_max'] = $reangeMax;
+        $rangeMax = (float) ($risultatoGrezzo['rangemax'] ?? 0.0);
+        $filtri['price_range_max'] = $rangeMax;
 
         //Se l'utente non aveva impostato il limite massimo, impostiamo lo slider al massimo del range
         if ($filtri['price_max'] === null) {
-            $filtri['price_max'] = $reangeMax;
+            $filtri['price_max'] = $rangeMax;
         }
 
         return $filtri;
