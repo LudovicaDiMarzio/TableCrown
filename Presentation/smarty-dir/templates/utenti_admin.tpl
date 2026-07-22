@@ -9,7 +9,7 @@
 {extends file="layout_admin.tpl"}
 
 {block name="page_css"}
-    <link rel="stylesheet" href="/css/utenti_admin.css">
+    <link rel="stylesheet" href="{$base_url}/css/utenti_admin.css">
 {/block}
 
 {block name="content"}
@@ -37,10 +37,10 @@
                     </div>
 
                     <div class="recensione-card__footer">
-                        <a href="/admin/utente/profilo?id={$u.id}" class="btn btn--outline">Dettagli utente</a>
+                        <a href="{$base_url}/admin/utente/profilo?id={$u.id}" class="btn btn--outline">Dettagli utente</a>
 
                         {if $u.stato === 'attivo'}
-                            <form method="post" action="/admin/utente/sospendi" class="recensione-card__form-elimina"
+                            <form method="post" action="{$base_url}/admin/utente/sospendi" class="recensione-card__form-elimina"
                                   data-confirm-message="Sospendere questo utente per 3 mesi?">
                                 <input type="hidden" name="id_persona" value="{$u.id}">
                                 <button type="submit" class="btn btn--warning">Sospendi</button>
@@ -48,7 +48,7 @@
                         {/if}
 
                         {if $u.stato !== 'bannato'}
-                            <form method="post" action="/admin/utente/banna" class="recensione-card__form-elimina"
+                            <form method="post" action="{$base_url}/admin/utente/banna" class="recensione-card__form-elimina"
                                   data-confirm-message="Bannare permanentemente questo utente?">
                                 <input type="hidden" name="id_persona" value="{$u.id}">
                                 <button type="submit" class="btn btn--danger">Banna</button>

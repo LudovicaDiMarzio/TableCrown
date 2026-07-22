@@ -69,6 +69,11 @@
             {if isset($offerte) && $offerte|@count > 0}
                 {foreach $offerte as $prodotto}
                     {assign var="haSconto" value=$prodotto.sconto|default:false}
+                    {if $prodotto.immagine}
+                        {assign var="immagineSrc" value="data:image/jpeg;base64,`$prodotto.immagine`"}
+                    {else}
+                        {assign var="immagineSrc" value="`$base_url`/img/placeholder.png"}
+                    {/if}
                     {assign var="prezzoEffettivo" value=$haSconto && isset($prodotto.prezzo_scontato) ? $prodotto.prezzo_scontato : $prodotto.prezzo|default:null}
 
                     <div class="card-vector-item">
@@ -76,7 +81,7 @@
                             <div class="card home-card-fixed">
                                 <div class="card-image">
                                     <figure class="image-container-fixed">
-                                        <img src="{$base_url}/img/prodotti/{$prodotto.immagine}" alt="{$prodotto.nome|escape}" />
+                                        <img src="{$immagineSrc}" alt="{$prodotto.nome|escape}" />
                                     </figure>
                                 </div>
                                 <div class="card-content">
@@ -112,7 +117,7 @@
                                     <button class="btn-cart"
                                             data-id="{$prodotto.id}"
                                             data-nome="{$prodotto.nome|escape}"
-                                            data-img="{$base_url}/img/prodotti/{$prodotto.immagine}"
+                                            data-img="{$immagineSrc}"
                                             data-prezzo="{$prezzoEffettivo}">
                                         <i class="ti ti-shopping-cart"></i> Acquista
                                     </button>
@@ -147,6 +152,11 @@
             {if isset($nuovi_arrivi) && $nuovi_arrivi|@count > 0}
                 {foreach $nuovi_arrivi as $prodotto}
                     {assign var="haSconto" value=$prodotto.sconto|default:false}
+                    {if $prodotto.immagine}
+                        {assign var="immagineSrc" value="data:image/jpeg;base64,`$prodotto.immagine`"}
+                    {else}
+                        {assign var="immagineSrc" value="`$base_url`/img/placeholder.png"}
+                    {/if}
                     {assign var="prezzoEffettivo" value=$haSconto && isset($prodotto.prezzo_scontato) ? $prodotto.prezzo_scontato : $prodotto.prezzo|default:null}
 
                     <div class="card-vector-item">
@@ -154,7 +164,7 @@
                             <div class="card home-card-fixed">
                                 <div class="card-image">
                                     <figure class="image-container-fixed">
-                                        <img src="{$base_url}/img/prodotti/{$prodotto.immagine}" alt="{$prodotto.nome|escape}" />
+                                        <img src="{$immagineSrc}" alt="{$prodotto.nome|escape}" />
                                     </figure>
                                 </div>
                                 <div class="card-content">
@@ -190,7 +200,7 @@
                                     <button class="btn-cart"
                                             data-id="{$prodotto.id}"
                                             data-nome="{$prodotto.nome|escape}"
-                                            data-img="{$base_url}/img/prodotti/{$prodotto.immagine}"
+                                            data-img="{$immagineSrc}"
                                             data-prezzo="{$prezzoEffettivo}">
                                         <i class="ti ti-shopping-cart"></i> Acquista
                                     </button>

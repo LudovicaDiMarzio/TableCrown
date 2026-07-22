@@ -85,7 +85,7 @@
                                 {else}Bassa
                                 {/if}
                             </span>
-                            <a href="{$base_url}/admin/utente/profilo?id={$s.autoreRecensione.id}" class="btn btn--outline">Visualizza</a>
+                           
                         </li>
                     {foreachelse}
                         <li class="list-empty">Nessuna segnalazione in attesa.</li>
