@@ -91,13 +91,13 @@
                 <label class="gcre-label">Categorie</label>
                 <div class="gcre-chip-group" id="categoriaChips">
                     {if isset($categorie_enum) && $categorie_enum|@count > 0}
-                        {foreach $categorie_enum as $cat}
-                            <label class="gcre-chip">
-                                <input type="checkbox" name="categoria[]" value="{$cat.value}">
-                                {$cat.label}
-                            </label>
-                        {/foreach}
-                    {else}
+    {foreach $categorie_enum as $cat}
+        <label class="gcre-chip">
+            <input type="checkbox" name="categoria[]" value="{$cat.value}">
+            {$cat.label}
+        </label>
+    {/foreach}
+{else}
                         {* TODO: CASE REALI DI Categoria DA CONFERMARE — placeholder provvisorio *}
                         <label class="gcre-chip"><input type="checkbox" name="categoria[]" value="strategia">Strategia</label>
                         <label class="gcre-chip"><input type="checkbox" name="categoria[]" value="party">Party</label>
@@ -153,16 +153,7 @@
                 <div class="gcre-field-group" data-field="valuta">
                     <label class="gcre-label" for="valuta">Valuta</label>
                     <select id="valuta" name="valuta" class="gcre-select" required>
-                        {if isset($valute_enum) && $valute_enum|@count > 0}
-                            {foreach $valute_enum as $v}
-                                <option value="{$v.value}">{$v.label}</option>
-                            {/foreach}
-                        {else}
-    {* placeholder — DA VERIFICARE contro i case reali di Valuta *}
     <option value="EUR">Euro (€)</option>
-    <option value="USD">Dollaro USA ($)</option>
-    <option value="GBP">Sterlina (£)</option>
-{/if}
                     </select>
                     <span class="gcre-error">Seleziona una valuta.</span>
                 </div>
