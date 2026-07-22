@@ -1,3 +1,4 @@
 # Ignora la cartella vendor/ (dipendenze Composer)
 vendor/
-Presentation/smarty-dir/templates_c/
+Presentation/smarty-dir/templates_c/*
+!Presentation/smarty-dir/templates_c/.gitkeep
