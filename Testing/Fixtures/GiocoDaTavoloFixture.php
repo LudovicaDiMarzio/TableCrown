@@ -88,6 +88,7 @@ class GiocoDaTavoloFixture extends AbstractFixture implements DependentFixtureIn
             } else {
                 $quantita = $overrides['quantita'] ?? $faker->numberBetween(10, 100);
             }
+
             $giocatoriMin = $overrides['giocatoriMin'] ?? $faker->numberBetween(1, 4);
             $giocatoriMax = $overrides['giocatoriMax'] ?? $faker->numberBetween($giocatoriMin, $giocatoriMin + 4);
             $etaMinima = $overrides['etaMinima'] ?? $faker->randomElement([6, 8, 10, 12, 14, 16, 18]);
