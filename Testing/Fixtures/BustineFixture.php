@@ -45,7 +45,12 @@ class BustineFixture extends AbstractFixture
             $prezzo = new EPrezzo($faker->randomFloat(2, 2, 15), Valuta::EUR);
 
             // 2. Peschiamo un valore a caso dall'Enum della disponibilità
-            $disponibilita = $faker->randomElement(DisponibilitaProdotto::cases());
+           $disponibilita = $overrides['disponibilita'] ?? $faker->randomElement(DisponibilitaProdotto::cases());
+            if ($disponibilita === DisponibilitaProdotto::Esaurito) {
+                $quantita = 0;
+            } else {
+                $quantita = $overrides['quantita'] ?? $faker->numberBetween(10, 100);
+            }
 
             //chiamo il costruttore di EBustine con i dati random
             $bustina = new EBustine(
@@ -56,6 +61,12 @@ class BustineFixture extends AbstractFixture
                 imgProdotto: $immaginePredefinita,
                 prezzo: $prezzo,                     // prezzo
                 );
+            
+            if ($disponibilita === DisponibilitaProdotto::InArrivo) {
+                $bustina->rendiInArrivo();
+            } elseif ($disponibilita === DisponibilitaProdotto::NonDisponibile) {
+                $bustina->rimuoviProdotto();
+            }
 
                 //per le ultime 2 bustine aggiungiamo uno sconto
                 if($i===8){
