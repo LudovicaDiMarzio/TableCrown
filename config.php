@@ -21,6 +21,7 @@ if (ENVIRONMENT === 'development') {
 }
 
 // ── PERCORSI FISICI (uguali in ogni ambiente) ─────────────────
+/*
 define('ROOT_PATH',         __DIR__);
 define('PUBLIC_PATH',       __DIR__ . '/public');
 define('ASSETS_URL', BASE_URL . '/public');
@@ -29,10 +30,11 @@ define('JS_PATH',    ASSETS_URL . '/js');
 define('IMG_PATH',   ASSETS_URL . '/img');
 define('PRESENTATION_PATH', __DIR__ . '/Presentation');
 define('SMARTY_DIR',        PRESENTATION_PATH . '/smarty-dir/');
+*/
 
 
 //-----CODCE PER TEST SU XAMPP
-/*
+
 define('ROOT_PATH',         __DIR__);
 define('PUBLIC_PATH',       __DIR__ . '/public');
 define('ASSETS_URL', BASE_URL . '/public');
@@ -41,9 +43,11 @@ define('JS_PATH',    PUBLIC_PATH . '/js');
 define('IMG_PATH',   PUBLIC_PATH . '/img');
 define('PRESENTATION_PATH', __DIR__ . '/Presentation');
 define('SMARTY_DIR',        PRESENTATION_PATH . '/smarty-dir/');
- */
+ 
 
 // ── DATABASE ─────────────────────────────────────────────────
+
+
 if (ENVIRONMENT === 'development') {
     define('DB_HOST', 'localhost');
     define('DB_NAME', 'tablecrown');
