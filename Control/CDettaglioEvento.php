@@ -148,12 +148,20 @@ class CDettaglioEvento extends BaseController {
             exit();
         }
 
-        //Gestione del pagamento (se richiesto dall'evento) 
-        if ($evento->richiedeQuota()) {
-            try {
+        try {
+            //INIZIO TRANSAZIONE E ISCRIZIONE
+            FPersistentManager::beginTransaction();
+
+            //Re-check difensivo dei posti disponibili
+            if (!$evento->hasPostiDisponibili()) {
+                throw new \RuntimeException("I posti per questo evento sono esauriti.");
+            }
+                
+            //Gestione del pagamento (se richiesto dall'evento) 
+            if ($evento->richiedeQuota()) {
                 $quota = null;
-                if ($evento instanceof ETorneo || $evento instanceof EChallenge) {
-                    $quota = $evento->getQuotaIscrizione();
+                if ($evento instanceof ETorneo || $evento instanceof EChallenge || $evento instanceof ESerata) {
+                    $quota = $evento->getQuotaIscrizione(); //se è un torneo o un serata, la quota è definita nell'evento
                 }
 
                 if ($quota === null) {
@@ -175,23 +183,15 @@ class CDettaglioEvento extends BaseController {
                 if (!$pagamentoAvvenuto) {
                     throw new \RuntimeException("Si è verificato un errore durante il pagamento.");
                 } 
-
-            } catch (\Exception $e) {
-                //Se il pagamento fallisce, interrompiamo tutto e mostriamo l'errore della banca
-                UFlashMessage::addMessage('danger', 'Pagamento rifiutato: ' . $e->getMessage());
-                header('Location: ' . UHTTPMethods::getReferer(BASE_URL . $this->urlCatalogo($evento))); //oppure 'Location: ' . BASE_URL . '/eventi/checkout/' . $idEvento ?
-                exit();
             }
-        }
-
-        //Regole di business: creazione delle partecipazioni
-        try {
+            
+            //Regole di business: creazione delle partecipazioni
             //Prepariamo la lista di partecipazioni da salvare
             $partecipazioniDaSalvare = [];
 
             //Partecipazione all'evento principale richiesto (Serata, Torneo Singolo o Challenge)
             $pPrincipale = new EPartecipazione($utente, $evento);
-            if ($evento->richiedeQuota()) { //FORSE SI PUò TOGLIERE QUESTO CONTROLLO
+            if ($evento->richiedeQuota()) { 
                 $pPrincipale->aggiornaPagamento(); //aggiornaPagamento() rifà internamente il controllo richiedeQuota, ma è una ridondanza innocua
             }
             $partecipazioniDaSalvare[] = $pPrincipale;
@@ -211,19 +211,29 @@ class CDettaglioEvento extends BaseController {
 
             //Salviamo tutto in blocco nel db tramite il pm
             foreach ($partecipazioniDaSalvare as $partecipazione) {
-                FPersistentManager::PMsaveObj($partecipazione);
+                $salvato =FPersistentManager::PMsaveObj($partecipazione);
+                if (!$salvato) {
+                    throw new \RuntimeException("Si è verificato un errore durante la salvataggio della partecipazione.");
+                }
             }
+
+            //CONFERMA TRANSAZIONE
+            FPersistentManager::commit();
 
             UFlashMessage::addMessage('success', 'Iscrizione effettuata con successo!');
             header('Location: ' . BASE_URL . '/eventi/dettaglio/' . $idEvento);
             exit();
 
         } catch (\Exception $e) {
+            //ANNULLA TUTTE LE OPERAZIONI DB SE QUALCOSA VA STORTO
+            FPersistentManager::rollback();
+
             UFlashMessage::addMessage('danger', 'Errore durante l\iscrizione: ' . $e->getMessage());
-            header('Location: ' . BASE_URL . '/eventi/dettaglio/' . $idEvento);
+            header('Location: ' . BASE_URL . '/eventi/dettaglio/' . $idEvento); 
             exit();
         }
     }
+
 
     protected function getBreadcrumbs(string $currentPage = ''): array {
         return [

@@ -243,7 +243,7 @@ class CRecensioni extends BaseController {
 
         //Risolviamo logicamente tutte le segnalazioni collegate a questa recensione prima di eliminarla
         foreach ($recensione->getSegnalazioni() as $segnalazione) {
-            if ($segnalazione->getStatoSegnalazione() === StatoSegnalazione::RISOLTA) {
+            if ($segnalazione->getStatoSegnalazione() !== StatoSegnalazione::RISOLTA) {
                 $segnalazione->risolvi();
                 FPersistentManager::PMsaveObj($segnalazione);
             }

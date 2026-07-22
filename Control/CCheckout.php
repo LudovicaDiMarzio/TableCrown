@@ -113,9 +113,17 @@ class CCheckout extends BaseController {
         $bancaService = new BancaMockService();
 
         try {
+            //AVVIO TRANSAZIONE DATABASE
+            FPersistentManager::beginTransaction();
+
             $indirizzo = $this->risolviIndirizzo(UHTTPMethods::postInt('id_indirizzo'), $utente);
 
-            $carta = $this->risolviCartaPagamento(UHTTPMethods::postString('scelta_carta'), UHTTPMethods::postInt('id_carta_salvata'), $utente, $bancaService);
+            $carta = $this->risolviCartaPagamento(
+                UHTTPMethods::postString('scelta_carta'), 
+                UHTTPMethods::postInt('id_carta_salvata'), 
+                $utente, 
+                $bancaService
+            );
 
             //Recupero dei prodotti dal carrello in sessione
             $carrello = USession::getSessionElement('carrello') ?? [];
@@ -134,24 +142,51 @@ class CCheckout extends BaseController {
             //Creazione e popolamento dell'ordine
             $ordine = new EOrdine($utente, $indirizzo, $carta);
 
-            //Associazione dei prodotti all'ordine
+            //VERIFICA DISPONIBILITÀ, SCALAMENTO QUANTITÀ E AGGIORNAMENTO VENDITE
             foreach ($righeCarrello as $riga) {
-                $ordine->aggiungiProdotto($riga['prodotto'], $riga['quantita']);
+                $prodotto = $riga['prodotto'];
+                $quantitaRichiesta = (int) $riga['quantita'];
+
+                //Verifica generale di acquistabilità (prezzo presente, disponibilità, stock > 0)
+                if (!$prodotto->isAcquistabile()) {
+                    throw new \RuntimeException("Il prodotto '" . $prodotto->getNomeProdotto() . "' non è ancora disponibile.");
+                }
+
+                //Verifica specifica sulla quantità disponibile
+                if ($prodotto->getQuantita() < $quantitaRichiesta) {
+                    throw new \RuntimeException("La quantità richiesta per '" . $prodotto->getNomeProdotto() . "' supera quella disponibile in magazzino.");
+                }
+
+                //Utilizziamo i metodi specifici di dominio della classe EProdotto:
+                //Aggiorna quantità (se arriva a 0 imposta automaticamente lo stato su Esaurito)
+                $prodotto->aggiornaQuantita($prodotto->getQuantita() - $quantitaRichiesta);
+
+                //Incrementa il numero di vendite del prodotto
+                $prodotto->aggiungiVendite($quantitaRichiesta);
+
+                //Salviamo l'aggiornamento dello stock/vendite del prodotto nel DB
+                FPersistentManager::PMsaveObj($prodotto);
+
+                //Associamo il prodotto all'ordine
+                $ordine->aggiungiProdotto($prodotto, $quantitaRichiesta);
             }
             
-            //Addebito effettivo tramite il mock della banca
+            //ADDEBITO EFFETTIVO TRAMITE BANCA MOCK
             $pagamentoAvvenuto = $bancaService->effettuaPagamento($carta->getToken(), $ordine->calcolaTotale());
 
             if (!$pagamentoAvvenuto) {
                 throw new \RuntimeException("Si è verificato un errore durante la transazione.");
             }
 
-            //Salvataggio dell'ordine e dei suoi elementi nel DB
+            //SALVATAGGIO ORDINE SU DB
             $ordineSalvato = FPersistentManager::PMsaveObj($ordine);
 
             if (!$ordineSalvato) {
                 throw new \RuntimeException("Si è verificato un errore durante il salvataggio dell'ordine.");
             }
+
+            //CONFERMA DEFINITIVA DELLA TRANSAZIONE
+            FPersistentManager::commit();
 
             //Successo: svuotiamo il carrello in sessione
             USession::unsetSessionElement('carrello');
@@ -165,6 +200,9 @@ class CCheckout extends BaseController {
             header('Location: ' . BASE_URL . '/checkout');
             exit();
         } catch (Exception $e) {
+            //Annulla le modifiche nel DB in caso di eccezioni generiche o fallimento pagamento
+            FPersistentManager::rollback();
+            
             UFlashMessage::addMessage('danger', 'Si è verificato un errore durante l\'acquisto: ' . $e->getMessage());
             header('Location: ' . BASE_URL . '/checkout');
             exit();
