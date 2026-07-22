@@ -81,7 +81,7 @@ class CProfilo extends BaseController {
 
         return [
             'nomeUtente' => $utente->getNomePersona(),
-            'immagineUtente' => $utente->getImgPersona(),
+            'immagineUtente' => $utente->getImgPersona() ? base64_encode($utente->getImgPersona()) : null,
             'torneiVinti' => $torneiVinti,
             'torneiTotali' => $torneiTotali,
             'playerLevel' => $livelloAttuale->value,
