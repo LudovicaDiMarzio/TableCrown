@@ -8,7 +8,7 @@ class UCookie {
     public static function setCookie(string $name, string $value, int $days = 30): void {
         $expiry = time() + ($days * 24 * 60 * 60);
         //parametri: nome, valore, scadenza, percorso valido (tutto il sito), dominio, solo_http, secure
-        setcookie($name, $value, $expiry, '/', 'tablecrown.it', false, true);
+        setcookie($name, $value, $expiry, '/', '', false, true);
     }
 
     /**
@@ -23,7 +23,7 @@ class UCookie {
      */
     public static function deleteCookie(string $name): void {
         if (isset($_COOKIE[$name])) {
-            setcookie($name, '', time() - 3600, '/');
+            setcookie($name, '', time() - 3600, '/', '');
             unset($_COOKIE[$name]);
         }
     }
