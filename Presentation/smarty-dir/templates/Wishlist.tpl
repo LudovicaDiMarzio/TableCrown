@@ -36,6 +36,11 @@
         {if isset($wishlist) && $wishlist|@count > 0}
             <div class="wishlist-grid" id="wishlist-grid">
                 {foreach $wishlist as $prodotto}
+    {if $prodotto.immagine}
+        {assign var="immagineSrc" value="data:image/jpeg;base64,`$prodotto.immagine`"}
+    {else}
+        {assign var="immagineSrc" value="`$base_url`/img/prodotto-default.png"}
+    {/if}
                     <div class="wishlist-card {if !$prodotto.isAcquistabile}wishlist-card-esaurito{/if}"
                          data-id="{$prodotto.id|escape}"
                          id="wishlist-card-{$prodotto.id|escape}">
@@ -43,7 +48,7 @@
                         <div class="wishlist-card-media">
                             <a href="{$base_url}/prodotto/{$prodotto.id|escape}">
                                 {if isset($prodotto.immagine) && $prodotto.immagine}
-                                    <img src="{$base_url}/img/prodotti/{$prodotto.immagine|escape}"
+                                    <img src="{$immagineSrc}"
                                          onerror="this.onerror=null; this.src='{$base_url}/img/prodotto-default.png'"
                                          alt="{$prodotto.nome|escape}"
                                          class="wishlist-card-img">

@@ -25,8 +25,9 @@
                 <p>Modera le recensioni segnalate dagli utenti</p>
             </div>
 
-            <form class="segn__filtro" method="get" action="/admin/recensioni">
-                
+            <form class="segn__filtro" method="get" action="{$base_url}/admin/recensioni">
+                {* TODO: controlli di ordinamento (es. select su $ordinamento) *}
+            </form>
         </div>
 
         <div class="recensioni-list">

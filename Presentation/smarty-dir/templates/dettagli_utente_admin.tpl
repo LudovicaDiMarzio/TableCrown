@@ -1,14 +1,14 @@
 {extends file="layout_admin.tpl"}
 
 {block name="page_css"}
-    <link rel="stylesheet" href="css/dettagli_utente_admin.css">
+    <link rel="stylesheet" href="{$base_url}/css/dettagli_utente_admin.css">
 {/block}
 
 {block name="content"}
 <div class="profile-page">
 
     <div class="profile-page__top">
-        <a href="/admin/utenti" class="profile-page__back">&larr; Torna alla lista utenti</a>
+        <a href="{$base_url}/admin/utenti" class="profile-page__back">&larr; Torna alla lista utenti</a>
     </div>
 
     <div class="profile-header">
@@ -26,14 +26,14 @@
         </div>
 
         <div class="profile-header__actions">
-            <form action="/admin/utente/sospendi" method="post"
+            <form action="{$base_url}/admin/utente/sospendi" method="post"
                   data-confirm-message="Sospendere {$utenteProfilo.nome} per 3 mesi? Non potrà accedere al proprio account fino alla scadenza.">
                 <input type="hidden" name="id_persona" value="{$utenteProfilo.id}">
                 <button type="submit" class="btn btn--warning">Sospendi</button>
             </form>
-            <form action="/admin/utente/banna" method="post"
+            <form action="{$base_url}/admin/utente/banna" method="post"
                   data-confirm-message="Bannare {$utenteProfilo.nome} in modo permanente? L'account non potrà più essere riattivato.">
-                <input type="hidden" name="id_persona" value="{$uteutenteProfilonte.id}">
+                <input type="hidden" name="id_persona" value="{$utenteProfilonte.id}">
                 <button type="submit" class="btn btn--danger">Banna</button>
             </form>
         </div>
@@ -62,7 +62,7 @@
                             <p class="recensione-card__testo">{$recensione.testo}</p>
                         </div>
 
-                        <form action="/admin/recensioni/elimina" method="post" class="recensione-card__form"
+                        <form action="{$base_url}/admin/recensioni/elimina" method="post" class="recensione-card__form"
                               data-confirm-message="Rimuovere questa recensione dal sito?">
                             <input type="hidden" name="id_recensione" value="{$recensione.id}">
                             <button type="submit" class="btn btn--danger-outline btn--small">Rimuovi</button>
