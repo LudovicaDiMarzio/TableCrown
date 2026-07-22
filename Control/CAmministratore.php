@@ -170,11 +170,13 @@ class CAmministratore extends BaseController {
      * URL: POST /admin/utente/sospendi
      */
     public function sospendiUtenteAdmin(): void {
+        //Recuperiamo la pagina di provenienza, con un fallback su /admin/dashboard
+        $referer = UHTTPMethods::getReferer(BASE_URL . '/admin/dashboard');
         try {
             $idUtente = UHTTPMethods::postInt('id_persona');
         } catch (\InvalidArgumentException $e) {
             UFlashMessage::addMessage('danger', 'Impossibile elaborare la richiesta: ' . $e->getMessage());
-            header('Location: ' . BASE_URL . '/admin/dashboard');
+            header('Location: ' . $referer);
             exit();
         }
 
@@ -182,14 +184,14 @@ class CAmministratore extends BaseController {
 
         if (!$utente) {
             UFlashMessage::addMessage('danger', 'L\'utente non esiste.');
-            header('Location: ' . BASE_URL . '/admin/dashboard');
+            header('Location: ' . $referer);
             exit();
         }
 
         try {
             //Calcoliamo la data di fine sospensione, aggiungendo esattamente 3 mesi alla data di oggi
             $dataFine = new DateTime();
-            $dataFine->modify(self::DURATA_SOSPENSIONE); //DA CAMBIARE: FORSE MEGLIO FARE UNA COSTANTE ALL'INIZIO TIPO DURATASOSPENSIONE E POI USARE QUELLA?
+            $dataFine->modify(self::DURATA_SOSPENSIONE); 
 
             //Applichiamo la sospensione tramite il metodo dell'entity
             $utente->sospendi($dataFine);
@@ -203,7 +205,7 @@ class CAmministratore extends BaseController {
         } 
 
         //Reindirizziamo alla pagina del profilo dell'utente appena modificato
-        header('Location: ' . BASE_URL . '/admin/utente/profilo?id=' . $idUtente);
+        header('Location: ' . $referer);
         exit();
     }
 
@@ -212,11 +214,13 @@ class CAmministratore extends BaseController {
      * URL: POST /admin/utente/banna
      */
     public function bannaUtenteAdmin(): void {
+        //Recuperiamo la pagina di provenienza, con un fallback su /admin/dashboard
+        $referer = UHTTPMethods::getReferer(BASE_URL . '/admin/dashboard');
         try {
             $idUtente = UHTTPMethods::postInt('id_persona');
         } catch (\InvalidArgumentException $e) {
             UFlashMessage::addMessage('danger', 'Impossibile elaborare la richiesta: ' . $e->getMessage());
-            header('Location: ' . BASE_URL . '/admin/dashboard');
+            header('Location: ' . $referer);
             exit();
         }
 
@@ -224,7 +228,7 @@ class CAmministratore extends BaseController {
 
         if (!$utente) {
             UFlashMessage::addMessage('danger', 'L\'utente non esiste.');
-            header('Location: ' . BASE_URL . '/admin/dashboard');
+            header('Location: ' . $referer);
             exit();
         }
 
@@ -239,7 +243,7 @@ class CAmministratore extends BaseController {
             UFlashMessage::addMessage('danger', 'Impossibile bannare l\'utente: ' . $e->getMessage());
         }
 
-        header('Location: ' . BASE_URL . '/admin/utente/profilo?id=' . $idUtente);
+        header('Location: ' . $referer);
         exit();
     }
 
