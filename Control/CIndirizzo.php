@@ -47,6 +47,10 @@ class CIndirizzo extends BaseController {
         $utente = $this->utenteCorrente();
         $isAjax = UHTTPMethods::isAjax();
 
+        //Recuperiamo l'url di provenienza (es. /checkout o /profilo/indirizzi/nuovo)
+        //Se non trova il referer, userà il fallback '/profilo/indirizzi'
+        $referer = UHTTPMethods::getReferer(BASE_URL . '/profilo/indirizzi');
+
         try {
             $nome = UHTTPMethods::postString('nome');
             $via = UHTTPMethods::postString('via');
@@ -79,12 +83,17 @@ class CIndirizzo extends BaseController {
 
             if ($isAjax) {
                 header('Content-Type: application/json');
-                echo json_encode(['status' => 'ok', 'message' => 'Indirizzo salvato con successo!']);
+                echo json_encode([
+                    'status' => 'ok', 
+                    'message' => 'Indirizzo salvato con successo!',
+                    'redirect' => $referer
+                    ]);
                 exit();
             }
 
             UFlashMessage::addMessage('success', 'Nuovo indirizzo salvato!');
-            header('Location: ' . BASE_URL . '/profilo/indirizzi');
+            //Reindirizza automaticamente alla pagina di provenienza
+            header('Location: ' . $referer);
             exit();
 
         } catch (\Exception $e) {
@@ -95,7 +104,7 @@ class CIndirizzo extends BaseController {
             }
 
             UFlashMessage::addMessage('danger', $e->getMessage());
-            header('Location: ' . UHTTPMethods::getReferer(BASE_URL . '/profilo/indirizzi'));
+            header('Location: ' . $referer);
             exit();
         }
     }
