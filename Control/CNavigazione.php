@@ -15,6 +15,9 @@ class CNavigazione extends BaseController {
         //Richiama il costruttore di BaseController che inizializza:
         //- $this->validRoles (array di ruoli validi)
         parent::__construct();
+
+        //Se è un gestore o un admin, lo spinge subito sulla sua dashboard
+        $this->reindirizzaAdminGestore();
     }
 
     /**
