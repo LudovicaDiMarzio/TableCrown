@@ -220,14 +220,7 @@
                     </div>
                 {/foreach}
 
-                <div class="card-vector-item card-vector-more">
-                    <a href="{$base_url}/catalogo?ordinamento=novita" class="more-link-wrapper" title="Vedi tutti i nuovi arrivi">
-                        <div class="more-circle-btn">
-                            <span class="more-plus-icon">+</span>
-                        </div>
-                        <span class="more-text">Vedi tutti</span>
-                    </a>
-                </div>
+    
 
             {else}
                 <p class="empty-section-message">Nessun nuovo arrivo disponibile al momento.</p>
