@@ -554,6 +554,9 @@
 
 {block name="extra_js"}
 <script>
+    var CARRELLO_AGGIUNGI_URL = "{$base_url}/carrello/aggiungi";
+</script>
+<script>
 {literal}
 document.addEventListener('DOMContentLoaded', function() {
 
@@ -771,7 +774,7 @@ document.addEventListener('DOMContentLoaded', function() {
 
     // ── AJAX CARRELLO ──
     function aggiungiAlCarrello(idProdotto, quantita, dati) {
-        fetch('/carrello/aggiungi', {
+        fetch(CARRELLO_AGGIUNGI_URL, {
             method: 'POST',
             headers: {
                 'Content-Type': 'application/x-www-form-urlencoded',
