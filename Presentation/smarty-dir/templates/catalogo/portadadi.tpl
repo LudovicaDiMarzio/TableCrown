@@ -220,11 +220,16 @@
                 {if isset($prodotti) && $prodotti|@count > 0}
                     <div class="products-grid">
                         {foreach $prodotti as $prodotto}
+                            {if $prodotto.immagine}
+                                {assign var="immagineSrc" value="data:image/jpeg;base64,`$prodotto.immagine`"}
+                            {else}
+                                {assign var="immagineSrc" value="`$base_url`/img/placeholder.png"}
+                            {/if}
                             <div class="product-card">
                                 <a href="{$base_url}/prodotto?id={$prodotto.id}" class="product-card-link">
 
                                     <div class="product-image-wrapper">
-                                        <img src="{$base_url}/img/prodotti/{$prodotto.immagine|escape}"
+                                        <img src="{$immagineSrc}"
                                              alt="{$prodotto.nome|escape}"
                                              class="product-image">
 
@@ -277,7 +282,7 @@
                                     <button class="button btn-add-cart"
                                             data-id="{$prodotto.id}"
                                             data-nome="{$prodotto.nome|escape}"
-                                            data-img="{$base_url}/img/prodotti/{$prodotto.immagine}"
+                                            data-img="{$immagineSrc}"
                                             data-prezzo="{if $prodotto.sconto}{$prodotto.prezzo_scontato}{else}{$prodotto.prezzo}{/if}"
                                             aria-label="Aggiungi a carrello">
                                         <i class="ti ti-shopping-cart"></i> Aggiungi
