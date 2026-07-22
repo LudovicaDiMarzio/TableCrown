@@ -216,59 +216,61 @@ class CRecensioni extends BaseController {
 
         try {
             $idRecensione = UHTTPMethods::postInt('id_recensione');
-        } catch (\InvalidArgumentException $e) {
+
+            //Recuperiamo la recensione per eliminarla
+            $recensione = FPersistentManager::PMgetObjOnAttribute(ERecensione::class, 'idRecensione', $idRecensione);
+
+            if (!$recensione) {
+                throw new \InvalidArgumentException("La recensione non esiste o è già stata rimossa.");
+            }
+
+            //Risolviamo logicamente tutte le segnalazioni collegate a questa recensione prima di eliminarla
+            foreach ($recensione->getSegnalazioni() as $segnalazione) {
+                if ($segnalazione->getStatoSegnalazione() !== StatoSegnalazione::RISOLTA) {
+                    $segnalazione->risolvi();
+                    FPersistentManager::PMsaveObj($segnalazione);
+                }
+            }
+
+            //Aggiornamento della media recensioni del prodotto associato
+            $prodotto = $recensione->getProdotto();
+            if ($prodotto) {
+                $prodotto->removeRecensione($recensione);
+                FPersistentManager::PMsaveObj($prodotto);
+            }
+
+            //Eliminiamo fisicamente la recensione dal DB
+            $successo = FPersistentManager::PMdeleteObj($recensione); 
+
+            if (!$successo) {
+                throw new \RuntimeException("Si è verificato un errore durante la rimozione della recensione.");
+            }
+
+            //Esito positivo
+            if ($isAjax) {
+                header('Content-Type: application/json');
+                echo json_encode([
+                    'status' => 'ok',
+                    'message' => 'La recensione è stata rimossa dal sito.'
+                ]);
+                exit();
+            }
+            UFlashMessage::addMessage('success', 'La recensione è stata rimossa dal sito.');
+            header('Location: ' . $referer);
+            exit();
+
+        } catch (\Exception $e) {
+            //Esito negativo
             if ($isAjax) {
                 header('Content-Type: application/json');
                 echo json_encode(['status' => 'error', 'message' => $e->getMessage()]);
                 exit();
             }
-            UFlashMessage::addMessage('danger', 'Parametri non validi: ' . $e->getMessage());
+
+            UFlashMessage::addMessage('danger', $e->getMessage());
             header('Location: ' . $referer);
             exit();
         }
-
-        //Recuperiamo la recensione per eliminarla
-        $recensione = FPersistentManager::PMgetObjOnAttribute(ERecensione::class, 'idRecensione', $idRecensione);
-
-        if (!$recensione) {
-            if ($isAjax) {
-                header('Content-Type: application/json');
-                echo json_encode(['status' => 'error', 'message' => 'La recensione non esiste o è già stata rimossa.']);
-                exit();
-            }
-            UFlashMessage::addMessage('danger', 'La recensione non esiste o è già stata rimossa.');
-            header('Location: ' . $referer);
-            exit();
-        }
-
-        //Risolviamo logicamente tutte le segnalazioni collegate a questa recensione prima di eliminarla
-        foreach ($recensione->getSegnalazioni() as $segnalazione) {
-            if ($segnalazione->getStatoSegnalazione() !== StatoSegnalazione::RISOLTA) {
-                $segnalazione->risolvi();
-                FPersistentManager::PMsaveObj($segnalazione);
-            }
-        }
-
-        //Eliminiamo fisicamente la recensione dal DB
-        $successo = FPersistentManager::PMdeleteObj($recensione); 
-
-        if ($isAjax) {
-            header('Content-Type: application/json');
-            echo json_encode([
-                'status' => $successo ? 'ok' : 'error',
-                'message' => $successo ? 'La recensione è stata rimossa dal sito.' : 'Si è verificato un errore durante la rimozione della recensione.'
-            ]);
-            exit();
-        }
-
-        if ($successo) {
-            UFlashMessage::addMessage('success', 'La recensione è stata rimossa dal sito.');
-        } else {
-            UFlashMessage::addMessage('danger', 'Si è verificato un errore durante la rimozione della recensione.');
-        }
-
-        header('Location: ' . $referer);
-        exit();
     }
 
     /**
