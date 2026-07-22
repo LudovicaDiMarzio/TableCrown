@@ -121,6 +121,7 @@ class FProdotto{
     }
 
 
+    //public static function findPremi()
 
     
     /**

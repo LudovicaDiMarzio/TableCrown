@@ -207,7 +207,7 @@ class FPersistentManager
     }
 
     /**
-     * @param string $stringaDiRicerca stringa da ricercare nella colonna nomeProdotto o descrizioneProdotto 
+     * @param string $StringaDiRicerca stringa da ricercare nella colonna nomeProdotto o descrizioneProdotto 
      * @param int $limit numero massimo di prodotti da restituire
      * @param int $offset numero di prodotti da saltare dall'inizio della lista
      * @return array di oggetti
@@ -412,20 +412,6 @@ class FPersistentManager
      */
     public static function PMfindTorneiGestore(?string $filtroData): array {
         return FTornei::findTorneiGestore($filtroData);
-    }
-
-    /**
-     * @return array di oggetti + intero     
-     */
-    public static function PMfindPremiTornei(): array {
-        return FTornei::findPremiTornei();
-    }
-
-    /**
-     * @return array di oggetti + intero     
-     */
-    public static function PMfindPremiChallenge(): array {
-        return FChallenge::findPremiChallenge();
     }
 
 }
