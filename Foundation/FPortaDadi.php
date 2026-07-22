@@ -24,14 +24,14 @@ class FPortaDadi{
 
             //gestione dei filtri sul prezzo
 
-            if (isset($filtri['prezzo_min'])) {
+            if (isset($filtri['price_min'])) {
                 $qb->andWhere('pr.valore >= :prezzo_min')
-                   ->setParameter('prezzo_min', $filtri['prezzo_min']);
+                   ->setParameter('prezzo_min', $filtri['price_min']);
             }
 
-            if (isset($filtiri['prezzo_max'])){
+            if (isset($filtiri['price_max'])){
                 $qb->andwhere('pr.valore <= :prezzo_max')
-                   ->setParameter('prezzo_max', $filtri['prezzo_max']);
+                   ->setParameter('prezzo_max', $filtri['price_max']);
             }
 
            
@@ -49,7 +49,7 @@ class FPortaDadi{
                 }
 
                 if (!empty($enumDisponibilita)) {
-                    $qb->andWhere($qb->expr()->in('b.disponibilitaProdotto', ':disponibilita'))
+                    $qb->andWhere($qb->expr()->in('p.disponibilitaProdotto', ':disponibilita'))
                     ->setParameter('disponibilita', $enumDisponibilita);
                 }
             }
