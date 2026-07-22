@@ -101,7 +101,6 @@ class FProdotto{
                 //suggeriamo solo i prodotti non esauriti in magazzino e disponibili
                 ->andWhere('p.quantita > 0')
                 ->andWhere("p.disponibilitaProdotto = 'DISPONIBILE'")
-                ->setParameter('esclusi', $prodottiesclusi)
                 ->orderBy('p.numeroVendite', 'DESC')
                 ->setMaxResults($limit);
             //selezioniamo solo i prodotti che non sono presenti nel carrello dell'utente
