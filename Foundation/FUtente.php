@@ -31,7 +31,7 @@ class FUtente{
     public static function contaUtentiNuoviOggi(): int{
         try{
             $qb=FEntityManager::getInstance()->getEntityManager()->createQueryBuilder();
-            $qb->select('COUNT(u.idPersona)')
+            $qb->select('COUNT(u.idpersona)')
                 ->from(EUtente::class, 'u')
                 ->where('u.dataRegistrazione>=:dataRegistrazione')
                 ->setParameter('dataRegistrazione', new \DateTime('today'));
@@ -53,7 +53,7 @@ class FUtente{
     public static function contaUtentiSospesiTotali(): int{
         try{
             $qb=FEntityManager::getInstance()->getEntityManager()->createQueryBuilder();
-            $qb->select('COUNT(u.idPersona)')
+            $qb->select('COUNT(u.idpersona)')
                 ->from(EUtente::class, 'u')
                 ->where('u.stato=:statoUtente')
                 ->setParameter('statoUtente', StatoUtente::SOSPESO);
@@ -76,11 +76,11 @@ class FUtente{
         try{
             $qb=FEntityManager::getInstance()->getEntityManager()->createQueryBuilder();
             $qb->select('u','COUNT(s.idsegnalazione) AS numeroSegnalazioni')
-                ->from(ESegnalazione::class, 's')
-                ->join('s.utente', 'u')
+                ->from(EUtente::class, 'u')
+                ->join('u.segnalazioni', 's')
                 ->where('s.statosegnalazione=:stato')
                 ->setParameter('stato', StatoSegnalazione::IN_ATTESA)
-                ->groupBy('u.idPersona')
+                ->groupBy('u.idpersona')
                 ->orderBy('numeroSegnalazioni', $ordinamento);
             //sono della tipologia [0 => EUtente, numeroSegnalazioni => int]
             $risultatiGrezzi = $qb->getQuery()->getResult();
