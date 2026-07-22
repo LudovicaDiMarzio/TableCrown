@@ -103,7 +103,7 @@ class CAmministratore extends BaseController {
         $idUtente = (int) $idUtenteRaw;
 
         //Recuperiamo l'utente specifico
-        $utente = FPersistentManager::PMgetObjOnAttribute(EUtente::class, 'idPersona', $idUtente);
+        $utente = FPersistentManager::PMgetObjOnAttribute(EUtente::class, 'idpersona', $idUtente);
 
         if (!$utente) {
             UFlashMessage::addMessage('danger', 'L\'utente non esiste.');

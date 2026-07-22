@@ -169,7 +169,17 @@ class CGestore extends BaseController {
      * URL: GET /gestore/crea/gioco-da-tavolo
      */
     public function mostraFormCreaGiocoGestore(): void {
-        $datiPagina = ['vista' => 'gestore_creazione_gioco'];
+        $risultatoGrezzo = FPersistentManager::PMfindGiochi(filtri: [], limit: 500, offset: 0);
+        $giochiDisponibili = $this->prodottiToArray($risultatoGrezzo['risultati'] ?? []);
+        $datiPagina = [
+            'vista' => 'gestore_creazione_gioco',
+            'giochiDisponibili' => $giochiDisponibili,
+            //passiamo le opzioni direttamente per la vista nel form
+            'danno_enum' => $this->enumToOptions(LivelloDannoGiochi::cases()),
+            'difficolta_enum' => $this->enumToOptions(DifficoltaGioco::cases()),
+            'categoria_enum' => $this->enumToOptions(Categoria::cases()),
+            'lingue_enum' => array_map(fn($c) => ['value' => $c->value, 'label' => $c->name], LinguaGioco::cases()),
+            ];
 
         $datiLayout = $this->preparaDatiLayout('gestore_creazione_gioco', $datiPagina);
         ViewGestore::mostraFormCreazione($datiLayout);
