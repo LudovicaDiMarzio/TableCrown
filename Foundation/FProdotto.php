@@ -120,6 +120,9 @@ class FProdotto{
         }
     }
 
+
+    public static function findPremi()
+
     
     /**
      * @return array Array associativo con 'min' e 'max' (float)
