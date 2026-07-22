@@ -8,7 +8,7 @@
 // ── AMBIENTE ────────────────────────────────────────────────
 // Cambia solo questa riga quando passi a produzione:
 // 'development' → 'production'
-define('ENVIRONMENT', 'development');
+define('ENVIRONMENT', 'production'); //development
 
 // ── BASE URL ─────────────────────────────────────────────────
 if (ENVIRONMENT === 'development') {
@@ -21,9 +21,9 @@ if (ENVIRONMENT === 'development') {
 define('ROOT_PATH',         __DIR__);
 define('PUBLIC_PATH',       __DIR__ . '/public');
 define('ASSETS_URL', BASE_URL . '/public');
-define('CSS_PATH',          PUBLIC_PATH . '/css');
-define('JS_PATH',           PUBLIC_PATH . '/js');
-define('IMG_PATH',          PUBLIC_PATH . '/img');
+define('CSS_PATH',   ASSETS_URL . '/css');
+define('JS_PATH',    ASSETS_URL . '/js');
+define('IMG_PATH',   ASSETS_URL . '/img');
 define('PRESENTATION_PATH', __DIR__ . '/Presentation');
 define('SMARTY_DIR',        PRESENTATION_PATH . '/smarty-dir/');
 
