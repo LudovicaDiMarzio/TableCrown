@@ -5,7 +5,13 @@ use TableCrown\Foundation\FPersistentManager;
 use TableCrown\Utility\UHTTPMethods;
 
 class CCatalogo extends BaseController {
-    
+    public function __construct() {
+        parent::__construct();
+
+        //Se è un gestore o un admin, lo spinge subito sulla sua dashboard
+        $this->reindirizzaAdminGestore();
+    }
+
     //==========================================================================
     // METODI PUBBLICI - uno per ciascuna sottoRoute del catalogo.
     //==========================================================================
