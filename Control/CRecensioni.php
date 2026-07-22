@@ -7,6 +7,7 @@ use TableCrown\Entity\EProdotto;
 use TableCrown\Entity\ERecensione;
 use TableCrown\Entity\EMotivazione;
 use TableCrown\Entity\ESegnalazione;
+use TableCrown\Entity\Enumerativi\StatoSegnalazione;
 
 use TableCrown\Foundation\FPersistentManager;
 
@@ -211,6 +212,7 @@ class CRecensioni extends BaseController {
         //Verifichiamo che sia l'admin a fare l'azione
         $this->requireRole('amministratore');
         $isAjax = UHTTPMethods::isAjax();
+        $referer = UHTTPMethods::getReferer(BASE_URL . '/admin/recensioni');
 
         try {
             $idRecensione = UHTTPMethods::postInt('id_recensione');
@@ -221,7 +223,7 @@ class CRecensioni extends BaseController {
                 exit();
             }
             UFlashMessage::addMessage('danger', 'Parametri non validi: ' . $e->getMessage());
-            header('Location: ' . BASE_URL . '/admin/recensioni');
+            header('Location: ' . $referer);
             exit();
         }
 
@@ -235,14 +237,16 @@ class CRecensioni extends BaseController {
                 exit();
             }
             UFlashMessage::addMessage('danger', 'La recensione non esiste o è già stata rimossa.');
-            header('Location: ' . BASE_URL . '/admin/recensioni');
+            header('Location: ' . $referer);
             exit();
         }
 
         //Risolviamo logicamente tutte le segnalazioni collegate a questa recensione prima di eliminarla
         foreach ($recensione->getSegnalazioni() as $segnalazione) {
-            $segnalazione->risolvi();
-            FPersistentManager::PMsaveObj($segnalazione);
+            if ($segnalazione->getStatoSegnalazione() === StatoSegnalazione::RISOLTA) {
+                $segnalazione->risolvi();
+                FPersistentManager::PMsaveObj($segnalazione);
+            }
         }
 
         //Eliminiamo fisicamente la recensione dal DB
@@ -263,7 +267,7 @@ class CRecensioni extends BaseController {
             UFlashMessage::addMessage('danger', 'Si è verificato un errore durante la rimozione della recensione.');
         }
 
-        header('Location: ' . BASE_URL . '/admin/recensioni');
+        header('Location: ' . $referer);
         exit();
     }
 
@@ -273,20 +277,29 @@ class CRecensioni extends BaseController {
      */
     public function rigettaSegnalazioneAdmin(): void {
         $this->requireRole('amministratore');
+        $referer = UHTTPMethods::getReferer(BASE_URL . '/admin/recensioni');
 
         try {
             $idSegnalazione = UHTTPMethods::postInt('id_segnalazione');
         } catch (\InvalidArgumentException $e) {
             UFlashMessage::addMessage('danger', 'Parametri non validi: ' . $e->getMessage());
-            header('Location: ' . BASE_URL . '/admin/recensioni');
+            header('Location: ' . $referer);
             exit();
         }
 
         $segnalazione = FPersistentManager::PMgetObjOnAttribute(ESegnalazione::class, 'idsegnalazione', $idSegnalazione);
 
+        //Verifichiamo che esista una segnalazione
         if (!$segnalazione) {
             UFlashMessage::addMessage('danger', 'La segnalazione non esiste o è già stata gestita.');
-            header('Location: ' . BASE_URL . '/admin/recensioni');
+            header('Location: ' . $referer);
+            exit();
+        }
+
+        //Verifichiamo se è già stata risolta/gestita!
+        if ($segnalazione->getStatoSegnalazione() === StatoSegnalazione::RISOLTA) {
+            UFlashMessage::addMessage('warning', 'Questa segnalazione è già stata risolta/gestita.');
+            header('Location: ' . $referer);
             exit();
         }
 
@@ -298,7 +311,7 @@ class CRecensioni extends BaseController {
             UFlashMessage::addMessage('danger', 'Impossibile rigettare la segnalazione: ' . $e->getMessage());
         }
 
-        header('Location: ' . BASE_URL . '/admin/recensioni');
+        header('Location: ' . $referer);
         exit();
     }
 
