@@ -58,15 +58,15 @@
                     <p class="recensione-card__testo">{$r.testo}</p>
 
                     <div class="recensione-card__footer">
-                        <a href="/admin/utente/profilo?id={$r.autore.id}" class="btn btn--outline">Controlla profilo</a>
+                        <a href="{$base_url}/admin/utente/profilo?id={$r.autore.id}" class="btn btn--outline">Controlla profilo</a>
 
-                        <form method="post" action="/admin/recensioni/rigetta" class="recensione-card__form-elimina"
+                        <form method="post" action="{$base_url}/admin/recensioni/rigetta" class="recensione-card__form-elimina"
                               data-confirm-message="Rigettare questa segnalazione? La recensione resterà pubblicata.">
                             <input type="hidden" name="id_segnalazione" value="{$r.idSegnalazioneDaRisolvere}">
                             <button type="submit" class="btn btn--neutral">Rigetta segnalazione</button>
                         </form>
 
-                        <form method="post" action="/admin/recensioni/elimina" class="recensione-card__form-elimina"
+                        <form method="post" action="{$base_url}/admin/recensioni/elimina" class="recensione-card__form-elimina"
                               data-confirm-message="Eliminare definitivamente questa recensione?">
                             <input type="hidden" name="id_recensione" value="{$r.id}">
                             <input type="hidden" name="id_segnalazione" value="{$r.idSegnalazioneDaRisolvere}">
