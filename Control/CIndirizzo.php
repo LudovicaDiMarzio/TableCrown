@@ -47,9 +47,16 @@ class CIndirizzo extends BaseController {
         $utente = $this->utenteCorrente();
         $isAjax = UHTTPMethods::isAjax();
 
-        //Recuperiamo l'url di provenienza (es. /checkout o /profilo/indirizzi/nuovo)
-        //Se non trova il referer, userà il fallback '/profilo/indirizzi'
-        $referer = UHTTPMethods::getReferer(BASE_URL . '/profilo/indirizzi');
+        //Gestione redirect con sessione
+        $daCheckout = USession::getSessionElement('provenienza_checkout') ?? false;
+
+        if ($daCheckout) {
+            //Consumiamo il flag così la prossima volta non rimane attivo a caso
+            USession::unsetSessionElement('provenienza_checkout');
+            $redirectUrl = BASE_URL . '/checkout';
+        } else {
+            $redirectUrl = BASE_URL . '/profilo/indirizzi';
+        }
 
         try {
             $nome = UHTTPMethods::postString('nome');
@@ -86,14 +93,14 @@ class CIndirizzo extends BaseController {
                 echo json_encode([
                     'status' => 'ok', 
                     'message' => 'Indirizzo salvato con successo!',
-                    'redirect' => $referer
+                    'redirect' => $redirectUrl
                     ]);
                 exit();
             }
 
             UFlashMessage::addMessage('success', 'Nuovo indirizzo salvato!');
             //Reindirizza automaticamente alla pagina di provenienza
-            header('Location: ' . $referer);
+            header('Location: ' . $redirectUrl);
             exit();
 
         } catch (\Exception $e) {
@@ -104,7 +111,7 @@ class CIndirizzo extends BaseController {
             }
 
             UFlashMessage::addMessage('danger', $e->getMessage());
-            header('Location: ' . $referer);
+            header('Location: ' . $redirectUrl);
             exit();
         }
     }
