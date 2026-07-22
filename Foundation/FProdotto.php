@@ -121,7 +121,7 @@ class FProdotto{
     }
 
 
-    public static function findPremi()
+    //public static function findPremi()
 
     
     /**

@@ -83,16 +83,11 @@ class GiocoDaTavoloFixture extends AbstractFixture implements DependentFixtureIn
             $prezzo = new EPrezzo($valorePrezzo, Valuta::EUR);
 
             $disponibilita = $overrides['disponibilita'] ?? $faker->randomElement(DisponibilitaProdotto::cases());
-            if (in_array($disponibilita, [
-                DisponibilitaProdotto::Esaurito,
-                DisponibilitaProdotto::NonDisponibile,
-                DisponibilitaProdotto::InArrivo
-            ], true)) {
+            if ($disponibilita === DisponibilitaProdotto::Esaurito) {
                 $quantita = 0;
             } else {
                 $quantita = $overrides['quantita'] ?? $faker->numberBetween(10, 100);
             }
-
             $giocatoriMin = $overrides['giocatoriMin'] ?? $faker->numberBetween(1, 4);
             $giocatoriMax = $overrides['giocatoriMax'] ?? $faker->numberBetween($giocatoriMin, $giocatoriMin + 4);
             $etaMinima = $overrides['etaMinima'] ?? $faker->randomElement([6, 8, 10, 12, 14, 16, 18]);
@@ -116,10 +111,19 @@ class GiocoDaTavoloFixture extends AbstractFixture implements DependentFixtureIn
                 durataMedia: $durataMedia,
             );
 
+            if ($disponibilita === DisponibilitaProdotto::InArrivo) {
+                $gioco->rendiInArrivo();
+            } elseif ($disponibilita === DisponibilitaProdotto::NonDisponibile) {
+                $gioco->rimuoviProdotto();
+            }
+
+
             // sconto "manuale" indipendente dal danno, per testare il filtro "sconti"
             if (!empty($overrides['sconto'])) {
                 $prezzo->aggiornaSconto($overrides['sconto']);
             }
+
+
 
             // numero vendite, per il filtro/ordinamento "popolarita"
             if (!empty($overrides['vendite'])) {
