@@ -82,7 +82,7 @@
                         <span class="gcre-upload-box__title" id="uploadTextPortaDadi">Carica un'immagine</span>
                         <span class="gcre-upload-box__hint">PNG o JPG, consigliata almeno 800x450px</span>
                     </div>
-                    <input type="file" name="imgProdotto" id="imgProdotto" accept="image/*" style="display:none;">
+                    <input type="file" name="img_prodotto" id="imgProdotto" accept="image/*" style="display:none;">
                 </label>
             </div>
         </div>
@@ -107,11 +107,11 @@
                                 <option value="{$v.value}">{$v.label}</option>
                             {/foreach}
                         {else}
-                            {* TODO: CASE REALI DI Valuta DA CONFERMARE — placeholder provvisorio *}
-                            <option value="eur">Euro (€)</option>
-                            <option value="usd">Dollaro USA ($)</option>
-                            <option value="gbp">Sterlina (£)</option>
-                        {/if}
+    {* placeholder — DA VERIFICARE contro i case reali di Valuta *}
+    <option value="EUR">Euro (€)</option>
+    <option value="USD">Dollaro USA ($)</option>
+    <option value="GBP">Sterlina (£)</option>
+{/if}
                     </select>
                     <span class="gcre-error">Seleziona una valuta.</span>
                 </div>

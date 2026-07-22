@@ -32,17 +32,17 @@
         </div>
 
         <div class="gprod-header__actions">
-            <form class="gprod-search-form" action="{$base_url}/gestore/ricerca" method="get">
-                <input class="gprod-search-input" type="search" name="q" placeholder="Cerca giochi da tavolo..."
-                       value="{if isset($filtri) && isset($filtri.q)}{$filtri.q|escape}{/if}" aria-label="Cerca prodotti">
-                <button class="gprod-search-btn" type="submit" aria-label="Cerca">
-                    <i class="ti ti-search"></i>
-                </button>
-            </form>
+            <form class="gprod-search-form" action="{$base_url}/gestore/catalogo/giochi-da-tavolo" method="get" onsubmit="return gestisciRicercaVuota(this)">
+    <input class="gprod-search-input" type="search" name="q" placeholder="Cerca giochi da tavolo..."
+           value="{if isset($filtri) && isset($filtri.q)}{$filtri.q|escape}{/if}" aria-label="Cerca prodotti">
+    <button class="gprod-search-btn" type="submit" aria-label="Cerca">
+        <i class="ti ti-search"></i>
+    </button>
+</form>
 
-            <a href="{$base_url}/gestore/catalogo/giochi-da-tavolo/nuovo" class="gprod-btn-create">
-                <i class="ti ti-plus"></i> Nuovo Gioco
-            </a>
+            <a href="{$base_url}/gestore/crea/giochi-da-tavolo" class="gprod-btn-create">
+    <i class="ti ti-plus"></i> Nuovo Gioco
+</a>
         </div>
     </div>
 
@@ -134,15 +134,20 @@
 
                         <div class="gprod-card__footer">
                             <button type="button" class="gprod-btn-edit gmp-btn-modifica"
-                                data-id="{$prodotto.id}"
-                                data-nome="{$prodotto.nome|escape}"
-                                data-immagine="{$prodotto.immagine}"
-                                data-prezzo="{$prodotto.prezzo}"
-                                data-sconto="{if $prodotto.sconto}1{else}0{/if}"
-                                data-percentuale-sconto="{$prodotto.percentuale_sconto|default:0}"
-                                data-is-gioco="1">
-                                <i class="ti ti-pencil"></i> Modifica
-                            </button>
+    data-id="{$prodotto.id}"
+    data-nome="{$prodotto.nome|escape}"
+    data-immagine="{$prodotto.immagine}"
+    data-tipo="{$prodotto.tipo|default:'Gioco da Tavolo'|escape}"
+    data-prezzo="{$prodotto.prezzo}"
+    data-sconto="{if $prodotto.sconto}1{else}0{/if}"
+    data-percentuale-sconto="{$prodotto.percentuale_sconto|default:0}"
+    data-scadenza-sconto="{$prodotto.scadenza_sconto|default:''}"
+    data-danneggiato="{if $prodotto.danneggiato}1{else}0{/if}"
+    data-livello-danno="{$prodotto.livello_danno_attuale|default:''}"
+    data-descrizione-danno="{$prodotto.descrizione_danno_attuale|default:''}"
+    data-is-gioco="1">
+    <i class="ti ti-pencil"></i> Modifica
+</button>
                             <button type="button" class="gprod-btn-delete" onclick="eliminaProdotto(this)">
                                 <i class="ti ti-trash"></i>
                             </button>
@@ -160,7 +165,7 @@
                             Non è stato ancora pubblicato nessun gioco da tavolo.
                         {/if}
                     </p>
-                    <a href="{$base_url}/gestore/catalogo/giochi-da-tavolo/nuovo" class="gprod-btn-create">
+                    <a href="{$base_url}/gestore/crea/giochi-da-tavolo" class="gprod-btn-create">
                         <i class="ti ti-plus"></i> Crea il primo gioco
                     </a>
                 </div>
@@ -190,10 +195,10 @@
         var valueEl = card.querySelector('.gprod-stepper__value');
 
         fetch('{$base_url}/gestore/prodotti/quantita', {
-            method: 'POST',
-            headers: { 'Content-Type': 'application/json' },
-            body: JSON.stringify({ id_prodotto: idProdotto, delta_quantita: delta })
-        })
+    method: 'POST',
+    headers: { 'X-Requested-With': 'XMLHttpRequest' },
+    body: new URLSearchParams({ id_prodotto: idProdotto, delta_quantita: delta })
+})
         .then(function (res) { return res.json(); })
         .then(function (data) {
             if (data.status === 'ok') {
@@ -217,10 +222,10 @@
         var idProdotto = card.dataset.idProdotto;
 
         fetch('{$base_url}/gestore/catalogo/prodotto/elimina', {
-            method: 'POST',
-            headers: { 'Content-Type': 'application/json' },
-            body: JSON.stringify({ id_prodotto: idProdotto })
-        })
+    method: 'POST',
+    headers: { 'X-Requested-With': 'XMLHttpRequest' },
+    body: new URLSearchParams({ id_prodotto: idProdotto })
+})
         .then(function (res) { return res.json(); })
         .then(function (data) {
             if (data.status === 'ok') {
@@ -231,8 +236,20 @@
         })
         .catch(function () { alert('Errore di rete durante la rimozione del prodotto.'); });
     }
+
+    function gestisciRicercaVuota(form) {
+    var input = form.querySelector('input[name="q"]');
+    if (input.value.trim() === '') {
+        // Query vuota: reindirizza al catalogo senza il parametro q,
+        // invece di inviare q="" (che il controller tratterebbe come ricerca)
+        window.location.href = '{$base_url}/gestore/catalogo/giochi-da-tavolo';
+        return false; // blocca il submit naturale del form
+    }
+    return true; // query valida, invia normalmente
+}
+
 </script>
 
-{include file="gestore_modifica_prodotto.tpl"}
+{include file="gestore_modifica_gioco.tpl"}
 
 {/block}

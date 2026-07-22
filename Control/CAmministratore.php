@@ -42,8 +42,7 @@ class CAmministratore extends BaseController {
         $utentiSospesiTotali = FPersistentManager::PMcontaUtentiSospesiTotali(); 
         $utentiSospesiOggi = FPersistentManager::PMcontaUtentiSospesiOggi(); 
 
-        //TODO: aggiungere ordinamento in base alla gravità delle motivazioni delle segnalazioni?
-        $segnalazioniUrgentiGrezze = FPersistentManager::PMgetSegnalazioniUrgenti('ASC', 5); //TODO: DA CAMBIARE, NE SERVONO 5 MA BISOGNA ORDINARE I CASE DI GRAVITAMOTIVAZIONE
+        $segnalazioniUrgentiGrezze = FPersistentManager::PMgetSegnalazioniUrgenti('ASC', 5); 
         $segnalazioniUrgenti = $this->segnalazioniToArray($segnalazioniUrgentiGrezze); 
 
         //Impacchettiamo i dati per Presentation
@@ -67,14 +66,17 @@ class CAmministratore extends BaseController {
      * URL: GET /admin/utenti
      */
     public function mostraListaUtentiAdmin(): void {
-        $righeGrezze = FPersistentManager::PMfindUtentiConRecensioniSegnalate('DESC'); //restituisce ['utente' => EUtente, 'numeroSegnalazioni' => int]
+        $datiGrezzi = FPersistentManager::PMfindUtentiConRecensioniSegnalate('DESC'); //restituisce ['risultati' => [['utente' => EUtente, 'numeroSegnalazioni' => int],[],...], 'totale' => int]
+
+        //Estraiamo la lista dei risultati (o array vuoto se non ce ne sono)
+        $listaRisultati = $datiGrezzi['risultati'] ?? [];
 
         $utenti = array_map(
             fn($riga) => $this->utenteAdminToArray($riga['utente'], $riga['numeroSegnalazioni']),
-            $righeGrezze
+            $listaRisultati
         );
 
-        $datiLayout = $this->preparaDatiLayout('admin_lista_utenti', ['utenti' => $utenti]);
+        $datiLayout = $this->preparaDatiLayout('admin_lista_utenti', ['utenti' => $utenti, 'totale' => $datiGrezzi['totale'] ?? count($utenti)]);
 
         ViewAdminFactory::mostraListaUtenti($datiLayout);
     }
@@ -129,14 +131,16 @@ class CAmministratore extends BaseController {
      * URL: GET /admin/recensioni
      */
     public function mostraListaRecensioniAdmin(): void {
-        $righeGrezze = FPersistentManager::PMfindRecensioniConSegnalazioni('DESC'); //restituisce ['recensione' => ERecensione, 'numeroSegnalazioni' => int]
+        $righeGrezze = FPersistentManager::PMfindRecensioniConSegnalazioni('DESC'); //restituisce ['risultati' => [['recensione' => EUtente, 'numerosegnalazioni' => int],[],...], 'totale' => int]
+
+        $listaRisultati = $datiGrezzi['risultati'] ?? [];
 
         $recensioni = array_map(
-            fn($riga) => $this->recensioneAdminToArray($riga['recensione'], $riga['numeroSegnalazioni']),
-            $righeGrezze
+            fn($riga) => $this->recensioneAdminToArray($riga['recensione'], $riga['numerosegnalazioni']),
+            $listaRisultati
         );
 
-        $datiLayout = $this->preparaDatiLayout('admin_lista_recensioni', ['recensioni' => $recensioni]);
+        $datiLayout = $this->preparaDatiLayout('admin_lista_recensioni', ['recensioni' => $recensioni, 'totale' => $datiGrezzi['totale'] ?? count($recensioni)]);
 
         ViewAdminFactory::mostraListaRecensioni($datiLayout);
 

@@ -61,7 +61,18 @@ abstract class BaseController {
             'gestore',
             'amministratore',
         ];
+
+        //Blocco della cache browser per utenti loggati
+        if ($this->isLoggedIn()) {
+            header("Cache-Control: no-cache, must-revalidate");
+            header("Pragma: no-cache");
+            header("Expires: 0");
+        }
+
+        $this->controllaRememberMe();
     }
+
+
 
     /**
      * Prepara i dati globali richiesti dal layout prima di passarli alla View reale.
@@ -160,6 +171,25 @@ abstract class BaseController {
             header("HTTP/1.1 403 Forbidden");
             echo "Errore 403 - Accesso Negato: Non hai i permessi necessari per accedere a questa risorsa."; //Error 403: utente loggato ma con ruolo sbagliato
             exit();
+        }
+    }
+
+    /**
+     * 
+     */
+    protected function reindirizzaAdminGestore(): void {
+        if ($this->isLoggedIn()) {
+            $ruolo = USession::getSessionElement('ruolo');
+
+            if ($ruolo === 'gestore') {
+                header("Location: " . BASE_URL . "/gestore/dashboard");
+                exit();
+            }
+
+            if ($ruolo === 'amministratore') {
+                header("Location: " . BASE_URL . "/admin/dashboard");
+                exit();
+            }
         }
     }
 
