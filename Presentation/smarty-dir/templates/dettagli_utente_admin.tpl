@@ -26,16 +26,20 @@
         </div>
 
         <div class="profile-header__actions">
-            <form action="{$base_url}/admin/utente/sospendi" method="post"
-                  data-confirm-message="Sospendere {$utenteProfilo.nome} per 3 mesi? Non potrà accedere al proprio account fino alla scadenza.">
-                <input type="hidden" name="id_persona" value="{$utenteProfilo.id}">
-                <button type="submit" class="btn btn--warning">Sospendi</button>
-            </form>
-            <form action="{$base_url}/admin/utente/banna" method="post"
-                  data-confirm-message="Bannare {$utenteProfilo.nome} in modo permanente? L'account non potrà più essere riattivato.">
-                <input type="hidden" name="id_persona" value="{$utenteProfilonte.id}">
-                <button type="submit" class="btn btn--danger">Banna</button>
-            </form>
+            {if $utenteProfilo.stato != 'bannato' && $utenteProfilo.stato != 'sospeso'}
+                <form action="{$base_url}/admin/utente/sospendi" method="post"
+                      data-confirm-message="Sospendere {$utenteProfilo.nome} per 3 mesi? Non potrà accedere al proprio account fino alla scadenza.">
+                    <input type="hidden" name="id_persona" value="{$utenteProfilo.id}">
+                    <button type="submit" class="btn btn--warning">Sospendi</button>
+                </form>
+            {/if}
+            {if $utenteProfilo.stato != 'bannato'}
+                <form action="{$base_url}/admin/utente/banna" method="post"
+                      data-confirm-message="Bannare {$utenteProfilo.nome} in modo permanente? L'account non potrà più essere riattivato.">
+                    <input type="hidden" name="id_persona" value="{$utenteProfilo.id}">
+                    <button type="submit" class="btn btn--danger">Banna</button>
+                </form>
+            {/if}
         </div>
     </div>
 
