@@ -13,7 +13,7 @@ require_once __DIR__ . '/config.php';
 
 //Caricamento delle dipendenze
 require_once __DIR__ . '/vendor/autoload.php';
-require_once __DIR__ . '/bootstrap.php';
+//require_once __DIR__ . '/bootstrap.php';
 
 use TableCrown\Control\CFrontController;
 use TableCrown\Control\BaseController;
@@ -24,14 +24,14 @@ use TableCrown\Utility\UHTTPMethods;
 $url = isset($_GET['url']) ? '/' . rtrim($_GET['url'], '/') : '/';
 
 // --- TEST DATABASE DA CANCELLARE DOPO ---
-try {
+/*try {
     $em = getEntityManagerBoot();
     $em->getConnection()->connect();
     echo "<div style='background: green; color: white; padding: 10px;'>Connessione al Database: SUCCESSO!</div>";
 } catch (\Exception $e) {
     echo "<div style='background: red; color: white; padding: 10px;'>ERRORE DATABASE: " . $e->getMessage() . "</div>";
     die(); // Blocca tutto e mostra l'errore
-}
+}*/
 // ----------------------------------------
 
 
