@@ -154,7 +154,7 @@ class CCheckout extends BaseController {
 
                 //Verifica specifica sulla quantità disponibile
                 if ($prodotto->getQuantita() < $quantitaRichiesta) {
-                    throw new \RuntimeException("La quantità richiesta per '" . $prodotto->getNomeProdotto() . "' supera quella disponibile in magazzino.");
+                    throw new \RuntimeException("La quantità richiesta per '" . $prodotto->getNomeProdotto() . "' supera quella disponibile in magazzino. Quantità disponibile in magazzino: " . $prodotto->getQuantita());
                 }
 
                 //Utilizziamo i metodi specifici di dominio della classe EProdotto:
