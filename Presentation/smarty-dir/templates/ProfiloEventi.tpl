@@ -79,7 +79,7 @@
                         <div class="mieeventi-card-body">
 
                             <div class="mieeventi-card-top">
-                                <a href="{$base_url}/{$evento.tipoEvento|default:''|escape}/{$evento.idEvento|escape}" class="mieeventi-nome">
+                                <a href="{$base_url}/eventi/dettaglio?id={$evento.idEvento|escape}" class="mieeventi-nome">
                                     {$evento.nomeEvento|escape}
                                 </a>
                             </div>
@@ -142,7 +142,7 @@
                                         </div>
                                     {/if}
                                     {if isset($evento.challenge)}
-                                        <a href="{$base_url}/challenge/{$evento.challenge.idEvento|escape}" class="mieeventi-info-row mieeventi-info-row-link">
+                                        <a href="{$base_url}/eventi/dettaglio?id={$evento.challenge.idEvento|escape}" class="mieeventi-info-row mieeventi-info-row-link">
                                             <i class="ti ti-swords"></i>
                                             <span class="mieeventi-info-label">Fa parte di:</span>
                                             <span class="mieeventi-info-value">{$evento.challenge.nomeEvento|escape}</span>
@@ -164,7 +164,7 @@
                                         </div>
                                         <div class="mieeventi-sotto-tornei">
                                             {foreach $evento.tornei as $torneo}
-                                                <a href="{$base_url}/torneo/{$torneo.idEvento|escape}" class="mieeventi-sotto-torneo-link">
+                                                <a href="{$base_url}/eventi/dettaglio?id={$torneo.idEvento|escape}" class="mieeventi-sotto-torneo-link">
                                                     <i class="ti ti-corner-down-right"></i> {$torneo.nomeEvento|escape}
                                                 </a>
                                             {/foreach}
@@ -202,7 +202,7 @@
                             <div class="mieeventi-actions">
                                 {if isset($evento.tipoEvento) && $evento.tipoEvento == 'serata'}
 
-                                    <a href="{$base_url}/{$evento.tipoEvento|escape}/{$evento.idEvento|escape}" class="mieeventi-btn-secondary">
+                                    <a href="{$base_url}/eventi/dettaglio?id={$evento.idEvento|escape}" class="mieeventi-btn-secondary">
                                         <i class="ti ti-info-circle"></i> Maggiori info
                                     </a>
 
@@ -214,11 +214,11 @@
 
                                 {elseif isset($evento.tipoEvento)}
                                     {if $evento.statoEvento == 'in programma'}
-                                        <a href="{$base_url}/{$evento.tipoEvento|escape}/{$evento.idEvento|escape}" class="mieeventi-btn-secondary">
+                                        <a href="{$base_url}/eventi/dettaglio?id={$evento.idEvento|escape}" class="mieeventi-btn-secondary">
                                             <i class="ti ti-info-circle"></i> Maggiori info
                                         </a>
                                     {else}
-                                        <a href="{$base_url}/{$evento.tipoEvento|escape}/{$evento.idEvento|escape}#classifica" class="mieeventi-btn-secondary">
+                                        <a href="{$base_url}/eventi/dettaglio?id={$evento.idEvento|escape}#classifica" class="mieeventi-btn-secondary">
                                             <i class="ti ti-trophy"></i> Esito
                                         </a>
                                     {/if}
