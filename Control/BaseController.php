@@ -601,10 +601,12 @@ abstract class BaseController {
      * (considera solo i campi comuni a tutti i tipi di evento)
      */
     protected function eventoToArray(EEvento $evento): array {
+        $immagineRaw = $evento->getImgEvento();
+
         return [
             'idEvento'          => (int) $evento->getIdEvento(),
             'nomeEvento'        => $evento->getNomeEvento(),
-            'imgEvento'         => $evento->getImgEvento() ? base64_encode($evento->getImgEvento()) : null,
+            'imgEvento'         => $immagineRaw ? base64_encode($immagineRaw) : null,
             'dataInizio'        => $evento->getDataInizio()->format('Y-m-d H:i:s'),
             'maxPartecipanti'   => $evento->getMaxPartecipanti(),
             'statoEvento'       => $evento->getStatoEvento()->value, //valori non ancora "puliti", da rivedere se/quando serve esporli come identificatore tecnico altrove
