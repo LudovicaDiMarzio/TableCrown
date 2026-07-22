@@ -175,6 +175,7 @@ class CIndirizzo extends BaseController {
     public function eliminaIndirizzo(): void {
         $utente = $this->utenteCorrente();
         $isAjax = UHTTPMethods::isAjax();
+        $referer = UHTTPMethods::getReferer(BASE_URL . '/profilo/indirizzi');
 
         try {
             $idIndirizzo = UHTTPMethods::postInt('id_indirizzo');
@@ -211,12 +212,16 @@ class CIndirizzo extends BaseController {
 
             if ($isAjax) {
                 header('Content-Type: application/json');
-                echo json_encode(['status' => 'ok', 'message' => 'Indirizzo eliminato con successo!']);
+                echo json_encode([
+                    'status' => 'ok', 
+                    'message' => 'Indirizzo eliminato con successo!',
+                    'idIndirizzo' => $idIndirizzo,
+                    ]);
                 exit();
             }
 
             UFlashMessage::addMessage('success', 'Indirizzo eliminato con successo!');
-            header('Location: ' . BASE_URL . '/profilo/indirizzi');
+            header('Location: ' . $referer);
             exit();
 
         } catch (\Exception $e) {
@@ -227,7 +232,7 @@ class CIndirizzo extends BaseController {
             }
 
             UFlashMessage::addMessage('danger', $e->getMessage());
-            header('Location: ' . BASE_URL . '/profilo/indirizzi');
+            header('Location: ' . $referer);
             exit();
         }
     }
