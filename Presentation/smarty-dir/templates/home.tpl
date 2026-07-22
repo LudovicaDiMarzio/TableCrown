@@ -31,7 +31,7 @@
     <div class="hero-carousel" id="home-carousel">
         <div class="carousel-inner" id="carousel-inner">
             <div class="carousel-item">
-                <img src="{$base_url}/img/carousel/slide1.jpg" alt="Nuovi Giochi da Tavolo">
+                <img src="{$base_url}/public/img/carousel/slide1.jpg" alt="Nuovi Giochi da Tavolo">
                 <div class="carousel-caption">
                     <h2 class="title is-3 has-text-white">Esplora le ultime novità</h2>
                     <p class="subtitle is-5 has-text-warning">I migliori titoli del 2026 arrivano su TableCrown</p>
@@ -39,14 +39,14 @@
             </div>
 
             <div class="carousel-item">
-                <img src="{$base_url}/img/carousel/slide2.jpg" alt="Eventi e Tornei">
+                <img src="{$base_url}/public/img/carousel/slide2.jpg" alt="Eventi e Tornei">
                 <div class="carousel-caption">
                     <h2 class="title is-3 has-text-white">Tornei della Settimana</h2>
                     <p class="subtitle is-5 has-text-warning">Iscriviti agli eventi ufficiali in Abruzzo</p>
                 </div>
             </div>
             <div class="carousel-item">
-                <img src="{$base_url}/img/carousel/slide3.jpg" alt="Offerte Speciali">
+                <img src="{$base_url}/public/img/carousel/slide3.jpg" alt="Offerte Speciali">
                 <div class="carousel-caption">
                     <h2 class="title is-3 has-text-white">Sconti folli di Primavera</h2>
                     <p class="subtitle is-5 has-text-warning">Fino al 40% di sconto sui giochi di strategia</p>
@@ -319,6 +319,7 @@
 
 {block name="extra_js"}
 <script>
+{literal}
     $(document).ready(function() {
         let currentSlide = 0;
         const totalSlides = 3;
@@ -336,6 +337,7 @@
             moveSlide(currentSlide + 1);
         }, 5000);
     });
+{/literal}    
 </script>
 
 
