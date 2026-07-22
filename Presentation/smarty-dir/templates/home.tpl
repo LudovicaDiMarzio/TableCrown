@@ -81,8 +81,13 @@
                             <div class="card home-card-fixed">
                                 <div class="card-image">
                                     <figure class="image-container-fixed">
-                                        <img src="{$immagineSrc}" alt="{$prodotto.nome|escape}" />
-                                    </figure>
+    {if $prodotto.disponibilita == 'esaurito'}
+        <span class="badge-stato badge-esaurito">Esaurito</span>
+    {elseif $prodotto.disponibilita == 'in_arrivo'}
+        <span class="badge-stato badge-in-arrivo">In arrivo</span>
+    {/if}
+    <img src="{$immagineSrc}" alt="{$prodotto.nome|escape}" />
+</figure>
                                 </div>
                                 <div class="card-content">
                                     <p class="card-title-custom">{$prodotto.nome|escape}</p>
@@ -164,8 +169,13 @@
                             <div class="card home-card-fixed">
                                 <div class="card-image">
                                     <figure class="image-container-fixed">
-                                        <img src="{$immagineSrc}" alt="{$prodotto.nome|escape}" />
-                                    </figure>
+    {if $prodotto.disponibilita == 'esaurito'}
+        <span class="badge-stato badge-esaurito">Esaurito</span>
+    {elseif $prodotto.disponibilita == 'in_arrivo'}
+        <span class="badge-stato badge-in-arrivo">In arrivo</span>
+    {/if}
+    <img src="{$immagineSrc}" alt="{$prodotto.nome|escape}" />
+</figure>
                                 </div>
                                 <div class="card-content">
                                     <p class="card-title-custom">{$prodotto.nome|escape}</p>
