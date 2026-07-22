@@ -68,13 +68,20 @@ class CAmministratore extends BaseController {
     public function mostraListaUtentiAdmin(): void {
         $datiGrezzi = FPersistentManager::PMfindUtentiConRecensioniSegnalate('DESC'); //restituisce ['risultati' => [['utente' => EUtente, 'numeroSegnalazioni' => int],[],...], 'totale' => int]
 
-        //Estraiamo la lista dei risultati (o array vuoto se non ce ne sono)
-        $listaRisultati = $datiGrezzi['risultati'] ?? [];
+        //Gestione difensiva se $datiGrezzi è null o non ha la chiave 'risultati'
+        $listaRisultati = $datiGrezzi['risultati'] ?? (is_array($datiGrezzi) ? $datiGrezzi : null);
 
-        $utenti = array_map(
-            fn($riga) => $this->utenteAdminToArray($riga['utente'], $riga['numeroSegnalazioni']),
-            $listaRisultati
-        );
+        $utenti = [];
+        foreach ($listaRisultati as $riga) {
+            if (!is_array($riga)) {
+                continue;
+            }
+            $utente = $riga['utente'] ?? null;
+            $numeroSegnalazioni = $riga['numeroSegnalazioni'] ?? 0;
+            if ($utente instanceof EUtente) { //verifichiamo se abbiamo un'istanza valida di EUtente
+                $utenti[] = $this->utenteAdminToArray($utente, $numeroSegnalazioni);
+            }
+        }
 
         $datiLayout = $this->preparaDatiLayout('admin_lista_utenti', ['utenti' => $utenti, 'totale' => $datiGrezzi['totale'] ?? count($utenti)]);
 
@@ -96,7 +103,7 @@ class CAmministratore extends BaseController {
         $idUtente = (int) $idUtenteRaw;
 
         //Recuperiamo l'utente specifico
-        $utente = FPersistentManager::PMgetObjOnAttribute(EUtente::class, 'idPersona', $idUtente);
+        $utente = FPersistentManager::PMgetObjOnAttribute(EUtente::class, 'idpersona', $idUtente);
 
         if (!$utente) {
             UFlashMessage::addMessage('danger', 'L\'utente non esiste.');
@@ -131,16 +138,24 @@ class CAmministratore extends BaseController {
      * URL: GET /admin/recensioni
      */
     public function mostraListaRecensioniAdmin(): void {
-        $righeGrezze = FPersistentManager::PMfindRecensioniConSegnalazioni('DESC'); //restituisce ['risultati' => [['recensione' => EUtente, 'numerosegnalazioni' => int],[],...], 'totale' => int]
+        $righeGrezze = FPersistentManager::PMfindRecensioniConSegnalazioni('DESC'); //restituisce ['risultati' => [['recensione' => ERecensione, 'numerosegnalazioni' => int],[],...], 'totale' => int]
 
-        $listaRisultati = $datiGrezzi['risultati'] ?? [];
+        $listaRisultati = $righeGrezze['risultati'] ?? [];
 
-        $recensioni = array_map(
-            fn($riga) => $this->recensioneAdminToArray($riga['recensione'], $riga['numerosegnalazioni']),
-            $listaRisultati
-        );
+        $recensioni = [];
+        foreach ($listaRisultati as $riga) {
+            $recensione = $riga['recensione'] ?? null;
+            $numeroSegnalazioni = $riga['numerosegnalazioni'] ?? 0;
 
-        $datiLayout = $this->preparaDatiLayout('admin_lista_recensioni', ['recensioni' => $recensioni, 'totale' => $datiGrezzi['totale'] ?? count($recensioni)]);
+            $recensioni[] = $this->recensioneAdminToArray($recensione, (int)$numeroSegnalazioni);
+        }
+        
+        $datiPagina = [
+            'recensioni' => $recensioni,
+            'totale' => $righeGrezze['totale'] ?? count($recensioni),
+        ];
+
+        $datiLayout = $this->preparaDatiLayout('admin_lista_recensioni', $datiPagina);
 
         ViewAdminFactory::mostraListaRecensioni($datiLayout);
 
@@ -308,19 +323,22 @@ class CAmministratore extends BaseController {
             }
         }
 
+        $utente = $recensione->getUtente();
+        $prodotto = $recensione->getProdotto();
+
         return [
             'id' => $recensione->getIdRecensione(),
             'testo' => $recensione->getTesto(),
-            'data' => $recensione->getData()->format('Y-m-d H:i:s'),
+            'data' => $recensione->getData() ? $recensione->getData()->format('Y-m-d H:i:s') : null,
             'gravita' => $gravitaMax, //stringa 'bassa'|'media'|'alta'
             'idSegnalazioneDaRisolvere' => $idPuntaSegnalazione, //per POST /admin/recensioni/rigetta
             'autore' => [
-                'id' => $recensione->getUtente()->getIdPersona(),
-                'nome' => $recensione->getUtente()->getNomePersona(),
+                'id' => $utente ? $utente->getIdPersona() : null,
+                'nome' => $utente ? $utente->getNomePersona() : 'Utente Sconosciuto',
             ],
             'prodotto' => [
-                'id' => $recensione->getProdotto()->getIdProdotto(),
-                'nome' => $recensione->getProdotto()->getNomeProdotto(),
+                'id' => $prodotto ? $prodotto->getIdProdotto() : null,
+                'nome' => $prodotto ? $prodotto->getNomeProdotto() : 'Prodotto Sconosciuto',
             ],
             'numeroSegnalazioni' => $numeroSegnalazioni,
         ];

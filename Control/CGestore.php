@@ -169,7 +169,17 @@ class CGestore extends BaseController {
      * URL: GET /gestore/crea/gioco-da-tavolo
      */
     public function mostraFormCreaGiocoGestore(): void {
-        $datiPagina = ['vista' => 'gestore_creazione_gioco'];
+        $risultatoGrezzo = FPersistentManager::PMfindGiochi(filtri: [], limit: 500, offset: 0);
+        $giochiDisponibili = $this->prodottiToArray($risultatoGrezzo['risultati'] ?? []);
+        $datiPagina = [
+            'vista' => 'gestore_creazione_gioco',
+            'giochiDisponibili' => $giochiDisponibili,
+            //passiamo le opzioni direttamente per la vista nel form
+            'danno_enum' => $this->enumToOptions(LivelloDannoGiochi::cases()),
+            'difficolta_enum' => $this->enumToOptions(DifficoltaGioco::cases()),
+            'categoria_enum' => $this->enumToOptions(Categoria::cases()),
+            'lingue_enum' => array_map(fn($c) => ['value' => $c->value, 'label' => $c->name], LinguaGioco::cases()),
+            ];
 
         $datiLayout = $this->preparaDatiLayout('gestore_creazione_gioco', $datiPagina);
         ViewGestore::mostraFormCreazione($datiLayout);
@@ -213,7 +223,13 @@ class CGestore extends BaseController {
      * URL: GET /gestore/crea/torneo
      */
     public function mostraFormCreaTorneo(): void {
-        $datiPagina = ['vista' => 'gestore_creazione_torneo'];
+        $risultatoGiochi = FPersistentManager::PMfindGiochi(filtri: [], limit: 500, offset: 0);
+        $giochiDisponibili = $this->prodottiToArray($risultatoGiochi['risultati'] ?? []);
+
+        $risultatoPremi = FPersistentManager::PMfindPremiTornei();
+        $premiDisponibili = $this->prodottiToArray($risultatoPremi['risultati'] ?? []);
+
+        $datiPagina = ['vista' => 'gestore_creazione_torneo', 'giochiDisponibili' => $giochiDisponibili, 'premiDisponibili' => $premiDisponibili];
 
         $datiLayout = $this->preparaDatiLayout('gestore_creazione_torneo', $datiPagina);
         ViewGestore::mostraFormCreazione($datiLayout);
@@ -224,7 +240,22 @@ class CGestore extends BaseController {
      * URL: GET /gestore/crea/challenge
      */
     public function mostraFormCreaChallenge(): void {
-        $datiPagina = ['vista' => 'gestore_creazione_challenge'];
+        $dataOggi = date('Y-m-d H:i:s');
+        $risultatoTornei = FPersistentManager::PMfindTornei($dataOggi);
+        $tuttiTornei = $risultatoTornei['risultati'] ?? [];
+
+        //Filtriamo i tornei futuri tenendo solo quelli che non hanno ancora una challenge associata
+        $torneiLiberi = array_filter($tuttiTornei, fn($t) => $t->getChallenge() === null);
+
+        //Convertiamo in array e ri-indicizziamo con array_values
+        $torneiDisponibili = array_values(
+            array_map(fn($t) => $this->torneoToArray($t), $torneiLiberi)
+        );
+
+        $risultatoPremi = FPersistentManager::PMfindPremiChallenge();
+        $premiDisponibili = $this->prodottiToArray($risultatoPremi['risultati'] ?? []);
+
+        $datiPagina = ['vista' => 'gestore_creazione_challenge', 'torneiDisponibili' => $torneiDisponibili, 'premiDisponibili' => $premiDisponibili];
 
         $datiLayout = $this->preparaDatiLayout('gestore_creazione_challenge', $datiPagina);
         ViewGestore::mostraFormCreazione($datiLayout);
@@ -238,7 +269,7 @@ class CGestore extends BaseController {
      */
     public function mostraListaSerateGestore(): void {
         $filtroData = $this->estraiFiltroData();
-        $serate = FPersistentManager::PMfindSerate($filtroData);
+        $serate = FPersistentManager::PMfindSerateGestore($filtroData);
         $this->renderListaEventi('gestore_eventi_serate', $serate, $filtroData, modalita: 'gestore');
     }
 
@@ -247,7 +278,7 @@ class CGestore extends BaseController {
      */
     public function mostraListaTorneiGestore(): void {
         $filtroData = $this->estraiFiltroData();
-        $tornei = FPersistentManager::PMfindTornei($filtroData);
+        $tornei = FPersistentManager::PMfindTorneiGestore($filtroData);
         $this->renderListaEventi('gestore_eventi_tornei', $tornei, $filtroData, modalita: 'gestore');
     }
 
@@ -256,7 +287,7 @@ class CGestore extends BaseController {
      */
     public function mostraListaChallengeGestore(): void {
         $filtroData = $this->estraiFiltroData();
-        $challenge = FPersistentManager::PMfindChallenge($filtroData);
+        $challenge = FPersistentManager::PMfindChallengeGestore($filtroData);
         $this->renderListaEventi('gestore_eventi_challenge', $challenge, $filtroData, modalita: 'gestore');
     }
 

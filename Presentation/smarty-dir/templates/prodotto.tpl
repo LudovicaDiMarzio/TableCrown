@@ -340,75 +340,73 @@
             {if isset($recensioni) && $recensioni|@count > 0}
                 <div class="recensioni-list">
                     {foreach $recensioni as $rec}
-                        <div class="recensione-card">
-                            <div class="recensione-header">
-                                <span class="recensione-nickname">
-                                    <i class="ti ti-user"></i>
-                                    {$rec.utente|escape}
-                                </span>
-                                <div class="recensione-stars">
-                                    {assign var="voto" value=$rec.valutazione}
-                                    {foreach [1,2,3,4,5] as $s}
-                                        {if $s <= $voto}
-                                            <i class="ti ti-star-filled"></i>
-                                        {else}
-                                            <i class="ti ti-star"></i>
-                                        {/if}
-                                    {/foreach}
-                                </div>
-                            </div>
-                            <p class="recensione-testo">{$rec.testo|escape|nl2br}</p>
+    <div class="recensione-card">
+        <div class="recensione-header">
+            <span class="recensione-nickname">
+                <i class="ti ti-user"></i>
+                {$rec.utente|escape}
+            </span>
+            <div class="recensione-stars">
+                {assign var="voto" value=$rec.valutazione}
+                {foreach [1,2,3,4,5] as $s}
+                    {if $s <= $voto}
+                        <i class="ti ti-star-filled"></i>
+                    {else}
+                        <i class="ti ti-star"></i>
+                    {/if}
+                {/foreach}
+            </div>
 
-                            {if isset($utente) && $utente}
-                                <div class="recensione-azioni">
-                                    {if $rec.utente == $utente.name}
-                                        {* Confronto per nickname: recensioneToArray() non espone l'id autore.
-                                           Da irrobustire con t1 se i nickname non sono garantiti univoci. *}
-                                        <form action="{$base_url}/recensioni/elimina"
-                                              method="post"
-                                              class="form-elimina-recensione"
-                                              data-confirm="Eliminare questa recensione?">
-                                            <input type="hidden" name="id_recensione" value="{$rec.id}">
-                                            <button type="submit" class="button-link btn-elimina-recensione">
-                                                <i class="ti ti-trash"></i> Elimina
-                                            </button>
-                                        </form>
-                                    {elseif isset($motivazioni) && $motivazioni|@count > 0}
-                                        <button type="button"
-                                                class="button-link btn-segnala-recensione"
-                                                data-target="segnala-form-{$rec.id}">
-                                            <i class="ti ti-flag"></i> Segnala
+            {* Icona segnala, solo se: utente loggato, non è la propria recensione, ci sono motivi disponibili *}
+            {if isset($utente) && $utente && $rec.utente != $utente.name && isset($motivazioni) && $motivazioni|@count > 0}
+                <div class="recensione-segnala-wrapper">
+                    <button type="button"
+                            class="btn-icon-segnala"
+                            id="btn-segnala-toggle-{$rec.id}"
+                            data-target="segnala-dropdown-{$rec.id}"
+                            aria-label="Segnala recensione"
+                            aria-haspopup="true"
+                            aria-expanded="false">
+                        <i class="ti ti-exclamation-mark"></i>
+                    </button>
+
+                    <div class="segnala-dropdown" id="segnala-dropdown-{$rec.id}" style="display:none;">
+                        <form action="{$base_url}/recensioni/segnala" method="post">
+                            <input type="hidden" name="id_recensione" value="{$rec.id}">
+                            <p class="segnala-dropdown-title">Segnala per...</p>
+                            <ul class="segnala-dropdown-list">
+                                {foreach $motivazioni as $motivo}
+                                    <li>
+                                        <button type="submit" name="id_motivazione" value="{$motivo.id}" class="segnala-dropdown-item">
+                                            {$motivo.label|escape}
                                         </button>
+                                    </li>
+                                {/foreach}
+                            </ul>
+                        </form>
+                    </div>
+                </div>
+            {/if}
+        </div>
 
-                                        <div class="segnala-form" id="segnala-form-{$rec.id}" style="display:none;">
-                                            <form action="{$base_url}/recensioni/segnala" method="post">
-                                                <input type="hidden" name="id_recensione" value="{$rec.id}">
-                                                <div class="form-group">
-                                                    <label class="form-label" for="motivazione-{$rec.id}">Motivo della segnalazione</label>
-                                                    <select id="motivazione-{$rec.id}" name="id_motivazione" class="input" required>
-                                                        <option value="" disabled selected>Seleziona un motivo</option>
-                                                        {foreach $motivazioni as $motivo}
-                                                            <option value="{$motivo.id}">{$motivo.label|escape}</option>
-                                                        {/foreach}
-                                                    </select>
-                                                </div>
-                                                <div class="form-actions">
-                                                    <button type="submit" class="button btn-invia-segnalazione">
-                                                        <i class="ti ti-send"></i> Invia segnalazione
-                                                    </button>
-                                                    <button type="button"
-                                                            class="button btn-annulla-segnalazione"
-                                                            data-target="segnala-form-{$rec.id}">
-                                                        Annulla
-                                                    </button>
-                                                </div>
-                                            </form>
-                                        </div>
-                                    {/if}
-                                </div>
-                            {/if}
-                        </div>
-                    {/foreach}
+        <p class="recensione-testo">{$rec.testo|escape|nl2br}</p>
+
+        {* Solo elimina, riservato all'autore della recensione *}
+        {if isset($utente) && $utente && $rec.utente == $utente.name}
+            <div class="recensione-azioni">
+                <form action="{$base_url}/recensioni/elimina"
+                      method="post"
+                      class="form-elimina-recensione"
+                      data-confirm="Eliminare questa recensione?">
+                    <input type="hidden" name="id_recensione" value="{$rec.id}">
+                    <button type="submit" class="button-link btn-elimina-recensione">
+                        <i class="ti ti-trash"></i> Elimina
+                    </button>
+                </form>
+            </div>
+        {/if}
+    </div>
+{/foreach}
                 </div>
             {else}
                 <p class="recensioni-empty">Nessuna recensione ancora. Sii il primo!</p>
@@ -702,15 +700,36 @@ var WISHLIST_RIMUOVI_URL = "{$base_url}/wishlist/rimuovi";
         });
     }
 
-    // ── TOGGLE FORM SEGNALAZIONE (delegato, ce n'è uno per recensione) ──
-    document.querySelectorAll('.btn-segnala-recensione, .btn-annulla-segnalazione').forEach(function(btn) {
-        btn.addEventListener('click', function(e) {
-            e.preventDefault();
-            var target = document.getElementById(this.dataset.target);
-            if (!target) return;
-            target.style.display = target.style.display === 'block' ? 'none' : 'block';
+    // ── DROPDOWN SEGNALAZIONE (icona in alto a destra sulla card) ──
+document.querySelectorAll('.btn-icon-segnala').forEach(function(btn) {
+    btn.addEventListener('click', function(e) {
+        e.preventDefault();
+        e.stopPropagation();
+        var target = document.getElementById(this.dataset.target);
+        if (!target) return;
+        var isOpen = target.style.display === 'block';
+
+        // chiude tutti gli altri dropdown aperti prima di aprire questo
+        document.querySelectorAll('.segnala-dropdown').forEach(function(d) {
+            d.style.display = 'none';
         });
+        document.querySelectorAll('.btn-icon-segnala').forEach(function(b) {
+            b.setAttribute('aria-expanded', 'false');
+        });
+
+        target.style.display = isOpen ? 'none' : 'block';
+        this.setAttribute('aria-expanded', isOpen ? 'false' : 'true');
     });
+});
+
+document.addEventListener('click', function() {
+    document.querySelectorAll('.segnala-dropdown').forEach(function(d) {
+        d.style.display = 'none';
+    });
+    document.querySelectorAll('.btn-icon-segnala').forEach(function(b) {
+        b.setAttribute('aria-expanded', 'false');
+    });
+});
 
     // ── CONFERMA ELIMINAZIONE RECENSIONE ──
     document.querySelectorAll('.form-elimina-recensione').forEach(function(form) {

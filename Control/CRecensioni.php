@@ -221,7 +221,7 @@ class CRecensioni extends BaseController {
                 exit();
             }
             UFlashMessage::addMessage('danger', 'Parametri non validi: ' . $e->getMessage());
-            header('Location: ' . BASE_URL . '/admin/dashboard');
+            header('Location: ' . BASE_URL . '/admin/recensioni');
             exit();
         }
 
@@ -235,7 +235,7 @@ class CRecensioni extends BaseController {
                 exit();
             }
             UFlashMessage::addMessage('danger', 'La recensione non esiste o è già stata rimossa.');
-            header('Location: ' . BASE_URL . '/admin/dashboard');
+            header('Location: ' . BASE_URL . '/admin/recensioni');
             exit();
         }
 
@@ -263,7 +263,7 @@ class CRecensioni extends BaseController {
             UFlashMessage::addMessage('danger', 'Si è verificato un errore durante la rimozione della recensione.');
         }
 
-        header('Location: ' . BASE_URL . '/admin/dashboard');
+        header('Location: ' . BASE_URL . '/admin/recensioni');
         exit();
     }
 
@@ -278,15 +278,15 @@ class CRecensioni extends BaseController {
             $idSegnalazione = UHTTPMethods::postInt('id_segnalazione');
         } catch (\InvalidArgumentException $e) {
             UFlashMessage::addMessage('danger', 'Parametri non validi: ' . $e->getMessage());
-            header('Location: ' . BASE_URL . '/admin/dashboard');
+            header('Location: ' . BASE_URL . '/admin/recensioni');
             exit();
         }
 
-        $segnalazione = FPersistentManager::PMgetObjOnAttribute(ESegnalazione::class, 'idSegnalazione', $idSegnalazione);
+        $segnalazione = FPersistentManager::PMgetObjOnAttribute(ESegnalazione::class, 'idsegnalazione', $idSegnalazione);
 
         if (!$segnalazione) {
             UFlashMessage::addMessage('danger', 'La segnalazione non esiste o è già stata gestita.');
-            header('Location: ' . BASE_URL . '/admin/dashboard');
+            header('Location: ' . BASE_URL . '/admin/recensioni');
             exit();
         }
 

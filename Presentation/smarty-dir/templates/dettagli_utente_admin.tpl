@@ -14,26 +14,26 @@
     <div class="profile-header">
         <div class="profile-header__identity">
             <div class="profile-avatar">
-                <span>{$utente.nome|truncate:1:"":true|upper}</span>
+                <span>{$utenteProfilo.nome|truncate:1:"":true|upper}</span>
             </div>
             <div class="profile-header__info">
-                <h1>{$utente.nome}</h1>
+                <h1>{$utenteProfilo.nome}</h1>
                 <div class="profile-header__meta">
-                    <span class="profile-header__id">ID #{$utente.id}</span>
-                    <span class="badge badge--{$utente.stato}">{$utente.stato|replace:'_':' '}</span>
+                    <span class="profile-header__id">ID #{$utenteProfilo.id}</span>
+                    <span class="badge badge--{$utenteProfilo.stato}">{$utenteProfilo.stato|replace:'_':' '}</span>
                 </div>
             </div>
         </div>
 
         <div class="profile-header__actions">
             <form action="/admin/utente/sospendi" method="post"
-                  data-confirm-message="Sospendere {$utente.nome} per 3 mesi? Non potrà accedere al proprio account fino alla scadenza.">
-                <input type="hidden" name="id_persona" value="{$utente.id}">
+                  data-confirm-message="Sospendere {$utenteProfilo.nome} per 3 mesi? Non potrà accedere al proprio account fino alla scadenza.">
+                <input type="hidden" name="id_persona" value="{$utenteProfilo.id}">
                 <button type="submit" class="btn btn--warning">Sospendi</button>
             </form>
             <form action="/admin/utente/banna" method="post"
-                  data-confirm-message="Bannare {$utente.nome} in modo permanente? L'account non potrà più essere riattivato.">
-                <input type="hidden" name="id_persona" value="{$utente.id}">
+                  data-confirm-message="Bannare {$utenteProfilo.nome} in modo permanente? L'account non potrà più essere riattivato.">
+                <input type="hidden" name="id_persona" value="{$uteutenteProfilonte.id}">
                 <button type="submit" class="btn btn--danger">Banna</button>
             </form>
         </div>

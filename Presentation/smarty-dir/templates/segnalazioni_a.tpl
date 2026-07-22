@@ -14,7 +14,7 @@
 {extends file="layout_admin.tpl"}
 
 {block name="page_css"}
-    <link rel="stylesheet" href="/css/segnalazioni_a.css">
+    <link rel="stylesheet" href="{$base_url}/css/segnalazioni_a.css">
 {/block}
 
 {block name="content"}
@@ -26,12 +26,7 @@
             </div>
 
             <form class="segn__filtro" method="get" action="/admin/recensioni">
-                <label for="ordinamento" class="segn__filtro-label">Ordina per</label>
-                <select name="ordinamento" id="ordinamento" class="segn__filtro-select" onchange="this.form.submit()">
-                    <option value="recenti" {if $ordinamento === 'recenti'}selected{/if}>Più recenti</option>
-                    <option value="gravita" {if $ordinamento === 'gravita'}selected{/if}>Gravità</option>
-                </select>
-            </form>
+                
         </div>
 
         <div class="recensioni-list">
@@ -58,15 +53,15 @@
                     <p class="recensione-card__testo">{$r.testo}</p>
 
                     <div class="recensione-card__footer">
-                        <a href="/admin/utente/profilo?id={$r.autore.id}" class="btn btn--outline">Controlla profilo</a>
+                        <a href="{$base_url}/admin/utente/profilo?id={$r.autore.id}" class="btn btn--outline">Controlla profilo</a>
 
-                        <form method="post" action="/admin/recensioni/rigetta" class="recensione-card__form-elimina"
+                        <form method="post" action="{$base_url}/admin/recensioni/rigetta" class="recensione-card__form-elimina"
                               data-confirm-message="Rigettare questa segnalazione? La recensione resterà pubblicata.">
                             <input type="hidden" name="id_segnalazione" value="{$r.idSegnalazioneDaRisolvere}">
                             <button type="submit" class="btn btn--neutral">Rigetta segnalazione</button>
                         </form>
 
-                        <form method="post" action="/admin/recensioni/elimina" class="recensione-card__form-elimina"
+                        <form method="post" action="{$base_url}/admin/recensioni/elimina" class="recensione-card__form-elimina"
                               data-confirm-message="Eliminare definitivamente questa recensione?">
                             <input type="hidden" name="id_recensione" value="{$r.id}">
                             <input type="hidden" name="id_segnalazione" value="{$r.idSegnalazioneDaRisolvere}">
