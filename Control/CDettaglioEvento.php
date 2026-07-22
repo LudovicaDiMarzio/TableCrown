@@ -6,6 +6,7 @@ use TableCrown\Utility\UFlashMessage;
 use TableCrown\Entity\EEvento;
 use TableCrown\Entity\ETorneo;
 use TableCrown\Entity\EChallenge;
+use TableCrown\Entity\ESerata;
 use TableCrown\Entity\EPartecipazione;
 use TableCrown\Entity\ECartaDiCredito;
 use TableCrown\Foundation\FPersistentManager;
