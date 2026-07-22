@@ -25,7 +25,9 @@
                 <p>Modera le recensioni segnalate dagli utenti</p>
             </div>
 
-            
+            <form class="segn__filtro" method="get" action="/admin/recensioni">
+                
+        </div>
 
         <div class="recensioni-list">
             {foreach $recensioni as $r}
