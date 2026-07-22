@@ -211,13 +211,13 @@ body.admin-body {
     position: absolute;
     top: calc(100% + 8px);
     right: 0;
-    background: var(--bg-surface, #1e1e2d);
-    border: 1px solid var(--border-color, #333);
+    background: var(--admin-white);
+    border: 1px solid var(--admin-border);
     border-radius: 8px;
     min-width: 180px;
     padding: 6px;
     z-index: 100;
-    box-shadow: 0 8px 24px rgba(0,0,0,0.3);
+    box-shadow: 0 8px 24px rgba(0,0,0,0.15);
 }
 .admin-topbar__dropdown.is-open { display: block; }
 
@@ -227,11 +227,13 @@ body.admin-body {
     gap: 8px;
     padding: 10px 12px;
     border-radius: 6px;
-    color: inherit;
+    color: var(--admin-text);
     text-decoration: none;
     font-size: 0.9rem;
 }
-.admin-topbar__dropdown-item:hover { background: rgba(255,255,255,0.06); }
+.admin-topbar__dropdown-item:hover {
+    background: var(--admin-bg);
+}
 
 /* Modal di conferma */
 .admin-modal-overlay {
