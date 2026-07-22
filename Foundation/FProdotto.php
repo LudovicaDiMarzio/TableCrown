@@ -82,7 +82,7 @@ class FProdotto{
                 ->andWhere("o.stato = :statoCompletato")
                 ->setParameter('idUtente', $iduser)
                 ->setParameter('idProdotto', $idprodotto)
-                ->setParameter('statoCompletato', StatoOrdine::CONSEGNATO);
+                ->setParameter('statoCompletato', StatoOrdine::IN_LAVORAZIONE);
 
             $risultato = (int) $qb->getQuery()->getSingleScalarResult();
             return $risultato > 0;
@@ -119,4 +119,44 @@ class FProdotto{
             return [];
         }
     }
+
+
+    //public static function findPremi()
+
+    
+    /**
+     * @return array Array associativo con 'min' e 'max' (float)
+    */
+    /*
+    public static function getRangePrezzi(): array
+    {
+        try{
+            $qb = FEntityManager::getInstance()->getEntityManager()->createQueryBuilder();
+        
+            // Selezioniamo il valore minimo e massimo unendo il prodotto alla sua entità EPrezzo
+            $qb->select('MIN(pr.valore) AS min_price', 'MAX(pr.valore) AS max_price');
+                
+            $estremi = $qb->getQuery()->getSingleResult();
+
+            //operatore ternario, facciamo un controllo sulla condizione e scriviamo cosa fare se risulta true o false
+            //ciò che si trova prima dei : è cosa fare se la condizione è true, dopo i : cosa fare se è false
+            $prezzoMinimo = $estremi['min_price'] !== null ? (float) $estremi['min_price'] : 0.0; 
+            $prezzoMassimo = $estremi['max_price'] !== null ? (float) $estremi['max_price'] : 200.0;
+
+            $risultato=[
+                'rangemin' => $prezzoMinimo,
+                'rangemax' => $prezzoMassimo
+            ];
+            
+            return $risultato;
+
+        }
+        catch(Exception $e){
+            error_log("Errore in getRangePrezzi: " . $e->getMessage());
+            return [
+                'rangemin' => 0.0,
+                'rangemax' => 200.0
+            ];
+        }
+    }*/
 }
