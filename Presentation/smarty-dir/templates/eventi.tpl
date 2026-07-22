@@ -12,7 +12,7 @@
                 <article class="evento-card">
                     <h2 class="evento-title">Serate</h2>
                     <div class="evento-image-wrapper">
-                        <img src="{$base_url}/image/eventi/serate.jpg" alt="Serate" class="evento-image">
+                        <img src="{$base_url}/public/img/serate.jpg" alt="Serate" class="evento-image">
                     </div>
                     <p class="evento-description">Serate a tema con giochi in compagnia, musica e tanto divertimento.</p>
                     <p class="evento-tagline">Tanto divertimento e gioia</p>
@@ -23,7 +23,7 @@
                 <article class="evento-card">
                     <h2 class="evento-title">Tornei</h2>
                     <div class="evento-image-wrapper">
-                        <img src="{$base_url}/image/eventi/tornei.jpg" alt="Tornei" class="evento-image">
+                        <img src="{$base_url}/public/img/tornei.jpg" alt="Tornei" class="evento-image">
                     </div>
                     <p class="evento-description">Sfide competitive tra giocatori, premi e tornei a eliminazione.</p>
                     <p class="evento-tagline">Tanto divertimento e gioia</p>
@@ -34,7 +34,7 @@
                 <article class="evento-card">
                     <h2 class="evento-title">Challenge</h2>
                     <div class="evento-image-wrapper">
-                        <img src="{$base_url}/image/eventi/challenge.jpg" alt="Challenge" class="evento-image">
+                        <img src="{$base_url}/public/img/challenge.jpg" alt="Challenge" class="evento-image">
                     </div>
                     <p class="evento-description">Sblocca obiettivi, scala la classifica e conquista il podio.</p>
                     <p class="evento-tagline">Tanto divertimento e gioia</p>
