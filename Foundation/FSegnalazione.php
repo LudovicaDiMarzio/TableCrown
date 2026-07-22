@@ -2,6 +2,7 @@
 namespace TableCrown\Foundation;
 
 use TableCrown\Entity\ESegnalazione;
+use TableCrown\Entity\ERecensione;
 use TableCrown\Entity\EProvvedimento;
 use TableCrown\Entity\Enumerativi\GravitaMotivazione;
 use TableCrown\Entity\Enumerativi\TipoProvvedimento;
@@ -17,7 +18,7 @@ class FSegnalazione{
     public static function contaUtentiSospesiOggi(): int{
         try{
             $qb=FEntityManager::getInstance()->getEntityManager()->createQueryBuilder();
-            $qb->select('COUNT(p.idProvvediemnto)')
+            $qb->select('COUNT(p.idprovvediemnto)')
                 ->from(EProvvedimento::class, 'p')
                 ->where('p.tipoprovvedimento=:tipo')
                 ->andWhere('p.dataemissione>=:data')
@@ -95,8 +96,8 @@ class FSegnalazione{
         try{
             $qb=FEntityManager::getInstance()->getEntityManager()->createQueryBuilder();
             $qb->select('r', 'COUNT(s.idsegnalazione) AS numerosegnalazioni')
-                ->from(ESegnalazione::class, 's')
-                ->join('s.recensione', 'r')
+                ->from(ERecensione::class, 'r')
+                ->join('r.segnalazioni', 's')
                 ->where('s.statosegnalazione=:stato')
                 ->setParameter('stato', StatoSegnalazione::IN_ATTESA)
                 ->groupBy('r.idRecensione')
