@@ -135,17 +135,20 @@ class CAmministratore extends BaseController {
 
         $listaRisultati = $righeGrezze['risultati'] ?? [];
 
-        $recensioni = array_map(
-            function($riga) {
-                $recensione = $riga['recensione'] ?? null;
-                $numeroSegnalazioni = $riga['numerosegnalazioni'] ?? 0;
+        $recensioni = [];
+        foreach ($listaRisultati as $riga) {
+            $recensione = $riga['recensione'] ?? null;
+            $numeroSegnalazioni = $riga['numerosegnalazioni'] ?? 0;
 
-                return $this->recensioneAdminToArray($recensione, (int)$numeroSegnalazioni);
-            },
-            $listaRisultati
-        );
+            $recensioni[] = $this->recensioneAdminToArray($recensione, (int)$numeroSegnalazioni);
+        }
+        
+        $datiPagina = [
+            'recensioni' => $recensioni,
+            'totale' => $righeGrezze['totale'] ?? count($recensioni),
+        ];
 
-        $datiLayout = $this->preparaDatiLayout('admin_lista_recensioni', ['recensioni' => $recensioni, 'totale' => $righeGrezze['totale'] ?? count($recensioni)]);
+        $datiLayout = $this->preparaDatiLayout('admin_lista_recensioni', $datiPagina);
 
         ViewAdminFactory::mostraListaRecensioni($datiLayout);
 
@@ -313,19 +316,22 @@ class CAmministratore extends BaseController {
             }
         }
 
+        $utente = $recensione->getUtente();
+        $prodotto = $recensione->getProdotto();
+
         return [
             'id' => $recensione->getIdRecensione(),
             'testo' => $recensione->getTesto(),
-            'data' => $recensione->getData()->format('Y-m-d H:i:s'),
+            'data' => $recensione->getData() ? $recensione->getData()->format('Y-m-d H:i:s') : null,
             'gravita' => $gravitaMax, //stringa 'bassa'|'media'|'alta'
             'idSegnalazioneDaRisolvere' => $idPuntaSegnalazione, //per POST /admin/recensioni/rigetta
             'autore' => [
-                'id' => $recensione->getUtente()->getIdPersona(),
-                'nome' => $recensione->getUtente()->getNomePersona(),
+                'id' => $utente ? $utente->getIdPersona() : null,
+                'nome' => $utente ? $utente->getNomePersona() : 'Utente Sconosciuto',
             ],
             'prodotto' => [
-                'id' => $recensione->getProdotto()->getIdProdotto(),
-                'nome' => $recensione->getProdotto()->getNomeProdotto(),
+                'id' => $prodotto ? $prodotto->getIdProdotto() : null,
+                'nome' => $prodotto ? $prodotto->getNomeProdotto() : 'Prodotto Sconosciuto',
             ],
             'numeroSegnalazioni' => $numeroSegnalazioni,
         ];
