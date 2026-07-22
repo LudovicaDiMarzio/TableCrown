@@ -131,16 +131,21 @@ class CAmministratore extends BaseController {
      * URL: GET /admin/recensioni
      */
     public function mostraListaRecensioniAdmin(): void {
-        $righeGrezze = FPersistentManager::PMfindRecensioniConSegnalazioni('DESC'); //restituisce ['risultati' => [['recensione' => EUtente, 'numerosegnalazioni' => int],[],...], 'totale' => int]
+        $righeGrezze = FPersistentManager::PMfindRecensioniConSegnalazioni('DESC'); //restituisce ['risultati' => [['recensione' => ERecensione, 'numerosegnalazioni' => int],[],...], 'totale' => int]
 
-        $listaRisultati = $datiGrezzi['risultati'] ?? [];
+        $listaRisultati = $righeGrezze['risultati'] ?? [];
 
         $recensioni = array_map(
-            fn($riga) => $this->recensioneAdminToArray($riga['recensione'], $riga['numerosegnalazioni']),
+            function($riga) {
+                $recensione = $riga['recensione'] ?? null;
+                $numeroSegnalazioni = $riga['numerosegnalazioni'] ?? 0;
+
+                return $this->recensioneAdminToArray($recensione, (int)$numeroSegnalazioni);
+            },
             $listaRisultati
         );
 
-        $datiLayout = $this->preparaDatiLayout('admin_lista_recensioni', ['recensioni' => $recensioni, 'totale' => $datiGrezzi['totale'] ?? count($recensioni)]);
+        $datiLayout = $this->preparaDatiLayout('admin_lista_recensioni', ['recensioni' => $recensioni, 'totale' => $righeGrezze['totale'] ?? count($recensioni)]);
 
         ViewAdminFactory::mostraListaRecensioni($datiLayout);
 
