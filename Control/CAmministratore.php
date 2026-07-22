@@ -126,7 +126,7 @@ class CAmministratore extends BaseController {
         }
 
         $datiLayout = $this->preparaDatiLayout('admin_profilo_utente', [
-            'utente' => $this->utenteAdminToArray($utente, $conteggioSegnalazioni), 
+            'utenteProfilo' => $this->utenteAdminToArray($utente, $conteggioSegnalazioni), 
             'recensioniSegnalate' => $this->recensioniToArray($recensioniSegnalate),
         ]);
 
