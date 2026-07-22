@@ -133,7 +133,31 @@ abstract class BaseController {
      * Controlla se l'utente è loggato nella sessione globale.
      */
     public function isLoggedIn(): bool {
-        return USession::isSetSessionElement('id_persona');
+        //Controlliamo prima se l'utente ha già una sessione attiva
+        if (USession::isSetSessionElement('id_persona')) {
+            return true;
+        }
+
+        //Se non c'è sessione, verifichiamo se esiste il cookie di remember me
+        $token = UCookie::getCookie('remember_me');
+
+        if ($token !== null) {
+            //Cerchiamo l'utente sul DB associato a questo token
+            $utente = FPersistentManager::PMgetObjOnAttribute(EUtente::class, 'rememberToken', $token);
+
+            if ($utente !== null) {
+                //Ripristiniamo i dati essenziali della sessione
+                USession::setSessionElement('id_persona', $utente->getIdPersona());
+                USession::setSessionElement('nickname', $utente->getNomePersona());
+                USession::setSessionElement('ruolo', 'utente');
+                return true;
+            } else {
+                //Se il token nel cookie non trova corrispondenza nel DB (es. invalidato/scaduto), puliamo il cookie
+                UCookie::deleteCookie('remember_me');
+            }
+        }
+
+        return false;
     }
 
     /**
@@ -174,9 +198,7 @@ abstract class BaseController {
         }
     }
 
-    /**
-     * 
-     */
+    
     protected function reindirizzaAdminGestore(): void {
         if ($this->isLoggedIn()) {
             $ruolo = USession::getSessionElement('ruolo');
