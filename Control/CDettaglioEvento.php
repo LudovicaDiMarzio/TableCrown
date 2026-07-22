@@ -19,6 +19,9 @@ class CDettaglioEvento extends BaseController {
 
     public function __construct() {
         parent::__construct();
+
+        //Se è un gestore o un admin, lo spinge subito sulla sua dashboard
+        $this->reindirizzaAdminGestore();
     }
 
     /**
