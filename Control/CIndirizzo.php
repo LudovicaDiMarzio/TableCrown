@@ -199,8 +199,14 @@ class CIndirizzo extends BaseController {
 
             $eraPredefinito = $indirizzoDaEliminare->isPredefinito();
 
-            //Rimuoviamo l'indirizzo fisicamente
-            $eliminato = FPersistentManager::PMdeleteObj($indirizzoDaEliminare);
+            //Tentativo di cancellazione fisica
+            try {
+                $eliminato = FPersistentManager::PMdeleteObj($indirizzoDaEliminare);
+            } catch (\Exception $dbException) {
+                //Se va in eccezione per vincoli con la tabella ordini:
+                error_log("Errore DB cancellazione indirizzo: " . $dbException->getMessage());
+                throw new \RuntimeException("Impossibile eliminare l'indirizzo perché è collegato ad uno o più ordini effettuati.");
+            }
 
             if (!$eliminato) {
                 throw new \RuntimeException("Si è verificato un errore durante l'eliminazione dell'indirizzo.");
