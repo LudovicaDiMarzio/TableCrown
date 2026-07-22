@@ -43,7 +43,12 @@ class PortaDadiFixture extends AbstractFixture
             $prezzo = new EPrezzo($faker->randomFloat(2, 2, 15), Valuta::EUR);
 
             // 2. Peschiamo un valore a caso dall'Enum della disponibilità
-            $disponibilita = $faker->randomElement(DisponibilitaProdotto::cases());
+            $disponibilita = $overrides['disponibilita'] ?? $faker->randomElement(DisponibilitaProdotto::cases());
+            if ($disponibilita === DisponibilitaProdotto::Esaurito) {
+                $quantita = 0;
+            } else {
+                $quantita = $overrides['quantita'] ?? $faker->numberBetween(10, 100);
+            }
 
             //chiamo il costruttore di EBustine con i dati random
             $porta_dadi= new EPortaDadi(
@@ -54,6 +59,12 @@ class PortaDadiFixture extends AbstractFixture
                 imgProdotto: $immaginePredefinita,   // quantita
                 prezzo: $prezzo,                     // prezzo
                 );
+            
+            if ($disponibilita === DisponibilitaProdotto::InArrivo) {
+                $porta_dadi->rendiInArrivo();
+            } elseif ($disponibilita === DisponibilitaProdotto::NonDisponibile) {
+                $porta_dadi->rimuoviProdotto();
+            }
 
                 // salva riferimento per usarlo in altre fixture
                 $this->addReference('porta_dadi_' . $i, $porta_dadi);
