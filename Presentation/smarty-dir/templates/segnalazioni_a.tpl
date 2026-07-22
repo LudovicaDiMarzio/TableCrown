@@ -25,14 +25,7 @@
                 <p>Modera le recensioni segnalate dagli utenti</p>
             </div>
 
-            <form class="segn__filtro" method="get" action="/admin/recensioni">
-                <label for="ordinamento" class="segn__filtro-label">Ordina per</label>
-                <select name="ordinamento" id="ordinamento" class="segn__filtro-select" onchange="this.form.submit()">
-                    <option value="recenti" {if $ordinamento === 'recenti'}selected{/if}>Più recenti</option>
-                    <option value="gravita" {if $ordinamento === 'gravita'}selected{/if}>Gravità</option>
-                </select>
-            </form>
-        </div>
+            
 
         <div class="recensioni-list">
             {foreach $recensioni as $r}
