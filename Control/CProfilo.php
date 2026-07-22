@@ -119,7 +119,7 @@ class CProfilo extends BaseController {
             'vista' => 'profilo_account',
             'nomeUtente' => $utente->getNomePersona(),
             'emailUtente' => $utente->getEmailPersona(),
-            'immagineUtente' => $utente->getImgPersona(),
+            'immagineUtente' => $utente->getImgPersona() ? base64_encode($utente->getImgPersona()) : null,
             'dataNascitaUtente' => $utente->getDataNascita()->format('Y-m-d'),
         ];
 
