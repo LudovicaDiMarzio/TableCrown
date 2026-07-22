@@ -2,6 +2,8 @@
 //carica l'autoloader di composer per trovare le librerie e le classi entity
 require_once __DIR__ . '/vendor/autoload.php'; //__DIR__ restituisce il percorso assoluto del file che stiamo leggendo (/vendor/autoload.php)
 
+require_once __DIR__ . '/config.php';
+
 use Doctrine\ORM\EntityManager;
 use Doctrine\ORM\ORMSetup;
 use Doctrine\DBAL\DriverManager;
@@ -25,11 +27,12 @@ function getEntityManagerBoot(): EntityManager
 
     //configurazione dati di accesso per la connessione al db
     $conn = [
-        'driver'   => 'pdo_mysql', //tipologia di db utilizzato (MySQL)
-        'host'     => 'localhost',
-        'dbname'   => 'tablecrown',  // nome db
-        'user'     => 'root',
-        'password' => '',            // vuota in XAMPP di default
+        'driver'   => 'pdo_mysql',
+        'host'     => DB_HOST,
+        'dbname'   => DB_NAME,
+        'user'     => DB_USER,
+        'password' => DB_PASS,
+        'port'     => DB_PORT, 
         'charset'  => 'utf8'
     ];
 
