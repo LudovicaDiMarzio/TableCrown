@@ -27,17 +27,38 @@ class EventoFixture extends AbstractFixture implements DependentFixtureInterface
         ];
     }
 
+    /**
+     * Helper per caricare le immagini con la stessa logica di GiocoDaTavoloFixture.
+     * Ritorna una stringa vuota come fallback per non far crashare il costruttore di EEvento (che richiede una string).
+     */
+    private function getImmagineBinaria(string $percorsoRelativo): string 
+    {
+        $percorsoImg = dirname(__DIR__, 2) . '/public/img/' . $percorsoRelativo;
+        
+        if (file_exists($percorsoImg) && is_file($percorsoImg)) {
+            return file_get_contents($percorsoImg);
+        }
+        
+        // Il costruttore di EEvento richiede strettamente una stringa, non possiamo passare null
+        return ""; 
+    }
+
     public function load(ObjectManager $manager): void 
     {
         $faker = Factory::create('it_IT');
 
+        // 1. Carichiamo le immagini usando il path relativo corretto
+        $imgSerata = $this->getImmagineBinaria('carousel/placeholder.png');
+        $imgTorneo = $this->getImmagineBinaria('carousel/placeholder.png');
+        $imgChallenge = $this->getImmagineBinaria('carousel/placeholder.png');
+
         // ---------------------------------------------------------
-        // 1. FIXTURE PER ESerata
+        // 2. FIXTURE PER ESerata
         // ---------------------------------------------------------
         for ($i = 0; $i < 5; $i++) {
             $serata = new ESerata(
                 "Serata " . $faker->words(3, true), 
-                $faker->imageUrl(640, 480, 'nightlife'), 
+                $imgSerata, 
                 $faker->paragraph(), 
                 $faker->dateTimeBetween('+1 days', '+2 weeks'), 
                 $faker->numberBetween(10, 40), 
@@ -48,9 +69,8 @@ class EventoFixture extends AbstractFixture implements DependentFixtureInterface
         }
 
         // ---------------------------------------------------------
-        // 2. FIXTURE PER ETorneo (Singoli, non legati a Challenge)
+        // 3. FIXTURE PER ETorneo (Singoli, non legati a Challenge)
         // ---------------------------------------------------------
-        // Creiamo 4 tornei stand-alone
         for ($i = 0; $i < 4; $i++) {
             
             $quotaTorneoSingolo = new EPrezzo(10.00, Valuta::EUR);
@@ -64,7 +84,7 @@ class EventoFixture extends AbstractFixture implements DependentFixtureInterface
 
             $torneoSingolo = new ETorneo(
                 "Torneo Singolo " . $faker->words(2, true), 
-                $faker->imageUrl(640, 480, 'sports'), 
+                $imgTorneo, 
                 $faker->paragraph(), 
                 $faker->dateTimeBetween('+1 month', '+2 months'), 
                 $faker->numberBetween(8, 32), 
@@ -77,7 +97,7 @@ class EventoFixture extends AbstractFixture implements DependentFixtureInterface
         }
 
         // ---------------------------------------------------------
-        // 3. FIXTURE PER EChallenge (con i relativi tornei interni)
+        // 4. FIXTURE PER EChallenge (con i relativi tornei interni)
         // ---------------------------------------------------------
         for ($i = 0; $i < 3; $i++) {
             
@@ -97,7 +117,7 @@ class EventoFixture extends AbstractFixture implements DependentFixtureInterface
 
                 $torneo = new ETorneo(
                     "Torneo di Lega " . $faker->words(2, true), 
-                    $faker->imageUrl(640, 480, 'sports'), 
+                    $imgTorneo, 
                     $faker->paragraph(), 
                     $faker->dateTimeBetween('+2 months', '+4 months'), 
                     $faker->numberBetween(16, 64), 
@@ -119,7 +139,7 @@ class EventoFixture extends AbstractFixture implements DependentFixtureInterface
 
             $challenge = new EChallenge(
                 "Challenge " . $faker->words(2, true), 
-                $faker->imageUrl(640, 480, 'trophy'), 
+                $imgChallenge, 
                 $faker->paragraph(), 
                 $faker->dateTimeBetween('+4 months', '+6 months'), 
                 $faker->numberBetween(50, 150), 
@@ -137,11 +157,6 @@ class EventoFixture extends AbstractFixture implements DependentFixtureInterface
         $manager->flush();
     }
 
-    /**
-     * Funzione di appoggio per estrarre causalmente dal database
-     * un premio misto tra Giochi, Bustine e Porta Dadi,
-     * garantendo che lo stato sia Disponibile.
-     */
     private function getRandomPremio(\Faker\Generator $faker)
     {
         do {

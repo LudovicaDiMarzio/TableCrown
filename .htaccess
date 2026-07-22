@@ -1,23 +1,21 @@
 <IfModule mod_rewrite.c>
 RewriteEngine On
-RewriteBase /Tablecrown/
+RewriteBase /
 
-# Reindirizza le richieste di asset statici verso la cartella public/
-RewriteCond %{REQUEST_URI} ^/Tablecrown/(css|js|img|plugins)/ [NC]
+# Asset statici verso public/
+RewriteCond %{REQUEST_URI} ^/(css|js|img|plugins)/ [NC]
 RewriteRule ^(css|js|img|plugins)/(.*)$ public/$1/$2 [L]
 
-#Se la richiesta è un file o una cartella vera, servila direttamente
+# Se il file o la cartella esistono davvero, servili direttamente
 RewriteCond %{REQUEST_FILENAME} -f [OR]
 RewriteCond %{REQUEST_FILENAME} -d
 RewriteRule ^ - [L]
 
-#Altrimenti, manda tutto a index.php centrale
+# Altrimenti, tutto a index.php
 RewriteRule ^(.*)$ index.php?url=$1 [QSA,L]
 
-#Protezione di sicurezza
 <FilesMatch "^\.">
 Order Allow,Deny
 Deny from all
 </FilesMatch>
-
 </IfModule>
