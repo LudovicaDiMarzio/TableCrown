@@ -10,8 +10,8 @@
 // 'development' → 'production'
 
 //CODICE PER TEST SU XAMPP
-//define('ENVIRONMENT', 'development');
-define('ENVIRONMENT', 'production'); //development
+define('ENVIRONMENT', 'development');
+//define('ENVIRONMENT', 'production'); //development
 
 // ── BASE URL ─────────────────────────────────────────────────
 if (ENVIRONMENT === 'development') {
