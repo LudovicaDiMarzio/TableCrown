@@ -242,10 +242,9 @@ class CGestore extends BaseController {
     public function mostraFormCreaChallenge(): void {
         $dataOggi = date('Y-m-d H:i:s');
         $risultatoTornei = FPersistentManager::PMfindTornei($dataOggi);
-        $tuttiTornei = $risultatoTornei['risultati'] ?? [];
 
         //Filtriamo i tornei futuri tenendo solo quelli che non hanno ancora una challenge associata
-        $torneiLiberi = array_filter($tuttiTornei, fn($t) => $t->getChallenge() === null);
+        $torneiLiberi = array_filter($risultatoTornei, fn($t) => $t->getChallenge() === null);
 
         //Convertiamo in array e ri-indicizziamo con array_values
         $torneiDisponibili = array_values(

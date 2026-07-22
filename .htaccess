@@ -1,3 +1,27 @@
+
+# <IfModule mod_rewrite.c>
+# RewriteEngine On
+# RewriteBase /
+# 
+# # Asset statici verso public/
+# # RewriteCond %{REQUEST_URI} ^/(css|js|img|plugins)/ [NC]
+# # RewriteRule ^(css|js|img|plugins)/(.*)$ public/$1/$2 [L]
+# 
+# # Se il file o la cartella esistono davvero, servili direttamente
+# # RewriteCond %{REQUEST_FILENAME} -f [OR]
+# # RewriteCond %{REQUEST_FILENAME} -d
+# # RewriteRule ^ - [L]
+# 
+# # Altrimenti, tutto a index.php
+# # RewriteRule ^(.*)$ index.php?url=$1 [QSA,L]
+# 
+# # <FilesMatch "^\.">
+# # Order Allow,Deny
+# # Deny from all
+# # </FilesMatch>
+# # </IfModule>
+#-------------------CODICE PER TEST SU XAMPP-----------------------
+
 <IfModule mod_rewrite.c>
 RewriteEngine On
 RewriteBase /
@@ -18,4 +42,8 @@ RewriteRule ^(.*)$ index.php?url=$1 [QSA,L]
 Order Allow,Deny
 Deny from all
 </FilesMatch>
+
 </IfModule>
+
+
+

@@ -67,10 +67,15 @@
                             {* ── ARTICOLI ── *}
                             <div class="mieordini-items">
                                 {foreach $ordine.items as $item}
-                                    <div class="mieordini-item">
+    {if $item.prodotto.immagine}
+        {assign var="immagineSrc" value="data:image/jpeg;base64,`$item.prodotto.immagine`"}
+    {else}
+        {assign var="immagineSrc" value="`$base_url`/img/prodotto-default.png"}
+    {/if}
+    <div class="mieordini-item">
                                         <a href="{$base_url}/prodotto?id={$item.prodotto.id|escape}" class="mieordini-item-media">
                                             {if isset($item.prodotto.immagine) && $item.prodotto.immagine}
-                                                <img src="{$base_url}/img/prodotti/{$item.prodotto.immagine|escape}"
+                                                <img src="{$immagineSrc}"
                                                      onerror="this.onerror=null; this.src='{$base_url}/img/prodotto-default.png'"
                                                      alt="{$item.prodotto.nome|escape}"
                                                      class="mieordini-item-img">

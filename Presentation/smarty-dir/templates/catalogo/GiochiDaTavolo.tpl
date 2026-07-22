@@ -59,10 +59,11 @@
                         <option value="prezzo-asc"  {if isset($filtri.ordinamento) && $filtri.ordinamento == 'prezzo-asc'}  selected{/if}>Prezzo: crescente</option>
                         <option value="prezzo-desc" {if isset($filtri.ordinamento) && $filtri.ordinamento == 'prezzo-desc'} selected{/if}>Prezzo: decrescente</option>
                         <option value="popolarita"  {if isset($filtri.ordinamento) && $filtri.ordinamento == 'popolarita'}  selected{/if}>Più venduti</option>
-                        <option value="rating_min"      {if isset($filtri.ordinamento) && $filtri.ordinamento == 'rating_min'}      selected{/if}>Valutazione</option>
+                        <option value="rating" {if isset($filtri.ordinamento) && $filtri.ordinamento == 'rating'} selected{/if}>Valutazione</option>
                     </select>
                 </div>
             </div>
+
 
         </div>
     </section>
@@ -229,6 +230,7 @@
                     </div>
 
                     {* ── FILTRO: VALUTAZIONE ── *}
+                    {*
                     <div class="filter-group">
                         <h4 class="filter-group-title">
                             <i class="ti ti-star"></i> Valutazione
@@ -248,6 +250,7 @@
                             </div>
                         </div>
                     </div>
+                    *}
 
                     {* ── FILTRO: ETA' ── *}
                     <div class="filter-group">
@@ -554,6 +557,9 @@
 
 {block name="extra_js"}
 <script>
+    var CARRELLO_AGGIUNGI_URL = "{$base_url}/carrello/aggiungi";
+</script>
+<script>
 {literal}
 document.addEventListener('DOMContentLoaded', function() {
 
@@ -771,7 +777,7 @@ document.addEventListener('DOMContentLoaded', function() {
 
     // ── AJAX CARRELLO ──
     function aggiungiAlCarrello(idProdotto, quantita, dati) {
-        fetch('/carrello/aggiungi', {
+        fetch(CARRELLO_AGGIUNGI_URL, {
             method: 'POST',
             headers: {
                 'Content-Type': 'application/x-www-form-urlencoded',

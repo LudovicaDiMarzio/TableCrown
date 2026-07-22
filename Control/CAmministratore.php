@@ -126,7 +126,7 @@ class CAmministratore extends BaseController {
         }
 
         $datiLayout = $this->preparaDatiLayout('admin_profilo_utente', [
-            'utente' => $this->utenteAdminToArray($utente, $conteggioSegnalazioni), 
+            'utenteProfilo' => $this->utenteAdminToArray($utente, $conteggioSegnalazioni), 
             'recensioniSegnalate' => $this->recensioniToArray($recensioniSegnalate),
         ]);
 
@@ -170,26 +170,40 @@ class CAmministratore extends BaseController {
      * URL: POST /admin/utente/sospendi
      */
     public function sospendiUtenteAdmin(): void {
+        $isAjax = UHTTPMethods::isAjax();
+        //Recuperiamo la pagina di provenienza, con un fallback su /admin/dashboard
+        $referer = UHTTPMethods::getReferer(BASE_URL . '/admin/dashboard');
+
         try {
             $idUtente = UHTTPMethods::postInt('id_persona');
         } catch (\InvalidArgumentException $e) {
+            if ($isAjax) {
+                header('Content-Type: application/json');
+                echo json_encode(['status' => 'error', 'message' => $e->getMessage()]);
+                exit();
+            }
             UFlashMessage::addMessage('danger', 'Impossibile elaborare la richiesta: ' . $e->getMessage());
-            header('Location: ' . BASE_URL . '/admin/dashboard');
+            header('Location: ' . $referer);
             exit();
         }
 
         $utente = FPersistentManager::PMgetObjOnAttribute(EUtente::class, 'idpersona', $idUtente);
 
         if (!$utente) {
+            if ($isAjax) {
+                header('Content-Type: application/json');
+                echo json_encode(['status' => 'error', 'message' => 'L\'utente non esiste.']);
+                exit();
+            }
             UFlashMessage::addMessage('danger', 'L\'utente non esiste.');
-            header('Location: ' . BASE_URL . '/admin/dashboard');
+            header('Location: ' . $referer);
             exit();
         }
 
         try {
             //Calcoliamo la data di fine sospensione, aggiungendo esattamente 3 mesi alla data di oggi
             $dataFine = new DateTime();
-            $dataFine->modify(self::DURATA_SOSPENSIONE); //DA CAMBIARE: FORSE MEGLIO FARE UNA COSTANTE ALL'INIZIO TIPO DURATASOSPENSIONE E POI USARE QUELLA?
+            $dataFine->modify(self::DURATA_SOSPENSIONE); 
 
             //Applichiamo la sospensione tramite il metodo dell'entity
             $utente->sospendi($dataFine);
@@ -197,13 +211,26 @@ class CAmministratore extends BaseController {
             //Salviamo lo stato aggiornato nel DB
             FPersistentManager::PMsaveObj($utente);
 
+            $msg = 'L\'utente è stato sospeso fino al ' . $dataFine->format('d/m/Y') . '.';
+
+            if ($isAjax) {
+                header('Content-Type: application/json');
+                echo json_encode(['status' => 'ok', 'message' => $msg, 'id_persona' => $idUtente]);
+                exit();
+            }
+
             UFlashMessage::addMessage('success', 'L\'utente è stato sospeso fino al ' . $dataFine->format('d/m/Y') . '.');
         } catch (\DomainException | \InvalidArgumentException $e) {
+            if ($isAjax) {
+                header('Content-Type: application/json');
+                echo json_encode(['status' => 'error', 'message' => 'Impossibile sospendere l\'utente: ' . $e->getMessage()]);
+                exit();
+            }
             UFlashMessage::addMessage('danger', 'Impossibile sospendere l\'utente: ' . $e->getMessage());
         } 
 
         //Reindirizziamo alla pagina del profilo dell'utente appena modificato
-        header('Location: ' . BASE_URL . '/admin/utente/profilo?id=' . $idUtente);
+        header('Location: ' . $referer);
         exit();
     }
 
@@ -212,19 +239,32 @@ class CAmministratore extends BaseController {
      * URL: POST /admin/utente/banna
      */
     public function bannaUtenteAdmin(): void {
+        $isAjax = UHTTPMethods::isAjax();
+        //Recuperiamo la pagina di provenienza, con un fallback su /admin/dashboard
+        $referer = UHTTPMethods::getReferer(BASE_URL . '/admin/dashboard');
         try {
             $idUtente = UHTTPMethods::postInt('id_persona');
         } catch (\InvalidArgumentException $e) {
+            if ($isAjax) {
+                header('Content-Type: application/json');
+                echo json_encode(['status' => 'error', 'message' => 'Parametri non validi: ' . $e->getMessage()]);
+                exit();
+            }
             UFlashMessage::addMessage('danger', 'Impossibile elaborare la richiesta: ' . $e->getMessage());
-            header('Location: ' . BASE_URL . '/admin/dashboard');
+            header('Location: ' . $referer);
             exit();
         }
 
         $utente = FPersistentManager::PMgetObjOnAttribute(EUtente::class, 'idpersona', $idUtente);
 
         if (!$utente) {
+            if ($isAjax) {
+                header('Content-Type: application/json');
+                echo json_encode(['status' => 'error', 'message' => 'L\'utente non esiste.']);
+                exit();
+            }
             UFlashMessage::addMessage('danger', 'L\'utente non esiste.');
-            header('Location: ' . BASE_URL . '/admin/dashboard');
+            header('Location: ' . $referer);
             exit();
         }
 
@@ -234,12 +274,23 @@ class CAmministratore extends BaseController {
             //Salviamo lo stato del utente nel DB
             FPersistentManager::PMsaveObj($utente);
 
+            if ($isAjax) {
+                header('Content-Type: application/json');
+                echo json_encode(['status' => 'ok', 'message' => 'L\'utente è stato permanentemente bannato con successo!', 'id_persona' => $idUtente]);
+                exit();
+            }
+
             UFlashMessage::addMessage('success', 'L\'utente è stato permanentemente bannato con successo!');
         } catch (\DomainException | \InvalidArgumentException $e) {
+            if ($isAjax) {
+                header('Content-Type: application/json');
+                echo json_encode(['status' => 'error', 'message' => 'Impossibile bannare l\'utente: ' . $e->getMessage()]);
+                exit();
+            }
             UFlashMessage::addMessage('danger', 'Impossibile bannare l\'utente: ' . $e->getMessage());
         }
 
-        header('Location: ' . BASE_URL . '/admin/utente/profilo?id=' . $idUtente);
+        header('Location: ' . $referer);
         exit();
     }
 

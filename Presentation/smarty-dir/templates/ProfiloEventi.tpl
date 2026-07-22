@@ -54,7 +54,7 @@
                 {foreach $eventi as $evento}
                     <div class="mieeventi-card" id="mieeventi-card-{$evento.idEvento|escape}">
 
-                        <a href="{$base_url}/{$evento.tipoEvento|default:''|escape}/{$evento.idEvento|escape}" class="mieeventi-card-media">
+                        <a href="{$base_url}/eventi/dettaglio?id={$evento.idEvento|escape}" class="mieeventi-card-media">
                             <div class="mieeventi-card-img-placeholder">
                                 <i class="ti ti-photo"></i>
                             </div>

@@ -119,17 +119,8 @@
                            min="0" step="0.01" placeholder="0.00" required>
                     <span class="gcre-error">Inserisci una quota valida (0 se gratuito).</span>
                 </div>
-                <div class="gcre-field-group" data-field="valuta">
-                    <label class="gcre-label" for="valuta">Valuta</label>
-                    <select id="valuta" name="valuta" class="gcre-select" required>
-                        
-                            
-    <option value="EUR">Euro (€)</option>
-    
-                    </select>
-                    <span class="gcre-error">Seleziona una valuta.</span>
                 </div>
-            </div>
+            <input type="hidden" name="valuta" value="EUR">
         </div>
 
         {* ── STEP 3: Gioco e premio ── *}
@@ -357,9 +348,7 @@
         document.getElementById('riepilogoMaxTorneo').textContent = document.getElementById('maxPartecipanti').value;
 
         const quota = parseFloat(document.getElementById('valoreQuota').value || '0').toFixed(2);
-        const valutaSelect = document.getElementById('valuta');
-        const valutaLabel = valutaSelect.options[valutaSelect.selectedIndex]?.text || '';
-        document.getElementById('riepilogoQuotaTorneo').textContent = quota + ' (' + valutaLabel + ')';
+        document.getElementById('riepilogoQuotaTorneo').textContent = quota + ' €';
 
         const rawDate = document.getElementById('dataInizio_input').value;
         if (rawDate) {

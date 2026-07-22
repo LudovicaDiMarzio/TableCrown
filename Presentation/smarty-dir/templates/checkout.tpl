@@ -120,8 +120,14 @@
                                     {/foreach}
                                 </div>
                             {else}
-                                <p class="checkout-empty">Non hai indirizzi salvati. <a href="{$base_url}/profilo/indirizzi">Aggiungine uno</a>.</p>
-                            {/if}
+    <div class="checkout-empty-state">
+        <i class="ti ti-map-pin-off checkout-empty-state-icon"></i>
+        <p class="checkout-empty-state-text">Non hai indirizzi salvati.</p>
+        <a href="{$base_url}/profilo/indirizzi" class="button btn-checkout-aggiungi-indirizzo">
+            <i class="ti ti-plus"></i> Aggiungi un indirizzo
+        </a>
+    </div>
+{/if}
                         </section>
                     {/if}
 

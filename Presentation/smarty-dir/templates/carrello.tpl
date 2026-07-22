@@ -21,22 +21,27 @@
 
                     <div class="carrello-items" id="carrello-items">
                         {foreach $carrello_items as $item}
-                            {assign var="p" value=$item.prodotto}
+    {assign var="p" value=$item.prodotto}
+    {if $p.immagine}
+        {assign var="immagineSrc" value="data:image/jpeg;base64,`$p.immagine`"}
+    {else}
+        {assign var="immagineSrc" value="`$base_url`/img/default.png"}
+    {/if}
 
                             <div class="carrello-item"
                                  data-item-id="{$p.id}"
                                  data-prezzo-unitario="{$p.prezzo_unitario}"
                                  data-risparmio-unitario="{if $p.sconto}{$p.prezzo-$p.prezzo_unitario}{else}0{/if}">
 
-                                <a href="{$base_url}/prodotto/{$p.id}" class="carrello-item-img-link">
-                                    <img src="{$base_url}/img/prodotti/{$p.immagine|escape}"
+                                <a href="{$base_url}/prodotti/?id={$p.id}" class="carrello-item-img-link">
+                                    <img src="{$immagineSrc}"
                                          onerror="this.onerror=null; this.src='{$base_url}/img/default.png'"
                                          alt="{$p.nome|escape}"
                                          class="carrello-item-img">
                                 </a>
 
                                 <div class="carrello-item-info">
-                                    <a href="{$base_url}/prodotto/{$p.id}" class="carrello-item-nome">
+                                    <a href="{$base_url}/prodotto/?id={$p.id}" class="carrello-item-nome">
                                         {$p.nome|escape}
                                     </a>
 
@@ -159,10 +164,15 @@
                             <div class="correlati-wrapper">
                                 <div class="correlati-grid" id="correlati-grid">
                                     {foreach $correlati as $correlato}
-                                        <div class="correlato-card">
-                                            <a href="{$base_url}/prodotto/{$correlato.id}" class="correlato-card-link">
+    {if $correlato.immagine}
+        {assign var="immagineSrcCorrelato" value="data:image/jpeg;base64,`$correlato.immagine`"}
+    {else}
+        {assign var="immagineSrcCorrelato" value="`$base_url`/img/default.png"}
+    {/if}
+    <div class="correlato-card">
+                                            <a href="{$base_url}/prodotto/?id={$correlato.id}" class="correlato-card-link">
                                                 <div class="correlato-image-wrapper">
-                                                    <img src="{$base_url}/img/prodotti/{$correlato.immagine|escape}"
+                                                    <img src="{$immagineSrcCorrelato}"
                                                          onerror="this.onerror=null; this.src='{$base_url}/img/default.png'"
                                                          alt="{$correlato.nome|escape}"
                                                          class="correlato-image">

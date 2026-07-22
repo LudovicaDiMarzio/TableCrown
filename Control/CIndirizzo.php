@@ -3,6 +3,7 @@ namespace TableCrown\Control;
 
 use TableCrown\Utility\UHTTPMethods;
 use TableCrown\Utility\UFlashMessage;
+use TableCrown\Utility\USession;
 use TableCrown\Entity\EIndirizzo;
 use TableCrown\Foundation\FPersistentManager;
 
@@ -47,6 +48,17 @@ class CIndirizzo extends BaseController {
         $utente = $this->utenteCorrente();
         $isAjax = UHTTPMethods::isAjax();
 
+        //Gestione redirect con sessione
+        $daCheckout = USession::getSessionElement('provenienza_checkout') ?? false;
+
+        if ($daCheckout) {
+            //Consumiamo il flag così la prossima volta non rimane attivo a caso
+            USession::unsetSessionElement('provenienza_checkout');
+            $redirectUrl = BASE_URL . '/checkout';
+        } else {
+            $redirectUrl = BASE_URL . '/profilo/indirizzi';
+        }
+
         try {
             $nome = UHTTPMethods::postString('nome');
             $via = UHTTPMethods::postString('via');
@@ -79,12 +91,17 @@ class CIndirizzo extends BaseController {
 
             if ($isAjax) {
                 header('Content-Type: application/json');
-                echo json_encode(['status' => 'ok', 'message' => 'Indirizzo salvato con successo!']);
+                echo json_encode([
+                    'status' => 'ok', 
+                    'message' => 'Indirizzo salvato con successo!',
+                    'redirect' => $redirectUrl
+                    ]);
                 exit();
             }
 
             UFlashMessage::addMessage('success', 'Nuovo indirizzo salvato!');
-            header('Location: ' . BASE_URL . '/profilo/indirizzi');
+            //Reindirizza automaticamente alla pagina di provenienza
+            header('Location: ' . $redirectUrl);
             exit();
 
         } catch (\Exception $e) {
@@ -95,7 +112,7 @@ class CIndirizzo extends BaseController {
             }
 
             UFlashMessage::addMessage('danger', $e->getMessage());
-            header('Location: ' . UHTTPMethods::getReferer(BASE_URL . '/profilo/indirizzi'));
+            header('Location: ' . $redirectUrl);
             exit();
         }
     }
@@ -166,6 +183,7 @@ class CIndirizzo extends BaseController {
     public function eliminaIndirizzo(): void {
         $utente = $this->utenteCorrente();
         $isAjax = UHTTPMethods::isAjax();
+        $referer = UHTTPMethods::getReferer(BASE_URL . '/profilo/indirizzi');
 
         try {
             $idIndirizzo = UHTTPMethods::postInt('id_indirizzo');
@@ -182,8 +200,14 @@ class CIndirizzo extends BaseController {
 
             $eraPredefinito = $indirizzoDaEliminare->isPredefinito();
 
-            //Rimuoviamo l'indirizzo fisicamente
-            $eliminato = FPersistentManager::PMdeleteObj($indirizzoDaEliminare);
+            //Tentativo di cancellazione fisica
+            try {
+                $eliminato = FPersistentManager::PMdeleteObj($indirizzoDaEliminare);
+            } catch (\Exception $dbException) {
+                //Se va in eccezione per vincoli con la tabella ordini:
+                error_log("Errore DB cancellazione indirizzo: " . $dbException->getMessage());
+                throw new \RuntimeException("Impossibile eliminare l'indirizzo perché è collegato ad uno o più ordini effettuati.");
+            }
 
             if (!$eliminato) {
                 throw new \RuntimeException("Si è verificato un errore durante l'eliminazione dell'indirizzo.");
@@ -202,12 +226,16 @@ class CIndirizzo extends BaseController {
 
             if ($isAjax) {
                 header('Content-Type: application/json');
-                echo json_encode(['status' => 'ok', 'message' => 'Indirizzo eliminato con successo!']);
+                echo json_encode([
+                    'status' => 'ok', 
+                    'message' => 'Indirizzo eliminato con successo!',
+                    'idIndirizzo' => $idIndirizzo,
+                    ]);
                 exit();
             }
 
             UFlashMessage::addMessage('success', 'Indirizzo eliminato con successo!');
-            header('Location: ' . BASE_URL . '/profilo/indirizzi');
+            header('Location: ' . $referer);
             exit();
 
         } catch (\Exception $e) {
@@ -218,7 +246,7 @@ class CIndirizzo extends BaseController {
             }
 
             UFlashMessage::addMessage('danger', $e->getMessage());
-            header('Location: ' . BASE_URL . '/profilo/indirizzi');
+            header('Location: ' . $referer);
             exit();
         }
     }

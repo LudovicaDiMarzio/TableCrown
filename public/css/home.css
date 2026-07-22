@@ -607,3 +607,27 @@
 .btn-unavailable-modal:hover {
     background-color: #c8933a;
 }
+/* ── BADGE STATO PRODOTTO (esaurito / in arrivo) ──────────── */
+
+.badge-stato {
+    position: absolute;
+    top: 10px;
+    right: 10px;
+    z-index: 2;
+    padding: 0.3rem 0.7rem;
+    font-size: 0.72rem;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 0.3px;
+    border-radius: var(--radius-sm);
+    color: #fff;
+    box-shadow: 0 2px 6px rgba(0, 0, 0, 0.35);
+}
+
+.badge-esaurito {
+    background-color: #d64545;
+}
+
+.badge-in-arrivo {
+    background-color: #3b82f6;
+}

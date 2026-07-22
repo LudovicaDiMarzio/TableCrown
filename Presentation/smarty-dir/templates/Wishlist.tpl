@@ -36,14 +36,19 @@
         {if isset($wishlist) && $wishlist|@count > 0}
             <div class="wishlist-grid" id="wishlist-grid">
                 {foreach $wishlist as $prodotto}
+    {if $prodotto.immagine}
+        {assign var="immagineSrc" value="data:image/jpeg;base64,`$prodotto.immagine`"}
+    {else}
+        {assign var="immagineSrc" value="`$base_url`/img/prodotto-default.png"}
+    {/if}
                     <div class="wishlist-card {if !$prodotto.isAcquistabile}wishlist-card-esaurito{/if}"
                          data-id="{$prodotto.id|escape}"
                          id="wishlist-card-{$prodotto.id|escape}">
 
                         <div class="wishlist-card-media">
-                            <a href="{$base_url}/prodotto/{$prodotto.id|escape}">
+                            <a href="{$base_url}/prodotto/?id={$prodotto.id|escape}">
                                 {if isset($prodotto.immagine) && $prodotto.immagine}
-                                    <img src="{$base_url}/img/prodotti/{$prodotto.immagine|escape}"
+                                    <img src="{$immagineSrc}"
                                          onerror="this.onerror=null; this.src='{$base_url}/img/prodotto-default.png'"
                                          alt="{$prodotto.nome|escape}"
                                          class="wishlist-card-img">
@@ -74,7 +79,7 @@
                         </div>
 
                         <div class="wishlist-card-body">
-                            <a href="{$base_url}/prodotto/{$prodotto.id|escape}" class="wishlist-card-nome">
+                            <a href="{$base_url}/prodotto/?id={$prodotto.id|escape}" class="wishlist-card-nome">
                                 {$prodotto.nome|escape}
                             </a>
 
@@ -188,14 +193,14 @@
             var card = document.getElementById('wishlist-card-' + id);
 
             fetch('{/literal}{$base_url}{literal}/wishlist/rimuovi', {
-    method: 'POST',
-    headers: {
-        'Content-Type': 'application/x-www-form-urlencoded',
-        'X-Requested-With': 'XMLHttpRequest'
-    },
-    credentials: 'same-origin',
-    body: 'id_prodotto=' + encodeURIComponent(id)
-})
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/x-www-form-urlencoded',
+                    'X-Requested-With': 'XMLHttpRequest'
+                },
+                credentials: 'same-origin',
+                body: 'id_prodotto=' + encodeURIComponent(id)
+            })
             .then(function(response) { return response.json(); })
             .then(function(data) {
                 if (data.status === 'ok') {
@@ -222,21 +227,34 @@
 
             var id = btn.getAttribute('data-id');
 
-            fetch('{/literal}{$base_url}{literal}/wishlist/aggiungi-carrello', {
+            fetch('{/literal}{$base_url}{literal}/carrello/aggiungi', {
                 method: 'POST',
-                headers: { 'Content-Type': 'application/json' },
+                headers: {
+                    'Content-Type': 'application/x-www-form-urlencoded',
+                    'X-Requested-With': 'XMLHttpRequest'
+                },
                 credentials: 'same-origin',
-                body: JSON.stringify({ id: id })
+                body: 'id_prodotto=' + encodeURIComponent(id) + '&quantita=1'
             })
-            .then(function(response) { return response.json(); })
-            .then(function(data) {
-                if (data.status === 'ok') {
-                    mostraPopup('Prodotto aggiunto al carrello!', true);
-                } else if (data.reason === 'esaurito') {
-                    mostraPopup('Il prodotto non è più disponibile.', false);
-                } else {
-                    mostraPopup('Non è stato possibile aggiungere il prodotto, riprova più tardi.', false);
+            .then(function(response) {
+                return response.json().then(function(data) {
+                    return { httpStatus: response.status, data: data };
+                });
+            })
+            .then(function(result) {
+                var data = result.data;
+
+                if (result.httpStatus === 401 || data.error === 'auth_required') {
+                    mostraPopup('Devi effettuare l\'accesso per aggiungere prodotti al carrello.', false);
+                    return;
                 }
+
+                if (data.success === false) {
+                    mostraPopup(data.message || 'Non è stato possibile aggiungere il prodotto, riprova più tardi.', false);
+                    return;
+                }
+
+                mostraPopup('Prodotto aggiunto al carrello!', true);
             })
             .catch(function() {
                 mostraPopup('Si è verificato un errore di connessione, riprova più tardi.', false);

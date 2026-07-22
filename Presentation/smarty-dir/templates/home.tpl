@@ -81,8 +81,13 @@
                             <div class="card home-card-fixed">
                                 <div class="card-image">
                                     <figure class="image-container-fixed">
-                                        <img src="{$immagineSrc}" alt="{$prodotto.nome|escape}" />
-                                    </figure>
+    {if $prodotto.disponibilita == 'esaurito'}
+        <span class="badge-stato badge-esaurito">Esaurito</span>
+    {elseif $prodotto.disponibilita == 'in_arrivo'}
+        <span class="badge-stato badge-in-arrivo">In arrivo</span>
+    {/if}
+    <img src="{$immagineSrc}" alt="{$prodotto.nome|escape}" />
+</figure>
                                 </div>
                                 <div class="card-content">
                                     <p class="card-title-custom">{$prodotto.nome|escape}</p>
@@ -119,7 +124,7 @@
                                             data-nome="{$prodotto.nome|escape}"
                                             data-img="{$immagineSrc}"
                                             data-prezzo="{$prezzoEffettivo}">
-                                        <i class="ti ti-shopping-cart"></i> Acquista
+                                        <i class="ti ti-shopping-cart"></i> Aggiungi
                                     </button>
                                 </div>
                             </div>
@@ -164,8 +169,13 @@
                             <div class="card home-card-fixed">
                                 <div class="card-image">
                                     <figure class="image-container-fixed">
-                                        <img src="{$immagineSrc}" alt="{$prodotto.nome|escape}" />
-                                    </figure>
+    {if $prodotto.disponibilita == 'esaurito'}
+        <span class="badge-stato badge-esaurito">Esaurito</span>
+    {elseif $prodotto.disponibilita == 'in_arrivo'}
+        <span class="badge-stato badge-in-arrivo">In arrivo</span>
+    {/if}
+    <img src="{$immagineSrc}" alt="{$prodotto.nome|escape}" />
+</figure>
                                 </div>
                                 <div class="card-content">
                                     <p class="card-title-custom">{$prodotto.nome|escape}</p>
@@ -202,7 +212,7 @@
                                             data-nome="{$prodotto.nome|escape}"
                                             data-img="{$immagineSrc}"
                                             data-prezzo="{$prezzoEffettivo}">
-                                        <i class="ti ti-shopping-cart"></i> Acquista
+                                        <i class="ti ti-shopping-cart"></i> Aggiungi 
                                     </button>
                                 </div>
                             </div>
@@ -210,14 +220,7 @@
                     </div>
                 {/foreach}
 
-                <div class="card-vector-item card-vector-more">
-                    <a href="{$base_url}/catalogo?ordinamento=novita" class="more-link-wrapper" title="Vedi tutti i nuovi arrivi">
-                        <div class="more-circle-btn">
-                            <span class="more-plus-icon">+</span>
-                        </div>
-                        <span class="more-text">Vedi tutti</span>
-                    </a>
-                </div>
+    
 
             {else}
                 <p class="empty-section-message">Nessun nuovo arrivo disponibile al momento.</p>
@@ -247,7 +250,7 @@
         </div>
 
         <div class="minicart-actions">
-            <a href="{$base_url}/catalogo" class="button btn-minicart-continua">
+            <a href="{$base_url}/catalogo/giochi-da-tavolo" class="button btn-minicart-continua">
                 <i class="ti ti-arrow-left"></i> Continua Shopping
             </a>
             <a href="{$base_url}/carrello" class="button btn-minicart-ordine">
