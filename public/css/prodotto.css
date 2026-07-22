@@ -1014,6 +1014,90 @@
     font-size: 0.9rem;
 }
 
+
+/* Icona segnala recensione (in alto a destra della card) */
+.recensione-segnala-wrapper {
+    position: relative;
+    margin-left: auto; /* garantisce che resti a destra anche se il layout del header cambia */
+}
+
+.btn-icon-segnala {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 32px;
+    height: 32px;
+    border-radius: 50%;
+    background-color: transparent !important;
+    border: 1px solid var(--color-border-dark) !important;
+    color: var(--color-text-muted) !important;
+    cursor: pointer;
+    transition: background-color var(--transition), border-color var(--transition), color var(--transition);
+    padding: 0 !important;
+    font-size: 16px;
+}
+
+.btn-icon-segnala:hover,
+.btn-icon-segnala[aria-expanded="true"] {
+    background-color: rgba(239, 68, 68, 0.12) !important;
+    border-color: #f87171 !important;
+    color: #f87171 !important;
+}
+
+/* Dropdown motivi segnalazione */
+.segnala-dropdown {
+    position: absolute;
+    top: calc(100% + 8px);
+    right: 0;
+    z-index: 20;
+    min-width: 220px;
+    background-color: var(--color-bg-dark-2);
+    border: 1px solid var(--color-border-dark);
+    border-radius: var(--radius-sm);
+    box-shadow: 0 12px 32px rgba(0, 0, 0, 0.45);
+    padding: 0.75rem;
+}
+
+.segnala-dropdown-title {
+    font-size: var(--font-size-sm);
+    font-weight: 600;
+    color: var(--color-text-subtle);
+    text-transform: uppercase;
+    letter-spacing: 0.03em;
+    margin: 0 0 0.5rem 0;
+    padding-bottom: 0.5rem;
+    border-bottom: 1px solid var(--color-border-dark);
+}
+
+.segnala-dropdown-list {
+    list-style: none;
+    margin: 0;
+    padding: 0;
+    display: flex;
+    flex-direction: column;
+    gap: 2px;
+}
+
+.segnala-dropdown-item {
+    width: 100%;
+    text-align: left;
+    background: none !important;
+    border: none !important;
+    color: var(--color-text-light) !important;
+    font-size: var(--font-size-sm) !important;
+    padding: 0.5rem 0.6rem !important;
+    border-radius: var(--radius-sm) !important;
+    cursor: pointer;
+    transition: background-color var(--transition), color var(--transition);
+}
+
+.segnala-dropdown-item:hover {
+    background-color: rgba(239, 68, 68, 0.12) !important;
+    color: #f87171 !important;
+}
+
+
+
 .recensione-titolo {
     font-size: var(--font-size-md);
     font-weight: 600;

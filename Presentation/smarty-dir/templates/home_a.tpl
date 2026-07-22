@@ -64,7 +64,7 @@
                             <span class="panel__badge">{$segnalazioniInSospeso}</span>
                         {/if}
                     </h2>
-                    <a href="/admin/recensioni" class="panel__link">Vedi tutte</a>
+                    <a href="{$base_url}/admin/recensioni" class="panel__link">Vedi tutte</a>
                 </div>
 
                 <ul class="segnalazioni-list">
@@ -85,7 +85,7 @@
                                 {else}Bassa
                                 {/if}
                             </span>
-                            <a href="/admin/utente/profilo?id={$s.autoreRecensione.id}" class="btn btn--outline">Visualizza</a>
+                            <a href="{$base_url}/admin/utente/profilo?id={$s.autoreRecensione.id}" class="btn btn--outline">Visualizza</a>
                         </li>
                     {foreachelse}
                         <li class="list-empty">Nessuna segnalazione in attesa.</li>

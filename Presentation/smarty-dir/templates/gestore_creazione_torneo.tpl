@@ -122,16 +122,10 @@
                 <div class="gcre-field-group" data-field="valuta">
                     <label class="gcre-label" for="valuta">Valuta</label>
                     <select id="valuta" name="valuta" class="gcre-select" required>
-                        {if isset($valute_enum) && $valute_enum|@count > 0}
-                            {foreach $valute_enum as $v}
-                                <option value="{$v.value}">{$v.label}</option>
-                            {/foreach}
-                        {else}
-                            {* placeholder — DA VERIFICARE contro i case reali di Valuta *}
+                        
+                            
     <option value="EUR">Euro (€)</option>
-    <option value="USD">Dollaro USA ($)</option>
-    <option value="GBP">Sterlina (£)</option>
-{/if}
+    
                     </select>
                     <span class="gcre-error">Seleziona una valuta.</span>
                 </div>

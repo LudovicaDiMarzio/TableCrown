@@ -32,24 +32,20 @@
         </div>
 
         <nav class="admin-sidebar__nav">
-            <a href="/admin/dashboard" class="admin-nav__item">
+            <a href="{$base_url}/admin/dashboard" class="admin-nav__item">
                 <span class="admin-nav__icon admin-nav__icon--dashboard"></span>
                 Dashboard
             </a>
-            <a href="/admin/utenti" class="admin-nav__item">
+            <a href="{$base_url}/admin/utenti" class="admin-nav__item">
                 <span class="admin-nav__icon admin-nav__icon--utenti"></span>
                 Utenti
             </a>
-            <a href="/admin/segnalazioni" class="admin-nav__item">
+            <a href="{$base_url}/admin/recensioni" class="admin-nav__item">
                 <span class="admin-nav__icon admin-nav__icon--segnalazioni"></span>
                 Segnalazioni
                 {if $segnalazioniInAttesaCount > 0}
                     <span class="admin-nav__badge">{$segnalazioniInAttesaCount}</span>
                 {/if}
-            </a>
-            <a href="/admin/impostazioni" class="admin-nav__item">
-                <span class="admin-nav__icon admin-nav__icon--impostazioni"></span>
-                Impostazioni
             </a>
         </nav>
     </aside>
@@ -68,7 +64,7 @@
                     <span class="admin-topbar__chevron ti ti-chevron-down"></span>
                     <div class="admin-topbar__dropdown" id="adminProfileDropdown">
 
-                        <a href="/logout" class="admin-topbar__dropdown-item">
+                        <a href="{$base_url}/logout" class="admin-topbar__dropdown-item">
                             <span class="ti ti-logout"></span> Esci
                         </a>
                     </div>

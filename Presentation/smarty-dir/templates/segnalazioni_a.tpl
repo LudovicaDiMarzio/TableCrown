@@ -14,7 +14,7 @@
 {extends file="layout_admin.tpl"}
 
 {block name="page_css"}
-    <link rel="stylesheet" href="/css/segnalazioni_a.css">
+    <link rel="stylesheet" href="{$base_url}/css/segnalazioni_a.css">
 {/block}
 
 {block name="content"}
