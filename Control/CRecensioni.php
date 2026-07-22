@@ -277,11 +277,17 @@ class CRecensioni extends BaseController {
      */
     public function rigettaSegnalazioneAdmin(): void {
         $this->requireRole('amministratore');
+        $isAjax = UHTTPMethods::isAjax();
         $referer = UHTTPMethods::getReferer(BASE_URL . '/admin/recensioni');
 
         try {
             $idSegnalazione = UHTTPMethods::postInt('id_segnalazione');
         } catch (\InvalidArgumentException $e) {
+            if ($isAjax) {
+                header('Content-Type: application/json');
+                echo json_encode(['status' => 'error', 'message' => $e->getMessage()]);
+                exit();
+            }
             UFlashMessage::addMessage('danger', 'Parametri non validi: ' . $e->getMessage());
             header('Location: ' . $referer);
             exit();
@@ -291,6 +297,11 @@ class CRecensioni extends BaseController {
 
         //Verifichiamo che esista una segnalazione
         if (!$segnalazione) {
+            if ($isAjax) {
+                header('Content-Type: application/json');
+                echo json_encode(['status' => 'error', 'message' => 'La segnalazione non esiste o è già stata gestita.']);
+                exit();
+            }
             UFlashMessage::addMessage('danger', 'La segnalazione non esiste o è già stata gestita.');
             header('Location: ' . $referer);
             exit();
@@ -298,6 +309,11 @@ class CRecensioni extends BaseController {
 
         //Verifichiamo se è già stata risolta/gestita!
         if ($segnalazione->getStatoSegnalazione() === StatoSegnalazione::RISOLTA) {
+            if ($isAjax) {
+                header('Content-Type: application/json');
+                echo json_encode(['status' => 'error', 'message' => 'Questa segnalazione è già stata risolta/gestita.']);
+                exit();
+            }
             UFlashMessage::addMessage('warning', 'Questa segnalazione è già stata risolta/gestita.');
             header('Location: ' . $referer);
             exit();
@@ -306,8 +322,20 @@ class CRecensioni extends BaseController {
         try {
             $segnalazione->risolvi();
             FPersistentManager::PMsaveObj($segnalazione);
+
+            if ($isAjax) {
+                header('Content-Type: application/json');
+                echo json_encode(['status' => 'ok', 'message' => 'La segnalazione è stata rigettata; la recensione resta pubblicata.']);
+                exit();
+            }
+
             UFlashMessage::addMessage('success', 'La segnalazione è stata rigettata; la recensione resta pubblicata.');
         } catch (\DomainException | \InvalidArgumentException $e) {
+            if ($isAjax) {
+                header('Content-Type: application/json');
+                echo json_encode(['status' => 'error', 'message' => 'Impossibile rigettare la segnalazione: ' . $e->getMessage()]);
+                exit();
+            }
             UFlashMessage::addMessage('danger', 'Impossibile rigettare la segnalazione: ' . $e->getMessage());
         }
 

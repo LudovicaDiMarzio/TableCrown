@@ -170,11 +170,18 @@ class CAmministratore extends BaseController {
      * URL: POST /admin/utente/sospendi
      */
     public function sospendiUtenteAdmin(): void {
+        $isAjax = UHTTPMethods::isAjax();
         //Recuperiamo la pagina di provenienza, con un fallback su /admin/dashboard
         $referer = UHTTPMethods::getReferer(BASE_URL . '/admin/dashboard');
+
         try {
             $idUtente = UHTTPMethods::postInt('id_persona');
         } catch (\InvalidArgumentException $e) {
+            if ($isAjax) {
+                header('Content-Type: application/json');
+                echo json_encode(['status' => 'error', 'message' => $e->getMessage()]);
+                exit();
+            }
             UFlashMessage::addMessage('danger', 'Impossibile elaborare la richiesta: ' . $e->getMessage());
             header('Location: ' . $referer);
             exit();
@@ -183,6 +190,11 @@ class CAmministratore extends BaseController {
         $utente = FPersistentManager::PMgetObjOnAttribute(EUtente::class, 'idpersona', $idUtente);
 
         if (!$utente) {
+            if ($isAjax) {
+                header('Content-Type: application/json');
+                echo json_encode(['status' => 'error', 'message' => 'L\'utente non esiste.']);
+                exit();
+            }
             UFlashMessage::addMessage('danger', 'L\'utente non esiste.');
             header('Location: ' . $referer);
             exit();
@@ -199,8 +211,21 @@ class CAmministratore extends BaseController {
             //Salviamo lo stato aggiornato nel DB
             FPersistentManager::PMsaveObj($utente);
 
+            $msg = 'L\'utente è stato sospeso fino al ' . $dataFine->format('d/m/Y') . '.';
+
+            if ($isAjax) {
+                header('Content-Type: application/json');
+                echo json_encode(['status' => 'ok', 'message' => $msg, 'id_persona' => $idUtente]);
+                exit();
+            }
+
             UFlashMessage::addMessage('success', 'L\'utente è stato sospeso fino al ' . $dataFine->format('d/m/Y') . '.');
         } catch (\DomainException | \InvalidArgumentException $e) {
+            if ($isAjax) {
+                header('Content-Type: application/json');
+                echo json_encode(['status' => 'error', 'message' => 'Impossibile sospendere l\'utente: ' . $e->getMessage()]);
+                exit();
+            }
             UFlashMessage::addMessage('danger', 'Impossibile sospendere l\'utente: ' . $e->getMessage());
         } 
 
@@ -214,11 +239,17 @@ class CAmministratore extends BaseController {
      * URL: POST /admin/utente/banna
      */
     public function bannaUtenteAdmin(): void {
+        $isAjax = UHTTPMethods::isAjax();
         //Recuperiamo la pagina di provenienza, con un fallback su /admin/dashboard
         $referer = UHTTPMethods::getReferer(BASE_URL . '/admin/dashboard');
         try {
             $idUtente = UHTTPMethods::postInt('id_persona');
         } catch (\InvalidArgumentException $e) {
+            if ($isAjax) {
+                header('Content-Type: application/json');
+                echo json_encode(['status' => 'error', 'message' => 'Parametri non validi: ' . $e->getMessage()]);
+                exit();
+            }
             UFlashMessage::addMessage('danger', 'Impossibile elaborare la richiesta: ' . $e->getMessage());
             header('Location: ' . $referer);
             exit();
@@ -227,6 +258,11 @@ class CAmministratore extends BaseController {
         $utente = FPersistentManager::PMgetObjOnAttribute(EUtente::class, 'idpersona', $idUtente);
 
         if (!$utente) {
+            if ($isAjax) {
+                header('Content-Type: application/json');
+                echo json_encode(['status' => 'error', 'message' => 'L\'utente non esiste.']);
+                exit();
+            }
             UFlashMessage::addMessage('danger', 'L\'utente non esiste.');
             header('Location: ' . $referer);
             exit();
@@ -238,8 +274,19 @@ class CAmministratore extends BaseController {
             //Salviamo lo stato del utente nel DB
             FPersistentManager::PMsaveObj($utente);
 
+            if ($isAjax) {
+                header('Content-Type: application/json');
+                echo json_encode(['status' => 'ok', 'message' => 'L\'utente è stato permanentemente bannato con successo!', 'id_persona' => $idUtente]);
+                exit();
+            }
+
             UFlashMessage::addMessage('success', 'L\'utente è stato permanentemente bannato con successo!');
         } catch (\DomainException | \InvalidArgumentException $e) {
+            if ($isAjax) {
+                header('Content-Type: application/json');
+                echo json_encode(['status' => 'error', 'message' => 'Impossibile bannare l\'utente: ' . $e->getMessage()]);
+                exit();
+            }
             UFlashMessage::addMessage('danger', 'Impossibile bannare l\'utente: ' . $e->getMessage());
         }
 
