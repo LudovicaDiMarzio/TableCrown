@@ -48,9 +48,9 @@
                         </h3>
 
                         <div class="evento-list-image-wrapper">
-                            <img src="{$base_url}/image/eventi/{$evento.imgEvento|escape}"
-                                 alt="{$evento.nomeEvento|escape}"
-                                 class="evento-list-image">
+                            <img src="data:image/jpeg;base64,{$evento.imgEvento}" 
+                                alt="{$evento.nomeEvento|escape}" 
+                                class="evento-list-image">
                         </div>
 
                         <div class="evento-list-meta-row">
