@@ -5,6 +5,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
 
     <title>{block name="page_title"}TableCrown{/block}</title>
+    <link rel="icon" type="image/png" href="{$base_url}/public/img/favicon.png">
 
     {* ── CSS ── *}
     <link rel="stylesheet" href="{$base_url}/plugins/bulma/bulma.min.css">
@@ -37,7 +38,7 @@
 
                     {* LOGO *}
                     <a class="navbar-logo" href="{$base_url}">
-                        <img src="{$base_url}/img/logo.png" alt="TableCrown" class="navbar-logo-img">
+                       <img src="{$base_url}/public/img/favicon.png" alt="TableCrown" class="navbar-logo-img">
                     </a>
                     
                     <div class="navbar-center-links">
