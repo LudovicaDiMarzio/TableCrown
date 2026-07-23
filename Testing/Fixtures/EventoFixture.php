@@ -48,9 +48,9 @@ class EventoFixture extends AbstractFixture implements DependentFixtureInterface
         $faker = Factory::create('it_IT');
 
         // 1. Carichiamo le immagini usando il path relativo corretto
-        $imgSerata = $this->getImmagineBinaria('carousel/placeholder.png');
-        $imgTorneo = $this->getImmagineBinaria('carousel/placeholder.png');
-        $imgChallenge = $this->getImmagineBinaria('carousel/placeholder.png');
+        $imgSerata = $this->getImmagineBinaria('carousel/placeholder2.png');
+        $imgTorneo = $this->getImmagineBinaria('carousel/placeholder2.png');
+        $imgChallenge = $this->getImmagineBinaria('carousel/placeholder2.png');
 
         // ---------------------------------------------------------
         // 2. FIXTURE PER ESerata
