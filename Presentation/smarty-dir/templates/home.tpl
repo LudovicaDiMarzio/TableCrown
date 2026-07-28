@@ -14,7 +14,7 @@
             <input class="input home-search-input"
                    type="search"
                    name="q"
-                   placeholder="Cerca nel catalogo..."
+                   placeholder="Cerca tra i Giochi..."
                    value="{$search_query|default:''|escape}"
                    aria-label="Cerca nel catalogo">
             <button class="button home-search-btn" type="submit" aria-label="Cerca">
